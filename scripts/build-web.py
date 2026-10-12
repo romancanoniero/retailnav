@@ -15,6 +15,8 @@ components = {
     "__MODEL__": json.dumps(floors, ensure_ascii=False, separators=(",", ":")),
     "__REFERENCES__": (repo / "src/references.js").read_text(encoding="utf-8"),
     "__JS__": (repo / "src/viewer.js").read_text(encoding="utf-8"),
+    "__QRCODE__": (repo / "src/qrcode.min.js").read_text(encoding="utf-8"),
+    "__SOCIAL__": (repo / "src/social.js").read_text(encoding="utf-8"),
     "__FALLBACK__": (repo / "src/fallback.svg").read_text(encoding="utf-8"),
 }
 for placeholder, value in components.items():

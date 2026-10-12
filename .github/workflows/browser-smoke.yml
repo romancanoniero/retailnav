@@ -11,6 +11,12 @@ permissions:
 jobs:
   browser-smoke:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    env:
+      RN_BROWSER: ${{ matrix.engine }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -20,6 +26,6 @@ jobs:
       - name: Install temporary browser test dependencies
         run: |
           npm install --no-save --ignore-scripts playwright@1.56.1
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps ${{ matrix.engine }}
       - name: Test live RetailNav on a touch-enabled mobile viewport
         run: node scripts/smoke-browser.mjs

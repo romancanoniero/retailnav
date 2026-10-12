@@ -13,6 +13,11 @@ if [[ -e "$BASE" && ! -f "$BASE/.retailnav-managed" ]]; then
   exit 3
 fi
 
+if docker container inspect retailnav-web-1 >/dev/null 2>&1 && [[ ! -f "$BASE/.retailnav-managed" ]]; then
+  echo "Unmanaged retailnav container already exists" >&2
+  exit 3
+fi
+
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 curl -fLsS --retry 2 --connect-timeout 15 --max-time 120 \
@@ -38,7 +43,7 @@ fi
 
 cat > "$BASE/nginx.conf" <<'NGINX'
 server {
-  listen 80;
+  listen 8080;
   server_name _;
   root /srv/retailnav/current;
   index index.html;
@@ -67,8 +72,7 @@ services:
       - /var/run
       - /tmp
     volumes:
-      - ./releases:/srv/retailnav/releases:ro
-      - ./current:/srv/retailnav/current:ro
+      - ./:/srv/retailnav:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - edge
@@ -82,7 +86,7 @@ services:
       - "traefik.http.routers.retailnav.priority=1000"
       - "traefik.http.routers.retailnav.middlewares=retailnav-strip"
       - "traefik.http.middlewares.retailnav-strip.stripprefix.prefixes=/retailnav"
-      - "traefik.http.services.retailnav.loadbalancer.server.port=80"
+      - "traefik.http.services.retailnav.loadbalancer.server.port=8080"
 networks:
   edge:
     external: true

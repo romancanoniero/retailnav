@@ -1,0 +1,35 @@
+{
+  "schema": "retailnav.manifest.v1",
+  "product": "RetailNav",
+  "mall": "Aventura Mall (reference mock)",
+  "version": "1.0.0-provisional",
+  "releaseDate": "2026-10-13",
+  "status": "provisional-vectorization",
+  "navigable": false,
+  "scaleVerified": false,
+  "verticalLinksVerified": false,
+  "renderer": "browser WebGL with Canvas fallback; fully self-contained in index.html",
+  "floors": [
+    {
+      "id": "LL",
+      "name": "Lower Level",
+      "url": "maps/LL.json",
+      "featureCount": 91
+    },
+    {
+      "id": "UL",
+      "name": "Upper Level",
+      "url": "maps/UL.json",
+      "featureCount": 97
+    },
+    {
+      "id": "L3",
+      "name": "Third Level",
+      "url": "maps/L3.json",
+      "featureCount": 47
+    }
+  ],
+  "browser": "index.html",
+  "precision": "Image-registered screenshot vectorization, not LiDAR; floor heights simulated.",
+  "notice": "DO NOT USE THIS MOCK TO NAVIGATE A PHYSICAL BUILDING"
+}

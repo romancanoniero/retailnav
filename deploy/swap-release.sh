@@ -4,8 +4,8 @@ set -euo pipefail
 # Replace only the /retailnav subdirectory of an EXISTING web document root.
 # A prebuilt release must be uploaded to .retailnav-stage-<id> beforehand.
 # Usage: bash deploy/swap-release.sh /absolute/site/document/root .retailnav-stage-123
-DOCROOT=\${1:?Provide existing document root}
-STAGE_NAME=\${2:?Provide stage directory name}
+DOCROOT=${1:?Provide existing document root}
+STAGE_NAME=${2:?Provide stage directory name}
 [[ "$DOCROOT" = /* ]] || { echo "Document root must be absolute" >&2; exit 2; }
 [[ "$STAGE_NAME" =~ ^\.retailnav-stage-[a-zA-Z0-9_-]+$ ]] || { echo "Unsafe stage name" >&2; exit 2; }
 DOCROOT=$(realpath -e -- "$DOCROOT")

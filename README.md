@@ -1,65 +1,78 @@
-# RetailNav
+# RetailNav · Aventura Mall (prototipo)
 
-**RetailNav** is an indoor 3D wayfinding and mall-mapping prototype.
+[**Abrir RetailNav en Improving Your Reality**](https://improvingyourreality.com/retailnav/)
 
-## Current demo: Aventura Mall
+Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos aportados y experiencia social de visita en grupo. Funciona en Safari y navegadores modernos, sin instalar una app.
 
-- Three distinct, **provisionally traced** levels: **LL**, **UL** and **L3**
-- Interactive 3D viewer: rotate, tilt, pan, pinch-zoom and inspect floors together or individually
-- Source-image comparison, search and selection of traced features
-- Pure browser app with WebGL and Canvas fallback, no runtime CDN dependency
-- Image-derived floor vectors, plus reproducible GLB export for native clients
+## Visor 3D
 
-**The maps are a mock.** They are traced from three user-supplied raster plans, not captured by LiDAR. Dimensions, shop assignments, building entrances and vertical/navigation links have not been physically verified. Do **not** use them to guide visitors around the real mall.
+- Plantas **LL, UL y L3**. Tocá un indicador en el modelo para enfocar esa planta y ocultar las demás.
+- Botón **Mostrar las 3 plantas** o pestaña **Todas** para restablecer la vista conjunta.
+- Un dedo orbita; dos dedos desplazan, amplían y **giran mediante torsión**, incluso dejando un dedo fijo.
+- Etiquetas, búsqueda de tiendas ancla, ruta ilustrativa sobre pasillos trazados, comparación con fuente y exportación GLB.
+- Cuatro amigos **DEMO** ficticios sobre plantas diferentes, identificados claramente. Se pueden ocultar.
+- Renderizado WebGL con alternativa 3D Canvas. QR generado localmente, sin dependencia de CDN.
 
-## Open the source
+## Visitantes sin registro obligatorio
 
-- [3D browser app](public/index.html) — self-contained browser HTML
-- [Floor manifest](public/maps/manifest.json) — LL, UL and L3 URLs
-- [Vector floor files](public/maps/) — geometric features and navigable-grid samples
-- [Editable viewer](src/viewer.js) and [HTML template](src/page.template.html)
-- [Build scripts](scripts/) — regenerate the HTML and produce GLB models
-- [Safe Contabo deployment instructions](deploy/README.md)
+La primera vez que un visitante abre RetailNav, el servidor crea una **identidad anónima aleatoria**. La sesión se conserva mediante una cookie segura, HttpOnly y SameSite=Lax. **No se identifica por IP, huella digital del dispositivo ni GPS**.
 
-To serve locally:
+En **Mis amigos** se puede:
 
-```bash
-python3 -m http.server 8080 --directory public
-# Open http://localhost:8080 in a browser
-```
+1. Cambiar el nombre visible sin registrarse.
+2. Mostrar un **QR temporal de 5 minutos y un solo uso**; el otro visitante lo escanea con la cámara del teléfono, abre el enlace y confirma una solicitud.
+3. Aceptar o rechazar la solicitud desde el primer teléfono. Solo **ambos consentimientos** producen el vínculo recíproco.
+4. Recuperar automáticamente los contactos al cerrar y volver a abrir el mismo navegador.
+5. Opcionalmente generar una **clave de recuperación de un solo uso** para trasladar la identidad a otro navegador o recuperarla después de borrar Safari.
+6. Desvincular contactos en ambos sentidos.
 
-To rebuild/edit:
+**Limitación de recuperación:** si Safari borra la cookie, se usa navegación privada o se cambia de teléfono *sin una clave de recuperación guardada*, la identidad anónima anterior no podrá recuperarse. Los contactos quedan en el servidor, pero no son accesibles desde la identidad nueva.
+
+## Ubicación y privacidad
+
+- La única posición que puede compartirse es **una marca manual aproximada** que el visitante selecciona en el plano.
+- Se comparte únicamente con contactos vinculados y **solo después de una acción explícita**.
+- Se deja de compartir con un botón y la posición caduca automáticamente a los **10 minutos**. Cerrar el navegador no produce rastreo en segundo plano.
+- Los marcadores reales se diferencian de los ficticios, y los datos de posición llevan `source: "manual"`.
+- **No hay posicionamiento interior real**: no se usa GPS, cámaras, Bluetooth, UWB, Wi-Fi ni medición de distancias para localizar a personas. Para saber su ubicación efectiva harán falta calibración y sensores de posicionamiento interior.
+- No compartas información sensible a través de los nombres de perfil o códigos QR.
+
+## Arquitectura
+
+| Parte | Tecnología | Ruta |
+|---|---|---|
+| Visor estático | HTML/JS/WebGL + Nginx | `/retailnav/` |
+| Contactos anónimos | Node 22, HTTP JSON y cookie HttpOnly | `/retailnav/api/` |
+| Publicación | Docker Compose aislado en red `edge` + Traefik | `deploy/` |
+| Persistencia | JSON privado, escritura atómica, fuera de releases | `/home/iankmp/retailnav-host/state/` |
+
+No se alteran las aplicaciones existentes de Improving Your Reality. El backend social no publica puertos directamente; solo Traefik expone su prefijo de API. Los nuevos despliegues **no borran** la identidad ni los contactos guardados.
+
+Para desarrollo estático sin servidor:
 
 ```bash
 python3 scripts/build-web.py
 python3 scripts/verify.py public
 python3 scripts/build-glb.py public
-python3 scripts/verify.py public
+python3 -m http.server 8080 --directory public
 ```
 
-No pip packages, npm install or CDN are required for these commands.
+La interfaz 3D funciona sin backend; en ese caso debe mostrar que los **contactos reales están desconectados**, aunque los amigos DEMO seguirán visibles.
 
-## Release packaging
+Para probar la API de contactos, con Node 22:
 
-[GitHub Actions → Verify and package RetailNav](../../actions) assembles the standalone viewer and four GLB files (three individual models and one combined), checks the geometry, and publishes a downloadable **RetailNav-Aventura-static-site** workflow artifact.
+```bash
+node --test backend/server.test.mjs
+```
 
-GLB assets are generated from the compact vector files rather than manually attached to the repository. Individual models remain floor-addressable, and the combined model preserves floor groups.
+Publicación y pruebas: [GitHub Actions](../../actions). Incluye validación del anonimato, rechazo de solicitudes no autorizadas, QR de un solo uso, consentimiento mutuo, persistencia, privacidad y prueba automatizada de navegador móvil en el sitio HTTPS real.
 
+## Futuro traslado a dominio propio
 
-## Live browser preview (one-time GitHub Pages activation)
+La interfaz utiliza rutas relativas y genera enlaces QR desde el origen actual. Para moverla a la raíz de un nuevo dominio se cambia el enrutamiento de Traefik y se configura `RETAILNAV_COOKIE_PATH=/` en la API. Es importante migrar y proteger la carpeta persistente de datos, y explicar a los visitantes la transición de las cookies de dominio.
 
-The repository has a `Preview RetailNav (GitHub Pages)` workflow. To obtain a public Safari URL, the repository owner must open **Settings → Pages**, choose **Build and deployment: GitHub Actions**, and save. The workflow cannot enable Pages itself with the default GitHub Actions token. After enabling, rerun the Pages workflow from **Actions**. The expected preview URL, *only after a successful deployment*, is `https://romancanoniero.github.io/retailnav/`.
+## Calidad de los planos
 
-## Intended Contabo installation
+**Los mapas son una maqueta** trazada a partir de tres imágenes, **no LiDAR ni un relevamiento físico**. No están verificadas la escala, las divisiones comerciales, las puertas, las conexiones entre plantas, la accesibilidad ni las rutas. **No deben usarse para orientar visitantes dentro del edificio real** hasta tener un levantamiento preciso y una validación in situ.
 
-`https://improvingyourreality.com/retailnav/`
-
-**Not deployed or verified on Contabo yet.** The user’s production server may use a container reverse proxy rather than a standard document root. Confirm how the site is served before installing anything. The installer must only write the `retailnav/` subtree and leave all other applications untouched.
-
-After the site’s actual static document root is identified, see [deploy/README.md](deploy/README.md).
-
-## Validation required before production
-
-Real-world scale calibration, geometric alignment, tenant/door metadata, connectivity across floors, accessibility, fire exits, map provenance/rights, physical on-site QA and iPhone Safari testing are still needed.
-
-Former exploratory repo `romancanoniero/MallMasters` remains unchanged.
+Repositorio exploratorio anterior `romancanoniero/MallMasters`: se conserva sin cambios.

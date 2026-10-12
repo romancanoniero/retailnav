@@ -205,6 +205,22 @@ const app=http.createServer(async(req,res)=>{
       if(other)other.friends=other.friends.filter(id=>id!==me.id);
       save();return send(res,200,state(me));
     }
+    if(req.method==='POST'&&url.pathname==='/account/delete'){
+      for(const [key,session] of Object.entries(db.sessions))
+        if(session.userId===me.id)delete db.sessions[key];
+      for(const [key,invitation] of Object.entries(db.invites))
+        if(invitation.ownerId===me.id)delete db.invites[key];
+      for(const [key,request] of Object.entries(db.requests))
+        if(request.ownerId===me.id||request.guestId===me.id)delete db.requests[key];
+      for(const id of me.friends){
+        const friend=db.users[id];
+        if(friend)friend.friends=friend.friends.filter(x=>x!==me.id);
+      }
+      delete db.users[me.id];
+      save();
+      return send(res,200,{deleted:true},
+        'rn_session=; Path='+COOKIE_PATH+'; Max-Age=0; HttpOnly; Secure; SameSite=Lax');
+    }
     if(req.method==='POST'&&url.pathname==='/location'){
       const p=await parse(req);
       if(p.sharing===false){me.location=null;save();return send(res,200,state(me));}

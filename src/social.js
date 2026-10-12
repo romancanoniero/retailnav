@@ -371,6 +371,14 @@ function bind(){
       status('Identidad recuperada. Tus contactos vuelven a estar disponibles.');
     }catch(e){status(e.message,true);}
   });
+  $('rnDeleteAccount').addEventListener('click',async()=>{
+    if(!confirm('Se borrarán tu identidad, tus contactos y la ubicación compartida. ¿Continuar?'))return;
+    if(!confirm('La eliminación es permanente. ¿Eliminar definitivamente?'))return;
+    try{
+      const result=await request('account/delete','POST',{});
+      if(result.deleted){status('Datos eliminados. Se generará una identidad nueva.');location.replace(location.pathname);}
+    }catch(e){status(e.message,true);}
+  });
   window.addEventListener('retailnav:map-point',onMapPoint);
   window.addEventListener('retailnav:ready',()=>{
     renderMarkers();

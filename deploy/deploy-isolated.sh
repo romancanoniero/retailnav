@@ -19,7 +19,11 @@ if docker container inspect retailnav-web-1 >/dev/null 2>&1 && [[ ! -f "$BASE/.r
 fi
 
 TMP=$(mktemp -d)
-PROBE_NAME="retailnav-private-preflight-$"
+PROBE_NAME="retailnav-private-preflight-$RANDOM"
+if docker container inspect "$PROBE_NAME" >/dev/null 2>&1; then
+  echo "Private diagnostic container name occupied" >&2
+  exit 4
+fi
 cleanup() {
   docker rm -f "$PROBE_NAME" >/dev/null 2>&1 || true
   rm -rf "$TMP"

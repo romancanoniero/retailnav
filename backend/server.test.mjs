@@ -33,6 +33,9 @@ test('anonymous people survive browser sessions; QR linking requires mutual acce
   const invite=await req('POST','/invite',{},a.cookie);
   assert.equal(invite.status,201);
   assert.equal(invite.data.code.length,43);
+  const preview=await req('POST','/invite/preview',{code:invite.data.code},b.cookie);
+  assert.equal(preview.status,200);
+  assert.equal(preview.data.name,'Ana');
   const invalid=await req('POST','/invite/claim',{code:invite.data.code},a.cookie);
   assert.equal(invalid.status,400);
   const claim=await req('POST','/invite/claim',{code:invite.data.code},b.cookie);

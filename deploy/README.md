@@ -24,12 +24,12 @@ Si el dominio es atendido por un proxy dentro de Docker, **no asumir** que su `r
 ## Paso 2: instalar estáticos (cuando ya existe un directorio público identificado)
 
 ```bash
-git clone https://github.com/romancanoniero/retailnav.git
-cd retailnav
-sudo env RETAILNAV_DOCROOT="/RUTA/REAL/DEL/WEBROOT" bash deploy/install-on-contabo.sh
+curl -fL https://raw.githubusercontent.com/romancanoniero/retailnav/main/deploy/install-from-github.sh -o /tmp/retailnav-install.sh
+sed -n '1,160p' /tmp/retailnav-install.sh
+bash /tmp/retailnav-install.sh /RUTA/REAL/DEL/WEBROOT
 ```
 
-El script transfiere solo el contenido de `public/` hacia `/RUTA/REAL/DEL/WEBROOT/retailnav/`. Si hay una instalación previa, deja un respaldo `.tar.gz` fuera del webroot.
+Este instalador obtiene el código público directamente desde GitHub **en Contabo** (sin SSH entrante), ejecuta las pruebas de vectores, genera los cuatro modelos GLB y reemplaza exclusivamente `/RUTA/REAL/DEL/WEBROOT/retailnav/`. Conserva un respaldo de la versión anterior fuera del webroot mediante `deploy/swap-release.sh`. No modifica Nginx ni Docker. Si faltan permisos de escritura, verificar el propietario de la raíz antes de usar sudo.
 
 El directorio web **no necesariamente** corresponde a `/var/www/html`: confirmar su valor real antes de ejecutar.
 

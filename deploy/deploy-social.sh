@@ -57,6 +57,7 @@ services:
       NODE_ENV: production
       PORT: "3181"
       RETAILNAV_DATA_DIR: /data
+      RETAILNAV_COOKIE_PATH: /retailnav
       RETAILNAV_ALLOWED_ORIGINS: "https://improvingyourreality.com,https://www.improvingyourreality.com"
     volumes:
       - ./api:/app:ro

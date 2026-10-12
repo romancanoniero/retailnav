@@ -23,9 +23,10 @@ mkdir -p -- "$TMPDIR/source"
 tar -xzf "$SRC_TAR" -C "$TMPDIR/source" --strip-components=1
 cd "$TMPDIR/source"
 
-python3 tools/verify_maps.py
-python3 tools/build_glb.py
-python3 tools/verify_maps.py --require-glb
+python3 scripts/build-web.py
+python3 scripts/verify.py public
+python3 scripts/build-glb.py public
+python3 scripts/verify.py public
 
 STAMP="$(date -u +%Y%m%dT%H%M%S)-$$"
 STAGE_NAME=".retailnav-stage-$STAMP"

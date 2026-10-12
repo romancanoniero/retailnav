@@ -223,7 +223,7 @@ async function previewJoin(code){
   if(!ready)return status('Esperá a que se conecte el servicio de contactos.',true);
   if(!/^[a-zA-Z0-9_-]{40,80}$/.test(code))return status('El enlace de invitación no es válido.',true);
   try{
-    const preview=await request('invite/preview?code='+encodeURIComponent(code));
+    const preview=await request('invite/preview','POST',{code});
     joinCode=code;
     $('rnJoinName').textContent=preview.name;
     $('rnJoinWrap').hidden=false;

@@ -60,7 +60,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 2 --connect-timeout 10 --max-time 20 https://improvingyourreality.com/retailnav/ | grep -q "RetailNav"
+          curl -fLsS --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav-index.html https://improvingyourreality.com/retailnav/
+          grep -q "RetailNav" /tmp/retailnav-index.html
           curl -fL --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav.glb https://improvingyourreality.com/retailnav/maps/Aventura-ALL.glb
           python3 - <<'PY'
           from pathlib import Path
@@ -68,4 +69,6 @@ jobs:
           assert data[:4] == b'glTF' and len(data)>200000
           print('Aventura-ALL.glb validated:',len(data),'bytes')
           PY
-          curl -fL --connect-timeout 10 --max-time 20 https://improvingyourreality.com/ | grep -q "Improving Your Reality"
+          curl -fLsS --connect-timeout 10 --max-time 20 -o /tmp/retailnav-home.html https://improvingyourreality.com/
+          grep -q "Improving Your Reality" /tmp/retailnav-home.html
+          echo "PASS: RetailNav HTML, GLB 3D and original homepage verified."

@@ -133,8 +133,9 @@ const app=http.createServer(async(req,res)=>{
     if(!auth)return reject(res,401,'Sesión anónima no disponible. Recargá la página.');
     const me=auth.user;
     if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me));
-    if(req.method==='GET'&&url.pathname==='/invite/preview'){
-      const code=url.searchParams.get('code')||'';
+    if(req.method==='POST'&&url.pathname==='/invite/preview'){
+      const payload=await parse(req);
+      const code=payload.code||'';
       if(code.length>110)return reject(res,400,'Código inválido');
       const invite=db.invites[hash(code)];
       if(!invite||invite.expires<=Date.now())return reject(res,404,'Invitación vencida');

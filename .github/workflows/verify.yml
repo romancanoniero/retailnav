@@ -1,0 +1,31 @@
+name: Verify and package RetailNav
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate vector floor maps and embedded viewer
+        run: python3 scripts/verify.py public
+      - name: Build optimized GLB floor models
+        run: python3 scripts/build-glb.py public
+      - name: Verify GLB outputs
+        run: python3 scripts/verify.py public
+      - name: Check bash install script syntax
+        run: bash -n deploy/install-on-contabo.sh
+      - name: Package standalone static site for Contabo
+        uses: actions/upload-artifact@v4
+        with:
+          name: RetailNav-Aventura-static-site
+          path: public/
+          retention-days: 30

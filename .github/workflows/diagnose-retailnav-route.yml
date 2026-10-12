@@ -1,0 +1,43 @@
+name: Inspect RetailNav reverse proxy
+on:
+  push:
+    paths:
+      - ".github/workflows/diagnose-retailnav-route.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SSHPASS: ${{ secrets.CONTABO_SSH_PASSWORD }}
+    steps:
+      - name: Prepare SSH transport
+        run: |
+          test -n "$SSHPASS"
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq sshpass
+          ssh-keyscan -T 10 -t ed25519 217.216.82.209 2>/dev/null > "$RUNNER_TEMP/known_hosts"
+          fp=$(ssh-keygen -l -E sha256 -f "$RUNNER_TEMP/known_hosts" | awk 'NR==1 {print $2}')
+          test "$fp" = "SHA256:Wz39FN6dMSMvzdjlrd2mwCwPWgEPoVlDQgYIxnbWDvo"
+      - name: Inspect existing RetailNav staging and Traefik messages without modifying VPS
+        shell: bash
+        run: |
+          sshpass -e ssh -T \
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" \
+            -o PreferredAuthentications=password,keyboard-interactive \
+            -o PubkeyAuthentication=no -o ConnectTimeout=15 \
+            iankmp@217.216.82.209 'bash -s' <<'REMOTE'
+          echo "STAGING"
+          ls -ld /home/iankmp/retailnav-host /home/iankmp/retailnav-host/current /home/iankmp/retailnav-host/releases 2>&1 || true
+          echo "CONTAINER"
+          docker ps -a --filter name=retailnav --format '{{.Names}} {{.Status}}' || true
+          echo "CONFIGURATION"
+          docker compose -f /home/iankmp/retailnav-host/compose.yml config --services 2>&1 || true
+          echo "TRAEFIK"
+          docker logs --since 20m --tail 300 traefik 2>&1 | grep -Ei 'retailnav|provider|error|bad gateway' | tail -n 45 || true
+          echo "PUBLIC ROUTE"
+          curl -sS -L --connect-timeout 8 --max-time 12 -o /dev/null -w 'home=%{http_code}\n' https://improvingyourreality.com/
+          curl -sS -L --connect-timeout 8 --max-time 12 -o /dev/null -w 'retailnav=%{http_code} type=%{content_type}\n' https://improvingyourreality.com/retailnav/maps/manifest.json
+          REMOTE

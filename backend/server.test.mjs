@@ -1,0 +1,83 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync, rmSync, readFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+
+const dir=mkdtempSync(path.join(tmpdir(),'retailnav-presence-'));
+process.env.NODE_ENV='test';
+process.env.RETAILNAV_DATA_DIR=dir;
+process.env.RETAILNAV_ALLOWED_ORIGINS='https://improvingyourreality.com';
+const {app}=await import('./server.mjs');
+await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));
+const base='http://127.0.0.1:'+app.address().port;
+const origin='https://improvingyourreality.com';
+
+async function req(method,url,body,session,customOrigin=origin){
+  const headers={};
+  if(method==='POST'){headers['Origin']=customOrigin;headers['Content-Type']='application/json';}
+  if(session)headers.Cookie=session;
+  const res=await fetch(base+url,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});
+  let data=await res.json();
+  return {status:res.status,data,cookie:res.headers.get('set-cookie')?.split(';')[0]};
+}
+test('anonymous people survive browser sessions; QR linking requires mutual acceptance',async()=>{
+  const a=await req('POST','/session',{});
+  const b=await req('POST','/session',{});
+  assert.equal(a.status,201);assert.equal(b.status,201);
+  assert.notEqual(a.data.me.id,b.data.me.id);
+  assert.match(a.cookie,/rn_session=/);
+  assert.equal((await req('GET','/state',undefined,a.cookie)).data.me.id,a.data.me.id);
+  const rename=await req('POST','/me',{name:'Ana'},a.cookie);
+  assert.equal(rename.data.me.name,'Ana');
+  const invite=await req('POST','/invite',{},a.cookie);
+  assert.equal(invite.status,201);
+  assert.equal(invite.data.code.length,43);
+  const invalid=await req('POST','/invite/claim',{code:invite.data.code},a.cookie);
+  assert.equal(invalid.status,400);
+  const claim=await req('POST','/invite/claim',{code:invite.data.code},b.cookie);
+  assert.equal(claim.status,201);
+  assert.equal(claim.data.pending,true);
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,0);
+  assert.equal((await req('POST','/invite/claim',{code:invite.data.code},b.cookie)).status,410);
+  const incoming=(await req('GET','/state',undefined,a.cookie)).data.incoming;
+  assert.equal(incoming.length,1);
+  assert.equal((await req('POST','/request/decide',{id:incoming[0].id,action:'accept'},b.cookie)).status,404);
+  const accept=await req('POST','/request/decide',{id:incoming[0].id,action:'accept'},a.cookie);
+  assert.equal(accept.status,200);assert.equal(accept.data.friends.length,1);
+  const friend=(await req('GET','/state',undefined,b.cookie)).data.friends[0];
+  assert.equal(friend.name,'Ana');
+  assert.equal(friend.position,undefined);
+  const invalidShare=await req('POST','/location',{sharing:true,floor:'LL',x:-2,y:300},a.cookie);
+  assert.equal(invalidShare.status,400);
+  const share=await req('POST','/location',{sharing:true,floor:'UL',x:650,y:380},a.cookie);
+  assert.equal(share.status,200);assert.equal(share.data.myPosition.floor,'UL');
+  const visible=(await req('GET','/state',undefined,b.cookie)).data.friends[0];
+  assert.equal(visible.sharing,true);assert.deepEqual([visible.position.x,visible.position.y],[650,380]);
+  assert.equal(visible.position.source,'manual');
+  const stop=await req('POST','/location',{sharing:false},a.cookie);
+  assert.equal(stop.data.myPosition,null);
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends[0].position,undefined);
+  const rec=await req('POST','/recovery/create',{},a.cookie);
+  assert.equal(rec.status,201);assert.ok(rec.data.recoveryCode.length>55);
+  const c=await req('POST','/session',{});
+  const restore=await req('POST','/recovery/restore',{code:rec.data.recoveryCode},c.cookie);
+  assert.equal(restore.status,200);assert.equal(restore.data.me.id,a.data.me.id);
+  assert.equal((await req('POST','/recovery/restore',{code:rec.data.recoveryCode},b.cookie)).status,404);
+  const unlink=await req('POST','/contact/remove',{id:b.data.me.id},restore.cookie);
+  assert.equal(unlink.status,200);assert.equal(unlink.data.friends.length,0);
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,0);
+  const persistent=JSON.parse(readFileSync(path.join(dir,'presence.json'),'utf8'));
+  assert.equal(persistent.version,1);
+  assert.ok(persistent.users[a.data.me.id]);
+  assert.ok(!JSON.stringify(persistent).includes(rec.data.recoveryCode));
+});
+test('request provenance, session and API protection',async()=>{
+  const untrusted=await req('POST','/session',{},null,'https://evil.example');
+  assert.equal(untrusted.status,403);
+  const protectedGet=await req('GET','/state');
+  assert.equal(protectedGet.status,401);
+  const method=await req('GET','/invite/preview?code=guess');
+  assert.equal(method.status,401);
+});
+test.after(async()=>{await new Promise(resolve=>app.close(resolve));rmSync(dir,{recursive:true,force:true});});

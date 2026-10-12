@@ -1,6 +1,9 @@
 name: Diagnose Contabo reachability
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/diagnose-contabo.yml'
 
 permissions:
   contents: read

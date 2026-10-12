@@ -4,6 +4,12 @@ on:
     paths:
       - ".github/workflows/publish-contabo.yml"
       - "deploy/deploy-isolated.sh"
+      - "deploy/deploy-social.sh"
+      - "backend/**"
+      - "src/**"
+      - "scripts/build-web.py"
+      - "scripts/build-glb.py"
+      - "public/maps/**"
   workflow_dispatch:
 
 permissions:
@@ -96,6 +102,7 @@ jobs:
           set -euo pipefail
           curl -fLsS --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav-index.html https://improvingyourreality.com/retailnav/
           grep -q "RetailNav" /tmp/retailnav-index.html
+          grep -q 'id="peopleDialog"' /tmp/retailnav-index.html
           curl -fL --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav.glb https://improvingyourreality.com/retailnav/maps/Aventura-ALL.glb
           python3 - <<'PY'
           from pathlib import Path

@@ -31,5 +31,28 @@
   ],
   "browser": "index.html",
   "precision": "Image-registered screenshot vectorization, not LiDAR; floor heights simulated.",
-  "notice": "DO NOT USE THIS MOCK TO NAVIGATE A PHYSICAL BUILDING"
+  "notice": "DO NOT USE THIS MOCK TO NAVIGATE A PHYSICAL BUILDING",
+  "models": [
+    {
+      "id": "ALL",
+      "url": "maps/Aventura-ALL.glb",
+      "kind": "glb"
+    },
+    {
+      "id": "LL",
+      "url": "maps/Aventura-LL.glb",
+      "kind": "glb"
+    },
+    {
+      "id": "UL",
+      "url": "maps/Aventura-UL.glb",
+      "kind": "glb"
+    },
+    {
+      "id": "L3",
+      "url": "maps/Aventura-L3.glb",
+      "kind": "glb"
+    }
+  ],
+  "modelsBuiltBy": "python tools/build_glb.py (GitHub Actions build)"
 }

@@ -1,0 +1,41 @@
+name: Preview RetailNav (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: retailnav-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild standalone browser demo
+        run: python3 scripts/build-web.py
+      - name: Validate floor vectors
+        run: python3 scripts/verify.py public
+      - name: Build mobile GLB models
+        run: python3 scripts/build-glb.py public
+      - name: Validate 3D assets
+        run: python3 scripts/verify.py public
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/
+      - id: deployment
+        uses: actions/deploy-pages@v4

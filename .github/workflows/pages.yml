@@ -1,8 +1,7 @@
 name: Preview RetailNav (GitHub Pages)
 
+# GitHub Pages must be enabled by the repo owner before manually running.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

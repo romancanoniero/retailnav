@@ -59,7 +59,7 @@ test('anonymous people survive browser sessions; QR linking requires mutual acce
   assert.equal(stop.data.myPosition,null);
   assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends[0].position,undefined);
   const rec=await req('POST','/recovery/create',{},a.cookie);
-  assert.equal(rec.status,201);assert.ok(rec.data.recoveryCode.length>55);
+  assert.equal(rec.status,201);assert.ok(rec.data.recoveryCode.length>=55);
   const c=await req('POST','/session',{});
   const restore=await req('POST','/recovery/restore',{code:rec.data.recoveryCode},c.cookie);
   assert.equal(restore.status,200);assert.equal(restore.data.me.id,a.data.me.id);

@@ -15,7 +15,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Validate vector floor maps and embedded viewer
+      - name: Regenerate browser viewer from editable sources
+        run: python3 scripts/build-web.py
+      - name: Validate vector floor maps and browser bundle
         run: python3 scripts/verify.py public
       - name: Build optimized GLB floor models
         run: python3 scripts/build-glb.py public

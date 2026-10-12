@@ -8,6 +8,9 @@ import crypto from 'node:crypto';
 const PORT = Number(process.env.PORT || 3181);
 const DATA_DIR = process.env.RETAILNAV_DATA_DIR || '/data';
 const FILE = path.join(DATA_DIR, 'presence.json');
+// When RetailNav moves to its own domain root, configure RETAILNAV_COOKIE_PATH=/.
+const COOKIE_PATH = process.env.RETAILNAV_COOKIE_PATH || '/retailnav';
+if(!/^\/(?:[a-zA-Z0-9/_-]*)$/.test(COOKIE_PATH))throw Error('Unsafe cookie path');
 const ALLOWED_ORIGINS = new Set((process.env.RETAILNAV_ALLOWED_ORIGINS ||
   'https://improvingyourreality.com,https://www.improvingyourreality.com').split(',').filter(Boolean));
 const SESSION_AGE=180*86400000, INVITE_AGE=5*60000, REQUEST_AGE=20*60000, LOCATION_AGE=10*60000;
@@ -64,7 +67,7 @@ function getSession(req){
     ?{user:db.users[entry.userId],credential:m[1],entry}:null;
 }
 function cookie(value){
-  return 'rn_session='+value+'; Path=/retailnav; Max-Age='+Math.floor(SESSION_AGE/1000)+
+  return 'rn_session='+value+'; Path='+COOKIE_PATH+'; Max-Age='+Math.floor(SESSION_AGE/1000)+
     '; HttpOnly; Secure; SameSite=Lax';
 }
 function newSession(user){

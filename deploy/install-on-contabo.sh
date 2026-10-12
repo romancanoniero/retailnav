@@ -19,6 +19,8 @@ if [[ -L "$target" ]]; then
   echo "ERROR: the target is a symlink; do not overwrite it." >&2
   exit 2
 fi
+# Generate portable GLB assets reproducibly from the checked-in vectors.
+python3 "$(dirname "${BASH_SOURCE[0]}")/../scripts/build-glb.py" "$source_dir"
 test -s "$source_dir/index.html" || { echo "ERROR: missing viewer HTML" >&2; exit 2; }
 test -s "$source_dir/maps/manifest.json" || { echo "ERROR: missing manifest" >&2; exit 2; }
 for floor in LL UL L3; do

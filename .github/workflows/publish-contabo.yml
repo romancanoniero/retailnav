@@ -1,0 +1,70 @@
+name: Publish RetailNav to Contabo
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-contabo.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: retailnav-contabo-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: retailnav-production
+      url: https://improvingyourreality.com/retailnav/
+    env:
+      SSHPASS: ${{ secrets.CONTABO_SSH_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify access configuration
+        shell: bash
+        run: |
+          test -n "$SSHPASS" || { echo "::error::CONTABO_SSH_PASSWORD not configured"; exit 2; }
+          test -f deploy/deploy-isolated.sh
+          bash -n deploy/deploy-isolated.sh
+      - name: Prepare SSH client
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq sshpass
+      - name: Verify approved Contabo SSH host identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/retailnav-ssh"
+          ssh-keyscan -T 10 -t ed25519 217.216.82.209 2>/dev/null > "$RUNNER_TEMP/retailnav-ssh/known_hosts"
+          fingerprint=$(ssh-keygen -l -E sha256 -f "$RUNNER_TEMP/retailnav-ssh/known_hosts" | awk 'NR==1 {print $2}')
+          echo "Server SSH fingerprint: $fingerprint"
+          test "$fingerprint" = "SHA256:Wz39FN6dMSMvzdjlrd2mwCwPWgEPoVlDQgYIxnbWDvo"
+      - name: Install isolated RetailNav container and verify public route
+        shell: bash
+        run: |
+          set -euo pipefail
+          sshpass -e ssh -T \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/retailnav-ssh/known_hosts" \
+            -o PreferredAuthentications=password,keyboard-interactive \
+            -o PubkeyAuthentication=no \
+            -o ConnectTimeout=15 \
+            -o NumberOfPasswordPrompts=1 \
+            iankmp@217.216.82.209 \
+            "bash -s -- $GITHUB_SHA" < deploy/deploy-isolated.sh
+      - name: Confirm independent public assets and unchanged homepage
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 2 --connect-timeout 10 --max-time 20 https://improvingyourreality.com/retailnav/ | grep -q "RetailNav"
+          curl -fL --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav.glb https://improvingyourreality.com/retailnav/maps/Aventura-ALL.glb
+          python3 - <<'PY'
+          from pathlib import Path
+          data=Path('/tmp/retailnav.glb').read_bytes()
+          assert data[:4] == b'glTF' and len(data)>200000
+          print('Aventura-ALL.glb validated:',len(data),'bytes')
+          PY
+          curl -fL --connect-timeout 10 --max-time 20 https://improvingyourreality.com/ | grep -q "Improving Your Reality"

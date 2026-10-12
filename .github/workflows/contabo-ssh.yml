@@ -1,0 +1,68 @@
+name: Diagnose Contabo SSH safely
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/contabo-ssh.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      SSHPASS: ${{ secrets.CONTABO_SSH_PASSWORD }}
+      SERVER: "217.216.82.209"
+      USERNAME: "iankmp"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check whether the SSH password secret is configured
+        id: secret-check
+        shell: bash
+        run: |
+          if [[ -z "$SSHPASS" ]]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Add the CONTABO_SSH_PASSWORD Actions repository secret to enable SSH access. Password must never be committed."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            echo "SSH password secret is configured."
+          fi
+      - name: Install SSH password transport
+        if: steps.secret-check.outputs.configured == 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq sshpass
+      - name: Verify the recorded SSH host fingerprint
+        if: steps.secret-check.outputs.configured == 'true'
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/retailnav-ssh"
+          chmod 700 "$RUNNER_TEMP/retailnav-ssh"
+          ssh-keyscan -T 10 -t ed25519 "$SERVER" 2>/dev/null > "$RUNNER_TEMP/retailnav-ssh/known_hosts"
+          test -s "$RUNNER_TEMP/retailnav-ssh/known_hosts"
+          fingerprint=$(ssh-keygen -l -E sha256 -f "$RUNNER_TEMP/retailnav-ssh/known_hosts" | awk 'NR == 1 {print $2}')
+          echo "Observed host fingerprint: $fingerprint"
+          test "$fingerprint" = "SHA256:Wz39FN6dMSMvzdjlrd2mwCwPWgEPoVlDQgYIxnbWDvo" || {
+            echo "::error::Host fingerprint mismatch. Refusing to send SSH password."
+            exit 2
+          }
+      - name: Inventory host and site routing without modifying the server
+        if: steps.secret-check.outputs.configured == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            printf '%s\n' "$SSHPASS"
+            cat deploy/probe-server.sh
+          } | sshpass -e ssh -T \
+                -o StrictHostKeyChecking=yes \
+                -o UserKnownHostsFile="$RUNNER_TEMP/retailnav-ssh/known_hosts" \
+                -o PreferredAuthentications=password,keyboard-interactive \
+                -o PubkeyAuthentication=no \
+                -o ConnectTimeout=15 \
+                -o NumberOfPasswordPrompts=1 \
+                "$USERNAME@$SERVER" \
+                'IFS= read -r RN_SUDO_PASS; export RN_SUDO_PASS; bash -s'

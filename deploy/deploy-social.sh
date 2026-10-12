@@ -45,7 +45,7 @@ services:
     image: node:22-alpine
     restart: unless-stopped
     command: ["node", "/app/server.mjs"]
-    user: "1000:1000"
+    user: "RETAILNAV_RUNTIME_USER"
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -79,6 +79,9 @@ networks:
   edge:
     external: true
 COMPOSE
+
+# Write only numeric runtime UID/GID; no Docker-root privileges needed.
+sed -i "s/RETAILNAV_RUNTIME_USER/$(id -u):$(id -g)/" "$BASE/social-compose.yml"
 
 docker compose -p retailnav -f "$BASE/compose.yml" -f "$BASE/social-compose.yml" config --quiet
 

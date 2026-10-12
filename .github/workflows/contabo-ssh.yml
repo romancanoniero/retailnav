@@ -1,4 +1,5 @@
 name: Diagnose Contabo SSH safely
+# Credential-protected access check; no VPS changes are performed.
 
 on:
   workflow_dispatch:

@@ -1,0 +1,25 @@
+name: Verify RetailNav real mobile browser
+on:
+  push:
+    paths:
+      - ".github/workflows/browser-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install temporary browser test dependencies
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test live RetailNav on a touch-enabled mobile viewport
+        run: node scripts/smoke-browser.mjs

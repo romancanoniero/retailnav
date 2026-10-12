@@ -146,6 +146,19 @@ try {
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
   assert.equal((await guest.evaluate(()=>window.RetailNavSocial.getState())).friendCount,0);
   log('CLEANUP','Reciprocal test contact removed from both accounts.');
+  for(const visitorPage of [page,guest]){
+    const result=await visitorPage.evaluate(async()=>{
+      const r=await fetch('api/account/delete',{
+        method:'POST',credentials:'same-origin',
+        headers:{'Content-Type':'application/json'},body:'{}'
+      });
+      return {code:r.status,data:await r.json()};
+    });
+    assert.equal(result.code,200);
+    assert.equal(result.data.deleted,true);
+  }
+  log('DATA_ERASURE','Both temporary production test identities permanently removed.');
+
   console.log('PASS WEB E2E: mobile browser, QR, consent, persistence, privacy and gesture');
 }finally{
   await Promise.all(contexts.map(c=>c.close()));

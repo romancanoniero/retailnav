@@ -15,6 +15,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and privacy tests for anonymous presence
+        run: |
+          node --check src/viewer.js
+          node --check src/social.js
+          node --check src/qrcode.min.js
+          node --check backend/server.mjs
+          node --test backend/server.test.mjs
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle
@@ -23,8 +33,10 @@ jobs:
         run: python3 scripts/build-glb.py public
       - name: Verify GLB outputs
         run: python3 scripts/verify.py public
-      - name: Check bash install script syntax
-        run: bash -n deploy/install-on-contabo.sh
+      - name: Check shell install scripts
+        run: |
+          bash -n deploy/install-on-contabo.sh
+          bash -n deploy/deploy-isolated.sh
       - name: Package standalone static site for Contabo
         uses: actions/upload-artifact@v4
         with:

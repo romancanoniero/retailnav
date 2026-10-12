@@ -1,9 +1,11 @@
 // End-to-end checks against the public HTTPS deployment in a touch-enabled browser.
 import assert from 'node:assert/strict';
-import {chromium} from 'playwright';
+import {chromium,webkit} from 'playwright';
 
 const URL='https://improvingyourreality.com/retailnav/';
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const engine=process.env.RN_BROWSER==='webkit'?webkit:chromium;
+console.log('BROWSER_ENGINE',engine.name());
+const browser=await engine.launch({headless:true,...(engine===chromium?{args:['--no-sandbox']}:{})});
 const contexts=[];
 const makeContext=async()=>{
   const context=await browser.newContext({

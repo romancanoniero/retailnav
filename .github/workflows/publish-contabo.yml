@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - ".github/workflows/publish-contabo.yml"
+      - "deploy/deploy-isolated.sh"
   workflow_dispatch:
 
 permissions:

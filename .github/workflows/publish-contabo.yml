@@ -14,7 +14,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify anonymous identity, QR consent and source syntax
+        run: |
+          node --check src/viewer.js
+          node --check src/social.js
+          node --check backend/server.mjs
+          node --test backend/server.test.mjs
+          bash -n deploy/deploy-isolated.sh
+          bash -n deploy/deploy-social.sh
+      - name: Build and validate floor vectors
+        run: |
+          python3 scripts/build-web.py
+          python3 scripts/verify.py public
   publish:
+    needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -43,6 +64,19 @@ jobs:
           fingerprint=$(ssh-keygen -l -E sha256 -f "$RUNNER_TEMP/retailnav-ssh/known_hosts" | awk 'NR==1 {print $2}')
           echo "Server SSH fingerprint: $fingerprint"
           test "$fingerprint" = "SHA256:Wz39FN6dMSMvzdjlrd2mwCwPWgEPoVlDQgYIxnbWDvo"
+      - name: Start isolated persistent anonymous contacts API first
+        shell: bash
+        run: |
+          set -euo pipefail
+          sshpass -e ssh -T \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/retailnav-ssh/known_hosts" \
+            -o PreferredAuthentications=password,keyboard-interactive \
+            -o PubkeyAuthentication=no \
+            -o ConnectTimeout=15 \
+            -o NumberOfPasswordPrompts=1 \
+            iankmp@217.216.82.209 \
+            "bash -s -- $GITHUB_SHA" < deploy/deploy-social.sh
       - name: Install isolated RetailNav container and verify public route
         shell: bash
         run: |
@@ -71,4 +105,11 @@ jobs:
           PY
           curl -fLsS --connect-timeout 10 --max-time 20 -o /tmp/retailnav-home.html https://improvingyourreality.com/
           grep -q "Improving Your Reality" /tmp/retailnav-home.html
+          curl -fLsS --connect-timeout 10 --max-time 20 -o /tmp/retailnav-api-health.json https://improvingyourreality.com/retailnav/api/health
+          python3 - <<'PY'
+          import json
+          response=json.load(open('/tmp/retailnav-api-health.json'))
+          assert response['ok'] is True and response['service']=='retailnav-anonymous-presence'
+          print('PASS: contacts API healthy and isolated.')
+          PY
           echo "PASS: RetailNav HTML, GLB 3D and original homepage verified."

@@ -25,6 +25,7 @@ En **Mis amigos** se puede:
 4. Recuperar automáticamente los contactos al cerrar y volver a abrir el mismo navegador.
 5. Opcionalmente generar una **clave de recuperación de un solo uso** para trasladar la identidad a otro navegador o recuperarla después de borrar Safari.
 6. Desvincular contactos en ambos sentidos.
+7. **Eliminar mi identidad y contactos**, revocando las sesiones y borrando los datos correspondientes del servidor.
 
 **Limitación de recuperación:** si Safari borra la cookie, se usa navegación privada o se cambia de teléfono *sin una clave de recuperación guardada*, la identidad anónima anterior no podrá recuperarse. Los contactos quedan en el servidor, pero no son accesibles desde la identidad nueva.
 

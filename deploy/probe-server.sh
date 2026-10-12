@@ -53,4 +53,6 @@ for root in /var/www /var/www/html /srv/www /opt /home/iankmp /etc/nginx/sites-e
     ls -ld -- "$root" 2>/dev/null || true
   fi
 done
+echo "=== SITE MOUNT PATHS ==="
+docker inspect improvingyourreality-site-1 --format '{{range .Mounts}}{{println .Source " -> " .Destination}}{{end}}' 2>/dev/null || true
 echo "=== HOST CONFIG CHECK COMPLETE ==="

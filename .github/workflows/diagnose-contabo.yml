@@ -1,0 +1,30 @@
+name: Diagnose Contabo reachability
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  connectivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Test outbound ports to approved Contabo VPS
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import socket
+          host = "217.216.82.209"
+          for port in (22, 80, 443):
+              try:
+                  with socket.create_connection((host, port), timeout=7) as sock:
+                      print(f"TCP {host}:{port} REACHABLE")
+              except OSError as exc:
+                  print(f"TCP {host}:{port} FAILED {type(exc).__name__}: {exc}")
+          PY
+      - name: Inspect public HTTP routing
+        shell: bash
+        run: |
+          curl --head --location --connect-timeout 8 --max-time 15 --silent --show-error https://improvingyourreality.com/ || true
+          curl --head --location --connect-timeout 8 --max-time 15 --silent --show-error https://improvingyourreality.com/retailnav/ || true

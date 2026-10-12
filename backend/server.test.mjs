@@ -74,6 +74,13 @@ test('anonymous people survive browser sessions; QR linking requires mutual acce
   assert.equal(persistent.version,1);
   assert.ok(persistent.users[a.data.me.id]);
   assert.ok(!JSON.stringify(persistent).includes(rec.data.recoveryCode));
+  const erased=await req('POST','/account/delete',{},restore.cookie);
+  assert.equal(erased.status,200);
+  assert.equal(erased.data.deleted,true);
+  assert.equal((await req('GET','/state',undefined,restore.cookie)).status,401);
+  const afterErase=JSON.parse(readFileSync(path.join(dir,'presence.json'),'utf8'));
+  assert.equal(afterErase.users[a.data.me.id],undefined);
+
 });
 test('request provenance, session and API protection',async()=>{
   const untrusted=await req('POST','/session',{},null,'https://evil.example');

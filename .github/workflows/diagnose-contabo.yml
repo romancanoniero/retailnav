@@ -26,6 +26,34 @@ jobs:
               except OSError as exc:
                   print(f"TCP {host}:{port} FAILED {type(exc).__name__}: {exc}")
           PY
+      - name: Inspect SSH host keys for verified key pinning
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -T 10 -t ed25519 217.216.82.209 2>/dev/null > ~/.ssh/retailnav_observed_hosts
+          if test -s ~/.ssh/retailnav_observed_hosts; then
+            ssh-keygen -l -E sha256 -f ~/.ssh/retailnav_observed_hosts
+          else
+            echo "No ED25519 host key received"
+          fi
+      - name: Compare HTTP content on root and planned subfolder
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from urllib.request import urlopen, Request
+          import hashlib, re
+          for path in ('/', '/retailnav/', '/retailnav/maps/manifest.json'):
+              url='https://improvingyourreality.com'+path
+              try:
+                  with urlopen(Request(url, headers={'User-Agent':'RetailNav-release-check'}), timeout=10) as r:
+                      body=r.read(200000)
+                      title=re.findall(br'<title[^>]*>(.*?)</title',body,re.I|re.S)
+                      print(path, 'status',r.status,'type',r.headers.get('Content-Type'),'sha256',hashlib.sha256(body).hexdigest()[:18],'title',title[0][:95].decode('utf-8','replace') if title else 'none')
+              except Exception as exc:
+                  print(path,type(exc).__name__,str(exc)[:150])
+          PY
       - name: Inspect public HTTP routing
         shell: bash
         run: |

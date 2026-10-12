@@ -45,6 +45,11 @@ No pip packages, npm install or CDN are required for these commands.
 
 GLB assets are generated from the compact vector files rather than manually attached to the repository. Individual models remain floor-addressable, and the combined model preserves floor groups.
 
+
+## Live browser preview (one-time GitHub Pages activation)
+
+The repository has a `Preview RetailNav (GitHub Pages)` workflow. To obtain a public Safari URL, the repository owner must open **Settings → Pages**, choose **Build and deployment: GitHub Actions**, and save. The workflow cannot enable Pages itself with the default GitHub Actions token. After enabling, rerun the Pages workflow from **Actions**. The expected preview URL, *only after a successful deployment*, is `https://romancanoniero.github.io/retailnav/`.
+
 ## Intended Contabo installation
 
 `https://improvingyourreality.com/retailnav/`

@@ -19,7 +19,12 @@ if docker container inspect retailnav-web-1 >/dev/null 2>&1 && [[ ! -f "$BASE/.r
 fi
 
 TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
+PROBE_NAME="retailnav-private-preflight-$"
+cleanup() {
+  docker rm -f "$PROBE_NAME" >/dev/null 2>&1 || true
+  rm -rf "$TMP"
+}
+trap cleanup EXIT
 curl -fLsS --retry 2 --connect-timeout 15 --max-time 120 \
   "https://github.com/romancanoniero/retailnav/archive/$REV.tar.gz" \
   -o "$TMP/source.tgz"
@@ -65,8 +70,6 @@ services:
     read_only: true
     security_opt:
       - no-new-privileges:true
-    cap_drop:
-      - ALL
     tmpfs:
       - /var/cache/nginx
       - /var/run
@@ -93,6 +96,31 @@ networks:
 COMPOSE
 
 docker compose -f "$BASE/compose.yml" config --quiet
+
+# Verify the static origin in a private, unpublished Docker container.
+# This catches nginx startup and bind-mount errors before Traefik is involved.
+docker run -d --name "$PROBE_NAME" --network none \
+  --read-only --security-opt no-new-privileges:true \
+  --tmpfs /var/cache/nginx --tmpfs /var/run --tmpfs /tmp \
+  -v "$RELEASE:/srv/retailnav/current:ro" \
+  -v "$BASE/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
+  nginx:1.28-alpine >/dev/null
+sleep 2
+if ! docker exec "$PROBE_NAME" wget -qO- \
+     http://127.0.0.1:8080/maps/manifest.json > "$TMP/preflight.json"; then
+  echo "Private nginx test failed; no public route was changed" >&2
+  docker logs --tail 30 "$PROBE_NAME" >&2 || true
+  exit 4
+fi
+python3 - "$TMP/preflight.json" <<'PY'
+import json, sys
+p=json.load(open(sys.argv[1]))
+assert p["schema"]=="retailnav.manifest.v1"
+assert [f["id"] for f in p["floors"]]==["LL","UL","L3"]
+print("PRIVATE_NGINX_TEST_PASS")
+PY
+docker rm -f "$PROBE_NAME" >/dev/null 2>&1 || true
+
 OLD=$(readlink "$BASE/current" || true)
 ln -s "releases/$REV" "$BASE/.next-current"
 mv -Tf "$BASE/.next-current" "$BASE/current"

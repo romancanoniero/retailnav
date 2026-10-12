@@ -1,36 +1,60 @@
 # RetailNav
 
-**RetailNav** is an indoor spatial-navigation prototype. The current reference case is **Aventura Mall, Miami**.
+**RetailNav** is an indoor 3D wayfinding and mall-mapping prototype.
 
-## Status
+## Current demo: Aventura Mall
 
-The three source images supplied by the project owner have been provisionally vectorized as levels **LL**, **UL** and **L3**. The vectorization, 3D export, and mobile-browser demo are **mock/provisional**: they are not a LiDAR capture and cannot be used for physical wayfinding. Store boundaries, shop identifiers, vertical connections, dimensions and navigation routes require validation.
+- Three distinct, **provisionally traced** levels: **LL**, **UL** and **L3**
+- Interactive 3D viewer: rotate, tilt, pan, pinch-zoom and inspect floors together or individually
+- Source-image comparison, search and selection of traced features
+- Pure browser app with WebGL and Canvas fallback, no runtime CDN dependency
+- Image-derived floor vectors, plus reproducible GLB export for native clients
 
-The original self-contained demo and complete dataset currently exist as a ZIP release artifact in the project conversation. This repository is being provisioned as the **source of truth for subsequent deployments**. Do not assume this repository has a deployable demo until its `public/index.html`, map assets and smoke tests are committed.
+**The maps are a mock.** They are traced from three user-supplied raster plans, not captured by LiDAR. Dimensions, shop assignments, building entrances and vertical/navigation links have not been physically verified. Do **not** use them to guide visitors around the real mall.
 
-## Planned repository layout
+## Open the source
 
-- `public/` — static RetailNav browser client, images, floor maps and optimized GLB files
-- `src/` — viewer source and vectorization utilities
-- `docs/` — QA, provenance and mapping conventions
-- `deploy/` — non-destructive installation into the existing improvingyourreality.com host
-- `.github/workflows/` — packaging and optional approved deployment
+- [3D browser app](public/index.html) — self-contained browser HTML
+- [Floor manifest](public/maps/manifest.json) — LL, UL and L3 URLs
+- [Vector floor files](public/maps/) — geometric features and navigable-grid samples
+- [Editable viewer](src/viewer.js) and [HTML template](src/page.template.html)
+- [Build scripts](scripts/) — regenerate the HTML and produce GLB models
+- [Safe Contabo deployment instructions](deploy/README.md)
 
-## Deployment target
+To serve locally:
+
+```bash
+python3 -m http.server 8080 --directory public
+# Open http://localhost:8080 in a browser
+```
+
+To rebuild/edit:
+
+```bash
+python3 scripts/build-web.py
+python3 scripts/verify.py public
+python3 scripts/build-glb.py public
+python3 scripts/verify.py public
+```
+
+No pip packages, npm install or CDN are required for these commands.
+
+## Release packaging
+
+[GitHub Actions → Verify and package RetailNav](../../actions) assembles the standalone viewer and four GLB files (three individual models and one combined), checks the geometry, and publishes a downloadable **RetailNav-Aventura-static-site** workflow artifact.
+
+GLB assets are generated from the compact vector files rather than manually attached to the repository. Individual models remain floor-addressable, and the combined model preserves floor groups.
+
+## Intended Contabo installation
 
 `https://improvingyourreality.com/retailnav/`
 
-The VPS (Contabo) deployment is **not active**. The server's existing document root / reverse proxy must be inspected before any write. The deployment should update **only** the `retailnav` directory and must never modify unrelated applications.
+**Not deployed or verified on Contabo yet.** The user’s production server may use a container reverse proxy rather than a standard document root. Confirm how the site is served before installing anything. The installer must only write the `retailnav/` subtree and leave all other applications untouched.
 
-Use [deploy/README.md](deploy/README.md) to configure a safe path and deployment credentials. **Do not commit passwords, SSH private keys or token values**.
+After the site’s actual static document root is identified, see [deploy/README.md](deploy/README.md).
 
-## Project guarantees
+## Validation required before production
 
-1. Geometries on distinct floors are not copies of one another.
-2. A visitor can orbit, pan, pinch-zoom and isolate levels.
-3. A loading error must show a clear message rather than remain on "initializing".
-4. Navigation in a physical shopping mall remains disabled until maps are calibrated and validated.
+Real-world scale calibration, geometric alignment, tenant/door metadata, connectivity across floors, accessibility, fire exits, map provenance/rights, physical on-site QA and iPhone Safari testing are still needed.
 
-Copyright and floorplan-source provenance must be reviewed before commercial publication.
-
-Previous project repo: `romancanoniero/MallMasters` (preserved; not automatically migrated).
+Former exploratory repo `romancanoniero/MallMasters` remains unchanged.

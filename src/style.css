@@ -80,3 +80,7 @@
   .rnSocialDialog>.dialoghead{padding:10px}
 }
 
+
+.rnSocialBody .rnDanger{border-color:#78454a;background:#2b1e28}
+.rnSocialBody .rnDelete{background:#5c2835;border-color:#b05869;color:#ffe8ee;font-weight:700}
+.rnSocialBody .rnDelete:hover{background:#71303e}

@@ -1,0 +1,199 @@
+/* RetailNav opt-in positioning.
+ * GPS only identifies the mall. Phone orientation gives a direction estimate.
+ * An indoor point requires a physical anchor: a map tap or a calibrated QR.
+ * Motion provides optional dead reckoning AFTER explicit plan scale calibration.
+ * Nothing in this module sends coordinates to the backend or persists them.
+ */
+(()=>{
+'use strict';
+const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const $=id=>document.getElementById(id);
+const ui={open:$('rnIndoorBtn'),panel:$('rnIndoorDialog'),
+ close:$('rnIndoorClose'),gps:$('rnGPSBtn'),anchor:$('rnAnchorBtn'),
+ compass:$('rnCompassBtn'),align:$('rnHeadingAlignBtn'),
+ motion:$('rnMotionBtn'),scale:$('rnScale100Input'),
+ status:$('rnIndoorStatus'),heading:$('rnHeadingStatus'),
+ position:$('rnIndoorPositionStatus'),point:$('rnMyPositionMarker'),
+ reset:$('rnIndoorResetBtn')};
+if(!ui.panel||!ui.point)return;
+let near=false,gpsAccuracy=null,gpsDistance=null,geoWatch=null;
+let anchor=null,heading=null,headingSource='unavailable',compassEnabled=false;
+let compassOffset=null,stepEnabled=false,steps=0,lastMotion=0,gravitational=9.81;
+let uncertaintyMetres=null,motionScale=null,compassListener=false,motionListener=false;
+const radians=d=>d*Math.PI/180;
+function proximity(lat,lon) {
+ if(!mall.gps)return Infinity;
+ const phi=radians(lat),ph2=radians(mall.gps.lat),dl=radians(lon-mall.gps.lon);
+ const dphi=ph2-phi;
+ const a=Math.sin(dphi/2)**2+Math.cos(phi)*Math.cos(ph2)*Math.sin(dl/2)**2;
+ return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function updateMessage(){
+ const gps=near?'Dentro de la zona aproximada de '+mall.name+'.':
+  gpsDistance===null?'GPS desactivado.':'No se ha confirmado este shopping por GPS.';
+ const place=anchor
+  ?'Referencia interior: '+anchor.floor+' · posición elegida manualmente. Error estimado: '+
+    (Math.round(uncertaintyMetres||0)||'sin escala')+(motionScale?' m.':' (sin distancia calibrada).')
+  :'No hay punto interior calibrado. El GPS no permite seleccionar un pasillo.';
+ ui.status.textContent=gps+(gpsAccuracy!==null?' Precisión del GPS: ±'+Math.round(gpsAccuracy)+' m.':'')+
+  ' No identifica planta ni local.';
+ ui.position.textContent=place;
+ ui.heading.textContent=heading===null?'Brújula apagada.':
+  'Orientación '+Math.round(heading)+'° ('+headingSource+'). '+(
+    compassOffset===null?'Aún no alineada al plano.':'Alineada manualmente al mapa.'
+  )+(steps?' · '+steps+' pasos detectados':'');
+}
+function reset(){
+ anchor=null;heading=null;compassOffset=null;steps=0;near=false;
+ gpsDistance=null;gpsAccuracy=null;uncertaintyMetres=null;motionScale=null;
+ if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null;}
+ ui.scale.value='';ui.point.hidden=true;updateMessage();
+ window.__RETAILNAV__?.invalidate?.();
+}
+ui.open?.addEventListener('click',()=>{updateMessage();ui.panel.showModal();});
+ui.close?.addEventListener('click',()=>ui.panel.close());
+ui.reset?.addEventListener('click',reset);
+ui.gps?.addEventListener('click',()=>{
+ if(!navigator.geolocation){ui.status.textContent='GPS no disponible en este navegador.';return;}
+ ui.status.textContent='Solicitando permiso de ubicación al navegador…';
+ if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null;}
+ geoWatch=navigator.geolocation.watchPosition(pos=>{
+  gpsAccuracy=pos.coords.accuracy;
+  gpsDistance=proximity(pos.coords.latitude,pos.coords.longitude);
+  near=gpsDistance<=((mall.gps?.radiusM||0)+Math.min(gpsAccuracy,150));
+  if(!near&&anchor){
+    // Hide stale mall anchor if GPS leaves the expected area by a large margin.
+    const outside=gpsDistance>(mall.gps?.radiusM||0)+Math.max(500,gpsAccuracy*2);
+    if(outside){anchor=null;ui.point.hidden=true;}
+  }
+  updateMessage();
+ },err=>{
+  ui.status.textContent=err.code===1?'Permiso de GPS denegado; la ubicación manual sigue disponible.':
+    'GPS no disponible. Podés elegir el punto manualmente.';
+ },{enableHighAccuracy:true,maximumAge:15000,timeout:13000});
+});
+ui.anchor?.addEventListener('click',()=>{
+ ui.panel.close();
+ if(!window.__RETAILNAV__?.getState().ready)return;
+ window.__RETAILNAV__.beginManualLocation();
+});
+window.addEventListener('retailnav:map-point',event=>{
+ const p=event.detail;
+ if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||
+  !window.__RETAILNAV__?.floors.some(f=>f.id===p.floor))return;
+ anchor={floor:p.floor,x:p.x,y:p.y,source:'manual'};
+ uncertaintyMetres=motionScale?.5:null;
+ steps=0;ui.point.hidden=false;
+ ui.position.textContent='Ubicación manual colocada. Activá la brújula y alineá el mapa.';
+ window.__RETAILNAV__?.invalidate?.();
+ updateMessage();
+});
+function readOrientation(e){
+ if(Number.isFinite(e.webkitCompassHeading)){
+  heading=(e.webkitCompassHeading+360)%360;
+  headingSource='brújula iOS';compassEnabled=true;
+ }else if(e.absolute&&Number.isFinite(e.alpha)){
+  heading=(360-e.alpha)%360;
+  headingSource='brújula absoluta';compassEnabled=true;
+ }else if(Number.isFinite(e.alpha)){
+  heading=(360-e.alpha)%360;
+  headingSource='orientación relativa — necesita alineación';compassEnabled=true;
+ }
+ updateMessage();window.__RETAILNAV__?.invalidate?.();
+}
+ui.compass?.addEventListener('click',async()=>{
+ const ctor=window.DeviceOrientationEvent;
+ if(!ctor){ui.heading.textContent='No hay sensor de orientación disponible.';return;}
+ try{
+  if(typeof ctor.requestPermission==='function'){
+   const permission=await ctor.requestPermission();
+   if(permission!=='granted')throw Error('Permiso no concedido');
+  }
+  if(!compassListener){
+   window.addEventListener('deviceorientation',readOrientation);
+   compassListener=true;
+  }
+  ui.heading.textContent='Brújula activada. Esperando datos del sensor…';
+ }catch(e){ui.heading.textContent='Brújula sin permiso: '+e.message;}
+});
+ui.align?.addEventListener('click',()=>{
+ if(heading===null){ui.heading.textContent='Primero activá la brújula y recibí una lectura.';return;}
+ if(!anchor){ui.heading.textContent='Primero indicá en qué punto del plano estás.';return;}
+ // The visitor points their phone in the real-world direction matching UP in
+ // the displayed floor plan, then taps this. It calibrates map-relative north.
+ compassOffset=heading;
+ updateMessage();window.__RETAILNAV__?.invalidate?.();
+});
+function processMotion(e){
+ if(!stepEnabled||!anchor||heading===null||compassOffset===null||!motionScale)return;
+ const a=e.accelerationIncludingGravity||e.acceleration;
+ if(!a||![a.x,a.y,a.z].every(Number.isFinite))return;
+ const mag=Math.hypot(a.x,a.y,a.z);
+ gravitational=gravitational*.92+mag*.08;
+ const now=e.timeStamp||performance.now();
+ if(mag-gravitational>1.65&&now-lastMotion>420){
+  lastMotion=now;steps++;
+  const rad=radians(heading-compassOffset);
+  const stride=0.70; // indicative adult stride; not a personal measurement
+  const px=stride/motionScale;
+  anchor.x+=Math.sin(rad)*px;
+  anchor.y-=Math.cos(rad)*px;
+  uncertaintyMetres=(uncertaintyMetres||0)+.65;
+  if(steps>=30||uncertaintyMetres>18){
+   stepEnabled=false;
+   ui.position.textContent='Estimación de pasos detenida: demasiada deriva. Recalibrá tu posición.';
+  }
+  updateMessage();window.__RETAILNAV__?.invalidate?.();
+ }
+}
+ui.motion?.addEventListener('click',async()=>{
+ if(!anchor||heading===null||compassOffset===null){
+  ui.position.textContent='Antes de estimar pasos, calibrá punto y orientación.';return;
+ }
+ const measured=Number(ui.scale.value);
+ if(!Number.isFinite(measured)||measured<1||measured>200){
+  ui.position.textContent='Indicá cuántos metros reales representan 100 píxeles del plano (escala medida).';
+  return;
+ }
+ motionScale=measured/100;uncertaintyMetres=Math.max(1,uncertaintyMetres||0);
+ const ctor=window.DeviceMotionEvent;
+ if(!ctor){ui.position.textContent='Acelerómetro no disponible.';return;}
+ try{
+  if(typeof ctor.requestPermission==='function'){
+   const access=await ctor.requestPermission();
+   if(access!=='granted')throw Error('Permiso denegado');
+  }
+  if(!motionListener){window.addEventListener('devicemotion',processMotion);motionListener=true;}
+  stepEnabled=true;
+  ui.position.textContent='Pasos experimentales activados. Usá el punto sólo como estimación.';
+ }catch(e){ui.position.textContent='Sensor de movimiento: '+e.message;}
+});
+function draw(){
+ if(!anchor||!ui.point)return;
+ const view=window.__RETAILNAV__;
+ if(!view?.getState().visible.includes(anchor.floor)){ui.point.hidden=true;return;}
+ const world=view.pinWorld(anchor.floor,anchor.x,anchor.y);
+ const p=world&&view.projectWorld([world[0],world[1]+2,world[2]]);
+ if(!p||p.w<=0||p.z<=-1||p.z>=1||p.x<5||p.y<5||
+  p.x>ui.point.parentElement.clientWidth-5||
+  p.y>ui.point.parentElement.clientHeight-5){ui.point.hidden=true;return;}
+ ui.point.hidden=false;ui.point.style.left=p.x+'px';ui.point.style.top=p.y+'px';
+ const arrow=ui.point.querySelector('.rnIndoorArrow');
+ if(arrow&&heading!==null&&compassOffset!==null){
+  const r=radians(heading-compassOffset);
+  const dist=7;
+  const p2=view.projectWorld([world[0]+Math.sin(r)*dist,world[1]+2,world[2]-Math.cos(r)*dist]);
+  if(p2&&p2.w>0)arrow.style.transform='translate(-50%,-90%) rotate('+
+    (Math.atan2(p2.x-p.x,-(p2.y-p.y))*180/Math.PI)+'deg)';
+ }
+}
+updateMessage();
+window.RetailNavIndoor={draw,getState:()=>({
+ nearMall:near,gpsAccuracyM:gpsAccuracy,mallDistanceM:gpsDistance,
+ anchor:anchor?{...anchor}:null,indoorSource:anchor?'manual-anchor':null,
+ headingDeg:heading,headingSource,aligned:compassOffset!==null,
+ steps,motionScaleCalibrated:motionScale!==null,stepEnabled,
+ uncertaintyMetres,geolocationStored:false,sendsDataToServer:false,
+ confidence:anchor?(stepEnabled?'low-dead-reckoning':'manual-anchor'):'none'
+})};
+})();

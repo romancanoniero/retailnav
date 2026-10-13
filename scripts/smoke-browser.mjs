@@ -53,9 +53,16 @@ try {
   });
   assert.equal(pinInfo.registered,9,'Nine seeded friend avatars registered');
   assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
-  assert.ok(pinInfo.paintedPixels>40,'3D marker canvas must render actual colored pin pixels');
-  assert.equal(pinInfo.design,'blue-reference-photographic-v1','Reference pin design must be deployed');
-  assert.ok(pinInfo.bluePixels>12,'Blue teardrop body must be visible in rendered pixels');
+  if(viewer.renderer==='WebGL'){
+    const solid=await page.evaluate(()=>window.RetailNavPins.getSolidState());
+    assert.equal(solid.mode,'solid-webgl-mesh');
+    assert.ok(solid.triangles>100 && solid.bodyThicknessWorld>.3);
+    assert.ok(solid.ringThicknessWorld>.1 && solid.fixedWorldRotation);
+    assert.ok(solid.rendered>=1);
+    log('TRUE_3D_MESH',solid);
+  }else{
+    assert.ok(pinInfo.paintedPixels>40 && pinInfo.bluePixels>12,'Fallback Canvas draws markers');
+  }
   await page.waitForFunction(()=>window.RetailNavPins.getState().photoLoaded===9,
     null,{timeout:20000});
   assert.equal((await page.evaluate(()=>window.RetailNavPins.getState())).photoErrors,0);
@@ -109,6 +116,23 @@ try {
   assert.ok(after.before.some((v,i)=>Math.abs(v-after.transformed[i])>0.001),
     'Two-finger anchored twist must rotate camera');
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
+  if(viewer.renderer==='WebGL'){
+    const faceA=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
+    await page.evaluate(()=>{
+      const el=document.querySelector('#canvas'),r=el.getBoundingClientRect();
+      const x=r.left+r.width/2,y=r.top+r.height/2;
+      const dispatch=(type,dx)=>el.dispatchEvent(new PointerEvent(type,{
+        bubbles:true,cancelable:true,pointerId:35,pointerType:'touch',
+        clientX:x+dx,clientY:y,button:0,buttons:type==='pointerup'?0:1
+      }));
+      dispatch('pointerdown',-75);dispatch('pointermove',110);dispatch('pointerup',110);
+    });
+    const faceB=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
+    assert.ok(Math.abs(faceA-faceB)>.05,
+      'World-fixed 3D photo face must change viewing angle on map rotation');
+    log('PIN_PARALLAX',{before:faceA,after:faceB});
+  }
+
 
   await page.locator('#friendsBtn').click();
   const demoRows=page.locator('#rnDemoFriends .rnDemoPerson');
@@ -403,6 +427,30 @@ try {
   assert.ok(apStatus.viewer.features[0][1]>=40);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
+  const ids=await apPage.evaluate(()=>window.RetailNavUnits.getState());
+  assert.ok(ids.count>=80,'Shop identifiers must survive mall vectorisation');
+  await apPage.locator('#search').fill('K1-31');
+  assert.ok(await apPage.locator('#results .rnUnitResult').count()>=1);
+  await apPage.locator('#results .rnUnitResult').first().click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavUnits.getState())).selected,'K1-31');
+  await apPage.locator('#rnUnitClose').click();
+  await apPage.locator('#search').fill('');
+  log('STORE_IDS','Shop codes indexed and searchable, including unresolved regions.');
+
+  const poi=await apPage.evaluate(()=>window.RetailNavPOI?.getState());
+  assert.ok(poi&&poi.count>=10,'AP Plaza must include semantic bathrooms, exits, escalators and information');
+  await apPage.waitForFunction(()=>window.RetailNavPOI?.getState().shown.length>=1,
+    null,{timeout:12000});
+  assert.ok(await apPage.locator('#rnServicesToggle').isVisible());
+  await apPage.locator('#search').fill('baños');
+  assert.ok(await apPage.locator('#results .rnPoiResult').count()>=2,
+    'Searching for toilets must return both AP Plaza bathroom facilities');
+  await apPage.locator('#search').fill('');
+  await apPage.locator('#rnServicesToggle').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,false);
+  await apPage.locator('#rnServicesToggle').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,true);
+  log('AP_AMENITIES','POI layer searchable: bathrooms, lift, metro, exits and information; uncertainty disclosed.');
   await apPage.waitForFunction(()=>window.RetailNavPins?.getState().photoLoaded===6,
     null,{timeout:25000});
   assert.equal(await apPage.locator('#routeBtn').isDisabled(),true);
@@ -410,6 +458,21 @@ try {
   assert.equal(await apPage.locator('#rnDemoFriends .rnDemoPerson').count(),6);
   assert.equal(await apPage.locator('#rnMarkLocation').isDisabled(),true);
   await apPage.locator('#rnClose').click();
+  await apPage.locator('#rnIndoorBtn').click();
+  assert.ok(await apPage.locator('#rnIndoorDialog').isVisible());
+  const indoors=await apPage.evaluate(()=>window.RetailNavIndoor.getState());
+  assert.equal(indoors.anchor,null,'GPS may not fabricate any indoor coordinates');
+  assert.equal(indoors.sendsDataToServer,false);
+  await apPage.evaluate(()=>window.dispatchEvent(new CustomEvent('retailnav:map-point',{
+    detail:{floor:'B1',x:525,y:320}
+  })));
+  const anchored=await apPage.evaluate(()=>window.RetailNavIndoor.getState());
+  assert.equal(anchored.indoorSource,'manual-anchor');
+  assert.equal(anchored.anchor.floor,'B1');
+  await apPage.locator('#rnIndoorResetBtn').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavIndoor.getState())).anchor,null);
+  await apPage.locator('#rnIndoorClose').click();
+  log('INDOOR_CALIBRATION','Opt-in anchor, compass controls and data erasure.');
   await apPage.locator('#mallSettingsBtn').click();
   assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
   assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(

@@ -15,6 +15,9 @@ DO NOT enable real navigation until a person validates surveyed geometry.
 """
 import argparse
 import base64
+import csv
+from unit_index import inside
+from unit_ocr import scan as scan_unit_codes
 import json
 import math
 import re
@@ -88,44 +91,50 @@ def feature(fid, kind, name, contour, tolerance):
     return [fid,kind,name,delta,[list(range(len(pts)))],tris,center]
 
 
-def extract(image, level, area=170, tolerance=.018):
+def extract(image, level, area=28, tolerance=.031):
     hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
-    saturation=hsv[:,:,1]
-    brightness=hsv[:,:,2]
-    mask=np.uint8((saturation>46)&(brightness>73))*255
-    # On monochrome architectural plans, black linework may enclose rooms.
-    # Fallback is deliberately provisional and requires extra review.
-    if np.mean(mask>0)<.018:
-        gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-        edges=cv2.Canny(gray,60,150)
-        edges=cv2.morphologyEx(edges,cv2.MORPH_CLOSE,np.ones((3,3),np.uint8))
-        mask=255-edges
+    gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    background=cv2.GaussianBlur(gray,(0,0),5)
+    colour=np.uint8((hsv[:,:,1]>25)&(hsv[:,:,2]>65))*255
+    local_dark=np.uint8(cv2.subtract(background,gray)>20)*255
+    horizontal=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((1,9),np.uint8))
+    vertical=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((9,1),np.uint8))
+    border=cv2.dilate(cv2.bitwise_or(horizontal,vertical),np.ones((2,2),np.uint8))
+    mask=cv2.bitwise_and(colour,cv2.bitwise_not(border))
+    if np.mean(colour>0)<.018:
+        mask=cv2.bitwise_and(255-cv2.Canny(gray,60,150),cv2.bitwise_not(border))
     mask[:5]=0;mask[-5:]=0;mask[:,:5]=0;mask[:,-5:]=0
-    mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((2,2),np.uint8))
-    contours,_=cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-    polygons=[]
-    limit=image.shape[0]*image.shape[1]*.18
-    for contour in contours:
-        a=cv2.contourArea(contour)
-        x,y,w,h=cv2.boundingRect(contour)
-        if area<=a<limit and w>4 and h>4:
-            polygons.append((a,contour))
-    polygons.sort(key=lambda item:-item[0])
-    result=[]
-    for _,polygon in polygons[:400]:
-        index=len(result)+1
-        item=feature(f"{level}-{index:03}",1,"",polygon,tolerance)
-        if item:result.append(item)
-    return result
+    count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
+    candidates=[]
+    limit=image.shape[0]*image.shape[1]*.20
+    for code in range(1,count):
+        x,y,w,h,size=map(int,stats[code])
+        if size<area or size>limit or w<3 or h<3:continue
+        region=np.uint8(labels[y:y+h,x:x+w]==code)*255
+        outlines,_=cv2.findContours(region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        if not outlines:continue
+        curve=max(outlines,key=cv2.contourArea)
+        if cv2.contourArea(curve)<area*.65:continue
+        curve[:,:,0]+=x;curve[:,:,1]+=y
+        candidates.append((size,curve))
+    candidates.sort(key=lambda item:-item[0])
+    features=[]
+    for _,contour in candidates[:600]:
+        identifier="{}-{:04d}".format(level,len(features)+1)
+        entry=feature(identifier,1,"",contour,tolerance)
+        if entry:features.append(entry)
+    return features
 
 
 def anchors(features, labels):
     for item in labels:
-        target=(float(item["x"]),float(item["y"]))
-        nearest=min(features,key=lambda f:math.dist(f[6],target),default=None)
-        if nearest and math.dist(nearest[6],target)<float(item.get("maxDistance",80)):
-            nearest[1]=0
-            nearest[2]=str(item["name"])
+        point=(float(item["x"]),float(item["y"]))
+        candidates=[feature for feature in features if inside(point,feature)]
+        if len(candidates)==1:
+            candidates[0][1]=0
+            candidates[0][2]=str(item["name"])
+        else:
+            print("Anchor",item["name"],"needs manual polygon review; matches:",len(candidates))
 
 
 def make_preview(image, regions):
@@ -151,9 +160,11 @@ def run():
     p.add_argument("--out",required=True)
     p.add_argument("--corners",help="Original image TL;TR;BR;BL points")
     p.add_argument("--size",default="1440x620",help="Perspective-corrected width x height")
+    p.add_argument("--unit-codes",help="Optional reviewed identifiers JSON by floor, with code/x/y/name")
+    p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
-    p.add_argument("--min-area",type=int,default=170)
-    p.add_argument("--simplify",type=float,default=.018)
+    p.add_argument("--min-area",type=int,default=28)
+    p.add_argument("--simplify",type=float,default=.031)
     p.add_argument("--gps",help="Optional mall-level geographic anchor: latitude,longitude")
     args=p.parse_args()
     if not re.fullmatch(r"[a-z][a-z0-9-]{1,48}",args.mall):
@@ -165,6 +176,7 @@ def run():
     output=Path(args.out)
     output.mkdir(parents=True,exist_ok=True)
     labels=json.loads(Path(args.labels).read_text(encoding="utf-8")) if args.labels else {}
+    code_labels=json.loads(Path(args.unit_codes).read_text(encoding="utf-8")) if args.unit_codes else {}
     manifest={
         "id":args.mall,"name":args.name or args.mall.replace("-"," ").title(),
         "city":args.city,"source":"Operator-supplied floor photos",
@@ -186,6 +198,25 @@ def run():
         if quad is not None:
             q=np.float32([[0,0],[width-1,0],[width-1,height-1],[0,height-1]])
             image=cv2.warpPerspective(image,cv2.getPerspectiveTransform(quad,q),(width,height))
+
+        detected,message=([], "OCR disabled") if args.disable_ocr else scan_unit_codes(image)
+        codes={row["code"]:row for row in detected}
+        for reviewed in code_labels.get(level,[]):
+            token=str(reviewed["code"]).strip().upper()
+            codes[token]={"code":token,"x":float(reviewed["x"]),
+                "y":float(reviewed["y"]),"name":str(reviewed.get("name","")),
+                "source":"manual-from-photograph"}
+        if codes:
+            out_csv=output/(level+"-unit-codes.csv")
+            with out_csv.open("w",encoding="utf-8",newline="") as stream:
+                writer=csv.DictWriter(stream,fieldnames=["code","x","y","name","source"])
+                writer.writeheader()
+                for token in sorted(codes):
+                    data=codes[token]
+                    writer.writerow({name:data.get(name,"") for name in writer.fieldnames})
+        print(level+":",len(codes),"visible candidate store IDs.",message,
+              "Check labels against the source photo before trusting their polygons.")
+
         feats=extract(image,level,args.min_area,args.simplify)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)

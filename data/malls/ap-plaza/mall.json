@@ -21,17 +21,125 @@
     "y": 320,
     "status": "punto-rojo-del-cartel-no-gps"
   },
-  "warning": "Regiones cromáticas vectorizadas de una fotografía. No verificadas las divisiones exactas de los locales ni los pasillos. No se permite navegación real.",
+  "warning": "190 contornos provisionales recuperan más divisiones negras, pero no equivalen a 190 locales confirmados. Identificadores de locales transcritos del cartel y vinculados solo cuando el contorno coincide sin ambigüedad. Pasillos, entradas, escala y conexiones verticales pendientes de verificación.",
   "floors": [
     {
       "id": "B1",
       "name": "Nivel B1 · AP Plaza",
-      "geometry": "B1.geometry.zlib.b64",
+      "geometry": "B1.geometry.v2.zlib.b64",
       "imageSize": [
         1440,
         620
       ],
       "source": "AP Plaza Floor Guide Map (fotografía rectificada)"
     }
-  ]
+  ],
+  "pois": [
+    {
+      "id": "ap-b1-wc-west",
+      "category": "toilet",
+      "name": "Baños oeste",
+      "floor": "B1",
+      "x": 12,
+      "y": 445,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-wc-east",
+      "category": "toilet",
+      "name": "Baños este",
+      "floor": "B1",
+      "x": 1433,
+      "y": 447,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-elevator",
+      "category": "elevator",
+      "name": "Ascensor noreste",
+      "floor": "B1",
+      "x": 1393,
+      "y": 111,
+      "confidence": "por-revisar"
+    },
+    {
+      "id": "ap-b1-metro",
+      "category": "metro",
+      "name": "Metro Línea 2",
+      "floor": "B1",
+      "x": 647,
+      "y": 57,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-info",
+      "category": "information",
+      "name": "Información",
+      "floor": "B1",
+      "x": 942,
+      "y": 318,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-exit8",
+      "category": "exit",
+      "name": "Salida 8",
+      "floor": "B1",
+      "x": 450,
+      "y": 105,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-exit7",
+      "category": "exit",
+      "name": "Salida 7",
+      "floor": "B1",
+      "x": 843,
+      "y": 105,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-vertical8",
+      "category": "vertical-uncertain",
+      "name": "Conexión vertical salida 8",
+      "floor": "B1",
+      "x": 515,
+      "y": 108,
+      "confidence": "por-revisar"
+    },
+    {
+      "id": "ap-b1-vertical7",
+      "category": "vertical-uncertain",
+      "name": "Conexión vertical salida 7",
+      "floor": "B1",
+      "x": 785,
+      "y": 107,
+      "confidence": "por-revisar"
+    },
+    {
+      "id": "ap-b1-parking",
+      "category": "parking",
+      "name": "Estacionamiento",
+      "floor": "B1",
+      "x": null,
+      "y": null,
+      "confidence": "posición-pendiente"
+    },
+    {
+      "id": "ap-b1-printed-here",
+      "category": "sign-you-are-here",
+      "name": "Usted está aquí (cartel)",
+      "floor": "B1",
+      "x": 366,
+      "y": 319,
+      "confidence": "cartel"
+    }
+  ],
+  "indoorPositionCalibrated": false,
+  "semanticLayerVersion": 1,
+  "vectorMethod": "dark-ink-divider-connected-components-v2",
+  "vectorRegionCount": 190,
+  "vectorQuality": "requires-manual-review",
+  "floorPlanMetricScaleVerified": false,
+  "numberOfPhysicalStoresVerified": false
 }

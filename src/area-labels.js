@@ -68,6 +68,16 @@ function draw(){
  const view=window.__RETAILNAV__,state=view?.getState();
  if(!state?.ready||!areas.length)return;
  frames++;
+ // WebGL owns the single, blue illuminated 3D sign for every zone. Rendering
+ // a second HTML badge caused the duplicated text reported on iPhone.
+ // HTML plaques are ONLY a fallback when 3D rendering is unavailable.
+ if(state.renderer==='WebGL'){
+  for(const el of elements.values())el.hidden=true;
+  boxes=[];shown=window.RetailNavDistricts?.getState?.().visibleIds||[];
+  trigger.dataset.visibleNames=String(shown.length);
+  trigger.setAttribute('aria-label','Ver las '+areas.length+' zonas comerciales');
+  return;
+ }
  const visible=new Set(state.visible);
  const screenWidth=canvas.clientWidth,screenHeight=canvas.clientHeight;
  if(!screenWidth||!screenHeight)return;
@@ -123,6 +133,7 @@ window.RetailNavAreaLabels={
   total:areas.length,visibleCount:shown.length,
   visibleIds:shown.slice(),frames,
   textUpright:true,screenSpace:true,orientationResponsive:true,
+  webglLabelsAreUnified:true,
   alwaysAvailableInDirectory:areas.length,
   menuOpen,boxes:getProjectedBoxes()
  })

@@ -194,7 +194,8 @@ try {
     send('pointerup',41,-50,50);send('pointerup',42,50,50);
     return {before,after};
   });
-  assert.ok(Math.abs(tilting.after-tilting.before)>.02,'Two-finger vertical gesture tilts');
+  assert.ok(tilting.after>tilting.before+.02,
+    'iPhone direction: swipe two fingers UP to reveal a lower, more three-dimensional viewing angle');
   assert.ok(tilting.after>=-Math.PI/2&&tilting.after<=-.25,'Prevent camera inversion');
   log('TOUCH_MAP',{pan:true,tilting});
   // Two fingers: first remains anchored while second twists around it.
@@ -205,18 +206,44 @@ try {
       bubbles:true,cancelable:true,pointerId:id,pointerType:'touch',
       clientX:x+dx,clientY:y+dy,button:0,buttons:type==='pointerup'?0:1
     }));
-    const before=view.getState().q;
+    const before=view.getState().q,beforeYaw=view.getState().orbitYaw;
     send('pointerdown',10,-45,0);
     send('pointerdown',11,45,0);
     send('pointermove',11,0,45);
-    const transformed=view.getState().q;
+    const transformed=view.getState().q,afterYaw=view.getState().orbitYaw;
     send('pointerup',11,0,45);
     send('pointerup',10,-45,0);
-    return {before,transformed};
+    return {before,transformed,beforeYaw,afterYaw};
   });
   assert.ok(after.before.some((v,i)=>Math.abs(v-after.transformed[i])>0.001),
     'Two-finger anchored twist must rotate camera');
-  log('TOUCH','Two-finger anchored twist changed camera quaternion.');
+  assert.ok(after.afterYaw>after.beforeYaw+.3,
+    'iPhone direction: clockwise two-finger twist must also rotate the map clockwise');
+  log('TOUCH','Two-finger anchored twist changed camera quaternion in iPhone direction.');
+  // Pinch-out must zoom IN; pinch-in must zoom OUT.
+  const pinching=await page.evaluate(()=>{
+    const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
+    const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const send=(t,id,dx)=>canvas.dispatchEvent(new PointerEvent(t,{
+      bubbles:true,pointerType:'touch',pointerId:id,button:0,
+      clientX:x+dx,clientY:y,buttons:t==='pointerup'?0:1
+    }));
+    const initial=view.getState().distance;
+    send('pointerdown',74,-35);send('pointerdown',75,35);
+    send('pointermove',75,105);
+    const spread=view.getState().distance;
+    send('pointerup',75,105);send('pointerup',74,-35);
+    send('pointerdown',76,-75);send('pointerdown',77,75);
+    send('pointermove',77,15);
+    const pinch=view.getState().distance;
+    send('pointerup',77,15);send('pointerup',76,-75);
+    return {initial,spread,pinch};
+  });
+  assert.ok(pinching.spread<pinching.initial,
+    'Spreading two fingers must zoom in like iOS Maps');
+  assert.ok(pinching.pinch>pinching.spread,
+    'Closing two fingers must zoom out like iOS Maps');
+  log('PINCH_NATIVE',pinching);
   if(viewer.renderer==='WebGL'){
     await page.locator('#pan').click();
     assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'orbit-3d');
@@ -630,6 +657,9 @@ try {
   log('AP_FLOOR_COMPARISON','No floor widget for one floor; original photo and geometry independently toggle at adjustable zoom.');
   assert.equal(apStatus.viewer.features[0][1],197,
     'Published AP Plaza B1 should use the new provisional AI2D v2 geometry');
+  assert.equal(apStatus.viewer.zoomMin,4,
+    'AP Plaza maximum zoom must allow up to six times closer than the previous 24-unit limit');
+  assert.equal(apStatus.viewer.nativeGestureDirections,true);
   assert.equal(await apPage.evaluate(()=>window.RETAILNAV_ACTIVE_MALL.navigable),false);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
@@ -792,6 +822,30 @@ try {
   assert.equal((await apPage.evaluate(()=>window.RetailNavIndoor.getState())).anchor,null);
   await apPage.locator('#rnIndoorClose').click();
   log('INDOOR_CALIBRATION','Opt-in anchor, compass controls and data erasure.');
+  const oneHandZoom=await apPage.evaluate(()=>{
+    const view=window.__RETAILNAV__,canvas=document.getElementById('canvas');
+    const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const send=(t,id,dy)=>canvas.dispatchEvent(new PointerEvent(t,{
+      bubbles:true,pointerType:'touch',pointerId:id,button:0,
+      clientX:x,clientY:y+dy,buttons:t==='pointerup'?0:1
+    }));
+    const before=view.getState().distance;
+    send('pointerdown',81,0);send('pointerup',81,0);
+    send('pointerdown',82,0);send('pointermove',82,-90);
+    const zoomed=view.getState().distance;
+    send('pointerup',82,-90);
+    return {before,zoomed};
+  });
+  assert.ok(oneHandZoom.zoomed<oneHandZoom.before*.7,
+    'Apple Maps double-tap HOLD + swipe up must zoom in');
+  for(let i=0;i<36;i++)await apPage.locator('#zoomIn').click();
+  const maximum=await apPage.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.ok(maximum.distance>=maximum.zoomMin-.0001&&maximum.distance<=maximum.zoomMin+.02,
+    'Repeated zoom buttons must reach the new close-up limit without crossing near-plane safety bounds');
+  assert.ok(maximum.q.every(Number.isFinite)&&maximum.target.every(Number.isFinite),
+    'Close-up must not create NaN in the 3D camera');
+  await apPage.locator('#reset').click();
+  log('APPLE_NATIVE_ZOOM',{oneHandZoom,maxDistance:maximum.distance});
   await apPage.locator('#mallSettingsBtn').click();
   assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
   assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(

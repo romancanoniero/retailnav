@@ -8,6 +8,10 @@ let active='ALL', wire=false, scan=false, auto=false, panMode=true, labelsOn=tru
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
 const MIN_PITCH=-Math.PI/2,MAX_PITCH=-.25;
+// World units, not metres: photo maps have no surveyed scale.
+// Previous min=24; min=4 yields up to six times more magnification.
+const MIN_ZOOM_DISTANCE=4,MAX_ZOOM_DISTANCE=850;
+const zoomBounds=n=>clamp(n,MIN_ZOOM_DISTANCE,MAX_ZOOM_DISTANCE);
 const wrapAngle=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function updateCameraRotation(){
  // True camera quaternion: yaw around world Y, pitch around local X,
@@ -223,7 +227,7 @@ function anchorCamera(cx,cy,originalTarget,originalPoint){
 }
 function zoomAt(next,clientX,clientY){
  matrices();const anchor=worldPointAt(clientX,clientY,target[1]),origin=target.slice();
- distance=clamp(next,24,700);
+ distance=zoomBounds(next);
  anchorCamera(clientX,clientY,origin,anchor);dirty=true;
 }
 const pointers=new Map();
@@ -239,9 +243,14 @@ function beginGesture(){
 canvas.addEventListener('pointerdown',e=>{
  if(!ready)return;stopAuto();canvas.focus();
  try{canvas.setPointerCapture(e.pointerId);}catch{}
+ const doubleTapCandidate=pointers.size===0&&e.pointerType==='touch'
+  &&lastTap&&performance.now()-lastTap.at<320
+  &&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<35;
  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,
   button:e.button,shift:e.shiftKey,moved:false});
- beginGesture();canvas.classList.add('dragging');dirty=true;
+ beginGesture();
+ if(gesture)gesture.doubleTapHold=Boolean(doubleTapCandidate);
+ canvas.classList.add('dragging');dirty=true;
 });
 canvas.addEventListener('pointermove',e=>{
  if(!ready||!pointers.has(e.pointerId))return;
@@ -253,6 +262,17 @@ canvas.addEventListener('pointermove',e=>{
  if(p.length===1){
   const dx=p[0].x-gesture.p[0].x,dy=p[0].y-gesture.p[0].y;
   target=gesture.target.slice();distance=gesture.distance;
+  // Native iOS: double-tap, HOLD the second tap and drag upwards to
+  // zoom in, downwards to zoom out (with the touched point anchored).
+  if(gesture.doubleTapHold){
+   if(Math.abs(dy)>6){
+    const moved=dy-Math.sign(dy)*6;
+    distance=zoomBounds(gesture.distance*Math.exp(moved*.015));
+    anchorCamera(gesture.p[0].x,gesture.p[0].y,gesture.target,gesture.anchor);
+    lastTap=null;dirty=true;
+   }
+   return;
+  }
   if(panMode||p[0].button===2||p[0].shift){
    if(gesture.anchor)anchorCamera(p[0].x,p[0].y,gesture.target,gesture.anchor);
    else{
@@ -275,12 +295,14 @@ canvas.addEventListener('pointermove',e=>{
   const delta=Math.atan2(b.y-a.y,b.x-a.x)-Math.atan2(bb.y-aa.y,bb.x-aa.x);
   const angle=Math.atan2(Math.sin(delta),Math.cos(delta));
   const dx=(a.x+b.x-aa.x-bb.x)/2,dy=(a.y+b.y-aa.y-bb.y)/2;
-  distance=clamp(gesture.distance*dd/Math.max(5,d),24,700);
-  if(panMode){orbitYaw=gesture.yaw-angle;orbitRoll=0;}
-  else{orbitYaw=gesture.yaw;orbitRoll=wrapAngle(gesture.roll-angle);}
+  distance=zoomBounds(gesture.distance*dd/Math.max(5,d));
+  if(panMode){orbitYaw=gesture.yaw+angle;orbitRoll=0;}
+  else{orbitYaw=gesture.yaw;orbitRoll=wrapAngle(gesture.roll+angle);}
   const tilting=Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.25
    &&Math.abs(d/dd-1)<.13&&Math.abs(angle)<.10;
-  const wantedPitch=gesture.pitch+(tilting?dy*.0045:0);
+  // iPhone Maps: dragging two fingers UP reveals the map in 3D;
+  // dragging DOWN flattens it. Previous direction was reversed.
+  const wantedPitch=gesture.pitch-(tilting?dy*.0045:0);
   orbitPitch=panMode?clamp(wantedPitch,MIN_PITCH,MAX_PITCH):wrapAngle(wantedPitch);
   updateCameraRotation();target=gesture.target.slice();
   if(gesture.anchor){
@@ -331,7 +353,7 @@ canvas.addEventListener('wheel',e=>{
  }else if(e.shiftKey){
   orbitPitch=panMode?clamp(orbitPitch+e.deltaY*.0015,MIN_PITCH,MAX_PITCH)
    :wrapAngle(orbitPitch+e.deltaY*.0015);updateCameraRotation();dirty=true;
- }else zoomAt(distance*Math.exp(e.deltaY*.001),e.clientX,e.clientY);
+ }else zoomAt(distance*Math.exp(e.deltaY*(e.ctrlKey?.0025:.0012)),e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener('keydown',e=>{
  if(!ready)return;
@@ -341,8 +363,8 @@ canvas.addEventListener('keydown',e=>{
  if(key==='ArrowRight')pan(-30,0);
  if(key==='ArrowUp')pan(0,30);
  if(key==='ArrowDown')pan(0,-30);
- if(key==='+'||key==='=')distance=clamp(distance*.86,24,700);
- if(key==='-')distance=clamp(distance*1.16,24,700);
+ if(key==='+'||key==='=')distance=zoomBounds(distance*.86);
+ if(key==='-')distance=zoomBounds(distance*1.16);
  if(key==='['||key===']'){
   orbitYaw+=(key==='['?-.12:.12);updateCameraRotation();
  }
@@ -708,6 +730,6 @@ function applyMallUi(){
   $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
-$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

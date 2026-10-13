@@ -135,7 +135,8 @@ function friendRow(friend){
     if(!friend.position)return;
     const view=window.__RETAILNAV__;
     if(!view){status('Esperá a que cargue el mapa.',true);return;}
-    view.focusAt(friend.position.floor,[friend.position.x,friend.position.y],115);
+    window.RetailNavFocusedFriendId=friend.id;
+     view.focusAt(friend.position.floor,[friend.position.x,friend.position.y],115);
     closePeople();
     status('Ubicación aproximada que compartió '+friend.name+'; no es GPS.');
   },'rnMapLocate');
@@ -213,7 +214,8 @@ function renderDemoContacts(){
     const buttonLocate=button('📍',()=>{
       const view=window.__RETAILNAV__;
       if(!view){status('El mapa 3D todavía se está preparando.',true);return;}
-      view.focusAt(person.position.floor,[person.position.x,person.position.y],105);
+      window.RetailNavFocusedFriendId=person.id;
+       view.focusAt(person.position.floor,[person.position.x,person.position.y],105);
       closePeople();
       status(person.name+' es un amigo ficticio. Posición de prueba en '+person.position.floor+'.');
     },'rnMapLocate');

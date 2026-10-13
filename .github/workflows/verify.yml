@@ -27,6 +27,7 @@ jobs:
           node --check src/pins-webgl.js
           node --check src/poi-layer.js
           node --check src/units.js
+          node --check src/unit-signs-webgl.js
           node --check src/indoor-location.js
           node --check src/qrcode.min.js
           node --check backend/server.mjs

@@ -185,7 +185,7 @@ function applyMallUi(){
     footer.textContent='AP Plaza: 1 plano fotográfico (zona subterránea). Sectores vectorizados automáticamente, nombres pequeños y recorridos sin verificación. No apto para orientarse físicamente hasta revisión.';
   }
   $('mapSubtitle').textContent=mallId==='ap-plaza'
-    ?'61 sectores cromáticos provisionales, derivados de una fotografía. NO es navegación real.'
+    ?''+(selectedMall.vectorRegionCount||0)+' regiones provisionales extraídas de una fotografía. NO es navegación real.'
     :'Contornos y pasillos trazados sobre tus imágenes.';
   $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · planta B1 (foto)':'Las tres plantas, en su posición relativa';
 }

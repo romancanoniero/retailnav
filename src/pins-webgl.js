@@ -246,6 +246,7 @@ pins.getSolidState=()=>({
   triangles:resources?(resources.body.triangles+resources.rim.triangles+resources.disc.triangles):0,
   photoLoaded,photoErrors,
   fixedWorldRotation:true,
+  frontFacingDot:(()=>{const q=window.__RETAILNAV__?.getState().q||[0,0,0,1];return 1-2*(q[0]*q[0]+q[1]*q[1]);})(),
   ringThicknessWorld:5*.119,
   bodyThicknessWorld:7.1*.119
 });

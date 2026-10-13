@@ -33,7 +33,34 @@ try {
   log('START',{renderer:viewer.renderer,active:viewer.active,features:viewer.features,social});
   assert.deepEqual(viewer.visible,['LL','UL','L3']);
   assert.ok(social.anonymous);
-  assert.ok(social.markerCount>=3,'Simulated friends must appear in map overlay');
+  await page.waitForFunction(()=>window.RetailNavPins?.getState().registered===9,
+    null,{timeout:20000});
+  await page.waitForFunction(()=>window.RetailNavPins?.getState().drawn>=1,
+    null,{timeout:20000});
+  const pinInfo=await page.evaluate(()=>{
+    const stage=document.getElementById('peoplePinCanvas');
+    const p=window.RetailNavPins.getState();
+    const rgba=stage.getContext('2d').getImageData(0,0,stage.width,stage.height).data;
+    let occupied=0;
+    for(let i=3;i<rgba.length;i+=47*4)if(rgba[i]>25)occupied++;
+    return {registered:p.registered,drawn:p.drawn,visibleIds:p.visibleIds,
+      canvasWidth:stage.width,canvasHeight:stage.height,paintedPixels:occupied,
+      floors:p.floors,colorPairs:p.colorPairs};
+  });
+  assert.equal(pinInfo.registered,9,'Nine seeded friend avatars registered');
+  assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
+  assert.ok(pinInfo.paintedPixels>40,'3D marker canvas must render actual colored pin pixels');
+  assert.ok(pinInfo.canvasWidth>300 && pinInfo.canvasHeight>300);
+  assert.deepEqual(['LL','UL','L3'].map(level=>pinInfo.floors.filter(f=>f===level).length),[3,3,3]);
+  for(const [id,color] of pinInfo.colorPairs){
+    assert.match(color.body,/^#[0-9a-f]{6}$/i,'body color of '+id);
+    assert.match(color.shadow,/^#[0-9a-f]{6}$/i,'shadow color of '+id);
+    assert.notEqual(color.body,color.shadow,'Distinct shadow and body colors for '+id);
+  }
+  assert.equal(social.demoFriendCount,9);
+  log('NINE_3D_PINS',{drawn:pinInfo.drawn,paintedPixels:pinInfo.paintedPixels,
+    floors:pinInfo.floors,colorCount:pinInfo.colorPairs.length});
+
   const own=await page.evaluate(async()=>{
     const res=await fetch('api/state',{credentials:'same-origin'});
     return {code:res.status,body:await res.json()};
@@ -74,6 +101,27 @@ try {
     'Two-finger anchored twist must rotate camera');
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
 
+  await page.locator('#friendsBtn').click();
+  const demoRows=page.locator('#rnDemoFriends .rnDemoPerson');
+  assert.equal(await demoRows.count(),9,'Nine demo friends must appear in friends pulldown');
+  const rowFloors=await demoRows.evaluateAll(rows=>rows.map(row=>row.dataset.floor));
+  assert.deepEqual(['LL','UL','L3'].map(level=>rowFloors.filter(f=>f===level).length),[3,3,3]);
+  assert.equal(await page.locator('#rnDemoFriendsCount').innerText(),'9');
+  assert.equal(await page.locator('#friendsCount').innerText(),'9');
+  await page.waitForFunction(()=>document.querySelector('#rnDemoFriends img')?.naturalWidth>0,
+    null,{timeout:15000});
+  assert.ok(await page.locator('#rnDemoFriends img').first().isVisible(),
+    'Synthetic profile portraits must be visible in contact list');
+  const pinPerson=await page.evaluate(()=>window.RETAILNAV_DEMO_CONTACTS[0]);
+  await demoRows.first().locator('.rnMapLocate').click();
+  await page.waitForFunction(()=>window.__RETAILNAV__.getState().active==='LL',
+    null,{timeout:10000});
+  assert.equal(await page.locator('#peopleDialog').isVisible(),false);
+  await page.waitForFunction(()=>
+    window.RetailNavPins.getState().visibleIds.includes('mock-ll-01'),
+    null,{timeout:14000});
+  log('FOCUS_DEMO','Contact list marker focuses '+pinPerson.name+' on LL with a 3D avatar pin.');
+  await page.locator('#showAllFloors').click();
   await page.locator('#friendsBtn').click();
   const panel=page.locator('#peopleDialog');
   assert.equal(await panel.evaluate(e=>e.tagName),'ASIDE','Friends menu must not be a dialog');

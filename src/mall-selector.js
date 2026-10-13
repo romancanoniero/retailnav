@@ -14,6 +14,27 @@ window.RETAILNAV_MALL_CATALOG=catalog;
 window.RETAILNAV_ACTIVE_MALL_ID=active;
 window.RETAILNAV_ACTIVE_MALL=catalog[active];
 function get(id){return document.getElementById(id);}
+// Branding is mall-specific, not a fixed RetailNav wordmark. An optional
+// logo is shown ON THE RIGHT of the name only if a same-origin image exists.
+function setMallHeaderBrand(mall){
+ const header=get('mallHeaderName'),img=get('mallHeaderLogo');
+ if(header)header.textContent=mall.name||'Centro comercial';
+ if(!img)return;
+ img.hidden=true;img.removeAttribute('src');
+ const raw=mall.logoUrl||mall.logo;
+ if(typeof raw!=='string'||!raw.trim())return;
+ try{
+  const url=new URL(raw,document.baseURI);
+  const root=new URL('.',document.baseURI).pathname;
+  if(url.origin!==location.origin||!url.pathname.startsWith(root)||
+   !/\.(?:svg|png|webp|jpe?g)$/i.test(url.pathname))return;
+  img.alt='Logotipo de '+mall.name;
+  img.onload=()=>{img.hidden=false;};
+  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');};
+  img.src=url.href;
+ }catch{img.hidden=true;}
+}
+setMallHeaderBrand(window.RETAILNAV_ACTIVE_MALL);
 function human(mall){return mall.name+' · '+mall.city+(mall.status==='vectorizado-provisional'?' · EN REVISIÓN':'');}
 const panel=get('mallSettingsDialog');
 const select=get('mallSelect');

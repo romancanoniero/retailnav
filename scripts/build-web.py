@@ -3,6 +3,7 @@
 import json
 import zlib
 import base64
+import csv
 from pathlib import Path
 
 repo = Path(__file__).resolve().parents[1]

@@ -241,5 +241,35 @@
       "kind": "attraction"
     }
   ],
-  "districtSource": "Manual transcription and approximate centres from user's perspective-corrected AP Plaza photograph; boundaries not surveyed."
+  "districtSource": "Manual transcription and approximate centres from user's perspective-corrected AP Plaza photograph; boundaries not surveyed.",
+  "floorReferences": {
+    "B1": {
+      "url": "reference/ap-plaza/B1.webp",
+      "source": "Foto del plano AP Plaza corregida de perspectiva; fuente aportada en conversación el 13/10/2026",
+      "imageSize": [
+        1440,
+        620
+      ],
+      "sha256": "f7288ca13bcccb6c33124b06c529e2fa72eb0aa618561d8f9854c70fff7456c5",
+      "qa": {
+        "status": "pending",
+        "geometrySha256": null,
+        "reviewer": null,
+        "reviewedAt": null,
+        "checks": {
+          "shopDivisions": false,
+          "storeIds": false,
+          "areas": false,
+          "corridors": false,
+          "accessibility": false,
+          "amenities": false,
+          "referenceRegistration": false
+        },
+        "issues": [
+          "Vectorización preliminar. Muchos límites de tiendas y conexiones no coinciden todavía con el plano original."
+        ]
+      }
+    }
+  },
+  "floorReferencePolicy": "Los mapas sin foto o sin cotejo aprobado nunca se certifican. Se pueden explorar únicamente como prototipos rotulados NO NAVEGABLE."
 }

@@ -24,6 +24,10 @@ jobs:
           node --check src/social.js
           node --check src/demo-friends.js
           node --check src/pins3d.js
+          node --check src/pins-webgl.js
+          node --check src/poi-layer.js
+          node --check src/units.js
+          node --check src/indoor-location.js
           node --check src/qrcode.min.js
           node --check backend/server.mjs
           node --test backend/server.test.mjs

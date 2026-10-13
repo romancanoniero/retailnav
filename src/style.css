@@ -436,3 +436,52 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnIndoorArrow{position:absolute;top:-23px;left:8px;display:block;transform:translate(-50%,-90%);
  transform-origin:50% 100%;color:#47e1ff;font-size:17px;text-shadow:0 1px 3px black}
 @media(max-width:470px){#rnIndoorBtn{width:36px;min-width:36px;height:38px;font-size:23px}}
+
+/* Compact, conditional floor controls: never obscure the actual mall model. */
+.rnFloorPicker{display:flex;align-items:center;gap:7px;padding:5px 8px;
+ background:#0c1d30e8;border:1px solid #42647c;border-radius:12px;
+ box-shadow:0 5px 16px #020e1c44;backdrop-filter:blur(10px);max-width:142px}
+.rnFloorPickerLabel{font-size:10px;color:#a8c4d1;white-space:nowrap}
+.rnFloorPicker select{color:#e8f7fc;border:0;border-radius:8px;
+ background:#183a50;min-width:56px;max-width:78px;
+ min-height:36px;padding:7px 5px;font-size:13px;font-weight:700}
+.rnFloorSpacing{position:relative;background:#0c1d30e8;border:1px solid #42647c;
+ border-radius:12px;box-shadow:0 5px 16px #020e1c44}
+.rnFloorSpacing summary{display:flex;width:41px;height:45px;justify-content:center;
+ align-items:center;cursor:pointer;list-style:none;color:#a9e6e9}
+.rnFloorSpacing summary::-webkit-details-marker{display:none}
+.rnFloorSpacing summary .icon{width:20px;height:20px}
+.rnFloorSpacingPanel{position:absolute;left:0;top:51px;background:#0c1d30f4;
+ border:1px solid #42647c;border-radius:12px;width:185px;max-width:65vw;
+ padding:12px 14px;box-shadow:0 8px 24px #0007}
+.rnFloorSpacingPanel label{display:block;color:#c0dae8;font-size:11px;margin-bottom:7px}
+.rnFloorSpacingPanel input{width:100%;accent-color:var(--cyan)}
+.rnFloorPicker[hidden],.rnFloorSpacing[hidden],.rnReferenceDialog [hidden]{display:none!important}
+.rnReferenceDialog{width:min(97vw,980px);max-width:97vw}
+.rnReferenceDialog .dialogbody{max-height:72dvh;overflow:auto}
+.rnReferenceDialog .comparewrap{overflow:auto;touch-action:pan-x pan-y}
+.rnReferenceDialog .comparewrap svg{max-height:62dvh;min-height:200px}
+.rnCompareControls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+ margin-bottom:10px;color:#d7ebf5;font-size:12px}
+.rnCompareControls label{display:flex;gap:6px;align-items:center}
+.rnCompareControls input[type=checkbox]{accent-color:var(--cyan)}
+.rnCompareControls input[type=range]{width:min(180px,44vw);accent-color:var(--cyan)}
+.rnReviewStatus{font-size:12px;color:#fff1c3;margin:0 0 10px}
+.rnCompareMissing{border:1px dashed #bc9f50;padding:12px;margin:10px 0;border-radius:8px;
+ color:#efdfb6;background:#3b2b1844}
+.rnCompareUpload{display:block;font-size:12px;margin:10px 0;color:#bce9f5}
+.rnCompareUpload input{display:block;margin-top:6px;max-width:100%;font-size:11px}
+.rnCompareNote{font-size:11px;color:#a7c1ce;margin-top:8px}
+.stage-single .note{top:70px;max-width:75%}
+@media(max-width:570px){
+ .stagebar{top:9px;left:9px;right:9px;gap:5px;flex-wrap:nowrap}
+ .rnFloorPicker{padding:4px 5px;gap:4px}
+ .rnFloorPickerLabel{font-size:9px}
+ .rnFloorPicker select{min-height:34px}
+ .rnFloorSpacing summary{width:35px;height:43px}
+ .viewtabs{margin-left:auto}
+ .viewtabs button{min-width:39px;padding:7px 8px}
+ .stage-single .note{top:67px;left:13px;max-width:79%}
+ .rnReferenceDialog .dialogbody{padding:10px}
+ .rnReferenceDialog .dialogfoot{gap:8px;padding:9px 11px}
+}

@@ -1,11 +1,14 @@
 name: Publish RetailNav to Contabo
 on:
   push:
+    branches: [main]
     paths:
       - ".github/workflows/publish-contabo.yml"
-      - "deploy/deploy-isolated.sh"
-      - "deploy/deploy-social.sh"
-      # Stage 3D friend markers and social list as one tested release.
+      - "src/**"
+      - "public/**"
+      - "backend/**"
+      - "scripts/**"
+      - "deploy/**"
   workflow_dispatch:
 
 permissions:

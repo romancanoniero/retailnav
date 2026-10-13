@@ -184,19 +184,29 @@ try {
 
   // Persist a compressed photo, make it available to accepted friends only,
   // and verify the mobile UI displays actual image data.
-  const uploaded=await page.evaluate(async()=>{
+  const avatarImage=await page.evaluate(()=>{
     const canvas=document.createElement('canvas');
     canvas.width=192;canvas.height=192;
     const ctx=canvas.getContext('2d');
     ctx.fillStyle='#187980';ctx.fillRect(0,0,192,192);
     ctx.fillStyle='#edb887';ctx.fillRect(40,35,112,112);
-    const payload=canvas.toDataURL('image/jpeg',.75);
-    const res=await fetch('api/avatar',{method:'POST',credentials:'same-origin',
-      headers:{'Content-Type':'application/json'},body:JSON.stringify({image:payload})});
-    return {status:res.status,body:await res.json()};
+    return canvas.toDataURL('image/jpeg',.75);
   });
-  assert.equal(uploaded.status,200,'Avatar upload must succeed');
-  assert.ok(uploaded.body.me.avatarVersion,'Avatar version should persist');
+  await page.locator('#friendsBtn').click();
+  await page.locator('#rnAvatarTrigger').click();
+  assert.ok(await page.locator('#rnAvatarGalleryBtn').isVisible());
+  assert.equal(await page.locator('#rnAvatarCameraInput').getAttribute('capture'),'user');
+  await page.locator('#rnAvatarGalleryInput').setInputFiles({
+    name:'profile.jpeg',mimeType:'image/jpeg',
+    buffer:Buffer.from(avatarImage.split(',')[1],'base64')
+  });
+  await page.waitForFunction(async()=>{
+    const res=await fetch('api/state');
+    return Boolean((await res.json()).me.avatarVersion);
+  },null,{timeout:15000});
+  assert.equal(await page.locator('#rnProfileImg').isVisible(),true);
+  const uploaded=await page.evaluate(async()=>(await(await fetch('api/state')).json()).me);
+  assert.ok(uploaded.avatarVersion,'Avatar version should persist');
   await guest.reload({waitUntil:'domcontentloaded'});
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
   const avatarCheck=await guest.evaluate(async(id)=>{
@@ -214,8 +224,6 @@ try {
   assert.equal(await guest.locator('#rnFriends img').isVisible(),true);
   log('PHOTO','Anonymous JPEG avatar uploaded, persisted, and visible to linked friend.');
 
-  page.on('dialog',async dialog=>dialog.accept());
-  await page.locator('#friendsBtn').click();
   await page.locator('#rnFriends .rnFriendMore').click();
   await page.locator('#rnFriends .rnRemoveWrap button',{hasText:'Quitar amigo'}).click();
   await page.waitForFunction(()=>window.RetailNavSocial.getState().friendCount===0);

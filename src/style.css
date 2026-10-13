@@ -699,3 +699,11 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .app{display:flex;flex-direction:column;min-height:0}
  .stage{width:100%;flex:1;order:1}
 }
+
+/* Real phones in landscape need the complete mall canvas, not a 215px sidebar.
+ * Desk-size short windows keep their sidebar; this is phone/tablet landscape. */
+@media(max-width:1100px) and (max-height:530px) and (orientation:landscape){
+ .app{display:flex;flex-direction:column;min-height:0}
+ .sidebar{display:none!important}
+ .stage{width:100%;flex:1;order:1;min-height:0}
+}

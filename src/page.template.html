@@ -82,13 +82,34 @@
 <div class="rnCompareControls">
 <label class="rnCompareCheckbox"><input type="checkbox" id="showReference" checked> Mostrar foto original</label>
 <label class="rnCompareCheckbox"><input type="checkbox" id="showVectors" checked> Mostrar vectorizado</label>
-<label for="overlayOpacity">Opacidad vectores: <output id="opacityValue">85 %</output></label>
-<input id="overlayOpacity" type="range" min="0" max="1" step=".01" value=".85">
-<label for="compareZoom">Zoom: <output id="compareZoomValue">100 %</output></label><input id="compareZoom" type="range" min="100" max="400" step="25" value="100">
+<label for="compareMode">Contornos <select id="compareMode" aria-label="Estilo del vectorizado"><option value="filled">Negro + borde blanco</option><option value="outline">Solo borde blanco</option></select></label>
+<label for="overlayOpacity">Relleno negro: <output id="opacityValue">40 %</output></label>
+<input id="overlayOpacity" type="range" min="0" max="1" step=".05" value=".40">
+<label for="showUnitCodes" class="rnCompareCheckbox"><input type="checkbox" id="showUnitCodes" checked> Códigos de locales</label>
+<label for="compareZoom">Zoom: <output id="compareZoomValue">100 %</output></label><input id="compareZoom" type="range" min="100" max="800" step="25" value="100">
 </div>
-<div class="comparewrap"><svg id="compareSvg" xmlns="http://www.w3.org/2000/svg" viewBox="290 100 800 620" role="img" aria-label="Comparación por planta: referencia fotográfica y divisiones vectorizadas"><rect id="referenceBackground" x="0" y="0" width="1440" height="620" fill="#ffffff"/><image id="referenceImage" x="0" y="0" width="1320" height="941" preserveAspectRatio="none"/><g id="traceOverlay"></g></svg></div>
+<div class="comparewrap"><svg id="compareSvg" xmlns="http://www.w3.org/2000/svg" viewBox="290 100 800 620" role="img" aria-label="Comparación por planta: referencia fotográfica y divisiones vectorizadas"><rect id="referenceBackground" x="0" y="0" width="1440" height="620" fill="#ffffff"/><image id="referenceImage" x="0" y="0" width="1320" height="941" preserveAspectRatio="none"/><g id="traceOverlay"></g><g id="compareUnitLabels" pointer-events="none"></g><g id="compareIssueMarkers" pointer-events="none"></g><g id="compareClickMarker" pointer-events="none"></g></svg></div>
 <div id="compareMissing" hidden class="rnCompareMissing">No se guardó todavía la fotografía de esta planta. Podés cargarla temporalmente para revisar sin enviarla al servidor.</div>
 <label class="rnCompareUpload">Usar una foto local para comparar <input id="compareLocalPhoto" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<section class="rnAuditPanel" aria-labelledby="rnAuditTitle">
+<h3 id="rnAuditTitle">Anomalías encontradas <span id="compareIssueCount">0</span></h3>
+<label class="rnCompareCheckbox"><input type="checkbox" id="compareMarkMode"> Marcar anomalía tocando la imagen</label>
+<p id="compareSelectedPoint" role="status">Activá el marcado y tocá el punto que no coincide.</p>
+<div class="rnAuditInputs">
+<label>Problema <select id="compareIssueType">
+<option value="division-missing">División de comercio faltante</option>
+<option value="merged-stores">Locales fusionados</option>
+<option value="shifted-boundary">Contorno desplazado</option>
+<option value="wrong-store-id">Código o nombre incorrecto</option>
+<option value="missing-amenity">Servicio omitido (baño, escalera, ascensor...)</option>
+<option value="other">Otra anomalía</option>
+</select></label>
+<label>Descripción <textarea id="compareIssueNote" maxlength="500" rows="2" placeholder="Qué debería coincidir con la foto"></textarea></label>
+</div>
+<div class="rnAuditButtons"><button type="button" id="compareSaveIssue" disabled>Guardar anomalía</button><button type="button" id="compareExportIssues">Exportar informe JSON</button></div>
+<div id="compareIssues" class="rnIssueList" aria-live="polite"></div>
+<p class="rnCompareNote">Las observaciones se guardan en este navegador. Exportá el JSON para compartirlas; ninguna se envía automáticamente al servidor ni aprueba la planta.</p>
+</section>
 <p class="rnCompareNote">La imagen y los polígonos usan las mismas coordenadas de planta. El mapa provisional no está aprobado para navegación. Los contornos requieren revisión visual individual.</p>
 </div><footer class="dialogfoot"><label for="compareLevel">Planta</label><select id="compareLevel" aria-label="Planta a comparar"><option value="LL">LL · Lower Level</option><option value="UL" selected>UL · Upper Level</option><option value="L3">L3 · Third Level</option></select><span class="caption">Podés ocultar cada capa por separado y ajustar la transparencia.</span></footer></dialog>
 <dialog id="exportDialog"><header class="dialoghead"><div><h2>Mapas para la aplicación cliente</h2><p>Exporta la selección actual: una planta o las tres.</p></div><button data-close="exportDialog" aria-label="Cerrar exportación"><svg class="icon"><use href="#i-close"/></svg></button></header><div class="dialogbody"><div class="exportgrid"><button id="glbBtn"><b>Modelo 3D · GLB</b><small>Mallas trianguladas reales y grupos por nivel. Alturas simuladas, independiente del visor.</small></button><button id="jsonBtn"><b>Geometría editable · JSON</b><small>Contornos, huecos, identificadores y fuente de cada polígono. Coordenadas registradas.</small></button><button id="svgBtn"><b>Plano vectorial · SVG</b><small>La planta activa en 2D. En vista conjunta se exporta UL.</small></button></div><p class="caption">La descarga se genera localmente. No se envía ningún dato personal. El modelo no incluye rutas certificadas ni proviene de un escaneo real.</p></div></dialog>

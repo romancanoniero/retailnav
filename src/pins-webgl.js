@@ -8,7 +8,7 @@
 'use strict';
 const pins=window.RetailNavPins;
 if(!pins)return;
-let resources=null,visibleCount=0,frames3d=0,photoLoaded=0,photoErrors=0;
+let resources=null,visibleCount=0,frames3d=0,photoLoaded=0,photoErrors=0,visibleIds=[];
 const photos=new Map();
 const PI=Math.PI;
 function compile(gl,type,src){
@@ -192,7 +192,7 @@ function draw3D(gl,mvp){
  const keep=new Set();
  const allowed=new Set(view.getState().visible);
  const records=pins.getPeople?.()||[];
- visibleCount=0;frames3d++;
+ visibleCount=0;visibleIds=[];frames3d++;
  photoLoaded=0;photoErrors=0;
  const r=resources;
  gl.useProgram(r.program);
@@ -222,6 +222,7 @@ function draw3D(gl,mvp){
    drawMesh(gl,r,r.disc,2);
   }
   visibleCount++;
+  visibleIds.push(p.id);
  }
  // Immediately release GPU image textures for revoked or deleted people.
  for(const [key,item] of photos)if(!keep.has(key)){
@@ -237,11 +238,11 @@ pins.draw=()=>{
  const canvas=document.getElementById('peoplePinCanvas'),ctx=canvas?.getContext('2d');
  if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);
 };
-pins.getPeople=()=>pins.getPeople?.__original?.()||[]; // replaced below
+// The source renderer exposes getPeople() and owns access-control filtering.
 pins.draw3D=draw3D;
 pins.getSolidState=()=>({
   mode:resources?'solid-webgl-mesh':'pending',
-  rendered:visibleCount,frames:frames3d,
+  rendered:visibleCount,visibleIds:visibleIds.slice(),frames:frames3d,
   triangles:resources?(resources.body.triangles+resources.rim.triangles+resources.disc.triangles):0,
   photoLoaded,photoErrors,
   fixedWorldRotation:true,

@@ -7,20 +7,36 @@ import csv
 from pathlib import Path
 
 def inside(point, feature):
+    """Include exterior but reject courtyards/aisles enclosed by the polygon.
+
+    Incoming RetailNav geometry stores every vertex as delta-coded half-pixels
+    and *separate* outer/inner vertex rings. Crossing from one ring to the next
+    creates an imaginary wall, so testing the concatenated vertex list is wrong.
+    """
     x = y = 0
     points = []
     for dx, dy in zip(feature[3][::2], feature[3][1::2]):
         x += dx
         y += dy
         points.append((x / 2, y / 2))
-    px, py = point
-    flag = False
-    for i, a in enumerate(points):
-        b = points[(i + 1) % len(points)]
-        if (a[1] > py) != (b[1] > py):
-            if px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]:
-                flag = not flag
-    return flag
+    if not points or point is None:
+        return False
+
+    def hit(indices):
+        polygon=[points[i] for i in indices if 0 <= i < len(points)]
+        if len(polygon)<3:
+            return False
+        px,py=point
+        flag=False
+        for aa, bb in zip(polygon,polygon[1:]+polygon[:1]):
+            if (aa[1]>py)!=(bb[1]>py) and (
+                px < (bb[0]-aa[0])*(py-aa[1])/(bb[1]-aa[1])+aa[0]
+            ):
+                flag=not flag
+        return flag
+
+    rings=feature[4] or [list(range(len(points)))]
+    return hit(rings[0]) and not any(hit(ring) for ring in rings[1:])
 
 def candidate_front(feature, point, manual=None):
     """Select an existing exterior wall segment, NEVER an arbitrary screen badge.

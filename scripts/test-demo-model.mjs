@@ -23,8 +23,10 @@ test('all nine seed contacts use the production-compatible indoor position model
     assert.equal(friend.position.coordinateSpace,'provisional-plan-pixels');
     assert.equal(friend.position.verified,false);
     assert.ok(Number.isFinite(friend.position.x)&&Number.isFinite(friend.position.y));
-    assert.ok(friend.avatarUrl.startsWith('data:image/svg+xml;charset=utf-8,'));
-    assert.ok(friend.avatarUrl.length<4000);
+    assert.match(friend.avatarUrl,/^demo-avatars\/[a-z]+\.jpg$/);
+    const jpeg=readFileSync(new URL('../public/'+friend.avatarUrl,import.meta.url));
+    assert.equal(jpeg.subarray(0,3).toString('hex'),'ffd8ff','Bundled demo photo is JPEG');
+    assert.ok(jpeg.length>8000,'Bundled photo is not a vector drawing');
     assert.match(friend.visual.bodyColor,/^#[0-9a-f]{6}$/i);
     assert.match(friend.visual.shadowColor,/^#[0-9a-f]{6}$/i);
     assert.notEqual(friend.visual.bodyColor,friend.visual.shadowColor);

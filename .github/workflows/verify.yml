@@ -34,12 +34,15 @@ jobs:
           node --check backend/server.mjs
           node --test backend/server.test.mjs
           node --test scripts/test-demo-model.mjs
-      - name: Validate reusable vectorizer syntax
-        run: python3 -m py_compile scripts/floorplan_vectorizer.py
-      - name: Verify image-to-vector importer with synthetic sample
+      - name: Validate reusable vectorizer and opt-in AI reviewer syntax
         run: |
-          python3 -m pip install --disable-pip-version-check numpy opencv-python-headless
+          python3 -m py_compile scripts/floorplan_vectorizer.py scripts/refine_curved_floor.py scripts/ai_floor_review.py
+      - name: Verify image-to-vector importer, true curves and offline AI safety
+        run: |
+          python3 -m pip install --disable-pip-version-check numpy opencv-python-headless 'shapely>=2.1'
           python3 scripts/test_vectorizer.py
+          python3 scripts/test_curved_floor.py
+          python3 scripts/test_ai_floor_review.py
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle

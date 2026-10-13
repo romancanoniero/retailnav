@@ -77,6 +77,8 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
         if qa.get("status") not in ("pending","approved"):
             raise ValueError(slug+"/"+floor_id+": all floor comparisons require a QA status")
         if qa.get("status") == "approved":
+            if any(issue.get("status") != "resolved" for issue in qa.get("issues", [])):
+                raise ValueError(slug+"/"+floor_id+": cannot approve a floor with unresolved review anomalies")
             expected_hash = hashlib.sha256(json.dumps(geometry,separators=(",",":"),
                 ensure_ascii=False).encode("utf-8")).hexdigest()
             if qa.get("geometrySha256") != expected_hash or not qa.get("reviewer") or not qa.get("reviewedAt") or not all(qa.get("checks",{}).values()):

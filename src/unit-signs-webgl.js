@@ -1,55 +1,82 @@
-/* Real, one-sided shopfront signs in the same WebGL view/projection matrix as
- * the floor meshes. Signs are textured wall QUADS; NEVER camera-facing DOM labels.
- * A unit without an unambiguous facade remains searchable, but is not silently
- * placed on an invented storefront.
+/* RetailNav roof labels + 3D raised signs.
+ * Every sign belongs to one uniquely matched shop roof in world space.
+ * Regular code/name is printed on the roof. A selected, searched or featured
+ * shop has an illuminated, solid double-sided panel physically attached to
+ * that same roof by two posts. Nothing is a screen-facing HTML billboard.
  */
 (()=>{
 'use strict';
-const parent=window.RetailNavUnits;
-if(!parent)return;
-const entries=parent.getUnits?.()||[];
-let glState=null,drawn=0,frames=0,visibleCodes=[],lastError='';
-const math={};
-function shader(gl,kind,source){
- const obj=gl.createShader(kind);gl.shaderSource(obj,source);gl.compileShader(obj);
- if(!gl.getShaderParameter(obj,gl.COMPILE_STATUS)){
-  const msg=gl.getShaderInfoLog(obj)||'unknown shader error';
-  gl.deleteShader(obj);throw Error(msg);
+const unitsApi=window.RetailNavUnits;
+if(!unitsApi)return;
+const entries=unitsApi.getUnits?.()||[];
+let resource=null,frames=0,drawnRoof=0,drawnRaised=0,visibleCodes=[],lastError='';
+const roofEntries=entries.filter(u=>u.roof&&u.polygonId);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function shader(gl,type,src){
+ const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
+ if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
+  const message=gl.getShaderInfoLog(s)||'invalid shader';
+  gl.deleteShader(s);throw Error(message);
  }
- return obj;
+ return s;
 }
-function create(gl){
- const vs=shader(gl,gl.VERTEX_SHADER,
+function program(gl){
+ const vertex=shader(gl,gl.VERTEX_SHADER,
   'attribute vec3 aXYZ;attribute vec2 aUV;uniform mat4 uMVP;'+
   'varying vec2 vUV;void main(){vUV=aUV;gl_Position=uMVP*vec4(aXYZ,1.);}');
- const fs=shader(gl,gl.FRAGMENT_SHADER,
+ const fragment=shader(gl,gl.FRAGMENT_SHADER,
   'precision mediump float;varying vec2 vUV;uniform sampler2D uAtlas;'+
-  'void main(){vec4 p=texture2D(uAtlas,vUV);if(p.a<0.18)discard;gl_FragColor=p;}');
- const program=gl.createProgram();
- gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);
- if(!gl.getProgramParameter(program,gl.LINK_STATUS))
-  throw Error(gl.getProgramInfoLog(program)||'sign program link failure');
- const usable=entries.filter(u=>u.facade?.a&&u.facade?.b).slice(0,300);
- const cols=8,rows=Math.max(1,Math.ceil(usable.length/cols)),cw=160,ch=70;
+  'uniform int uSolid;uniform vec4 uColour;void main(){'+
+  'vec4 c=uSolid==1?uColour:texture2D(uAtlas,vUV);'+
+  'if(c.a<0.12)discard;gl_FragColor=c;}');
+ const p=gl.createProgram();
+ gl.attachShader(p,vertex);gl.attachShader(p,fragment);gl.linkProgram(p);
+ if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));
+ return {p,pos:gl.getAttribLocation(p,'aXYZ'),uv:gl.getAttribLocation(p,'aUV'),
+  mvp:gl.getUniformLocation(p,'uMVP'),tex:gl.getUniformLocation(p,'uAtlas'),
+  solid:gl.getUniformLocation(p,'uSolid'),colour:gl.getUniformLocation(p,'uColour')};
+}
+function create(gl){
+ const shaderProgram=program(gl);
+ const items=roofEntries.slice(0,300);
+ const cw=192,ch=85,cols=8,rows=Math.max(1,Math.ceil(items.length/cols));
  const atlas=document.createElement('canvas');
- atlas.width=cols*cw;atlas.height=rows*ch;
+ atlas.width=cw*cols;atlas.height=ch*rows;
  const ctx=atlas.getContext('2d');
- if(!ctx)throw Error('Canvas unavailable for shopfront signs');
+ if(!ctx)throw Error('Cannot build text atlas');
  const cells=new Map();
- for(let i=0;i<usable.length;i++){
-  const u=usable[i],col=i%cols,row=Math.floor(i/cols);
-  const x=col*cw,y=row*ch,lab=u.code;
+ for(let i=0;i<items.length;i++){
+  const item=items[i],col=i%cols,row=Math.floor(i/cols);
+  const x=col*cw,y=row*ch;
   ctx.clearRect(x,y,cw,ch);
-  ctx.fillStyle='rgba(4,31,56,.97)';ctx.fillRect(x+4,y+5,cw-8,ch-11);
-  ctx.lineWidth=3;ctx.strokeStyle=u.frontStatus==='reviewed-manual'?'#e3f7ff':'#61b1e0';
-  ctx.strokeRect(x+5,y+6,cw-10,ch-13);
+  // Modern slightly glossy blue/graphite sign, white writing and cyan edges.
+  const background=ctx.createLinearGradient(x,y,x+cw,y+ch);
+  background.addColorStop(0,'#14334e');
+  background.addColorStop(.45,'#184966');
+  background.addColorStop(1,'#092539');
+  ctx.fillStyle=background;
+  ctx.beginPath();ctx.roundRect(x+3,y+4,cw-6,ch-8,14);ctx.fill();
+  ctx.lineWidth=3.6;ctx.strokeStyle='#a1f0ff';ctx.stroke();
+  ctx.lineWidth=1;ctx.strokeStyle='#e4fbff';
+  ctx.beginPath();ctx.roundRect(x+7,y+8,cw-14,ch-16,11);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.11)';
+  ctx.beginPath();ctx.roundRect(x+12,y+12,cw-24,11,6);ctx.fill();
+  const name=(item.name||'').trim();
+  const code=item.code;
   ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillStyle='#ffffff';ctx.font='800 '+(lab.length>9?'20':'28')+'px system-ui,sans-serif';
-  ctx.fillText(lab,x+cw/2,y+(u.name?29:ch/2),cw-14);
-  if(u.name){ctx.font='500 12px system-ui,sans-serif';ctx.fillStyle='#d2f0ff';
-   ctx.fillText(u.name,x+cw/2,y+51,cw-17);}
-  cells.set(u.code,{u0:(x+5)/atlas.width,u1:(x+cw-5)/atlas.width,
-    v0:1-(y+5)/atlas.height,v1:1-(y+ch-6)/atlas.height});
+  ctx.fillStyle='#ffffff';
+  if(name){
+   ctx.font='700 '+(name.length>14?'19':'24')+'px system-ui,sans-serif';
+   ctx.fillText(name,x+cw/2,y+34,cw-22);
+   ctx.font='700 18px system-ui,sans-serif';
+   ctx.fillStyle='#c9faff';
+   ctx.fillText(code,x+cw/2,y+62,cw-24);
+  }else{
+   ctx.font='800 '+(code.length>9?'27':'34')+'px system-ui,sans-serif';
+   ctx.fillText(code,x+cw/2,y+ch/2,cw-22);
+  }
+  cells.set(item.code,{u0:(x+2)/atlas.width,u1:(x+cw-2)/atlas.width,
+   v0:1-(y+2)/atlas.height,v1:1-(y+ch-2)/atlas.height});
  }
  const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
@@ -59,86 +86,148 @@ function create(gl){
  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,atlas);
  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
- const buffer=gl.createBuffer();
- return {gl,program,tex,buffer,cells,usable,attribX:gl.getAttribLocation(program,'aXYZ'),
-  attribU:gl.getAttribLocation(program,'aUV'),mvp:gl.getUniformLocation(program,'uMVP'),
-  sampler:gl.getUniformLocation(program,'uAtlas'),triangles:0};
+ return {gl,...shaderProgram,tex,cells,items,
+  buffer:gl.createBuffer()};
 }
-function quad(data,first,second,top,bottom,uv){
- const a0=[first[0],bottom,first[2]];
- const a1=[first[0],top,first[2]];
- const b0=[second[0],bottom,second[2]];
- const b1=[second[0],top,second[2]];
- // Counterclockwise outward-facing wall quad, with text always upright.
- function push(p,u,v){data.push(...p,u,v);}
- push(a0,uv.u0,uv.v1);push(a1,uv.u0,uv.v0);push(b0,uv.u1,uv.v1);
- push(b0,uv.u1,uv.v1);push(a1,uv.u0,uv.v0);push(b1,uv.u1,uv.v0);
+function add(data,p,u=.5,v=.5){data.push(p[0],p[1],p[2],u,v);}
+function triangle(data,a,b,c,ua,ub,uc){
+ add(data,a,ua?.[0],ua?.[1]);add(data,b,ub?.[0],ub?.[1]);
+ add(data,c,uc?.[0],uc?.[1]);
 }
-function draw3D(gl,mvp){
- const view=window.__RETAILNAV__;
- if(!gl||view?.getState().renderer!=='WebGL')return;
- if(!glState||glState.gl!==gl){
-  try{glState=create(gl);lastError='';}catch(e){lastError=String(e?.message||e);return;}
+function rectangle(data,a,b,c,d,cell){
+ const uv=cell||{u0:0,u1:1,v0:1,v1:0};
+ triangle(data,a,b,d,[uv.u0,uv.v1],[uv.u1,uv.v1],[uv.u0,uv.v0]);
+ triangle(data,b,c,d,[uv.u1,uv.v1],[uv.u1,uv.v0],[uv.u0,uv.v0]);
+}
+function vec(p,a,b,c){return [p[0]+a[0]*b+c[0],p[1]+a[1]*b+c[1],p[2]+a[2]*b+c[2]];}
+function planar(center,axis,side,halfW,halfD){
+ const corner=(a,b)=>[
+  center[0]+axis[0]*a+side[0]*b,center[1],
+  center[2]+axis[2]*a+side[2]*b];
+ return [corner(-halfW,-halfD),corner(halfW,-halfD),
+         corner(halfW,halfD),corner(-halfW,halfD)];
+}
+function upright(center,axis,side,halfW,halfH,offset=0){
+ const base=[center[0]+side[0]*offset,center[1],center[2]+side[2]*offset];
+ const corner=(h,k)=>[base[0]+axis[0]*h,base[1]+k,base[2]+axis[2]*h];
+ return [corner(-halfW,-halfH),corner(halfW,-halfH),
+         corner(halfW,halfH),corner(-halfW,halfH)];
+}
+function box(data,center,axis,side,halfW,halfH,halfT){
+ const front=upright(center,axis,side,halfW,halfH,halfT);
+ const back=upright(center,axis,side,halfW,halfH,-halfT);
+ rectangle(data,...front);
+ rectangle(data,back[1],back[0],back[3],back[2]);
+ for(let i=0;i<4;i++){
+  const j=(i+1)%4;
+  rectangle(data,front[i],front[j],back[j],back[i]);
  }
- const state=view.getState(),on=new Set(state.visible);
- const selected=parent.getState().selected;
- const vertices=[];
- drawn=0;frames++;visibleCodes=[];
- for(const u of glState.usable){
-  if(!on.has(u.floor)||(!u.facade?.a||!u.facade?.b))continue;
-  if(state.distance>240&&u.code!==selected)continue;
-  const first=view.pinWorld(u.floor,u.facade.a[0],u.facade.a[1]);
-  const second=view.pinWorld(u.floor,u.facade.b[0],u.facade.b[1]);
-  if(!first||!second)continue;
-  let a=first,b=second;
-  const dx=b[0]-a[0],dz=b[2]-a[2];
-  if(Math.hypot(dx,dz)<.25)continue;
-  // Orient winding so only the facade facing the corridor is visible.
-  const normal=u.facade.normal;
-  if(normal&&Number.isFinite(normal[0])&&Number.isFinite(normal[1])&&
-    dz*normal[0]-dx*normal[1]<0){a=second;b=first;}
-  const f=view.floors.find(x=>x.id===u.floor)?.features.find(x=>x.id===u.polygonId);
-  const h={anchor:2.2,unit:1.4,zone:.55,corridor:.08}[f?.k]||1.0;
-  const bottom=a[1]+Math.max(.11,h*.38);
-  const top=bottom+Math.max(.20,Math.min(.55,h*.39));
-  const uv=glState.cells.get(u.code);
-  if(!uv)continue;
-  // Offset outward from the shop wall to avoid depth-buffer Z-fighting.
-  const nx=normal?.[0]||dz/Math.hypot(dx,dz);
-  const nz=normal?.[1]||-dx/Math.hypot(dx,dz);
-  const offset=.14;
-  a=[a[0]+nx*offset,a[1],a[2]+nz*offset];
-  b=[b[0]+nx*offset,b[1],b[2]+nz*offset];
-  quad(vertices,a,b,top,bottom,uv);
-  drawn++;visibleCodes.push(u.code);
+}
+function spotlight(data,roof,axis,side,width,cell){
+ const centre=[roof[0],roof[1]+2.9,roof[2]];
+ const hw=width/2,hh=width*.26;
+ // Two metallic stems visibly join plaque to roof.
+ for(const offset of [-width*.29,width*.29]){
+  const postCenter=[roof[0]+axis[0]*offset,roof[1]+.86,
+                    roof[2]+axis[2]*offset];
+  box(data.posts,postCenter,axis,side,.095,.9,.115);
  }
+ // Solid deep blue rear shell, with bright cyan trim inset under the text.
+ box(data.body,centre,axis,side,hw+.12,hh+.13,.20);
+ const front=upright(centre,axis,side,hw+.025,hh+.025,.240);
+ const back=upright(centre,axis,side,hw+.025,hh+.025,-.240);
+ rectangle(data.trim,...front);
+ rectangle(data.trim,back[1],back[0],back[3],back[2]);
+ const f=upright(centre,axis,side,hw,hh,.256);
+ const b=upright(centre,axis,side,hw,hh,-.256);
+ rectangle(data.text,...f,cell);
+ rectangle(data.text,b[1],b[0],b[3],b[2],cell);
+ // Short base plate visually seats the posts on the roof surface.
+ const baseCenter=[roof[0],roof[1]+.08,roof[2]];
+ box(data.posts,baseCenter,axis,side,hw*.64,.09,.18);
+}
+function gpuDraw(gl,r,mvp,buffer,vertices,material,colour){
  if(!vertices.length)return;
- const r=glState;
- gl.useProgram(r.program);gl.uniformMatrix4fv(r.mvp,false,mvp);
+ gl.useProgram(r.p);
+ gl.uniformMatrix4fv(r.mvp,false,mvp);
+ gl.uniform1i(r.solid,material);
+ gl.uniform4fv(r.colour,colour);
  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,r.tex);
- gl.uniform1i(r.sampler,0);
+ gl.uniform1i(r.texLoc??r.tex,0);
  gl.bindBuffer(gl.ARRAY_BUFFER,r.buffer);
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.DYNAMIC_DRAW);
- gl.enableVertexAttribArray(r.attribX);
- gl.vertexAttribPointer(r.attribX,3,gl.FLOAT,false,20,0);
- gl.enableVertexAttribArray(r.attribU);
- gl.vertexAttribPointer(r.attribU,2,gl.FLOAT,false,20,12);
- gl.enable(gl.DEPTH_TEST);
- gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);
- gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
- gl.depthMask(false);
+ gl.enableVertexAttribArray(r.pos);
+ gl.vertexAttribPointer(r.pos,3,gl.FLOAT,false,20,0);
+ gl.enableVertexAttribArray(r.uv);
+ gl.vertexAttribPointer(r.uv,2,gl.FLOAT,false,20,12);
  gl.drawArrays(gl.TRIANGLES,0,vertices.length/5);
- gl.depthMask(true);
- gl.disable(gl.BLEND);
- gl.disable(gl.CULL_FACE);
 }
-parent.draw3D=draw3D;
-parent.getWallState=()=>({renderMode:glState?'world-space-wall-quads':'pending',
- availableFacades:entries.filter(u=>u.facade).length,
- unresolved:entries.filter(u=>!u.facade).length,
- drawn,visibleCodes:visibleCodes.slice(),frames,
- geometryVertices:drawn*6,
- cameraFacing:false,
- backfaceCulled:true,
- lastError});
+function render(gl,mvp){
+ const view=window.__RETAILNAV__;
+ if(!gl||view?.getState().renderer!=='WebGL')return;
+ if(!resource||resource.gl!==gl){
+  try{resource=create(gl);lastError='';}catch(e){lastError=String(e?.message||e);return;}
+ }
+ const state=view.getState();
+ const visibleFloors=new Set(state.visible);
+ const highlights=new Set(unitsApi.getHighlightedCodes?.()||[]);
+ const selected=state.selectedCode??unitsApi.getState().selected;
+ const regular=[],special={posts:[],body:[],trim:[],text:[]};
+ drawnRoof=0;drawnRaised=0;frames++;visibleCodes=[];
+ let autoFeatured=0,raisedCount=0;
+ for(const u of resource.items){
+  if(!visibleFloors.has(u.floor))continue;
+  const roof=u.roof;
+  const unit=view.floors.find(f=>f.id===u.floor)?.features.find(f=>f.id===u.polygonId);
+  if(!unit||!roof)continue;
+  const cell=resource.cells.get(u.code);if(!cell)continue;
+  const floorWorld=view.pinWorld(u.floor,roof.x,roof.y);
+  if(!floorWorld)continue;
+  const roofY={anchor:2.2,unit:1.4,zone:.55,corridor:.08}[unit.k]??1.4;
+  const top=[floorWorld[0],floorWorld[1]+roofY+.09,floorWorld[2]];
+  const dx=roof.axis[0],dz=roof.axis[1];
+  const len=Math.hypot(dx,dz);
+  if(len<.2)continue;
+  const axis=[dx/len,0,dz/len],side=[-axis[2],0,axis[0]];
+  const pxToWorld=window.RETAILNAV_ACTIVE_MALL?.scale||.12;
+  const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
+  const surface=planar(top,axis,side,halfW,halfW*.43);
+  if(state.distance<=230||u.code===selected){
+   rectangle(regular,surface[0],surface[3],surface[2],surface[1],cell);
+   drawnRoof++;visibleCodes.push(u.code);
+  }
+  const requested=highlights.has(u.code)||u.code===selected;
+  const feature=Boolean(u.featured||(u.name&&u.name.length>0));
+  if(requested||feature&&autoFeatured<3){
+   if(raisedCount>=7&&!requested)continue;
+   const panelWidth=clamp(state.distance*.031,2.8,5.1);
+   // Use the same physical roof midpoint as the ordinary lettering.
+   spotlight(special,top,axis,side,panelWidth,cell);
+   raisedCount++;drawnRaised++;
+   if(feature&&!requested)autoFeatured++;
+  }
+ }
+ if(!regular.length&&!raisedCount)return;
+ const r=resource;
+ gl.enable(gl.DEPTH_TEST);
+ gl.disable(gl.CULL_FACE);
+ gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+ gpuDraw(gl,r,mvp,r.buffer,special.posts,1,[.21,.46,.62,1]);
+ gpuDraw(gl,r,mvp,r.buffer,special.body,1,[.07,.24,.39,1]);
+ gpuDraw(gl,r,mvp,r.buffer,special.trim,1,[.40,.82,.97,1]);
+ gpuDraw(gl,r,mvp,r.buffer,regular,0,[1,1,1,1]);
+ gpuDraw(gl,r,mvp,r.buffer,special.text,0,[1,1,1,1]);
+ gl.disable(gl.BLEND);
+}
+unitsApi.draw3D=render;
+unitsApi.getRoofState=()=>({
+ renderMode:resource?'world-space-textured-roof-and-raised-3d':'pending',
+ roofLabels:drawnRoof,raised:drawnRaised,
+ labelledRoofs:roofEntries.length,
+ unmatched:entries.length-roofEntries.length,
+ visibleCodes:visibleCodes.slice(),frames,
+ raisedHasPhysicalPosts:true,raisedHasExtrudedBody:true,
+ followsMapCamera:true,cameraFacing:false,lastError
+});
+unitsApi.getWallState=unitsApi.getRoofState;
 })();

@@ -5,7 +5,7 @@
 const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
-let inviteCode='', currentLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
+let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
 let scannerTimer=0, demoVisible=true, markers=[], socialStatus='';
 const demoNames=['Sofía','Marcos','Lucía','Nico'];
 const demoLevels=['UL','LL','L3','UL'];
@@ -286,23 +286,54 @@ async function createInvite(){
     status('QR listo. La otra persona debe aceptar y después vos confirmás.');
   }catch(e){status(e.message,true);}
 }
+async function makeDirectLink(){
+  if(!ready)return status('No se pudo conectar con el servidor de amigos.',true);
+  try{
+    const invite=await request('invite/link','POST',{});
+    directLink=encodeLink(invite.code);
+    $('rnDirectLink').value=directLink;
+    $('rnDirectWrap').hidden=false;
+    $('rnDirectWrap').scrollIntoView({block:'nearest',behavior:'smooth'});
+    status('Tu enlace está listo. El destinatario deberá aceptarlo para agregarse recíprocamente.');
+  }catch(e){status(e.message,true);}
+}
+async function shareDirectLink(){
+  if(!directLink)return status('Primero generá un enlace.',true);
+  if(typeof navigator.share==='function'){
+    try{
+      await navigator.share({
+        title:'Invitación de RetailNav',
+        text:'Te invito a que nos agreguemos como amigos en RetailNav. Si aceptás, quedamos vinculados.',
+        url:directLink
+      });
+      status('Enlace compartido. Cuando lo acepten, ambos verán el contacto.');
+      return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  await copy(directLink);
+}
 async function previewJoin(code){
   if(!ready)return status('Esperá a que se conecte el servicio de contactos.',true);
   if(!/^[a-zA-Z0-9_-]{40,80}$/.test(code))return status('El enlace de invitación no es válido.',true);
   try{
     const preview=await request('invite/preview','POST',{code});
     joinCode=code;
+    joinMode=preview.mode==='link'?'link':'qr';
     $('rnJoinName').textContent=preview.name;
+    $('rnJoinConfirm').textContent=joinMode==='link'?'Agregar a mis amigos':'Solicitar vínculo';
+    $('rnJoinExplain').textContent=joinMode==='link'
+      ?'La persona que envió el enlace ya autorizó la invitación. Si aceptás, aparecerán recíprocamente como amigos.'
+      :'Se enviará una solicitud. La otra persona debe aceptarla antes de que queden vinculados.';
     $('rnJoinWrap').hidden=false;
     show();
-    status('Confirmá si querés solicitar el vínculo con '+preview.name+'.');
+    status(joinMode==='link'?'Aceptá solamente si conocés a '+preview.name+'.':'Podés solicitar el vínculo con '+preview.name+'.');
   }catch(e){status(e.message,true);}
 }
 function parseInvite(input){
   const raw=input.trim();
   if(/^[A-Za-z0-9_-]{40,80}$/.test(raw))return raw;
   const u=new URL(raw,location.origin);
-  if(u.origin!==location.origin)throw Error('El enlace debe pertenecer a RetailNav');
+  if(u.origin!==location.origin||u.pathname!==location.pathname)throw Error('El enlace debe pertenecer a RetailNav');
   return new URLSearchParams(u.hash.replace(/^#/,'')).get('join')||'';
 }
 async function claim(){
@@ -310,8 +341,10 @@ async function claim(){
   try{
     const result=await request('invite/claim','POST',{code:joinCode});
     joinCode='';$('rnJoinWrap').hidden=true;
-    status('Solicitud enviada a '+result.name+'. La otra persona tiene que aceptarla.');
     merge(await request('state'));
+    status(result.linked
+      ?'¡Ya son amigos! '+result.name+' también te verá en su lista. La ubicación sigue oculta.'
+      :'Solicitud enviada a '+result.name+'. La otra persona tiene que aceptarla.');
   }catch(e){status(e.message,true);}
 }
 async function copy(text){
@@ -319,8 +352,8 @@ async function copy(text){
     await navigator.clipboard.writeText(text);
     status('Enlace copiado.');
   }catch{
-    const input=$('rnLink');
-    input.focus();input.select();
+    const input=text===directLink?$('rnDirectLink'):$('rnLink');
+    input.hidden=false;input.value=text;input.focus();input.select();
     status('Seleccioná y copiá el enlace.');
   }
 }

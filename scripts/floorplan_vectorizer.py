@@ -269,6 +269,76 @@ def extract(image, level, area=28, tolerance=.031, reviewed_walls=(),
     return features
 
 
+
+def audit_boundary_alignment(image, features, evidence=None, max_distance=2.6):
+    """Flag polygon walls not supported by grayscale/BW/color image edges.
+
+    This is a *heuristic*, not a ground-truth IoU score. Printed labels,
+    perspective blur, nonblack boundaries and over-simplified polygons can
+    mislead it. A high score NEVER verifies a store's ownership or shape.
+    """
+    layers = evidence or grayscale_evidence(image)
+    hsv = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
+    gray_edges=cv2.Canny(layers["enhanced"],55,125)
+    chromatic_edges=cv2.Canny(
+        cv2.GaussianBlur(hsv[:,:,1],(3,3),0),42,110)
+    ink=cv2.bitwise_or(gray_edges,chromatic_edges)
+    ink=cv2.bitwise_or(ink,cv2.Canny(layers["supported"],40,110))
+    distances=cv2.distanceTransform(255-ink,cv2.DIST_L2,3)
+    h,w=image.shape[:2]
+    results=[]
+    for item in features:
+        x=y=0
+        pts=[]
+        for dx,dy in zip(item[3][::2],item[3][1::2]):
+            x+=dx;y+=dy;pts.append((x/2,y/2))
+        outer=item[4][0] if item[4] else list(range(len(pts)))
+        polygon=[pts[i] for i in outer if 0<=i<len(pts)]
+        if len(polygon)<3:continue
+        samples=[]
+        for a,b in zip(polygon,polygon[1:]+polygon[:1]):
+            length=float(np.hypot(b[0]-a[0],b[1]-a[1]))
+            for t in np.linspace(0,1,max(2,int(length/1.7)),endpoint=False):
+                px=int(round(a[0]+(b[0]-a[0])*t))
+                py=int(round(a[1]+(b[1]-a[1])*t))
+                if 1<=px<w-1 and 1<=py<h-1:
+                    samples.append(float(distances[py,px]))
+        if not samples:continue
+        coverage=round(float(np.mean(np.array(samples)<=max_distance)),3)
+        # Large unsupported borders are actionable, but not automatically
+        # proof of errors because some plans use empty boundaries.
+        concern=("low-visual-support" if coverage<.38 else
+                 "partial-visual-support" if coverage<.63 else
+                 "appears-aligned-needs-review")
+        results.append({
+            "polygonId":item[0],
+            "label":item[2],
+            "center":item[6],
+            "boundarySupport":coverage,
+            "samples":len(samples),
+            "status":concern,
+            "verified":False
+        })
+    results.sort(key=lambda row:(row["boundarySupport"],row["polygonId"]))
+    needs=sum(x["status"]=="low-visual-support" for x in results)
+    return {
+        "schema":"retailnav.vector-boundary-audit.v1",
+        "method":"CLAHE + adaptive ink + original color edge-distance",
+        "reviewRequired":True, "verified":False,
+        "maxEdgeDistancePx":max_distance,
+        "sampledPolygonCount":len(results),
+        "lowSupportCount":needs,
+        "mediumSupportCount":sum(x["status"]=="partial-visual-support"
+                                 for x in results),
+        "averageBoundarySupport":round(
+            float(np.mean([row["boundarySupport"] for row in results])),3)
+            if results else 0,
+        "assumption":"High edge agreement does not prove real-world store divisions.",
+        "results":results
+    }
+
+
+
 def anchors(features, labels):
     for item in labels:
         point=(float(item["x"]),float(item["y"]))
@@ -442,6 +512,17 @@ def run():
         feats=extract(image,level,args.min_area,args.simplify,inspected,
                       args.segmentation,evidence)
         anchors(feats,labels.get(level,[]))
+        alignment=audit_boundary_alignment(image,feats,evidence)
+        (output/(level+"-alignment-review.json")).write_text(
+            json.dumps(alignment,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        image_audit=image.copy()
+        for row in alignment["results"]:
+            if row["status"]!="low-visual-support":continue
+            cx,cy=map(int,row["center"])
+            cv2.drawMarker(image_audit,(cx,cy),(0,0,230),
+                           cv2.MARKER_TILTED_CROSS,12,2)
+        cv2.imwrite(str(output/(level+"-alignment-review.jpg")),image_audit)
+
         if len(feats)<3: p.error("Insufficient regions in "+level)
         pixels=[image.shape[1],image.shape[0]]
         filename_out=level+".geometry.zlib.b64"
@@ -477,6 +558,10 @@ def run():
             "printedStoreCodes":len(codes),
             "printedZoneNames":len(district_labels.get(level, [])),
             "mappedServices":len(poi_labels.get(level, [])),
+            "alignmentAudit":level+"-alignment-review.json",
+            "lowBoundarySupport":alignment["lowSupportCount"],
+            "meanBoundarySupport":alignment["averageBoundarySupport"],
+            "automaticChecksPassed":False,
             "exactPerStoreGeometryVerified":False,
             "navigable":False})
         print(level+": "+str(len(feats))+" provisional polygons, "+

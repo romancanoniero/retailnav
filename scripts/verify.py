@@ -126,6 +126,52 @@ for feature in ap_geometry:
     assert len(triangles) % 3 == 0 and len(triangles) >= 3
     assert max(triangles) < n
 
+# New World City Shanghai: seven UNIQUE photograph-derived floors; 380 human
+# directory records are NOT the same as the number of independently surveyed
+# shops or colour clusters. Search tags must remain attached to unlocated rows.
+nw = catalog["new-world-city-shanghai"]
+assert nw["id"] == "new-world-city-shanghai"
+assert nw["name"].startswith("新世界城")
+assert nw["navigable"] is False and nw["floorAlignmentApproved"] is False
+assert nw["commercialDirectoryRecords"] == 380
+assert nw["vectorRegionCount"] == 195
+assert len(nw["floors"]) == 7
+assert [fl[0] for fl in nw["floors"]] == [
+    "L1", "L2", "L3", "L4", "L5", "L6", "L7"]
+assert len(nw["districts"]) == 7
+assert len(nw["floorReferences"]) == 7
+nw_units=nw["units"]
+assert len(nw_units) == 380
+assert len({(u["floor"],u["code"]) for u in nw_units}) == 380
+assert all(u["category"] and u["tags"] and u["source"].startswith(
+    "user-photo-directory-") for u in nw_units)
+assert sum(u["name"] != "" for u in nw_units) >= 360
+assert 0 < sum(u["x"] is None for u in nw_units) < 380, (
+    "Unplaced directory stores must not be assigned fabricated coordinates")
+assert {("L1","1B01"),("L3","3B30"),("L6","6A01"),
+    ("L6","6C01"),("L7","7C01")}.issubset(
+    {(u["floor"],u["code"]) for u in nw_units})
+assert any("zapatillas" in u["tags"] for u in nw_units)
+assert any("护肤" in u["tags"] for u in nw_units)
+assert any("anime" in u["tags"] for u in nw_units)
+assert nw["photoDigitizationExperiment"]["onlineNameVerification"][
+    "onlineCorroboratedExamples"] == 6
+assert nw["photoDigitizationExperiment"]["onlineNameVerification"]["perStoreOnlineCrawlDone"] is False
+for record in nw["floors"]:
+    level=record[0]
+    source=nw["floorReferences"][level]
+    photo=root/source["url"]
+    assert photo.exists() and hashlib.sha256(photo.read_bytes()).hexdigest()==source["sha256"]
+    assert source["qa"]["status"]=="pending"
+    assert source["quality"]=="compressed-preview"
+    assert all(not approval for approval in source["qa"]["checks"].values())
+    assert len(record[3])>=15, level
+    assert all(f[1] in (1,2) and len(f)==7 for f in record[3])
+    assert all(f[5] and len(f[5])%3==0 for f in record[3])
+assert sum(len(f[3]) for f in nw["floors"]) == 195
+assert nw["photoDigitizationExperiment"]["unmappedFloorsFromDirectorySign"]==[
+    "B1","L8","L9","L10","L11","L12"]
+
 manifest = json.loads((root / "maps/manifest.json").read_text(encoding="utf-8"))
 assert [f["id"] for f in manifest["floors"]] == ["LL", "UL", "L3"]
 totals = {"features": 0, "commercial": 0, "triangles": 0}

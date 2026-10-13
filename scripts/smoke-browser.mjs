@@ -927,7 +927,7 @@ try {
   await apPage.locator('#mallSettingsBtn').click();
   assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
   assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(
-    options=>options.map(x=>x.value)),['aventura','ap-plaza']);
+    options=>options.map(x=>x.value)),['aventura','ap-plaza','new-world-city-shanghai']);
   assert.equal(await apPage.locator('#mallSelect').inputValue(),'ap-plaza');
   assert.match(await apPage.locator('#mallLocationStatus').innerText(),/desactivada/i);
   await apPage.locator('#mallSelect').selectOption('aventura');
@@ -946,6 +946,83 @@ try {
     method:'POST',credentials:'same-origin',
     headers:{'Content-Type':'application/json'},body:'{}'
   }));
+
+  // Independent new mall test: source photos L1-L7, no duplicate signage
+  // index, 380 tagged directory rows (not 380 surveyed unit polygons).
+  const nwContext=await makeContext(),nwPage=await nwContext.newPage();
+  await nwPage.goto(URL+'?mall=new-world-city-shanghai',{
+    waitUntil:'domcontentloaded',timeout:45000
+  });
+  await nwPage.waitForFunction(()=>window.__RETAILNAV__?.getState().ready===true,
+    null,{timeout:45000});
+  const nw=await nwPage.evaluate(()=>{
+    const viewer=window.__RETAILNAV__.getState();
+    const units=window.RetailNavUnits;
+    const state=units.getState();
+    const catalog=window.RETAILNAV_ACTIVE_MALL;
+    return {mallName:catalog.name,viewer,units:state,
+      floorLabels:catalog.floorLabels,
+      geometryRegions:catalog.floors.reduce((n,f)=>n+f[3].length,0),
+      directoryRecords:catalog.commercialDirectoryRecords,
+      navigable:catalog.navigable,
+      demoPeople:window.RETAILNAV_DEMO_CONTACTS.length,
+      candidateBrands:{
+        nike:units.find('NIKE').map(u=>u.code),
+        sports:units.find('zapatillas').length,
+        cosmetics:units.find('护肤').length,
+        anime:units.find('anime').length,
+        restaurant:units.find('7C01').map(u=>u.name),
+        coffee:units.find('Starbucks').map(u=>u.floor)
+      },
+      onlineSources:units.getUnits().filter(u=>u.enrichmentURL).length
+    };
+  });
+  assert.equal(nw.viewer.mallId,'new-world-city-shanghai');
+  assert.equal(nw.viewer.ready,true);
+  assert.equal(nw.viewer.searchPlacement,'map-top');
+  assert.equal(await nwPage.locator('#mallHeaderName').innerText(),
+    '新世界城 · Shanghai New World City');
+  assert.deepEqual(nw.floorLabels,['L1','L2','L3','L4','L5','L6','L7']);
+  assert.deepEqual(nw.viewer.visible,nw.floorLabels);
+  assert.equal(nw.geometryRegions,195,'195 colour-island REGIONS, not stores');
+  assert.equal(nw.directoryRecords,380);
+  assert.equal(nw.units.count,380);
+  assert.equal(nw.units.withTags,380);
+  assert.ok(nw.units.withNames>=360);
+  assert.equal(nw.navigable,false);
+  assert.equal(nw.demoPeople,0,'No Aventura demo people may bleed into new mall');
+  assert.ok(nw.candidateBrands.nike.includes('6B06-08'));
+  assert.ok(nw.candidateBrands.sports>=28);
+  assert.ok(nw.candidateBrands.cosmetics>=30);
+  assert.ok(nw.candidateBrands.anime>=25);
+  assert.deepEqual(nw.candidateBrands.restaurant,['陶陶居（粤菜）']);
+  assert.deepEqual(nw.candidateBrands.coffee,['L3']);
+  assert.equal(nw.onlineSources,6,
+    'Exactly six examples have independently corroborated public URLs; never invent others');
+  await nwPage.locator('#search').fill('zapatillas');
+  assert.ok(await nwPage.locator('#results .rnUnitResult').count()>=18,
+    'Product-tag search finds stores even when their geometric frontage is unresolved');
+  await nwPage.locator('#search').fill('6C01');
+  assert.ok(await nwPage.locator('#results .rnUnitResult').count()>=1);
+  await nwPage.evaluate(()=>window.RetailNavUnits.focus('7C01'));
+  assert.equal((await nwPage.evaluate(()=>window.__RETAILNAV__.getState())).active,'L7');
+  const focusPosition=await nwPage.evaluate(()=>window.__RETAILNAV__.getState().target);
+  assert.ok(focusPosition.every(Number.isFinite),
+    'Unlocated directory row must not create NaN camera positions');
+  assert.equal(await nwPage.locator('#rnUnitInfo').isVisible(),true);
+  const photoStatus=await nwPage.evaluate(async()=>{
+    const refs=window.RETAILNAV_ACTIVE_MALL.floorReferences;
+    const files=Object.entries(refs).map(async([f,p])=>({
+      floor:f,status:(await fetch(p.url,{cache:'no-cache'})).status
+    }));
+    return await Promise.all(files);
+  });
+  assert.equal(photoStatus.length,7);
+  assert.ok(photoStatus.every(x=>x.status===200),
+    'The exact seven user-photograph reference crops must be published');
+  log('NEW_WORLD_CITY',{floors:nw.floorLabels,regions:nw.geometryRegions,
+    codes:nw.units.count,categories:nw.units.withTags,sampleWebMatches:nw.onlineSources,
+    photoStatus});
 
   console.log('PASS WEB E2E: mobile browser, QR, consent, persistence, privacy and gesture');
 }finally{

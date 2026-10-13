@@ -383,6 +383,54 @@ try {
   }
   log('DATA_ERASURE','Both temporary production test identities permanently removed.');
 
+  // Independent AP Plaza data and mall selector: no Aventura positions bleed in.
+  const apContext=await makeContext();
+  const apPage=await apContext.newPage();
+  await apPage.goto(URL+'?mall=ap-plaza',{waitUntil:'domcontentloaded',timeout:45000});
+  await apPage.waitForFunction(()=>window.__RETAILNAV__?.getState().ready===true,
+    null,{timeout:45000});
+  await apPage.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true,
+    null,{timeout:25000});
+  const apStatus=await apPage.evaluate(()=>({
+    viewer:window.__RETAILNAV__.getState(),
+    social:window.RetailNavSocial.getState(),
+    pins:window.RetailNavPins.getState(),
+    mall:window.RETAILNAV_ACTIVE_MALL_ID
+  }));
+  assert.equal(apStatus.mall,'ap-plaza');
+  assert.equal(apStatus.viewer.mallId,'ap-plaza');
+  assert.deepEqual(apStatus.viewer.visible,['B1']);
+  assert.ok(apStatus.viewer.features[0][1]>=40);
+  assert.equal(apStatus.social.demoFriendCount,6);
+  assert.equal(apStatus.pins.registered,6);
+  await apPage.waitForFunction(()=>window.RetailNavPins?.getState().photoLoaded===6,
+    null,{timeout:25000});
+  assert.equal(await apPage.locator('#routeBtn').isDisabled(),true);
+  await apPage.locator('#friendsBtn').click();
+  assert.equal(await apPage.locator('#rnDemoFriends .rnDemoPerson').count(),6);
+  assert.equal(await apPage.locator('#rnMarkLocation').isDisabled(),true);
+  await apPage.locator('#rnClose').click();
+  await apPage.locator('#mallSettingsBtn').click();
+  assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
+  assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(
+    options=>options.map(x=>x.value)),['aventura','ap-plaza']);
+  assert.equal(await apPage.locator('#mallSelect').inputValue(),'ap-plaza');
+  assert.match(await apPage.locator('#mallLocationStatus').innerText(),/desactivada/i);
+  await apPage.locator('#mallSelect').selectOption('aventura');
+  await Promise.all([
+    apPage.waitForURL(url=>url.searchParams.get('mall')==='aventura'),
+    apPage.locator('#mallApplyBtn').click()
+  ]);
+  await apPage.waitForFunction(()=>window.__RETAILNAV__?.getState().ready===true);
+  assert.equal((await apPage.evaluate(()=>window.__RETAILNAV__.getState())).mallId,'aventura');
+  log('MALL_SELECTOR','AP Plaza B1 and six isolated demo avatars work; settings switch back to Aventura.');
+  // Do not leave a test identity on production.
+  await apPage.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
+  await apPage.evaluate(async()=>fetch('api/account/delete',{
+    method:'POST',credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},body:'{}'
+  }));
+
   console.log('PASS WEB E2E: mobile browser, QR, consent, persistence, privacy and gesture');
 }finally{
   await Promise.all(contexts.map(c=>c.close()));

@@ -28,6 +28,8 @@ jobs:
           node --check backend/server.mjs
           node --test backend/server.test.mjs
           node --test scripts/test-demo-model.mjs
+      - name: Validate reusable vectorizer syntax
+        run: python3 -m py_compile scripts/floorplan_vectorizer.py
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle

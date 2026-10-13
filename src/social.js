@@ -8,6 +8,8 @@ let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
 let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
 let scannerTimer=0, demoVisible=true, socialStatus='', contactsRenderKey='';
 const DEMO=window.RETAILNAV_DEMO_CONTACTS||[];
+const MALL_ID=window.RETAILNAV_ACTIVE_MALL_ID||'aventura';
+const SHOW_REAL_POSITIONS=MALL_ID==='aventura';
 function element(tag,className,text){
   const el=document.createElement(tag);
   if(className)el.className=className;
@@ -126,13 +128,13 @@ function friendRow(friend){
   setAvatar(img,initial,friend.id,friend.avatarVersion);
   const info=element('div','rnPerson');
   info.append(element('strong','',friend.name));
-  const detail=friend.position
+  const detail=SHOW_REAL_POSITIONS&&friend.position
     ?friend.position.floor+' · posición que compartió hace '+Math.max(0,Math.ceil((Date.now()-friend.position.updated)/60000))+' min'
-    :'No está compartiendo su ubicación';
+    :(SHOW_REAL_POSITIONS?'No está compartiendo su ubicación':'Ubicación en otro shopping: oculta por privacidad');
   info.append(element('small','',detail));
   const actions=element('div','rnRowActions');
   const locate=button('📍',()=>{
-    if(!friend.position)return;
+    if(!SHOW_REAL_POSITIONS||!friend.position)return;
     const view=window.__RETAILNAV__;
     if(!view){status('Esperá a que cargue el mapa.',true);return;}
     window.RetailNavFocusedFriendId=friend.id;
@@ -140,9 +142,9 @@ function friendRow(friend){
     closePeople();
     status('Ubicación aproximada que compartió '+friend.name+'; no es GPS.');
   },'rnMapLocate');
-  locate.title=friend.position?'Mostrar la posición compartida de '+friend.name:'Este contacto no comparte ubicación';
+  locate.title=SHOW_REAL_POSITIONS&&friend.position?'Mostrar la posición compartida de '+friend.name:'Ubicación no compartida en este shopping';
   locate.setAttribute('aria-label',locate.title);
-  locate.disabled=!friend.position;
+  locate.disabled=!SHOW_REAL_POSITIONS||!friend.position;
   const more=button('⋯',()=>{removeWrap.hidden=!removeWrap.hidden;row.classList.toggle('rnExpanded',!removeWrap.hidden);},'rnFriendMore');
   more.setAttribute('aria-label','Opciones de '+friend.name);
   actions.append(locate,more);
@@ -227,13 +229,13 @@ function renderDemoContacts(){
   }
 }
 function allPeople(){
-  const actual=friends.filter(f=>f.position).map(f=>({
+  const actual=(SHOW_REAL_POSITIONS?friends.filter(f=>f.position):[]).map(f=>({
     id:f.id,name:f.name,demo:false,
     position:{...f.position,source:'manual',mallId:'aventura-mall-reference'},
     avatarUrl:avatarUrl(f.id,f.avatarVersion),
     visual:{bodyColor:'#65e6e0',shadowColor:'#23647a',rimColor:'#f2ffff'}
   }));
-  if(myPosition)actual.push({
+  if(SHOW_REAL_POSITIONS&&myPosition)actual.push({
     id:'self',name:'Yo',demo:false,self:true,
     position:{...myPosition,source:'manual',mallId:'aventura-mall-reference'},
     avatarUrl:me?avatarUrl(me.id,me.avatarVersion):'',
@@ -580,6 +582,12 @@ function bind(){
     try{merge(await request('location','POST',{sharing:false}));status('Ubicación oculta a todos los contactos.');}
     catch(e){status(e.message,true);}
   });
+  if(!SHOW_REAL_POSITIONS){
+    $('rnMarkLocation').disabled=true;
+    $('rnMarkLocation').title='Las ubicaciones reales se habilitarán tras calibrar este shopping.';
+    $('rnStatusPosition').textContent='AP Plaza está en modo demostración. No se trasladan ubicaciones reales de Aventura.';
+    $('rnDemoToggle').parentElement.lastChild.textContent=' Mostrar '+DEMO.length+' amigos simulados en este shopping';
+  }
   $('rnDemoToggle').addEventListener('change',e=>{
     demoVisible=e.target.checked;
     renderDemoContacts();

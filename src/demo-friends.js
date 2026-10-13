@@ -38,7 +38,30 @@ const list=seeds.map((seed,index)=>Object.freeze({
     verified:false
   })
 }));
-window.RETAILNAV_DEMO_CONTACTS=Object.freeze(list);
+// AP Plaza users exist only on its own B1 demo. Positions are intentionally
+// illustrative empty-aisle points in image pixels, not GPS or sensor readings.
+const apSeed=[
+  ['ap-demo-b1-01','Lina Chen',336,350,'lucia'],
+  ['ap-demo-b1-02','Daniel Wu',546,329,'marcos'],
+  ['ap-demo-b1-03','Mei Wang',761,341,'sofia'],
+  ['ap-demo-b1-04','Santiago López',989,357,'mateo'],
+  ['ap-demo-b1-05','Xia Liu',1183,341,'valentina'],
+  ['ap-demo-b1-06','Emma Zhao',852,447,'camila']
+];
+const apPeople=apSeed.map(([id,name,x,y,photo],i)=>Object.freeze({
+  id,name,demo:true,avatarUrl:'demo-avatars/'+photo+'.jpg',
+  visual:Object.freeze({bodyColor:['#74aceb','#88c9de','#80bee2','#92bff9','#76b5e6','#93c7ed'][i],
+    shadowColor:'#284f70',rimColor:'#f6ffff'}),
+  position:Object.freeze({
+    mallId:'ap-plaza-reference',floor:'B1',x,y,source:'mock',
+    coordinateSpace:'provisional-plan-pixels',verified:false
+  })
+}));
+window.RETAILNAV_DEMO_CONTACTS_BY_MALL=Object.freeze({
+  aventura:Object.freeze(list),
+  'ap-plaza':Object.freeze(apPeople)
+});
+window.RETAILNAV_DEMO_CONTACTS=window.RETAILNAV_DEMO_CONTACTS_BY_MALL[window.RETAILNAV_ACTIVE_MALL_ID]||window.RETAILNAV_DEMO_CONTACTS_BY_MALL.aventura;
 window.RETAILNAV_MARKER_PALETTE=window.RETAILNAV_MARKER_PALETTE||{
   defaultBodyColor:'#65e6e0',
   defaultShadowColor:'#25627c',

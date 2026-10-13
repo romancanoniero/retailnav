@@ -1,0 +1,37 @@
+{
+  "id": "ap-plaza",
+  "name": "AP Plaza",
+  "city": "Pudong, Shanghái",
+  "source": "Foto del cartel AP Plaza aportada el 13/10/2026",
+  "status": "vectorizado-provisional",
+  "origin": [
+    720,
+    310
+  ],
+  "scale": 0.12,
+  "navigable": false,
+  "gps": {
+    "lat": 31.22189,
+    "lon": 121.53866,
+    "radiusM": 650
+  },
+  "photoRedDot": {
+    "floor": "B1",
+    "x": 366,
+    "y": 320,
+    "status": "punto-rojo-del-cartel-no-gps"
+  },
+  "warning": "Regiones cromáticas vectorizadas de una fotografía. No verificadas las divisiones exactas de los locales ni los pasillos. No se permite navegación real.",
+  "floors": [
+    {
+      "id": "B1",
+      "name": "Nivel B1 · AP Plaza",
+      "geometry": "B1.geometry.zlib.b64",
+      "imageSize": [
+        1440,
+        620
+      ],
+      "source": "AP Plaza Floor Guide Map (fotografía rectificada)"
+    }
+  ]
+}

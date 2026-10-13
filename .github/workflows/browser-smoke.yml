@@ -4,12 +4,16 @@ on:
     paths:
       - ".github/workflows/browser-smoke.yml"
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Publish RetailNav to Contabo"]
+    types: [completed]
 
 permissions:
   contents: read
 
 jobs:
   browser-smoke:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

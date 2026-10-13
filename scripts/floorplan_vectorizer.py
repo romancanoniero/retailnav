@@ -16,6 +16,7 @@ DO NOT enable real navigation until a person validates surveyed geometry.
 import argparse
 import base64
 import csv
+import hashlib
 from unit_index import inside
 from unit_ocr import scan as scan_unit_codes
 import json
@@ -406,7 +407,7 @@ def run():
         "status":"vectorizado-provisional","origin":[width/2,height/2],
         "scale":round(140/width,5),"navigable":False,
         "warning":"Automatic regions, not independently verified stores, printed district names or routes.",
-        "districts":[],"pois":[],"floors":[]
+        "districts":[],"pois":[],"floors":[],"floorReferences":{}
     }
     if args.gps:
         lat,lon=map(float,args.gps.split(","))
@@ -419,9 +420,49 @@ def run():
             p.error("Each --floor must be e.g. B1=/path/photo.jpg")
         image=cv2.imread(str(Path(filename)))
         if image is None: p.error("Cannot open "+filename)
+        original_sha=hashlib.sha256(Path(filename).read_bytes()).hexdigest()
         if quad is not None:
             q=np.float32([[0,0],[width-1,0],[width-1,height-1],[0,height-1]])
             image=cv2.warpPerspective(image,cv2.getPerspectiveTransform(quad,q),(width,height))
+
+        # Save a synchronized reference image for EVERY imported floor.
+        # Compress for mobile display without claiming the original scan's
+        # resolution or treating any automatic raster overlay as certification.
+        raster=image
+        longest=max(image.shape[:2])
+        if longest>1600:
+            factor=1600/longest
+            raster=cv2.resize(image,(round(image.shape[1]*factor),
+                                     round(image.shape[0]*factor)),
+                              interpolation=cv2.INTER_AREA)
+        ok,picture=cv2.imencode(".webp",raster,
+                               [cv2.IMWRITE_WEBP_QUALITY,88])
+        if not ok:
+            p.error("Cannot encode floor reference image for "+level)
+        raw=picture.tobytes()
+        photo_hash=hashlib.sha256(raw).hexdigest()
+        encoded_photo=base64.b64encode(raw).decode("ascii")
+        for i,part in enumerate(range(0,len(encoded_photo),320000)):
+            (output/("{}{}.reference.webp.b64.part{:02d}".format(
+                level,"",i))).write_text(
+                encoded_photo[part:part+320000]+"\n",encoding="ascii")
+        manifest["floorReferences"][level]={
+            "url":"reference/"+args.mall+"/"+level+".webp",
+            "source":Path(filename).name,
+            "sourceSha256":original_sha,
+            "imageSize":[image.shape[1],image.shape[0]],
+            "rasterSize":[raster.shape[1],raster.shape[0]],
+            "sha256":photo_hash,"quality":"compressed-preview",
+            "qa":{
+                "status":"pending","geometrySha256":None,
+                "reviewer":None,"reviewedAt":None,"issues":[],
+                "checks":{
+                    "shopDivisions":False,"storeIds":False,"areas":False,
+                    "corridors":False,"accessibility":False,
+                    "amenities":False,"referenceRegistration":False
+                }
+            }
+        }
 
         detected,message=([], "OCR disabled") if args.disable_ocr else scan_unit_codes(image)
         codes={row["code"]:row for row in detected}

@@ -6,7 +6,7 @@ const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
 let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
-let scannerTimer=0, demoVisible=true, markers=[], socialStatus='', contactsRenderKey='', restorePeopleAfterQr=false;
+let scannerTimer=0, demoVisible=true, markers=[], socialStatus='', contactsRenderKey='';
 const demoNames=['Sofía','Marcos','Lucía','Nico'];
 const demoLevels=['UL','LL','L3','UL'];
 const demoColors=['#f29abd','#ffd38b','#a6a3ff','#91e0c1'];
@@ -316,12 +316,11 @@ async function createInvite(){
       colorDark:'#102133',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
     $('rnLink').value=currentLink;
     $('rnQrWrap').hidden=false;
-    // Only one overlay is visible at a time. Remember the originating menu
-    // so closing the QR can restore the user's place in the friends flow.
+    // The friends pulldown closes BEFORE the independent QR modal opens.
+    // Closing QR must not reopen the pulldown without a new click on its icon.
     const qrDialog=$('rnQrDialog');
     if(!qrDialog.open){
-      restorePeopleAfterQr=!$('peopleDialog').hidden;
-      if(restorePeopleAfterQr)closePeople();
+      closePeople();
       qrDialog.showModal();
     }
     $('rnQrExpiry').textContent='Válido durante 5 minutos. El enlace sirve una sola vez.';
@@ -538,11 +537,8 @@ function bind(){
     if(event.target===qrDialog)qrDialog.close();
   });
   qrDialog.addEventListener('close',()=>{
-    if(restorePeopleAfterQr){
-      restorePeopleAfterQr=false;
-      show();
-      $('rnMakeInvite').focus({preventScroll:true});
-    }
+    // Restore focus to the visible launcher, but keep the friends pulldown closed.
+    $('friendsBtn').focus({preventScroll:true});
   });
   $('rnMakeInvite').addEventListener('click',createInvite);
   $('rnShareInvite').addEventListener('click',makeDirectLink);

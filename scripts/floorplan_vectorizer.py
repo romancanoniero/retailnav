@@ -15,6 +15,9 @@ DO NOT enable real navigation until a person validates surveyed geometry.
 """
 import argparse
 import base64
+import csv
+from unit_index import inside
+from unit_ocr import scan as scan_unit_codes
 import json
 import math
 import re
@@ -155,6 +158,8 @@ def run():
     p.add_argument("--out",required=True)
     p.add_argument("--corners",help="Original image TL;TR;BR;BL points")
     p.add_argument("--size",default="1440x620",help="Perspective-corrected width x height")
+    p.add_argument("--unit-codes",help="Optional reviewed identifiers JSON by floor, with code/x/y/name")
+    p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
     p.add_argument("--simplify",type=float,default=.031)
@@ -169,6 +174,7 @@ def run():
     output=Path(args.out)
     output.mkdir(parents=True,exist_ok=True)
     labels=json.loads(Path(args.labels).read_text(encoding="utf-8")) if args.labels else {}
+    code_labels=json.loads(Path(args.unit_codes).read_text(encoding="utf-8")) if args.unit_codes else {}
     manifest={
         "id":args.mall,"name":args.name or args.mall.replace("-"," ").title(),
         "city":args.city,"source":"Operator-supplied floor photos",

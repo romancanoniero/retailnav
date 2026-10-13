@@ -43,6 +43,18 @@ function focus(code){
    :'Comercio identificado en el directorio; ubicación exacta sin verificar.')+
    activity+(u.tags?' · Productos/servicios: '+u.tags.replaceAll(',',', '):'')+
    '. Directorio fotográfico; la presencia comercial puede cambiar.';
+ if(u.enrichmentURL){
+  try{
+   const url=new URL(u.enrichmentURL);
+   if(url.protocol==='https:'){
+    const link=document.createElement('a');
+    link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';
+    link.textContent=' Fuente externa: coincidencia de esta marca o local (no prueba vigencia actual).';
+    link.style.color='#92eafa';
+    sub.append(document.createElement('br'),link);
+   }
+  }catch{}
+ }
  detail.hidden=false;
  if(Number.isFinite(u.x)&&Number.isFinite(u.y))
    window.__RETAILNAV__?.focusAt?.(u.floor,[u.x,u.y],67);

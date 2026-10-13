@@ -21,12 +21,12 @@
     "y": 320,
     "status": "punto-rojo-del-cartel-no-gps"
   },
-  "warning": "Regiones cromáticas vectorizadas de una fotografía. No verificadas las divisiones exactas de los locales ni los pasillos. No se permite navegación real.",
+  "warning": "190 contornos provisionales recuperan más divisiones negras, pero no equivalen a 190 locales confirmados. Identificadores de locales transcritos del cartel y vinculados solo cuando el contorno coincide sin ambigüedad. Pasillos, entradas, escala y conexiones verticales pendientes de verificación.",
   "floors": [
     {
       "id": "B1",
       "name": "Nivel B1 · AP Plaza",
-      "geometry": "B1.geometry.zlib.b64",
+      "geometry": "B1.geometry.v2.zlib.b64",
       "imageSize": [
         1440,
         620
@@ -136,5 +136,10 @@
     }
   ],
   "indoorPositionCalibrated": false,
-  "semanticLayerVersion": 1
+  "semanticLayerVersion": 1,
+  "vectorMethod": "dark-ink-divider-connected-components-v2",
+  "vectorRegionCount": 190,
+  "vectorQuality": "requires-manual-review",
+  "floorPlanMetricScaleVerified": false,
+  "numberOfPhysicalStoresVerified": false
 }

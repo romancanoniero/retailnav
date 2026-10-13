@@ -200,10 +200,10 @@ try {
     name:'profile.jpeg',mimeType:'image/jpeg',
     buffer:Buffer.from(avatarImage.split(',')[1],'base64')
   });
-  await page.waitForFunction(async()=>{
-    const res=await fetch('api/state');
-    return Boolean((await res.json()).me.avatarVersion);
-  },null,{timeout:15000});
+  await page.waitForFunction(()=>{
+    const img=document.getElementById('rnProfileImg');
+    return img&&!img.hidden&&img.complete&&img.naturalWidth>0;
+  },null,{timeout:20000});
   assert.equal(await page.locator('#rnProfileImg').isVisible(),true);
   const uploaded=await page.evaluate(async()=>(await(await fetch('api/state')).json()).me);
   assert.ok(uploaded.avatarVersion,'Avatar version should persist');

@@ -679,13 +679,20 @@ $('zoomOut').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
  dirty=true;
 };
 $('rollLeft').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll+.18);updateCameraRotation();dirty=true;};
-$('rollRight').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll-.18);updateCameraRotation();dirty=true;};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('rnMapSearch').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('rnMapSearch').classList.add('finding');$('detail').hidden=true;results();};
+$('rollRight').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll-.18);updateCameraRotation();dirty=true;};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};const updateSearchPanel=()=>{
+ // Closing a populated search restores map controls. Never leave a default
+ // suggestions sheet covering WC, zoom or friends after the query is cleared.
+ $('rnMapSearch').classList.toggle('finding',Boolean($('search').value.trim()));
+ $('detail').hidden=true;results();
+};
+$('search').oninput=updateSearchPanel;
+$('search').onfocus=updateSearchPanel;
 $('search').addEventListener('keydown',event=>{
  if(event.key==='Escape'){
   $('rnMapSearch').classList.remove('finding');$('search').blur();
   event.stopPropagation();return;
  }
- if(event.key==='ArrowDown'||event.key==='Enter'){
+ if($('search').value.trim()&&(event.key==='ArrowDown'||event.key==='Enter')){
   const first=$('results').querySelector('button:not([disabled])');
   if(first){
    event.preventDefault();

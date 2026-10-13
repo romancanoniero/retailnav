@@ -665,7 +665,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .rnMapSearch .searchbox input{height:47px;min-height:47px;
   border-radius:12px;padding:8px 13px 8px 43px}
  .rnMapSearch .searchbox .icon{top:12px}
- .stage>.rnMapSearch .resultlist{max-height:min(43dvh,320px)}
+ .stage>.rnMapSearch .resultlist{right:58px;max-height:min(39dvh,275px)}
  .mobiletitle{display:none!important}
  .stagebar{top:68px}
  .stage-single .note,.stage .note{top:122px;left:12px;

@@ -867,7 +867,13 @@ try {
   assert.ok(await apPage.locator('#results .rnPoiResult').count()>=2,
     'Searching for toilets must return both AP Plaza bathroom facilities');
   await apPage.locator('#search').fill('');
-  await apPage.locator('#rnServicesToggle').click();
+  assert.equal(await apPage.locator('#rnMapSearch.finding').count(),0,
+    'Clearing the search MUST close the floating results without hiding map controls');
+  assert.equal(await apPage.locator('#results').isVisible(),false,
+    'Empty query must collapse the result panel entirely');
+  // The right-side service toggle remains clickable even if search had been
+  // open a moment ago (regression from 2026-10-14 mobile UI release).
+  await apPage.locator('#rnServicesToggle').click({timeout:5000});
   assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,false);
   await apPage.locator('#rnServicesToggle').click();
   assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,true);

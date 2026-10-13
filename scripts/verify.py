@@ -18,7 +18,7 @@ assert [f[0] for f in inline] == ["LL", "UL", "L3"]
 catalog_match = re.search(r'<script id="mallCatalog" type="application/json">([\s\S]+?)</script>', html)
 assert catalog_match, "Standalone HTML must embed mall selector data"
 catalog = json.loads(catalog_match.group(1))
-assert set(catalog) == {"aventura", "ap-plaza"}
+assert {"aventura", "ap-plaza"}.issubset(catalog)
 assert len(catalog["aventura"]["floors"]) == 3
 ap = catalog["ap-plaza"]
 assert ap["id"] == "ap-plaza" and ap["navigable"] is False

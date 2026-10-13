@@ -17,40 +17,13 @@ const seeds=[
   {id:'mock-l3-02',name:'Camila Torres',floor:'L3',x:777.5,y:425.0,bodyColor:'#ee95a1',shadowColor:'#984c71',rimColor:'#ffebec',skin:'#c98a60',hair:'#372a24',shirt:'#507d99',bg:'#6b85a5',hairStyle:1},
   {id:'mock-l3-03',name:'Tomás Álvarez',floor:'L3',x:837.4,y:410.5,bodyColor:'#8fb8ff',shadowColor:'#466998',rimColor:'#e8f2ff',skin:'#edba91',hair:'#46352d',shirt:'#826d8d',bg:'#80919d',hairStyle:0}
 ];
-function photo(seed){
-  // Deliberately synthetic SVG portraits: no dependency on another person's
-  // photograph, no CDN and no misleading real-world photo of a visitor.
-  const h=seed.hairStyle;
-  const hair=h===0
-    ? '<path d="M27 52Q19 26 37 17Q56 6 74 20Q85 31 76 53L72 40Q58 30 36 41Z"/>'
-    : h===1
-      ? '<path d="M20 86Q13 63 20 35Q27 10 53 12Q87 10 84 41L79 84L66 81L72 48Q58 27 34 40L30 82Z"/>'
-      : '<path d="M20 84Q9 40 25 24Q41 6 63 16Q87 19 85 55L82 91L68 89L72 44Q45 20 31 44L32 91Z"/>';
-  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'+
-    '<defs><radialGradient id="sky"><stop stop-color="#d2e3e7"/><stop offset="1" stop-color="'+seed.bg+'"/></radialGradient>'+
-    '<radialGradient id="face" cx=".39" cy=".34" r=".74"><stop stop-color="#ffe0b9"/><stop offset=".55" stop-color="'+seed.skin+'"/><stop offset="1" stop-color="#935e48"/></radialGradient>'+
-    '<linearGradient id="coat" x2="1" y2=".7"><stop stop-color="'+seed.shirt+'"/><stop offset="1" stop-color="#283b57"/></linearGradient></defs>'+
-    '<rect width="100" height="100" fill="url(#sky)"/>'+
-    '<circle cx="81" cy="19" r="24" fill="#fff" opacity=".12"/>'+
-    '<path d="M5 105Q6 79 31 77L43 72L57 72L69 77Q93 80 95 105Z" fill="url(#coat)"/>'+
-    '<path d="M41 67L59 67L60 79Q50 92 40 79Z" fill="'+seed.skin+'"/>'+
-    '<path d="'+hair.slice(9,-3)+'" fill="'+seed.hair+'" opacity=".92"/>'+
-    '<ellipse cx="50" cy="48" rx="25" ry="30" fill="url(#face)"/>'+
-    '<path d="M25 45Q23 20 41 17Q63 12 75 29L72 41Q62 31 50 34Q37 30 28 47Z" fill="'+seed.hair+'"/>'+
-    '<path d="M35 47q6-3 12 0m7 0q6-3 12 0" stroke="'+seed.hair+'" stroke-width="2.1" stroke-linecap="round" fill="none"/>'+
-    '<ellipse cx="41" cy="50" rx="2.1" ry="2.7" fill="#24313b"/><ellipse cx="59" cy="50" rx="2.1" ry="2.7" fill="#24313b"/>'+
-    '<path d="M50 52l-2 8q3 2 6-1" fill="none" stroke="#985f4a" stroke-width="1.5" opacity=".6"/>'+
-    '<path d="M41 64Q50 69 59 64" fill="none" stroke="#984c4f" stroke-width="2.2" stroke-linecap="round"/>'+
-    '<path d="M28 55Q25 53 25 50M73 55Q76 53 75 50" fill="none" stroke="'+seed.skin+'" stroke-width="3"/>'+
-    '<path d="M8 100Q23 87 37 85m26 0q14 3 29 15" fill="none" stroke="#f3fbff" stroke-opacity=".15" stroke-width="3"/>'+
-    '</svg>';
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-}
-const list=seeds.map(seed=>Object.freeze({
+// CC0 synthetic photographic portraits shipped locally, never private user photos.
+const photoFiles=Object.freeze(['elena','mateo','valentina','sofia','marcos','lucia','nico','camila','tomas']);
+const list=seeds.map((seed,index)=>Object.freeze({
   id:seed.id,
   name:seed.name,
   demo:true,
-  avatarUrl:photo(seed),
+  avatarUrl:'demo-avatars/'+photoFiles[index]+'.jpg',
   visual:Object.freeze({bodyColor:seed.bodyColor,shadowColor:seed.shadowColor,
     rimColor:seed.rimColor}),
   position:Object.freeze({

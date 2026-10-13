@@ -243,11 +243,18 @@ function beginGesture(){
 canvas.addEventListener('pointerdown',e=>{
  if(!ready)return;stopAuto();canvas.focus();
  try{canvas.setPointerCapture(e.pointerId);}catch{}
+ // All participants in a two-finger gesture must be ineligible for tap
+ // recognition, including the stationary finger lifted last.
+ if(pointers.size){
+  for(const previous of pointers.values())previous.hadMultitouch=true;
+  lastTap=null;
+ }
  const doubleTapCandidate=pointers.size===0&&e.pointerType==='touch'
   &&lastTap&&performance.now()-lastTap.at<320
   &&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<35;
  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,
-  button:e.button,shift:e.shiftKey,moved:false});
+  button:e.button,shift:e.shiftKey,moved:false,
+  hadMultitouch:pointers.size>0});
  beginGesture();
  if(gesture)gesture.doubleTapHold=Boolean(doubleTapCandidate);
  canvas.classList.add('dragging');dirty=true;
@@ -317,7 +324,8 @@ canvas.addEventListener('pointermove',e=>{
 });
 function endPointer(e){
  const p=pointers.get(e.pointerId);
- if(p&&pointers.size===1&&!p.moved&&Math.hypot(p.x-p.startX,p.y-p.startY)<7&&p.button===0){
+ if(p&&!p.hadMultitouch&&pointers.size===1&&!p.moved
+  &&Math.hypot(p.x-p.startX,p.y-p.startY)<7&&p.button===0){
   const now=performance.now();
   const doubleTap=lastTap&&now-lastTap.at<320&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<32;
   if(doubleTap){

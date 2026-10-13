@@ -244,4 +244,5 @@ unitsApi.getRoofState=()=>({
  followsMapCamera:true,cameraFacing:false,lastError
 });
 unitsApi.getWallState=unitsApi.getRoofState;
+window.__RETAILNAV__?.invalidate?.();
 })();

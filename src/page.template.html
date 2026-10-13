@@ -84,6 +84,7 @@
 <label class="rnCompareCheckbox"><input type="checkbox" id="showVectors" checked> Mostrar vectorizado</label>
 <label for="overlayOpacity">Opacidad vectores: <output id="opacityValue">85 %</output></label>
 <input id="overlayOpacity" type="range" min="0" max="1" step=".01" value=".85">
+<label for="compareZoom">Zoom: <output id="compareZoomValue">100 %</output></label><input id="compareZoom" type="range" min="100" max="400" step="25" value="100">
 </div>
 <div class="comparewrap"><svg id="compareSvg" xmlns="http://www.w3.org/2000/svg" viewBox="290 100 800 620" role="img" aria-label="Comparación por planta: referencia fotográfica y divisiones vectorizadas"><rect id="referenceBackground" x="0" y="0" width="1440" height="620" fill="#ffffff"/><image id="referenceImage" x="0" y="0" width="1320" height="941" preserveAspectRatio="none"/><g id="traceOverlay"></g></svg></div>
 <div id="compareMissing" hidden class="rnCompareMissing">No se guardó todavía la fotografía de esta planta. Podés cargarla temporalmente para revisar sin enviarla al servidor.</div>

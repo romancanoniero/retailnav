@@ -28,9 +28,12 @@ jobs:
         run: |
           node --check src/viewer.js
           node --check src/social.js
+          node --check src/demo-friends.js
+          node --check src/pins3d.js
           node --check src/jsqr.js
           node --check backend/server.mjs
           node --test backend/server.test.mjs
+          node --test scripts/test-demo-model.mjs
           bash -n deploy/deploy-isolated.sh
           bash -n deploy/deploy-social.sh
       - name: Build and validate floor vectors
@@ -103,6 +106,9 @@ jobs:
           grep -q 'id="rnAvatarTrigger"' /tmp/retailnav-index.html
           grep -q 'id="rnShareInvite"' /tmp/retailnav-index.html
           grep -q 'id="rnFriends"' /tmp/retailnav-index.html
+          grep -q 'id="rnDemoFriends"' /tmp/retailnav-index.html
+          grep -q 'id="peoplePinCanvas"' /tmp/retailnav-index.html
+          grep -q 'retailnav.presence' /tmp/retailnav-index.html || grep -q 'mock-ul-01' /tmp/retailnav-index.html
           curl -fL --retry 2 --connect-timeout 10 --max-time 20 -o /tmp/retailnav.glb https://improvingyourreality.com/retailnav/maps/Aventura-ALL.glb
           python3 - <<'PY'
           from pathlib import Path

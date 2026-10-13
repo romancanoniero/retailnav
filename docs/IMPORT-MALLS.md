@@ -121,3 +121,55 @@ Los pines de usuarios tienen otra responsabilidad: se dimensionan por el zoom
 desde src/pins-webgl.js, respetan una altura física máxima y no atraviesan
 los rótulos suspendidos del mapa. Eso corresponde a visualización, no a la
 vectorización que extrae los datos arquitectónicos.
+
+
+## Auditoría automática asistida por escala de grises y blanco/negro
+
+La importación nueva usa **tres observaciones de la MISMA fotografía registrada**:
+
+- Color HSV: preserva superficies de zonas comerciales y cambios cromáticos.
+- Escala de grises con **CLAHE**: recupera contraste local de trazos oscuros.
+- Blanco/negro con **umbral adaptativo gaussiano**: detecta posibles separaciones
+  con sombras y luz desigual. La coincidencia con trazos oscuros se exige como
+  evidencia adicional antes de considerar una línea candidata.
+
+Ejemplo (requiere OpenCV y NumPy):
+
+\`\`\`sh
+python3 scripts/floorplan_vectorizer.py \
+  --mall nuevo-shopping --name "Nuevo Shopping" \
+  --floor B1=/ruta/planta-original.jpg --out data/malls/nuevo-shopping \
+  --segmentation hybrid --wall-min-length 14 \
+  --unit-codes codes.json --districts zones.json --pois amenities.json
+\`\`\`
+
+Para comparar el algoritmo previo, usar \`--segmentation color\`. La variante
+híbrida es la predeterminada. El importador guarda, por cada planta:
+
+- \`B1-grayscale-contrast.jpg\`, \`B1-adaptive-bw.png\` y
+  \`B1-confirmed-strokes.png\`, para inspeccionar **qué vio** el análisis.
+- \`B1-wall-candidates.json\`: cada línea tiene soporte del umbral binario,
+  contraste local y color a ambos lados, junto a una puntuación **provisional**.
+- \`B1-alignment-review.json\` y \`B1-alignment-review.jpg\`: cotejo de
+  contornos vectorizados contra bordes del plano, con regiones sospechosas.
+- \`B1.reference.webp.b64.part00\` (y partes siguientes, si hace falta):
+  imagen registrada para comparar dentro de la web; por ser una vista previa
+  comprimida **no autoriza la aprobación definitiva**.
+- \`vectorization-review.json\`: síntesis de discrepancias y garantía de que
+  la planta permanece en estado no navegable hasta revisión.
+
+**Importante:** una coincidencia con líneas negras no prueba que exista
+una pared ni demuestra que los locales sean correctos. Letras, logotipos,
+sombras y bordes mal rectificados pueden producir falsos positivos. Ningún
+hallazgo se promueve automáticamente a \`verified: true\`.
+
+### Verificación en la web
+
+El botón de comparación abre la foto y los polígonos de cada planta. El
+estilo predeterminado son rellenos negros al 40 %, contorno blanco de 2 px
+a opacidad completa, o **solo contorno**, zoom hasta 800 % y códigos
+transcritos opcionales. Marcar anomalía permite elegir tipo, coordenadas,
+polígono aproximado y descripción. Los datos se guardan localmente en el
+navegador, vinculados a la versión geométrica; no se envían al servidor.
+\`Exportar informe JSON\` sirve para entregar las observaciones a un revisor.
+Una planta no se certifica por el mero hecho de haber ejecutado el proceso.

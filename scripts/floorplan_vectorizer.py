@@ -232,6 +232,9 @@ def run():
     p.add_argument("--size",default="1440x620",help="Perspective-corrected width x height")
     p.add_argument("--unit-codes",help="Optional reviewed identifiers JSON by floor, with code/x/y/name")
     p.add_argument("--districts",help="JSON containing reviewed names of commercial zones, with floor,x,y and widthPx,heightPx")
+    p.add_argument("--pois",help="JSON keyed by floor of photo-reviewed bathrooms, lifts, stairs, metro, exits, information etc")
+    p.add_argument("--reviewed-walls",help="JSON keyed by floor, containing only checked architectural line segments with verified=true")
+    p.add_argument("--wall-min-length",type=int,default=14,help="Minimum image-pixel length of independent unreviewed wall candidates")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
@@ -249,18 +252,23 @@ def run():
     labels=json.loads(Path(args.labels).read_text(encoding="utf-8")) if args.labels else {}
     code_labels=json.loads(Path(args.unit_codes).read_text(encoding="utf-8")) if args.unit_codes else {}
     district_labels=json.loads(Path(args.districts).read_text(encoding="utf-8")) if args.districts else {}
+    poi_labels=json.loads(Path(args.pois).read_text(encoding="utf-8")) if args.pois else {}
+    reviewed_walls=json.loads(Path(args.reviewed_walls).read_text(encoding="utf-8")) if args.reviewed_walls else {}
+    if args.wall_min_length < 8 or args.wall_min_length > 150:
+        p.error("--wall-min-length must be between 8 and 150 pixels")
     manifest={
         "id":args.mall,"name":args.name or args.mall.replace("-"," ").title(),
         "city":args.city,"source":"Operator-supplied floor photos",
         "status":"vectorizado-provisional","origin":[width/2,height/2],
         "scale":round(140/width,5),"navigable":False,
         "warning":"Automatic regions, not independently verified stores, printed district names or routes.",
-        "districts":[],"floors":[]
+        "districts":[],"pois":[],"floors":[]
     }
     if args.gps:
         lat,lon=map(float,args.gps.split(","))
         if abs(lat)>90 or abs(lon)>180: p.error("Invalid coordinates")
         manifest["gps"]={"lat":lat,"lon":lon,"radiusM":600}
+    reports=[]
     for entry in args.floor:
         level,separator,filename=entry.partition("=")
         if not separator or not re.fullmatch(r"[A-Z][A-Z0-9-]{0,10}",level):
@@ -307,7 +315,52 @@ def run():
                 "confidence":"manual-transcription"
             })
 
-        feats=extract(image,level,args.min_area,args.simplify)
+        # Protect amenities and circulation as their own searchable map layer.
+        # Do not infer exits or accessibility from pixels without inspection.
+        for record in poi_labels.get(level, []):
+            item = dict(record)
+            if not item.get("id") or not item.get("category") or not item.get("name"):
+                p.error("POI requires id, category and name on "+level)
+            px, py = item.get("x"), item.get("y")
+            if px is not None or py is not None:
+                if px is None or py is None or not (
+                    0 <= float(px) <= image.shape[1] and
+                    0 <= float(py) <= image.shape[0]):
+                    p.error("POI coordinates are invalid on "+level)
+            item["floor"] = level
+            item.setdefault("confidence", "por-revisar")
+            item.setdefault("source", "operator-photo-transcription")
+            manifest["pois"].append(item)
+
+        # Save the linework separately, even where two colour regions merged.
+        # Candidates are not automatically walls: signs and logos contain
+        # similar dark strokes. The review JPG makes this uncertainty visible.
+        candidates = detect_wall_candidates(image, args.wall_min_length)
+        inspected = reviewed_walls.get(level, [])
+        accepted = [w for w in inspected if w.get("verified")]
+        (output/(level+"-wall-candidates.json")).write_text(
+            json.dumps({"schema":"retailnav.linework-review.v1",
+                "floor":level,"status":"unreviewed",
+                "candidates":candidates},separators=(",",":"))+"\n",
+            encoding="utf-8"
+        )
+        line_preview = image.copy()
+        for stroke in candidates:
+            cv2.line(line_preview, tuple(stroke["a"]), tuple(stroke["b"]),
+                     (0, 218, 255), 1, lineType=cv2.LINE_AA)
+        for stroke in accepted:
+            try:
+                cv2.line(line_preview, tuple(map(int,stroke["a"])),
+                         tuple(map(int,stroke["b"])), (255, 0, 225), 2,
+                         lineType=cv2.LINE_AA)
+            except (KeyError, TypeError, ValueError):
+                pass
+        cv2.imwrite(str(output/(level+"-wall-review.jpg")),line_preview)
+        print(level+":",len(candidates),"independent dark-line candidates;",
+              len(accepted),"reviewed dividers. Unreviewed lines never become walls.")
+
+
+        feats=extract(image,level,args.min_area,args.simplify,inspected)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)
         pixels=[image.shape[1],image.shape[0]]
@@ -329,11 +382,26 @@ def run():
             cv2.imwrite(str(output/(level+"-districts-preview.jpg")),preview)
         manifest["floors"].append({
             "id":level,"name":level,"geometry":filename_out,
-            "imageSize":pixels,"source":Path(filename).name
+            "imageSize":pixels,"source":Path(filename).name,
+            "lineworkReview":level+"-wall-candidates.json",
+            "unverifiedLineCount":len(candidates),
+            "reviewedWallCount":len(accepted)
         })
+        reports.append({"floor":level,"status":"provisional",
+            "polygonCount":len(feats),
+            "wallCandidates":len(candidates),
+            "approvedWallCount":len(accepted),
+            "printedStoreCodes":len(codes),
+            "printedZoneNames":len(district_labels.get(level, [])),
+            "mappedServices":len(poi_labels.get(level, [])),
+            "exactPerStoreGeometryVerified":False,
+            "navigable":False})
         print(level+": "+str(len(feats))+" provisional polygons, "+
               str(sum(f[1]==0 for f in feats))+" manually labeled anchors")
     (output/"mall.json").write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n")
+    (output/"vectorization-review.json").write_text(json.dumps(
+        {"mallId":args.mall,"state":"needs-human-verification","floors":reports},
+        indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print("New mall manifest:",output/"mall.json")
     print("Not for public navigation until a physical survey validates the map.")
 

@@ -62,7 +62,10 @@ window.RETAILNAV_DEMO_CONTACTS_BY_MALL=Object.freeze({
   'ap-plaza':Object.freeze(apPeople)
 });
 // Unknown/unmapped malls have no invented people or Aventura positions.
-window.RETAILNAV_DEMO_CONTACTS=window.RETAILNAV_DEMO_CONTACTS_BY_MALL[window.RETAILNAV_ACTIVE_MALL_ID]||Object.freeze([]);
+window.RETAILNAV_DEMO_CONTACTS=window.RETAILNAV_DEMO_CONTACTS_BY_MALL[window.RETAILNAV_ACTIVE_MALL_ID]||
+  (!window.RETAILNAV_ACTIVE_MALL_ID
+    ? window.RETAILNAV_DEMO_CONTACTS_BY_MALL.aventura
+    : Object.freeze([]));
 window.RETAILNAV_MARKER_PALETTE=window.RETAILNAV_MARKER_PALETTE||{
   defaultBodyColor:'#65e6e0',
   defaultShadowColor:'#25627c',

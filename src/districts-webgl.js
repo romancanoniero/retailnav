@@ -1,13 +1,8 @@
-/* Suspended, solid 3D district signs for RetailNav.
- *
- * Commercial district names are separate from individual shop roof labels.
- * Each is a real horizontal sign, floating ABOVE its own floor with visible
- * air between the tallest shop roof and the bottom of the sign.
- *
- * The sign has a physical bottom, four sides, a lit upper rim, a text texture,
- * and a translucent ground shadow. It lives in the mall's world coordinate
- * system and uses the EXACT SAME camera matrix as the floor meshes.
- * It does not billboard toward the screen.
+/* One label per shopping zone: preserve the original illuminated, solid 3D
+ * plaque and its textured type, but orient the entire plaque to the camera.
+ * Quaternions supply the basis for ANY camera yaw/pitch/roll, so the name is
+ * never mirrored, upside-down or edge-on as the user explores the mall.
+ * Geometry is anchored to its original 3D floor; no second DOM badge in WebGL.
  */
 (()=>{
 'use strict';
@@ -19,7 +14,7 @@ const SIGN_THICKNESS=.58;       // actual 3D side and bottom geometry
 const SHADOW_Y=BASE_ROOF_HEIGHT+.10;
 const SIDE_BORDER=.16;
 let gpu=null,rendered=0,frames=0,focused=null,lastError='';
-let shown=[],positions=[],geometryTriangles=0;
+let shown=[],positions=[],geometryTriangles=0,projectedBoxes=[];
 const normalizeText=s=>String(s||'').normalize('NFD')
   .replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const find=q=>districts.filter(d=>normalizeText(d.name+' '+(d.detail||''))
@@ -139,6 +134,34 @@ function sides(list,bottom,top){
   triangle(list,bottom[i],top[next],top[i]);
  }
 }
+
+function add(a,b,scalar=1){return [a[0]+b[0]*scalar,a[1]+b[1]*scalar,a[2]+b[2]*scalar];}
+function rotate(q,v){
+ const u=q.slice(0,3);
+ const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const t=cross(u,v).map(n=>n*2);
+ return add(add(v,t,q[3]),cross(u,t));
+}
+// Corners are bottom-left, bottom-right, top-right, top-left as seen by camera.
+function facingCorners(center,right,up,front,width,height,forward){
+ return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([sx,sy])=>
+  add(add(add(center,right,sx*width),up,sy*height),front,forward));
+}
+function facingFace(list,quad,uv){
+ const [a,b,c,d]=quad;
+ // Atlas's v0 is the TOP, v1 is the BOTTOM, with UNPACK_FLIP_Y_WEBGL=true.
+ triangle(list,a,b,c,[uv.u0,uv.v1],[uv.u1,uv.v1],[uv.u1,uv.v0]);
+ triangle(list,a,c,d,[uv.u0,uv.v1],[uv.u1,uv.v0],[uv.u0,uv.v0]);
+}
+function projectedEnvelope(view,corners,id,floor,low,high){
+ const points=corners.map(p=>view.projectWorld(p));
+ if(points.some(p=>!p||!Number.isFinite(p.x+p.y)||p.w<=0||p.z<=-1||p.z>=1))
+  return null;
+ const xs=points.map(p=>p.x),ys=points.map(p=>p.y);
+ return {id,floor,x0:Math.min(...xs),x1:Math.max(...xs),
+  y0:Math.min(...ys),y1:Math.max(...ys),bottomY:low,topY:high};
+}
+
 function uploadAndDraw(gl,r,mvp,vertexData,solid,tint){
  if(!vertexData.length)return 0;
  gl.useProgram(r.program);
@@ -163,50 +186,61 @@ function draw3D(gl,mvp){
  if(!gpu||gpu.gl!==gl){
   try{gpu=init(gl);lastError='';}catch(e){
    lastError=String(e?.message||e);
-   console.error('District floating 3D signs failed:',e);
-   return;
+   console.error('District floating 3D signs failed:',e);return;
   }
  }
- const state=view.getState();
- const visibleFloors=new Set(state.visible);
- const shadow=[],sidesData=[],undersides=[],rims=[],lettering=[];
- shown=[];positions=[];rendered=0;geometryTriangles=0;frames++;
+ const state=view.getState(),on=new Set(state.visible);
+ // These three quaternion-rotated axes remain orthogonal even upside-down.
+ const right=rotate(state.q,[1,0,0]);
+ const up=rotate(state.q,[0,1,0]);
+ const towardCamera=rotate(state.q,[0,0,1]);
+ const backs=[],walls=[],rims=[],lettering=[],shadows=[];
+ shown=[];positions=[];projectedBoxes=[];rendered=0;geometryTriangles=0;frames++;
+ const worldPerPixel=2*state.distance*Math.tan(Math.PI/8)/
+  Math.max(300,document.getElementById('canvas')?.clientHeight||600);
  for(const district of districts){
-  if(!visibleFloors.has(district.floor))continue;
+  if(!on.has(district.floor))continue;
   const point=view.pinWorld(district.floor,district.x,district.y);
   if(!point)continue;
   const uv=gpu.cells.get(district.id);
   if(!uv)continue;
-  const width=Math.max(4,(mall.scale||.12)*(district.widthPx||170));
-  const depth=Math.max(1.5,(mall.scale||.12)*(district.heightPx||35));
-  const x=point[0],z=point[2],halfW=width/2,halfH=depth/2;
-  // This is FLOOR-RELATIVE, never a global fixed y. When the visitor
-  // separates/stacks levels each label travels with its own floor index.
-  const bottomY=point[1]+BASE_ROOF_HEIGHT+FLOAT_GAP;
-  const topY=bottomY+SIGN_THICKNESS;
-  const bottom=rectCorners(x,z,halfW,halfH,bottomY);
-  const top=rectCorners(x,z,halfW,halfH,topY);
-  bottomFace(undersides,bottom);
-  sides(sidesData,bottom,top);
-  // A 3D luminous bezel is a larger, thin raised slab around the face.
-  const trimY=topY+.035;
-  const trim=rectCorners(x,z,halfW,halfH,trimY);
-  topFace(rims,trim,{u0:0,u1:1,v0:0,v1:1});
-  // Slightly inset texture leaves a bright blue rim visible from above.
-  const face=rectCorners(x,z,
-   Math.max(.3,halfW-SIDE_BORDER),Math.max(.3,halfH-SIDE_BORDER),
-   trimY+.018);
-  topFace(lettering,face,uv);
-  // Soft translucent shadow on the roof beneath the floating sign. Not a
-  // connecting post: the visible gap is physically empty.
-  const shadowPlane=rectCorners(x,z,halfW*.86,halfH*.83,
-   point[1]+SHADOW_Y);
-  topFace(shadow,shadowPlane,{u0:0,u1:1,v0:0,v1:1});
+  const nominalWidth=Math.max(4,(mall.scale||.12)*(district.widthPx||170));
+  // Extra map zoom should not leave all typography microscopic. Limit how
+  // much the sign can enlarge, so it never masks an entire mall floor.
+  const width=Math.min(Math.max(44,nominalWidth),Math.max(nominalWidth,worldPerPixel*110));
+  const height=Math.max(3.5,(mall.scale||.12)*(district.heightPx||35),width*102/384);
+  const halfW=width/2,halfH=height/2;
+  const x=point[0],z=point[2],floorY=point[1];
+  const low=floorY+BASE_ROOF_HEIGHT+FLOAT_GAP;
+  // The sign stays physically clear of shop roofs even after arbitrary roll:
+  // account for the maximum world-Y span of its rotated 3D volume.
+  const verticalExtent=Math.abs(right[1])*halfW+
+   Math.abs(up[1])*halfH+Math.abs(towardCamera[1])*SIGN_THICKNESS/2;
+  const center=[x,low+verticalExtent,z];
+  const high=low+verticalExtent*2;
+  const back=facingCorners(center,right,up,towardCamera,halfW,halfH,-SIGN_THICKNESS/2);
+  const front=facingCorners(center,right,up,towardCamera,halfW,halfH,SIGN_THICKNESS/2);
+  bottomFace(backs,back);
+  sides(walls,back,front);
+  const trim=facingCorners(center,right,up,towardCamera,halfW,halfH,
+   SIGN_THICKNESS/2+.035);
+  facingFace(rims,trim,{u0:0,u1:1,v0:0,v1:1});
+  const inset=Math.min(SIDE_BORDER,halfH*.25);
+  const face=facingCorners(center,right,up,towardCamera,
+   Math.max(.4,halfW-inset),Math.max(.4,halfH-inset),
+   SIGN_THICKNESS/2+.053);
+  facingFace(lettering,face,uv);
+  const shadowPlane=rectCorners(x,z,halfW*.76,halfH*.82,
+   floorY+SHADOW_Y);
+  topFace(shadows,shadowPlane,{u0:0,u1:1,v0:0,v1:1});
+  const box=projectedEnvelope(view,back.concat(front),district.id,
+   district.floor,low,high);
+  if(box)projectedBoxes.push(box);
   positions.push({
-   id:district.id,floor:district.floor,
-   floorY:point[1],bottomY,topY,airGap:FLOAT_GAP,
-   heightAboveFloor:topY-point[1],
-   center:[x,(bottomY+topY)/2,z]
+   id:district.id,floor:district.floor,floorY,bottomY:low,topY:high,
+   airGap:FLOAT_GAP,heightAboveFloor:high-floorY,center: center.slice(),
+   // Unit normal points toward viewer for EVERY camera orientation.
+   forward:towardCamera.slice()
   });
   rendered++;shown.push(district.id);
  }
@@ -216,56 +250,26 @@ function draw3D(gl,mvp){
  gl.disable(gl.CULL_FACE);
  gl.enable(gl.BLEND);
  gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
- // The shadow never writes depth, so the mall floor still occludes it.
  gl.depthMask(false);
- geometryTriangles+=uploadAndDraw(gl,r,mvp,shadow,true,[.02,.18,.29,.17]);
+ geometryTriangles+=uploadAndDraw(gl,r,mvp,shadows,true,[.02,.18,.29,.17]);
  gl.depthMask(true);
- geometryTriangles+=uploadAndDraw(gl,r,mvp,undersides,true,[.035,.12,.26,1]);
- geometryTriangles+=uploadAndDraw(gl,r,mvp,sidesData,true,[.10,.31,.62,1]);
+ geometryTriangles+=uploadAndDraw(gl,r,mvp,backs,true,[.035,.12,.26,1]);
+ geometryTriangles+=uploadAndDraw(gl,r,mvp,walls,true,[.10,.31,.62,1]);
  geometryTriangles+=uploadAndDraw(gl,r,mvp,rims,true,[.38,.80,.95,1]);
  geometryTriangles+=uploadAndDraw(gl,r,mvp,lettering,false,[1,1,1,1]);
  gl.disable(gl.BLEND);
 }
-// Screen-space envelopes are calculated from the ACTUAL 3D plaque corners,
-// not an approximate label font size. Pins query these every camera frame.
-// Use a conservative inset (2 px) so 3D friends can never puncture the text.
+// These are EXACT projections of billboarded 3D sign corners. The pin renderer
+// uses the same occupied footprint so friends never pierce sign lettering.
 function getProjectedBoxes(){
- const view=window.__RETAILNAV__;
- if(!view?.getState().ready)return [];
- const on=new Set(view.getState().visible),boxes=[];
- for(const area of districts){
-  if(!on.has(area.floor))continue;
-  const p=view.pinWorld(area.floor,area.x,area.y);
-  if(!p)continue;
-  const w=Math.max(4,(mall.scale||.12)*(area.widthPx||170))/2;
-  const d=Math.max(1.5,(mall.scale||.12)*(area.heightPx||35))/2;
-  const low=p[1]+BASE_ROOF_HEIGHT+FLOAT_GAP;
-  const high=low+SIGN_THICKNESS+.08;
-  const corners=[];
-  for(const y of [low,high])for(const dx of [-w,w])for(const dz of [-d,d]){
-    const screen=view.projectWorld([p[0]+dx,y,p[2]+dz]);
-    if(!screen||screen.w<=0||screen.z<=-1||screen.z>=1){
-      corners.length=0;break;
-    }
-    corners.push(screen);
-  }
-  if(corners.length!==8)continue;
-  const x0=Math.min(...corners.map(q=>q.x));
-  const x1=Math.max(...corners.map(q=>q.x));
-  const y0=Math.min(...corners.map(q=>q.y));
-  const y1=Math.max(...corners.map(q=>q.y));
-  if(!Number.isFinite(x0+y0+x1+y1))continue;
-  boxes.push({id:area.id,floor:area.floor,x0,y0,x1,y1,
-    bottomY:low,topY:high});
- }
- return boxes.concat(window.RetailNavAreaLabels?.getProjectedBoxes?.()||[]);
+ return projectedBoxes.map(b=>({...b}));
 }
 window.RetailNavDistricts={
  draw3D,find,focus,getProjectedBoxes,getAll:()=>districts.slice(),
  getState:()=>({
   count:districts.length,rendered,visibleIds:shown.slice(),
-  mode:gpu?'floating-solid-district-3d':'pending',
-  cameraFacing:false,screenUprightLabels:window.RetailNavAreaLabels?.getState?.().textUpright===true,
+  mode:gpu?'camera-facing-solid-district-3d':'pending',
+  cameraFacing:true,screenUprightLabels:true,singleLabelPerZone:true,
   tiedToFloor:true,
   floorClearance:FLOAT_GAP,
   panelThickness:SIGN_THICKNESS,

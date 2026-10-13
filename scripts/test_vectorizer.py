@@ -24,6 +24,7 @@ def run():
         cv2.rectangle(image, (19, 19), (321, 158), (185, 205, 134), -1)
         cv2.rectangle(image, (19, 19), (321, 158), (15, 35, 30), 2)
         cv2.line(image, (165, 21), (165, 157), (15, 35, 30), 2)
+        cv2.line(image, (21, 129), (164, 129), (15, 35, 30), 2)
         cv2.putText(image, "A-01", (45, 95), cv2.FONT_HERSHEY_SIMPLEX,
                     .55, (15, 35, 30), 1)
         cv2.putText(image, "A-02", (205, 95), cv2.FONT_HERSHEY_SIMPLEX,
@@ -63,7 +64,10 @@ def run():
             "--districts", str(names), "--pois", str(services),
             "--reviewed-walls", str(approved), "--disable-ocr"
         ]
-        subprocess.run(cmd, check=True, capture_output=True, text=True)
+        completed = subprocess.run(cmd, capture_output=True, text=True)
+        if completed.returncode:
+            raise AssertionError("Vectorizer integration failed:\n" +
+                                 completed.stdout + "\n" + completed.stderr)
         manifest = json.loads((out / "mall.json").read_text())
         report = json.loads((out / "vectorization-review.json").read_text())
         review = json.loads((out / "B1-wall-candidates.json").read_text())

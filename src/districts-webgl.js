@@ -258,14 +258,14 @@ function getProjectedBoxes(){
   boxes.push({id:area.id,floor:area.floor,x0,y0,x1,y1,
     bottomY:low,topY:high});
  }
- return boxes;
+ return boxes.concat(window.RetailNavAreaLabels?.getProjectedBoxes?.()||[]);
 }
 window.RetailNavDistricts={
  draw3D,find,focus,getProjectedBoxes,getAll:()=>districts.slice(),
  getState:()=>({
   count:districts.length,rendered,visibleIds:shown.slice(),
   mode:gpu?'floating-solid-district-3d':'pending',
-  cameraFacing:false,
+  cameraFacing:false,screenUprightLabels:window.RetailNavAreaLabels?.getState?.().textUpright===true,
   tiedToFloor:true,
   floorClearance:FLOAT_GAP,
   panelThickness:SIGN_THICKNESS,

@@ -9,6 +9,47 @@
 const pins=window.RetailNavPins;
 if(!pins)return;
 let resources=null,visibleCount=0,frames3d=0,photoLoaded=0,photoErrors=0,visibleIds=[];
+let occludedByLabels=[],renderedSizes=[],maxPinHeightWorld=0,maxPinHeightPx=0;
+const MAX_WORLD_PIN_HEIGHT=6.4;   // lower than the suspended district placards
+const MAX_WORLD_SCALE=MAX_WORLD_PIN_HEIGHT/149;
+const MIN_SCALE=.0022;
+const PIN_HEIGHT=149;
+// A pin cannot intersect a district's real projected 3D plaque. When there
+// isn't enough space to draw its body, keep the friend in the list rather
+// than moving its geographic anchor to a false location.
+function projectedBounds(view,world,scale){
+ const pts=[];
+ for(const h of [0,PIN_HEIGHT*scale])
+   for(const dx of [-55*scale,55*scale])
+     for(const dz of [-4.2*scale,4.2*scale]){
+       const pt=view.projectWorld([world[0]+dx,world[1]+.26+h,world[2]+dz]);
+       if(!pt||pt.w<=0||pt.z>=1||pt.z<=-1)return null;
+       pts.push(pt);
+     }
+ return {x0:Math.min(...pts.map(p=>p.x)),x1:Math.max(...pts.map(p=>p.x)),
+   y0:Math.min(...pts.map(p=>p.y)),y1:Math.max(...pts.map(p=>p.y))};
+}
+function intersects(bounds,sign,padding=1.5){
+ return bounds.x0<sign.x1+padding&&bounds.x1>sign.x0-padding&&
+   bounds.y0<sign.y1+padding&&bounds.y1>sign.y0-padding;
+}
+function chooseSize(view,world,isFocused){
+ const mobile=view.viewportWidth()<540,dist=view.getState().distance;
+ const targetPx=Math.max(mobile?27:32,
+   Math.min(mobile?(isFocused?61:53):(isFocused?78:66),
+     (mobile?60:79)-dist*(mobile?.045:.06)));
+ let lo=MIN_SCALE,hi=MAX_WORLD_SCALE;
+ for(let i=0;i<11;i++){
+  const candidate=(lo+hi)/2;
+  const tip=view.projectWorld([world[0],world[1]+.26,world[2]]);
+  const apex=view.projectWorld([world[0],world[1]+.26+PIN_HEIGHT*candidate,world[2]]);
+  if(!tip||!apex||apex.w<=0){hi=candidate;continue;}
+  const height=Math.hypot(apex.x-tip.x,apex.y-tip.y);
+  if(height>targetPx)hi=candidate;
+  else lo=candidate;
+ }
+ return lo;
+}
 let calls=0,lastError='',lastSkipped='';
 const photos=new Map();
 const PI=Math.PI;
@@ -194,9 +235,10 @@ function draw3D(gl,mvp){
  const keep=new Set();
  const allowed=new Set(view.getState().visible);
  const records=pins.getPeople?.()||[];
- visibleCount=0;visibleIds=[];frames3d++;
+ visibleCount=0;visibleIds=[];occludedByLabels=[];renderedSizes=[];maxPinHeightWorld=0;maxPinHeightPx=0;frames3d++;
  photoLoaded=0;photoErrors=0;
  const r=resources;
+ const protectedLabels=window.RetailNavDistricts?.getProjectedBoxes?.()||[];
  gl.useProgram(r.program);
  gl.uniformMatrix4fv(r.uniforms.mvp,false,mvp);
  gl.activeTexture(gl.TEXTURE0);
@@ -207,11 +249,33 @@ function draw3D(gl,mvp){
   if(!allowed.has(p.position.floor))continue;
   const world=view.pinWorld(p.position.floor,p.position.x,p.position.y);
   if(!world)continue;
-  const projected=view.projectWorld([world[0],world[1]+8,world[2]]);
+  const projected=view.projectWorld([world[0],world[1]+.26,world[2]]);
   if(!projected||projected.w<=0||projected.z>=1||projected.z<=-1)continue;
-  // Geometry remains world-fixed; never rotate it toward the camera.
+  const focused=p.id===window.RetailNavFocusedFriendId;
+  let scale=chooseSize(view,world,focused),bounds=projectedBounds(view,world,scale);
+  if(!bounds)continue;
+  // The camera may place a pin directly beneath a district sign. Physically
+  // cap the model below the floating sign and further shrink it if its
+  // projection intersects that sign from an oblique viewing angle.
+  let obstructed=protectedLabels.some(box=>intersects(bounds,box));
+  while(obstructed&&scale>MIN_SCALE*1.2){
+    scale*=.76;
+    bounds=projectedBounds(view,world,scale);
+    if(!bounds)break;
+    obstructed=protectedLabels.some(box=>intersects(bounds,box));
+  }
+  if(!bounds||obstructed){
+    occludedByLabels.push(p.id);
+    continue;
+  }
+  const displayedHeight=Math.max(0,bounds.y1-bounds.y0);
+  maxPinHeightPx=Math.max(maxPinHeightPx,displayedHeight);
+  maxPinHeightWorld=Math.max(maxPinHeightWorld,PIN_HEIGHT*scale);
+  renderedSizes.push({id:p.id,scale,worldHeight:PIN_HEIGHT*scale,
+    heightPx:displayedHeight,rect:bounds});
+  // Geometry remains anchored in the mall world: no moving its tip.
   gl.uniform3f(r.uniforms.origin,world[0],world[1]+.26,world[2]);
-  gl.uniform1f(r.uniforms.scale,.119);
+  gl.uniform1f(r.uniforms.scale,scale);
   gl.uniform1f(r.uniforms.selected,p.id===window.RetailNavFocusedFriendId?1:0);
   drawMesh(gl,r,r.body,0);
   drawMesh(gl,r,r.rim,1);
@@ -249,8 +313,11 @@ pins.getSolidState=()=>({
   photoLoaded,photoErrors,
   fixedWorldRotation:true,
   frontFacingDot:(()=>{const q=window.__RETAILNAV__?.getState().q||[0,0,0,1];return 1-2*(q[0]*q[0]+q[1]*q[1]);})(),
-  ringThicknessWorld:5*.119,
-  bodyThicknessWorld:7.1*.119
+  ringThicknessWorld:5*(renderedSizes[0]?.scale||MAX_WORLD_SCALE),
+  bodyThicknessWorld:7.1*(renderedSizes[0]?.scale||MAX_WORLD_SCALE),
+  maxPinHeightWorld,maxPinHeightPx,worldHeightLimit:MAX_WORLD_PIN_HEIGHT,
+  occludedByLabels:occludedByLabels.slice(),renderedSizes:renderedSizes.map(x=>({...x,rect:{...x.rect}})),
+  noLabelIntersections:renderedSizes.every(x=>!((window.RetailNavDistricts?.getProjectedBoxes?.()||[]).some(y=>intersects(x.rect,y))))
 });
 // The viewer may have rendered its first frame before this late-loaded module.
 window.__RETAILNAV__?.invalidate?.();

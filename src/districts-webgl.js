@@ -226,8 +226,42 @@ function draw3D(gl,mvp){
  geometryTriangles+=uploadAndDraw(gl,r,mvp,lettering,false,[1,1,1,1]);
  gl.disable(gl.BLEND);
 }
+// Screen-space envelopes are calculated from the ACTUAL 3D plaque corners,
+// not an approximate label font size. Pins query these every camera frame.
+// Use a conservative inset (2 px) so 3D friends can never puncture the text.
+function getProjectedBoxes(){
+ const view=window.__RETAILNAV__;
+ if(!view?.getState().ready)return [];
+ const on=new Set(view.getState().visible),boxes=[];
+ for(const area of districts){
+  if(!on.has(area.floor))continue;
+  const p=view.pinWorld(area.floor,area.x,area.y);
+  if(!p)continue;
+  const w=Math.max(4,(mall.scale||.12)*(area.widthPx||170))/2;
+  const d=Math.max(1.5,(mall.scale||.12)*(area.heightPx||35))/2;
+  const low=p[1]+BASE_ROOF_HEIGHT+FLOAT_GAP;
+  const high=low+SIGN_THICKNESS+.08;
+  const corners=[];
+  for(const y of [low,high])for(const dx of [-w,w])for(const dz of [-d,d]){
+    const screen=view.projectWorld([p[0]+dx,y,p[2]+dz]);
+    if(!screen||screen.w<=0||screen.z<=-1||screen.z>=1){
+      corners.length=0;break;
+    }
+    corners.push(screen);
+  }
+  if(corners.length!==8)continue;
+  const x0=Math.min(...corners.map(q=>q.x));
+  const x1=Math.max(...corners.map(q=>q.x));
+  const y0=Math.min(...corners.map(q=>q.y));
+  const y1=Math.max(...corners.map(q=>q.y));
+  if(!Number.isFinite(x0+y0+x1+y1))continue;
+  boxes.push({id:area.id,floor:area.floor,x0,y0,x1,y1,
+    bottomY:low,topY:high});
+ }
+ return boxes;
+}
 window.RetailNavDistricts={
- draw3D,find,focus,getAll:()=>districts.slice(),
+ draw3D,find,focus,getProjectedBoxes,getAll:()=>districts.slice(),
  getState:()=>({
   count:districts.length,rendered,visibleIds:shown.slice(),
   mode:gpu?'floating-solid-district-3d':'pending',

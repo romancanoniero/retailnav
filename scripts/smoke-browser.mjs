@@ -478,6 +478,29 @@ try {
       shown:district3D.rendered,clearance:district3D.floorClearance,
       thickness:district3D.panelThickness,triangles:district3D.triangles
     });
+    await apPage.waitForFunction(()=>window.RetailNavPins.getSolidState().frames>=2,
+      null,{timeout:20000});
+    const pin3D=await apPage.evaluate(()=>window.RetailNavPins.getSolidState());
+    assert.ok(pin3D.worldHeightLimit<=6.4,'Friend pins need a strict upper height cap');
+    assert.ok(pin3D.maxPinHeightWorld<=pin3D.worldHeightLimit+.001,
+      'Actual pin meshes must never exceed the district sign clearance');
+    assert.equal(pin3D.noLabelIntersections,true,
+      'No 3D friend pin may overlap any projected commercial-zone label');
+    assert.ok(pin3D.maxPinHeightPx<115,
+      'Reduce visually oversized pins on mobile, including oblique views');
+    const cameraBefore=await apPage.evaluate(()=>window.__RETAILNAV__.getState().distance);
+    await apPage.evaluate(()=>window.__RETAILNAV__.focusAt('B1',[400,280],83));
+    await apPage.waitForFunction(d=>Math.abs(window.__RETAILNAV__.getState().distance-d)>10,
+      cameraBefore,{timeout:15000});
+    await apPage.waitForFunction(()=>window.RetailNavPins.getSolidState().noLabelIntersections,
+      null,{timeout:15000});
+    const afterZoom=await apPage.evaluate(()=>window.RetailNavPins.getSolidState());
+    assert.equal(afterZoom.noLabelIntersections,true,
+      'Zooming to floor must never put a pin through a suspended label');
+    assert.ok(afterZoom.maxPinHeightWorld<=6.401);
+    log('PIN_LABEL_COLLISION',{initial:pin3D.rendered,hidden:pin3D.occludedByLabels,
+      maxHeight:pin3D.maxPinHeightWorld,afterZoom:afterZoom.maxPinHeightWorld});
+
   }
   await apPage.locator('#search').fill('Electronic Digital City');
   assert.ok(await apPage.locator('#results .rnDistrictResult').count()>=1);

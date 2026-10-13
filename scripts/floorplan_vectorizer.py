@@ -91,7 +91,75 @@ def feature(fid, kind, name, contour, tolerance):
     return [fid,kind,name,delta,[list(range(len(pts)))],tris,center]
 
 
-def extract(image, level, area=28, tolerance=.031):
+
+def detect_wall_candidates(image, min_length=14):
+    """Keep dark, straight dividing strokes for review INDEPENDENTLY of fills.
+
+    Colour-connected components may merge neighbouring stores. The separate
+    linework ledger prevents those borders from silently disappearing.
+    OCR glyph strokes can also be detected; therefore no candidate is marked
+    verified and none becomes an indoor-navigation wall until reviewed.
+    """
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    background = cv2.GaussianBlur(gray, (0, 0), 5)
+    dark = np.uint8(cv2.subtract(background, gray) > 20) * 255
+    horizontal = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
+                                 np.ones((1, 8), np.uint8))
+    vertical = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
+                               np.ones((8, 1), np.uint8))
+    strokes = cv2.bitwise_or(horizontal, vertical)
+    raw = cv2.HoughLinesP(strokes, 1, np.pi / 180,
+                          threshold=10, minLineLength=min_length,
+                          maxLineGap=4)
+    if raw is None:
+        return []
+    candidates = {}
+    for x1, y1, x2, y2 in raw.reshape(-1, 4):
+        dx, dy = abs(int(x2)-int(x1)), abs(int(y2)-int(y1))
+        length = float(np.hypot(dx, dy))
+        if length < min_length or min(dx, dy) > max(dx, dy) * .13:
+            continue
+        a = (int(x1), int(y1))
+        b = (int(x2), int(y2))
+        if a > b:
+            a, b = b, a
+        key = tuple(round(n / 2) for n in (*a, *b))
+        if key not in candidates or length > candidates[key]["lengthPx"]:
+            candidates[key] = {
+                "a": list(a), "b": list(b), "lengthPx": round(length, 1),
+                "source": "local-dark-linework", "verified": False,
+                "kind": "unknown-line-or-text", "status": "needs-photo-review",
+            }
+    return sorted(candidates.values(),
+                  key=lambda line: (-line["lengthPx"], *line["a"]))
+
+
+def apply_reviewed_walls(mask, image, walls):
+    """Split regions ONLY at operator-reviewed architectural dividers."""
+    height, width = image.shape[:2]
+    applied = []
+    for item in walls:
+        if not item.get("verified"):
+            continue
+        a, b = item.get("a"), item.get("b")
+        if not isinstance(a, list) or not isinstance(b, list):
+            continue
+        if len(a) != 2 or len(b) != 2:
+            continue
+        if any(not np.isfinite(v) for v in (*a, *b)):
+            continue
+        if not all(0 <= a[i] < (width, height)[i] and
+                   0 <= b[i] < (width, height)[i] for i in range(2)):
+            continue
+        if np.hypot(a[0]-b[0], a[1]-b[1]) < 3:
+            continue
+        cv2.line(mask, tuple(map(round, a)), tuple(map(round, b)),
+                 0, thickness=2, lineType=cv2.LINE_8)
+        applied.append({"a": a, "b": b, "verified": True})
+    return applied
+
+
+def extract(image, level, area=28, tolerance=.031, reviewed_walls=()):
     hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
     gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     background=cv2.GaussianBlur(gray,(0,0),5)
@@ -101,12 +169,17 @@ def extract(image, level, area=28, tolerance=.031):
     vertical=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((9,1),np.uint8))
     border=cv2.dilate(cv2.bitwise_or(horizontal,vertical),np.ones((2,2),np.uint8))
     mask=cv2.bitwise_and(colour,cv2.bitwise_not(border))
+    apply_reviewed_walls(mask, image, reviewed_walls)
     if np.mean(colour>0)<.018:
         mask=cv2.bitwise_and(255-cv2.Canny(gray,60,150),cv2.bitwise_not(border))
+        apply_reviewed_walls(mask, image, reviewed_walls)
     mask[:5]=0;mask[-5:]=0;mask[:,:5]=0;mask[:,-5:]=0
     count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
     candidates=[]
-    limit=image.shape[0]*image.shape[1]*.20
+    # A large department store may occupy >20% of a *small* floor.
+    # Do not silently delete its polygon. Flag oversized regions during review
+    # instead of assuming that a filled region always means background.
+    limit=image.shape[0]*image.shape[1]*.90
     for code in range(1,count):
         x,y,w,h,size=map(int,stats[code])
         if size<area or size>limit or w<3 or h<3:continue
@@ -162,6 +235,9 @@ def run():
     p.add_argument("--size",default="1440x620",help="Perspective-corrected width x height")
     p.add_argument("--unit-codes",help="Optional reviewed identifiers JSON by floor, with code/x/y/name")
     p.add_argument("--districts",help="JSON containing reviewed names of commercial zones, with floor,x,y and widthPx,heightPx")
+    p.add_argument("--pois",help="JSON keyed by floor of photo-reviewed bathrooms, lifts, stairs, metro, exits, information etc")
+    p.add_argument("--reviewed-walls",help="JSON keyed by floor, containing only checked architectural line segments with verified=true")
+    p.add_argument("--wall-min-length",type=int,default=14,help="Minimum image-pixel length of independent unreviewed wall candidates")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
@@ -179,18 +255,23 @@ def run():
     labels=json.loads(Path(args.labels).read_text(encoding="utf-8")) if args.labels else {}
     code_labels=json.loads(Path(args.unit_codes).read_text(encoding="utf-8")) if args.unit_codes else {}
     district_labels=json.loads(Path(args.districts).read_text(encoding="utf-8")) if args.districts else {}
+    poi_labels=json.loads(Path(args.pois).read_text(encoding="utf-8")) if args.pois else {}
+    reviewed_walls=json.loads(Path(args.reviewed_walls).read_text(encoding="utf-8")) if args.reviewed_walls else {}
+    if args.wall_min_length < 8 or args.wall_min_length > 150:
+        p.error("--wall-min-length must be between 8 and 150 pixels")
     manifest={
         "id":args.mall,"name":args.name or args.mall.replace("-"," ").title(),
         "city":args.city,"source":"Operator-supplied floor photos",
         "status":"vectorizado-provisional","origin":[width/2,height/2],
         "scale":round(140/width,5),"navigable":False,
         "warning":"Automatic regions, not independently verified stores, printed district names or routes.",
-        "districts":[],"floors":[]
+        "districts":[],"pois":[],"floors":[]
     }
     if args.gps:
         lat,lon=map(float,args.gps.split(","))
         if abs(lat)>90 or abs(lon)>180: p.error("Invalid coordinates")
         manifest["gps"]={"lat":lat,"lon":lon,"radiusM":600}
+    reports=[]
     for entry in args.floor:
         level,separator,filename=entry.partition("=")
         if not separator or not re.fullmatch(r"[A-Z][A-Z0-9-]{0,10}",level):
@@ -237,7 +318,52 @@ def run():
                 "confidence":"manual-transcription"
             })
 
-        feats=extract(image,level,args.min_area,args.simplify)
+        # Protect amenities and circulation as their own searchable map layer.
+        # Do not infer exits or accessibility from pixels without inspection.
+        for record in poi_labels.get(level, []):
+            item = dict(record)
+            if not item.get("id") or not item.get("category") or not item.get("name"):
+                p.error("POI requires id, category and name on "+level)
+            px, py = item.get("x"), item.get("y")
+            if px is not None or py is not None:
+                if px is None or py is None or not (
+                    0 <= float(px) <= image.shape[1] and
+                    0 <= float(py) <= image.shape[0]):
+                    p.error("POI coordinates are invalid on "+level)
+            item["floor"] = level
+            item.setdefault("confidence", "por-revisar")
+            item.setdefault("source", "operator-photo-transcription")
+            manifest["pois"].append(item)
+
+        # Save the linework separately, even where two colour regions merged.
+        # Candidates are not automatically walls: signs and logos contain
+        # similar dark strokes. The review JPG makes this uncertainty visible.
+        candidates = detect_wall_candidates(image, args.wall_min_length)
+        inspected = reviewed_walls.get(level, [])
+        accepted = [w for w in inspected if w.get("verified")]
+        (output/(level+"-wall-candidates.json")).write_text(
+            json.dumps({"schema":"retailnav.linework-review.v1",
+                "floor":level,"status":"unreviewed",
+                "candidates":candidates},separators=(",",":"))+"\n",
+            encoding="utf-8"
+        )
+        line_preview = image.copy()
+        for stroke in candidates:
+            cv2.line(line_preview, tuple(stroke["a"]), tuple(stroke["b"]),
+                     (0, 218, 255), 1, lineType=cv2.LINE_AA)
+        for stroke in accepted:
+            try:
+                cv2.line(line_preview, tuple(map(int,stroke["a"])),
+                         tuple(map(int,stroke["b"])), (255, 0, 225), 2,
+                         lineType=cv2.LINE_AA)
+            except (KeyError, TypeError, ValueError):
+                pass
+        cv2.imwrite(str(output/(level+"-wall-review.jpg")),line_preview)
+        print(level+":",len(candidates),"independent dark-line candidates;",
+              len(accepted),"reviewed dividers. Unreviewed lines never become walls.")
+
+
+        feats=extract(image,level,args.min_area,args.simplify,inspected)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)
         pixels=[image.shape[1],image.shape[0]]
@@ -259,11 +385,26 @@ def run():
             cv2.imwrite(str(output/(level+"-districts-preview.jpg")),preview)
         manifest["floors"].append({
             "id":level,"name":level,"geometry":filename_out,
-            "imageSize":pixels,"source":Path(filename).name
+            "imageSize":pixels,"source":Path(filename).name,
+            "lineworkReview":level+"-wall-candidates.json",
+            "unverifiedLineCount":len(candidates),
+            "reviewedWallCount":len(accepted)
         })
+        reports.append({"floor":level,"status":"provisional",
+            "polygonCount":len(feats),
+            "wallCandidates":len(candidates),
+            "approvedWallCount":len(accepted),
+            "printedStoreCodes":len(codes),
+            "printedZoneNames":len(district_labels.get(level, [])),
+            "mappedServices":len(poi_labels.get(level, [])),
+            "exactPerStoreGeometryVerified":False,
+            "navigable":False})
         print(level+": "+str(len(feats))+" provisional polygons, "+
               str(sum(f[1]==0 for f in feats))+" manually labeled anchors")
     (output/"mall.json").write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+"\n")
+    (output/"vectorization-review.json").write_text(json.dumps(
+        {"mallId":args.mall,"state":"needs-human-verification","floors":reports},
+        indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print("New mall manifest:",output/"mall.json")
     print("Not for public navigation until a physical survey validates the map.")
 

@@ -152,8 +152,9 @@ function setFloor(id){
  $('mapTitle').textContent=id==='ALL'
   ?'Las '+floors.length+' plantas, en su posición relativa'
   :floors.find(f=>f.id===id).name+' / '+id;
- $('mapSubtitle').textContent=mallId==='ap-plaza'
-  ?'Sectorización automática de una foto; sin rutas verificadas.'
+ $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
+  ?'Contornos fotográficos agrupados; códigos de comercios vinculados sólo cuando el punto es identificable.'
+  :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
   :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
     'Contornos y pasillos trazados sobre tus imágenes.');
  resetCamera();results();
@@ -191,14 +192,19 @@ for(const unit of shopIds.slice(0,36)){
   const badge=document.createElement('span');badge.className='levelbadge';badge.textContent=unit.floor;
   const info=document.createElement('span');info.textContent=unit.code+(unit.name?' · '+unit.name:'');
   const note=document.createElement('span');note.className='small';
-  note.textContent=unit.polygonId?'ID asociado al contorno '+unit.polygonId:'Código visible, contorno pendiente de comprobar';
+  note.textContent=[unit.category||'Categoría pendiente',
+   unit.polygonId?'Región provisional':'Ubicación por verificar'
+  ].join(' · ');
+  b.title=[unit.code,unit.name,unit.category,unit.tags].filter(Boolean).join(' · ');
   info.append(note);b.append(badge,info);
   b.onclick=()=>window.RetailNavUnits?.focus?.(unit.code);
   host.append(b);
 }
 if(!host.children.length){let p=document.createElement('p');p.textContent='Sin coincidencias en esta planta. Proba "Todos".';host.append(p);}
 $('resultCount').textContent=q?(list.length+pois.length+shopIds.length+districtMatches.length)+' coincidencias':
-  (mallId==='ap-plaza'?'Servicios y comercios visibles en la foto':'Tiendas ancla legibles en las imágenes');}
+  (mallId==='ap-plaza'||mallId==='new-world-city-shanghai'
+    ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
+    :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
 function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
 function progress(n,message){$('loading').hidden=false;$('progress').value=n;$('loadText').textContent=message;}
@@ -727,10 +733,15 @@ function applyMallUi(){
   $('mallHeaderName').textContent=selectedMall.name;
   $('mallSidebarTitle').textContent=selectedMall.name;
   $('mallMobileTitle').textContent=selectedMall.name;
-  $('mallMobileMeta').textContent=floors.length+' planta(s) · '+(mallId==='ap-plaza'?'TRAZADO PROVISIONAL':'MOCK');
-  $('mallSourceMessage').textContent=mallId==='ap-plaza'
-    ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
-    :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
+  $('mallMobileMeta').textContent=floors.length+' planta(s) · '+
+    (mallId==='aventura'?'MOCK':'TRAZADO PROVISIONAL');
+  $('mallSourceMessage').textContent=mallId==='new-world-city-shanghai'
+    ?'七个楼层 L1–L7: '+(selectedMall.commercialDirectoryRecords||0)+' entradas del directorio y '+
+       (selectedMall.vectorRegionCount||0)+' sectores de color vectorizados. '+
+       'No son comercios individuales verificados; escala y escaleras no calibradas.'
+    :mallId==='ap-plaza'
+     ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
+     :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
   const single=floors.length<=1;
@@ -757,11 +768,21 @@ function applyMallUi(){
   const footer=document.querySelector('.sidebarfooter');
   if(footer&&mallId==='ap-plaza'){
     footer.textContent='AP Plaza: 1 fotografía de B1; 197 polígonos candidatos trazados a partir de un calco visual IA y revisión fotográfica. Tiendas, rutas y escala sin validación física: NO APTO PARA NAVEGACIÓN REAL.';
+  }else if(footer&&mallId==='new-world-city-shanghai'){
+    footer.textContent='新世界城: directorio transcrito de fotografías L1–L7, '+
+     'contornos agrupados según color y códigos sólo aproximados. '+
+     'No se conocen ubicaciones exactas ni fachadas para cada comercio. '+
+     'NO APTO PARA NAVEGACIÓN REAL.';
   }
-  $('mapSubtitle').textContent=mallId==='ap-plaza'
-    ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
-    :'Contornos y pasillos trazados sobre tus imágenes.';
-  $('mapTitle').textContent=mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
+  $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
+    ?''+(selectedMall.vectorRegionCount||0)+' sectores fotográficos agrupados / '+
+      (selectedMall.commercialDirectoryRecords||0)+' entradas de directorio · ubicación provisional. NO NAVEGABLE.'
+    :mallId==='ap-plaza'
+     ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
+     :'Contornos y pasillos trazados sobre tus imágenes.';
+  $('mapTitle').textContent=mallId==='new-world-city-shanghai'
+    ?'L1–L7 · reconstrucción por color, sin escala calibrada'
+    :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}

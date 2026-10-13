@@ -154,15 +154,109 @@ function endPointer(e){let p=pointers.get(e.pointerId);if(p&&pointers.size===1&&
 canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);beginGesture();canvas.classList.remove('dragging');});canvas.addEventListener('contextmenu',e=>e.preventDefault());canvas.addEventListener('wheel',e=>{if(!ready)return;e.preventDefault();stopAuto();distance=clamp(distance*Math.exp(e.deltaY*.001),24,700);},{passive:false});canvas.addEventListener('keydown',e=>{if(!ready)return;let key=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','-','0'].includes(key))e.preventDefault();if(key==='ArrowLeft')pan(30,0);if(key==='ArrowRight')pan(-30,0);if(key==='ArrowUp')pan(0,30);if(key==='ArrowDown')pan(0,-30);if(key==='+')distance=clamp(distance*.86,24,700);if(key==='-')distance=clamp(distance*1.16,24,700);if(key==='0')resetCamera();});
 // Same-floor demo pathfinding. Gray corridors only; no unverified vertical connectors or shop entrances.
 function findRoute(){if(!selected)return;if(mallId!=='aventura'){notify('Rutas deshabilitadas: los pasillos de este plano fotográfico no están verificados.');return;}let f=floors.find(f=>f.id===selected.floor),w=f.walk,N=w.w*w.h;const open=i=>i>=0&&i<N&&((w.bytes[i>>3]>>(i&7))&1),coord=i=>[w.x+(i%w.w)*w.step,w.y+Math.floor(i/w.w)*w.step];let cells=[];for(let i=0;i<N;i++)if(open(i))cells.push(i);if(!cells.length)return notify('Este sector no contiene un pasillo legible para trazar una ruta.');let origin=[624,401],goal=selected.c;let nearest=p=>cells.reduce((a,b)=>Math.hypot(...vsub(coord(b),p))<Math.hypot(...vsub(coord(a),p))?b:a,cells[0]);let start=nearest(origin),end=nearest(goal),queue=[start],prev=new Int32Array(N).fill(-1);prev[start]=start;for(let h=0;h<queue.length&&prev[end]<0;h++){let i=queue[h];for(let j of [i-1,i+1,i-w.w,i+w.w])if(open(j)&&prev[j]<0&&(Math.abs(j-i)!==1||Math.floor(j/w.w)===Math.floor(i/w.w))){prev[j]=i;queue.push(j);}}if(prev[end]<0){$('routeInfo').textContent='No hay continuidad demostrable entre estos sectores en el trazado. No se dibuja una ruta a traves de locales.';return;}let path=[end];while(path.at(-1)!==start)path.push(prev[path.at(-1)]);path.reverse();if(path.length<2){$('routeInfo').textContent='El punto de demostracion ya esta junto a este sector.';return;}let pts=path.map(coord).filter((p,i,a)=>i===0||i===a.length-1||(a[i-1][0]!==a[i+1][0]&&a[i-1][1]!==a[i+1][1]));if(active!==selected.floor){let saved=selected;setFloor(saved.floor);selected=saved;}route={floor:f.id,points:pts};routeRunning=true;routeT=0;$('routeInfo').textContent='Recorrido de prueba sobre pasillos trazados. Origen ficticio; termina cerca del local, no en una puerta verificada. Sin instrucciones para uso real.';notify('La animacion recorre exclusivamente la circulacion del plano.');}
-function comparison(){if(mallId!=='aventura'){notify('La fotografía de referencia sólo se ha procesado como vectores; no hay imagen de comparación publicada.');return;}stopAuto();originalLevel=active==='ALL'?'UL':active;$('compareLevel').value=originalLevel;drawComparison();$('compareDialog').showModal();}
-function svgPaths(floor){return floor.features.filter(f=>f.k!=='slab').map(f=>{let color=f.k==='anchor'?'#df8600':f.k==='corridor'?'#009cb5':f.k==='void'?'#b847b3':'#21a34c';let d=f.r.map(r=>'M'+r.map(p=>p.join(',')).join(' L')+'Z').join(' ');return '<path d="'+d+'" fill="'+color+'" fill-opacity="0.12" stroke="'+color+'" stroke-width="1.7" fill-rule="evenodd"/>';}).join('');}
-function drawComparison(){let floor=floors.find(f=>f.id===$('compareLevel').value);$('compareSource').textContent=floor.source+' - imagen registrada, sin sustituir la distribucion';$('referenceImage').setAttribute('href',(window.RETAILNAV_REFERENCES||{})[floor.id]||'reference/'+floor.id+'.webp');$('traceOverlay').innerHTML=svgPaths(floor);$('traceOverlay').style.opacity=$('overlayOpacity').value;}
+// Per-floor source-photo QA: do not treat the traced SVG as the original image.
+let referenceObjectUrl=null;
+function referenceFor(level){
+ const entry=selectedMall.floorReferences?.[level];
+ return entry?.url||(mallId==='aventura'?(window.RETAILNAV_REFERENCES||{})[level]:null);
+}
+function comparison(){
+ stopAuto();
+ originalLevel=active==='ALL'?(mallId==='aventura'?'UL':floors[0].id):active;
+ const combo=$('compareLevel');
+ combo.replaceChildren();
+ for(const floor of floors){
+  const option=document.createElement('option');
+  option.value=floor.id;option.textContent=floor.id+' · '+floor.name;
+  combo.append(option);
+ }
+ combo.value=originalLevel;
+ $('showReference').checked=true;$('showVectors').checked=true;
+ $('overlayOpacity').value='.85';
+ if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}
+ drawComparison();
+ $('compareDialog').showModal();
+}
+function svgPaths(floor){
+ return floor.features.filter(f=>f.k!=='slab').map(f=>{
+  const color=f.k==='anchor'?'#df8600':
+    f.k==='corridor'?'#009cb5':f.k==='void'?'#b847b3':'#21a34c';
+  const d=f.r.map(r=>'M'+r.map(p=>p.join(',')).join(' L')+'Z').join(' ');
+  return '<path d="'+d+'" fill="'+color+
+    '" fill-opacity="0.12" stroke="'+color+
+    '" stroke-width="1.7" fill-rule="evenodd"/>';
+ }).join('');
+}
+function drawComparison(){
+ const level=$('compareLevel').value;
+ const floor=floors.find(f=>f.id===level);
+ if(!floor)return;
+ const entry=selectedMall.floorReferences?.[level];
+ const size=entry?.imageSize||
+   (mallId==='aventura'?[1320,941]:(selectedMall.floors.find(f=>f[0]===level)?.[5]||[1440,620]));
+ const box=entry?.viewBox||(mallId==='aventura'?'290 100 800 620':
+   '0 0 '+size[0]+' '+size[1]);
+ $('compareSvg').setAttribute('viewBox',box);
+ $('referenceBackground').setAttribute('width',String(size[0]));
+ $('referenceBackground').setAttribute('height',String(size[1]));
+ const img=$('referenceImage');
+ img.setAttribute('x','0');img.setAttribute('y','0');
+ img.setAttribute('width',String(size[0]));
+ img.setAttribute('height',String(size[1]));
+ const src=referenceObjectUrl||referenceFor(level);
+ img.removeAttribute('href');
+ if(src)img.setAttribute('href',src);
+ const present=Boolean(src);
+ $('compareMissing').hidden=present;
+ $('compareSource').textContent=floor.name+' · '+floor.source;
+ const approved=entry?.qa?.status==='approved';
+ $('compareReviewStatus').textContent=present
+  ?(approved?'Referencia verificada para esta geometría.'
+    :'Mapa provisional · contrastar divisiones, rótulos, accesos y servicios con la foto.')
+  :'Falta la foto de referencia: esta vectorización no puede aprobarse.';
+ $('traceOverlay').innerHTML=svgPaths(floor);
+ $('referenceImage').style.display=$('showReference').checked&&present?'':'none';
+ $('traceOverlay').style.display=$('showVectors').checked?'':'none';
+ $('traceOverlay').style.opacity=$('overlayOpacity').value;
+ $('opacityValue').textContent=Math.round(Number($('overlayOpacity').value)*100)+' %';
+}
+function changeComparePhoto(event){
+ const file=event?.target?.files?.[0];
+ if(!file)return;
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)||
+    file.size>12*1024*1024){
+  $('compareMissing').hidden=false;
+  $('compareMissing').textContent='Usá una imagen JPG, PNG o WebP de hasta 12 MB.';
+  return;
+ }
+ if(referenceObjectUrl)URL.revokeObjectURL(referenceObjectUrl);
+ referenceObjectUrl=URL.createObjectURL(file);
+ $('showReference').checked=true;
+ drawComparison();
+}
+window.RetailNavComparison={
+ open:comparison,refresh:drawComparison,
+ getState:()=>({
+  level:$('compareLevel')?.value,
+  hasReference:Boolean(referenceObjectUrl||referenceFor($('compareLevel')?.value)),
+  originalVisible:Boolean($('showReference')?.checked),
+  vectorsVisible:Boolean($('showVectors')?.checked),
+  opacity:Number($('overlayOpacity')?.value),
+  geometricValidation:selectedMall.floorReferences?.[$('compareLevel')?.value]?.qa?.status||'unverified',
+  floorCount:floors.length
+ })
+};
 function download(name,bytes,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),30000);}
 function exportSVG(){let fs=visible(),f=fs.length===1?fs[0]:floors[Math.min(1,floors.length-1)];let isAP=mallId==='ap-plaza',box=isAP?'0 0 1440 620':'290 110 800 600';let s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+box+'"><rect x="0" y="0" width="1440" height="620" fill="#f3f7f9"/>'+svgPaths(f)+'</svg>';download('RetailNav-'+mallId+'-'+f.id+'.svg',s,'image/svg+xml');}
 function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',source:selectedMall.source||'Planos aportados',mallId,calibration:'Escala no medida. Coordenadas originales en pixeles registrados.',levels:visible().map(f=>({id:f.id,source:f.source,elevation:f.index*4.5,elevationStatus:'simulada',features:f.features.map(o=>({id:o.id,kind:o.k,label:o.n,geometry:{outer:o.r[0],holes:o.r.slice(1)},status:'trazado-provisional'}))}))};download('RetailNav-'+mallId+'-'+active+'.json',JSON.stringify(out,null,2),'application/json');}
 // GLB 2.0: real triangle meshes with normals, one group per floor, Y up.
 function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],materials=[],len=0;let mat={};for(let floor of visible()){let children=[];for(let f of floor.features){if(!f.flat.length)continue;let bytes=new Uint8Array(f.flat.buffer);parts.push(bytes);let view=views.length;views.push({buffer:0,byteOffset:len,byteLength:bytes.length,byteStride:24,target:34962});let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<f.flat.length;i+=6)for(let j=0;j<3;j++){min[j]=Math.min(min[j],f.flat[i+j]);max[j]=Math.max(max[j],f.flat[i+j]);}let a=accessors.length;accessors.push({bufferView:view,byteOffset:0,componentType:5126,count:f.flat.length/6,type:'VEC3',min,max},{bufferView:view,byteOffset:12,componentType:5126,count:f.flat.length/6,type:'VEC3'});let key=f.k+'-'+floor.index;if(mat[key]===undefined){mat[key]=materials.length;materials.push({name:key,pbrMetallicRoughness:{baseColorFactor:[...palette(f,floor.index,false),1],metallicFactor:.1,roughnessFactor:.8},doubleSided:true});}let m=meshes.length;meshes.push({name:f.id,primitives:[{attributes:{POSITION:a,NORMAL:a+1},material:mat[key],mode:4}]});children.push(nodes.length);nodes.push({name:f.n||f.id,mesh:m,extras:{id:f.id,level:floor.id,status:'trazado-provisional'}});len+=bytes.length;}let group=nodes.length;nodes.push({name:floor.id,children,translation:[0,floor.index*4.5,0],extras:{source:floor.source,elevationStatus:'simulada'}});floor.exportGroup=group;}let doc={asset:{version:'2.0',generator:'RetailNav vector-to-mesh',extras:{realSurvey:false,scale:'unidades de modelo, no metros medidos'}},scene:0,scenes:[{nodes:visible().map(f=>f.exportGroup)}],nodes,meshes,materials,buffers:[{byteLength:len}],bufferViews:views,accessors};let text=new TextEncoder().encode(JSON.stringify(doc));let jlen=(text.length+3)&~3,total=12+8+jlen+8+len,buff=new ArrayBuffer(total),v=new DataView(buff),u=new Uint8Array(buff);v.setUint32(0,0x46546c67,true);v.setUint32(4,2,true);v.setUint32(8,total,true);v.setUint32(12,jlen,true);v.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jlen);u.set(text,20);v.setUint32(20+jlen,len,true);v.setUint32(24+jlen,0x004e4942,true);let off=28+jlen;parts.forEach(p=>{u.set(p,off);off+=p.length;});download('RetailNav-'+mallId+'-'+active+'.glb',buff,'model/gltf-binary');return buff;}
-function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();distance=clamp(distance*.8,24,700);};$('zoomOut').onclick=()=>{stopAuto();distance=clamp(distance*1.25,24,700);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{panMode=!panMode;$('pan').setAttribute('aria-pressed',String(panMode));notify(panMode?'Un dedo desplaza. Dos dedos desplazan y amplian.':'Un dedo gira libremente. Dos dedos desplazan y amplian.');};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;$('compareLevel').onchange=drawComparison;$('overlayOpacity').oninput=()=>{$('traceOverlay').style.opacity=$('overlayOpacity').value;};$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});}
+function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();distance=clamp(distance*.8,24,700);};$('zoomOut').onclick=()=>{stopAuto();distance=clamp(distance*1.25,24,700);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{panMode=!panMode;$('pan').setAttribute('aria-pressed',String(panMode));notify(panMode?'Un dedo desplaza. Dos dedos desplazan y amplian.':'Un dedo gira libremente. Dos dedos desplazan y amplian.');};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;
+$('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';drawComparison();};
+$('showReference').onchange=drawComparison;
+$('showVectors').onchange=drawComparison;
+$('overlayOpacity').oninput=drawComparison;
+$('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});}
 async function fetchJSON(url){let c=new AbortController(),timer=setTimeout(()=>c.abort(),15000);try{let res=await fetch(url,{signal:c.signal});if(!res.ok)throw new Error('HTTP '+res.status+' al descargar '+url);let total=Number(res.headers.get('content-length'))||0,got=0,chunks=[],reader=res.body.getReader();while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.byteLength;progress(total?Math.min(25,got/total*25):10,'Descargando vectores: '+Math.ceil(got/1024)+' KB'+(total?' / '+Math.ceil(total/1024)+' KB':''));}let bytes=new Uint8Array(got),off=0;chunks.forEach(x=>{bytes.set(x,off);off+=x.length;});return JSON.parse(new TextDecoder().decode(bytes));}finally{clearTimeout(timer);}}
 function applyMallUi(){
   document.title='RetailNav | '+selectedMall.name+' · visor 3D';
@@ -188,8 +282,8 @@ function applyMallUi(){
   addButton('ALL');
   for(const level of floors)addButton(level.id);
   $('showAllFloors').textContent=floors.length===1?'← Mostrar plano':'← Mostrar todas las plantas';
-  $('original').disabled=mallId!=='aventura';
-  $('original').title=mallId==='aventura'?'Comparar con el plano aportado':'Comparación no disponible para esta imagen importada';
+  $('original').disabled=false;
+  $('original').title='Comparar foto y vectorizado de cada planta';
   $('routeBtn').disabled=mallId!=='aventura';
   const footer=document.querySelector('.sidebarfooter');
   if(footer&&mallId==='ap-plaza'){

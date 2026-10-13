@@ -623,7 +623,7 @@ function applyMallUi(){
   $('mallMobileTitle').textContent=selectedMall.name;
   $('mallMobileMeta').textContent=floors.length+' planta(s) · '+(mallId==='ap-plaza'?'TRAZADO PROVISIONAL':'MOCK');
   $('mallSourceMessage').textContent=mallId==='ap-plaza'
-    ?'Primera vectorización de tu fotografía del plano de AP Plaza: revisar límites y señalización.'
+    ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
     :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
@@ -650,12 +650,12 @@ function applyMallUi(){
   $('routeBtn').disabled=mallId!=='aventura';
   const footer=document.querySelector('.sidebarfooter');
   if(footer&&mallId==='ap-plaza'){
-    footer.textContent='AP Plaza: 1 plano fotográfico (zona subterránea). Sectores vectorizados automáticamente, nombres pequeños y recorridos sin verificación. No apto para orientarse físicamente hasta revisión.';
+    footer.textContent='AP Plaza: 1 fotografía de B1; 197 polígonos candidatos trazados a partir de un calco visual IA y revisión fotográfica. Tiendas, rutas y escala sin validación física: NO APTO PARA NAVEGACIÓN REAL.';
   }
   $('mapSubtitle').textContent=mallId==='ap-plaza'
-    ?''+(selectedMall.vectorRegionCount||0)+' regiones provisionales extraídas de una fotografía. NO es navegación real.'
+    ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
     :'Contornos y pasillos trazados sobre tus imágenes.';
-  $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · planta B1 (foto)':'Las tres plantas, en su posición relativa';
+  $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}

@@ -33,7 +33,7 @@ function program(gl){
  gl.attachShader(p,vertex);gl.attachShader(p,fragment);gl.linkProgram(p);
  if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(p));
  return {p,pos:gl.getAttribLocation(p,'aXYZ'),uv:gl.getAttribLocation(p,'aUV'),
-  mvp:gl.getUniformLocation(p,'uMVP'),tex:gl.getUniformLocation(p,'uAtlas'),
+  mvp:gl.getUniformLocation(p,'uMVP'),sampler:gl.getUniformLocation(p,'uAtlas'),
   solid:gl.getUniformLocation(p,'uSolid'),colour:gl.getUniformLocation(p,'uColour')};
 }
 function create(gl){
@@ -124,14 +124,13 @@ function box(data,center,axis,side,halfW,halfH,halfT){
  }
 }
 function spotlight(data,roof,axis,side,width,cell){
- const centre=[roof[0],roof[1]+2.9,roof[2]];
  const hw=width/2,hh=width*.26;
- // Two metallic stems visibly join plaque to roof.
- for(const offset of [-width*.29,width*.29]){
-  const postCenter=[roof[0]+axis[0]*offset,roof[1]+.86,
-                    roof[2]+axis[2]*offset];
-  box(data.posts,postCenter,axis,side,.095,.9,.115);
- }
+ // Panel bottom is always flush with the single, centered support stem.
+ // The stem starts at the roof (no floating, unattached sign).
+ const panelBottom=1.57;
+ const centre=[roof[0],roof[1]+panelBottom+hh,roof[2]];
+ const postCenter=[roof[0],roof[1]+panelBottom/2,roof[2]];
+ box(data.posts,postCenter,axis,side,.075,panelBottom/2,.092);
  // Solid deep blue rear shell, with bright cyan trim inset under the text.
  box(data.body,centre,axis,side,hw+.12,hh+.13,.20);
  const front=upright(centre,axis,side,hw+.025,hh+.025,.240);
@@ -151,9 +150,9 @@ function gpuDraw(gl,r,mvp,buffer,vertices,material,colour){
  gl.useProgram(r.p);
  gl.uniformMatrix4fv(r.mvp,false,mvp);
  gl.uniform1i(r.solid,material);
- gl.uniform4fv(r.colour,colour);
+ gl.uniform4fv(r.colour,new Float32Array(colour));
  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,r.tex);
- gl.uniform1i(r.texLoc??r.tex,0);
+ gl.uniform1i(r.sampler,0);
  gl.bindBuffer(gl.ARRAY_BUFFER,r.buffer);
  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.DYNAMIC_DRAW);
  gl.enableVertexAttribArray(r.pos);
@@ -200,7 +199,8 @@ function render(gl,mvp){
   const feature=Boolean(u.featured||(u.name&&u.name.length>0));
   if(requested||feature&&autoFeatured<3){
    if(raisedCount>=7&&!requested)continue;
-   const panelWidth=clamp(state.distance*.031,2.8,5.1);
+   const mappedWidth=(roof.widthPixels||10)*pxToWorld;
+   const panelWidth=clamp(Math.min(state.distance*.018,mappedWidth*.96),1.35,3.5);
    // Use the same physical roof midpoint as the ordinary lettering.
    spotlight(special,top,axis,side,panelWidth,cell);
    raisedCount++;drawnRaised++;

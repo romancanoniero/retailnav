@@ -23,8 +23,8 @@ def run():
         image = np.full((180, 340, 3), 240, dtype=np.uint8)
         cv2.rectangle(image, (19, 19), (321, 158), (185, 205, 134), -1)
         cv2.rectangle(image, (19, 19), (321, 158), (15, 35, 30), 2)
-        cv2.line(image, (165, 21), (165, 157), (15, 35, 30), 2)
-        cv2.line(image, (21, 129), (164, 129), (15, 35, 30), 2)
+        cv2.line(image, (165, 18), (165, 159), (15, 35, 30), 4)
+        cv2.line(image, (19, 129), (166, 129), (15, 35, 30), 4)
         cv2.putText(image, "A-01", (45, 95), cv2.FONT_HERSHEY_SIMPLEX,
                     .55, (15, 35, 30), 1)
         cv2.putText(image, "A-02", (205, 95), cv2.FONT_HERSHEY_SIMPLEX,

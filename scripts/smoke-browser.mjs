@@ -308,7 +308,21 @@ try {
   assert.equal(blocked.code,200);
   await guest.reload({waitUntil:'domcontentloaded'});
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
-  const vanished=await guest.evaluate(async()=>(await(await fetch('api/state')).json()).friends[0]);
+  // Contabo's reverse proxy can briefly return a 502 during reload. Retry
+  // idempotent state reads rather than parsing the gateway error as JSON.
+  const vanished=await guest.evaluate(async()=>{
+    for(let attempt=0;attempt<8;attempt++){
+      try{
+        const response=await fetch('api/state',{credentials:'same-origin',cache:'no-store'});
+        if(response.ok){
+          const data=await response.json();
+          if(Array.isArray(data.friends))return data.friends[0];
+        }
+      }catch{}
+      await new Promise(resolve=>setTimeout(resolve,450));
+    }
+    throw new Error('Repeated api/state failures during location-sharing test');
+  });
   assert.equal(vanished.position,undefined);
   await guest.waitForFunction(()=>window.RetailNavPins.getState().registered===9);
   assert.ok(!(await guest.evaluate(id=>window.RetailNavPins.getState().visibleIds.includes(id),firstId)));

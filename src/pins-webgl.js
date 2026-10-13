@@ -9,6 +9,7 @@
 const pins=window.RetailNavPins;
 if(!pins)return;
 let resources=null,visibleCount=0,frames3d=0,photoLoaded=0,photoErrors=0,visibleIds=[];
+let calls=0,lastError='',lastSkipped='';
 const photos=new Map();
 const PI=Math.PI;
 function compile(gl,type,src){
@@ -184,10 +185,11 @@ function bindPhoto(gl,person){
  return Boolean(item.tex);
 }
 function draw3D(gl,mvp){
+ calls++;
  const view=window.__RETAILNAV__;
- if(!view?.getState().ready||!gl)return;
+ if(!view?.getState().ready||!gl){lastSkipped=!gl?'no-webgl-context':'viewer-not-ready';return;}
  if(!resources||resources.gl!==gl){
-  try{resources=init(gl);}catch(e){console.error('3D pin mesh failed',e);return;}
+  try{resources=init(gl);lastError='';}catch(e){lastError=String(e?.message||e);console.error('3D pin mesh failed',e);return;}
  }
  const keep=new Set();
  const allowed=new Set(view.getState().visible);
@@ -241,7 +243,7 @@ pins.draw=()=>{
 // The source renderer exposes getPeople() and owns access-control filtering.
 pins.draw3D=draw3D;
 pins.getSolidState=()=>({
-  mode:resources?'solid-webgl-mesh':'pending',
+  mode:resources?'solid-webgl-mesh':'pending',calls,lastError,lastSkipped,
   rendered:visibleCount,visibleIds:visibleIds.slice(),frames:frames3d,
   triangles:resources?(resources.body.triangles+resources.rim.triangles+resources.disc.triangles):0,
   photoLoaded,photoErrors,

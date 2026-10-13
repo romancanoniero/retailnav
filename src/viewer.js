@@ -151,6 +151,7 @@ function applyMallUi(){
   }
   addButton('ALL');
   for(const level of floors)addButton(level.id);
+  $('showAllFloors').textContent=floors.length===1?'← Mostrar plano':'← Mostrar todas las plantas';
   $('original').disabled=mallId!=='aventura';
   $('original').title=mallId==='aventura'?'Comparar con el plano aportado':'Comparación no disponible para esta imagen importada';
   $('routeBtn').disabled=mallId!=='aventura';

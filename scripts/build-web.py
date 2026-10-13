@@ -109,6 +109,7 @@ components = {
     "__POI_RENDERER__": (repo / "src/poi-layer.js").read_text(encoding="utf-8"),
     "__UNITS_RENDERER__": (repo / "src/units.js").read_text(encoding="utf-8"),
     "__DISTRICTS_RENDERER__": (repo / "src/districts-webgl.js").read_text(encoding="utf-8"),
+    "__AREA_LABELS_RENDERER__": (repo / "src/area-labels.js").read_text(encoding="utf-8"),
     "__UNIT_SIGNS_WEBGL__": (repo / "src/unit-signs-webgl.js").read_text(encoding="utf-8"),
     "__INDOOR_RENDERER__": (repo / "src/indoor-location.js").read_text(encoding="utf-8"),
     "__QRCODE__": (repo / "src/qrcode.min.js").read_text(encoding="utf-8"),

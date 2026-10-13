@@ -13,6 +13,8 @@ Example:
     --review B1.ai2d.photo-refined.review.json
 """
 import argparse
+import base64
+import zlib
 import hashlib
 import json
 from copy import deepcopy
@@ -246,14 +248,19 @@ def main():
     photo = cv2.imdecode(np.frombuffer(photo_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
     if photo is None:
         parser.error("Cannot decode reference photograph")
-    collection = json.loads(Path(args.input).read_text(encoding="utf8"))
+    input_text = Path(args.input).read_text(encoding="utf8").strip()
+    if args.input.endswith(".zlib.b64"):
+        input_text = zlib.decompress(base64.b64decode(input_text)).decode("utf8")
+    collection = json.loads(input_text)
     source_hash = hashlib.sha256(photo_bytes).hexdigest()
     expected_hash = collection.get("metadata", {}).get("photoSHA256")
     if expected_hash and source_hash != expected_hash:
         parser.error("Photo does not match candidate geometry sourceSHA256")
     out, report = refine_collection(collection, photo, source_hash, args.min_support)
-    Path(args.output).write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n",
-                                 encoding="utf8")
+    output_text = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
+    if args.output.endswith(".zlib.b64"):
+        output_text = base64.b64encode(zlib.compress(output_text.encode("utf8"), 9)).decode("ascii")
+    Path(args.output).write_text(output_text + "\n", encoding="utf8")
     Path(args.review).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n",
                                  encoding="utf8")
     print(json.dumps({key: value for key, value in report.items()

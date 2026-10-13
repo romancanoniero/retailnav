@@ -75,12 +75,26 @@ try {
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
 
   await page.locator('#friendsBtn').click();
+  const panelRect=await page.locator('#peopleDialog').boundingBox();
+  assert.ok(panelRect.width<380 && panelRect.height<690,
+    'Friends popup must leave the mobile map visible around it');
+  assert.ok(await page.locator('#rnAvatarTrigger').isVisible());
+  assert.ok(await page.locator('#rnShareInvite').isVisible());
+  assert.ok(await page.locator('#rnFriends').isVisible());
+  log('FLOATING_PANEL',{width:Math.round(panelRect.width),height:Math.round(panelRect.height)});
   await page.locator('#rnMakeInvite').click();
   await page.waitForFunction(()=>document.querySelector('#rnLink')?.value.includes('#join='));
   assert.ok(await page.locator('#rnQr canvas, #rnQr img').count());
   const link=await page.locator('#rnLink').inputValue();
   assert.ok(link.startsWith(URL+'#join='));
-  log('QR','Generated local QR image and one-time fragment invitation.');
+  const decodedQR=await page.evaluate(()=>{
+    const canvas=document.querySelector('#rnQr canvas');
+    if(!canvas||typeof window.jsQR!=='function')return null;
+    const frame=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height);
+    return window.jsQR(frame.data,frame.width,frame.height)?.data||null;
+  });
+  assert.equal(decodedQR,link,'QR image must decode to actual invitation even in Safari');
+  log('QR','Generated and decoded locally in Safari/Chromium.');
 
   const other=await makeContext(),guest=await other.newPage();
   guest.on('pageerror',err=>console.error('GUEST_PAGE_ERROR',err.message));
@@ -142,12 +156,75 @@ try {
   await page.reload({waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
   await page.locator('#friendsBtn').click();
-  await page.locator('#rnFriends button',{hasText:'Quitar'}).click();
+  await page.locator('#rnFriends .rnFriendMore').click();
+  await page.locator('#rnFriends .rnRemoveWrap button',{hasText:'Quitar amigo'}).click();
   await page.waitForFunction(()=>window.RetailNavSocial?.getState().friendCount===0);
   await guest.reload({waitUntil:'domcontentloaded'});
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
   assert.equal((await guest.evaluate(()=>window.RetailNavSocial.getState())).friendCount,0);
   log('CLEANUP','Reciprocal test contact removed from both accounts.');
+  // A messenger invitation is authorized by its creator. The recipient alone
+  // must explicitly accept; both lists update immediately, without an extra
+  // owner approval step.
+  await page.locator('#rnShareInvite').click();
+  await page.locator('#rnDirectWrap').waitFor({state:'visible'});
+  const chatLink=await page.locator('#rnDirectLink').inputValue();
+  assert.ok(chatLink.startsWith(URL+'#join='));
+  await guest.goto(chatLink,{waitUntil:'domcontentloaded',timeout:45000});
+  await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
+  await guest.locator('#rnJoinWrap').waitFor({state:'visible'});
+  assert.equal(await guest.locator('#rnJoinConfirm').innerText(),'Agregar a mis amigos');
+  const beforeLink=await guest.evaluate(async()=>(await(await fetch('api/state')).json()).friends.length);
+  assert.equal(beforeLink,0);
+  await guest.locator('#rnJoinConfirm').click();
+  await guest.waitForFunction(()=>window.RetailNavSocial?.getState().friendCount===1);
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>window.RetailNavSocial?.getState().friendCount===1);
+  log('MESSAGE_LINK','Opening link alone does nothing; recipient consent links both immediately.');
+
+  // Persist a compressed photo, make it available to accepted friends only,
+  // and verify the mobile UI displays actual image data.
+  const uploaded=await page.evaluate(async()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=192;canvas.height=192;
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='#187980';ctx.fillRect(0,0,192,192);
+    ctx.fillStyle='#edb887';ctx.fillRect(40,35,112,112);
+    const payload=canvas.toDataURL('image/jpeg',.75);
+    const res=await fetch('api/avatar',{method:'POST',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},body:JSON.stringify({image:payload})});
+    return {status:res.status,body:await res.json()};
+  });
+  assert.equal(uploaded.status,200,'Avatar upload must succeed');
+  assert.ok(uploaded.body.me.avatarVersion,'Avatar version should persist');
+  await guest.reload({waitUntil:'domcontentloaded'});
+  await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
+  const avatarCheck=await guest.evaluate(async(id)=>{
+    const data=await(await fetch('api/state')).json();
+    const photo=await fetch('api/avatar/'+id,{credentials:'same-origin'});
+    return {version:data.friends[0].avatarVersion,
+      photoStatus:photo.status,type:photo.headers.get('content-type'),
+      bytes:(await photo.arrayBuffer()).byteLength};
+  },firstId);
+  assert.equal(avatarCheck.photoStatus,200);
+  assert.match(avatarCheck.type,/image\/jpeg/);
+  assert.ok(avatarCheck.bytes>100);
+  await guest.locator('#friendsBtn').click();
+  await guest.waitForFunction(()=>document.querySelector('#rnFriends img')?.complete===true);
+  assert.equal(await guest.locator('#rnFriends img').isVisible(),true);
+  log('PHOTO','Anonymous JPEG avatar uploaded, persisted, and visible to linked friend.');
+
+  page.on('dialog',async dialog=>dialog.accept());
+  await page.locator('#friendsBtn').click();
+  await page.locator('#rnFriends .rnFriendMore').click();
+  await page.locator('#rnFriends .rnRemoveWrap button',{hasText:'Quitar amigo'}).click();
+  await page.waitForFunction(()=>window.RetailNavSocial.getState().friendCount===0);
+  await guest.reload({waitUntil:'domcontentloaded'});
+  await guest.waitForFunction(()=>window.RetailNavSocial?.getState().friendCount===0);
+  const denied=await guest.evaluate(async(id)=>(await fetch('api/avatar/'+id)).status,firstId);
+  assert.equal(denied,404,'Former contact can no longer fetch protected avatar');
+  log('AVATAR_PRIVACY','Photo inaccessible after friendship removal.');
+
   for(const visitorPage of [page,guest]){
     const result=await visitorPage.evaluate(async()=>{
       const r=await fetch('api/account/delete',{

@@ -441,6 +441,21 @@ try {
   assert.equal(await apPage.locator('#rnDemoFriends .rnDemoPerson').count(),6);
   assert.equal(await apPage.locator('#rnMarkLocation').isDisabled(),true);
   await apPage.locator('#rnClose').click();
+  await apPage.locator('#rnIndoorBtn').click();
+  assert.ok(await apPage.locator('#rnIndoorDialog').isVisible());
+  const indoors=await apPage.evaluate(()=>window.RetailNavIndoor.getState());
+  assert.equal(indoors.anchor,null,'GPS may not fabricate any indoor coordinates');
+  assert.equal(indoors.sendsDataToServer,false);
+  await apPage.evaluate(()=>window.dispatchEvent(new CustomEvent('retailnav:map-point',{
+    detail:{floor:'B1',x:525,y:320}
+  })));
+  const anchored=await apPage.evaluate(()=>window.RetailNavIndoor.getState());
+  assert.equal(anchored.indoorSource,'manual-anchor');
+  assert.equal(anchored.anchor.floor,'B1');
+  await apPage.locator('#rnIndoorResetBtn').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavIndoor.getState())).anchor,null);
+  await apPage.locator('#rnIndoorClose').click();
+  log('INDOOR_CALIBRATION','Opt-in anchor, compass controls and data erasure.');
   await apPage.locator('#mallSettingsBtn').click();
   assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
   assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(

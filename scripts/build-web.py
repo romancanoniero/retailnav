@@ -5,6 +5,7 @@ import zlib
 import base64
 import csv
 from pathlib import Path
+from unit_index import attach as attach_unit_codes
 
 repo = Path(__file__).resolve().parents[1]
 template = (repo / "src/page.template.html").read_text(encoding="utf-8")
@@ -31,6 +32,7 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
     assert info["id"] == slug and slug not in catalog
     assert info.get("navigable") is False, "Only provisional mock photo maps are supported"
     floor_data = []
+    units = []
     for item in info["floors"]:
         floor_id = item["id"]
         assert floor_id.replace("-", "").isalnum()
@@ -39,12 +41,13 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
         geometry = json.loads(zlib.decompress(base64.b64decode(encoded)))
         assert len(geometry) > 2
         assert all(len(f) == 7 and len(f[3]) >= 6 for f in geometry)
+        units.extend(attach_unit_codes(mall_path.parent, floor_id, geometry))
         step = 8
         width, height = (photo_width + step-1)//step, (photo_height + step-1)//step
         walk = {"x": 0, "y": 0, "step": step, "w": width, "h": height,
                 "bits": base64.b64encode(bytes((width*height+7)//8)).decode("ascii")}
         floor_data.append([floor_id, item["name"], item["source"], geometry, walk])
-    catalog[slug] = {**info, "floors": floor_data,
+    catalog[slug] = {**info, "floors": floor_data, "units": units,
                      "floorLabels": [f[0] for f in floor_data]}
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
@@ -57,6 +60,7 @@ components = {
     "__PIN_RENDERER__": (repo / "src/pins3d.js").read_text(encoding="utf-8"),
     "__PIN_WEBGL_RENDERER__": (repo / "src/pins-webgl.js").read_text(encoding="utf-8"),
     "__POI_RENDERER__": (repo / "src/poi-layer.js").read_text(encoding="utf-8"),
+    "__UNITS_RENDERER__": (repo / "src/units.js").read_text(encoding="utf-8"),
     "__QRCODE__": (repo / "src/qrcode.min.js").read_text(encoding="utf-8"),
     "__SOCIAL__": (repo / "src/social.js").read_text(encoding="utf-8"),
     "__QRSCANNER__": (repo / "src/jsqr.js").read_text(encoding="utf-8"),

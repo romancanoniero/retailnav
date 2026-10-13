@@ -444,7 +444,38 @@ function bind(){
     try{merge(await request('me','POST',{name:$('rnName').value}));status('Nombre actualizado.');}
     catch(e){status(e.message,true);}
   });
+  $('rnName').addEventListener('keydown',event=>{
+    if(event.key==='Enter'){$('rnSaveName').click();$('rnName').blur();}
+  });
+  $('rnAvatarTrigger').addEventListener('click',()=>{
+    $('rnAvatarChoices').hidden=!$('rnAvatarChoices').hidden;
+  });
+  $('rnAvatarGalleryBtn').addEventListener('click',()=>$('rnAvatarGalleryInput').click());
+  $('rnAvatarCameraBtn').addEventListener('click',()=>$('rnAvatarCameraInput').click());
+  for(const id of ['rnAvatarGalleryInput','rnAvatarCameraInput']){
+    $(id).addEventListener('change',async event=>{
+      const file=event.target.files?.[0];
+      event.target.value='';
+      if(file)await photoFromFile(file);
+    });
+  }
+  $('rnAvatarRemove').addEventListener('click',async()=>{
+    if(!me?.avatarVersion)return;
+    if(!confirm('¿Eliminar tu foto de perfil?'))return;
+    try{
+      merge(await request('avatar/delete','POST',{}));
+      $('rnAvatarChoices').hidden=true;
+      status('Foto eliminada. Se muestran tus iniciales.');
+    }catch(e){status(e.message,true);}
+  });
   $('rnMakeInvite').addEventListener('click',createInvite);
+  $('rnShareInvite').addEventListener('click',makeDirectLink);
+  $('rnDirectShare').addEventListener('click',shareDirectLink);
+  $('rnDirectCopy').addEventListener('click',()=>copy(directLink));
+  $('rnPasteToggle').addEventListener('click',()=>{
+    $('rnPasteWrap').hidden=!$('rnPasteWrap').hidden;
+    if(!$('rnPasteWrap').hidden)$('rnInviteInput').focus();
+  });
   $('rnCopyLink').addEventListener('click',()=>copy(currentLink));
   $('rnShareLink').addEventListener('click',async()=>{
     if(!currentLink)return;

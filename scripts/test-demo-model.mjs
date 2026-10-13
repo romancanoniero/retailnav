@@ -52,3 +52,15 @@ test('mock records remain client-only fixtures with no fabricated GPS',()=>{
   assert.ok(friends.every(f=>!('session' in f)&&!('cookie' in f)));
   assert.ok(friends.every(f=>Object.isFrozen(f.position)));
 });
+
+test('AP Plaza generates six completely independent demo contacts on B1 only',()=>{
+  const context={window:{RETAILNAV_ACTIVE_MALL_ID:'ap-plaza'}};
+  runInNewContext(script,context);
+  const ap=context.window.RETAILNAV_DEMO_CONTACTS;
+  assert.equal(ap.length,6);
+  assert.ok(ap.every(p=>p.id.startsWith('ap-demo-')));
+  assert.ok(ap.every(p=>p.demo===true && p.position.mallId==='ap-plaza-reference'));
+  assert.ok(ap.every(p=>p.position.floor==='B1' && p.position.source==='mock'));
+  assert.ok(ap.every(p=>!friends.some(a=>a.id===p.id)));
+  assert.ok(ap.every(p=>p.avatarUrl.startsWith('demo-avatars/')));
+});

@@ -75,9 +75,24 @@ def candidate_front(feature, point, manual=None):
     first=at(mid-span/(2*length))
     last=at(mid+span/(2*length))
     nx, ny=(b[1]-a[1])/length,-(b[0]-a[0])/length
-    if area < 0: nx,ny=-nx,-ny
+    midpoint=((first[0]+last[0])/2,(first[1]+last[1])/2)
+    centre=feature[6]
+    if nx*(midpoint[0]-centre[0])+ny*(midpoint[1]-centre[1]) < 0:
+        nx,ny=-nx,-ny
     return {"a":first,"b":last,"normal":[round(nx,5),round(ny,5)],
             "status":"estimated-boundary"}
+
+def _explicit_front(row):
+    try:
+        ax,ay,bx,by=(float(row[k]) for k in
+                     ("front_ax","front_ay","front_bx","front_by"))
+    except (ValueError, TypeError, KeyError):
+        return None
+    if not 3 <= ((ax-bx)**2+(ay-by)**2)**.5 <= 160:
+        return None
+    return {"a":[ax,ay],"b":[bx,by],
+            "normal":None,"status":"manual-unverified"}
+
 
 def attach(folder, level, geometry):
     file = Path(folder) / (level + "-unit-codes.csv")
@@ -85,6 +100,7 @@ def attach(folder, level, geometry):
         return []
     labels = []
     owners = {}
+    manual_by_code = {}
     with file.open(encoding="utf-8", newline="") as stream:
         for row in csv.DictReader(stream):
             code = row["code"].strip()
@@ -96,20 +112,30 @@ def attach(folder, level, geometry):
                 "polygonId": polygon_id,
                 "source": row.get("source", "unknown"),
                 "relation": "inside-one-component" if polygon_id else "pending"}
+            manual_by_code[code] = row
             labels.append(label)
             if polygon_id:
                 owners.setdefault(polygon_id, []).append(label)
     polygons = {f[0]: f for f in geometry}
     for label in labels:
         polygon_id = label["polygonId"]
-        if not polygon_id:continue
-        # If a single region contains several identified shops, its dividers
-        # have not been captured faithfully: do not invent their shopfronts.
+        manual = manual_by_code.get(label["code"])
+        if manual and all(str(manual.get(k,"")).strip() for k in ("front_ax","front_ay","front_bx","front_by")):
+            # The importer accepts manually inspected endpoints even for shop
+            # fragments that cannot yet be mapped to one complete polygon.
+            front = candidate_front(polygons[polygon_id],(label["x"],label["y"]),manual) if polygon_id else _explicit_front(manual)
+            if front:
+                label["facade"]=front
+                label["frontStatus"]=front["status"]
+                continue
+        if not polygon_id:
+            label["frontStatus"] = "unmatched-region"
+            continue
+        # A fused zone with multiple IDs has no provable per-shop storefront.
         if len(owners[polygon_id]) != 1:
             label["frontStatus"] = "mixed-polygon-requires-splitting"
             continue
-        front = candidate_front(polygons[polygon_id], (label["x"],label["y"]),
-                                next((row for row in []),None))
+        front = candidate_front(polygons[polygon_id],(label["x"],label["y"]))
         if front:
             label["facade"] = front
             label["frontStatus"] = front["status"]

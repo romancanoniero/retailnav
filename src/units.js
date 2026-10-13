@@ -22,20 +22,31 @@ const buttons=new Map();
 function find(query){
  const text=String(query||'').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  if(!text)return[];
- return units.filter(u=>(u.code+' '+(u.name||'')).normalize('NFD')
-   .replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(text));
+ return units.filter(u=>{
+   const haystack=[u.code,u.name,u.aliases,u.category,u.tags].filter(Boolean).join(' ');
+   return haystack.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(text);
+ });
 }
 function focus(code){
  const u=units.find(x=>x.code===code);
  if(!u)return false;
  selected=code;
  title.textContent=(u.name?u.name+' · ':'')+u.code;
+ const brand=u.name?' · '+u.name:'';
+ const activity=u.category?' · '+u.category:'';
  sub.textContent=(u.polygonId
-  ?'Código transcrito del plano; asociado al contorno provisional '+u.polygonId+'.'
-  :'Código visible en la fotografía; todavía sin asociación confiable con el polígono.')+
-  ' Posición aproximada del texto, no de la entrada.';
+  ?'Sector cromático provisional '+u.polygonId+
+   '. Puede incluir varios locales y no es la puerta de la tienda.'
+  :Number.isFinite(u.x)&&Number.isFinite(u.y)
+   ?'Código de directorio con ubicación aproximada del texto, sin pared atribuida.'
+   :'Comercio identificado en el directorio; ubicación exacta sin verificar.')+
+   activity+(u.tags?' · Productos/servicios: '+u.tags.replaceAll(',',', '):'')+
+   '. Directorio fotográfico; la presencia comercial puede cambiar.';
  detail.hidden=false;
- window.__RETAILNAV__?.focusAt?.(u.floor,[u.x,u.y],67);
+ if(Number.isFinite(u.x)&&Number.isFinite(u.y))
+   window.__RETAILNAV__?.focusAt?.(u.floor,[u.x,u.y],67);
+ else window.__RETAILNAV__?.setFloor?.(u.floor);
  window.__RETAILNAV__?.invalidate?.();
  return true;
 }
@@ -65,7 +76,8 @@ function paint(){
    el.addEventListener('click',e=>{e.stopPropagation();focus(u.code)});
    host.appendChild(el);buttons.set(u.code,el);
   }
-  if(!codesOn||!floors.has(u.floor)||(selected&&u.code!==selected&&state.distance>=145)){
+  if(!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
+    !floors.has(u.floor)||(selected&&u.code!==selected&&state.distance>=145)){
    el.hidden=true;continue;
   }
   const world=view.pinWorld(u.floor,u.x,u.y);
@@ -88,6 +100,9 @@ window.RetailNavUnits={draw:paint,focus,find,setQuery,
  getUnits:()=>units.slice(),getState:()=>({
  count:units.length,selected,frames,visibleCount,searchHighlights:searchHighlights.slice(),
  matched:units.filter(u=>u.polygonId).length,
+ located:units.filter(u=>Number.isFinite(u.x)&&Number.isFinite(u.y)).length,
+ withTags:units.filter(u=>u.tags).length,
+ withNames:units.filter(u=>u.name).length,
  facadeCount:units.filter(u=>u.facade).length,
  unmatched:units.filter(u=>!u.polygonId).length
 })};

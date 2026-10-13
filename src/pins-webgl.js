@@ -252,4 +252,6 @@ pins.getSolidState=()=>({
   ringThicknessWorld:5*.119,
   bodyThicknessWorld:7.1*.119
 });
+// The viewer may have rendered its first frame before this late-loaded module.
+window.__RETAILNAV__?.invalidate?.();
 })();

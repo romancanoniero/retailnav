@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - ".github/workflows/browser-smoke.yml"
+      - "scripts/smoke-browser.mjs"
   workflow_dispatch:
   workflow_run:
     workflows: ["Publish RetailNav to Contabo"]

@@ -118,7 +118,7 @@ try {
   assert.equal(initialStyle.fill,'#000000');
   assert.equal(initialStyle.outline,'#ffffff');
   assert.equal(initialStyle.line,'2');
-  assert.equal(initialStyle.alpha,'.4');
+  assert.equal(Number(initialStyle.alpha),.4);
   assert.equal(initialStyle.overlayAlpha,'1',
     'Changing fill opacity must NOT make the white outline transparent');
   assert.equal(initialStyle.state.issueCount,0);

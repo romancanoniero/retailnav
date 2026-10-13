@@ -54,17 +54,7 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
             raise ValueError(slug+"/"+floor_id+": invalid reference asset URL")
         parts = sorted(mall_path.parent.glob(floor_id+".reference.webp.b64.part*"))
         if not parts:
-            if reference.get("qa",{}).get("status")=="approved" or info.get("navigable",False):
-                raise ValueError(slug+"/"+floor_id+": an approved/released floor requires a stored photo")
-            # In the non-navigable preview, show an explicit missing-reference
-            # control instead of pretending a vector trace is the source photo.
-            reference["url"]=None
-            step = 8
-            width, height = (photo_width + step-1)//step, (photo_height + step-1)//step
-            walk = {"x":0,"y":0,"step":step,"w":width,"h":height,
-                    "bits":base64.b64encode(bytes((width*height+7)//8)).decode("ascii")}
-            floor_data.append([floor_id,item["name"],item["source"],geometry,walk])
-            continue
+            raise ValueError(slug+"/"+floor_id+": import rejected: the reference photograph must be saved for EVERY floor")
         raw = base64.b64decode("".join(p.read_text(encoding="ascii").strip()
                                          for p in parts),validate=True)
         sha = hashlib.sha256(raw).hexdigest()

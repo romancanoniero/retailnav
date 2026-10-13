@@ -252,3 +252,63 @@ aside.rnSocialDropdown .rnPanelHeader>button{min-width:35px;min-height:35px}
   aside.rnSocialDropdown{max-height:calc(100dvh - var(--rn-dropdown-top) - 8px)}
   aside.rnSocialDropdown .rnSocialBody{max-height:calc(100dvh - var(--rn-dropdown-top) - 60px)}
 }
+
+/* Independent QR modal over the open friends dropdown. */
+dialog.rnQrDialog {
+  box-sizing:border-box;
+  position:fixed;
+  width:min(350px,calc(100vw - 36px));
+  max-width:350px;
+  max-height:calc(100dvh - 40px);
+  margin:auto;
+  border:1px solid #7dbfca;
+  border-radius:18px;
+  padding:0;
+  background:#102437;
+  color:#eef5fb;
+  box-shadow:0 18px 58px #000b;
+  overflow:hidden;
+}
+dialog.rnQrDialog::backdrop {
+  background:rgba(4,13,26,.43);
+  backdrop-filter:blur(1px);
+}
+.rnQrDialog .rnQrHeader {
+  background:#152d41;
+  padding:12px 14px;
+}
+.rnQrDialog .rnQrHeader h2 {margin:0 0 3px;font-size:16px}
+.rnQrDialog .rnQrHeader p {font-size:11px;margin:0}
+.rnQrDialog .rnQrHeader button {min-width:40px;min-height:40px;padding:8px}
+.rnQrDialog .rnQrBody {
+  box-sizing:border-box;
+  padding:12px 12px 16px;
+  overflow-y:auto;
+  max-height:calc(100dvh - 110px);
+}
+.rnQrDialog .rnQrWrap {
+  max-width:290px;
+  margin:0 auto;
+  padding:12px;
+  text-align:center;
+}
+.rnQrDialog #rnQr {
+  width:210px;
+  min-height:210px;
+  margin:0 auto 8px;
+  padding:10px;
+}
+.rnQrDialog #rnQr canvas,
+.rnQrDialog #rnQr img {max-width:190px;max-height:190px}
+.rnQrDialog .rnFlex {display:flex;gap:6px;justify-content:center}
+.rnQrDialog .rnFlex button {
+  flex:1;
+  min-width:0;
+  min-height:40px;
+  padding:8px 7px;
+  font-size:11px;
+}
+@media(max-width:390px){
+  dialog.rnQrDialog{width:calc(100vw - 24px)}
+  .rnQrDialog .rnQrBody{padding:9px}
+}

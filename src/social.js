@@ -316,6 +316,9 @@ async function createInvite(){
       colorDark:'#102133',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
     $('rnLink').value=currentLink;
     $('rnQrWrap').hidden=false;
+    // The QR is a separate modal. Keep the friends pulldown mounted underneath.
+    const qrDialog=$('rnQrDialog');
+    if(!qrDialog.open)qrDialog.showModal();
     $('rnQrExpiry').textContent='Válido durante 5 minutos. El enlace sirve una sola vez.';
     status('QR listo. La otra persona debe aceptar y después vos confirmás.');
   }catch(e){status(e.message,true);}
@@ -477,10 +480,14 @@ function bind(){
   // closes it, including the canvas or an unrelated topbar control.
   document.addEventListener('pointerdown',event=>{
     if($('peopleDialog').hidden)return;
+    // The independent QR dialog is in the top layer: interacting with it
+    // must NEVER be mistaken for a tap outside the friends pulldown.
+    if($('rnQrDialog').open || event.target.closest('#rnQrDialog'))return;
     if(event.target.closest('#peopleDialog, #friendsBtn'))return;
     closePeople();
   },true);
   document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&$('rnQrDialog').open)return; // Native dialog handles Escape.
     if(event.key==='Escape'&&!$('peopleDialog').hidden){
       event.preventDefault();
       closePeople();
@@ -517,6 +524,18 @@ function bind(){
       $('rnAvatarChoices').hidden=true;
       status('Foto eliminada. Se muestran tus iniciales.');
     }catch(e){status(e.message,true);}
+  });
+  const qrDialog=$('rnQrDialog');
+  $('rnQrClose').addEventListener('click',()=>qrDialog.close());
+  qrDialog.addEventListener('cancel',()=>{ /* Escape closes only the QR. */ });
+  qrDialog.addEventListener('click',event=>{
+    // Close on a tap directly on the backdrop, not on the QR content.
+    if(event.target===qrDialog)qrDialog.close();
+  });
+  qrDialog.addEventListener('close',()=>{
+    // The QR must return to the same open friends pulldown, not the map.
+    show();
+    $('rnMakeInvite').focus({preventScroll:true});
   });
   $('rnMakeInvite').addEventListener('click',createInvite);
   $('rnShareInvite').addEventListener('click',makeDirectLink);

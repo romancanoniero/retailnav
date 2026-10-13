@@ -40,7 +40,7 @@
 <button id="rnMakeInvite" type="button" class="rnProfileQr" aria-label="Mostrar mi QR para vincular amigos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="2.5" y="2.5" width="7.5" height="7.5" rx="1"/><rect x="14" y="2.5" width="7.5" height="7.5" rx="1"/><rect x="2.5" y="14" width="7.5" height="7.5" rx="1"/><path d="M14 14h3v3h-3zm7 0v3m-3 3h3v-3m-7 3h2"/></svg><span>Mi QR</span></button>
 </div>
 <div id="rnAvatarChoices" class="rnAvatarChoices" hidden><span class="rnHint">Cambiar foto:</span><button id="rnAvatarGalleryBtn" type="button">Elegir de galería</button><button id="rnAvatarCameraBtn" type="button">Tomar foto</button><button id="rnAvatarRemove" type="button" class="rnMinor">Quitar foto</button><input type="file" id="rnAvatarGalleryInput" accept="image/*" hidden><input type="file" id="rnAvatarCameraInput" accept="image/*" capture="user" hidden></div>
-<div id="rnQrWrap" class="rnQrWrap" hidden><div id="rnQr"></div><small id="rnQrExpiry"></small><div class="rnFlex"><button id="rnCopyLink" type="button">Copiar QR como enlace</button><button id="rnShareLink" type="button">Compartir QR</button></div><input id="rnLink" type="text" readonly aria-label="Enlace del QR" hidden></div>
+
 </section>
 <hr class="rnRule">
 <section class="rnCompactSection" aria-labelledby="rnAddTitle">
@@ -63,6 +63,13 @@
 <hr class="rnRule">
 <details id="rnAccountDetails" class="rnDetails"><summary>Recuperación y privacidad</summary><p>Conservá tus contactos sin registrarte, con una clave de recuperación opcional.</p><button id="rnCreateRecovery" type="button">Crear clave de recuperación</button><div id="rnRecoveryOutput" hidden><textarea id="rnRecoveryCode" aria-label="Clave de recuperación generada" readonly rows="2"></textarea><button id="rnCopyRecovery" type="button">Copiar clave</button><small class="rnHint">Guardala fuera de Safari. Crear otra invalida la anterior.</small></div><div class="rnFlex"><input id="rnRestoreCode" type="text" autocomplete="off" spellcheck="false" aria-label="Clave de recuperación anterior" placeholder="Pegar clave anterior"><button id="rnRestore" type="button" class="rnMinor">Recuperar</button></div><button id="rnDeleteAccount" class="rnDelete" type="button">Eliminar mis datos y contactos</button></details>
 </div></aside>
+<dialog id="rnQrDialog" class="rnQrDialog" aria-labelledby="rnQrTitle">
+  <header class="dialoghead rnQrHeader">
+    <div><h2 id="rnQrTitle">Mi código QR</h2><p>Mostrá este código a la persona que querés agregar.</p></div>
+    <button type="button" id="rnQrClose" aria-label="Cerrar código QR"><svg class="icon"><use href="#i-close"/></svg></button>
+  </header>
+  <div class="dialogbody rnQrBody"><div id="rnQrWrap" class="rnQrWrap" hidden><div id="rnQr"></div><small id="rnQrExpiry"></small><div class="rnFlex"><button id="rnCopyLink" type="button">Copiar QR como enlace</button><button id="rnShareLink" type="button">Compartir QR</button></div><input id="rnLink" type="text" readonly aria-label="Enlace del QR" hidden></div></div>
+</dialog>
 <dialog id="helpDialog"><header class="dialoghead"><h2>Explorar RetailNav</h2><button data-close="helpDialog" aria-label="Cerrar ayuda"><svg class="icon"><use href="#i-close"/></svg></button></header><div class="dialogbody"><p>Arrastrá con un dedo para rotar en cualquier dirección, sin bloquear el ángulo vertical. Con dos dedos podés desplazar, ampliar y girar simultáneamente: dejá uno fijo y mové el otro alrededor para orbitar. Tocá el indicador de LL, UL o L3 para enfocar la planta, y elegí «Mostrar las 3 plantas» para volver. En computadora, usá el botón derecho para desplazar y la rueda para acercarte.</p><p><b>Todas / LL / UL / L3</b> alterna los tres niveles. La separación vertical es visual; no representa una medición de alturas.</p><p><b>Tu plano</b> compara los polígonos con la imagen aportada. LL se rectificó para alinear su perspectiva con UL. Las zonas sin límites claros quedan provisionales.</p><p>Seleccioná un bloque para explorar su referencia. El recorrido de prueba usa solamente los pasillos segmentados, con un origen ficticio en la misma planta. No se inventan enlaces entre sectores desconectados.</p><p><b>No es un escaneo LiDAR ni una aplicación de navegación validada en el edificio.</b></p></div></dialog>
 <div hidden id="polygonCount"></div>
 <script id="modelData" type="application/json">__MODEL__</script>

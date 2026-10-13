@@ -49,6 +49,7 @@ catalog = {
 }
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
+    "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),
     "__CSS__": (repo / "src/style.css").read_text(encoding="utf-8"),
     "__MODEL__": json.dumps(floors, ensure_ascii=False, separators=(",", ":")),
     "__REFERENCES__": (repo / "src/references.js").read_text(encoding="utf-8"),

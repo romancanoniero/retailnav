@@ -41,40 +41,39 @@ assert hashlib.sha256(asset.read_bytes()).hexdigest()==reference["sha256"]
 
 assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
 ap_geometry = ap["floors"][0][3]
-assert len(ap_geometry) >= 40
-assert len(ap_geometry) == 190, "Detailed map should retain 190 separated colour components"
-
-# The AP Plaza v3 geometry comes from 1440x620 original reference. All stable
-# identifiers stay intact while facade curvature uses more short segments.
+assert len(ap_geometry) == 197, "Provisional AP Plaza AI2D v2 contains 197 candidates"
 source_manifest=json.loads(Path("data/malls/ap-plaza/mall.json").read_text(encoding="utf8"))
 floor_manifest=source_manifest["floors"][0]
-assert floor_manifest["geometry"] == "B1.geometry.v3.zlib.b64"
+assert floor_manifest["geometry"] == "B1.geometry.ai2d.v2.zlib.b64"
 assert source_manifest["navigable"] is False
-curve=source_manifest["curveRefinement"]
-assert curve["version"] == 3
-assert curve["originalPolygonCount"] == curve["newPolygonCount"] == 190
-assert curve["originalVertices"] == 968
-assert curve["refinedVertices"] > 1950
-assert curve["unresolvedRegions"] >= 1 and curve["requiresHumanReview"] is True
-assert curve["aiVisualReview"].startswith("not-executed")
-assert sum(len(feature[3])//2 for feature in ap_geometry) == curve["refinedVertices"]
-assert source_manifest["floorReferences"]["B1"]["rasterSize"] == [1440,620]
-assert source_manifest["floorReferences"]["B1"]["sourceSha256"] == curve["sourceSHA256"]
-assert source_manifest["floorReferences"]["B1"]["quality"] == "full-resolution"
+assert source_manifest["status"]=="vectorizado-provisional"
+assert source_manifest["vectorRegionCount"]==197
+assert source_manifest["indoorPositionCalibrated"] is False
+method=source_manifest["ai2dRefinement"]
+assert method["version"]==2 and method["candidateRegions"]==197
+assert method["polygonVertices"]==2119 and method["renderTriangles"]==1725
+assert method["requiresHumanReview"] is True
+assert method["scanVerified"] is False and method["isNavigationSafe"] is False
+assert method["photoSHA256"]==reference["sha256"]
+assert method["geometrySHA256"]=="31bd607ba2953183cd50eb1af15bf7e1530b2d8616a87ca378ff9d78579acda1"
+assert source_manifest["curveRefinement"]["active"] is False, "Preserve v3 as historical comparison"
 import zlib,base64
-original_data=json.loads(zlib.decompress(base64.b64decode(
-    Path("data/malls/ap-plaza/B1.geometry.v2.zlib.b64").read_text(encoding="ascii").strip()
-)))
-assert [f[0] for f in ap_geometry] == [f[0] for f in original_data]
-assert {f[2] for f in ap_geometry if f[2] and f[2].strip()} >= set()
-review=json.loads(Path("data/malls/ap-plaza/B1.curves-v3-review.json").read_text(encoding="utf8"))
-assert review["featuresBefore"] == review["featuresAfter"] == 190
-assert review["verticesBefore"] == 968
-assert review["verticesAfter"] == curve["refinedVertices"]
-assert review["unresolvedRegions"] == curve["unresolvedRegions"]
-assert review["qa"] == "provisional-human-review-required"
-assert review["aiReview"].startswith("not-executed")
-assert len(review["regions"]) == 190
+new_file=Path("data/malls/ap-plaza/B1.geometry.ai2d.v2.zlib.b64")
+new_bytes=zlib.decompress(base64.b64decode(new_file.read_text(encoding="ascii").strip()))
+assert hashlib.sha256(new_bytes).hexdigest()==method["geometrySHA256"]
+assert json.loads(new_bytes)==ap_geometry
+report=json.loads(Path("data/malls/ap-plaza/B1.ai2d.render-report.json").read_text(encoding="utf8"))
+assert report["features"]==197 and report["vertices"]==2119
+assert report["triangles"]==1725 and report["codes"]==31
+assert report["navigationApproved"] is False
+assert report["referenceSHA256"]==reference["sha256"]
+assert len({f[0] for f in ap_geometry})==197
+assert all(f[0].startswith("AI2D-B1-") for f in ap_geometry)
+assert sum(len(f[3])//2 for f in ap_geometry)==2119
+assert sum(len(f[5])//3 for f in ap_geometry)==1725
+assert len({f[2] for f in ap_geometry if f[2]})>=25
+assert "<script>" in html and "RetailNavAreaLabels" in html
+assert 'id="rnAreasButton"' in html and 'id="rnDistrictOverlay"' in html
 
 units = ap["units"]
 assert len(units) >= 80, "Read all legible printed store identifiers as indexed labels"

@@ -312,3 +312,62 @@ dialog.rnQrDialog::backdrop {
   dialog.rnQrDialog{width:calc(100vw - 24px)}
   .rnQrDialog .rnQrBody{padding:9px}
 }
+
+
+/* Actual 3D-projected avatar pin layer. Markers are geometric Canvas paths,
+   grounded to the mall coordinates and independently colored per person. */
+.viewport canvas.rnPinCanvas{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  z-index:3;
+  pointer-events:none;
+  touch-action:auto;
+  cursor:default;
+  outline:none;
+}
+.rnDemoFriendsSection{
+  margin:13px 0 2px;
+  padding:12px 0 4px;
+  border-top:1px solid #375667;
+}
+.rnSocialDialog .rnDemoFriendsSection h3{margin:0 0 9px;font-size:13px;color:#e5efff}
+.rnDemoNotice{
+  display:inline-block;
+  padding:3px 6px;
+  border:1px dashed #8dcab9;
+  border-radius:6px;
+  font-weight:650;
+  color:#a8e8d7;
+  font-size:9px;
+  letter-spacing:.25px;
+}
+.rnSocialDialog .rnDemoFriendsSection .rnRow{
+  background:#142838;
+  border-color:#456171;
+}
+.rnSocialDialog .rnDemoFriendsSection .rnRow[role="listitem"]{
+  padding:7px 9px;
+}
+.rnSocialDialog .rnDemoFriendsSection .rnAvatar{
+  border:2px solid var(--rn-person-color,#65e6e0);
+}
+.rnSocialDialog .rnDemoFriendsSection .rnAvatar img{
+  border-radius:50%;
+  display:block;
+}
+.rnSocialDialog .rnDemoFriendsSection .rnMapLocate{
+  color:#dbffff;
+  border-color:var(--rn-person-color,#65e6e0);
+  background:#16435a;
+}
+.rnDemoTag{
+  color:#a8e8d7;
+  font-size:9px;
+  display:inline-block;
+  margin-left:4px;
+  font-weight:750;
+}
+.rnDemoFriendsSection[hidden]{display:none!important}

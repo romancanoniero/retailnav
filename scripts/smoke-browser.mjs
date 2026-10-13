@@ -189,9 +189,10 @@ try {
     }));
     const before=view.getState().orbitPitch;
     send('pointerdown',41,-50,0);send('pointerdown',42,50,0);
-    send('pointermove',41,-50,50);send('pointermove',42,50,50);
+    // Swipe both fingers UP: negative screen Y means a higher camera pitch.
+    send('pointermove',41,-50,-50);send('pointermove',42,50,-50);
     const after=view.getState().orbitPitch;
-    send('pointerup',41,-50,50);send('pointerup',42,50,50);
+    send('pointerup',41,-50,-50);send('pointerup',42,50,-50);
     return {before,after};
   });
   assert.ok(tilting.after>tilting.before+.02,

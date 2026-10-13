@@ -254,7 +254,13 @@ canvas.addEventListener('pointermove',e=>{
   const dx=p[0].x-gesture.p[0].x,dy=p[0].y-gesture.p[0].y;
   target=gesture.target.slice();distance=gesture.distance;
   if(panMode||p[0].button===2||p[0].shift){
-   anchorCamera(p[0].x,p[0].y,gesture.target,gesture.anchor);
+   if(gesture.anchor)anchorCamera(p[0].x,p[0].y,gesture.target,gesture.anchor);
+   else{
+    // At edge-on/underside views the ray never intersects the floor plane.
+    // Fall back to panning in the camera's screen axes, without freezing.
+    const unit=2*distance*Math.tan(Math.PI/8)/Math.max(1,canvas.clientHeight);
+    target=vadd(gesture.target,qr(q,[-dx*unit,dy*unit,0]));
+   }
   }else{
    orbitYaw=gesture.yaw-dx*.006;
    orbitPitch=panMode?clamp(gesture.pitch-dy*.004,MIN_PITCH,MAX_PITCH)
@@ -277,7 +283,12 @@ canvas.addEventListener('pointermove',e=>{
   const wantedPitch=gesture.pitch+(tilting?dy*.0045:0);
   orbitPitch=panMode?clamp(wantedPitch,MIN_PITCH,MAX_PITCH):wrapAngle(wantedPitch);
   updateCameraRotation();target=gesture.target.slice();
-  anchorCamera((a.x+b.x)/2,(a.y+b.y)/2,gesture.target,gesture.anchor);
+  if(gesture.anchor){
+   anchorCamera((a.x+b.x)/2,(a.y+b.y)/2,gesture.target,gesture.anchor);
+  }else{
+   const unit=2*distance*Math.tan(Math.PI/8)/Math.max(1,canvas.clientHeight);
+   target=vadd(gesture.target,qr(q,[-dx*unit,dy*unit,0]));
+  }
   $('plan').setAttribute('aria-pressed','false');
  }
  dirty=true;

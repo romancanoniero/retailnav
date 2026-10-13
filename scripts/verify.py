@@ -32,6 +32,20 @@ assert {"A-01", "A-12", "K1-31", "K2-19"}.issubset({u["code"] for u in units})
 assert {"KFC", "Starbucks", "7-Eleven"}.issubset({u["name"] for u in units})
 assert len({u["code"] for u in units}) == len(units)
 assert 0 < sum(bool(u["polygonId"]) for u in units) < len(units), "Retain unmatched provisional code labels"
+districts = ap.get("districts", [])
+assert len(districts) == 8, "Printed major shopping-zone titles must remain in the map"
+district_names = {d["name"] for d in districts}
+assert {
+    "ACG Zone", "Optical City", "Jewelry Street", "Gift Zone",
+    "Electronic Digital City", "Food Zone", "Old Shanghai Tailor Street",
+    "Astro Xplore"
+}.issubset(district_names)
+assert len({d["id"] for d in districts}) == len(districts)
+for d in districts:
+    assert d["floor"] == "B1" and d["source"] == "printed-map-label"
+    assert 0 <= d["x"] <= 1440 and 0 <= d["y"] <= 620
+    assert d["widthPx"] >= 50 and d["heightPx"] >= 20
+assert "RetailNavDistricts" in html
 assert len({p[0] for p in ap_geometry}) == len(ap_geometry)
 poi = catalog["ap-plaza"]["pois"]
 assert len(poi) >= 10

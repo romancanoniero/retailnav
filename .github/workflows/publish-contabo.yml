@@ -30,6 +30,8 @@ jobs:
       - name: Verify anonymous identity, QR consent and source syntax
         run: |
           node --check src/viewer.js
+          node --check src/area-labels.js
+          node --check src/districts-webgl.js
           node --check src/social.js
           node --check src/demo-friends.js
           node --check src/pins3d.js

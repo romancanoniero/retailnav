@@ -70,6 +70,27 @@ test('anonymous people survive browser sessions; QR linking requires mutual acce
   const unlink=await req('POST','/contact/remove',{id:b.data.me.id},restore.cookie);
   assert.equal(unlink.status,200);assert.equal(unlink.data.friends.length,0);
   assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,0);
+  // Sharing a chat invitation is consent by its creator; opening it still
+  // requires explicit acceptance by the recipient. The link is one-use.
+  const direct=await req('POST','/invite/link',{},restore.cookie);
+  assert.equal(direct.status,201);
+  assert.equal(direct.data.mode,'link');
+  const peek=await req('POST','/invite/preview',{code:direct.data.code},b.cookie);
+  assert.equal(peek.data.mode,'link');
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,0);
+  const linked=await req('POST','/invite/claim',{code:direct.data.code},b.cookie);
+  assert.equal(linked.status,200);
+  assert.equal(linked.data.linked,true);
+  assert.equal((await req('GET','/state',undefined,restore.cookie)).data.friends.length,1);
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,1);
+  assert.equal((await req('POST','/invite/claim',{code:direct.data.code},b.cookie)).status,410);
+  // Only the creator and accepted contacts may read the profile photograph.
+  const stranger=await req('POST','/session',{});
+  assert.equal((await req('GET','/avatar/'+a.data.me.id,undefined,stranger.cookie)).status,404);
+  assert.equal((await req('POST','/avatar',{image:'data:image/jpeg;base64,Zm9v'},restore.cookie)).status,400);
+  const unlinkAgain=await req('POST','/contact/remove',{id:b.data.me.id},restore.cookie);
+  assert.equal(unlinkAgain.status,200);
+  assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends.length,0);
   const persistent=JSON.parse(readFileSync(path.join(dir,'presence.json'),'utf8'));
   assert.equal(persistent.version,1);
   assert.ok(persistent.users[a.data.me.id]);

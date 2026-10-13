@@ -10,8 +10,10 @@ Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos 
 - Botón **Mostrar las 3 plantas** o pestaña **Todas** para restablecer la vista conjunta.
 - Un dedo orbita; dos dedos desplazan, amplían y **giran mediante torsión**, incluso dejando un dedo fijo.
 - Etiquetas, búsqueda de tiendas ancla, ruta ilustrativa sobre pasillos trazados, comparación con fuente y exportación GLB.
-- Cuatro amigos **DEMO** ficticios sobre plantas diferentes, identificados claramente. Se pueden ocultar.
+- **Nueve amigos DEMO (tres por planta)**, con retratos sintéticos, nombre, cuerpo 3D y sombra de colores independientes. Los pines se dibujan en coordenadas espaciales y acompañan la rotación del mapa. Aparecen también en el pulldown «Mis amigos», con un botón 📍 para enfocar cada persona. Se pueden ocultar sin alterar contactos reales.
 - Renderizado WebGL con alternativa 3D Canvas. Generación y lectura de códigos QR locales, **sin dependencia de CDN**, incluso en Safari sin BarcodeDetector.
+- Los perfiles DEMO están en `src/demo-friends.js`. Sus ubicaciones son **centros de pasillos vectorizados** de LL, UL y L3 en unidades del plano provisional; no se inventan coordenadas GPS ni posiciones medidas. Su modelo de posición `{mallId,floor,x,y,source,coordinateSpace}` permite reemplazarlos por contactos reales en el mismo renderizador. Cuerpo, borde y sombra se configuran por persona o por paleta general en `window.RETAILNAV_MARKER_PALETTE`; ningún pin usa PNG estáticos.
+- El renderizador `src/pins3d.js` traza cada pin y su sombra mediante geometría proyectada 3D en un lienzo transparente compartido; los avatares son texturas separadas. Las fotos reales, cuando se comparten, se cargan de manera privada desde el backend. El modelo mantiene el anclaje por planta al rotar, trasladar o acercar el mapa.
 
 ## Visitantes sin registro obligatorio
 

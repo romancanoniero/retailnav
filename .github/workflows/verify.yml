@@ -29,6 +29,7 @@ jobs:
           node --check src/units.js
           node --check src/unit-signs-webgl.js
           node --check src/districts-webgl.js
+          node --check src/area-labels.js
           node --check src/indoor-location.js
           node --check src/qrcode.min.js
           node --check backend/server.mjs
@@ -43,6 +44,14 @@ jobs:
           python3 scripts/test_vectorizer.py
           python3 scripts/test_curved_floor.py
           python3 scripts/test_ai_floor_review.py
+          python3 scripts/test_ai2d_convert.py
+      - name: Regenerate AP Plaza v2 and assert byte-for-byte identical 3D mesh
+        run: |
+          python3 scripts/convert_ai2d_retailnav.py \
+            --input data/malls/ap-plaza/experimental/B1.ai2d.photo-refined.v2.zlib.b64 \
+            --output /tmp/ap-plaza-ai2d-v2.zlib.b64 \
+            --report /tmp/ap-plaza-ai2d-report.json
+          cmp /tmp/ap-plaza-ai2d-v2.zlib.b64 data/malls/ap-plaza/B1.geometry.ai2d.v2.zlib.b64
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle

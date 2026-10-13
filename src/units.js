@@ -37,6 +37,12 @@ function paint(){
  const view=window.__RETAILNAV__,state=view?.getState();
  if(!state?.ready)return;
  frames++;visibleCount=0;
+ if(state.renderer==='WebGL'&&window.RetailNavUnits?.draw3D){
+  // Geometry-bearing WebGL wall signs take priority. Screen-space DOM badges
+  // are only a 2D fallback and must never masquerade as fixed 3D shopfronts.
+  for(const el of buttons.values())el.hidden=true;
+  return;
+ }
  const codesOn=state.distance<145||Boolean(selected);
  const floors=new Set(state.visible);
  const occupied=[];
@@ -70,9 +76,10 @@ function paint(){
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,find,getState:()=>({
+window.RetailNavUnits={draw:paint,focus,find,getUnits:()=>units.slice(),getState:()=>({
  count:units.length,selected,frames,visibleCount,
  matched:units.filter(u=>u.polygonId).length,
+ facadeCount:units.filter(u=>u.facade).length,
  unmatched:units.filter(u=>!u.polygonId).length
 })};
 })();

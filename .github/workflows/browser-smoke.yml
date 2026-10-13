@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# Avoid concurrent tests creating the same visual state during consecutive releases.
+concurrency:
+  group: retailnav-mobile-e2e
+  cancel-in-progress: true
+
 jobs:
   browser-smoke:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'

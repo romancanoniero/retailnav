@@ -21,7 +21,7 @@
     "y": 320,
     "status": "punto-rojo-del-cartel-no-gps"
   },
-  "warning": "190 contornos provisionales recuperan más divisiones negras, pero no equivalen a 190 locales confirmados. Identificadores de locales transcritos del cartel y vinculados solo cuando el contorno coincide sin ambigüedad. Pasillos, entradas, escala y conexiones verticales pendientes de verificación.",
+  "warning": "190 contornos provisionales. Las paredes interiores visibles no están todas capturadas. Los nombres comerciales de zona se transcriben en una capa independiente, ubicados donde aparecen en la fotografía. Esos títulos NO designan locales individuales ni delimitan polígonos de propiedad. Escala, entradas y pasillos requieren inspección.",
   "floors": [
     {
       "id": "B1",
@@ -141,5 +141,105 @@
   "vectorRegionCount": 190,
   "vectorQuality": "requires-manual-review",
   "floorPlanMetricScaleVerified": false,
-  "numberOfPhysicalStoresVerified": false
+  "numberOfPhysicalStoresVerified": false,
+  "districts": [
+    {
+      "id": "acg-zone",
+      "name": "ACG Zone",
+      "detail": "Anime Products & Local Specialties",
+      "floor": "B1",
+      "x": 216,
+      "y": 166,
+      "widthPx": 170,
+      "heightPx": 35,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "optical-city",
+      "name": "Optical City",
+      "detail": "Glasses, sunglasses & optical services",
+      "floor": "B1",
+      "x": 684,
+      "y": 165,
+      "widthPx": 258,
+      "heightPx": 35,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "jewelry-street",
+      "name": "Jewelry Street",
+      "detail": "Jewelry & Accessories",
+      "floor": "B1",
+      "x": 662,
+      "y": 330,
+      "widthPx": 197,
+      "heightPx": 35,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "gift-zone",
+      "name": "Gift Zone",
+      "detail": "Souvenirs & Gifts",
+      "floor": "B1",
+      "x": 168,
+      "y": 390,
+      "widthPx": 176,
+      "heightPx": 36,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "electronic-digital-city",
+      "name": "Electronic Digital City",
+      "detail": "Electronics",
+      "floor": "B1",
+      "x": 546,
+      "y": 422,
+      "widthPx": 192,
+      "heightPx": 35,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "food-zone",
+      "name": "Food Zone",
+      "detail": "Catering & Casual Dining",
+      "floor": "B1",
+      "x": 328,
+      "y": 589,
+      "widthPx": 198,
+      "heightPx": 36,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "old-shanghai-tailor-street",
+      "name": "Old Shanghai Tailor Street",
+      "detail": "Custom-made garments & specialty apparel",
+      "floor": "B1",
+      "x": 1146,
+      "y": 230,
+      "widthPx": 270,
+      "heightPx": 36,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription"
+    },
+    {
+      "id": "astro-xplore",
+      "name": "Astro Xplore",
+      "detail": "VR Experience",
+      "floor": "B1",
+      "x": 163,
+      "y": 602,
+      "widthPx": 156,
+      "heightPx": 32,
+      "source": "printed-map-label",
+      "confidence": "manual-transcription",
+      "kind": "attraction"
+    }
+  ],
+  "districtSource": "Manual transcription and approximate centres from user's perspective-corrected AP Plaza photograph; boundaries not surveyed."
 }

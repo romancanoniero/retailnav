@@ -5,7 +5,7 @@
 const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
-let inviteCode='', currentLink='', joinCode='', ready=false, lastIncoming='', scannerStream=null;
+let inviteCode='', currentLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
 let scannerTimer=0, demoVisible=true, markers=[], socialStatus='';
 const demoNames=['Sofía','Marcos','Lucía','Nico'];
 const demoLevels=['UL','LL','L3','UL'];
@@ -33,6 +33,53 @@ async function request(route,method='GET',payload){
   if(!response.ok)throw Error(data.error||'No se pudo completar la solicitud');
   return data;
 }
+function avatarUrl(id,version){
+  if(!version||!/^[a-f0-9-]{36}$/.test(id))return '';
+  return new URL('avatar/'+id+'?v='+encodeURIComponent(version),API).toString();
+}
+function setAvatar(img,initial,id,version){
+  const url=avatarUrl(id,version);
+  if(!url){img.hidden=true;initial.hidden=false;return;}
+  img.onerror=()=>{img.hidden=true;initial.hidden=false;};
+  if(img.getAttribute('src')!==url)img.src=url;
+  img.hidden=false;
+  initial.hidden=true;
+}
+async function photoFromFile(file){
+  if(!file)return;
+  if(!ready)return status('Esperá a que se conecte tu identidad.',true);
+  if(!file.type.startsWith('image/')||file.size>8*1024*1024)
+    return status('Elegí una foto de hasta 8 MB.',true);
+  let objectURL;
+  try{
+    objectURL=URL.createObjectURL(file);
+    const img=new Image();
+    await new Promise((resolve,reject)=>{
+      img.onload=resolve;img.onerror=()=>reject(Error('No se pudo leer esta foto en Safari'));
+      img.src=objectURL;
+    });
+    if(!img.naturalWidth||!img.naturalHeight||img.naturalWidth*img.naturalHeight>75000000)
+      throw Error('Imagen demasiado grande para procesar');
+    const canvas=document.createElement('canvas');
+    canvas.width=192;canvas.height=192;
+    const ctx=canvas.getContext('2d',{alpha:false});
+    if(!ctx)throw Error('No se pudo preparar la foto');
+    const crop=Math.min(img.naturalWidth,img.naturalHeight);
+    const x=(img.naturalWidth-crop)/2,y=(img.naturalHeight-crop)/2;
+    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,192,192);
+    ctx.drawImage(img,x,y,crop,crop,0,0,192,192);
+    let data='',quality=.78;
+    do{
+      data=canvas.toDataURL('image/jpeg',quality);
+      quality-=.12;
+    }while(data.length>98000&&quality>.28);
+    if(data.length>102000)throw Error('La foto es demasiado pesada.');
+    merge(await request('avatar','POST',{image:data}));
+    $('rnAvatarChoices').hidden=true;
+    status('Foto actualizada. Tus amigos podrán verla.');
+  }catch(e){status(e.message,true);}
+  finally{if(objectURL)URL.revokeObjectURL(objectURL);}
+}
 function merge(snapshot){
   if(!snapshot||!snapshot.me)return;
   me=snapshot.me;
@@ -41,8 +88,12 @@ function merge(snapshot){
   outgoing=snapshot.outgoing||[];
   myPosition=snapshot.myPosition||null;
   ready=true;
-  $('rnName').value=me.name;
-  $('rnMeCode').textContent='Identidad privada · '+me.id.slice(0,8).toUpperCase();
+  if(document.activeElement!==$('rnName'))$('rnName').value=me.name;
+  $('rnMeCode').textContent='ID interno · '+me.id.slice(0,8).toUpperCase();
+  const myImg=$('rnProfileImg'),myInitial=$('rnProfileInitial');
+  myInitial.textContent=me.name.charAt(0).toUpperCase();
+  setAvatar(myImg,myInitial,me.id,me.avatarVersion);
+  $('rnAvatarRemove').hidden=!me.avatarVersion;
   $('rnStatusPosition').textContent=myPosition
     ? 'Compartiendo una marca manual en '+myPosition.floor+' · vence 10 min después de marcarla.'
     : 'Tu ubicación está oculta. No se utiliza GPS.';
@@ -63,28 +114,42 @@ function button(text,callback,variant=''){
 }
 function friendRow(friend){
   const row=element('div','rnRow');
-  const icon=element('span','rnAvatar',friend.name.slice(0,1).toUpperCase());
+  const icon=element('span','rnAvatar');
+  const initial=element('span','rnAvatarInitial',friend.name.slice(0,1).toUpperCase());
+  const img=element('img','','');
+  img.alt='Foto de '+friend.name;
+  img.hidden=true;
+  icon.append(initial,img);
+  setAvatar(img,initial,friend.id,friend.avatarVersion);
   const info=element('div','rnPerson');
   info.append(element('strong','',friend.name));
   const detail=friend.position
-    ? friend.position.floor+' · marcado manualmente · '+Math.max(0,Math.ceil((Date.now()-friend.position.updated)/60000))+' min'
-    : 'Ubicación no compartida';
+    ?friend.position.floor+' · posición que compartió hace '+Math.max(0,Math.ceil((Date.now()-friend.position.updated)/60000))+' min'
+    :'No está compartiendo su ubicación';
   info.append(element('small','',detail));
   const actions=element('div','rnRowActions');
-  if(friend.position)actions.append(button('Ver',()=>{
+  const locate=button('📍',()=>{
+    if(!friend.position)return;
     const view=window.__RETAILNAV__;
-    if(!view){status('Todavía se está preparando el mapa.',true);return;}
-    view.setFloor(friend.position.floor);
+    if(!view){status('Esperá a que cargue el mapa.',true);return;}
     view.focusAt(friend.position.floor,[friend.position.x,friend.position.y],115);
     $('peopleDialog').close();
-    status('Posición marcada por '+friend.name+'; no es GPS.');
-  }));
-  actions.append(button('Quitar',async()=>{
-    if(!confirm('¿Desvincular a '+friend.name+'? El vínculo se eliminará para ambos.'))return;
+    status('Ubicación aproximada que compartió '+friend.name+'; no es GPS.');
+  },'rnMapLocate');
+  locate.title=friend.position?'Mostrar la posición compartida de '+friend.name:'Este contacto no comparte ubicación';
+  locate.setAttribute('aria-label',locate.title);
+  locate.disabled=!friend.position;
+  const more=button('⋯',()=>{removeWrap.hidden=!removeWrap.hidden;},'rnFriendMore');
+  more.setAttribute('aria-label','Opciones de '+friend.name);
+  actions.append(locate,more);
+  const removeWrap=element('div','rnRemoveWrap');
+  removeWrap.hidden=true;
+  removeWrap.append(button('Quitar amigo',async()=>{
+    if(!confirm('¿Desvincular a '+friend.name+'? Se eliminará de ambas listas.'))return;
     try{merge(await request('contact/remove','POST',{id:friend.id}));status('Contacto desvinculado.');}
-    catch(error){status(error.message,true);}
-  },'rnMinor'));
-  row.append(icon,info,actions);
+    catch(e){status(e.message,true);}
+  }));
+  row.append(icon,info,actions,removeWrap);
   return row;
 }
 function renderContacts(){
@@ -112,6 +177,8 @@ function renderContacts(){
   $('rnOutgoingWrap').hidden=!outgoing.length;
   $('rnPendingBadge').hidden=!incoming.length;
   $('rnRealFriendsCount').textContent=String(friends.length);
+  $('rnPendingCount').textContent=String(incoming.length);
+  if(incoming.length)$('rnRequestsDetails').open=true;
 }
 function demoPeople(){
   const view=window.__RETAILNAV__;

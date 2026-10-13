@@ -485,3 +485,48 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .rnReferenceDialog .dialogbody{padding:10px}
  .rnReferenceDialog .dialogfoot{gap:8px;padding:9px 11px}
 }
+
+/* Image-to-vector audit. Black fill is independent of the crisp WHITE border. */
+.rnReferenceDialog .rnCompareFeature{stroke:#fff;stroke-width:2px;fill:#000;
+  vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.rnReferenceDialog #traceOverlay{isolation:isolate}
+.rnReferenceDialog .rnCompareUnitCode{fill:#f9faff;stroke:#0a1627;stroke-width:2.6;
+  paint-order:stroke;font:700 10px system-ui,sans-serif;text-anchor:middle}
+.rnReferenceDialog .rnCompareControls select,.rnAuditPanel select,
+.rnAuditPanel textarea{background:#102b42;border:1px solid #527c90;
+  color:#eafbff;border-radius:8px;padding:8px;font:inherit}
+.rnReferenceDialog .rnCompareControls select{font-size:12px;min-height:34px}
+.rnReferenceDialog .rnCompareControls input[type=range]:disabled{opacity:.4}
+.rnAuditPanel{border-top:1px solid #43667a;padding-top:12px;margin-top:14px}
+.rnAuditPanel h3{font-size:14px;margin:0 0 10px;color:#e9faff}
+.rnAuditPanel h3 span{background:#1d4056;padding:3px 7px;border-radius:16px;
+ font-variant-numeric:tabular-nums;font-size:11px}
+.rnAuditPanel .rnCompareCheckbox{display:flex;gap:8px;align-items:center;
+ font-size:12px}
+.rnAuditPanel p{font-size:11px;color:#bad6e1;line-height:1.4}
+.rnAuditInputs{display:grid;grid-template-columns:minmax(120px,1fr) minmax(190px,1.6fr);
+ gap:10px;align-items:start}
+.rnAuditInputs label{display:flex;flex-direction:column;gap:6px;color:#dceef7;font-size:11px}
+.rnAuditInputs textarea{resize:vertical;min-height:55px}
+.rnAuditButtons{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}
+.rnAuditButtons button,.rnIssueRow button{background:#15415b;color:#f3ffff;
+ border:1px solid #6ca0ad;border-radius:8px;padding:8px 10px;font-size:12px}
+.rnAuditButtons button:disabled{opacity:.4}
+.rnIssueList{max-height:155px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.rnIssueRow{display:flex;align-items:center;justify-content:space-between;gap:10px;
+ border:1px solid #355469;background:#0e2639;border-radius:9px;padding:7px 9px;
+ color:#e2f3f5;font-size:11px;line-height:1.5}
+.rnIssueRow span{overflow-wrap:anywhere}
+.rnIssueRow button{flex:none;padding:6px 8px}
+.rnCompareIssueMarker{fill:#f8c14f;stroke:#172839;stroke-width:2}
+.rnCompareIssueNumber{fill:#182739;font:bold 9px system-ui,sans-serif;
+ text-anchor:middle;dominant-baseline:central}
+.rnCompareTarget{stroke:#ffb73c;stroke-width:3;fill:transparent;stroke-dasharray:5 3;
+ vector-effect:non-scaling-stroke}
+.rnReferenceDialog #compareSvg{cursor:crosshair}
+@media(max-width:570px){
+ .rnAuditInputs{grid-template-columns:1fr}
+ .rnReferenceDialog .rnCompareControls{gap:7px}
+ .rnReferenceDialog .rnCompareControls label{font-size:11px}
+ .rnReferenceDialog .rnCompareControls input[type=range]{width:min(140px,41vw)}
+}

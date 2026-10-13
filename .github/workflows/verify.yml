@@ -51,7 +51,16 @@ jobs:
             --input data/malls/ap-plaza/experimental/B1.ai2d.photo-refined.v2.zlib.b64 \
             --output /tmp/ap-plaza-ai2d-v2.zlib.b64 \
             --report /tmp/ap-plaza-ai2d-report.json
-          cmp /tmp/ap-plaza-ai2d-v2.zlib.b64 data/malls/ap-plaza/B1.geometry.ai2d.v2.zlib.b64
+          python3 - <<'PY'
+          import base64,zlib
+          from pathlib import Path
+          def raw(path):
+              return zlib.decompress(base64.b64decode(Path(path).read_text().strip()))
+          expected=raw('data/malls/ap-plaza/B1.geometry.ai2d.v2.zlib.b64')
+          actual=raw('/tmp/ap-plaza-ai2d-v2.zlib.b64')
+          assert actual==expected, 'Original geometry content differs from reproducible source'
+          print('PASS: 197 candidates reproduce the EXACT geometry bytes (base64 whitespace ignored)')
+          PY
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle

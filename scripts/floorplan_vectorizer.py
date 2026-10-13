@@ -198,6 +198,25 @@ def run():
         if quad is not None:
             q=np.float32([[0,0],[width-1,0],[width-1,height-1],[0,height-1]])
             image=cv2.warpPerspective(image,cv2.getPerspectiveTransform(quad,q),(width,height))
+
+        detected,message=([], "OCR disabled") if args.disable_ocr else scan_unit_codes(image)
+        codes={row["code"]:row for row in detected}
+        for reviewed in code_labels.get(level,[]):
+            token=str(reviewed["code"]).strip().upper()
+            codes[token]={"code":token,"x":float(reviewed["x"]),
+                "y":float(reviewed["y"]),"name":str(reviewed.get("name","")),
+                "source":"manual-from-photograph"}
+        if codes:
+            out_csv=output/(level+"-unit-codes.csv")
+            with out_csv.open("w",encoding="utf-8",newline="") as stream:
+                writer=csv.DictWriter(stream,fieldnames=["code","x","y","name","source"])
+                writer.writeheader()
+                for token in sorted(codes):
+                    data=codes[token]
+                    writer.writerow({name:data.get(name,"") for name in writer.fieldnames})
+        print(level+":",len(codes),"visible candidate store IDs.",message,
+              "Check labels against the source photo before trusting their polygons.")
+
         feats=extract(image,level,args.min_area,args.simplify)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)

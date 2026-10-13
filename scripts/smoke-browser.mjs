@@ -121,6 +121,18 @@ try {
     window.RetailNavPins.getState().visibleIds.includes('mock-ll-01'),
     null,{timeout:14000});
   log('FOCUS_DEMO','Contact list marker focuses '+pinPerson.name+' on LL with a 3D avatar pin.');
+  await page.locator('#friendsBtn').click();
+  await page.locator('#rnLocationDetails summary').click();
+  await page.locator('#rnDemoToggle').uncheck();
+  await page.waitForFunction(()=>window.RetailNavPins.getState().registered===0);
+  assert.equal(await page.locator('#rnDemoFriends').isVisible(),false);
+  assert.equal(await page.locator('#friendsCount').innerText(),'0');
+  await page.locator('#rnDemoToggle').check();
+  await page.waitForFunction(()=>window.RetailNavPins.getState().registered===9);
+  assert.equal(await page.locator('#rnDemoFriends .rnDemoPerson').count(),9);
+  assert.equal(await page.locator('#friendsCount').innerText(),'9');
+  await page.locator('#rnClose').click();
+  log('DEMO_TOGGLE','Disabling demo hides all nine pins and list entries; re-enabling restores both.');
   await page.locator('#showAllFloors').click();
   await page.locator('#friendsBtn').click();
   const panel=page.locator('#peopleDialog');
@@ -242,6 +254,16 @@ try {
   const contact=await guest.evaluate(async()=>(await(await fetch('api/state')).json()).friends[0]);
   assert.equal(contact.position.source,'manual');
   assert.equal(contact.position.floor,'UL');
+  await guest.waitForFunction(()=>window.RetailNavPins.getState().registered>=10);
+  await guest.locator('#friendsBtn').click();
+  const realLocate=guest.locator('#rnFriends .rnMapLocate');
+  assert.equal(await realLocate.isEnabled(),true);
+  await realLocate.click();
+  await guest.waitForFunction(()=>window.__RETAILNAV__.getState().active==='UL');
+  await guest.waitForFunction(id=>window.RetailNavPins.getState().visibleIds.includes(id),
+    firstId,{timeout:14000});
+  assert.equal(await guest.locator('#peopleDialog').isVisible(),false);
+  log('REAL_FRIEND_PIN','Authorized position renders a 3D pin and can be focused through contact list.');
   log('LOCATION','Explicit manual position visible only to linked friend.');
   const blocked=await page.evaluate(async()=>{
     const res=await fetch('api/location',{method:'POST',credentials:'same-origin',
@@ -253,7 +275,9 @@ try {
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
   const vanished=await guest.evaluate(async()=>(await(await fetch('api/state')).json()).friends[0]);
   assert.equal(vanished.position,undefined);
-  log('LOCATION_STOP','Contact no longer receives location.');
+  await guest.waitForFunction(()=>window.RetailNavPins.getState().registered===9);
+  assert.ok(!(await guest.evaluate(id=>window.RetailNavPins.getState().visibleIds.includes(id),firstId)));
+  log('LOCATION_STOP','Contact no longer receives location or its 3D marker.');
 
   // Unlink test pair, leaving no mock friendship in production.
   page.on('dialog',dialog=>dialog.accept());

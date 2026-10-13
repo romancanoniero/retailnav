@@ -6,7 +6,7 @@ const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
 let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
-let scannerTimer=0, demoVisible=true, markers=[], socialStatus='';
+let scannerTimer=0, demoVisible=true, markers=[], socialStatus='', contactsRenderKey='';
 const demoNames=['Sofía','Marcos','Lucía','Nico'];
 const demoLevels=['UL','LL','L3','UL'];
 const demoColors=['#f29abd','#ffd38b','#a6a3ff','#91e0c1'];
@@ -106,7 +106,11 @@ function merge(snapshot){
     const notify=$('rnPendingBadge');notify.hidden=false;
   }
   lastIncoming=pending;
-  renderContacts();
+  const nextContactsKey=JSON.stringify([friends,incoming,outgoing]);
+  if(nextContactsKey!==contactsRenderKey){
+    contactsRenderKey=nextContactsKey;
+    renderContacts();
+  }
   renderMarkers();
 }
 function button(text,callback,variant=''){

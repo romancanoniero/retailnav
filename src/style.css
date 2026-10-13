@@ -192,3 +192,13 @@ dialog.rnSocialDialog::backdrop{background:rgba(3,10,22,.33);backdrop-filter:blu
   .rnSocialDialog .rnFriendsList .rnRowActions{width:auto}
   .rnSocialDialog .rnFriendsList .rnFriendMore{min-width:26px}
 }
+
+
+.rnSocialDialog .rnDirectWrap{margin:9px 0;border:1px solid #567e8e;border-radius:11px;padding:9px;background:#123044}
+.rnSocialDialog .rnDirectWrap p{font-size:11px;line-height:1.5;margin:1px 0 8px;color:#c9e0ea}
+.rnSocialDialog .rnDirectWrap input{width:100%;min-width:0;border:1px solid #4b7586;border-radius:8px;background:#071929;color:#e7f4fc;padding:8px;font-size:10px}
+.rnSocialDialog .rnDirectWrap .rnFlex{gap:6px;margin-bottom:0}
+.rnSocialDialog .rnDirectWrap .rnFlex button{font-size:11px;flex:1;min-height:36px;padding:6px}
+.rnSocialDialog .rnFriendsList .rnRow.rnExpanded{flex-wrap:wrap!important}
+.rnSocialDialog .rnFriendsList .rnRemoveWrap{width:100%;flex:1 0 100%}
+.rnAvatarInitial[hidden]{display:none}

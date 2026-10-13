@@ -10,6 +10,7 @@
 const el=document.getElementById('peoplePinCanvas');
 const ctx=el?.getContext('2d',{alpha:true,desynchronized:true})||null;
 const PI=Math.PI;
+const MAX_PIN_HEIGHT=66; // upper bound in CSS pixels, even at extreme zoom
 let people=[],shown=[],drawn=0,frames=0,viewport={width:0,height:0,dpr:1};
 const pictures=new Map();
 const colorsDefault=()=>window.RETAILNAV_MARKER_PALETTE||{};
@@ -102,19 +103,20 @@ function draw(){
     const pinTop=view.projectWorld(offset(base,0,11.6,0));
     const tip=view.projectWorld(offset(base,0,.5,0));
     if(!pinTop||!tip||pinTop.w<=0||tip.w<=0||pinTop.z>=1||tip.z>=1)continue;
-    if(Math.min(pinTop.x,tip.x)<-95||Math.max(pinTop.x,tip.x)>w+95||
-       Math.min(pinTop.y,tip.y)<-95||Math.max(pinTop.y,tip.y)>h+95)continue;
-    placed.push({person,base,depth:tip.z});
+    if(tip.x<-48||tip.x>w+48||tip.y<-48||tip.y>h+48)continue;
+    const fullHeight=Math.hypot(pinTop.x-tip.x,pinTop.y-tip.y);
+    const scale=Math.min(.67,MAX_PIN_HEIGHT/Math.max(1,fullHeight));
+    placed.push({person,base,depth:tip.z,scale});
   }
   // Painter ordering: far-to-near, with the same world-space vertical levels.
   placed.sort((a,b)=>b.depth-a.depth);
-  for(const {person,base} of placed){
+  for(const {person,base,scale} of placed){
     const rgbc=getPalette(person);
-    const P=(x,y,z=0)=>view.projectWorld(offset(base,x,y,z));
+    const P=(x,y,z=0)=>view.projectWorld(offset(base,x*scale,y*scale,z*scale));
     const shadow=[];
     for(let i=0;i<32;i++){
       const angle=i*PI/16;
-      const world=[base[0]+4.9*Math.cos(angle),base[1]+.13,base[2]+4.1*Math.sin(angle)];
+      const world=[base[0]+4.9*scale*Math.cos(angle),base[1]+.13,base[2]+4.1*scale*Math.sin(angle)];
       shadow.push(view.projectWorld(world));
     }
     if(shadow.every(pt=>pt&&pt.w>0&&pt.z<1)){
@@ -192,10 +194,10 @@ function draw(){
       ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=1.5;ctx.stroke();}
     ctx.restore();
     const tip=P(0,.5,.76);
-    if(tip){
-      // A readable name-tag below the rendered pin, not a replacement for it.
+    if(tip&&(vis.size===1||person.id===window.RetailNavFocusedFriendId)){
+      // Names only when a floor is isolated or the person is explicitly focused.
       const first=person.name.split(' ')[0];
-      const label=first+(person.demo?' · DEMO':'');
+      const label=first; // full DEMO distinction remains visible in the contacts panel
       ctx.save();ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';
       const width=Math.min(108,ctx.measureText(label).width+16);
       const ty=Math.min(h-15,tip.y+12),tx=Math.max(width/2+4,Math.min(w-width/2-4,tip.x));
@@ -213,6 +215,8 @@ window.RetailNavPins={setPeople:updatePeople,draw,getState:()=>({
   registered:people.length,drawn,visibleIds:shown.slice(),frames,
   canvasWidth:el?.width||0,canvasHeight:el?.height||0,
   floors:people.map(p=>p.position.floor),
-  colorPairs:people.map(p=>[p.id,getPalette(p)])
+  colorPairs:people.map(p=>[p.id,getPalette(p)]),
+  photoLoaded:people.filter(p=>pictures.get(p.id+'@'+p.avatarUrl)?.loaded).length,
+  photoErrors:people.filter(p=>pictures.get(p.id+'@'+p.avatarUrl)?.error).length
 })};
 })();

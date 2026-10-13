@@ -6,10 +6,8 @@ const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
 let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
-let scannerTimer=0, demoVisible=true, markers=[], socialStatus='', contactsRenderKey='';
-const demoNames=['Sofía','Marcos','Lucía','Nico'];
-const demoLevels=['UL','LL','L3','UL'];
-const demoColors=['#f29abd','#ffd38b','#a6a3ff','#91e0c1'];
+let scannerTimer=0, demoVisible=true, socialStatus='', contactsRenderKey='';
+const DEMO=window.RETAILNAV_DEMO_CONTACTS||[];
 function element(tag,className,text){
   const el=document.createElement(tag);
   if(className)el.className=className;
@@ -100,7 +98,8 @@ function merge(snapshot){
   $('rnStopLocation').disabled=!myPosition;
   $('rnCreateRecovery').textContent=me.hasRecovery?'Reemplazar clave de recuperación':'Crear clave de recuperación';
   const badge=$('friendsCount');
-  badge.textContent=String(friends.length);
+  badge.textContent=String(friends.length+(demoVisible?DEMO.length:0));
+  $('friendsBtn').title=friends.length+' contactos reales · '+(demoVisible?DEMO.length:0)+' personas DEMO';
   const pending=incoming.map(x=>x.id).sort().join(',');
   if(pending&&lastIncoming&&pending!==lastIncoming&&$('peopleDialog').hidden){
     const notify=$('rnPendingBadge');notify.hidden=false;
@@ -182,68 +181,70 @@ function renderContacts(){
   $('rnPendingBadge').hidden=!incoming.length;
   $('rnRealFriendsCount').textContent=String(friends.length);
   $('rnPendingCount').textContent=String(incoming.length);
+  $('rnDemoFriendsSection').hidden=!demoVisible;
+  $('rnDemoFriendsCount').textContent=String(demoVisible?DEMO.length:0);
+  renderDemoContacts();
   if(incoming.length)$('rnRequestsDetails').open=true;
 }
-function demoPeople(){
-  const view=window.__RETAILNAV__;
-  if(!view||!demoVisible)return [];
-  const result=[];
-  demoNames.forEach((name,i)=>{
-    const floor=view.floors.find(f=>f.id===demoLevels[i]);
-    const corridors=floor?.features.filter(f=>f.k==='corridor'&&f.c&&f.c.length===2)||[];
-    const candidate=corridors[Math.floor(corridors.length*(i+1)/(demoNames.length+1))];
-    if(!candidate)return;
-    const x=candidate.c[0],y=candidate.c[1];
-    result.push({id:'simulation-'+i,name,floor:floor.id,x,y,demo:true,color:demoColors[i]});
-  });
-  return result;
+function renderDemoContacts(){
+  const list=$('rnDemoFriends');
+  if(!list)return;
+  list.replaceChildren();
+  $('rnDemoFriendsCount').textContent=String(demoVisible?DEMO.length:0);
+  $('rnDemoFriendsSection').hidden=!demoVisible;
+  if(!demoVisible)return;
+  for(const person of DEMO){
+    const row=element('div','rnRow rnDemoPerson');
+    row.setAttribute('role','listitem');
+    row.dataset.personId=person.id;
+    row.dataset.floor=person.position.floor;
+    row.style.setProperty('--rn-person-color',person.visual.bodyColor);
+    const avatar=element('span','rnAvatar');
+    const image=element('img');
+    image.src=person.avatarUrl;
+    image.alt='Retrato ficticio de '+person.name;
+    image.loading='lazy';
+    image.width=38;image.height=38;
+    avatar.append(image);
+    const info=element('div','rnPerson');
+    const name=element('strong','',person.name);
+    name.append(element('span','rnDemoTag','DEMO'));
+    info.append(name,element('small','',person.position.floor+' · Ubicación ficticia en el plano'));
+    const buttonLocate=button('📍',()=>{
+      const view=window.__RETAILNAV__;
+      if(!view){status('El mapa 3D todavía se está preparando.',true);return;}
+      view.focusAt(person.position.floor,[person.position.x,person.position.y],105);
+      closePeople();
+      status(person.name+' es un amigo ficticio. Posición de prueba en '+person.position.floor+'.');
+    },'rnMapLocate');
+    buttonLocate.setAttribute('aria-label','Enfocar a '+person.name+' (DEMO) en planta '+person.position.floor);
+    buttonLocate.title='Ver a '+person.name+' (DEMO) en el mapa';
+    const actions=element('div','rnRowActions');actions.append(buttonLocate);
+    row.append(avatar,info,actions);
+    list.append(row);
+  }
 }
 function allPeople(){
-  const real=friends.filter(f=>f.position).map(f=>({
-    id:f.id,name:f.name,floor:f.position.floor,
-    x:f.position.x,y:f.position.y,demo:false,color:'#65e6e0'
+  const actual=friends.filter(f=>f.position).map(f=>({
+    id:f.id,name:f.name,demo:false,
+    position:{...f.position,source:'manual',mallId:'aventura-mall-reference'},
+    avatarUrl:avatarUrl(f.id,f.avatarVersion),
+    visual:{bodyColor:'#65e6e0',shadowColor:'#23647a',rimColor:'#f2ffff'}
   }));
-  if(myPosition)real.push({id:'self',name:'Yo',floor:myPosition.floor,
-    x:myPosition.x,y:myPosition.y,demo:false,self:true,color:'#6de5a8'});
-  return real.concat(demoPeople());
+  if(myPosition)actual.push({
+    id:'self',name:'Yo',demo:false,self:true,
+    position:{...myPosition,source:'manual',mallId:'aventura-mall-reference'},
+    avatarUrl:me?avatarUrl(me.id,me.avatarVersion):'',
+    visual:{bodyColor:'#73f1b3',shadowColor:'#3c9279',rimColor:'#ffffff'}
+  });
+  return actual.concat(demoVisible?DEMO:[]);
 }
 function renderMarkers(){
-  const host=$('peopleOverlay');
-  if(!host)return;
-  host.replaceChildren();markers=[];
-  const view=window.__RETAILNAV__;
-  if(!view)return;
-  for(const person of allPeople()){
-    const pin=element('div','rnMapPin'+(person.demo?' rnDemoPin':''),person.name+(person.demo?' · DEMO':''));
-    pin.style.setProperty('--rnPinColor',person.color);
-    pin.title=person.demo?'Amigo simulado; no corresponde a una persona real':
-      person.self?'Posición indicada por vos; no es GPS':
-        'Posición que tu contacto indicó manualmente; no es GPS';
-    pin.setAttribute('aria-label',pin.title);
-    host.append(pin);markers.push({pin,person});
-  }
-  updateMarkers();
+  // The exact same coordinate records power the contact list and the 3D pins.
+  // The pins render as vector geometry above the real 3D floor, not HTML tags.
+  window.RetailNavPins?.setPeople?.(allPeople());
 }
-function updateMarkers(){
-  const view=window.__RETAILNAV__;
-  if(!view)return;
-  const state=view.getState();
-  const visible=new Set(state.visible);
-  for(const marker of markers){
-    const {person,pin}=marker;
-    if(!visible.has(person.floor)){pin.hidden=true;continue;}
-    const screen=view.project(person.floor,[person.x,person.y]);
-    const w=window.innerWidth, h=window.innerHeight;
-    const shown=screen&&screen.w>0&&screen.z<1&&
-      screen.x>20&&screen.x<Math.max(40,view.viewportWidth?view.viewportWidth():w)&&
-      screen.y>65&&screen.y<h;
-    pin.hidden=!shown;
-    if(shown){
-      pin.style.left=screen.x+'px';
-      pin.style.top=screen.y+'px';
-    }
-  }
-}
+function updateMarkers(){window.RetailNavPins?.draw?.();}
 function positionPeople(){
   const trigger=$('friendsBtn');
   const panel=$('peopleDialog');
@@ -579,8 +580,11 @@ function bind(){
   });
   $('rnDemoToggle').addEventListener('change',e=>{
     demoVisible=e.target.checked;
+    renderDemoContacts();
+    $('friendsCount').textContent=String(friends.length+(demoVisible?DEMO.length:0));
+    $('friendsBtn').title=friends.length+' contactos reales · '+(demoVisible?DEMO.length:0)+' personas DEMO';
     renderMarkers();
-    status(demoVisible?'Los personajes son simulados, no visitantes reales.':'Personajes simulados ocultos.');
+    status(demoVisible?'Hay '+DEMO.length+' amigos ficticios de prueba distribuidos en LL, UL y L3.':'Amigos DEMO ocultos del mapa y la lista.');
   });
   $('rnCreateRecovery').addEventListener('click',async()=>{
     if(!confirm('Se creará una clave nueva. Cualquier clave anterior dejará de funcionar. ¿Continuar?'))return;
@@ -636,8 +640,14 @@ function bind(){
   },4500);
 }
 bind();
+renderDemoContacts();
+renderMarkers();
+$('friendsCount').textContent=String(DEMO.length);
 boot();
 window.RetailNavSocial={updateMarkers,renderMarkers,getState:()=>({
-  anonymous:!!me,friendCount:friends.length,incoming:incoming.length,
-  demoVisible,myPosition,ready,markerCount:markers.length})};
+  anonymous:!!me,friendCount:friends.length,demoFriendCount:DEMO.length,
+  demoFloors:DEMO.map(p=>p.position.floor),incoming:incoming.length,
+  demoVisible,myPosition,ready,markerCount:window.RetailNavPins?.getState().registered||0,
+  drawnPinCount:window.RetailNavPins?.getState().drawn||0
+})};
 })();

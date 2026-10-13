@@ -446,11 +446,38 @@ try {
   const districts=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
   assert.equal(districts.count,8,'District titles from the photographed floor plan must be preserved');
   if(apStatus.viewer.renderer==='WebGL'){
-    await apPage.waitForFunction(()=>window.RetailNavDistricts.getState().mode==='fixed-to-world-horizontal-3d',
+    await apPage.waitForFunction(()=>window.RetailNavDistricts.getState().mode==='floating-solid-district-3d',
       null,{timeout:20000});
     const district3D=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
-    assert.ok(district3D.rendered>=6,'Commercial-zone labels must be drawn in actual map 3D');
-    assert.equal(district3D.cameraFacing,false,'District labels rotate with the map');
+    assert.ok(district3D.rendered>=6,'All visible commercial-area names must render in 3D');
+    assert.equal(district3D.cameraFacing,false,'Floating area names rotate with the actual map, never face the screen');
+    assert.equal(district3D.tiedToFloor,true,'Each title must use its own selected floor base elevation');
+    assert.equal(district3D.hasPhysicalSides,true,'Floating plaques need true 3D sides');
+    assert.equal(district3D.hasBottomFace,true,'A 3D plaque needs a visible underside');
+    assert.ok(district3D.floorClearance>=5,'Areas must float clearly above tallest mall roofs');
+    assert.ok(district3D.panelThickness>=.4,'Floating area labels need visible physical thickness');
+    assert.ok(district3D.triangles>=district3D.rendered*14,
+      '3D area signs include upper surfaces, lower surfaces, sidewalls and shadows');
+    assert.equal(district3D.positions.length,district3D.rendered);
+    assert.ok(district3D.positions.every(p=>
+      p.floor==='B1' && p.airGap>=5 &&
+      Math.abs(p.bottomY-p.floorY-2.2-p.airGap)<.001),
+      'District labels must be suspended relative to B1 instead of a global screen layer');
+    const perspective=await apPage.evaluate(()=>{
+      const district=window.RetailNavDistricts.getState().positions[0];
+      const view=window.__RETAILNAV__;
+      const roof=view.projectWorld([district.center[0],district.floorY+2.2,district.center[2]]);
+      const floating=view.projectWorld(district.center);
+      return {roof,floating};
+    });
+    assert.ok(Math.hypot(
+      perspective.roof.x-perspective.floating.x,
+      perspective.roof.y-perspective.floating.y)>3,
+      'Area name must have a visible gap above the actual mall roof in the 3D camera');
+    log('FLOATING_DISTRICTS',{
+      shown:district3D.rendered,clearance:district3D.floorClearance,
+      thickness:district3D.panelThickness,triangles:district3D.triangles
+    });
   }
   await apPage.locator('#search').fill('Electronic Digital City');
   assert.ok(await apPage.locator('#results .rnDistrictResult').count()>=1);

@@ -11,21 +11,22 @@ Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos 
 - Un dedo orbita; dos dedos desplazan, amplían y **giran mediante torsión**, incluso dejando un dedo fijo.
 - Etiquetas, búsqueda de tiendas ancla, ruta ilustrativa sobre pasillos trazados, comparación con fuente y exportación GLB.
 - Cuatro amigos **DEMO** ficticios sobre plantas diferentes, identificados claramente. Se pueden ocultar.
-- Renderizado WebGL con alternativa 3D Canvas. QR generado localmente, sin dependencia de CDN.
+- Renderizado WebGL con alternativa 3D Canvas. Generación y lectura de códigos QR locales, **sin dependencia de CDN**, incluso en Safari sin BarcodeDetector.
 
 ## Visitantes sin registro obligatorio
 
 La primera vez que un visitante abre RetailNav, el servidor crea una **identidad anónima aleatoria**. La sesión se conserva mediante una cookie segura, HttpOnly y SameSite=Lax. **No se identifica por IP, huella digital del dispositivo ni GPS**.
 
-En **Mis amigos** se puede:
+Al tocar el botón de amigos aparece un **popup compacto por encima del plano**. Su contenido está dividido por líneas horizontales: primero el perfil, luego las invitaciones y amigos, y finalmente solicitudes, ubicación y recuperación plegables.
 
-1. Cambiar el nombre visible sin registrarse.
-2. Mostrar un **QR temporal de 5 minutos y un solo uso**; el otro visitante lo escanea con la cámara del teléfono, abre el enlace y confirma una solicitud.
-3. Aceptar o rechazar la solicitud desde el primer teléfono. Solo **ambos consentimientos** producen el vínculo recíproco.
-4. Recuperar automáticamente los contactos al cerrar y volver a abrir el mismo navegador.
-5. Opcionalmente generar una **clave de recuperación de un solo uso** para trasladar la identidad a otro navegador o recuperarla después de borrar Safari.
-6. Desvincular contactos en ambos sentidos.
-7. **Eliminar mi identidad y contactos**, revocando las sesiones y borrando los datos correspondientes del servidor.
+1. **Perfil:** cambiar el nombre visible y elegir foto de la galería o tomarla con la cámara. El ID interno permanece inalterable. Las fotos se reducen a JPEG antes de subirlas, se guardan fuera del directorio público y solo el usuario y sus amigos pueden consultarlas.
+2. **Mi QR:** al pulsar el icono del perfil se genera un QR temporal de cinco minutos y un solo uso. El invitado lo escanea en la web o con la Cámara de Safari, solicita el vínculo y quien mostró el QR lo confirma.
+3. **Invitar por link:** quien genera el enlace **autoriza previamente** esa invitación; cuando el destinatario abre el enlace de mensajería y pulsa «Agregar a mis amigos», se añaden **recíprocamente** de inmediato. El enlace vence a los treinta minutos, es de un solo uso y debe enviarse solo a personas conocidas. Abrirlo sin aceptarlo no añade contactos.
+4. **Mis amigos:** lista con foto o inicial, nombre y botón de marcador para enfocarlo en la planta compartida. Si la ubicación está oculta, el marcador no permite buscarla. Un menú discreto permite desvincular.
+5. Volver a entrar en el mismo navegador restaura la identidad y los vínculos. Una **clave de recuperación voluntaria** permite volver a acceder tras borrar Safari o cambiar de teléfono.
+6. **Eliminar mi identidad y contactos** revoca las sesiones, elimina los vínculos recíprocos y borra también la foto privada del servidor.
+
+Los enlaces de invitación usan fragmentos URL (no se envían automáticamente en la solicitud web), códigos aleatorios resistentes a adivinación y validación del consentimiento.
 
 **Limitación de recuperación:** si Safari borra la cookie, se usa navegación privada o se cambia de teléfono *sin una clave de recuperación guardada*, la identidad anónima anterior no podrá recuperarse. Los contactos quedan en el servidor, pero no son accesibles desde la identidad nueva.
 
@@ -45,7 +46,7 @@ En **Mis amigos** se puede:
 | Visor estático | HTML/JS/WebGL + Nginx | `/retailnav/` |
 | Contactos anónimos | Node 22, HTTP JSON y cookie HttpOnly | `/retailnav/api/` |
 | Publicación | Docker Compose aislado en red `edge` + Traefik | `deploy/` |
-| Persistencia | JSON privado, escritura atómica, fuera de releases | `/home/iankmp/retailnav-host/state/` |
+| Persistencia | JSON privado y avatares JPEG protegidos, fuera de releases | `/home/iankmp/retailnav-host/state/` |
 
 No se alteran las aplicaciones existentes de Improving Your Reality. El backend social no publica puertos directamente; solo Traefik expone su prefijo de API. Los nuevos despliegues **no borran** la identidad ni los contactos guardados.
 

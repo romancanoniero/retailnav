@@ -43,6 +43,39 @@ assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
 ap_geometry = ap["floors"][0][3]
 assert len(ap_geometry) >= 40
 assert len(ap_geometry) == 190, "Detailed map should retain 190 separated colour components"
+
+# The AP Plaza v3 geometry comes from 1440x620 original reference. All stable
+# identifiers stay intact while facade curvature uses more short segments.
+source_manifest=json.loads(Path("data/malls/ap-plaza/mall.json").read_text(encoding="utf8"))
+floor_manifest=source_manifest["floors"][0]
+assert floor_manifest["geometry"] == "B1.geometry.v3.zlib.b64"
+assert source_manifest["navigable"] is False
+curve=source_manifest["curveRefinement"]
+assert curve["version"] == 3
+assert curve["originalPolygonCount"] == curve["newPolygonCount"] == 190
+assert curve["originalVertices"] == 968
+assert curve["refinedVertices"] > 1950
+assert curve["unresolvedRegions"] >= 1 and curve["requiresHumanReview"] is True
+assert curve["aiVisualReview"].startswith("not-executed")
+assert sum(len(feature[3])//2 for feature in ap_geometry) == curve["refinedVertices"]
+assert source_manifest["floorReferences"]["B1"]["rasterSize"] == [1440,620]
+assert source_manifest["floorReferences"]["B1"]["sourceSha256"] == curve["sourceSHA256"]
+assert source_manifest["floorReferences"]["B1"]["quality"] == "full-resolution"
+import zlib,base64
+original_data=json.loads(zlib.decompress(base64.b64decode(
+    Path("data/malls/ap-plaza/B1.geometry.v2.zlib.b64").read_text(encoding="ascii").strip()
+)))
+assert [f[0] for f in ap_geometry] == [f[0] for f in original_data]
+assert {f[2] for f in ap_geometry if f[2] and f[2].strip()} >= set()
+review=json.loads(Path("data/malls/ap-plaza/B1.curves-v3-review.json").read_text(encoding="utf8"))
+assert review["featuresBefore"] == review["featuresAfter"] == 190
+assert review["verticesBefore"] == 968
+assert review["verticesAfter"] == curve["refinedVertices"]
+assert review["unresolvedRegions"] == curve["unresolvedRegions"]
+assert review["qa"] == "provisional-human-review-required"
+assert review["aiReview"].startswith("not-executed")
+assert len(review["regions"]) == 190
+
 units = ap["units"]
 assert len(units) >= 80, "Read all legible printed store identifiers as indexed labels"
 assert {"A-01", "A-12", "K1-31", "K2-19"}.issubset({u["code"] for u in units})

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """RetailNav image-to-vector import: provisional, reviewable colored floor plans.
 
-pip install opencv-python-headless numpy
+pip install opencv-python-headless numpy 'shapely>=2.1'
 python3 scripts/floorplan_vectorizer.py --mall another-mall --name "Another Mall" \
   --floor B1=/path/floor1.jpg --floor B2=/path/floor2.jpg --out data/malls/another-mall
 Photographed map boards often need --corners "TLx,TLy;TRx,TRy;BRx,BRy;BLx,BLy".
@@ -19,8 +19,11 @@ import csv
 import hashlib
 from unit_index import inside
 from unit_ocr import scan as scan_unit_codes
+from refine_curved_floor import triangulate_clean
+from ai_floor_review import image_tiles, request_ai, normalize_tile_proposals
 import json
 import math
+import os
 import re
 import zlib
 from pathlib import Path
@@ -72,26 +75,36 @@ def triangles_from_polygon(points):
 
 
 def feature(fid, kind, name, contour, tolerance):
-    pts=cv2.approxPolyDP(contour,tolerance*cv2.arcLength(contour,True),True)[:,0,:]
-    pts=np.rint(pts.astype(float)*2).astype("int32")
-    if len(pts)<3:
+    """Use pixel-error curve fidelity; NEVER replace a failed concave wall with a convex hull.
+
+    Deliberately retain many short edges on curved shopfronts so both the
+    2D comparison and triangulated 3D model follow the photograph.
+    """
+    tolerance=float(tolerance)
+    if not .4 <= tolerance <= 4:
+        raise ValueError("Storefront approximation tolerance must be 0.4..4 image pixels")
+    traced=None
+    for epsilon in (tolerance,tolerance*1.2,tolerance*1.5,tolerance*1.9):
+        points=cv2.approxPolyDP(contour,epsilon,True)[:,0,:]
+        traced=triangulate_clean(points)
+        if traced is not None:
+            break
+    if traced is None:
+        # Skipping one unresolvable region is safer than inventing a wall by
+        # taking its convex hull. The QA report will flag unresolved polygons.
         return None
-    tris=triangles_from_polygon(pts)
-    if not tris:
-        pts=cv2.convexHull(pts)[:,0,:]
-        tris=triangles_from_polygon(pts)
-    if not tris:
-        return None
+    vertices,triangles=traced
     delta=[]
     x=y=0
-    for px,py in pts:
-        delta.extend([int(px)-x,int(py)-y])
-        x,y=int(px),int(py)
-    m=cv2.moments(contour)
-    center=[round(m["m10"]/m["m00"],1),round(m["m01"]/m["m00"],1)] if m["m00"] else [0,0]
-    return [fid,kind,name,delta,[list(range(len(pts)))],tris,center]
-
-
+    for px,py in vertices:
+        nx,ny=int(px)*2,int(py)*2
+        delta.extend([nx-x,ny-y]);x,y=nx,ny
+    moments=cv2.moments(contour)
+    center=([round(moments["m10"]/moments["m00"],1),
+             round(moments["m01"]/moments["m00"],1)]
+            if moments["m00"] else [0,0])
+    return [fid,kind,name,delta,[list(range(len(vertices)))],
+            triangles,center]
 
 def grayscale_evidence(image):
     """Fuse three independent readings of walls without calling any verified.
@@ -217,7 +230,7 @@ def apply_reviewed_walls(mask, image, walls):
     return applied
 
 
-def extract(image, level, area=28, tolerance=.031, reviewed_walls=(),
+def extract(image, level, area=28, tolerance=1.25, reviewed_walls=(),
             mode="hybrid", evidence=None):
     """Color regions split by dark dividers confirmed across gray and B/W.
 
@@ -381,11 +394,22 @@ def run():
     p.add_argument("--wall-min-length",type=int,default=14,help="Minimum image-pixel length of independent unreviewed wall candidates")
     p.add_argument("--segmentation",choices=["hybrid","color"],default="hybrid",help="Combine local grayscale/BW and original color (or older color-only borders)")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
+    p.add_argument("--ai-review",action="store_true",
+                   help="OPT-IN: send cropped image sectors to OpenAI visual model for unverified proposals (requires OPENAI_API_KEY); never changes polygon geometry")
+    p.add_argument("--ai-model",default="gpt-4.1-mini",
+                   help="OpenAI vision model for opt-in suggestions")
+    p.add_argument("--ai-max-tiles",type=int,default=12,
+                   help="Maximum image sectors sent to the AI API, each may incur cost")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
-    p.add_argument("--simplify",type=float,default=.031)
+    p.add_argument("--simplify",type=float,default=1.25,
+                   help="Maximum curve approximation deviation in PHOTO pixels (0.4 to 4); former perimeter-relative .031 is no longer used")
     p.add_argument("--gps",help="Optional mall-level geographic anchor: latitude,longitude")
     args=p.parse_args()
+    if args.ai_review and not os.getenv("OPENAI_API_KEY"):
+        p.error("--ai-review explicitly requires OPENAI_API_KEY; no photograph has been sent")
+    if not 1<=args.ai_max_tiles<=40:
+        p.error("--ai-max-tiles must be between 1 and 40")
     if not re.fullmatch(r"[a-z][a-z0-9-]{1,48}",args.mall):
         p.error("Mall ID must be a lowercase slug")
     width,height=map(int,args.size.lower().split("x"))
@@ -399,6 +423,8 @@ def run():
     district_labels=json.loads(Path(args.districts).read_text(encoding="utf-8")) if args.districts else {}
     poi_labels=json.loads(Path(args.pois).read_text(encoding="utf-8")) if args.pois else {}
     reviewed_walls=json.loads(Path(args.reviewed_walls).read_text(encoding="utf-8")) if args.reviewed_walls else {}
+    if not .4 <= args.simplify <= 4:
+        p.error("--simplify is now specified in IMAGE PIXELS; use 1.25 for fine shop curves")
     if args.wall_min_length < 8 or args.wall_min_length > 150:
         p.error("--wall-min-length must be between 8 and 150 pixels")
     manifest={
@@ -424,6 +450,32 @@ def run():
         if quad is not None:
             q=np.float32([[0,0],[width-1,0],[width-1,height-1],[0,height-1]])
             image=cv2.warpPerspective(image,cv2.getPerspectiveTransform(quad,q),(width,height))
+
+        # Optional image understanding is separate from geometry calculations.
+        # Text/logos can look like shop walls; AI has NO authority to alter a
+        # floor without manual pixel-level review and documented acceptance.
+        ai_status="not-run"
+        if args.ai_review:
+            proposals={"schema":"retailnav.ai-plan-suggestions.v1",
+                 "status":"unverified","geometryChangesApplied":False,
+                 "floor":level,"model":args.ai_model,
+                 "sourceSHA256":original_sha,"tiles":[],"segments":[],"labels":[]}
+            for index,(tile_x,tile_y,tile) in enumerate(
+                    image_tiles(image,max_tiles=args.ai_max_tiles)):
+                raw=request_ai(tile,os.environ["OPENAI_API_KEY"],args.ai_model)
+                checked=normalize_tile_proposals(
+                    raw,tile_x,tile_y,tile.shape[1],tile.shape[0])
+                proposals["segments"].extend(checked["segments"])
+                proposals["labels"].extend(checked["labels"])
+                proposals["tiles"].append({
+                    "tileIndex":index,"x":tile_x,"y":tile_y,
+                    "width":tile.shape[1],"height":tile.shape[0],
+                    "quality":raw.get("tileQuality"),
+                    "status":"manual-review-required"})
+            (output/(level+"-ai-suggestions.json")).write_text(
+                json.dumps(proposals,ensure_ascii=False,indent=2)+"\n",
+                encoding="utf-8")
+            ai_status="unverified-suggestions-only"
 
         # Save a synchronized reference image for EVERY imported floor.
         # Compress for mobile display without claiming the original scan's
@@ -603,6 +655,8 @@ def run():
             "lowBoundarySupport":alignment["lowSupportCount"],
             "meanBoundarySupport":alignment["averageBoundarySupport"],
             "automaticChecksPassed":False,
+            "aiReviewStatus":ai_status,
+            "aiProposalsAppliedToGeometry":False,
             "exactPerStoreGeometryVerified":False,
             "navigable":False})
         print(level+": "+str(len(feats))+" provisional polygons, "+

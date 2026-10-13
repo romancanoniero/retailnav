@@ -1,0 +1,1692 @@
+{
+  "schema": "retailnav.curve-refinement-review.v1",
+  "sourceSHA256": "29b0ce60fbcb243a04eba48270659e12930c64c5bb3e9d3f25528ea823cbae48",
+  "geometrySHA256": "8eaff1a999fd478cb83a27d0f12940baf091f916be2a26caf5fb15e08dbe534c",
+  "featuresBefore": 190,
+  "featuresAfter": 190,
+  "verticesBefore": 968,
+  "verticesAfter": 2023,
+  "curvedRegionsEnriched": 62,
+  "unresolvedRegions": 10,
+  "qa": "provisional-human-review-required",
+  "aiReview": "not-executed-by-this-geometric-step",
+  "regions": [
+    {
+      "id": "B1-0001",
+      "status": "triangulation-uncertain"
+    },
+    {
+      "id": "B1-0002",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 95,
+      "iou": 0.701,
+      "areaRatio": 1.382,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0003",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 54,
+      "iou": 0.739,
+      "areaRatio": 1.087,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0004",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 76,
+      "iou": 0.723,
+      "areaRatio": 1.288,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0005",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 30,
+      "iou": 0.969,
+      "areaRatio": 0.994,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0006",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 94,
+      "iou": 0.697,
+      "areaRatio": 1.092,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0007",
+      "status": "photo-mismatch",
+      "iou": 0.35,
+      "areaRatio": 1.618
+    },
+    {
+      "id": "B1-0008",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 108,
+      "iou": 0.668,
+      "areaRatio": 0.908,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0009",
+      "status": "photo-mismatch",
+      "iou": 0.562,
+      "areaRatio": 0.955
+    },
+    {
+      "id": "B1-0010",
+      "status": "refined-provisionally",
+      "oldVertices": 10,
+      "newVertices": 36,
+      "iou": 0.746,
+      "areaRatio": 1.014,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0011",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 33,
+      "iou": 0.774,
+      "areaRatio": 1.269,
+      "maxCurveErrorPx": 1.5
+    },
+    {
+      "id": "B1-0012",
+      "status": "photo-mismatch",
+      "iou": 0.445,
+      "areaRatio": 1.201
+    },
+    {
+      "id": "B1-0013",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 19,
+      "iou": 0.95,
+      "areaRatio": 0.955,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0014",
+      "status": "refined-provisionally",
+      "oldVertices": 12,
+      "newVertices": 32,
+      "iou": 0.827,
+      "areaRatio": 1.043,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0015",
+      "status": "refined-provisionally",
+      "oldVertices": 10,
+      "newVertices": 35,
+      "iou": 0.93,
+      "areaRatio": 0.976,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0016",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 19,
+      "iou": 0.945,
+      "areaRatio": 1.046,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0017",
+      "status": "photo-mismatch",
+      "iou": 0.642,
+      "areaRatio": 0.654
+    },
+    {
+      "id": "B1-0018",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 35,
+      "iou": 0.838,
+      "areaRatio": 1.086,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0019",
+      "status": "refined-provisionally",
+      "oldVertices": 3,
+      "newVertices": 25,
+      "iou": 0.891,
+      "areaRatio": 1.016,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0020",
+      "status": "refined-provisionally",
+      "oldVertices": 10,
+      "newVertices": 22,
+      "iou": 0.923,
+      "areaRatio": 1.014,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0021",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.876,
+      "areaRatio": 1.037,
+      "maxCurveErrorPx": 1.875
+    },
+    {
+      "id": "B1-0022",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 19,
+      "iou": 0.95,
+      "areaRatio": 0.964,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0023",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.982,
+      "areaRatio": 1.02,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0024",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.993,
+      "areaRatio": 0.997,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0025",
+      "status": "refined-provisionally",
+      "oldVertices": 12,
+      "newVertices": 18,
+      "iou": 0.96,
+      "areaRatio": 0.965,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0026",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 27,
+      "iou": 0.878,
+      "areaRatio": 0.997,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0027",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.966,
+      "areaRatio": 1.016,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0028",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 12,
+      "iou": 0.979,
+      "areaRatio": 0.992,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0029",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 15,
+      "iou": 0.85,
+      "areaRatio": 1.146,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0030",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 18,
+      "iou": 0.688,
+      "areaRatio": 0.743,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0031",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 10,
+      "iou": 0.806,
+      "areaRatio": 1.104,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0032",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 20,
+      "iou": 0.837,
+      "areaRatio": 1.048,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0033",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0034",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0035",
+      "status": "photo-mismatch",
+      "iou": 0.572,
+      "areaRatio": 0.687
+    },
+    {
+      "id": "B1-0036",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 13,
+      "iou": 0.971,
+      "areaRatio": 0.986,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0037",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 9,
+      "iou": 0.944,
+      "areaRatio": 0.938,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0038",
+      "status": "refined-provisionally",
+      "oldVertices": 8,
+      "newVertices": 15,
+      "iou": 0.892,
+      "areaRatio": 1.098,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0039",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0040",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.924,
+      "areaRatio": 1.088,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0041",
+      "status": "refined-provisionally",
+      "oldVertices": 8,
+      "newVertices": 10,
+      "iou": 0.954,
+      "areaRatio": 0.962,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0042",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0043",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 9,
+      "iou": 0.933,
+      "areaRatio": 1.066,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0044",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.96,
+      "areaRatio": 1.04,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0045",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0046",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 8,
+      "iou": 0.978,
+      "areaRatio": 0.977,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0047",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.855,
+      "areaRatio": 1.13,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0048",
+      "status": "refined-provisionally",
+      "oldVertices": 8,
+      "newVertices": 14,
+      "iou": 0.944,
+      "areaRatio": 0.998,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0049",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 6,
+      "iou": 0.967,
+      "areaRatio": 1.035,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0050",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0051",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0052",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 17,
+      "iou": 0.848,
+      "areaRatio": 1.102,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0053",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 11,
+      "iou": 0.949,
+      "areaRatio": 1.028,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0054",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 10,
+      "iou": 0.933,
+      "areaRatio": 0.945,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0055",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.955,
+      "areaRatio": 1.027,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0056",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 14,
+      "iou": 0.93,
+      "areaRatio": 0.934,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0057",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0058",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.996,
+      "areaRatio": 1.003,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0059",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 19,
+      "iou": 0.835,
+      "areaRatio": 0.899,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0060",
+      "status": "refined-provisionally",
+      "oldVertices": 8,
+      "newVertices": 12,
+      "iou": 0.943,
+      "areaRatio": 0.978,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0061",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.986,
+      "areaRatio": 0.995,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0062",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0063",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.991,
+      "areaRatio": 0.988,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0064",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 16,
+      "iou": 0.828,
+      "areaRatio": 1.105,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0065",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0066",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.985,
+      "areaRatio": 1.004,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0067",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.947,
+      "areaRatio": 0.989,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0068",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.932,
+      "areaRatio": 0.945,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0069",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0070",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 11,
+      "iou": 0.971,
+      "areaRatio": 0.984,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0071",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0072",
+      "status": "refined-provisionally",
+      "oldVertices": 8,
+      "newVertices": 11,
+      "iou": 0.933,
+      "areaRatio": 1.046,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0073",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0074",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0075",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 15,
+      "iou": 0.931,
+      "areaRatio": 0.993,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0076",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0077",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.974,
+      "areaRatio": 1.027,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0078",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.981,
+      "areaRatio": 0.991,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0079",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0080",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0081",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0082",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0083",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.978,
+      "areaRatio": 0.975,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0084",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0085",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 6,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0086",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0087",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.986,
+      "areaRatio": 1.003,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0088",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 10,
+      "iou": 0.995,
+      "areaRatio": 0.991,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0089",
+      "status": "photo-mismatch",
+      "iou": 0.473,
+      "areaRatio": 0.488
+    },
+    {
+      "id": "B1-0090",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 9,
+      "iou": 0.948,
+      "areaRatio": 0.977,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0091",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.98,
+      "areaRatio": 1.022,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0092",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 8,
+      "iou": 0.964,
+      "areaRatio": 1.039,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0093",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 17,
+      "iou": 0.838,
+      "areaRatio": 0.878,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0094",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0095",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 9,
+      "iou": 0.977,
+      "areaRatio": 0.99,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0096",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 11,
+      "iou": 0.929,
+      "areaRatio": 0.939,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0097",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 10,
+      "iou": 0.994,
+      "areaRatio": 1.002,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0098",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0099",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.994,
+      "areaRatio": 1.004,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0100",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0101",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.985,
+      "areaRatio": 1.011,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0102",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 8,
+      "iou": 0.967,
+      "areaRatio": 0.961,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0103",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0104",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 9,
+      "iou": 0.974,
+      "areaRatio": 0.995,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0105",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 12,
+      "iou": 0.933,
+      "areaRatio": 1.052,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0106",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 10,
+      "iou": 0.961,
+      "areaRatio": 0.956,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0107",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.938,
+      "areaRatio": 1.069,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0108",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0109",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0110",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.936,
+      "areaRatio": 1.074,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0111",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.952,
+      "areaRatio": 0.949,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0112",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.909,
+      "areaRatio": 1.084,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0113",      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0114",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0115",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.996,
+      "areaRatio": 1.003,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0116",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 9,
+      "iou": 0.941,
+      "areaRatio": 0.957,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0117",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0118",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 6,
+      "iou": 0.969,
+      "areaRatio": 0.966,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0119",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.93,
+      "areaRatio": 1.022,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0120",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0121",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 10,
+      "iou": 0.99,
+      "areaRatio": 1.007,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0122",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.956,
+      "areaRatio": 0.949,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0123",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.977,
+      "areaRatio": 0.975,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0124",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0125",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.976,
+      "areaRatio": 1.027,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0126",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.93,
+      "areaRatio": 1.012,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0127",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.983,
+      "areaRatio": 0.982,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0128",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.986,
+      "areaRatio": 1.005,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0129",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.958,
+      "areaRatio": 0.953,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0130",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 7,
+      "iou": 0.962,
+      "areaRatio": 1.001,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0131",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0132",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 9,
+      "iou": 0.959,
+      "areaRatio": 1.011,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0133",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0134",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 17,
+      "iou": 0.946,
+      "areaRatio": 1.006,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0135",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0136",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0137",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0138",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0139",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 5,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0140",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0141",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0142",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0143",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0144",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0145",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 8,
+      "iou": 0.986,
+      "areaRatio": 0.977,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0146",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 7,
+      "iou": 0.964,
+      "areaRatio": 1.04,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0147",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0148",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0149",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0150",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 20,
+      "iou": 0.81,
+      "areaRatio": 1.098,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0151",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.973,
+      "areaRatio": 1.028,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0152",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0153",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 7,
+      "iou": 0.991,
+      "areaRatio": 0.989,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0154",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0155",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 9,
+      "iou": 0.975,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0156",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 13,
+      "iou": 0.955,
+      "areaRatio": 0.994,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0157",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 13,
+      "iou": 0.931,
+      "areaRatio": 0.964,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0158",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 8,
+      "iou": 0.951,
+      "areaRatio": 1.047,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0159",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.976,
+      "areaRatio": 1.011,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0160",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 5,
+      "iou": 0.964,
+      "areaRatio": 0.961,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0161",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 12,
+      "iou": 0.907,
+      "areaRatio": 0.991,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0162",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 7,
+      "iou": 0.971,
+      "areaRatio": 0.992,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0163",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0164",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 9,
+      "iou": 0.941,
+      "areaRatio": 1.027,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0165",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0166",
+      "status": "photo-mismatch",
+      "iou": 0.634,
+      "areaRatio": 0.657
+    },
+    {
+      "id": "B1-0167",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.911,
+      "areaRatio": 1.113,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0168",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 8,
+      "iou": 0.947,
+      "areaRatio": 0.928,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0169",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0170",
+      "status": "refined-provisionally",
+      "oldVertices": 9,
+      "newVertices": 15,
+      "iou": 0.782,
+      "areaRatio": 1.018,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0171",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 8,
+      "iou": 0.978,
+      "areaRatio": 0.959,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0172",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 11,
+      "iou": 0.881,
+      "areaRatio": 1.017,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0173",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0174",
+      "status": "refined-provisionally",
+      "oldVertices": 5,
+      "newVertices": 11,
+      "iou": 0.837,
+      "areaRatio": 0.933,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0175",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 6,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0176",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0177",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 6,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0178",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 6,
+      "iou": 0.969,
+      "areaRatio": 1.035,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0179",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0180",
+      "status": "refined-provisionally",
+      "oldVertices": 3,
+      "newVertices": 3,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0181",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 9,
+      "iou": 0.89,
+      "areaRatio": 0.798,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0182",
+      "status": "photo-mismatch",
+      "iou": 0.451,
+      "areaRatio": 0.46
+    },
+    {
+      "id": "B1-0183",
+      "status": "refined-provisionally",
+      "oldVertices": 3,
+      "newVertices": 3,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0184",
+      "status": "photo-mismatch",
+      "iou": 0.718,
+      "areaRatio": 0.481
+    },
+    {
+      "id": "B1-0185",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0186",
+      "status": "refined-provisionally",
+      "oldVertices": 7,
+      "newVertices": 5,
+      "iou": 0.857,
+      "areaRatio": 1.255,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0187",
+      "status": "refined-provisionally",
+      "oldVertices": 4,
+      "newVertices": 4,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0188",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 4,
+      "iou": 0.917,
+      "areaRatio": 0.87,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0189",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 6,
+      "iou": 1.0,
+      "areaRatio": 1.0,
+      "maxCurveErrorPx": 1.25
+    },
+    {
+      "id": "B1-0190",
+      "status": "refined-provisionally",
+      "oldVertices": 6,
+      "newVertices": 5,
+      "iou": 0.941,
+      "areaRatio": 1.135,
+      "maxCurveErrorPx": 1.25
+    }
+  ]
+}

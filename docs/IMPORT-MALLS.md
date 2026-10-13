@@ -173,3 +173,71 @@ polígono aproximado y descripción. Los datos se guardan localmente en el
 navegador, vinculados a la versión geométrica; no se envían al servidor.
 \`Exportar informe JSON\` sirve para entregar las observaciones a un revisor.
 Una planta no se certifica por el mero hecho de haber ejecutado el proceso.
+
+
+## AP Plaza B1 v3: curvas, fotografía íntegra e IA opcional
+
+La versión **B1.geometry.v3.zlib.b64** se reconstruyó contra una
+fotografía rectificada de **1440 × 620** píxeles, no contra la vista
+reducida de 400 × 172. Conserva 190 identificadores de región y sus
+códigos impresos; pasa de 968 a 2023 vértices para reproducir curvas
+mediante segmentos más finos en WebGL.
+
+**Diez regiones** no superaron la comprobación de coincidencia con los
+píxeles y mantienen su contorno anterior. Permanecen sin aprobar:
+\`vectorizado-provisional\` y \`navigable: false\`. El archivo
+\`B1.curves-v3-review.json\` identifica cada propuesta o anomalía.
+\`floorReferences.B1\` registra la fotografía de 1440 × 620 para la
+comparación negro/blanco con zoom hasta 800 %.
+
+### Importación con curvas reales de plano
+
+\`scripts/floorplan_vectorizer.py\` utiliza ahora
+**1,25 píxeles de desviación máxima de contorno**, no el antiguo 3,1 %
+del perímetro, que aplanaba fachadas curvas y arcos cortos.
+El parámetro \`--simplify\` acepta de 0,4 a 4 píxeles.
+El módulo triangula polígonos cóncavos mediante Shapely y **nunca**
+los sustituye por envolventes convexas ficticias.
+
+Ejemplo de importación:
+
+\`\`\`sh
+python3 scripts/floorplan_vectorizer.py \
+  --mall nuevo-shopping --name "Nuevo Shopping" \
+  --floor B1=/ruta/plano.png --out data/malls/nuevo-shopping \
+  --segmentation hybrid --simplify 1.25
+\`\`\`
+
+Para refinar geometría ya existente **sin cambiar sus identificadores**
+ni sus nombres, usar \`scripts/refine_curved_floor.py\` con argumentos
+\`--source\`, \`--geometry\`, \`--output\`, \`--report\` y \`--preview\`.
+Compara la forma propuesta contra el original mediante IoU y relación
+de áreas; las formas dudosas se conservan intactas y se reportan.
+
+Requiere \`numpy\`, \`opencv-python-headless\` y \`shapely>=2.1\`.
+
+### IA visual incorporada (opt-in; no ejecutada en AP Plaza)
+
+Con \`--ai-review\`, el importador envía sectores ampliados y
+superpuestos del plano a un modelo de visión que propone divisiones,
+curvas, códigos y servicios. Ninguna propuesta modifica la geometría
+automáticamente: se exporta a \`B1-ai-suggestions.json\` con
+\`verified: false\` y requiere revisión humana.
+
+**Costos y privacidad:** es necesario configurar \`OPENAI_API_KEY\`.
+La opción envía imágenes de la planta a la API de OpenAI y puede incurrir
+en cargos. SIN esa opción, ni el importador ni CI realizan llamadas de IA.
+
+\`\`\`sh
+export OPENAI_API_KEY="TU_CLAVE_EN_ENTORNO_SEGURO"
+python3 scripts/floorplan_vectorizer.py \
+  --mall nuevo-shopping --name "Nuevo Shopping" \
+  --floor B1=/ruta/plano.png --out data/malls/nuevo-shopping \
+  --segmentation hybrid --simplify 1.25 \
+  --ai-review --ai-model gpt-4.1-mini --ai-max-tiles 12
+\`\`\`
+
+Como no se configuró ninguna clave en el entorno usado para AP Plaza,
+la nueva geometría fue generada por visión geométrica OpenCV +
+triangulación robusta, **no** por un modelo generativo remoto. La
+validación arquitectónica sigue pendiente.

@@ -55,8 +55,11 @@ function loadPicture(person){
   return v;
 }
 function updatePeople(records){
+  // Do not hardcode Aventura's levels: newly imported malls have own floor IDs.
+  const allowed=new Set(window.RETAILNAV_ACTIVE_MALL?.floorLabels||
+    window.__RETAILNAV__?.floors?.map(f=>f.id)||['LL','UL','L3']);
   people=records.filter(p=>
-    p&&p.position&&['LL','UL','L3'].includes(p.position.floor)&&
+    p&&p.position&&allowed.has(p.position.floor)&&
     Number.isFinite(p.position.x)&&Number.isFinite(p.position.y));
   // Do not hold on to images of revoked contacts; release their cache entries.
   const keep=new Set(people.map(p=>p.id+'@'+(p.avatarUrl||'')));

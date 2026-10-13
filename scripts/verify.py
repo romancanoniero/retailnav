@@ -156,7 +156,7 @@ assert any("护肤" in u["tags"] for u in nw_units)
 assert any("anime" in u["tags"] for u in nw_units)
 assert nw["photoDigitizationExperiment"]["onlineNameVerification"][
     "onlineCorroboratedExamples"] == 6
-assert nw["photoDigitizationExperiment"]["perStoreOnlineCrawlDone"] is False
+assert nw["photoDigitizationExperiment"]["onlineNameVerification"]["perStoreOnlineCrawlDone"] is False
 for record in nw["floors"]:
     level=record[0]
     source=nw["floorReferences"][level]

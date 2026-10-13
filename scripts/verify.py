@@ -27,6 +27,19 @@ ap_geometry = ap["floors"][0][3]
 assert len(ap_geometry) >= 40
 assert {"KFC", "Starbucks", "7-Eleven"}.issubset({p[2] for p in ap_geometry})
 assert len({p[0] for p in ap_geometry}) == len(ap_geometry)
+poi = catalog["ap-plaza"]["pois"]
+assert len(poi) >= 10
+assert {"toilet","elevator","metro","information","exit","vertical-uncertain"}.issubset(
+    {p["category"] for p in poi})
+assert len({p["id"] for p in poi}) == len(poi)
+for p in poi:
+    assert p["floor"] == "B1" and p["confidence"] in {"cartel","por-revisar","posición-pendiente"}
+    if p["x"] is not None:
+        assert 0 <= p["x"] <= 1440 and 0 <= p["y"] <= 620
+    else:
+        assert p["confidence"] == "posición-pendiente"
+assert catalog["ap-plaza"].get("indoorPositionCalibrated") is False
+
 for feature in ap_geometry:
     fid, kind, name, deltas, rings, triangles, center = feature
     n = len(deltas) // 2

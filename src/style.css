@@ -405,3 +405,17 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnPoiInfo button{position:absolute;top:6px;right:7px;border:0;background:transparent;color:white;font-size:20px}
 @media(max-width:760px){.rnPoiMarker{min-width:29px;height:29px;font-size:16px}
  .rnPoiInfo{left:10px;right:65px;bottom:120px;padding:9px 33px 8px 10px}}
+
+.rnUnitOverlay{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.rnUnitCode{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;min-width:35px;
+  height:20px;line-height:16px;padding:0 3px;color:#193344;background:#effbfff0;
+  border:1px solid #78aaca;border-radius:4px;font-size:10px;font-weight:750;text-shadow:none}
+.rnUnitCode[hidden]{display:none!important}
+.rnUnitCode.selected,.rnUnitCode:focus-visible{background:#fff1a3;color:#14233e;border:2px solid #eaa148;z-index:8}
+.rnUnitInfo{position:absolute;z-index:8;left:18px;right:64px;bottom:91px;
+  max-width:460px;padding:11px 40px 11px 13px;border-radius:12px;background:#112d40ed;
+  border:1px solid #7ab6c6;box-shadow:0 12px 27px #0009}
+.rnUnitInfo strong{font-size:13px;color:#fff}
+.rnUnitInfo p{font-size:11px;color:#c0dce5;line-height:1.45}
+#rnUnitClose{position:absolute;right:8px;top:5px;border:0;background:transparent;font-size:20px;color:white}
+@media(max-width:760px){.rnUnitInfo{bottom:125px;left:10px;right:63px}.rnUnitCode{font-size:9px;height:18px}}

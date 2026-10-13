@@ -121,10 +121,12 @@ function rectCorners(x,z,halfW,halfH,y){
 function topFace(list,r,uv){
  // World +Y facing: a -> c -> b and a -> d -> c
  const [a,b,c,d]=r;
+ // Preserve the map's established canvas-atlas orientation: the positive
+ // Z edge corresponds to the first printed line in the floor-plan texture.
  triangle(list,a,c,b,
-  [uv.u0,uv.v0],[uv.u1,uv.v1],[uv.u1,uv.v0]);
+  [uv.u0,uv.v1],[uv.u1,uv.v0],[uv.u1,uv.v1]);
  triangle(list,a,d,c,
-  [uv.u0,uv.v0],[uv.u0,uv.v1],[uv.u1,uv.v1]);
+  [uv.u0,uv.v1],[uv.u0,uv.v0],[uv.u1,uv.v0]);
 }
 function bottomFace(list,r){
  const [a,b,c,d]=r;

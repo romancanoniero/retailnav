@@ -116,6 +116,23 @@ try {
   assert.ok(after.before.some((v,i)=>Math.abs(v-after.transformed[i])>0.001),
     'Two-finger anchored twist must rotate camera');
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
+  if(viewer.renderer==='WebGL'){
+    const faceA=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
+    await page.evaluate(()=>{
+      const el=document.querySelector('#canvas'),r=el.getBoundingClientRect();
+      const x=r.left+r.width/2,y=r.top+r.height/2;
+      const dispatch=(type,dx)=>el.dispatchEvent(new PointerEvent(type,{
+        bubbles:true,cancelable:true,pointerId:35,pointerType:'touch',
+        clientX:x+dx,clientY:y,button:0,buttons:type==='pointerup'?0:1
+      }));
+      dispatch('pointerdown',-75);dispatch('pointermove',110);dispatch('pointerup',110);
+    });
+    const faceB=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
+    assert.ok(Math.abs(faceA-faceB)>.05,
+      'World-fixed 3D photo face must change viewing angle on map rotation');
+    log('PIN_PARALLAX',{before:faceA,after:faceB});
+  }
+
 
   await page.locator('#friendsBtn').click();
   const demoRows=page.locator('#rnDemoFriends .rnDemoPerson');

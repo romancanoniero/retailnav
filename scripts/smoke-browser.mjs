@@ -220,6 +220,8 @@ try {
   if(viewer.renderer==='WebGL'){
     await page.locator('#pan').click();
     assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'orbit-3d');
+    assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).rotationAxes,3);
+    assert.equal(await page.locator('#rnRollControls').isVisible(),true);
     const faceA=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
     await page.evaluate(()=>{
       const el=document.querySelector('#canvas'),r=el.getBoundingClientRect();
@@ -234,8 +236,54 @@ try {
     assert.ok(Math.abs(faceA-faceB)>.05,
       'World-fixed 3D photo face must change viewing angle on map rotation');
     log('PIN_PARALLAX',{before:faceA,after:faceB});
+    const freeAxes=await page.evaluate(()=>{
+      const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
+      const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+      const send=(type,id,dx,dy)=>canvas.dispatchEvent(new PointerEvent(type,{
+        bubbles:true,cancelable:true,pointerId:id,pointerType:'touch',
+        clientX:x+dx,clientY:y+dy,button:0,buttons:type==='pointerup'?0:1
+      }));
+      const before=view.getState();
+      send('pointerdown',48,-100,0);
+      send('pointermove',48,100,300);
+      const pitched=view.getState();
+      send('pointerup',48,100,300);
+      send('pointerdown',49,-55,0);
+      send('pointerdown',50,55,0);
+      send('pointermove',50,8,60);
+      const rolled=view.getState();
+      send('pointerup',50,8,60);
+      send('pointerup',49,-55,0);
+      return {before,pitched,rolled};
+    });
+    assert.ok(Math.abs(freeAxes.before.orbitPitch-freeAxes.pitched.orbitPitch)>.9,
+      'One-finger free-orbit gestures rotate across X without the map-mode inclination clamp');
+    assert.ok(Math.abs(freeAxes.pitched.orbitYaw-freeAxes.before.orbitYaw)>.3,
+      'One-finger free-orbit gestures also rotate around Y');
+    assert.ok(Math.abs(freeAxes.rolled.orbitRoll-freeAxes.pitched.orbitRoll)>.25,
+      'Two-finger twist in free-3D mode rotates over the third Z axis');
+    assert.ok(Math.abs(freeAxes.rolled.orbitYaw-freeAxes.pitched.orbitYaw)<.001,
+      'Two-finger free-3D roll must not unexpectedly change world yaw');
+    const beforeButton=await page.evaluate(()=>window.__RETAILNAV__.getState().orbitRoll);
+    await page.locator('#rollLeft').click();
+    const afterButton=await page.evaluate(()=>window.__RETAILNAV__.getState().orbitRoll);
+    assert.ok(Math.abs(afterButton-beforeButton)>.1,'Roll control rotates camera Z axis');
+    await page.locator('#rollRight').click();
+    await page.evaluate(()=>{
+      const canvas=document.querySelector('#canvas');
+      canvas.dispatchEvent(new WheelEvent('wheel',{bubbles:true,cancelable:true,
+        deltaY:-190,clientX:canvas.getBoundingClientRect().left+85,
+        clientY:canvas.getBoundingClientRect().top+85}));
+    });
+    const zoomed=await page.evaluate(()=>window.__RETAILNAV__.getState());
+    assert.ok(zoomed.distance<freeAxes.rolled.distance,'Wheel zoom must remain operational after full-axis rotation');
+    log('FREE_3D_AXES',{pitch:freeAxes.pitched.orbitPitch,roll:freeAxes.rolled.orbitRoll,
+      distance:zoomed.distance});
     await page.locator('#pan').click();
     assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'map-pan');
+    assert.equal(await page.locator('#rnRollControls').isVisible(),false);
+    assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).orbitRoll,0,
+      'Map navigation returns to a stable screen-up camera');
   }
 
 
@@ -589,6 +637,7 @@ try {
     null,{timeout:15000});
   const readable=await apPage.evaluate(()=>window.RetailNavAreaLabels.getState());
   assert.equal(readable.total,8);
+  assert.equal(readable.webglLabelsAreUnified,true);
   assert.equal(readable.textUpright,true);
   assert.equal(readable.orientationResponsive,true);
   assert.equal(readable.alwaysAvailableInDirectory,8);
@@ -609,11 +658,16 @@ try {
   const districts=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
   assert.equal(districts.count,8,'District titles from the photographed floor plan must be preserved');
   if(apStatus.viewer.renderer==='WebGL'){
-    await apPage.waitForFunction(()=>window.RetailNavDistricts.getState().mode==='floating-solid-district-3d',
+    await apPage.waitForFunction(()=>window.RetailNavDistricts.getState().mode==='camera-facing-solid-district-3d',
       null,{timeout:20000});
     const district3D=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
     assert.ok(district3D.rendered>=6,'All visible commercial-area names must render in 3D');
-    assert.equal(district3D.cameraFacing,false,'Floating area names rotate with the actual map, never face the screen');
+    assert.equal(district3D.cameraFacing,true,
+      'Original luminous 3D plaques face the camera instead of rotating unreadably');
+    assert.equal(district3D.singleLabelPerZone,true,'Never duplicate zone names');
+    assert.equal(district3D.screenUprightLabels,true);
+    assert.equal(await apPage.locator('#rnDistrictOverlay .rnAreaLabel:visible').count(),0,
+      'No second HTML sign may duplicate the actual camera-facing WebGL sign');
     assert.equal(district3D.tiedToFloor,true,'Each title must use its own selected floor base elevation');
     assert.equal(district3D.hasPhysicalSides,true,'Floating plaques need true 3D sides');
     assert.equal(district3D.hasBottomFace,true,'A 3D plaque needs a visible underside');
@@ -637,6 +691,15 @@ try {
       perspective.roof.x-perspective.floating.x,
       perspective.roof.y-perspective.floating.y)>3,
       'Area name must have a visible gap above the actual mall roof in the 3D camera');
+    const heading=await apPage.evaluate(()=>{
+      const view=window.__RETAILNAV__.getState();
+      const plaque=window.RetailNavDistricts.getState().positions[0];
+      const [x,y,z,w]=view.q;
+      const basis=[2*(x*z+w*y),2*(y*z-w*x),1-2*(x*x+y*y)];
+      const dot=basis.reduce((sum,n,i)=>sum+n*plaque.forward[i],0);
+      return {dot};
+    });
+    assert.ok(heading.dot>.995,'Billboard sign normal must face camera for every quaternion');
     log('FLOATING_DISTRICTS',{
       shown:district3D.rendered,clearance:district3D.floorClearance,
       thickness:district3D.panelThickness,triangles:district3D.triangles

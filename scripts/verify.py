@@ -25,7 +25,13 @@ assert ap["id"] == "ap-plaza" and ap["navigable"] is False
 assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
 ap_geometry = ap["floors"][0][3]
 assert len(ap_geometry) >= 40
-assert {"KFC", "Starbucks", "7-Eleven"}.issubset({p[2] for p in ap_geometry})
+assert len(ap_geometry) == 190, "Detailed map should retain 190 separated colour components"
+units = ap["units"]
+assert len(units) >= 80, "Read all legible printed store identifiers as indexed labels"
+assert {"A-01", "A-12", "K1-31", "K2-19"}.issubset({u["code"] for u in units})
+assert {"KFC", "Starbucks", "7-Eleven"}.issubset({u["name"] for u in units})
+assert len({u["code"] for u in units}) == len(units)
+assert 0 < sum(bool(u["polygonId"]) for u in units) < len(units), "Retain unmatched provisional code labels"
 assert len({p[0] for p in ap_geometry}) == len(ap_geometry)
 poi = catalog["ap-plaza"]["pois"]
 assert len(poi) >= 10

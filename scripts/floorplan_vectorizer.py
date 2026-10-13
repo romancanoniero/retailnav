@@ -176,7 +176,10 @@ def extract(image, level, area=28, tolerance=.031, reviewed_walls=()):
     mask[:5]=0;mask[-5:]=0;mask[:,:5]=0;mask[:,-5:]=0
     count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
     candidates=[]
-    limit=image.shape[0]*image.shape[1]*.20
+    # A large department store may occupy >20% of a *small* floor.
+    # Do not silently delete its polygon. Flag oversized regions during review
+    # instead of assuming that a filled region always means background.
+    limit=image.shape[0]*image.shape[1]*.90
     for code in range(1,count):
         x,y,w,h,size=map(int,stats[code])
         if size<area or size>limit or w<3 or h<3:continue

@@ -75,13 +75,33 @@ try {
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
 
   await page.locator('#friendsBtn').click();
-  const panelRect=await page.locator('#peopleDialog').boundingBox();
-  assert.ok(panelRect.width<380 && panelRect.height<690,
-    'Friends popup must leave the mobile map visible around it');
+  const panel=page.locator('#peopleDialog');
+  assert.equal(await panel.evaluate(e=>e.tagName),'ASIDE','Friends menu must not be a dialog');
+  assert.equal(await panel.evaluate(e=>e.hidden),false);
+  assert.equal(await page.locator('#friendsBtn').getAttribute('aria-expanded'),'true');
+  const panelRect=await panel.boundingBox();
+  assert.ok(panelRect && panelRect.width<=375 && panelRect.height<610,
+    'Friends pulldown must leave the map visible');
+  assert.ok(panelRect.x>=0 && panelRect.x+panelRect.width<=390,
+    'Friends pulldown must be fully inside the mobile viewport');
   assert.ok(await page.locator('#rnAvatarTrigger').isVisible());
   assert.ok(await page.locator('#rnShareInvite').isVisible());
   assert.ok(await page.locator('#rnFriends').isVisible());
-  log('FLOATING_PANEL',{width:Math.round(panelRect.width),height:Math.round(panelRect.height)});
+  log('PULLDOWN',{x:Math.round(panelRect.x),width:Math.round(panelRect.width),height:Math.round(panelRect.height)});
+  // No backdrop: interacting with the map outside the pulldown dismisses it.
+  await page.mouse.click(4,240);
+  assert.equal(await panel.isVisible(),false,'Outside tap should dismiss pulldown');
+  assert.equal(await page.locator('#friendsBtn').getAttribute('aria-expanded'),'false');
+  await page.locator('#friendsBtn').click();
+  assert.equal(await panel.isVisible(),true);
+  await page.keyboard.press('Escape');
+  assert.equal(await panel.isVisible(),false,'Escape should dismiss pulldown');
+  await page.locator('#friendsBtn').click();
+  assert.equal(await panel.isVisible(),true);
+  await page.locator('#friendsBtn').click();
+  assert.equal(await panel.isVisible(),false,'Icon should toggle its own pulldown');
+  await page.locator('#friendsBtn').click();
+  log('OUTSIDE_TAP','Dismiss on map tap, Escape and icon toggle; floor map stays interactive.');
   await page.locator('#rnMakeInvite').click();
   await page.waitForFunction(()=>document.querySelector('#rnLink')?.value.includes('#join='));
   assert.ok(await page.locator('#rnQr canvas, #rnQr img').count());

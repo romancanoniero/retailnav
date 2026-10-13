@@ -18,6 +18,32 @@ const token=()=>crypto.randomBytes(32).toString('base64url');
 const hash=value=>crypto.createHash('sha256').update(String(value)).digest('hex');
 const validId=id=>typeof id==='string'&&/^[a-f0-9-]{36}$/.test(id);
 const validName=name=>typeof name==='string'&&name.trim().length>=1&&name.trim().length<=36&&!/[\u0000-\u001f\u007f]/.test(name);
+const AVATAR_DIR=path.join(DATA_DIR,'avatars');
+const MAX_AVATAR_BYTES=75000;
+function jpegDimensions(buffer){
+  if(buffer.length<100||buffer[0]!==255||buffer[1]!==216||
+    buffer[buffer.length-2]!==255||buffer[buffer.length-1]!==217)return null;
+  let pos=2,size=null,scan=false;
+  while(pos<buffer.length-4){
+    if(buffer[pos]!==255)return null;
+    while(buffer[pos]===255)pos++;
+    const marker=buffer[pos++];
+    if(marker===0xda){scan=true;break;}
+    if(marker===0xd8||(marker>=0xd0&&marker<=0xd7)||marker===0x01)continue;
+    if(marker===0xd9||pos+2>buffer.length)return null;
+    const length=buffer.readUInt16BE(pos);
+    if(length<2||pos+length>buffer.length)return null;
+    if([0xc0,0xc1,0xc2,0xc3].includes(marker)){
+      if(length<8)return null;
+      const height=buffer.readUInt16BE(pos+3),width=buffer.readUInt16BE(pos+5);
+      if(width<16||width>512||height<16||height>512)return null;
+      size={width,height};
+    }
+    pos+=length;
+  }
+  return scan?size:null;
+}
+function avatarFile(id){return path.join(AVATAR_DIR,id+'.jpg');}
 const allowedFloor=floor=>['LL','UL','L3'].includes(floor);
 fs.mkdirSync(DATA_DIR,{recursive:true,mode:0o700});
 let db;
@@ -84,11 +110,11 @@ function newUser(){
   db.users[id]=user;
   return user;
 }
-async function parse(req){
+async function parse(req,maxBytes=8192){
   let raw='',size=0;
   for await(const chunk of req){
     size+=chunk.length;
-    if(size>8192)throw Object.assign(Error('Solicitud demasiado grande'),{status:413});
+    if(size>maxBytes)throw Object.assign(Error('Solicitud demasiado grande'),{status:413});
     raw+=chunk.toString('utf8');
   }
   let p;
@@ -99,11 +125,11 @@ async function parse(req){
 }
 function publicFriend(user){
   const loc=user.location,visible=loc?.sharing===true&&loc.updated+LOCATION_AGE>Date.now();
-  return {id:user.id,name:user.name,sharing:Boolean(visible),
+  return {id:user.id,name:user.name,avatarVersion:user.avatarVersion||null,sharing:Boolean(visible),
     ...(visible?{position:{floor:loc.floor,x:loc.x,y:loc.y,updated:loc.updated,source:'manual'}}:{})};
 }
 function state(me){
-  return {me:{id:me.id,name:me.name,anonymous:true,hasRecovery:Boolean(me.recovery)},
+  return {me:{id:me.id,name:me.name,avatarVersion:me.avatarVersion||null,anonymous:true,hasRecovery:Boolean(me.recovery)},
     friends:me.friends.map(id=>db.users[id]).filter(Boolean).map(publicFriend),
     incoming:Object.values(db.requests).filter(r=>r.ownerId===me.id&&r.expires>Date.now())
       .map(r=>({id:r.id,name:db.users[r.guestId]?.name||'Visitante',created:r.created})),
@@ -136,6 +162,41 @@ const app=http.createServer(async(req,res)=>{
     if(!auth)return reject(res,401,'Sesión anónima no disponible. Recargá la página.');
     const me=auth.user;
     if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me));
+    if(req.method==='GET'&&url.pathname.startsWith('/avatar/')){
+      const id=url.pathname.slice('/avatar/'.length);
+      if(!validId(id)||!(id===me.id||me.friends.includes(id)))
+        return reject(res,404,'Foto no disponible');
+      const owner=db.users[id];
+      if(!owner?.avatarVersion)return reject(res,404,'Foto no disponible');
+      let bytes;
+      try{bytes=fs.readFileSync(avatarFile(id));}
+      catch(e){if(e.code==='ENOENT')return reject(res,404,'Foto no disponible');throw e;}
+      res.writeHead(200,{'Content-Type':'image/jpeg','Content-Length':bytes.length,
+        'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff',
+        'Content-Security-Policy':"default-src 'none'; sandbox",
+        'Referrer-Policy':'no-referrer'});
+      return res.end(bytes);
+    }
+    if(req.method==='POST'&&url.pathname==='/avatar'){
+      const p=await parse(req,120000);
+      if(typeof p.image!=='string'||!/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(p.image))
+        return reject(res,400,'La foto debe ser JPEG');
+      const encoded=p.image.split(',')[1];
+      if(encoded.length>101000)return reject(res,413,'Foto demasiado grande');
+      const bytes=Buffer.from(encoded,'base64');
+      if(bytes.length>MAX_AVATAR_BYTES||!jpegDimensions(bytes))
+        return reject(res,400,'Foto JPEG inválida o demasiado grande. Usá una imagen cuadrada.');
+      if(me.avatarUpdatedAt&&Date.now()-me.avatarUpdatedAt<4000)
+        return reject(res,429,'Esperá unos segundos para cambiar tu foto');
+      fs.mkdirSync(AVATAR_DIR,{recursive:true,mode:0o700});
+      const temp=avatarFile(me.id)+'.'+process.pid+'.tmp';
+      fs.writeFileSync(temp,bytes,{mode:0o600});
+      fs.renameSync(temp,avatarFile(me.id));
+      me.avatarVersion=Date.now();
+      me.avatarUpdatedAt=Date.now();
+      save();
+      return send(res,200,state(me));
+    }
     if(req.method==='POST'&&url.pathname==='/invite/preview'){
       const payload=await parse(req);
       const code=payload.code||'';
@@ -145,7 +206,7 @@ const app=http.createServer(async(req,res)=>{
       if(invite.ownerId===me.id)return reject(res,400,'Esta invitación es tuya');
       const owner=db.users[invite.ownerId];
       if(!owner)return reject(res,404,'Invitación vencida');
-      return send(res,200,{name:owner.name,expires:invite.expires});
+      return send(res,200,{name:owner.name,expires:invite.expires,mode:invite.mode==='link'?'link':'qr'});
     }
     if(req.method==='POST'&&url.pathname==='/me'){
       const p=await parse(req);
@@ -154,10 +215,17 @@ const app=http.createServer(async(req,res)=>{
     }
     if(req.method==='POST'&&url.pathname==='/invite'){
       for(const [key,invite] of Object.entries(db.invites))
-        if(invite.ownerId===me.id)delete db.invites[key];
+        if(invite.ownerId===me.id&&invite.mode!=='link')delete db.invites[key];
       const code=token(),expires=Date.now()+INVITE_AGE;
-      db.invites[hash(code)]={ownerId:me.id,created:Date.now(),expires};
-      save();return send(res,201,{code,expires});
+      db.invites[hash(code)]={ownerId:me.id,mode:'qr',created:Date.now(),expires};
+      save();return send(res,201,{code,expires,mode:'qr'});
+    }
+    if(req.method==='POST'&&url.pathname==='/invite/link'){
+      for(const [key,invite] of Object.entries(db.invites))
+        if(invite.ownerId===me.id&&invite.mode==='link')delete db.invites[key];
+      const code=token(),expires=Date.now()+30*60000;
+      db.invites[hash(code)]={ownerId:me.id,mode:'link',created:Date.now(),expires};
+      save();return send(res,201,{code,expires,mode:'link'});
     }
     if(req.method==='POST'&&url.pathname==='/invite/claim'){
       const p=await parse(req);
@@ -170,6 +238,11 @@ const app=http.createServer(async(req,res)=>{
       if(!host)return reject(res,410,'Invitación vencida');
       if(host.friends.includes(me.id))return reject(res,409,'Ya están vinculados');
       delete db.invites[key];
+      if(invite.mode==='link'){
+        if(!host.friends.includes(me.id))host.friends.push(me.id);
+        if(!me.friends.includes(host.id))me.friends.push(host.id);
+        save();return send(res,200,{linked:true,name:host.name});
+      }
       const id=crypto.randomUUID();
       db.requests[id]={id,ownerId:host.id,guestId:me.id,created:Date.now(),
         expires:Date.now()+REQUEST_AGE};
@@ -217,6 +290,7 @@ const app=http.createServer(async(req,res)=>{
         if(friend)friend.friends=friend.friends.filter(x=>x!==me.id);
       }
       delete db.users[me.id];
+      try{fs.unlinkSync(avatarFile(me.id));}catch(e){if(e.code!=='ENOENT')throw e;}
       save();
       return send(res,200,{deleted:true},
         'rn_session=; Path='+COOKIE_PATH+'; Max-Age=0; HttpOnly; Secure; SameSite=Lax');

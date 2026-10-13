@@ -34,6 +34,30 @@ try {
   assert.deepEqual(viewer.visible,['LL','UL','L3']);
   assert.equal(viewer.gestureMode,'map-pan','One-finger map pan is default');
   assert.ok(social.anonymous);
+  const aventuraLayout=await page.evaluate(()=>{
+    const stage=document.querySelector('.stage'),search=document.querySelector('#rnMapSearch');
+    const a=stage.getBoundingClientRect(),b=search.getBoundingClientRect();
+    return {
+     headerName:document.querySelector('#mallHeaderName')?.textContent,
+     logoHidden:document.querySelector('#mallHeaderLogo')?.hidden,
+     searchCount:document.querySelectorAll('#search').length,
+     searchInsideMap:stage.contains(document.querySelector('#search')),
+     searchVisible:b.width>0&&b.height>0,
+     searchNearTop:b.top>=a.top-2&&b.top<a.top+135,
+     brandOrder:document.querySelector('#mallHeaderName').compareDocumentPosition(
+       document.querySelector('#mallHeaderLogo'))&Node.DOCUMENT_POSITION_FOLLOWING,
+     oldRetailNavWordmark:!!document.querySelector('.topbar .brand')
+    };
+  });
+  assert.equal(aventuraLayout.headerName,'Aventura Mall');
+  assert.equal(aventuraLayout.searchCount,1,'Exactly one real map search input');
+  assert.ok(aventuraLayout.searchInsideMap&&aventuraLayout.searchVisible&&aventuraLayout.searchNearTop,
+    'Aventura mall search sits visibly ABOVE the map, not below the viewer');
+  assert.ok(aventuraLayout.brandOrder,'Optional mall logo follows mall name in DOM');
+  assert.equal(aventuraLayout.logoHidden,true,'No fabricated logo when none is configured');
+  assert.equal(aventuraLayout.oldRetailNavWordmark,false);
+  assert.equal(viewer.searchPlacement,'map-top');
+  log('TOP_MAP_SEARCH_AVENTURA',aventuraLayout);
   await page.waitForFunction(()=>window.RetailNavPins?.getState().registered===9,
     null,{timeout:20000});
   await page.waitForFunction(()=>window.RetailNavPins?.getState().drawn>=1,
@@ -617,6 +641,23 @@ try {
     mall:window.RETAILNAV_ACTIVE_MALL_ID
   }));
   assert.equal(apStatus.mall,'ap-plaza');
+  assert.equal(await apPage.locator('#mallHeaderName').innerText(),'AP Plaza');
+  assert.equal(await apPage.locator('#mallHeaderLogo').isVisible(),false);
+  assert.equal(await apPage.locator('#search').count(),1);
+  assert.equal(await apPage.locator('#rnMapSearch').isVisible(),true);
+  const apLayout=await apPage.evaluate(()=>{
+   const stage=document.querySelector('.stage'),search=document.querySelector('#rnMapSearch');
+   const b=stage.getBoundingClientRect(),r=search.getBoundingClientRect();
+   return {insideMap:stage.contains(search),aboveMap:r.top>=b.top-1&&r.bottom<b.top+145,
+    searchCount:document.querySelectorAll('#search').length,
+    mobileTitleShown:getComputedStyle(document.querySelector('.mobiletitle')).display!=='none',
+    branding:document.querySelector('#mallHeaderName').textContent};
+  });
+  assert.ok(apLayout.insideMap&&apLayout.aboveMap);
+  assert.equal(apLayout.searchCount,1);
+  assert.equal(apLayout.mobileTitleShown,false,'No duplicate mall name in map');
+  assert.equal(apLayout.branding,'AP Plaza');
+  log('TOP_MAP_SEARCH_AP_PORTRAIT',apLayout);
   assert.equal(apStatus.viewer.mallId,'ap-plaza');
   assert.deepEqual(apStatus.viewer.visible,['B1']);
   // A mall with just one known floor must not show any floor UI, not even
@@ -679,6 +720,17 @@ try {
   assert.equal(await apPage.locator('#rnAreasMenu .rnAreaMenuItem strong').first().innerText(),'ACG Zone');
   await apPage.setViewportSize({width:844,height:390});
   await apPage.waitForTimeout(160);
+  const landscapeSearch=await apPage.evaluate(()=>{
+   const stage=document.querySelector('.stage').getBoundingClientRect();
+   const rect=document.querySelector('#rnMapSearch').getBoundingClientRect();
+   return {top:rect.top,stageTop:stage.top,right:rect.right,width:rect.width,
+    windowWidth:innerWidth,stageWidth:stage.width,visible:rect.height>20};
+  });
+  assert.ok(landscapeSearch.visible&&landscapeSearch.top>=landscapeSearch.stageTop-2
+   &&landscapeSearch.top<landscapeSearch.stageTop+60
+   &&landscapeSearch.width>200&&landscapeSearch.right<=landscapeSearch.windowWidth,
+   'Search stays above map, full-width and accessible in landscape');
+  log('TOP_MAP_SEARCH_LANDSCAPE',landscapeSearch);
   assert.equal(await apPage.locator('#rnAreasButton').isVisible(),true,
     'Complete zone directory available in landscape');
   assert.equal(await apPage.locator('#rnAreasMenu .rnAreaMenuItem').count(),8);
@@ -760,8 +812,14 @@ try {
 
   }
   await apPage.locator('#search').fill('Electronic Digital City');
+  assert.equal(await apPage.locator('#rnMapSearch.finding').count(),1);
+  assert.ok(await apPage.locator('#results').isVisible(),
+    'Results dropdown opens immediately beneath the single map-top search');
   assert.ok(await apPage.locator('#results .rnDistrictResult').count()>=1);
   await apPage.locator('#results .rnDistrictResult').first().click();
+  assert.equal(await apPage.locator('#rnMapSearch.finding').count(),0,
+    'Choosing a search result dismisses the overlay');
+  assert.equal(await apPage.locator('#search').count(),1);
   assert.equal((await apPage.evaluate(()=>window.RetailNavDistricts.getState())).focused,'electronic-digital-city');
   await apPage.locator('#search').fill('');
   log('DISTRICTS','Eight photographed zone names placed in world-space and searchable.');
@@ -860,6 +918,8 @@ try {
   ]);
   await apPage.waitForFunction(()=>window.__RETAILNAV__?.getState().ready===true);
   assert.equal((await apPage.evaluate(()=>window.__RETAILNAV__.getState())).mallId,'aventura');
+  assert.equal(await apPage.locator('#mallHeaderName').innerText(),'Aventura Mall',
+    'Switching a shopping center updates the masthead without a stale AP Plaza title');
   log('MALL_SELECTOR','AP Plaza B1 and six isolated demo avatars work; settings switch back to Aventura.');
   // Do not leave a test identity on production.
   await apPage.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);

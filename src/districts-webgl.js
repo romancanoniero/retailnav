@@ -120,4 +120,5 @@ window.RetailNavDistricts={
   mode:gpu?'fixed-to-world-horizontal-3d':'pending',
   cameraFacing:false,frames,focused,lastError})
 };
+window.__RETAILNAV__?.invalidate?.();
 })();

@@ -249,8 +249,10 @@ function positionPeople(){
   const panel=$('peopleDialog');
   if(panel.hidden)return;
   const rect=trigger.getBoundingClientRect();
-  const right=Math.max(10,window.innerWidth-rect.right);
-  const top=Math.min(window.innerHeight-70,Math.max(8,rect.bottom+7));
+  const panelWidth=Math.min(425,window.innerWidth-20);
+  const maxRight=Math.max(10,window.innerWidth-panelWidth-10);
+  const right=Math.min(maxRight,Math.max(10,window.innerWidth-rect.right));
+  const top=Math.min(window.innerHeight-110,Math.max(8,rect.bottom+7));
   panel.style.setProperty('--rn-dropdown-right',right+'px');
   panel.style.setProperty('--rn-dropdown-top',top+'px');
 }

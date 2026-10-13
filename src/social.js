@@ -366,36 +366,68 @@ function closeScanner(){
   $('rnScanner').hidden=true;
 }
 async function scan(){
-  if(!('BarcodeDetector' in window)||!navigator.mediaDevices?.getUserMedia){
-    status('Este navegador no permite escanear dentro de la web. Abrí la Cámara del teléfono, apuntá al QR y tocá el enlace.',true);
+  if(!navigator.mediaDevices?.getUserMedia){
+    status('Este navegador no permite usar la cámara desde la web. Usá la Cámara del teléfono para abrir el QR.',true);
     return;
   }
   try{
-    const detector=new BarcodeDetector({formats:['qr_code']});
-    scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    let detector=null;
+    if('BarcodeDetector' in window){
+      try{detector=new BarcodeDetector({formats:['qr_code']});}catch{}
+    }
+    if(!detector&&typeof window.jsQR!=='function')
+      throw Error('No hay lector QR compatible con este navegador');
+    scannerStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'},width:{ideal:640},height:{ideal:480}},
+      audio:false
+    });
     const video=$('rnVideo');
     video.srcObject=scannerStream;
     $('rnScanner').hidden=false;
     await video.play();
-    let checking=false;
+    let checking=false,frameCanvas=null,frameCtx=null;
     async function loop(){
       if(!scannerStream)return;
       if(!checking&&video.readyState>=2){
         checking=true;
         try{
-          const codes=await detector.detect(video);
-          if(codes.length){
-            const code=parseInvite(codes[0].rawValue);
-            closeScanner();await previewJoin(code);
+          let found='';
+          if(detector){
+            const codes=await detector.detect(video);
+            found=codes[0]?.rawValue||'';
+          }else if(video.videoWidth&&video.videoHeight){
+            if(!frameCanvas){
+              frameCanvas=document.createElement('canvas');
+              frameCtx=frameCanvas.getContext('2d',{willReadFrequently:true});
+            }
+            if(frameCtx){
+              const scale=Math.min(1,480/video.videoWidth);
+              frameCanvas.width=Math.round(video.videoWidth*scale);
+              frameCanvas.height=Math.round(video.videoHeight*scale);
+              frameCtx.drawImage(video,0,0,frameCanvas.width,frameCanvas.height);
+              const frame=frameCtx.getImageData(0,0,frameCanvas.width,frameCanvas.height);
+              found=window.jsQR(frame.data,frame.width,frame.height,
+                {inversionAttempts:'attemptBoth'})?.data||'';
+            }
+          }
+          if(found){
+            const code=parseInvite(found);
+            closeScanner();
+            await previewJoin(code);
             return;
           }
-        }catch{}
-        finally{checking=false;}
+        }catch(e){
+          if(e.message&&/enlace|código|invitación|RetailNav/i.test(e.message))
+            status('El código escaneado no pertenece a RetailNav.',true);
+        }finally{checking=false;}
       }
-      scannerTimer=setTimeout(loop,300);
+      scannerTimer=setTimeout(loop,350);
     }
     loop();
-  }catch(e){closeScanner();status('No se pudo abrir la cámara. Podés usar la Cámara del teléfono o pegar el enlace.',true);}
+  }catch(e){
+    closeScanner();
+    status('No se pudo abrir la cámara: '+e.message+'. También podés usar la app Cámara del iPhone.',true);
+  }
 }
 function onMapPoint(event){
   const detail=event.detail;

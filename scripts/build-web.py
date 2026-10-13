@@ -76,8 +76,13 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
             raise ValueError(slug+"/"+floor_id+": source must be a valid VP8 WebP photo")
         registered_size = [int.from_bytes(raw[marker+3:marker+5],"little")&0x3fff,
                            int.from_bytes(raw[marker+5:marker+7],"little")&0x3fff]
-        if registered_size != [photo_width,photo_height] or registered_size != reference.get("imageSize"):
-            raise ValueError(slug+"/"+floor_id+": source image and vector coordinate sizes do not match")
+        geometry_size=[photo_width,photo_height]
+        if reference.get("imageSize") != geometry_size or reference.get("rasterSize") != registered_size:
+            raise ValueError(slug+"/"+floor_id+": registered photo dimensions do not match the expected floor")
+        if abs(registered_size[0]/photo_width-registered_size[1]/photo_height)>0.006:
+            raise ValueError(slug+"/"+floor_id+": photo and vector reference have different aspect ratios")
+        if reference.get("quality")=="compressed-preview" and reference.get("qa",{}).get("status")=="approved":
+            raise ValueError(slug+"/"+floor_id+": a compressed preview alone cannot certify shop geometry")
         qa = reference.get("qa",{})
         if qa.get("status") not in ("pending","approved"):
             raise ValueError(slug+"/"+floor_id+": all floor comparisons require a QA status")

@@ -161,6 +161,7 @@ def run():
     p.add_argument("--corners",help="Original image TL;TR;BR;BL points")
     p.add_argument("--size",default="1440x620",help="Perspective-corrected width x height")
     p.add_argument("--unit-codes",help="Optional reviewed identifiers JSON by floor, with code/x/y/name")
+    p.add_argument("--districts",help="JSON containing reviewed names of commercial zones, with floor,x,y and widthPx,heightPx")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
@@ -177,13 +178,14 @@ def run():
     output.mkdir(parents=True,exist_ok=True)
     labels=json.loads(Path(args.labels).read_text(encoding="utf-8")) if args.labels else {}
     code_labels=json.loads(Path(args.unit_codes).read_text(encoding="utf-8")) if args.unit_codes else {}
+    district_labels=json.loads(Path(args.districts).read_text(encoding="utf-8")) if args.districts else {}
     manifest={
         "id":args.mall,"name":args.name or args.mall.replace("-"," ").title(),
         "city":args.city,"source":"Operator-supplied floor photos",
         "status":"vectorizado-provisional","origin":[width/2,height/2],
         "scale":round(140/width,5),"navigable":False,
-        "warning":"Automatic regions, not independently verified stores or routes.",
-        "floors":[]
+        "warning":"Automatic regions, not independently verified stores, printed district names or routes.",
+        "districts":[],"floors":[]
     }
     if args.gps:
         lat,lon=map(float,args.gps.split(","))
@@ -217,6 +219,24 @@ def run():
         print(level+":",len(codes),"visible candidate store IDs.",message,
               "Check labels against the source photo before trusting their polygons.")
 
+        # Named districts are independent map entities. They are NOT a store
+        # and should never replace black dividing walls between small units.
+        for index, record in enumerate(district_labels.get(level, [])):
+            name=str(record["name"]).strip()
+            x,y=float(record["x"]),float(record["y"])
+            if not name or not (0<=x<=image.shape[1] and 0<=y<=image.shape[0]):
+                p.error("Commercial district label outside floor "+level)
+            length=min(len(name)*13+70,300)
+            manifest["districts"].append({
+                "id":re.sub("[^a-z0-9]+","-",name.lower()).strip("-")+"-"+level.lower(),
+                "name":name,"detail":str(record.get("detail","")),"floor":level,
+                "x":x,"y":y,
+                "widthPx":float(record.get("widthPx",length)),
+                "heightPx":float(record.get("heightPx",35)),
+                "source":"reviewed-source-map-print",
+                "confidence":"manual-transcription"
+            })
+
         feats=extract(image,level,args.min_area,args.simplify)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)
@@ -230,6 +250,13 @@ def run():
             "geometry":feats,"status":"provisional-not-navigable"
         },ensure_ascii=False,separators=(",",":")),encoding="utf-8")
         cv2.imwrite(str(output/(level+"-preview.jpg")),make_preview(image,feats))
+        if args.districts:
+            preview=make_preview(image,feats)
+            for item in manifest["districts"]:
+                if item["floor"] == level:
+                    cv2.putText(preview,item["name"],(int(item["x"]),int(item["y"])),
+                                cv2.FONT_HERSHEY_SIMPLEX,.55,(8,85,174),2)
+            cv2.imwrite(str(output/(level+"-districts-preview.jpg")),preview)
         manifest["floors"].append({
             "id":level,"name":level,"geometry":filename_out,
             "imageSize":pixels,"source":Path(filename).name

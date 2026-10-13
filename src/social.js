@@ -249,17 +249,21 @@ function show(){
   if(!dialog.open)dialog.showModal();
   $('rnPendingBadge').hidden=true;
 }
+async function handleHashInvite(){
+  const fragment=new URLSearchParams(location.hash.replace(/^#/,''));
+  if(!fragment.has('join'))return;
+  const code=fragment.get('join');
+  // Erase the one-use token from the address bar, browser history and referrer.
+  history.replaceState(null,'',location.pathname+location.search);
+  if(!ready){status('Esperá a que se conecten los contactos.',true);return;}
+  await previewJoin(code);
+}
 async function boot(){
   try{
     const s=await request('session','POST',{});
     merge(s);
     status('Identidad anónima activa. Tu navegador conserva los vínculos.');
-    const p=new URLSearchParams(location.hash.replace(/^#/,''));
-    if(p.has('join')){
-      const code=p.get('join');
-      history.replaceState(null,'',location.pathname+location.search);
-      await previewJoin(code);
-    }
+    await handleHashInvite();
   }catch(e){
     status('Contactos reales no disponibles: '+e.message+'. La simulación sigue funcionando.',true);
   }
@@ -551,7 +555,13 @@ function bind(){
     renderMarkers();
     updateMarkers();
   });
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')poll();});
+  window.addEventListener('hashchange',()=>{handleHashInvite().catch(e=>status(e.message,true));});
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='visible'){
+      poll();
+      if(location.hash.includes('join='))handleHashInvite().catch(e=>status(e.message,true));
+    }
+  });
   setInterval(poll,12000);
   setInterval(()=>{
     if(document.visibilityState==='hidden')return;

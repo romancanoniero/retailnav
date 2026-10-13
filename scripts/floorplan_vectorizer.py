@@ -91,7 +91,75 @@ def feature(fid, kind, name, contour, tolerance):
     return [fid,kind,name,delta,[list(range(len(pts)))],tris,center]
 
 
-def extract(image, level, area=28, tolerance=.031):
+
+def detect_wall_candidates(image, min_length=14):
+    """Keep dark, straight dividing strokes for review INDEPENDENTLY of fills.
+
+    Colour-connected components may merge neighbouring stores. The separate
+    linework ledger prevents those borders from silently disappearing.
+    OCR glyph strokes can also be detected; therefore no candidate is marked
+    verified and none becomes an indoor-navigation wall until reviewed.
+    """
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    background = cv2.GaussianBlur(gray, (0, 0), 5)
+    dark = np.uint8(cv2.subtract(background, gray) > 20) * 255
+    horizontal = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
+                                 np.ones((1, 8), np.uint8))
+    vertical = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
+                               np.ones((8, 1), np.uint8))
+    strokes = cv2.bitwise_or(horizontal, vertical)
+    raw = cv2.HoughLinesP(strokes, 1, np.pi / 180,
+                          threshold=10, minLineLength=min_length,
+                          maxLineGap=4)
+    if raw is None:
+        return []
+    candidates = {}
+    for x1, y1, x2, y2 in raw.reshape(-1, 4):
+        dx, dy = abs(int(x2)-int(x1)), abs(int(y2)-int(y1))
+        length = float(np.hypot(dx, dy))
+        if length < min_length or min(dx, dy) > max(dx, dy) * .13:
+            continue
+        a = (int(x1), int(y1))
+        b = (int(x2), int(y2))
+        if a > b:
+            a, b = b, a
+        key = tuple(round(n / 2) for n in (*a, *b))
+        if key not in candidates or length > candidates[key]["lengthPx"]:
+            candidates[key] = {
+                "a": list(a), "b": list(b), "lengthPx": round(length, 1),
+                "source": "local-dark-linework", "verified": False,
+                "kind": "unknown-line-or-text", "status": "needs-photo-review",
+            }
+    return sorted(candidates.values(),
+                  key=lambda line: (-line["lengthPx"], *line["a"]))
+
+
+def apply_reviewed_walls(mask, image, walls):
+    """Split regions ONLY at operator-reviewed architectural dividers."""
+    height, width = image.shape[:2]
+    applied = []
+    for item in walls:
+        if not item.get("verified"):
+            continue
+        a, b = item.get("a"), item.get("b")
+        if not isinstance(a, list) or not isinstance(b, list):
+            continue
+        if len(a) != 2 or len(b) != 2:
+            continue
+        if any(not np.isfinite(v) for v in (*a, *b)):
+            continue
+        if not all(0 <= a[i] < (width, height)[i] and
+                   0 <= b[i] < (width, height)[i] for i in range(2)):
+            continue
+        if np.hypot(a[0]-b[0], a[1]-b[1]) < 3:
+            continue
+        cv2.line(mask, tuple(map(round, a)), tuple(map(round, b)),
+                 0, thickness=2, lineType=cv2.LINE_8)
+        applied.append({"a": a, "b": b, "verified": True})
+    return applied
+
+
+def extract(image, level, area=28, tolerance=.031, reviewed_walls=()):
     hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
     gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     background=cv2.GaussianBlur(gray,(0,0),5)
@@ -101,8 +169,10 @@ def extract(image, level, area=28, tolerance=.031):
     vertical=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((9,1),np.uint8))
     border=cv2.dilate(cv2.bitwise_or(horizontal,vertical),np.ones((2,2),np.uint8))
     mask=cv2.bitwise_and(colour,cv2.bitwise_not(border))
+    apply_reviewed_walls(mask, image, reviewed_walls)
     if np.mean(colour>0)<.018:
         mask=cv2.bitwise_and(255-cv2.Canny(gray,60,150),cv2.bitwise_not(border))
+        apply_reviewed_walls(mask, image, reviewed_walls)
     mask[:5]=0;mask[-5:]=0;mask[:,:5]=0;mask[:,-5:]=0
     count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
     candidates=[]

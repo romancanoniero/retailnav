@@ -600,21 +600,41 @@
     "onlineNameValidationStatus": "supplementary-business-category-crosschecks-only",
     "onlineEvidence": [
       {
+        "url": "https://www.meet-in-shanghai.net/en/shopping/shanghai-new-world-153606/",
+        "use": "Shanghai tourist bureau corroborates New World City site and general Gucci/Bonpoint presence after 2020 refurbishment; not the unit code"
+      },
+      {
+        "url": "https://www.waze.com/live-map/directions/cn/shang-hai-shi/xicha-%28shanghai-new-world-city-store%29?to=place.ChIJ1yPCY0FwsjUReATRDoq2aGk",
+        "use": "HEYTEA/Xicha New World City branch, brand identification only"
+      },
+      {
+        "url": "https://tw.trip.com/restaurant/china/shanghai/detail/starbucks-353635/",
+        "use": "Starbucks 新世界店 on 3F, consistent with photographed 3B30; exact entrance not verified"
+      },
+      {
+        "url": "https://ditu.amap.com/place/B0FFLKUIOM",
+        "use": "小大董 New World City shop independently listed on floor 6; photo code 6C01 still provisional"
+      },
+      {
+        "url": "https://ditu.amap.com/place/B0HGAL18PS",
+        "use": "陶陶居 at New World City level 7 code 7C01 listed on Amap"
+      },
+      {
         "url": "https://ditu.amap.com/place/B001539A1D",
-        "use": "mall location and official category"
+        "use": "New World City at Nanjing West Road 2-68, verified mall coordinate"
       },
       {
-        "url": "https://www.thepaper.cn/newsDetail_forward_5032906",
-        "use": "floor themes and market background; 2019 not current tenancy"
-      },
-      {
-        "url": "https://m.winshang.com/news710365.html",
-        "use": "sample floor retail/category descriptions; historic, not 2026 verification"
-      },
-      {
-        "url": "https://sh.city8.com/shopping/8daaou7955t3b3c10a_address",
-        "use": "sample photographed floor 3 brands"
+        "url": "https://www.meet-in-shanghai.net/en/shopping/shanghai-new-world-153606/",
+        "use": "Official Shanghai New World City tourism description"
       }
-    ]
+    ],
+    "onlineNameVerification": {
+      "directoryRecords": 380,
+      "onlineCorroboratedExamples": 6,
+      "remainingWithoutIndependentOutletConfirmation": 374,
+      "brandCategoriesBasedOn": "directory headings plus known retail categories; not a 2026 online inventory",
+      "perStoreOnlineCrawlDone": false
+    },
+    "originalDirectoryOnlyFloors": "L1-L7; IMG_6406 is the building floor index only, never duplicated as a floor map"
   }
 }

@@ -19,8 +19,10 @@ import csv
 import hashlib
 from unit_index import inside
 from unit_ocr import scan as scan_unit_codes
+from ai_floor_review import image_tiles, request_ai, normalize_tile_proposals
 import json
 import math
+import os
 import re
 import zlib
 from pathlib import Path
@@ -381,11 +383,21 @@ def run():
     p.add_argument("--wall-min-length",type=int,default=14,help="Minimum image-pixel length of independent unreviewed wall candidates")
     p.add_argument("--segmentation",choices=["hybrid","color"],default="hybrid",help="Combine local grayscale/BW and original color (or older color-only borders)")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
+    p.add_argument("--ai-review",action="store_true",
+                   help="OPT-IN: send cropped image sectors to OpenAI visual model for unverified proposals (requires OPENAI_API_KEY); never changes polygon geometry")
+    p.add_argument("--ai-model",default="gpt-4.1-mini",
+                   help="OpenAI vision model for opt-in suggestions")
+    p.add_argument("--ai-max-tiles",type=int,default=12,
+                   help="Maximum image sectors sent to the AI API, each may incur cost")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
     p.add_argument("--simplify",type=float,default=.031)
     p.add_argument("--gps",help="Optional mall-level geographic anchor: latitude,longitude")
     args=p.parse_args()
+    if args.ai_review and not os.getenv("OPENAI_API_KEY"):
+        p.error("--ai-review explicitly requires OPENAI_API_KEY; no photograph has been sent")
+    if not 1<=args.ai_max_tiles<=40:
+        p.error("--ai-max-tiles must be between 1 and 40")
     if not re.fullmatch(r"[a-z][a-z0-9-]{1,48}",args.mall):
         p.error("Mall ID must be a lowercase slug")
     width,height=map(int,args.size.lower().split("x"))
@@ -424,6 +436,32 @@ def run():
         if quad is not None:
             q=np.float32([[0,0],[width-1,0],[width-1,height-1],[0,height-1]])
             image=cv2.warpPerspective(image,cv2.getPerspectiveTransform(quad,q),(width,height))
+
+        # Optional image understanding is separate from geometry calculations.
+        # Text/logos can look like shop walls; AI has NO authority to alter a
+        # floor without manual pixel-level review and documented acceptance.
+        ai_status="not-run"
+        if args.ai_review:
+            proposals={"schema":"retailnav.ai-plan-suggestions.v1",
+                 "status":"unverified","geometryChangesApplied":False,
+                 "floor":level,"model":args.ai_model,
+                 "sourceSHA256":original_sha,"tiles":[],"segments":[],"labels":[]}
+            for index,(tile_x,tile_y,tile) in enumerate(
+                    image_tiles(image,max_tiles=args.ai_max_tiles)):
+                raw=request_ai(tile,os.environ["OPENAI_API_KEY"],args.ai_model)
+                checked=normalize_tile_proposals(
+                    raw,tile_x,tile_y,tile.shape[1],tile.shape[0])
+                proposals["segments"].extend(checked["segments"])
+                proposals["labels"].extend(checked["labels"])
+                proposals["tiles"].append({
+                    "tileIndex":index,"x":tile_x,"y":tile_y,
+                    "width":tile.shape[1],"height":tile.shape[0],
+                    "quality":raw.get("tileQuality"),
+                    "status":"manual-review-required"})
+            (output/(level+"-ai-suggestions.json")).write_text(
+                json.dumps(proposals,ensure_ascii=False,indent=2)+"\n",
+                encoding="utf-8")
+            ai_status="unverified-suggestions-only"
 
         # Save a synchronized reference image for EVERY imported floor.
         # Compress for mobile display without claiming the original scan's
@@ -603,6 +641,8 @@ def run():
             "lowBoundarySupport":alignment["lowSupportCount"],
             "meanBoundarySupport":alignment["averageBoundarySupport"],
             "automaticChecksPassed":False,
+            "aiReviewStatus":ai_status,
+            "aiProposalsAppliedToGeometry":False,
             "exactPerStoreGeometryVerified":False,
             "navigable":False})
         print(level+": "+str(len(feats))+" provisional polygons, "+

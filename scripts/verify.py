@@ -73,6 +73,16 @@ assert sum(len(f[3])//2 for f in ap_geometry)==2119
 assert sum(len(f[5])//3 for f in ap_geometry)==1725
 assert len({f[2] for f in ap_geometry if f[2]})>=25
 assert "<script>" in html and "RetailNavAreaLabels" in html
+assert html.count('id="search"') == 1, "Only ONE shared search field may exist"
+assert html.count('id="results"') == 1
+assert html.count('id="mallHeaderName"') == 1
+assert html.count('id="mallHeaderLogo"') == 1
+assert 'RetailNav<small>SPATIAL EXPERIENCE</small>' not in html
+assert html.index('id="rnMapSearch"') > html.index('class="stage"')
+assert html.index('id="rnMapSearch"') < html.index('id="canvas"')
+assert 'class="rnMallBrand"' in html
+assert "searchPlacement:'map-top'" in html
+
 assert 'id="rnAreasButton"' in html and 'id="rnDistrictOverlay"' in html
 
 units = ap["units"]

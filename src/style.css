@@ -598,3 +598,112 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .hudright .rnRollControls{position:absolute;right:45px;top:95px}
  .hudright .rnRollControls button{width:34px;min-width:34px;min-height:34px;font-size:21px}
 }
+
+
+/* Mall-first brand: active centre replaces the product wordmark. The mall
+ * logo, if a SAME-ORIGIN asset is configured, sits to the right of its name. */
+.topbar .rnMallBrand{display:flex;align-items:center;gap:9px;min-width:0;
+ max-width:min(470px,46vw);flex:0 1 auto}
+.rnMallBrand strong{display:block;font-weight:750;font-size:clamp(16px,1.65vw,22px);
+ color:#eefaff;line-height:1.1;min-width:0;overflow:hidden;
+ text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.35px}
+.rnMallBrand img{display:block;flex:none;width:auto;height:35px;max-width:80px;
+ object-fit:contain}
+.rnMallBrand img[hidden]{display:none!important}
+.topbar .spacer{flex:1 1 0;min-width:0}
+
+/* ONE shared real search input, anchored to the TOP of the 3D viewport.
+ * Results overlay the map while searching, never an extra field below it. */
+.stage>.rnMapSearch{
+ position:absolute;z-index:13;top:69px;left:50%;
+ transform:translateX(-50%);width:min(540px,calc(100% - 44px));
+ padding:0;margin:0;min-width:0;
+}
+.rnMapSearch .searchbox{position:relative}
+.rnMapSearch .searchbox input{
+ display:block;width:100%;height:49px;min-height:49px;
+ color:#f7fdff;background:#0c2133f5;border:1px solid #6c9ab4;
+ box-shadow:0 8px 24px #0007,0 1px 0 #a6f2ff2d inset;
+ border-radius:14px;padding:10px 16px 10px 45px;
+ font-size:16px;line-height:1.25;outline-offset:2px;
+ backdrop-filter:blur(12px);-webkit-appearance:none;appearance:none;
+}
+.rnMapSearch .searchbox input::placeholder{color:#a7c3d3;opacity:1}
+.rnMapSearch .searchbox input:focus{outline:2px solid #89e5ee;outline-offset:1px}
+.rnMapSearch .searchbox .icon{position:absolute;left:15px;top:13px;
+ width:21px;height:21px;z-index:1;pointer-events:none}
+.rnMapSearch>.caption{display:none}
+.stage>.rnMapSearch .resultlist{
+ display:none;position:absolute;top:calc(100% + 5px);
+ left:0;right:0;margin:0;overflow-y:auto;overscroll-behavior:contain;
+ max-height:min(45dvh,360px);
+ background:#0c2133f9;border:1px solid #6c9ab4;border-radius:13px;
+ box-shadow:0 13px 33px #000a;padding:7px;
+ -webkit-overflow-scrolling:touch;
+}
+.stage>.rnMapSearch.finding .resultlist{display:block}
+.rnMapSearch .resultlist .result{min-height:41px;font-size:12px;
+ margin:0 0 2px;background:transparent}
+.rnMapSearch .resultlist .result:hover,.rnMapSearch .resultlist .result:focus-visible{
+ background:#1a4359;color:#efffff
+}
+/* Selected shop/stand panels remain within the map, even on iPhone.
+ * The empty former lower search sidebar is no longer needed on mobile. */
+.stage>.detail{position:absolute;z-index:10;left:17px;right:auto;
+ width:min(355px,calc(100% - 105px));bottom:112px;top:auto;
+ max-height:min(41dvh,340px);overflow:auto;background:#102a3def;
+ box-shadow:0 8px 25px #0008;backdrop-filter:blur(10px)}
+/* The name is already prominent in the app header. */
+@media(max-width:760px){
+ .topbar .rnMallBrand{max-width:min(185px,47vw);gap:6px}
+ .rnMallBrand strong{font-size:clamp(15px,4.1vw,19px)}
+ .rnMallBrand img{height:30px;max-width:45px}
+ .sidebar{display:none}
+ .stage{order:1;flex:1;min-height:0}
+ .stage>.rnMapSearch{top:10px;left:11px;right:11px;
+  width:auto;transform:none}
+ .rnMapSearch .searchbox input{height:47px;min-height:47px;
+  border-radius:12px;padding:8px 13px 8px 43px}
+ .rnMapSearch .searchbox .icon{top:12px}
+ .stage>.rnMapSearch .resultlist{max-height:min(43dvh,320px)}
+ .mobiletitle{display:none!important}
+ .stagebar{top:68px}
+ .stage-single .note,.stage .note{top:122px;left:12px;
+  max-width:calc(100% - 93px);font-size:9px}
+ .stage .note b{font-size:11px}
+ .stage .hudright{top:161px}
+ .stage>.detail{left:10px;right:61px;bottom:98px;
+  width:auto;max-height:min(32dvh,290px)}
+}
+@media(max-width:470px){
+ .topbar{gap:6px}
+ .topbar .rnMallBrand{max-width:calc(100vw - 235px)}
+ .topbar .rnMallBrand strong{font-size:16px}
+ .topbar .rnMallBrand img{max-width:32px;height:27px}
+}
+@media(max-height:530px) and (orientation:landscape){
+ .stage>.rnMapSearch{top:7px;left:10px;right:10px;
+  width:auto;transform:none}
+ .rnMapSearch .searchbox input{height:39px;min-height:39px;font-size:15px;
+  padding-top:7px;padding-bottom:7px}
+ .rnMapSearch .searchbox .icon{top:9px}
+ .stage>.rnMapSearch .resultlist{max-height:min(55dvh,235px)}
+ .stagebar{top:56px}
+ .stage .note{display:none}
+ .stage .hudright{top:92px}
+ .stage>.detail{bottom:85px;left:10px;right:61px;
+  width:min(330px,calc(100% - 75px));max-height:47dvh}
+ .mobiletitle{display:none!important}
+}
+@media(max-width:760px) and (max-height:530px) and (orientation:landscape){
+ .app{display:flex;flex-direction:column;min-height:0}
+ .stage{width:100%;flex:1;order:1}
+}
+
+/* Real phones in landscape need the complete mall canvas, not a 215px sidebar.
+ * Desk-size short windows keep their sidebar; this is phone/tablet landscape. */
+@media(max-width:1100px) and (max-height:530px) and (orientation:landscape){
+ .app{display:flex;flex-direction:column;min-height:0}
+ .sidebar{display:none!important}
+ .stage{width:100%;flex:1;order:1;min-height:0}
+}

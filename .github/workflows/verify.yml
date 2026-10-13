@@ -45,6 +45,7 @@ jobs:
           python3 scripts/test_curved_floor.py
           python3 scripts/test_ai_floor_review.py
           python3 scripts/test_ai2d_convert.py
+          python3 scripts/test_newworld_photo_colours.py
       - name: Regenerate AP Plaza v2 and assert byte-for-byte identical 3D mesh
         run: |
           python3 scripts/convert_ai2d_retailnav.py \

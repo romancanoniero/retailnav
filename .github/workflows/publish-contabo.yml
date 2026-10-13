@@ -5,11 +5,7 @@ on:
       - ".github/workflows/publish-contabo.yml"
       - "deploy/deploy-isolated.sh"
       - "deploy/deploy-social.sh"
-      - "backend/**"
-      - "src/**"
-      - "scripts/build-web.py"
-      - "scripts/build-glb.py"
-      - "public/maps/**"
+      # Stage 3D friend markers and social list as one tested release.
   workflow_dispatch:
 
 permissions:

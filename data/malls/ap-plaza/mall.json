@@ -33,5 +33,108 @@
       ],
       "source": "AP Plaza Floor Guide Map (fotografía rectificada)"
     }
-  ]
+  ],
+  "pois": [
+    {
+      "id": "ap-b1-wc-west",
+      "category": "toilet",
+      "name": "Baños oeste",
+      "floor": "B1",
+      "x": 12,
+      "y": 441,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-wc-east",
+      "category": "toilet",
+      "name": "Baños este",
+      "floor": "B1",
+      "x": 1428,
+      "y": 439,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-elevator",
+      "category": "elevator",
+      "name": "Ascensor noreste",
+      "floor": "B1",
+      "x": 1407,
+      "y": 51,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-metro",
+      "category": "metro",
+      "name": "Metro Línea 2",
+      "floor": "B1",
+      "x": 605,
+      "y": 41,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-info",
+      "category": "information",
+      "name": "Información",
+      "floor": "B1",
+      "x": 916,
+      "y": 317,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-exit8",
+      "category": "exit",
+      "name": "Salida 8",
+      "floor": "B1",
+      "x": 462,
+      "y": 102,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-exit7",
+      "category": "exit",
+      "name": "Salida 7",
+      "floor": "B1",
+      "x": 813,
+      "y": 102,
+      "confidence": "cartel"
+    },
+    {
+      "id": "ap-b1-vertical8",
+      "category": "vertical-uncertain",
+      "name": "Conexión vertical salida 8",
+      "floor": "B1",
+      "x": 512,
+      "y": 96,
+      "confidence": "por-revisar"
+    },
+    {
+      "id": "ap-b1-vertical7",
+      "category": "vertical-uncertain",
+      "name": "Conexión vertical salida 7",
+      "floor": "B1",
+      "x": 769,
+      "y": 101,
+      "confidence": "por-revisar"
+    },
+    {
+      "id": "ap-b1-parking",
+      "category": "parking",
+      "name": "Estacionamiento",
+      "floor": "B1",
+      "x": null,
+      "y": null,
+      "confidence": "posición-pendiente"
+    },
+    {
+      "id": "ap-b1-printed-here",
+      "category": "sign-you-are-here",
+      "name": "Usted está aquí (cartel)",
+      "floor": "B1",
+      "x": 366,
+      "y": 319,
+      "confidence": "cartel"
+    }
+  ],
+  "indoorPositionCalibrated": false,
+  "semanticLayerVersion": 1
 }

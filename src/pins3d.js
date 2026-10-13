@@ -91,8 +91,7 @@ function blueSilhouette(){
   ctx.bezierCurveTo(39,-59,9,-17,0,0);
   ctx.closePath();
 }
-function paintPin(person,x,y,selected){
-  const scale=viewport.width<520?.61:.73;
+function paintPin(person,x,y,selected,scale){
   ctx.save();
   ctx.translate(x,y);
   // A subdued, neutral ground shadow under the exact position anchor.
@@ -245,8 +244,25 @@ function draw(){
   }
   placements.sort((a,b)=>b.depth-a.depth);
   const focused=window.RetailNavFocusedFriendId;
+  const rectangles=window.RetailNavDistricts?.getProjectedBoxes?.()||[];
+  const distance=view.getState().distance;
+  // Canvas 2D is a fallback only, but it respects the same hard limit:
+  // never cover a protected floating 3D zone name with a portrait pin.
   for(const pin of placements){
-    paintPin(pin.person,pin.x,pin.y,pin.person.id===focused);
+    const active=pin.person.id===focused;
+    let scale=Math.max(.12,Math.min(viewport.width<520?.34:.42,
+      (viewport.width<520?40:54)/149*(1-.0009*Math.max(0,distance-60))));
+    let blocked=false;
+    for(let attempt=0;attempt<7;attempt++){
+      const bb={x0:pin.x-57*scale,x1:pin.x+57*scale,
+        y0:pin.y-150*scale,y1:pin.y+4*scale};
+      blocked=rectangles.some(d=>bb.x0<d.x1+1&&bb.x1>d.x0-1&&
+        bb.y0<d.y1+1&&bb.y1>d.y0-1);
+      if(!blocked)break;
+      scale*=.72;
+    }
+    if(blocked)continue;
+    paintPin(pin.person,pin.x,pin.y,active,scale);
     drawn++;
     shown.push(pin.person.id);
   }

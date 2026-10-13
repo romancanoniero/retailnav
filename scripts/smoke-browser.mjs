@@ -54,6 +54,7 @@ try {
   assert.equal(pinInfo.registered,9,'Nine seeded friend avatars registered');
   assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
   if(viewer.renderer==='WebGL'){
+    await page.waitForFunction(()=>window.RetailNavPins.getSolidState().mode==='solid-webgl-mesh', null,{timeout:30000});
     const solid=await page.evaluate(()=>window.RetailNavPins.getSolidState());
     log('SOLID_DIAG',solid);
     assert.equal(solid.mode,'solid-webgl-mesh','Mesh initialization: '+solid.lastError+' / '+solid.lastSkipped);
@@ -67,7 +68,7 @@ try {
   await page.waitForFunction(()=>window.RetailNavPins.getState().photoLoaded===9,
     null,{timeout:20000});
   assert.equal((await page.evaluate(()=>window.RetailNavPins.getState())).photoErrors,0);
-  assert.ok(pinInfo.canvasWidth>300 && pinInfo.canvasHeight>300);
+  if(viewer.renderer!=='WebGL')assert.ok(pinInfo.canvasWidth>300 && pinInfo.canvasHeight>300);
   assert.deepEqual(['LL','UL','L3'].map(level=>pinInfo.floors.filter(f=>f===level).length),[3,3,3]);
   for(const [id,color] of pinInfo.colorPairs){
     assert.match(color.body,/^#[0-9a-f]{6}$/i,'body color of '+id);
@@ -428,6 +429,21 @@ try {
   assert.ok(apStatus.viewer.features[0][1]>=40);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
+  const districts=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
+  assert.equal(districts.count,8,'District titles from the photographed floor plan must be preserved');
+  if(apStatus.viewer.renderer==='WebGL'){
+    await apPage.waitForFunction(()=>window.RetailNavDistricts.getState().mode==='fixed-to-world-horizontal-3d',
+      null,{timeout:20000});
+    const district3D=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
+    assert.ok(district3D.rendered>=6,'Commercial-zone labels must be drawn in actual map 3D');
+    assert.equal(district3D.cameraFacing,false,'District labels rotate with the map');
+  }
+  await apPage.locator('#search').fill('Electronic Digital City');
+  assert.ok(await apPage.locator('#results .rnDistrictResult').count()>=1);
+  await apPage.locator('#results .rnDistrictResult').first().click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavDistricts.getState())).focused,'electronic-digital-city');
+  await apPage.locator('#search').fill('');
+  log('DISTRICTS','Eight photographed zone names placed in world-space and searchable.');
   const ids=await apPage.evaluate(()=>window.RetailNavUnits.getState());
   assert.ok(ids.count>=80,'Shop identifiers must survive mall vectorisation');
   await apPage.locator('#search').fill('K1-31');

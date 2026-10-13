@@ -10,7 +10,6 @@
 const el=document.getElementById('peoplePinCanvas');
 const ctx=el?.getContext('2d',{alpha:true,desynchronized:true})||null;
 const PI=Math.PI;
-const MAX_PIN_HEIGHT=66; // upper bound in CSS pixels, even at extreme zoom
 let people=[],shown=[],drawn=0,frames=0,viewport={width:0,height:0,dpr:1};
 const pictures=new Map();
 const colorsDefault=()=>window.RETAILNAV_MARKER_PALETTE||{};
@@ -75,148 +74,173 @@ function resize(){
   viewport={width:rect.width,height:rect.height,dpr};
   ctx.setTransform(dpr,0,0,dpr,0,0);
 }
+// Proportions reproduced from the blue reference pin: rounded 3D shell,
+// porcelain-white inset rim, centred photographic portrait and soft cyan halo.
+// Canvas geometry is camera-facing and has a predictable CSS-pixel footprint;
+// the sharp point always coincides with the projected floor location.
+const DESIGN='blue-reference-photographic-v1';
+function blueSilhouette(){
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.bezierCurveTo(-9,-17,-39,-59,-47,-83);
+  ctx.bezierCurveTo(-60,-122,-34,-149,0,-149);
+  ctx.bezierCurveTo(34,-149,60,-122,47,-83);
+  ctx.bezierCurveTo(39,-59,9,-17,0,0);
+  ctx.closePath();
+}
+function paintPin(person,x,y,selected){
+  const scale=viewport.width<520?.61:.73;
+  ctx.save();
+  ctx.translate(x,y);
+  // A subdued, neutral ground shadow under the exact position anchor.
+  ctx.beginPath();
+  ctx.ellipse(0,0,29*scale,5*scale,0,0,2*PI);
+  ctx.fillStyle='rgba(6,20,37,.25)';
+  ctx.shadowColor='rgba(3,17,31,.45)';
+  ctx.shadowBlur=8*scale;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.scale(scale,scale);
+
+  // Rounded metallic-blue teardrop with a soft cyan glow.
+  const shell=ctx.createLinearGradient(-50,-114,49,-32);
+  shell.addColorStop(0,'#3b80c6');
+  shell.addColorStop(.17,'#76b7f7');
+  shell.addColorStop(.41,'#65aaf0');
+  shell.addColorStop(.72,'#5096e2');
+  shell.addColorStop(1,'#2872bf');
+  blueSilhouette();
+  ctx.save();
+  ctx.shadowColor=selected?'rgba(107,241,255,.80)':'rgba(115,218,254,.52)';
+  ctx.shadowBlur=selected?25:15;
+  ctx.fillStyle=shell;
+  ctx.fill();
+  ctx.restore();
+  blueSilhouette();
+  ctx.strokeStyle='rgba(193,226,255,.50)';
+  ctx.lineWidth=1.4;
+  ctx.stroke();
+
+  // Soft diffuse upper lighting and lower body shading, clipped to the shell.
+  ctx.save();
+  blueSilhouette();
+  ctx.clip();
+  const topLight=ctx.createRadialGradient(-18,-139,5,-6,-112,88);
+  topLight.addColorStop(0,'rgba(240,250,255,.30)');
+  topLight.addColorStop(.60,'rgba(175,214,254,.07)');
+  topLight.addColorStop(1,'rgba(19,75,152,0)');
+  ctx.fillStyle=topLight;
+  ctx.fillRect(-58,-151,116,154);
+  const edgeLight=ctx.createLinearGradient(-51,-98,49,-94);
+  edgeLight.addColorStop(0,'rgba(20,70,138,.30)');
+  edgeLight.addColorStop(.14,'rgba(235,248,255,.10)');
+  edgeLight.addColorStop(.65,'rgba(255,255,255,0)');
+  edgeLight.addColorStop(1,'rgba(15,68,135,.18)');
+  ctx.fillStyle=edgeLight;
+  ctx.fillRect(-54,-149,108,153);
+  ctx.restore();
+
+  // Three-dimensional recessed white bezel. Reference ring is deliberately
+  // substantially thicker than the narrow outline of the old map pin.
+  const cy=-99;
+  ctx.save();
+  ctx.shadowColor='rgba(20,59,110,.46)';
+  ctx.shadowBlur=8;
+  ctx.shadowOffsetY=3;
+  const outer=ctx.createLinearGradient(-32,cy-35,36,cy+37);
+  outer.addColorStop(0,'#f9faf7');
+  outer.addColorStop(.25,'#e5e9e9');
+  outer.addColorStop(.52,'#ffffff');
+  outer.addColorStop(.84,'#d1d7d9');
+  outer.addColorStop(1,'#f6f9fb');
+  ctx.beginPath();
+  ctx.arc(0,cy,34.5,0,PI*2);
+  ctx.fillStyle=outer;
+  ctx.fill();
+  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(0,cy,32.2,0,PI*2);
+  ctx.strokeStyle='rgba(103,128,148,.25)';
+  ctx.lineWidth=1.1;
+  ctx.stroke();
+  const inner=ctx.createLinearGradient(0,cy-30,0,cy+30);
+  inner.addColorStop(0,'#ffffff');
+  inner.addColorStop(.60,'#f4f7f7');
+  inner.addColorStop(1,'#c7cfd3');
+  ctx.beginPath();
+  ctx.arc(0,cy,30.5,0,PI*2);
+  ctx.fillStyle=inner;
+  ctx.fill();
+
+  // Replace the picture with each user's actual avatar texture.
+  const radius=25.1, asset=loadPicture(person);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(0,cy,radius,0,2*PI);
+  ctx.clip();
+  ctx.fillStyle='#edf1f5';
+  ctx.fillRect(-radius,cy-radius,radius*2,radius*2);
+  if(asset?.loaded){
+    const img=asset.img;
+    const side=Math.min(img.naturalWidth,img.naturalHeight);
+    ctx.imageSmoothingEnabled=true;
+    ctx.imageSmoothingQuality='high';
+    ctx.drawImage(img,(img.naturalWidth-side)/2,(img.naturalHeight-side)/2,
+      side,side,-radius,cy-radius,radius*2,radius*2);
+  }else{
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='#385c7d';
+    ctx.font='700 24px sans-serif';
+    ctx.fillText((person.name||'?').slice(0,1).toUpperCase(),0,cy);
+  }
+  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(0,cy,radius+.8,0,2*PI);
+  ctx.strokeStyle='rgba(255,255,255,.97)';
+  ctx.lineWidth=1.45;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0,cy,34.5,PI*1.07,PI*1.70);
+  ctx.strokeStyle='rgba(255,255,255,.54)';
+  ctx.lineWidth=1.7;
+  ctx.stroke();
+  ctx.restore();
+}
 function draw(){
-  if(!ctx||!window.__RETAILNAV__?.getState().ready)return;
+  const view=window.__RETAILNAV__;
+  if(!ctx||!view?.getState().ready)return;
   resize();
   const w=viewport.width,h=viewport.height;
   ctx.clearRect(0,0,w,h);
   shown=[];drawn=0;frames++;
-  const view=window.__RETAILNAV__,state=view.getState();
-  const vis=new Set(state.visible);
-  const q=state.q;
-  // Camera-facing yaw with an upright-world component prevents flat pins
-  // from collapsing when a visitor changes to the top-down view.
-  let right=rot(q,[1,0,0]);right=norm([right[0],0,right[2]]);
-  let cameraUp=rot(q,[0,1,0]);
-  const up=norm([cameraUp[0]*.34,1+cameraUp[1]*.34,cameraUp[2]*.34]);
-  const facing=norm(cross(right,up));
-  const offset=(o,r,u,d)=>{
-    return [o[0]+right[0]*r+up[0]*u+facing[0]*d,
-      o[1]+right[1]*r+up[1]*u+facing[1]*d,
-      o[2]+right[2]*r+up[2]*u+facing[2]*d];
-  };
-  const placed=[];
+  const vis=new Set(view.getState().visible);
+  const placements=[];
   for(const person of people){
     if(!vis.has(person.position.floor))continue;
-    const base=view.pinWorld(person.position.floor,person.position.x,person.position.y);
-    if(!base)continue;
-    const pinTop=view.projectWorld(offset(base,0,11.6,0));
-    const tip=view.projectWorld(offset(base,0,.5,0));
-    if(!pinTop||!tip||pinTop.w<=0||tip.w<=0||pinTop.z>=1||tip.z>=1)continue;
-    if(tip.x<-48||tip.x>w+48||tip.y<-48||tip.y>h+48)continue;
-    const fullHeight=Math.hypot(pinTop.x-tip.x,pinTop.y-tip.y);
-    const scale=Math.min(.67,MAX_PIN_HEIGHT/Math.max(1,fullHeight));
-    placed.push({person,base,depth:tip.z,scale});
+    const world=view.pinWorld(person.position.floor,person.position.x,person.position.y);
+    if(!world)continue;
+    const tip=view.projectWorld([world[0],world[1]+.35,world[2]]);
+    if(!tip||tip.w<=0||tip.z>=1||tip.z<=-1)continue;
+    if(tip.x<-52||tip.x>w+52||tip.y<-8||tip.y>h+12)continue;
+    placements.push({person,x:tip.x,y:tip.y,depth:tip.z});
   }
-  // Painter ordering: far-to-near, with the same world-space vertical levels.
-  placed.sort((a,b)=>b.depth-a.depth);
-  for(const {person,base,scale} of placed){
-    const rgbc=getPalette(person);
-    const P=(x,y,z=0)=>view.projectWorld(offset(base,x*scale,y*scale,z*scale));
-    const shadow=[];
-    for(let i=0;i<32;i++){
-      const angle=i*PI/16;
-      const world=[base[0]+4.9*scale*Math.cos(angle),base[1]+.13,base[2]+4.1*scale*Math.sin(angle)];
-      shadow.push(view.projectWorld(world));
-    }
-    if(shadow.every(pt=>pt&&pt.w>0&&pt.z<1)){
-      const center=view.projectWorld([base[0],base[1]+.13,base[2]]);
-      ctx.save();
-      ctx.beginPath();
-      shadow.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();
-      ctx.fillStyle=rgb(rgbc.shadow,.40);ctx.shadowColor=rgb(rgbc.shadow,.85);
-      ctx.shadowBlur=11;ctx.fill();ctx.restore();
-      if(center){
-        ctx.beginPath();shadow.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
-        ctx.closePath();ctx.strokeStyle=rgb(rgbc.shadow,.7);ctx.lineWidth=1.2;ctx.stroke();
-      }
-    }
-    // Draw a pseudo-extrusion (same projected world geometry as the foreground).
-    function shape(depth){
-      const t=P(0,.7,depth),a=P(-2.5,4.6,depth),b=P(-3.5,7.35,depth),
-        c=P(-2.2,10.8,depth),top=P(0,11.8,depth),
-        d=P(2.2,10.8,depth),e=P(3.5,7.35,depth),
-        f=P(2.5,4.6,depth);
-      const all=[t,a,b,c,top,d,e,f];
-      if(all.some(p=>!p||p.w<=0))return false;
-      ctx.beginPath();ctx.moveTo(t.x,t.y);
-      ctx.bezierCurveTo(a.x,a.y,b.x,b.y,c.x,c.y);
-      ctx.quadraticCurveTo(top.x,top.y,d.x,d.y);
-      ctx.bezierCurveTo(e.x,e.y,f.x,f.y,t.x,t.y);
-      ctx.closePath();
-      return {t,top};
-    }
-    ctx.save();
-    const back=shape(-.75);
-    if(back){ctx.fillStyle=darker(rgbc.body,.38);ctx.fill();}
-    const front=shape(.75);
-    if(!front){ctx.restore();continue;}
-    const grad=ctx.createLinearGradient(front.top.x,front.top.y,front.t.x,front.t.y);
-    grad.addColorStop(0,col(rgbc.rim,'#f5ffff'));
-    grad.addColorStop(.12,rgbc.body);
-    grad.addColorStop(.60,rgbc.body);
-    grad.addColorStop(1,darker(rgbc.body,.58));
-    ctx.fillStyle=grad;ctx.shadowColor=rgb(rgbc.body,.55);ctx.shadowBlur=8;ctx.fill();
-    ctx.shadowBlur=0;ctx.lineWidth=1.9;ctx.strokeStyle=rgbc.rim;ctx.stroke();
-    // Face image mapped into an actual world-space circular plane. The
-    // perspective transform uses the projected 3D basis vectors each frame.
-    const head=P(0,8.18,1.0),rx=P(2.35,8.18,1.0),ry=P(0,10.53,1.0);
-    if(head&&rx&&ry){
-      const X=[rx.x-head.x,rx.y-head.y],Y=[ry.x-head.x,ry.y-head.y];
-      const area=Math.abs(X[0]*Y[1]-X[1]*Y[0]);
-      if(area>8){
-        ctx.save();
-        ctx.translate(head.x,head.y);
-        // Positive canvas local Y is "down"; world local up points opposite.
-        ctx.transform(X[0],X[1],-Y[0],-Y[1],0,0);
-        ctx.beginPath();ctx.arc(0,0,1,0,2*PI);ctx.closePath();ctx.clip();
-        ctx.fillStyle='#152b42';ctx.fillRect(-1.1,-1.1,2.2,2.2);
-        const image=loadPicture(person);
-        if(image?.loaded)ctx.drawImage(image.img,-1,-1,2,2);
-        else{
-          ctx.fillStyle='#f5faff';ctx.textAlign='center';ctx.textBaseline='middle';
-          ctx.font='.95px sans-serif';ctx.fillText(person.name.slice(0,1).toUpperCase(),0,.03);
-        }
-        ctx.restore();
-        ctx.beginPath();
-        for(let i=0;i<=40;i++){
-          const theta=i*PI/20;
-          const p=P(2.45*Math.cos(theta),8.18+2.45*Math.sin(theta),1.05);
-          if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);
-        }
-        ctx.closePath();ctx.strokeStyle=rgbc.rim;ctx.lineWidth=2.2;
-        ctx.shadowColor='#0c1c2c';ctx.shadowBlur=3;ctx.stroke();ctx.shadowBlur=0;
-      }
-    }
-    // A tiny dimensional metallic highlight on the left side of the pin.
-    const shine=P(-2.6,9.4,1.25),shine2=P(-2.95,7.5,1.25);
-    if(shine&&shine2){ctx.beginPath();ctx.moveTo(shine.x,shine.y);ctx.lineTo(shine2.x,shine2.y);
-      ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=1.5;ctx.stroke();}
-    ctx.restore();
-    const tip=P(0,.5,.76);
-    if(tip&&(vis.size===1||person.id===window.RetailNavFocusedFriendId)){
-      // Names only when a floor is isolated or the person is explicitly focused.
-      const first=person.name.split(' ')[0];
-      const label=first; // full DEMO distinction remains visible in the contacts panel
-      ctx.save();ctx.font='600 10px -apple-system,BlinkMacSystemFont,sans-serif';
-      const width=Math.min(108,ctx.measureText(label).width+16);
-      const ty=Math.min(h-15,tip.y+12),tx=Math.max(width/2+4,Math.min(w-width/2-4,tip.x));
-      ctx.fillStyle='rgba(8,22,36,.88)';
-      ctx.beginPath();ctx.roundRect(tx-width/2,ty-11,width,18,9);ctx.fill();
-      ctx.strokeStyle=rgb(rgbc.body,.9);ctx.lineWidth=1;ctx.stroke();
-      ctx.textBaseline='middle';ctx.textAlign='center';ctx.fillStyle='#fff';
-      ctx.fillText(label,tx,ty-2,Math.max(15,width-11));ctx.restore();
-    }
+  placements.sort((a,b)=>b.depth-a.depth);
+  const focused=window.RetailNavFocusedFriendId;
+  for(const pin of placements){
+    paintPin(pin.person,pin.x,pin.y,pin.person.id===focused);
     drawn++;
-    shown.push(person.id);
+    shown.push(pin.person.id);
   }
 }
+
 window.RetailNavPins={setPeople:updatePeople,draw,getState:()=>({
   registered:people.length,drawn,visibleIds:shown.slice(),frames,
   canvasWidth:el?.width||0,canvasHeight:el?.height||0,
   floors:people.map(p=>p.position.floor),
   colorPairs:people.map(p=>[p.id,getPalette(p)]),
   photoLoaded:people.filter(p=>pictures.get(p.id+'@'+p.avatarUrl)?.loaded).length,
-  photoErrors:people.filter(p=>pictures.get(p.id+'@'+p.avatarUrl)?.error).length
+  photoErrors:people.filter(p=>pictures.get(p.id+'@'+p.avatarUrl)?.error).length,
+  design:DESIGN
 })};
 })();

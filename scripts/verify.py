@@ -14,6 +14,26 @@ script = re.search(r'<script id="modelData" type="application/json">([\s\S]+?)</
 assert script, "Standalone HTML missing embedded 3-floor data"
 inline = json.loads(script.group(1))
 assert [f[0] for f in inline] == ["LL", "UL", "L3"]
+
+catalog_match = re.search(r'<script id="mallCatalog" type="application/json">([\s\S]+?)</script>', html)
+assert catalog_match, "Standalone HTML must embed mall selector data"
+catalog = json.loads(catalog_match.group(1))
+assert set(catalog) == {"aventura", "ap-plaza"}
+assert len(catalog["aventura"]["floors"]) == 3
+ap = catalog["ap-plaza"]
+assert ap["id"] == "ap-plaza" and ap["navigable"] is False
+assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
+ap_geometry = ap["floors"][0][3]
+assert len(ap_geometry) >= 40
+assert {"KFC", "Starbucks", "7-Eleven"}.issubset({p[2] for p in ap_geometry})
+assert len({p[0] for p in ap_geometry}) == len(ap_geometry)
+for feature in ap_geometry:
+    fid, kind, name, deltas, rings, triangles, center = feature
+    n = len(deltas) // 2
+    assert kind in range(6) and n >= 3
+    assert len(triangles) % 3 == 0 and len(triangles) >= 3
+    assert max(triangles) < n
+
 manifest = json.loads((root / "maps/manifest.json").read_text(encoding="utf-8"))
 assert [f["id"] for f in manifest["floors"]] == ["LL", "UL", "L3"]
 totals = {"features": 0, "commercial": 0, "triangles": 0}

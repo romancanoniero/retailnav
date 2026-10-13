@@ -102,7 +102,7 @@ function merge(snapshot){
   const badge=$('friendsCount');
   badge.textContent=String(friends.length);
   const pending=incoming.map(x=>x.id).sort().join(',');
-  if(pending&&lastIncoming&&pending!==lastIncoming&&!$('peopleDialog').open){
+  if(pending&&lastIncoming&&pending!==lastIncoming&&$('peopleDialog').hidden){
     const notify=$('rnPendingBadge');notify.hidden=false;
   }
   lastIncoming=pending;
@@ -137,7 +137,7 @@ function friendRow(friend){
     const view=window.__RETAILNAV__;
     if(!view){status('Esperá a que cargue el mapa.',true);return;}
     view.focusAt(friend.position.floor,[friend.position.x,friend.position.y],115);
-    $('peopleDialog').close();
+    closePeople();
     status('Ubicación aproximada que compartió '+friend.name+'; no es GPS.');
   },'rnMapLocate');
   locate.title=friend.position?'Mostrar la posición compartida de '+friend.name:'Este contacto no comparte ubicación';
@@ -244,10 +244,34 @@ function updateMarkers(){
     }
   }
 }
+function positionPeople(){
+  const trigger=$('friendsBtn');
+  const panel=$('peopleDialog');
+  if(panel.hidden)return;
+  const rect=trigger.getBoundingClientRect();
+  const right=Math.max(10,window.innerWidth-rect.right);
+  const top=Math.min(window.innerHeight-70,Math.max(8,rect.bottom+7));
+  panel.style.setProperty('--rn-dropdown-right',right+'px');
+  panel.style.setProperty('--rn-dropdown-top',top+'px');
+}
 function show(){
-  const dialog=$('peopleDialog');
-  if(!dialog.open)dialog.showModal();
+  const panel=$('peopleDialog');
+  if(!panel.hidden)return;
+  panel.hidden=false;
+  $('friendsBtn').setAttribute('aria-expanded','true');
+  positionPeople();
   $('rnPendingBadge').hidden=true;
+}
+function closePeople(){
+  const panel=$('peopleDialog');
+  if(panel.hidden)return;
+  panel.hidden=true;
+  $('friendsBtn').setAttribute('aria-expanded','false');
+  closeScanner();
+}
+function togglePeople(){
+  if($('peopleDialog').hidden)show();
+  else closePeople();
 }
 async function handleHashInvite(){
   const fragment=new URLSearchParams(location.hash.replace(/^#/,''));
@@ -445,9 +469,25 @@ function onMapPoint(event){
     .catch(e=>{status(e.message,true);show();});
 }
 function bind(){
-  $('friendsBtn').addEventListener('click',show);
-  $('rnClose').addEventListener('click',()=>{$('peopleDialog').close();closeScanner();});
-  $('peopleDialog').addEventListener('close',closeScanner);
+  $('friendsBtn').addEventListener('click',togglePeople);
+  $('rnClose').addEventListener('click',closePeople);
+  // A non-modal dropdown never blocks the floor map. Tapping anywhere else
+  // closes it, including the canvas or an unrelated topbar control.
+  document.addEventListener('pointerdown',event=>{
+    if($('peopleDialog').hidden)return;
+    if(event.target.closest('#peopleDialog, #friendsBtn'))return;
+    closePeople();
+  },true);
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&!$('peopleDialog').hidden){
+      event.preventDefault();
+      closePeople();
+      $('friendsBtn').focus();
+    }
+  });
+  window.addEventListener('resize',positionPeople);
+  window.visualViewport?.addEventListener('resize',positionPeople);
+  window.addEventListener('scroll',positionPeople,true);
   $('rnSaveName').addEventListener('click',async()=>{
     try{merge(await request('me','POST',{name:$('rnName').value}));status('Nombre actualizado.');}
     catch(e){status(e.message,true);}
@@ -506,7 +546,7 @@ function bind(){
     if(!view)return status('El mapa todavía se está preparando.',true);
     if(view.getState().active==='ALL')view.setFloor('UL');
     view.beginManualLocation();
-    $('peopleDialog').close();
+    closePeople();
     status('Tocá tu posición aproximada en el piso elegido. Podés cambiar de planta antes de marcar.');
   });
   $('rnStopLocation').addEventListener('click',async()=>{

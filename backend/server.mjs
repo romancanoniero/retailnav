@@ -197,6 +197,16 @@ const app=http.createServer(async(req,res)=>{
       save();
       return send(res,200,state(me));
     }
+    if(req.method==='POST'&&url.pathname==='/avatar/delete'){
+      if(me.avatarVersion){
+        try{fs.unlinkSync(avatarFile(me.id));}
+        catch(e){if(e.code!=='ENOENT')throw e;}
+      }
+      me.avatarVersion=null;
+      me.avatarUpdatedAt=Date.now();
+      save();
+      return send(res,200,state(me));
+    }
     if(req.method==='POST'&&url.pathname==='/invite/preview'){
       const payload=await parse(req);
       const code=payload.code||'';

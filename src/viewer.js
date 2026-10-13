@@ -35,7 +35,19 @@ function resize(){let r=canvas.getBoundingClientRect(),dpr=Math.min(window.devic
 function visible(){return floors.filter(f=>active==='ALL'||f.id===active);}
 function screen(p){let v=mp(mvp,[...p,1]);let r=canvas.getBoundingClientRect();return {x:(v[0]/v[3]*.5+.5)*r.width,y:(.5-v[1]/v[3]*.5)*r.height,z:v[2]/v[3],w:v[3]};}
 let labelElems=[];let placingPosition=false;
-function makeLabels(){let host=$('labels');host.replaceChildren();labelElems=[];for(const floor of floors){let el=document.createElement('div');el.className='label floor';el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label','Enfocar planta '+floor.id);el.onclick=()=>setFloor(active===floor.id?'ALL':floor.id);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setFloor(active===floor.id?'ALL':floor.id);}};el.style.borderLeftColor=['#65e6e0','#79adff','#c5a4ff'][floor.index];el.textContent=floor.id;let sub=document.createElement('span');sub.textContent=floor.name;el.append(sub);host.append(el);labelElems.push({el,floor,p:[-60,0,15],always:true});for(const f of floor.features.filter(f=>f.k==='anchor')){let el=document.createElement('div');el.className='label';el.textContent=f.n;host.append(el);labelElems.push({el,floor,p:pos(f.c,height(f)+1.5),f});}}
+function makeLabels(){
+ let host=$('labels');host.replaceChildren();labelElems=[];
+ // Store labels remain available on demand. A giant duplicate floor badge
+ // inside the map is redundant with the compact floor picker and obscures
+ // shops, especially in single-floor malls.
+ for(const floor of floors){
+  for(const feature of floor.features.filter(f=>f.k==='anchor')){
+   let el=document.createElement('div');el.className='label';
+   el.textContent=feature.n;
+   host.append(el);
+   labelElems.push({el,floor,p:pos(feature.c,height(feature)+1.5),f:feature,always:false});
+  }
+ }
 }
 function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
@@ -99,7 +111,28 @@ function renderCanvas(dt){
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
 function resetCamera(plan=false){stopAuto();q=plan?quat([1,0,0],-Math.PI/2):qm(quat([0,1,0],-.30),quat([1,0,0],-.70));let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:spread):fs[0].y,0];distance=200;resize();matrices();let mx=0,my=0;for(let f of fs)for(let o of f.features)for(let v of o.p){let p=mp(mvp,[...pos(v,f.y),1]);mx=Math.max(mx,Math.abs(p[0]/p[3]));my=Math.max(my,Math.abs(p[1]/p[3]));}distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);$('plan').setAttribute('aria-pressed',String(plan));}
-function setFloor(id){if(!ready)return;active=id;$('showAllFloors').hidden=id==='ALL';document.querySelector('.stage')?.classList.toggle('focused',id!=='ALL');route=null;routeRunning=false;$('routeInfo').textContent='';document.querySelectorAll('[data-floor]').forEach(b=>{b.classList.toggle('active',b.dataset.floor===id);b.setAttribute('aria-pressed',String(b.dataset.floor===id));});$('spread').disabled=id!=='ALL';$('mapTitle').textContent=id==='ALL'?'Las tres plantas, en su posicion relativa':floors.find(f=>f.id===id).name+' / '+id;$('mapSubtitle').textContent=mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.':(id==='L3'?'Sectores discontinuos conservados del tercer plano.':'Contornos y pasillos trazados sobre tus imagenes.');resetCamera();results();}
+function setFloor(id){
+ if(!ready)return;
+ if(floors.length===1)id=floors[0].id;
+ if(id!=='ALL'&&!floors.some(f=>f.id===id))return;
+ active=id;
+ $('showAllFloors').hidden=floors.length<=1||id==='ALL';
+ document.querySelector('.stage')?.classList.toggle('focused',id!=='ALL');
+ route=null;routeRunning=false;$('routeInfo').textContent='';
+ const picker=$('floorSelect');
+ if(picker&&[...picker.options].some(opt=>opt.value===id))picker.value=id;
+ $('floorSpacing').hidden=floors.length<=1||id!=='ALL';
+ if(id!=='ALL')$('floorSpacing').open=false;
+ $('spread').disabled=id!=='ALL'||floors.length<=1;
+ $('mapTitle').textContent=id==='ALL'
+  ?'Las '+floors.length+' plantas, en su posición relativa'
+  :floors.find(f=>f.id===id).name+' / '+id;
+ $('mapSubtitle').textContent=mallId==='ap-plaza'
+  ?'Sectorización automática de una foto; sin rutas verificadas.'
+  :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
+    'Contornos y pasillos trazados sobre tus imágenes.');
+ resetCamera();results();
+}
 function contains(p,ring){let v=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){let a=ring[i],b=ring[j];if(((a[1]>p[1])!==(b[1]>p[1]))&&(p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]))v=!v;}return v;}
 function pick(x,y){if(!invMvp)return;let r=canvas.getBoundingClientRect(),nx=(x-r.left)/r.width*2-1,ny=1-(y-r.top)/r.height*2;let un=z=>{let v=mp(invMvp,[nx,ny,z,1]);return v.slice(0,3).map(x=>x/v[3]);};let a=un(-1),b=un(1),dir=norm(vsub(b,a)),best=null,dist=Infinity;for(let floor of visible()){for(let f of floor.features.filter(f=>['unit','anchor','zone'].includes(f.k))){let t=(floor.y+height(f)-a[1])/dir[1];if(!Number.isFinite(t)||t<0||t>dist)continue;let pt=vadd(a,vmul(dir,t)),p=[pt[0]/cfg.scale+cfg.origin[0],pt[2]/cfg.scale+cfg.origin[1]];if(contains(p,f.r[0])&&!f.r.slice(1).some(h=>contains(p,h))){best=f;dist=t;}}}if(best)select(best);}
 function select(f){selected=f;route=null;routeRunning=false;$('sidebar').classList.remove('finding');$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Unidad sin nombre verificado','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.n||f.id;$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();}
@@ -268,20 +301,24 @@ function applyMallUi(){
     :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
-  const tabs=document.querySelector('.stagebar nav.tabs');
-  tabs.replaceChildren();
-  function addButton(id){
-    const button=document.createElement('button');
-    button.dataset.floor=id;
-    button.textContent=id==='ALL'?'Todas':id;
-    button.className=id==='ALL'?'active':'';
-    button.setAttribute('aria-pressed',String(id==='ALL'));
-    button.addEventListener('click',()=>setFloor(id));
-    tabs.append(button);
+  const single=floors.length<=1;
+  document.querySelector('.stage')?.classList.toggle('stage-single',single);
+  const picker=$('floorPicker'),select=$('floorSelect'),spacing=$('floorSpacing');
+  picker.hidden=single;spacing.hidden=single;
+  spacing.open=false;
+  select.replaceChildren();
+  const options=single?floors.map(f=>({id:f.id,title:f.id})):
+    [{id:'ALL',title:'Todas'},...floors.map(f=>({id:f.id,title:f.id}))];
+  for(const item of options){
+    const option=document.createElement('option');
+    option.value=item.id;option.textContent=item.title;
+    select.append(option);
   }
-  addButton('ALL');
-  for(const level of floors)addButton(level.id);
-  $('showAllFloors').textContent=floors.length===1?'← Mostrar plano':'← Mostrar todas las plantas';
+  select.value=single?floors[0].id:'ALL';
+  select.onchange=()=>setFloor(select.value);
+  $('spread').disabled=single;
+  $('showAllFloors').hidden=true;
+  $('showAllFloors').textContent='← Todas las plantas';
   $('original').disabled=false;
   $('original').title='Comparar foto y vectorizado de cada planta';
   $('routeBtn').disabled=mallId!=='aventura';

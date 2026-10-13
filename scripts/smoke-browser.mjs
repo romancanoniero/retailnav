@@ -403,6 +403,20 @@ try {
   assert.ok(apStatus.viewer.features[0][1]>=40);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
+  const poi=await apPage.evaluate(()=>window.RetailNavPOI?.getState());
+  assert.ok(poi&&poi.count>=10,'AP Plaza must include semantic bathrooms, exits, escalators and information');
+  await apPage.waitForFunction(()=>window.RetailNavPOI?.getState().shown.length>=1,
+    null,{timeout:12000});
+  assert.ok(await apPage.locator('#rnServicesToggle').isVisible());
+  await apPage.locator('#search').fill('baños');
+  assert.ok(await apPage.locator('#results .rnPoiResult').count()>=2,
+    'Searching for toilets must return both AP Plaza bathroom facilities');
+  await apPage.locator('#search').fill('');
+  await apPage.locator('#rnServicesToggle').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,false);
+  await apPage.locator('#rnServicesToggle').click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavPOI.getState())).enabled,true);
+  log('AP_AMENITIES','POI layer searchable: bathrooms, lift, metro, exits and information; uncertainty disclosed.');
   await apPage.waitForFunction(()=>window.RetailNavPins?.getState().photoLoaded===6,
     null,{timeout:25000});
   assert.equal(await apPage.locator('#routeBtn').isDisabled(),true);

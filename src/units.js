@@ -11,6 +11,13 @@ const detail=document.getElementById('rnUnitInfo');
 const title=document.getElementById('rnUnitName');
 const sub=document.getElementById('rnUnitDescription');
 let selected=null,visibleCount=0,frames=0;
+let searchHighlights=[];
+function setQuery(text){
+ const next=String(text||'').trim().length<2?[]:find(text).slice(0,4).map(u=>u.code);
+ if(searchHighlights.join('|')===next.join('|'))return;
+ searchHighlights=next;
+ window.__RETAILNAV__?.invalidate?.();
+}
 const buttons=new Map();
 function find(query){
  const text=String(query||'').trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -76,8 +83,10 @@ function paint(){
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,find,getUnits:()=>units.slice(),getState:()=>({
- count:units.length,selected,frames,visibleCount,
+window.RetailNavUnits={draw:paint,focus,find,setQuery,
+ getHighlightedCodes:()=>searchHighlights.slice(),
+ getUnits:()=>units.slice(),getState:()=>({
+ count:units.length,selected,frames,visibleCount,searchHighlights:searchHighlights.slice(),
  matched:units.filter(u=>u.polygonId).length,
  facadeCount:units.filter(u=>u.facade).length,
  unmatched:units.filter(u=>!u.polygonId).length

@@ -252,8 +252,10 @@ function draw(){
   }
 }
 
-window.RetailNavPins={setPeople:updatePeople,draw,getState:()=>({
-  registered:people.length,drawn,visibleIds:shown.slice(),frames,
+window.RetailNavPins={setPeople:updatePeople,draw,getPeople:()=>people.slice(),getState:()=>({
+  registered:people.length,
+  drawn:window.RetailNavPins?.webGLActive?window.RetailNavPins.getSolidState()?.rendered||0:drawn,
+  visibleIds:window.RetailNavPins?.webGLActive?window.RetailNavPins.getSolidState()?.visibleIds||[]:shown.slice(),frames,
   canvasWidth:el?.width||0,canvasHeight:el?.height||0,
   floors:people.map(p=>p.position.floor),
   colorPairs:people.map(p=>[p.id,getPalette(p)]),

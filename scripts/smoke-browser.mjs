@@ -106,6 +106,46 @@ try {
   await page.locator('#original').click();
   assert.equal(await page.locator('#compareDialog').isVisible(),true);
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).floorCount,3);
+
+  const initialStyle=await page.evaluate(()=>({
+    state:window.RetailNavComparison.getState(),
+    fill:document.querySelector('#traceOverlay .rnCompareFeature')?.getAttribute('fill'),
+    outline:document.querySelector('#traceOverlay .rnCompareFeature')?.getAttribute('stroke'),
+    line:document.querySelector('#traceOverlay .rnCompareFeature')?.getAttribute('stroke-width'),
+    alpha:document.querySelector('#traceOverlay .rnCompareFeature')?.style.fillOpacity,
+    overlayAlpha:document.querySelector('#traceOverlay').style.opacity
+  }));
+  assert.equal(initialStyle.fill,'#000000');
+  assert.equal(initialStyle.outline,'#ffffff');
+  assert.equal(initialStyle.line,'2');
+  assert.equal(Number(initialStyle.alpha),.4);
+  assert.equal(initialStyle.overlayAlpha,'1',
+    'Changing fill opacity must NOT make the white outline transparent');
+  assert.equal(initialStyle.state.issueCount,0);
+  await page.locator('#compareMode').selectOption('outline');
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).appliedFillOpacity,0);
+  assert.equal(await page.locator('#traceOverlay .rnCompareFeature').first().evaluate(e=>e.style.fillOpacity),'0');
+  assert.equal(await page.locator('#traceOverlay .rnCompareFeature').first().evaluate(e=>e.getAttribute('stroke')),'#ffffff');
+  await page.locator('#compareMode').selectOption('filled');
+  await page.locator('#compareMarkMode').check();
+  await page.locator('#compareSvg').evaluate(svg=>{
+    const box=svg.getBoundingClientRect();
+    svg.dispatchEvent(new MouseEvent('click',{
+      bubbles:true,clientX:box.left+box.width*.51,clientY:box.top+box.height*.53
+    }));
+  });
+  assert.equal(await page.locator('#compareSaveIssue').isDisabled(),false);
+  await page.locator('#compareIssueType').selectOption('division-missing');
+  await page.locator('#compareIssueNote').fill('Prueba de división faltante');
+  await page.locator('#compareSaveIssue').click();
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).issueCount,1);
+  assert.equal(await page.locator('#compareIssueMarkers circle').count(),1);
+  assert.ok(await page.locator('#compareIssues').innerText().then(t=>t.includes('Prueba de división faltante')));
+  await page.locator('#compareIssues button').first().click();
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).issueCount,0);
+  await page.locator('#compareMarkMode').uncheck();
+  log('VECTOR_QA_STYLE','Black fill at 40% with independently opaque 2px white outline and JSON-ready per-floor issue markers.');
+
   await page.locator('#showVectors').uncheck();
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).vectorsVisible,false);
   await page.locator('#showReference').uncheck();
@@ -478,6 +518,12 @@ try {
   }));
   assert.equal(reference.level,'B1');
   assert.equal(reference.hasReference,true);
+  assert.equal(reference.compareMode,'filled');
+  assert.equal(reference.fillColor,'#000000');
+  assert.equal(reference.outlineColor,'#ffffff');
+  assert.equal(reference.outlineWidthPx,2);
+  assert.equal(reference.appliedFillOpacity,.40);
+  assert.equal(reference.codeLabelsVisible,true);
   assert.equal(reference.geometricValidation,'pending',
     'Do not falsely declare provisional photograph-derived vectors verified');
   assert.ok(reference.href.includes('reference/ap-plaza/B1.webp'));

@@ -205,20 +205,180 @@ function comparison(){
  }
  combo.value=originalLevel;
  $('showReference').checked=true;$('showVectors').checked=true;
- $('overlayOpacity').value='.85';$('compareZoom').value='100';
+ $('overlayOpacity').value='.40';$('compareZoom').value='100';
+ $('compareMode').value='filled';$('showUnitCodes').checked=true;
+ $('compareMarkMode').checked=false;auditPoint=null;
+ $('compareSaveIssue').disabled=true;
  if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}
  drawComparison();
  $('compareDialog').showModal();
 }
+const RN_SVG='http://www.w3.org/2000/svg';
+let auditPoint=null;
+const issueMemory=new Map();
+const issueTypes={
+ 'division-missing':'División faltante','merged-stores':'Locales fusionados',
+ 'shifted-boundary':'Contorno desplazado','wrong-store-id':'Código incorrecto',
+ 'missing-amenity':'Servicio omitido','other':'Otra anomalía'
+};
+function geometryIdentity(floor){
+ let h=2166136261;
+ // Fingerprint every vertex, not only the feature count. Old annotations
+ // should NOT silently land on newly generated, different polygons.
+ for(const f of floor.features){
+  const str=f.id+':'+f.p.map(p=>p.join(',')).join('|')+';';
+  for(let i=0;i<str.length;i++)h=Math.imul(h^str.charCodeAt(i),16777619)>>>0;
+ }
+ return h.toString(16).padStart(8,'0');
+}
+function issueKey(level){
+ const f=floors.find(f=>f.id===level);
+ const photo=selectedMall.floorReferences?.[level]?.sha256||'unregistered';
+ return 'retailnav:photo-audit:v1:'+mallId+':'+level+':'+photo+':'+geometryIdentity(f);
+}
+function getAuditIssues(level){
+ const key=issueKey(level);
+ if(issueMemory.has(key))return issueMemory.get(key).slice();
+ try{
+  const items=JSON.parse(localStorage.getItem(key)||'[]');
+  if(Array.isArray(items)){
+   const safe=items.filter(item=>item&&item.floor===level
+     &&Number.isFinite(item.x)&&Number.isFinite(item.y)
+     &&Object.hasOwn(issueTypes,item.type)).slice(0,250);
+   issueMemory.set(key,safe);
+   return safe.slice();
+  }
+ }catch{}
+ return [];
+}
+function putAuditIssues(level,items){
+ const key=issueKey(level);
+ issueMemory.set(key,items.slice(0,250));
+ try{localStorage.setItem(key,JSON.stringify(items.slice(0,250)));}catch{}
+}
 function svgPaths(floor){
  return floor.features.filter(f=>f.k!=='slab').map(f=>{
-  const color=f.k==='anchor'?'#df8600':
-    f.k==='corridor'?'#009cb5':f.k==='void'?'#b847b3':'#21a34c';
   const d=f.r.map(r=>'M'+r.map(p=>p.join(',')).join(' L')+'Z').join(' ');
-  return '<path d="'+d+'" fill="'+color+
-    '" fill-opacity="0.12" stroke="'+color+
-    '" stroke-width="1.7" fill-rule="evenodd"/>';
+  return '<path data-polygon="'+f.id+'" class="rnCompareFeature" d="'+d+
+   '" fill="#000000" fill-opacity="0.40" stroke="#ffffff" stroke-width="2"'+
+   ' stroke-linejoin="round" vector-effect="non-scaling-stroke" fill-rule="evenodd"/>';
  }).join('');
+}
+function drawUnitComparison(level){
+ const group=$('compareUnitLabels');
+ group.replaceChildren();
+ group.style.display=$('showUnitCodes').checked?'':'none';
+ const records=(selectedMall.units||[]).filter(u=>u.floor===level);
+ for(const u of records){
+  if(!Number.isFinite(u.x)||!Number.isFinite(u.y))continue;
+  const t=document.createElementNS(RN_SVG,'text');
+  t.setAttribute('x',String(u.x));t.setAttribute('y',String(u.y));
+  t.setAttribute('class','rnCompareUnitCode');
+  t.textContent=u.code;
+  group.append(t);
+ }
+}
+function drawAuditPins(level){
+ const group=$('compareIssueMarkers');
+ group.replaceChildren();
+ const items=getAuditIssues(level);
+ $('compareIssueCount').textContent=String(items.length);
+ for(let i=0;i<items.length;i++){
+  const item=items[i];
+  const circle=document.createElementNS(RN_SVG,'circle');
+  circle.setAttribute('cx',String(item.x));circle.setAttribute('cy',String(item.y));
+  circle.setAttribute('r','7');
+  circle.setAttribute('class','rnCompareIssueMarker');
+  group.append(circle);
+  const n=document.createElementNS(RN_SVG,'text');
+  n.setAttribute('x',String(item.x));n.setAttribute('y',String(item.y));
+  n.setAttribute('class','rnCompareIssueNumber');
+  n.textContent=String(i+1);
+  group.append(n);
+ }
+ const marker=$('compareClickMarker');marker.replaceChildren();
+ if(auditPoint?.floor===level){
+  const c=document.createElementNS(RN_SVG,'circle');
+  c.setAttribute('cx',String(auditPoint.x));c.setAttribute('cy',String(auditPoint.y));
+  c.setAttribute('r','10');c.setAttribute('class','rnCompareTarget');
+  marker.append(c);
+ }
+ const list=$('compareIssues');list.replaceChildren();
+ for(let i=0;i<items.length;i++){
+  const item=items[i];
+  const row=document.createElement('div');row.className='rnIssueRow';
+  const name=document.createElement('span');
+  name.textContent=(i+1)+'. '+issueTypes[item.type]+
+   ' · ('+Math.round(item.x)+','+Math.round(item.y)+')'+
+   (item.polygonId?' · '+item.polygonId:'')+
+   (item.note?' — '+item.note:'');
+  const remove=document.createElement('button');
+  remove.type='button';remove.textContent='Eliminar';
+  remove.setAttribute('aria-label','Eliminar anomalía '+(i+1));
+  remove.onclick=()=>{
+   const updated=getAuditIssues(level).filter(x=>x.id!==item.id);
+   putAuditIssues(level,updated);drawComparison();
+  };
+  row.append(name,remove);list.append(row);
+ }
+}
+function compareMapClick(event){
+ if(!$('compareMarkMode').checked)return;
+ const svg=$('compareSvg');
+ const ctm=svg.getScreenCTM();
+ if(!ctm)return;
+ const local=svg.createSVGPoint();
+ local.x=event.clientX;local.y=event.clientY;
+ const p=local.matrixTransform(ctm.inverse());
+ const bounds=svg.viewBox.baseVal;
+ if(p.x<bounds.x||p.y<bounds.y||
+    p.x>bounds.x+bounds.width||p.y>bounds.y+bounds.height)return;
+ const floor=floors.find(f=>f.id===$('compareLevel').value);
+ if(!floor)return;
+ const candidates=floor.features.filter(f=>f.k!=='slab'&&f.r.length&&
+  contains([p.x,p.y],f.r[0])&&
+  !f.r.slice(1).some(r=>contains([p.x,p.y],r)));
+ // A click on the photograph may correspond to a missing divider rather
+ // than an existing polygon. Preserve both the point and optional polygon.
+ const chosen=candidates.sort((a,b)=>a.p.length-b.p.length)[0];
+ auditPoint={floor:floor.id,x:Math.round(p.x*10)/10,
+  y:Math.round(p.y*10)/10,polygonId:chosen?.id||null};
+ $('compareSelectedPoint').textContent='Punto '+auditPoint.x+', '+auditPoint.y+
+  (auditPoint.polygonId?' · '+auditPoint.polygonId:' · sin contorno identificado');
+ $('compareSaveIssue').disabled=false;
+ drawAuditPins(floor.id);
+}
+function saveAuditIssue(){
+ if(!auditPoint)return;
+ const floor=$('compareLevel').value;
+ if(auditPoint.floor!==floor)return;
+ const items=getAuditIssues(floor);
+ if(items.length>=250){
+  $('compareSelectedPoint').textContent='Límite de observaciones: exportá las existentes.';
+  return;
+ }
+ items.push({...auditPoint,
+  id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8),
+  type:$('compareIssueType').value,
+  note:$('compareIssueNote').value.trim().slice(0,500),
+  createdAt:new Date().toISOString(),status:'open'});
+ putAuditIssues(floor,items);
+ auditPoint=null;
+ $('compareSelectedPoint').textContent='Anomalía guardada; podés marcar otra.';
+ $('compareSaveIssue').disabled=true;$('compareIssueNote').value='';
+ drawComparison();
+}
+function exportAuditIssues(){
+ const level=$('compareLevel').value;
+ const payload={schema:'retailnav.floor-anomalies.v1',
+  mallId,level,referenceSha256:selectedMall.floorReferences?.[level]?.sha256||null,
+  geometryFingerprint:geometryIdentity(floors.find(f=>f.id===level)),
+  generatedAt:new Date().toISOString(),
+  reviewStatus:'open-needs-manual-validation',
+  automaticCertification:false,
+  issues:getAuditIssues(level)};
+ download('RetailNav-'+mallId+'-'+level+'-anomalies.json',
+  JSON.stringify(payload,null,2),'application/json');
 }
 function drawComparison(){
  const level=$('compareLevel').value;
@@ -243,15 +403,23 @@ function drawComparison(){
  $('compareMissing').hidden=present;
  $('compareSource').textContent=floor.name+' · '+floor.source;
  const approved=entry?.qa?.status==='approved';
+ const openCount=getAuditIssues(level).length;
  $('compareReviewStatus').textContent=present
-  ?(approved?'Referencia verificada para esta geometría.'
-    :'Mapa provisional · contrastar divisiones, rótulos, accesos y servicios con la foto.')
+  ?(approved&&openCount===0?'Referencia verificada para esta geometría.'
+    :'Mapa provisional · '+openCount+' anomalía(s) registrada(s). Verificar divisiones, rótulos y servicios.')
   :'Falta la foto de referencia: esta vectorización no puede aprobarse.';
  $('traceOverlay').innerHTML=svgPaths(floor);
  $('referenceImage').style.display=$('showReference').checked&&present?'':'none';
  $('traceOverlay').style.display=$('showVectors').checked?'':'none';
- $('traceOverlay').style.opacity=$('overlayOpacity').value;
- $('opacityValue').textContent=Math.round(Number($('overlayOpacity').value)*100)+' %';
+ const opaque=$('compareMode').value==='outline'?0:Number($('overlayOpacity').value);
+ // Apply transparency ONLY to black fill. White outlines stay fully opaque.
+ $('traceOverlay').style.opacity='1';
+ for(const node of $('traceOverlay').children)
+  node.style.fillOpacity=String(opaque);
+ $('overlayOpacity').disabled=$('compareMode').value==='outline';
+ $('opacityValue').textContent=Math.round(opaque*100)+' %';
+ drawUnitComparison(level);
+ drawAuditPins(level);
  const zoom=Number($('compareZoom').value)||100;
  $('compareZoomValue').textContent=zoom+' %';
  $('compareSvg').style.width=zoom+'%';
@@ -279,6 +447,11 @@ window.RetailNavComparison={
   originalVisible:Boolean($('showReference')?.checked),
   vectorsVisible:Boolean($('showVectors')?.checked),
   opacity:Number($('overlayOpacity')?.value),
+  appliedFillOpacity:$('compareMode').value==='outline'?0:Number($('overlayOpacity').value),
+  outlineColor:'#ffffff',fillColor:'#000000',outlineWidthPx:2,
+  compareMode:$('compareMode')?.value,
+  codeLabelsVisible:Boolean($('showUnitCodes')?.checked),
+  issueCount:getAuditIssues($('compareLevel')?.value).length,
   geometricValidation:selectedMall.floorReferences?.[$('compareLevel')?.value]?.qa?.status||'unverified',
   floorCount:floors.length
  })
@@ -289,11 +462,19 @@ function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',
 // GLB 2.0: real triangle meshes with normals, one group per floor, Y up.
 function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],materials=[],len=0;let mat={};for(let floor of visible()){let children=[];for(let f of floor.features){if(!f.flat.length)continue;let bytes=new Uint8Array(f.flat.buffer);parts.push(bytes);let view=views.length;views.push({buffer:0,byteOffset:len,byteLength:bytes.length,byteStride:24,target:34962});let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<f.flat.length;i+=6)for(let j=0;j<3;j++){min[j]=Math.min(min[j],f.flat[i+j]);max[j]=Math.max(max[j],f.flat[i+j]);}let a=accessors.length;accessors.push({bufferView:view,byteOffset:0,componentType:5126,count:f.flat.length/6,type:'VEC3',min,max},{bufferView:view,byteOffset:12,componentType:5126,count:f.flat.length/6,type:'VEC3'});let key=f.k+'-'+floor.index;if(mat[key]===undefined){mat[key]=materials.length;materials.push({name:key,pbrMetallicRoughness:{baseColorFactor:[...palette(f,floor.index,false),1],metallicFactor:.1,roughnessFactor:.8},doubleSided:true});}let m=meshes.length;meshes.push({name:f.id,primitives:[{attributes:{POSITION:a,NORMAL:a+1},material:mat[key],mode:4}]});children.push(nodes.length);nodes.push({name:f.n||f.id,mesh:m,extras:{id:f.id,level:floor.id,status:'trazado-provisional'}});len+=bytes.length;}let group=nodes.length;nodes.push({name:floor.id,children,translation:[0,floor.index*4.5,0],extras:{source:floor.source,elevationStatus:'simulada'}});floor.exportGroup=group;}let doc={asset:{version:'2.0',generator:'RetailNav vector-to-mesh',extras:{realSurvey:false,scale:'unidades de modelo, no metros medidos'}},scene:0,scenes:[{nodes:visible().map(f=>f.exportGroup)}],nodes,meshes,materials,buffers:[{byteLength:len}],bufferViews:views,accessors};let text=new TextEncoder().encode(JSON.stringify(doc));let jlen=(text.length+3)&~3,total=12+8+jlen+8+len,buff=new ArrayBuffer(total),v=new DataView(buff),u=new Uint8Array(buff);v.setUint32(0,0x46546c67,true);v.setUint32(4,2,true);v.setUint32(8,total,true);v.setUint32(12,jlen,true);v.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jlen);u.set(text,20);v.setUint32(20+jlen,len,true);v.setUint32(24+jlen,0x004e4942,true);let off=28+jlen;parts.forEach(p=>{u.set(p,off);off+=p.length;});download('RetailNav-'+mallId+'-'+active+'.glb',buff,'model/gltf-binary');return buff;}
 function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();distance=clamp(distance*.8,24,700);};$('zoomOut').onclick=()=>{stopAuto();distance=clamp(distance*1.25,24,700);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{panMode=!panMode;$('pan').setAttribute('aria-pressed',String(panMode));notify(panMode?'Un dedo desplaza. Dos dedos desplazan y amplian.':'Un dedo gira libremente. Dos dedos desplazan y amplian.');};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;
-$('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';drawComparison();};
+$('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';auditPoint=null;$('compareSaveIssue').disabled=true;drawComparison();};
 $('showReference').onchange=drawComparison;
 $('showVectors').onchange=drawComparison;
 $('overlayOpacity').oninput=drawComparison;
 $('compareZoom').oninput=drawComparison;
+$('compareMode').onchange=drawComparison;
+$('showUnitCodes').onchange=drawComparison;
+$('compareMarkMode').onchange=()=>{
+ if(!$('compareMarkMode').checked){auditPoint=null;$('compareSaveIssue').disabled=true;drawComparison();}
+};
+$('compareSvg').addEventListener('click',compareMapClick);
+$('compareSaveIssue').onclick=saveAuditIssue;
+$('compareExportIssues').onclick=exportAuditIssues;
 $('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});}
 async function fetchJSON(url){let c=new AbortController(),timer=setTimeout(()=>c.abort(),15000);try{let res=await fetch(url,{signal:c.signal});if(!res.ok)throw new Error('HTTP '+res.status+' al descargar '+url);let total=Number(res.headers.get('content-length'))||0,got=0,chunks=[],reader=res.body.getReader();while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.byteLength;progress(total?Math.min(25,got/total*25):10,'Descargando vectores: '+Math.ceil(got/1024)+' KB'+(total?' / '+Math.ceil(total/1024)+' KB':''));}let bytes=new Uint8Array(got),off=0;chunks.forEach(x=>{bytes.set(x,off);off+=x.length;});return JSON.parse(new TextDecoder().decode(bytes));}finally{clearTimeout(timer);}}
 function applyMallUi(){

@@ -12,7 +12,9 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from floorplan_vectorizer import detect_wall_candidates, apply_reviewed_walls
+from floorplan_vectorizer import (detect_wall_candidates, apply_reviewed_walls,
+                                  grayscale_evidence, extract,
+                                  audit_boundary_alignment)
 
 
 def run():
@@ -31,7 +33,13 @@ def run():
                     .55, (15, 35, 30), 1)
         cv2.imwrite(str(source), image)
 
-        lines = detect_wall_candidates(image, 14)
+        evidence=grayscale_evidence(image)
+        assert evidence["gray"].shape == (180,340)
+        assert evidence["enhanced"].shape == (180,340)
+        assert evidence["binary"].shape == (180,340)
+        assert evidence["binary"].dtype == np.uint8
+        assert np.count_nonzero(evidence["supported"]) > 100
+        lines = detect_wall_candidates(image, 14, evidence)
         assert len(lines) >= 2, "Shared shop divider must survive"
         assert all(line["verified"] is False for line in lines)
         assert any(abs(l["a"][0]-165) < 5 and abs(l["b"][0]-165) < 5
@@ -42,6 +50,26 @@ def run():
             {"a": [20, 30], "b": [318, 30], "verified": False}
         ])
         assert len(segments) == 1, "Only manually approved walls may change geometry"
+
+        hybrid=extract(image,"B1",reviewed_walls=[
+            {"a":[165,22],"b":[165,155],"verified":True}
+        ],mode="hybrid",evidence=evidence)
+        assert len(hybrid)>=3, "Segmentation must recognize at least three cells"
+        audit=audit_boundary_alignment(image,hybrid,evidence)
+        assert audit["sampledPolygonCount"]>=3
+        assert audit["reviewRequired"] and not audit["verified"]
+        assert 0<=audit["averageBoundarySupport"]<=1
+        # Simulate a shadow gradient over a faded, grayscale-only map.
+        mono=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        illumination=np.linspace(5,57,340,dtype=np.uint8)
+        dark=np.clip(mono.astype(np.int16)-illumination[None,:],0,255).astype("uint8")
+        uneven=cv2.cvtColor(dark,cv2.COLOR_GRAY2BGR)
+        grayEvidence=grayscale_evidence(uneven)
+        monochrome=detect_wall_candidates(uneven,14,grayEvidence)
+        assert len(monochrome)>=1, "Gray/BW path must survive uneven lighting"
+        assert all(not x["verified"] for x in monochrome)
+        assert all(x["source"]=="adaptive-grayscale+color" for x in monochrome)
+        assert all("adaptiveBW" in x["evidence"] for x in monochrome)
 
         names = temp / "zones.json"
         names.write_text(json.dumps({"B1": [
@@ -77,11 +105,33 @@ def run():
         assert manifest["districts"][0]["name"] == "Digital City"
         assert manifest["pois"][0]["category"] == "toilet"
         assert review["status"] == "unreviewed"
+        assert review["method"]=="original-colour+CLAHE-grayscale+adaptive-BW"
+        assert "confidence" in review["candidates"][0]
+        assert len(review["candidates"])>=2
+        aligned=json.loads((out / "B1-alignment-review.json").read_text())
+        assert aligned["reviewRequired"] is True
+        assert aligned["verified"] is False
+        assert aligned["sampledPolygonCount"] >= 3
+        assert report["floors"][0]["grayscaleAnalysis"] is True
+        assert report["floors"][0]["adaptiveBinarization"] is True
+        assert report["floors"][0]["segmentationMethod"]=="hybrid"
+        assert report["floors"][0]["automaticChecksPassed"] is False
+        reference=manifest["floorReferences"]["B1"]
+        assert reference["qa"]["status"]=="pending"
+        assert reference["qa"]["reviewer"] is None
+        assert reference["imageSize"]==[340,180]
+        assert reference["rasterSize"]==[340,180]
+        assert reference["quality"]=="compressed-preview"
+        assert (out / "B1.reference.webp.b64.part00").exists()
+
         assert all(not line["verified"] for line in review["candidates"])
         assert report["state"] == "needs-human-verification"
         assert report["floors"][0]["exactPerStoreGeometryVerified"] is False
         for name in ["B1-preview.jpg", "B1-wall-review.jpg",
-                     "B1-districts-preview.jpg", "B1.geometry.zlib.b64"]:
+                     "B1-districts-preview.jpg", "B1.geometry.zlib.b64",
+                     "B1-grayscale-contrast.jpg", "B1-adaptive-bw.png",
+                     "B1-confirmed-strokes.png", "B1-alignment-review.jpg",
+                     "B1-alignment-review.json"]:
             assert (out / name).exists(), name
         print("PASS: floor boundaries, services, district names and unverified linework")
 

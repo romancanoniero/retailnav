@@ -4,8 +4,11 @@
 const $=id=>document.getElementById(id), K=['anchor','unit','zone','corridor','void','slab'];
 let data, floors=[], gl, ctx2d=null, program, loc, canvas=$('canvas'), frame=0, lastTime=0, mvp, invMvp, toastTimer, ready=false;
 let dirty=true;
-let active='ALL', wire=false, scan=false, auto=false, panMode=false, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
+let active='ALL', wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
+let orbitYaw=-.30,orbitPitch=-.70;
+const MIN_PITCH=-Math.PI/2,MAX_PITCH=-.25;
+function updateCameraRotation(){q=norm(qm(quat([0,1,0],orbitYaw),quat([1,0,0],orbitPitch)));}
 const selectedMall=window.RETAILNAV_ACTIVE_MALL||{id:'aventura',name:'Aventura Mall',floors:null,origin:[690,405],scale:.15};
 const mallId=selectedMall.id||'aventura';
 const cfg={origin:selectedMall.origin||[690,405],scale:selectedMall.scale||.15}; const errors=[];
@@ -52,8 +55,10 @@ function makeLabels(){
 function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
 function drawRoute(dt){if(!route)return;let floor=floors.find(f=>f.id===route.floor);if(active!=='ALL'&&active!==floor.id)return;if(routeRunning)routeT=(routeT+dt*.14)%1;let arr=[];route.points.forEach(p=>arr.push(...pos(p,.2),0,0,0,1,.65,.23,-3));gl.uniform1f(loc.uY,floor.y);gl.uniform1f(loc.uLine,1);gl.bindBuffer(gl.ARRAY_BUFFER,routeBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.DYNAMIC_DRAW);bind({b:routeBuffer});gl.drawArrays(gl.LINE_STRIP,0,arr.length/10);let lens=[0];for(let i=1;i<route.points.length;i++)lens.push(lens[i-1]+Math.hypot(...vsub(route.points[i],route.points[i-1])));let t=(lens.at(-1)||1)*routeT,i=1;while(i<lens.length-1&&lens[i]<t)i++;let a=route.points[i-1],b=route.points[i]||a,k=(t-lens[i-1])/(lens[i]-lens[i-1]||1);let p=[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([...pos(p,.8),0,0,0,1,.83,.43,-3]),gl.DYNAMIC_DRAW);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*10);gl.drawArrays(gl.POINTS,0,1);}
-function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);floors.forEach(f=>f.y=f.index*spread);if(auto)q=norm(qm(quat([0,1,0],dt*.18),q));matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawRoute(dt);window.RetailNavPins?.draw3D?.(gl,mvp);window.RetailNavUnits?.draw3D?.(gl,mvp);window.RetailNavDistricts?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
+function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);floors.forEach(f=>f.y=f.index*spread);if(auto){orbitYaw+=dt*.18;updateCameraRotation();}matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
+window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 
 // Canvas 3D engine: genuine perspective projection of the same extruded polygon
 // geometry. Used when WebGL is blocked by an in-app preview or GPU policy.
@@ -110,7 +115,17 @@ function renderCanvas(dt){
 }
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
-function resetCamera(plan=false){stopAuto();q=plan?quat([1,0,0],-Math.PI/2):qm(quat([0,1,0],-.30),quat([1,0,0],-.70));let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:spread):fs[0].y,0];distance=200;resize();matrices();let mx=0,my=0;for(let f of fs)for(let o of f.features)for(let v of o.p){let p=mp(mvp,[...pos(v,f.y),1]);mx=Math.max(mx,Math.abs(p[0]/p[3]));my=Math.max(my,Math.abs(p[1]/p[3]));}distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);$('plan').setAttribute('aria-pressed',String(plan));}
+function resetCamera(plan=false){
+ stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;updateCameraRotation();
+ let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:spread):fs[0].y,0];distance=200;
+ resize();matrices();let mx=0,my=0;
+ for(const f of fs)for(const o of f.features)for(const v of o.p){
+  const p=mp(mvp,[...pos(v,f.y),1]);if(p[3]<=0)continue;
+  mx=Math.max(mx,Math.abs(p[0]/p[3]));my=Math.max(my,Math.abs(p[1]/p[3]));
+ }
+ distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);
+ $('plan').setAttribute('aria-pressed',String(plan));dirty=true;
+}
 function setFloor(id){
  if(!ready)return;
  if(floors.length===1)id=floors[0].id;
@@ -177,14 +192,137 @@ $('resultCount').textContent=q?(list.length+pois.length+shopIds.length+districtM
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
 function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
 function progress(n,message){$('loading').hidden=false;$('progress').value=n;$('loadText').textContent=message;}
-function pan(dx,dy){let u=2*distance*Math.tan(Math.PI/8)/canvas.clientHeight;target=vadd(target,qr(q,[-dx*u,dy*u,0]));}
-const pointers=new Map();let gesture=null;
-function beginGesture(){let p=[...pointers.values()];gesture={q:q.slice(),target:target.slice(),distance,p:p.map(p=>({...p}))};}
-canvas.addEventListener('pointerdown',e=>{if(!ready)return;stopAuto();canvas.focus();try{canvas.setPointerCapture(e.pointerId);}catch{}pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,button:e.button,shift:e.shiftKey});beginGesture();canvas.classList.add('dragging');});
-canvas.addEventListener('pointermove',e=>{if(!ready||!pointers.has(e.pointerId))return;Object.assign(pointers.get(e.pointerId),{x:e.clientX,y:e.clientY});let p=[...pointers.values()];if(p.length===1){let dx=p[0].x-gesture.p[0].x,dy=p[0].y-gesture.p[0].y;q=gesture.q.slice();target=gesture.target.slice();if(panMode||p[0].button===2||p[0].shift)pan(dx,dy);else{q=norm(qm(gesture.q,qm(quat([0,1,0],-dx*.006),quat([1,0,0],-dy*.006))));$('plan').setAttribute('aria-pressed','false');}}else{let [a,b]=p,[aa,bb]=gesture.p;let d=Math.hypot(a.x-b.x,a.y-b.y),dd=Math.hypot(aa.x-bb.x,aa.y-bb.y);distance=clamp(gesture.distance*dd/Math.max(d,5),24,700);let angle=Math.atan2(b.y-a.y,b.x-a.x)-Math.atan2(bb.y-aa.y,bb.x-aa.x);angle=Math.atan2(Math.sin(angle),Math.cos(angle));q=norm(qm(quat([0,1,0],-angle),gesture.q));target=gesture.target.slice();pan((a.x+b.x-aa.x-bb.x)/2,(a.y+b.y-aa.y-bb.y)/2);$('plan').setAttribute('aria-pressed','false');}});
-function manualMapPoint(x,y){if(!invMvp||active==='ALL')return null;let r=canvas.getBoundingClientRect(),nx=(x-r.left)/r.width*2-1,ny=1-(y-r.top)/r.height*2;let un=z=>{let v=mp(invMvp,[nx,ny,z,1]);return v.slice(0,3).map(n=>n/v[3]);};let a=un(-1),b=un(1),dir=norm(vsub(b,a)),floor=floors.find(f=>f.id===active);if(!floor||Math.abs(dir[1])<.00001)return null;let t=(floor.y+.2-a[1])/dir[1];if(!Number.isFinite(t)||t<=0)return null;let point=vadd(a,vmul(dir,t)),p=[point[0]/cfg.scale+cfg.origin[0],point[2]/cfg.scale+cfg.origin[1]];let xs=floor.features.flatMap(f=>f.p.map(v=>v[0])),ys=floor.features.flatMap(f=>f.p.map(v=>v[1]));if(!xs.length||p[0]<Math.min(...xs)-20||p[0]>Math.max(...xs)+20||p[1]<Math.min(...ys)-20||p[1]>Math.max(...ys)+20)return null;return {floor:floor.id,x:Math.round(p[0]*10)/10,y:Math.round(p[1]*10)/10};}
-function endPointer(e){let p=pointers.get(e.pointerId);if(p&&pointers.size===1&&Math.hypot(p.x-p.startX,p.y-p.startY)<6&&p.button===0){if(placingPosition){let at=manualMapPoint(e.clientX,e.clientY);if(at){placingPosition=false;canvas.classList.remove('placing');window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:at}));notify('Posición aproximada marcada en '+at.floor+'.');}else notify('Tocá un punto dentro de la planta para indicar tu ubicación.');}else pick(e.clientX,e.clientY);}pointers.delete(e.pointerId);beginGesture();if(!pointers.size)canvas.classList.remove('dragging');}
-canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);beginGesture();canvas.classList.remove('dragging');});canvas.addEventListener('contextmenu',e=>e.preventDefault());canvas.addEventListener('wheel',e=>{if(!ready)return;e.preventDefault();stopAuto();distance=clamp(distance*Math.exp(e.deltaY*.001),24,700);},{passive:false});canvas.addEventListener('keydown',e=>{if(!ready)return;let key=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','-','0'].includes(key))e.preventDefault();if(key==='ArrowLeft')pan(30,0);if(key==='ArrowRight')pan(-30,0);if(key==='ArrowUp')pan(0,30);if(key==='ArrowDown')pan(0,-30);if(key==='+')distance=clamp(distance*.86,24,700);if(key==='-')distance=clamp(distance*1.16,24,700);if(key==='0')resetCamera();});
+// Map-first touch controls: one finger pans; two fingers zoom, twist and tilt.
+// Movement is anchored to the world point beneath the gesture, avoiding jumps.
+function pan(dx,dy){
+ const u=2*distance*Math.tan(Math.PI/8)/Math.max(1,canvas.clientHeight);
+ target=vadd(target,qr(q,[-dx*u,dy*u,0]));dirty=true;
+}
+function worldPointAt(cx,cy,y=target[1]){
+ if(!invMvp)return null;
+ const rect=canvas.getBoundingClientRect();
+ if(!rect.width||!rect.height)return null;
+ const nx=(cx-rect.left)/rect.width*2-1,ny=1-(cy-rect.top)/rect.height*2;
+ const un=z=>{const a=mp(invMvp,[nx,ny,z,1]);return a.slice(0,3).map(n=>n/a[3]);};
+ const a=un(-1),b=un(1),dir=norm(vsub(b,a));
+ if(Math.abs(dir[1])<.0001)return null;
+ const length=(y-a[1])/dir[1];
+ return Number.isFinite(length)&&length>0?vadd(a,vmul(dir,length)):null;
+}
+function anchorCamera(cx,cy,originalTarget,originalPoint){
+ if(!originalPoint)return;
+ matrices();
+ const after=worldPointAt(cx,cy,originalPoint[1]);
+ if(after)target=vadd(originalTarget,vsub(originalPoint,after));
+}
+function zoomAt(next,clientX,clientY){
+ matrices();const anchor=worldPointAt(clientX,clientY,target[1]),origin=target.slice();
+ distance=clamp(next,24,700);
+ anchorCamera(clientX,clientY,origin,anchor);dirty=true;
+}
+const pointers=new Map();
+let gesture=null,lastTap=null;
+function beginGesture(){
+ const p=[...pointers.values()];
+ const center=p.length>=2?[(p[0].x+p[1].x)/2,(p[0].y+p[1].y)/2]:
+  p.length?[p[0].x,p[0].y]:null;
+ matrices();
+ gesture={target:target.slice(),distance,yaw:orbitYaw,pitch:orbitPitch,
+  p:p.map(point=>({...point})),anchor:center?worldPointAt(center[0],center[1],target[1]):null};
+}
+canvas.addEventListener('pointerdown',e=>{
+ if(!ready)return;stopAuto();canvas.focus();
+ try{canvas.setPointerCapture(e.pointerId);}catch{}
+ pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,
+  button:e.button,shift:e.shiftKey,moved:false});
+ beginGesture();canvas.classList.add('dragging');dirty=true;
+});
+canvas.addEventListener('pointermove',e=>{
+ if(!ready||!pointers.has(e.pointerId))return;
+ const ptr=pointers.get(e.pointerId);
+ ptr.x=e.clientX;ptr.y=e.clientY;
+ if(Math.hypot(ptr.x-ptr.startX,ptr.y-ptr.startY)>7)ptr.moved=true;
+ if(!gesture)return;
+ const p=[...pointers.values()];
+ if(p.length===1){
+  const dx=p[0].x-gesture.p[0].x,dy=p[0].y-gesture.p[0].y;
+  target=gesture.target.slice();distance=gesture.distance;
+  if(panMode||p[0].button===2||p[0].shift){
+   anchorCamera(p[0].x,p[0].y,gesture.target,gesture.anchor);
+  }else{
+   orbitYaw=gesture.yaw-dx*.006;
+   orbitPitch=clamp(gesture.pitch-dy*.004,MIN_PITCH,MAX_PITCH);
+   updateCameraRotation();
+   $('plan').setAttribute('aria-pressed','false');
+  }
+ }else if(p.length>=2){
+  const [a,b]=p,[aa,bb]=gesture.p;
+  const d=Math.hypot(a.x-b.x,a.y-b.y),dd=Math.max(5,Math.hypot(aa.x-bb.x,aa.y-bb.y));
+  const delta=Math.atan2(b.y-a.y,b.x-a.x)-Math.atan2(bb.y-aa.y,bb.x-aa.x);
+  const angle=Math.atan2(Math.sin(delta),Math.cos(delta));
+  const dx=(a.x+b.x-aa.x-bb.x)/2,dy=(a.y+b.y-aa.y-bb.y)/2;
+  distance=clamp(gesture.distance*dd/Math.max(5,d),24,700);
+  orbitYaw=gesture.yaw-angle;
+  const tilting=Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.25
+   &&Math.abs(d/dd-1)<.13&&Math.abs(angle)<.10;
+  orbitPitch=clamp(gesture.pitch+(tilting?dy*.0045:0),MIN_PITCH,MAX_PITCH);
+  updateCameraRotation();target=gesture.target.slice();
+  anchorCamera((a.x+b.x)/2,(a.y+b.y)/2,gesture.target,gesture.anchor);
+  $('plan').setAttribute('aria-pressed','false');
+ }
+ dirty=true;
+});
+function endPointer(e){
+ const p=pointers.get(e.pointerId);
+ if(p&&pointers.size===1&&!p.moved&&Math.hypot(p.x-p.startX,p.y-p.startY)<7&&p.button===0){
+  const now=performance.now();
+  const doubleTap=lastTap&&now-lastTap.at<320&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<32;
+  if(doubleTap){
+   zoomAt(distance*.70,e.clientX,e.clientY);lastTap=null;
+  }else{
+   lastTap={x:e.clientX,y:e.clientY,at:now};
+   if(placingPosition){
+    const at=manualMapPoint(e.clientX,e.clientY);
+    if(at){placingPosition=false;canvas.classList.remove('placing');
+     window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:at}));
+     notify('Posición aproximada marcada en '+at.floor+'.');
+    }else notify('Tocá un punto dentro de la planta para indicar tu ubicación.');
+   }else pick(e.clientX,e.clientY);
+  }
+ }
+ pointers.delete(e.pointerId);beginGesture();
+ if(!pointers.size)canvas.classList.remove('dragging');
+ dirty=true;
+}
+canvas.addEventListener('pointerup',endPointer);
+canvas.addEventListener('pointercancel',e=>{
+ pointers.delete(e.pointerId);beginGesture();
+ if(!pointers.size)canvas.classList.remove('dragging');dirty=true;
+});
+canvas.addEventListener('lostpointercapture',e=>{
+ if(pointers.has(e.pointerId)){pointers.delete(e.pointerId);beginGesture();dirty=true;}
+});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+canvas.addEventListener('wheel',e=>{
+ if(!ready)return;e.preventDefault();stopAuto();
+ zoomAt(distance*Math.exp(e.deltaY*.001),e.clientX,e.clientY);
+},{passive:false});
+canvas.addEventListener('keydown',e=>{
+ if(!ready)return;
+ const key=e.key;
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','=','-','0','[',']'].includes(key))e.preventDefault();
+ if(key==='ArrowLeft')pan(30,0);
+ if(key==='ArrowRight')pan(-30,0);
+ if(key==='ArrowUp')pan(0,30);
+ if(key==='ArrowDown')pan(0,-30);
+ if(key==='+'||key==='=')distance=clamp(distance*.86,24,700);
+ if(key==='-')distance=clamp(distance*1.16,24,700);
+ if(key==='['||key===']'){
+  orbitYaw+=(key==='['?-.12:.12);updateCameraRotation();
+ }
+ if(key==='0')resetCamera();
+ dirty=true;
+});
 // Same-floor demo pathfinding. Gray corridors only; no unverified vertical connectors or shop entrances.
 function findRoute(){if(!selected)return;if(mallId!=='aventura'){notify('Rutas deshabilitadas: los pasillos de este plano fotográfico no están verificados.');return;}let f=floors.find(f=>f.id===selected.floor),w=f.walk,N=w.w*w.h;const open=i=>i>=0&&i<N&&((w.bytes[i>>3]>>(i&7))&1),coord=i=>[w.x+(i%w.w)*w.step,w.y+Math.floor(i/w.w)*w.step];let cells=[];for(let i=0;i<N;i++)if(open(i))cells.push(i);if(!cells.length)return notify('Este sector no contiene un pasillo legible para trazar una ruta.');let origin=[624,401],goal=selected.c;let nearest=p=>cells.reduce((a,b)=>Math.hypot(...vsub(coord(b),p))<Math.hypot(...vsub(coord(a),p))?b:a,cells[0]);let start=nearest(origin),end=nearest(goal),queue=[start],prev=new Int32Array(N).fill(-1);prev[start]=start;for(let h=0;h<queue.length&&prev[end]<0;h++){let i=queue[h];for(let j of [i-1,i+1,i-w.w,i+w.w])if(open(j)&&prev[j]<0&&(Math.abs(j-i)!==1||Math.floor(j/w.w)===Math.floor(i/w.w))){prev[j]=i;queue.push(j);}}if(prev[end]<0){$('routeInfo').textContent='No hay continuidad demostrable entre estos sectores en el trazado. No se dibuja una ruta a traves de locales.';return;}let path=[end];while(path.at(-1)!==start)path.push(prev[path.at(-1)]);path.reverse();if(path.length<2){$('routeInfo').textContent='El punto de demostracion ya esta junto a este sector.';return;}let pts=path.map(coord).filter((p,i,a)=>i===0||i===a.length-1||(a[i-1][0]!==a[i+1][0]&&a[i-1][1]!==a[i+1][1]));if(active!==selected.floor){let saved=selected;setFloor(saved.floor);selected=saved;}route={floor:f.id,points:pts};routeRunning=true;routeT=0;$('routeInfo').textContent='Recorrido de prueba sobre pasillos trazados. Origen ficticio; termina cerca del local, no en una puerta verificada. Sin instrucciones para uso real.';notify('La animacion recorre exclusivamente la circulacion del plano.');}
 // Per-floor source-photo QA: do not treat the traced SVG as the original image.
@@ -461,7 +599,7 @@ function exportSVG(){let fs=visible(),f=fs.length===1?fs[0]:floors[Math.min(1,fl
 function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',source:selectedMall.source||'Planos aportados',mallId,calibration:'Escala no medida. Coordenadas originales en pixeles registrados.',levels:visible().map(f=>({id:f.id,source:f.source,elevation:f.index*4.5,elevationStatus:'simulada',features:f.features.map(o=>({id:o.id,kind:o.k,label:o.n,geometry:{outer:o.r[0],holes:o.r.slice(1)},status:'trazado-provisional'}))}))};download('RetailNav-'+mallId+'-'+active+'.json',JSON.stringify(out,null,2),'application/json');}
 // GLB 2.0: real triangle meshes with normals, one group per floor, Y up.
 function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],materials=[],len=0;let mat={};for(let floor of visible()){let children=[];for(let f of floor.features){if(!f.flat.length)continue;let bytes=new Uint8Array(f.flat.buffer);parts.push(bytes);let view=views.length;views.push({buffer:0,byteOffset:len,byteLength:bytes.length,byteStride:24,target:34962});let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<f.flat.length;i+=6)for(let j=0;j<3;j++){min[j]=Math.min(min[j],f.flat[i+j]);max[j]=Math.max(max[j],f.flat[i+j]);}let a=accessors.length;accessors.push({bufferView:view,byteOffset:0,componentType:5126,count:f.flat.length/6,type:'VEC3',min,max},{bufferView:view,byteOffset:12,componentType:5126,count:f.flat.length/6,type:'VEC3'});let key=f.k+'-'+floor.index;if(mat[key]===undefined){mat[key]=materials.length;materials.push({name:key,pbrMetallicRoughness:{baseColorFactor:[...palette(f,floor.index,false),1],metallicFactor:.1,roughnessFactor:.8},doubleSided:true});}let m=meshes.length;meshes.push({name:f.id,primitives:[{attributes:{POSITION:a,NORMAL:a+1},material:mat[key],mode:4}]});children.push(nodes.length);nodes.push({name:f.n||f.id,mesh:m,extras:{id:f.id,level:floor.id,status:'trazado-provisional'}});len+=bytes.length;}let group=nodes.length;nodes.push({name:floor.id,children,translation:[0,floor.index*4.5,0],extras:{source:floor.source,elevationStatus:'simulada'}});floor.exportGroup=group;}let doc={asset:{version:'2.0',generator:'RetailNav vector-to-mesh',extras:{realSurvey:false,scale:'unidades de modelo, no metros medidos'}},scene:0,scenes:[{nodes:visible().map(f=>f.exportGroup)}],nodes,meshes,materials,buffers:[{byteLength:len}],bufferViews:views,accessors};let text=new TextEncoder().encode(JSON.stringify(doc));let jlen=(text.length+3)&~3,total=12+8+jlen+8+len,buff=new ArrayBuffer(total),v=new DataView(buff),u=new Uint8Array(buff);v.setUint32(0,0x46546c67,true);v.setUint32(4,2,true);v.setUint32(8,total,true);v.setUint32(12,jlen,true);v.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jlen);u.set(text,20);v.setUint32(20+jlen,len,true);v.setUint32(24+jlen,0x004e4942,true);let off=28+jlen;parts.forEach(p=>{u.set(p,off);off+=p.length;});download('RetailNav-'+mallId+'-'+active+'.glb',buff,'model/gltf-binary');return buff;}
-function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();distance=clamp(distance*.8,24,700);};$('zoomOut').onclick=()=>{stopAuto();distance=clamp(distance*1.25,24,700);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{panMode=!panMode;$('pan').setAttribute('aria-pressed',String(panMode));notify(panMode?'Un dedo desplaza. Dos dedos desplazan y amplian.':'Un dedo gira libremente. Dos dedos desplazan y amplian.');};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;
+function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();distance=clamp(distance*.8,24,700);};$('zoomOut').onclick=()=>{stopAuto();distance=clamp(distance*1.25,24,700);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{panMode=!panMode;$('pan').setAttribute('aria-pressed',String(panMode));notify(panMode?'Modo mapa: un dedo mueve · dos dedos amplían, giran e inclinan.':'Explorar 3D: un dedo orbita · dos dedos amplían, giran e inclinan.');};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};$('search').oninput=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('search').onfocus=()=>{$('sidebar').classList.add('finding');$('detail').hidden=true;results();};$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;
 $('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';auditPoint=null;$('compareSaveIssue').disabled=true;drawComparison();};
 $('showReference').onchange=drawComparison;
 $('showVectors').onchange=drawComparison;
@@ -475,7 +613,9 @@ $('compareMarkMode').onchange=()=>{
 $('compareSvg').addEventListener('click',compareMapClick);
 $('compareSaveIssue').onclick=saveAuditIssue;
 $('compareExportIssues').onclick=exportAuditIssues;
-$('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});}
+$('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});
+ window.addEventListener('orientationchange',()=>{resize();dirty=true;});
+ window.visualViewport?.addEventListener('resize',()=>{resize();dirty=true;});}
 async function fetchJSON(url){let c=new AbortController(),timer=setTimeout(()=>c.abort(),15000);try{let res=await fetch(url,{signal:c.signal});if(!res.ok)throw new Error('HTTP '+res.status+' al descargar '+url);let total=Number(res.headers.get('content-length'))||0,got=0,chunks=[],reader=res.body.getReader();while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.byteLength;progress(total?Math.min(25,got/total*25):10,'Descargando vectores: '+Math.ceil(got/1024)+' KB'+(total?' / '+Math.ceil(total/1024)+' KB':''));}let bytes=new Uint8Array(got),off=0;chunks.forEach(x=>{bytes.set(x,off);off+=x.length;});return JSON.parse(new TextDecoder().decode(bytes));}finally{clearTimeout(timer);}}
 function applyMallUi(){
   document.title='RetailNav | '+selectedMall.name+' · visor 3D';
@@ -518,6 +658,6 @@ function applyMallUi(){
   $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · planta B1 (foto)':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
-$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length])}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

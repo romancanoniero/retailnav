@@ -53,9 +53,16 @@ try {
   });
   assert.equal(pinInfo.registered,9,'Nine seeded friend avatars registered');
   assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
-  assert.ok(pinInfo.paintedPixels>40,'3D marker canvas must render actual colored pin pixels');
-  assert.equal(pinInfo.design,'blue-reference-photographic-v1','Reference pin design must be deployed');
-  assert.ok(pinInfo.bluePixels>12,'Blue teardrop body must be visible in rendered pixels');
+  if(viewer.renderer==='WebGL'){
+    const solid=await page.evaluate(()=>window.RetailNavPins.getSolidState());
+    assert.equal(solid.mode,'solid-webgl-mesh');
+    assert.ok(solid.triangles>100 && solid.bodyThicknessWorld>.3);
+    assert.ok(solid.ringThicknessWorld>.1 && solid.fixedWorldRotation);
+    assert.ok(solid.rendered>=1);
+    log('TRUE_3D_MESH',solid);
+  }else{
+    assert.ok(pinInfo.paintedPixels>40 && pinInfo.bluePixels>12,'Fallback Canvas draws markers');
+  }
   await page.waitForFunction(()=>window.RetailNavPins.getState().photoLoaded===9,
     null,{timeout:20000});
   assert.equal((await page.evaluate(()=>window.RetailNavPins.getState())).photoErrors,0);

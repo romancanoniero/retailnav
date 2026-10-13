@@ -21,12 +21,12 @@
     "y": 320,
     "status": "punto-rojo-del-cartel-no-gps"
   },
-  "warning": "Mapa provisional AP Plaza B1. Se recuperaron curvaturas y límites a partir de la fotografía original rectificada, pero no todas las divisiones interiores de comercios son fiables. Diez regiones requieren revisión; algunos códigos de tienda continúan sin asociación exacta. Los nombres de zonas se transcribieron manualmente. NO se debe navegar con este mapa hasta completar una inspección arquitectónica y validación física.",
+  "warning": "AP Plaza B1: mapa 2D/3D EXPERIMENTAL obtenido de calco visual con IA y verificacion conservadora de divisiones contra fotografia. 197 poligonos candidatos; no equivalen a 197 tiendas. Hay subdivisiones, codigos y curvas sin validar. NO APTO PARA NAVEGACION REAL.",
   "floors": [
     {
       "id": "B1",
       "name": "Nivel B1 · AP Plaza",
-      "geometry": "B1.geometry.v3.zlib.b64",
+      "geometry": "B1.geometry.ai2d.v2.zlib.b64",
       "imageSize": [
         1440,
         620
@@ -37,12 +37,14 @@
         1440,
         620
       ],
-      "vectorizationStatus": "curves-refined-unverified",
-      "curvedWallSource": "photo-component-outlines",
-      "regionCount": 190,
-      "polygonVertexCount": 2023,
-      "provisionalMatchedStoreLabels": 55,
-      "unresolvedCurves": 10
+      "vectorizationStatus": "AI2D-V2-EXPERIMENTAL-NO-NAVIGATION",
+      "curvedWallSource": "AI-visual-calque-candidates-with-photo-backed-six-additional-splits",
+      "regionCount": 197,
+      "polygonVertexCount": 2119,
+      "provisionalMatchedStoreLabels": 31,
+      "unresolvedCurves": null,
+      "ai2dReview": "B1.ai2d.render-report.json",
+      "ai2dSource": "experimental/B1.ai2d.photo-refined.v2.zlib.b64"
     }
   ],
   "pois": [
@@ -148,9 +150,9 @@
   ],
   "indoorPositionCalibrated": false,
   "semanticLayerVersion": 1,
-  "vectorMethod": "hybrid-color-grayscale-ink-plus-pixel-tolerance-curve-refinement-v3",
-  "vectorRegionCount": 190,
-  "vectorQuality": "photo-correlated-but-not-certified",
+  "vectorMethod": "AI2D-visual-calque-candidates-plus-original-photo-wall-review-v2",
+  "vectorRegionCount": 197,
+  "vectorQuality": "experimental-photo-correlated-not-architecturally-certified",
   "floorPlanMetricScaleVerified": false,
   "numberOfPhysicalStoresVerified": false,
   "districts": [
@@ -277,10 +279,10 @@
           "referenceRegistration": false
         },
         "issues": [
-          "Vectorización curvada v3 de 190 regiones: formas propuestas más precisas con 2.023 vértices, pendientes de revisión de locales y accesos.",
-          "Diez regiones no pudieron mejorarse de forma fiable; se conservan sus contornos originales.",
-          "Hay códigos de tiendas sin asociación fiable al polígono y las rutas no se han verificado.",
-          "La revisión visual de IA externa está preparada pero todavía no se ha ejecutado."
+          "AI2D v2 tiene 197 candidatos; no significa 197 tiendas verificadas.",
+          "Hay 4 grupos de codigos dentro de regiones insuficientemente subdivididas.",
+          "31 codigos asociados segun anclajes; todos los demas codigos deben mantenerse accesibles sin suponer su tienda.",
+          "Fachadas, pasillos, senaletica, servicios y escala estan pendientes de validacion arquitectonica in situ."
         ]
       },
       "rasterSize": [
@@ -306,6 +308,25 @@
     "unresolvedRegions": 10,
     "review": "B1.curves-v3-review.json",
     "aiVisualReview": "not-executed;optional-tool-available",
-    "requiresHumanReview": true
+    "requiresHumanReview": true,
+    "active": false,
+    "obsoleteButPreserved": true
+  },
+  "ai2dRefinement": {
+    "version": 2,
+    "source": "AI-generated visual calque plus deterministic photo-ink subdivision; NOT a machine-learning inference executable in vectorizer",
+    "photoSHA256": "8053ccfa86129533d693a05271efbe2b3bfcd3d7674fb8753bd54f914ce9e063",
+    "geometrySHA256": "31bd607ba2953183cd50eb1af15bf7e1530b2d8616a87ca378ff9d78579acda1",
+    "geometryFile": "B1.geometry.ai2d.v2.zlib.b64",
+    "traceFile": "experimental/B1.ai2d.photo-refined.v2.zlib.b64",
+    "candidateRegions": 197,
+    "polygonVertices": 2119,
+    "renderTriangles": 1725,
+    "linkedCodeCandidates": 31,
+    "unresolvedMergedGroups": 4,
+    "scanVerified": false,
+    "requiresHumanReview": true,
+    "isNavigationSafe": false,
+    "publishedAs": "PROVISIONAL"
   }
 }

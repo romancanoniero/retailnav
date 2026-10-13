@@ -32,6 +32,7 @@ try {
   let social=await page.evaluate(()=>window.RetailNavSocial.getState());
   log('START',{renderer:viewer.renderer,active:viewer.active,features:viewer.features,social});
   assert.deepEqual(viewer.visible,['LL','UL','L3']);
+  assert.equal(viewer.gestureMode,'map-pan','One-finger map pan is default');
   assert.ok(social.anonymous);
   await page.waitForFunction(()=>window.RetailNavPins?.getState().registered===9,
     null,{timeout:20000});
@@ -162,7 +163,41 @@ try {
   await page.locator('#compareDialog [data-close]').click();
   log('COMPARE','Reference and vector layers can be hidden independently, zoomed and switched by floor.');
 
-  // Simulate two fingers: first remains anchored while second twists around it.
+  // Mobile map gestures: a single touch pans WITHOUT changing yaw.
+  const panning=await page.evaluate(()=>{
+    const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
+    const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const send=(type,dx)=>canvas.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,pointerType:'touch',pointerId:98,button:0,
+      clientX:x+dx,clientY:y,buttons:type==='pointerup'?0:1
+    }));
+    const before=view.getState();
+    send('pointerdown',-55);send('pointermove',55);
+    const after=view.getState();send('pointerup',55);
+    return {before,after};
+  });
+  assert.ok(Math.hypot(...panning.before.target.map((v,i)=>v-panning.after.target[i]))>.2,
+    'One-finger drag pans the map');
+  assert.ok(panning.before.q.every((v,i)=>Math.abs(v-panning.after.q[i])<.0001),
+    'Map drag must not rotate the view');
+  const tilting=await page.evaluate(()=>{
+    const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
+    const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const send=(type,id,dx,dy)=>canvas.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,pointerType:'touch',pointerId:id,button:0,
+      clientX:x+dx,clientY:y+dy,buttons:type==='pointerup'?0:1
+    }));
+    const before=view.getState().orbitPitch;
+    send('pointerdown',41,-50,0);send('pointerdown',42,50,0);
+    send('pointermove',41,-50,50);send('pointermove',42,50,50);
+    const after=view.getState().orbitPitch;
+    send('pointerup',41,-50,50);send('pointerup',42,50,50);
+    return {before,after};
+  });
+  assert.ok(Math.abs(tilting.after-tilting.before)>.02,'Two-finger vertical gesture tilts');
+  assert.ok(tilting.after>=-Math.PI/2&&tilting.after<=-.25,'Prevent camera inversion');
+  log('TOUCH_MAP',{pan:true,tilting});
+  // Two fingers: first remains anchored while second twists around it.
   const after=await page.evaluate(()=>{
     const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
     const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
@@ -183,6 +218,8 @@ try {
     'Two-finger anchored twist must rotate camera');
   log('TOUCH','Two-finger anchored twist changed camera quaternion.');
   if(viewer.renderer==='WebGL'){
+    await page.locator('#pan').click();
+    assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'orbit-3d');
     const faceA=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
     await page.evaluate(()=>{
       const el=document.querySelector('#canvas'),r=el.getBoundingClientRect();
@@ -197,6 +234,8 @@ try {
     assert.ok(Math.abs(faceA-faceB)>.05,
       'World-fixed 3D photo face must change viewing angle on map rotation');
     log('PIN_PARALLAX',{before:faceA,after:faceB});
+    await page.locator('#pan').click();
+    assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'map-pan');
   }
 
 
@@ -541,9 +580,32 @@ try {
   assert.equal(await apPage.locator('#compareSvg').evaluate(el=>el.style.width),'225%');
   await apPage.locator('#compareDialog [data-close]').click();
   log('AP_FLOOR_COMPARISON','No floor widget for one floor; original photo and geometry independently toggle at adjustable zoom.');
-  assert.ok(apStatus.viewer.features[0][1]>=40);
+  assert.equal(apStatus.viewer.features[0][1],197,
+    'Published AP Plaza B1 should use the new provisional AI2D v2 geometry');
+  assert.equal(await apPage.evaluate(()=>window.RETAILNAV_ACTIVE_MALL.navigable),false);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
+  await apPage.waitForFunction(()=>window.RetailNavAreaLabels?.getState().frames>=1,
+    null,{timeout:15000});
+  const readable=await apPage.evaluate(()=>window.RetailNavAreaLabels.getState());
+  assert.equal(readable.total,8);
+  assert.equal(readable.textUpright,true);
+  assert.equal(readable.orientationResponsive,true);
+  assert.equal(readable.alwaysAvailableInDirectory,8);
+  assert.ok(readable.visibleCount>=1,'Zone names stay visible as screen-upright text');
+  assert.equal(await apPage.locator('#rnAreasButton').isVisible(),true);
+  await apPage.locator('#rnAreasButton').click();
+  assert.equal(await apPage.locator('#rnAreasMenu .rnAreaMenuItem').count(),8);
+  assert.equal(await apPage.locator('#rnAreasMenu .rnAreaMenuItem strong').first().innerText(),'ACG Zone');
+  await apPage.setViewportSize({width:844,height:390});
+  await apPage.waitForTimeout(160);
+  assert.equal(await apPage.locator('#rnAreasButton').isVisible(),true,
+    'Complete zone directory available in landscape');
+  assert.equal(await apPage.locator('#rnAreasMenu .rnAreaMenuItem').count(),8);
+  assert.equal((await apPage.evaluate(()=>window.RetailNavAreaLabels.getState())).textUpright,true);
+  await apPage.setViewportSize({width:390,height:844});
+  await apPage.locator('#rnAreasMenu .rnAreaMenuItem').first().click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavDistricts.getState())).focused,'acg-zone');
   const districts=await apPage.evaluate(()=>window.RetailNavDistricts.getState());
   assert.equal(districts.count,8,'District titles from the photographed floor plan must be preserved');
   if(apStatus.viewer.renderer==='WebGL'){

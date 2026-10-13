@@ -530,3 +530,54 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .rnReferenceDialog .rnCompareControls label{font-size:11px}
  .rnReferenceDialog .rnCompareControls input[type=range]{width:min(140px,41vw)}
 }
+
+
+/* Rotating 3D map, but ALWAYS horizontal readable semantic area labels. */
+.viewport{z-index:1}
+.rnAreaOverlay{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.rnAreaLabel{
+ position:absolute;transform:translate(-50%,-50%);pointer-events:auto;
+ padding:5px 8px;min-height:26px;max-width:min(31vw,195px);
+ white-space:normal;overflow-wrap:normal;text-align:center;line-height:1.24;
+ font-size:clamp(11px,1.15vw,14px);font-weight:760;letter-spacing:.02em;
+ border:1.5px solid #a0eeff;border-radius:8px;
+ color:#fff;background:#123e69f2;text-shadow:0 1px 2px #031323;
+ box-shadow:0 2px 13px #00132dd8, inset 0 0 7px #379bd455;
+ -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.rnAreaLabel:focus-visible,.rnAreaLabel:hover{outline:2px solid #fff;outline-offset:2px;background:#12639a}
+.rnAreaDirectory{position:absolute;z-index:5;right:15px;bottom:105px;pointer-events:none}
+.rnAreaDirectory>button{
+ pointer-events:auto;min-height:38px;padding:8px 11px;
+ background:#092d49fa;color:#f4ffff;border:1px solid #6dbfe2;
+ border-radius:12px;font-size:12px;font-weight:750;box-shadow:0 4px 12px #0008
+}
+.rnAreasMenu{
+ pointer-events:auto;position:absolute;bottom:48px;right:0;
+ width:min(300px,82vw);max-height:min(52dvh,410px);overflow:auto;
+ background:#091e32f9;border:1px solid #6dbfe2;border-radius:14px;
+ padding:7px;box-shadow:0 12px 40px #000b;
+ -webkit-overflow-scrolling:touch
+}
+.rnAreaMenuItem{
+ width:100%;display:block;text-align:left;padding:10px 12px;
+ background:transparent;border:0;border-radius:9px;min-height:41px;
+ color:#e8f9ff;line-height:1.25
+}
+.rnAreaMenuItem+button{border-top:1px solid #34576b}
+.rnAreaMenuItem strong{display:block;font-size:13px}
+.rnAreaMenuItem small{display:block;color:#adcfe3;font-size:10px;margin-top:3px}
+.rnAreaMenuItem:focus-visible{outline:2px solid #9deaff}
+@media(max-width:760px) and (orientation:portrait){
+ .rnAreaLabel{font-size:12px;max-width:41vw;padding:5px 7px;line-height:1.16}
+ .rnAreaDirectory{right:11px;bottom:95px}
+ .rnAreaDirectory>button{font-size:11px;padding:7px 9px}
+}
+@media(max-width:900px) and (orientation:landscape){
+ .rnAreaLabel{font-size:11px;max-width:26vw;padding:3px 6px;min-height:23px}
+ .rnAreaDirectory{right:9px;bottom:52px}
+ .rnAreasMenu{max-height:62dvh}
+}
+@media(prefers-reduced-motion:reduce){
+ .rnAreaLabel,.rnAreaDirectory button{transition:none!important}
+}

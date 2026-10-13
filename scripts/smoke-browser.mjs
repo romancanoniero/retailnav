@@ -87,16 +87,40 @@ try {
   assert.equal(own.body.me.anonymous,true);
   const firstId=own.body.me.id;
 
-  // Floor label, isolation and a clearly visible path back to all 3 levels.
-  await page.evaluate(()=>document.querySelector('#labels .label.floor')?.click());
+  // A small one-touch floor picker replaces the giant screen-covering
+  // floating floor badge. The separation control remains collapsed.
+  assert.equal(await page.locator('#floorPicker').isVisible(),true);
+  assert.equal(await page.locator('#floorSpacing').isVisible(),true);
+  assert.equal(await page.locator('#labels .label.floor').count(),0);
+  await page.locator('#floorSelect').selectOption('UL');
   viewer=await page.evaluate(()=>window.__RETAILNAV__.getState());
-  assert.notEqual(viewer.active,'ALL');
-  assert.equal(viewer.visible.length,1);
-  assert.equal(await page.locator('#showAllFloors').isVisible(),true);
-  await page.locator('#showAllFloors').click();
-  assert.deepEqual((await page.evaluate(()=>window.__RETAILNAV__.getState())).visible,
-    ['LL','UL','L3']);
-  log('FLOORS','Click on level indicator isolates floor; return restores all.');
+  assert.equal(viewer.active,'UL');
+  assert.deepEqual(viewer.visible,['UL']);
+  assert.equal(await page.locator('#floorSpacing').isVisible(),false);
+  await page.locator('#floorSelect').selectOption('ALL');
+  assert.deepEqual((await page.evaluate(()=>window.__RETAILNAV__.getState())).visible,['LL','UL','L3']);
+  assert.equal(await page.locator('#floorSpacing').isVisible(),true);
+  log('FLOORS','Compact 3D floor selector isolates levels, no overlaid giant floor marker.');
+  // Reference photography and traces are independently visible, never one
+  // pre-rendered composite that cannot be switched off.
+  await page.locator('#original').click();
+  assert.equal(await page.locator('#compareDialog').isVisible(),true);
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).floorCount,3);
+  await page.locator('#showVectors').uncheck();
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).vectorsVisible,false);
+  await page.locator('#showReference').uncheck();
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).originalVisible,false);
+  await page.locator('#showReference').check();
+  await page.locator('#showVectors').check();
+  await page.locator('#overlayOpacity').evaluate(el=>{el.value='.33';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  await page.locator('#compareZoom').evaluate(el=>{el.value='200';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).opacity,.33);
+  assert.equal(await page.locator('#compareSvg').evaluate(e=>e.style.width),'200%');
+  await page.locator('#compareLevel').selectOption('LL');
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).level,'LL');
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).hasReference,true);
+  await page.locator('#compareDialog [data-close]').click();
+  log('COMPARE','Reference and vector layers can be hidden independently, zoomed and switched by floor.');
 
   // Simulate two fingers: first remains anchored while second twists around it.
   const after=await page.evaluate(()=>{
@@ -168,7 +192,7 @@ try {
   assert.equal(await page.locator('#friendsCount').innerText(),'9');
   await page.locator('#rnClose').click();
   log('DEMO_TOGGLE','Disabling demo hides all nine pins and list entries; re-enabling restores both.');
-  await page.locator('#showAllFloors').click();
+  await page.locator('#floorSelect').selectOption('ALL');
   await page.locator('#friendsBtn').click();
   const panel=page.locator('#peopleDialog');
   assert.equal(await panel.evaluate(e=>e.tagName),'ASIDE','Friends menu must not be a dialog');
@@ -440,6 +464,37 @@ try {
   assert.equal(apStatus.mall,'ap-plaza');
   assert.equal(apStatus.viewer.mallId,'ap-plaza');
   assert.deepEqual(apStatus.viewer.visible,['B1']);
+  // A mall with just one known floor must not show any floor UI, not even
+  // a floating badge or an unused separation/stacking slider.
+  assert.equal(await apPage.locator('#floorPicker').isVisible(),false);
+  assert.equal(await apPage.locator('#floorSpacing').isVisible(),false);
+  assert.equal(await apPage.locator('#showAllFloors').isVisible(),false);
+  assert.equal(await apPage.locator('#labels .label.floor').count(),0);
+  await apPage.locator('#original').click();
+  assert.equal(await apPage.locator('#compareDialog').isVisible(),true);
+  const reference=await apPage.evaluate(()=>({
+    ...window.RetailNavComparison.getState(),
+    href:document.querySelector('#referenceImage').getAttribute('href')
+  }));
+  assert.equal(reference.level,'B1');
+  assert.equal(reference.hasReference,true);
+  assert.equal(reference.geometricValidation,'pending',
+    'Do not falsely declare provisional photograph-derived vectors verified');
+  assert.ok(reference.href.includes('reference/ap-plaza/B1.webp'));
+  assert.equal(await apPage.evaluate(async()=>(
+    await fetch(document.querySelector('#referenceImage').getAttribute('href'))
+  ).status),200);
+  await apPage.locator('#showVectors').uncheck();
+  assert.equal(await apPage.locator('#traceOverlay').evaluate(el=>getComputedStyle(el).display),'none');
+  await apPage.locator('#showReference').uncheck();
+  assert.equal(await apPage.locator('#referenceImage').evaluate(el=>getComputedStyle(el).display),'none');
+  await apPage.locator('#showVectors').check();
+  assert.notEqual(await apPage.locator('#traceOverlay').evaluate(el=>getComputedStyle(el).display),'none');
+  await apPage.locator('#showReference').check();
+  await apPage.locator('#compareZoom').evaluate(el=>{el.value='225';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.equal(await apPage.locator('#compareSvg').evaluate(el=>el.style.width),'225%');
+  await apPage.locator('#compareDialog [data-close]').click();
+  log('AP_FLOOR_COMPARISON','No floor widget for one floor; original photo and geometry independently toggle at adjustable zoom.');
   assert.ok(apStatus.viewer.features[0][1]>=40);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);

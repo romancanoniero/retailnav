@@ -253,9 +253,9 @@ async function handleHashInvite(){
   const fragment=new URLSearchParams(location.hash.replace(/^#/,''));
   if(!fragment.has('join'))return;
   const code=fragment.get('join');
+  if(!ready){status('Conectando contactos para abrir la invitación...');return;}
   // Erase the one-use token from the address bar, browser history and referrer.
   history.replaceState(null,'',location.pathname+location.search);
-  if(!ready){status('Esperá a que se conecten los contactos.',true);return;}
   await previewJoin(code);
 }
 async function boot(){

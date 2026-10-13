@@ -225,6 +225,21 @@ function draw(){
     if(tip.x<-52||tip.x>w+52||tip.y<-8||tip.y>h+12)continue;
     placements.push({person,x:tip.x,y:tip.y,depth:tip.z});
   }
+  // A signpost on the photographed map, not phone GPS or live indoor tracking.
+  const mark=window.RETAILNAV_ACTIVE_MALL?.photoRedDot;
+  if(mark&&vis.has(mark.floor)){
+    const world=view.pinWorld(mark.floor,mark.x,mark.y);
+    const p=world&&view.projectWorld([world[0],world[1]+.42,world[2]]);
+    if(p&&p.w>0&&p.z<1&&p.x>=7&&p.x<w-7&&p.y>=7&&p.y<h-7){
+      ctx.save();
+      ctx.beginPath();ctx.arc(p.x,p.y,9,0,2*PI);
+      ctx.fillStyle='rgba(240,61,67,.23)';ctx.fill();
+      ctx.beginPath();ctx.arc(p.x,p.y,5,0,2*PI);
+      ctx.fillStyle='#e33440';ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.restore();
+    }
+  }
   placements.sort((a,b)=>b.depth-a.depth);
   const focused=window.RetailNavFocusedFriendId;
   for(const pin of placements){

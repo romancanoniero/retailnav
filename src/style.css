@@ -84,3 +84,111 @@
 .rnSocialBody .rnDanger{border-color:#78454a;background:#2b1e28}
 .rnSocialBody .rnDelete{background:#5c2835;border-color:#b05869;color:#ffe8ee;font-weight:700}
 .rnSocialBody .rnDelete:hover{background:#71303e}
+
+
+/* RetailNav compact overlay: the floor map remains visible around the dialog. */
+dialog.rnSocialDialog{
+  position:fixed;top:49%;left:50%;right:auto;bottom:auto;margin:0;
+  transform:translate(-50%,-50%);width:min(470px,calc(100vw - 34px));
+  max-width:470px;max-height:min(76dvh,680px);height:auto;
+  border-radius:22px;border:1px solid #5c9bad;background:#0c2032;
+  box-shadow:0 20px 60px #000a,0 0 0 1px #2c647575;overflow:hidden;
+}
+dialog.rnSocialDialog::backdrop{background:rgba(3,10,22,.33);backdrop-filter:blur(1px)}
+.rnSocialDialog>.rnPanelHeader{padding:11px 15px;background:#10283b;min-height:52px}
+.rnHeading{display:flex;align-items:center;gap:10px}
+.rnHeading .icon{width:24px;height:24px;color:#b8f5f3}
+.rnPanelHeader h2{margin:0;font-size:17px}
+.rnPanelHeader>button{width:38px;min-width:38px;min-height:38px;padding:7px}
+.rnSocialDialog .rnSocialBody{overflow-y:auto;overscroll-behavior:contain;
+ max-height:calc(min(76dvh,680px) - 54px);padding:4px 14px 17px}
+.rnSocialDialog .rnSocialStatus{margin:8px 2px;background:transparent;border:0;border-left:2px solid #4aa7b1;padding:4px 7px;font-size:10px;color:#a8c0ce}
+.rnSocialDialog .rnSocialStatus.error{color:#ffd2ab;border-color:#f2a871}
+.rnSocialDialog .rnCompactSection{padding:10px 2px 13px}
+.rnSocialDialog .rnCompactSection h3{font-size:14px;color:#eefafa;margin:0 0 10px;font-weight:750}
+.rnSocialDialog .rnRule{height:1px;border:0;background:#34566c;margin:0 2px}
+.rnProfileLine{display:flex;align-items:center;gap:10px;min-width:0}
+.rnProfilePhotoWrap{flex:0 0 auto}
+.rnSocialDialog .rnAvatarTrigger{width:64px;height:64px;min-width:64px;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;position:relative;padding:0;
+ background:linear-gradient(135deg,#247b83,#294b77);border:2px solid #7dc8d4;
+ font-size:25px;font-weight:700;color:#fff;overflow:visible}
+.rnAvatarTrigger img{position:absolute;inset:0;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.rnCameraBadge{position:absolute;right:-5px;bottom:-5px;width:26px;height:26px;
+ border-radius:50%;display:grid;place-items:center;background:#0a2033;border:1px solid #89e4ec;
+ font-size:13px;box-shadow:0 1px 6px #000a;z-index:2}
+.rnProfileInfo{flex:1;min-width:0}
+.rnProfileLabel{font-size:11px;color:#b3cbd8;margin-bottom:3px;display:block}
+.rnNameRow{display:flex;gap:4px;align-items:center}
+.rnSocialDialog .rnNameRow input{width:100%;min-width:0;max-width:100%;
+ font-size:13px;min-height:40px;padding:8px 9px;border-radius:9px;
+ border:1px solid #51748a;background:#091b2b;color:white}
+.rnSocialDialog .rnNameSave{min-width:35px;min-height:39px;padding:5px;font-weight:900;font-size:19px;
+ background:#194a54;color:#b9f5ef;border:1px solid #618f97}
+.rnProfileInfo .rnHint{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:4px 0 0}
+.rnSocialDialog .rnProfileQr{flex:0 0 66px;min-width:66px;width:66px;height:76px;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+ border:1px solid #77cdd8;background:#164158;border-radius:14px;
+ padding:5px;color:#e1fbff}
+.rnProfileQr svg{width:27px;height:27px}
+.rnProfileQr span{font-size:11px}
+.rnAvatarChoices{display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+ padding:9px 0 0 0}
+.rnAvatarChoices .rnHint{margin:0;font-size:10px}
+.rnSocialDialog .rnAvatarChoices button{min-height:35px;padding:6px 8px;font-size:11px}
+.rnSocialDialog .rnQrWrap{max-width:270px;margin:9px auto 0;padding:10px}
+.rnSocialDialog .rnQrWrap .rnFlex button{font-size:11px;flex:1;min-height:37px}
+.rnSocialDialog .rnQrWrap #rnQr{height:190px;min-height:190px;width:190px;padding:5px}
+.rnSocialDialog .rnQrWrap #rnQr img,
+.rnSocialDialog .rnQrWrap #rnQr canvas{max-width:178px;max-height:178px}
+.rnSocialDialog .rnQrWrap small{font-size:10px}
+.rnInviteActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rnSocialDialog .rnInviteActions .rnAction{display:flex;align-items:center;justify-content:center;
+ gap:6px;min-width:0;min-height:46px;border:1px solid #5796a8;background:#17374c;
+ color:#ebffff;border-radius:11px;font-size:12px;font-weight:650;padding:7px 5px}
+.rnAction>span{font-size:19px}
+.rnSocialDialog .rnCompactSection>.rnHint{margin:8px 0 0;font-size:10px;line-height:1.4}
+.rnSocialDialog .rnPasteInvite{margin-top:6px}
+.rnSocialDialog .rnTextButton{background:transparent;border:0;color:#a9d9e2;
+ min-height:28px;font-size:11px;padding:3px;text-decoration:underline}
+.rnSocialDialog .rnJoinWrap{margin-top:8px}
+.rnFriendsList{display:flex;flex-direction:column;gap:7px}
+.rnSocialDialog .rnFriendsList .rnRow{border:1px solid #355669;border-radius:12px;
+ background:#10283b;padding:6px 8px;display:flex;flex-wrap:nowrap;gap:8px;min-height:56px}
+.rnSocialDialog .rnFriendsList .rnPerson{flex:1;min-width:0}
+.rnSocialDialog .rnFriendsList .rnPerson strong{font-size:12px}
+.rnSocialDialog .rnFriendsList .rnPerson small{font-size:10px}
+.rnSocialDialog .rnFriendsList .rnAvatar{width:40px;height:40px;overflow:hidden;
+ border-radius:50%;position:relative;flex:0 0 40px;font-size:15px}
+.rnSocialDialog .rnAvatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rnSocialDialog .rnFriendsList .rnRowActions{display:flex;width:auto;flex:0 0 auto;gap:5px;align-items:center}
+.rnSocialDialog .rnFriendsList .rnMapLocate{width:38px;min-height:38px;height:38px;padding:8px;
+ display:grid;place-items:center;font-size:19px;flex:0 0 38px;color:#efffff}
+.rnSocialDialog .rnFriendsList .rnMapLocate[disabled]{opacity:.33}
+.rnSocialDialog .rnFriendsList .rnFriendMore{width:28px;min-height:38px;height:38px;
+ border:0;background:transparent;padding:4px;color:#a9bbcb;font-size:18px}
+.rnSocialDialog .rnFriendsList .rnRemoveWrap{display:flex;justify-content:flex-end;
+ flex-basis:100%;background:#142b40;padding:6px}
+.rnSocialDialog .rnFriendsList .rnRemoveWrap button{background:#472735;border-color:#a15264;
+ min-height:32px;font-size:11px}
+.rnSocialDialog .rnDetails{padding:10px 2px}
+.rnSocialDialog .rnDetails summary{font-size:12px;color:#c8e6f1;font-weight:650;cursor:pointer;min-height:26px}
+.rnSocialDialog .rnDetails .rnCount{background:#204459;padding:2px 7px;border-radius:7px;margin-left:4px}
+.rnSocialDialog .rnDetails p{font-size:11px}
+.rnSocialDialog .rnDetails .rnFlex{gap:5px}
+.rnSocialDialog .rnDetails button{font-size:11px;padding:7px;min-height:36px}
+.rnSocialDialog .rnDetails input{font-size:12px;min-width:115px}
+.rnSocialDialog .rnDetails textarea{width:100%}
+.rnSocialDialog .rnEmpty{font-size:11px;margin:6px 0 2px;color:#9fb6c7}
+.rnSocialDialog .rnProfile .rnHint{max-width:100%}
+@media(max-width:760px){
+  dialog.rnSocialDialog{top:47%;width:calc(100vw - 28px);max-height:min(73dvh,615px)}
+  .rnSocialDialog .rnSocialBody{max-height:calc(min(73dvh,615px) - 54px);padding:3px 11px 13px}
+  .rnSocialDialog .rnProfileQr{flex-basis:56px;width:56px;min-width:56px}
+  .rnSocialDialog .rnAvatarTrigger{width:56px;height:56px;min-width:56px}
+  .rnProfileLine{gap:8px}
+  .rnSocialDialog .rnCompactSection{padding:8px 2px 10px}
+  .rnSocialDialog .rnFriendsList .rnRow{flex-wrap:nowrap}
+  .rnSocialDialog .rnFriendsList .rnRowActions{width:auto}
+  .rnSocialDialog .rnFriendsList .rnFriendMore{min-width:26px}
+}

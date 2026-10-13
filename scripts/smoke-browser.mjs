@@ -112,8 +112,8 @@ try {
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).originalVisible,false);
   await page.locator('#showReference').check();
   await page.locator('#showVectors').check();
-  await page.locator('#overlayOpacity').fill('.33');
-  await page.locator('#compareZoom').fill('200');
+  await page.locator('#overlayOpacity').evaluate(el=>{el.value='.33';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  await page.locator('#compareZoom').evaluate(el=>{el.value='200';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).opacity,.33);
   assert.equal(await page.locator('#compareSvg').evaluate(e=>e.style.width),'200%');
   await page.locator('#compareLevel').selectOption('LL');
@@ -491,7 +491,7 @@ try {
   await apPage.locator('#showVectors').check();
   assert.notEqual(await apPage.locator('#traceOverlay').evaluate(el=>getComputedStyle(el).display),'none');
   await apPage.locator('#showReference').check();
-  await apPage.locator('#compareZoom').fill('225');
+  await apPage.locator('#compareZoom').evaluate(el=>{el.value='225';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal(await apPage.locator('#compareSvg').evaluate(el=>el.style.width),'225%');
   await apPage.locator('#compareDialog [data-close]').click();
   log('AP_FLOOR_COMPARISON','No floor widget for one floor; original photo and geometry independently toggle at adjustable zoom.');

@@ -371,3 +371,16 @@ dialog.rnQrDialog::backdrop {
   font-weight:750;
 }
 .rnDemoFriendsSection[hidden]{display:none!important}
+
+/* Dedicated mall settings; compact enough for iPhone Safari without covering the viewport. */
+#mallSettingsBtn{display:grid;place-items:center;width:42px;min-width:42px;height:42px;padding:8px;background:#123246;border-color:#416980;color:#d8faff}
+#mallSettingsBtn .icon{width:21px;height:21px}
+dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b829a;border-radius:18px}
+.rnMallSettings .dialogbody{display:flex;flex-direction:column;gap:12px;padding:20px}
+.rnMallSettings label{font-size:12px;color:#b3d3e0}
+.rnMallSettings select{width:100%;min-width:0;padding:13px;font-size:14px;background:#152d3f;border:1px solid #5a8397;color:#fff;border-radius:10px}
+.rnMallSettings .dialogbody>button{min-height:42px;border-color:#557f95}
+.rnMallSettings #mallApplyBtn{background:#2b6673;color:#fff;font-weight:700}
+.rnMallSettings #mallLocationStatus{border:1px solid #345b6f;background:#102537;border-radius:10px;padding:10px;min-height:37px}
+.rnMallSettings hr{width:100%;border:0;border-top:1px solid #3d5264;margin:2px 0}
+@media(max-width:470px){.topbar .pill{display:none}.topbar{gap:7px}.brand{font-size:17px}#mallSettingsBtn{min-width:39px;width:39px;height:39px}.topbar .spacer{flex:1}}

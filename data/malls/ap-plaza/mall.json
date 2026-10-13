@@ -21,17 +21,28 @@
     "y": 320,
     "status": "punto-rojo-del-cartel-no-gps"
   },
-  "warning": "190 contornos provisionales. Las paredes interiores visibles no están todas capturadas. Los nombres comerciales de zona se transcriben en una capa independiente, ubicados donde aparecen en la fotografía. Esos títulos NO designan locales individuales ni delimitan polígonos de propiedad. Escala, entradas y pasillos requieren inspección.",
+  "warning": "Mapa provisional AP Plaza B1. Se recuperaron curvaturas y límites a partir de la fotografía original rectificada, pero no todas las divisiones interiores de comercios son fiables. Diez regiones requieren revisión; algunos códigos de tienda continúan sin asociación exacta. Los nombres de zonas se transcribieron manualmente. NO se debe navegar con este mapa hasta completar una inspección arquitectónica y validación física.",
   "floors": [
     {
       "id": "B1",
       "name": "Nivel B1 · AP Plaza",
-      "geometry": "B1.geometry.v2.zlib.b64",
+      "geometry": "B1.geometry.v3.zlib.b64",
       "imageSize": [
         1440,
         620
       ],
-      "source": "AP Plaza Floor Guide Map (fotografía rectificada)"
+      "source": "AP Plaza Floor Guide Map (fotografía rectificada)",
+      "curveReview": "B1.curves-v3-review.json",
+      "referenceResolution": [
+        1440,
+        620
+      ],
+      "vectorizationStatus": "curves-refined-unverified",
+      "curvedWallSource": "photo-component-outlines",
+      "regionCount": 190,
+      "polygonVertexCount": 2023,
+      "provisionalMatchedStoreLabels": 55,
+      "unresolvedCurves": 10
     }
   ],
   "pois": [
@@ -137,9 +148,9 @@
   ],
   "indoorPositionCalibrated": false,
   "semanticLayerVersion": 1,
-  "vectorMethod": "dark-ink-divider-connected-components-v2",
+  "vectorMethod": "hybrid-color-grayscale-ink-plus-pixel-tolerance-curve-refinement-v3",
   "vectorRegionCount": 190,
-  "vectorQuality": "requires-manual-review",
+  "vectorQuality": "photo-correlated-but-not-certified",
   "floorPlanMetricScaleVerified": false,
   "numberOfPhysicalStoresVerified": false,
   "districts": [
@@ -250,7 +261,7 @@
         1440,
         620
       ],
-      "sha256": "c238b0c76bb02f180306af107e05b54b4cd434dd4d92d9d2cad8ecfff678adeb",
+      "sha256": "8053ccfa86129533d693a05271efbe2b3bfcd3d7674fb8753bd54f914ce9e063",
       "qa": {
         "status": "pending",
         "geometrySha256": null,
@@ -266,16 +277,35 @@
           "referenceRegistration": false
         },
         "issues": [
-          "Vectorización preliminar. Muchos límites de tiendas y conexiones no coinciden todavía con el plano original."
+          "Vectorización curvada v3 de 190 regiones: formas propuestas más precisas con 2.023 vértices, pendientes de revisión de locales y accesos.",
+          "Diez regiones no pudieron mejorarse de forma fiable; se conservan sus contornos originales.",
+          "Hay códigos de tiendas sin asociación fiable al polígono y las rutas no se han verificado.",
+          "La revisión visual de IA externa está preparada pero todavía no se ha ejecutado."
         ]
       },
       "rasterSize": [
-        400,
-        172
+        1440,
+        620
       ],
-      "quality": "compressed-preview",
-      "description": "Vista previa real del cartel rectificado y reducido para móvil; cargar foto original para comprobar divisiones pequeñas."
+      "quality": "full-resolution",
+      "description": "Fotografía original rectificada de 1440x620 conservando escala nativa; codificación WebP a calidad 82. Rótulos pequeños podrían requerir fotografía más cercana.",
+      "sourceSha256": "29b0ce60fbcb243a04eba48270659e12930c64c5bb3e9d3f25528ea823cbae48"
     }
   },
-  "floorReferencePolicy": "Los mapas sin foto o sin cotejo aprobado nunca se certifican. Se pueden explorar únicamente como prototipos rotulados NO NAVEGABLE."
+  "floorReferencePolicy": "Los mapas sin foto o sin cotejo aprobado nunca se certifican. Se pueden explorar únicamente como prototipos rotulados NO NAVEGABLE.",
+  "curveRefinement": {
+    "version": 3,
+    "sourceSHA256": "29b0ce60fbcb243a04eba48270659e12930c64c5bb3e9d3f25528ea823cbae48",
+    "geometrySHA256": "8eaff1a999fd478cb83a27d0f12940baf091f916be2a26caf5fb15e08dbe534c",
+    "maxCurveErrorPx": 1.25,
+    "originalPolygonCount": 190,
+    "newPolygonCount": 190,
+    "originalVertices": 968,
+    "refinedVertices": 2023,
+    "curvedRegionsEnriched": 62,
+    "unresolvedRegions": 10,
+    "review": "B1.curves-v3-review.json",
+    "aiVisualReview": "not-executed;optional-tool-available",
+    "requiresHumanReview": true
+  }
 }

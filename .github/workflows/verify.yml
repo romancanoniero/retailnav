@@ -22,9 +22,12 @@ jobs:
         run: |
           node --check src/viewer.js
           node --check src/social.js
+          node --check src/demo-friends.js
+          node --check src/pins3d.js
           node --check src/qrcode.min.js
           node --check backend/server.mjs
           node --test backend/server.test.mjs
+          node --test scripts/test-demo-model.mjs
       - name: Regenerate browser viewer from editable sources
         run: python3 scripts/build-web.py
       - name: Validate vector floor maps and browser bundle

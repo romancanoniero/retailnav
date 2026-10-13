@@ -650,7 +650,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 /* Selected shop/stand panels remain within the map, even on iPhone.
  * The empty former lower search sidebar is no longer needed on mobile. */
 .stage>.detail{position:absolute;z-index:10;left:17px;right:auto;
- width:min(355px,calc(100% - 105px));bottom:72px;top:auto;
+ width:min(355px,calc(100% - 105px));bottom:112px;top:auto;
  max-height:min(41dvh,340px);overflow:auto;background:#102a3def;
  box-shadow:0 8px 25px #0008;backdrop-filter:blur(10px)}
 /* The name is already prominent in the app header. */
@@ -672,7 +672,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
   max-width:calc(100% - 93px);font-size:9px}
  .stage .note b{font-size:11px}
  .stage .hudright{top:161px}
- .stage>.detail{left:10px;right:61px;bottom:66px;
+ .stage>.detail{left:10px;right:61px;bottom:98px;
   width:auto;max-height:min(32dvh,290px)}
 }
 @media(max-width:470px){
@@ -691,7 +691,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .stagebar{top:56px}
  .stage .note{display:none}
  .stage .hudright{top:92px}
- .stage>.detail{bottom:33px;left:10px;right:61px;
+ .stage>.detail{bottom:85px;left:10px;right:61px;
   width:min(330px,calc(100% - 75px));max-height:47dvh}
  .mobiletitle{display:none!important}
 }

@@ -581,3 +581,20 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 @media(prefers-reduced-motion:reduce){
  .rnAreaLabel,.rnAreaDirectory button{transition:none!important}
 }
+
+
+/* Free 3D camera: compact, discoverable Z-axis roll controls, hidden in map mode. */
+.rnRollControls{display:flex;flex-direction:row;justify-content:flex-end;gap:5px;
+ align-self:flex-end;position:relative;right:0;z-index:5}
+.rnRollControls[hidden]{display:none!important}
+.hudright .rnRollControls button{width:40px;min-width:40px;min-height:40px;
+ padding:3px 7px;font-size:25px;font-weight:600;border-radius:12px;
+ background:#0e3559ed;color:#dcf8ff;border:1px solid #6fb9d5;
+ line-height:1;touch-action:manipulation}
+.hudright .rnRollControls button:focus-visible{
+ outline:2px solid #fff;outline-offset:2px
+}
+@media(max-width:900px) and (orientation:landscape){
+ .hudright .rnRollControls{position:absolute;right:45px;top:95px}
+ .hudright .rnRollControls button{width:34px;min-width:34px;min-height:34px;font-size:21px}
+}

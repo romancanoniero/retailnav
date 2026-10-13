@@ -105,7 +105,8 @@ def segment(photo_path, floor):
    deltas.extend([x-prev[0],y-prev[1]]);prev=[x,y]
   cid=f'NWC-{floor}-{n:04d}'
   # COLOUR CLUSTER, not an independently verified tenancy.
-  kind='zone' if area>2700 else 'unit'
+  # Compact RetailNav feature types: 1=unit, 2=zone (not strings).
+  kind=2 if area>2700 else 1
   f=[cid,kind,'',deltas,rings,triangles,
     [round(poly.representative_point().x,2),round(poly.representative_point().y,2)]]
   features.append(f);polygons.append(poly);triangles_count+=len(triangles)//3;pixel_coverage+=area
@@ -113,7 +114,7 @@ def segment(photo_path, floor):
   'method':'direct-on-photograph pastel connected components; no invented subdivisions',
   'photoSegments':len(features),'vertices':sum(len(f[3])//2 for f in features),
   'triangles':triangles_count,'pixelArea':pixel_coverage,'candidatesAreStores':False,
-  'unresolvedJoinedAreas':sum(f[1]=='zone' for f in features),
+  'unresolvedJoinedAreas':sum(f[1]==2 for f in features),
   'geometryValid':True,'overlapPixelArea':round(sum(p.area for p in polygons)-unary_union(polygons).area,6),
   'photoImageSize':[w,h],'rejectedSmallShapes':num-1-len(features)}
  return features,out

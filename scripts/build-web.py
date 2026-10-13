@@ -17,6 +17,7 @@ components = {
     "__JS__": (repo / "src/viewer.js").read_text(encoding="utf-8"),
     "__QRCODE__": (repo / "src/qrcode.min.js").read_text(encoding="utf-8"),
     "__SOCIAL__": (repo / "src/social.js").read_text(encoding="utf-8"),
+    "__QRSCANNER__": (repo / "src/jsqr.js").read_text(encoding="utf-8"),
     "__FALLBACK__": (repo / "src/fallback.svg").read_text(encoding="utf-8"),
 }
 for placeholder, value in components.items():

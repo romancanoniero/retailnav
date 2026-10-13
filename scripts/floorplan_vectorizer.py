@@ -128,11 +128,13 @@ def extract(image, level, area=28, tolerance=.031):
 
 def anchors(features, labels):
     for item in labels:
-        target=(float(item["x"]),float(item["y"]))
-        nearest=min(features,key=lambda f:math.dist(f[6],target),default=None)
-        if nearest and math.dist(nearest[6],target)<float(item.get("maxDistance",80)):
-            nearest[1]=0
-            nearest[2]=str(item["name"])
+        point=(float(item["x"]),float(item["y"]))
+        candidates=[feature for feature in features if inside(point,feature)]
+        if len(candidates)==1:
+            candidates[0][1]=0
+            candidates[0][2]=str(item["name"])
+        else:
+            print("Anchor",item["name"],"needs manual polygon review; matches:",len(candidates))
 
 
 def make_preview(image, regions):

@@ -41,15 +41,24 @@ try {
     const stage=document.getElementById('peoplePinCanvas');
     const p=window.RetailNavPins.getState();
     const rgba=stage.getContext('2d').getImageData(0,0,stage.width,stage.height).data;
-    let occupied=0;
-    for(let i=3;i<rgba.length;i+=47*4)if(rgba[i]>25)occupied++;
+    let occupied=0,bluePixels=0;
+    for(let i=0;i<rgba.length;i+=47*4){
+      if(rgba[i+3]>25)occupied++;
+      if(rgba[i+3]>140&&rgba[i+2]>rgba[i]+22&&rgba[i+2]>rgba[i+1]+8)bluePixels++;
+    }
     return {registered:p.registered,drawn:p.drawn,visibleIds:p.visibleIds,
+      design:p.design,photoLoaded:p.photoLoaded,photoErrors:p.photoErrors,bluePixels,
       canvasWidth:stage.width,canvasHeight:stage.height,paintedPixels:occupied,
       floors:p.floors,colorPairs:p.colorPairs};
   });
   assert.equal(pinInfo.registered,9,'Nine seeded friend avatars registered');
   assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
   assert.ok(pinInfo.paintedPixels>40,'3D marker canvas must render actual colored pin pixels');
+  assert.equal(pinInfo.design,'blue-reference-photographic-v1','Reference pin design must be deployed');
+  assert.ok(pinInfo.bluePixels>12,'Blue teardrop body must be visible in rendered pixels');
+  await page.waitForFunction(()=>window.RetailNavPins.getState().photoLoaded===9,
+    null,{timeout:20000});
+  assert.equal((await page.evaluate(()=>window.RetailNavPins.getState())).photoErrors,0);
   assert.ok(pinInfo.canvasWidth>300 && pinInfo.canvasHeight>300);
   assert.deepEqual(['LL','UL','L3'].map(level=>pinInfo.floors.filter(f=>f===level).length),[3,3,3]);
   for(const [id,color] of pinInfo.colorPairs){

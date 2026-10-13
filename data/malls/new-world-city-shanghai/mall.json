@@ -1,0 +1,620 @@
+{
+  "id": "new-world-city-shanghai",
+  "name": "新世界城 · Shanghai New World City",
+  "city": "Huangpu, Shanghái, China",
+  "source": "Siete fotografías únicas aportadas por el usuario (L1-L7); una fotografía adicional del índice general L1-L12 sin geometría",
+  "status": "vectorizado-provisional",
+  "origin": [
+    308,
+    324
+  ],
+  "scale": 0.19,
+  "navigable": false,
+  "gps": {
+    "lat": 31.235113,
+    "lon": 121.473671,
+    "radiusM": 500,
+    "source": "https://ditu.amap.com/place/B001539A1D"
+  },
+  "warning": "Prototipo obtenido de fotografía y directorios. Contornos cromáticos agrupados; NO equivalen a tiendas certificadas, ni permiten navegación segura. Código y nombre corresponden a la fecha de fotografía y pueden cambiar.",
+  "indoorPositionCalibrated": false,
+  "vectorMethod": "direct-photo-colour-islands-and-manually-transcribed-floor-directories-v1",
+  "vectorQuality": "PHOTO-COLOUR-CLUSTERS-PROVISIONAL-NOT-APPROVED",
+  "vectorRegionCount": 195,
+  "commercialDirectoryRecords": 380,
+  "commercialDirectoryNameStatus": "transcribed-from-user-photo; NOT live online tenant verification",
+  "floorPlanMetricScaleVerified": false,
+  "numberOfPhysicalStoresVerified": false,
+  "floorAlignmentApproved": false,
+  "floorReferences": {
+    "L1": {
+      "url": "reference/new-world-city-shanghai/L1.webp",
+      "sha256": "ca8facff53493c5b6721edf000f50f6cba893e242d6c676494bb8858337a0e34",
+      "imageSize": [
+        512,
+        555
+      ],
+      "rasterSize": [
+        512,
+        555
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6405.jpeg",
+      "originalUserPhotoSHA256": "e5c74dd60d45185abdeb1933f4724c47563be8e355901d8d24b3617f8aa10ebe",
+      "cropRectOriginalPixels": [
+        240,
+        90,
+        752,
+        645
+      ],
+      "directorySource": "L1.directory.webp.b64",
+      "viewBox": "0 0 512 555",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L2": {
+      "url": "reference/new-world-city-shanghai/L2.webp",
+      "sha256": "d38b18c144f5ef853af897719d46665493fed708b51203821e8ff5ba6ce16dde",
+      "imageSize": [
+        534,
+        581
+      ],
+      "rasterSize": [
+        534,
+        581
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6407.jpeg",
+      "originalUserPhotoSHA256": "6795c4508e7ed8ec21492085515a7d001e4a176bf3cc45a280656ba9e108c1ff",
+      "cropRectOriginalPixels": [
+        193,
+        93,
+        727,
+        674
+      ],
+      "directorySource": "L2.directory.webp.b64",
+      "viewBox": "0 0 534 581",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L3": {
+      "url": "reference/new-world-city-shanghai/L3.webp",
+      "sha256": "c85e72612d382632c42a4b90cb14c0b22c9c83be16329b31752eae52dcd31386",
+      "imageSize": [
+        635,
+        690
+      ],
+      "rasterSize": [
+        635,
+        690
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6408.jpeg",
+      "originalUserPhotoSHA256": "e0ebadf5be77b5c71fb36a9efb9abd36d00ea8dfb29c5ef0ce35af0fffe5eb52",
+      "cropRectOriginalPixels": [
+        105,
+        0,
+        740,
+        690
+      ],
+      "directorySource": "L3.directory.webp.b64",
+      "viewBox": "0 0 635 690",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L4": {
+      "url": "reference/new-world-city-shanghai/L4.webp",
+      "sha256": "88b2b17fd3fae475180a7cdf20fa290878e2279d7202b7f6be5295afd24ecb8c",
+      "imageSize": [
+        650,
+        673
+      ],
+      "rasterSize": [
+        650,
+        673
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6409.jpeg",
+      "originalUserPhotoSHA256": "0bd6fabdef9ed82f8a5fcf7882dfb0b8f9c050266f457074f57aabf511769c23",
+      "cropRectOriginalPixels": [
+        96,
+        0,
+        746,
+        673
+      ],
+      "directorySource": "L4.directory.webp.b64",
+      "viewBox": "0 0 650 673",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L5": {
+      "url": "reference/new-world-city-shanghai/L5.webp",
+      "sha256": "bc9f09f5241e1f1ddff33c8d9db3623cd1c9f9e4a674ad64f68c32f755990650",
+      "imageSize": [
+        597,
+        623
+      ],
+      "rasterSize": [
+        597,
+        623
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6411.jpeg",
+      "originalUserPhotoSHA256": "02f3d1dd498da312884fb6af1939823bce6672273788dd6b67f17c83c5ca7d8e",
+      "cropRectOriginalPixels": [
+        175,
+        20,
+        772,
+        643
+      ],
+      "directorySource": "L5.directory.webp.b64",
+      "viewBox": "0 0 597 623",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L6": {
+      "url": "reference/new-world-city-shanghai/L6.webp",
+      "sha256": "a880d93984365b4c26aabff5d0cabeb90fdea0dc553a3e7d5f9db05e1d8c6bc5",
+      "imageSize": [
+        598,
+        635
+      ],
+      "rasterSize": [
+        598,
+        635
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6412.jpeg",
+      "originalUserPhotoSHA256": "861b7c4b60686a46eb85eec3f990714a690b2cd83e475337729e80e0749e38fe",
+      "cropRectOriginalPixels": [
+        192,
+        0,
+        790,
+        635
+      ],
+      "directorySource": "L6.directory.webp.b64",
+      "viewBox": "0 0 598 635",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    },
+    "L7": {
+      "url": "reference/new-world-city-shanghai/L7.webp",
+      "sha256": "7fabc93e1aff8b2de2540d6aad41cc6406466a04d904495dd00efc6fc5ca3abd",
+      "imageSize": [
+        565,
+        648
+      ],
+      "rasterSize": [
+        565,
+        648
+      ],
+      "quality": "compressed-preview",
+      "photoSource": "user-supplied shopping mall floor guide; perspective not metrically rectified",
+      "sourceUserFile": "IMG_6413.jpeg",
+      "originalUserPhotoSHA256": "82d08b856351921916b091a5f6111a74512c74f9fa810340eb141895ab952165",
+      "cropRectOriginalPixels": [
+        195,
+        0,
+        760,
+        648
+      ],
+      "directorySource": "L7.directory.webp.b64",
+      "viewBox": "0 0 565 648",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Agrupaciones cromáticas múltiples y tabiques interiores sin subdivisión comprobada",
+          "Algunas marcas y códigos legibles solo en el directorio, sin posición geométrica confirmada",
+          "Perspectiva de la fotografía y alineación entre pisos sin levantamiento topográfico"
+        ],
+        "checks": {
+          "visualPhotoOverlay": false,
+          "individualStoreWalls": false,
+          "tenantCodeMatch": false,
+          "stairsAndElevators": false,
+          "floorAlignment": false,
+          "metricScale": false
+        }
+      }
+    }
+  },
+  "floors": [
+    {
+      "id": "L1",
+      "name": "L1 · 名品百货 · Brand Department",
+      "geometry": "L1.geometry.zlib.b64",
+      "imageSize": [
+        512,
+        555
+      ],
+      "source": "Fotografía del mapa L1 de 新世界城, archivo IMG_6405.jpeg",
+      "regionCount": 59,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 77,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L2",
+      "name": "L2 · 典雅女士 · Elegant Women",
+      "geometry": "L2.geometry.zlib.b64",
+      "imageSize": [
+        534,
+        581
+      ],
+      "source": "Fotografía del mapa L2 de 新世界城, archivo IMG_6407.jpeg",
+      "regionCount": 22,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 55,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L3",
+      "name": "L3 · 魅力女性 · Charm Lady",
+      "geometry": "L3.geometry.zlib.b64",
+      "imageSize": [
+        635,
+        690
+      ],
+      "source": "Fotografía del mapa L3 de 新世界城, archivo IMG_6408.jpeg",
+      "regionCount": 27,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 66,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L4",
+      "name": "L4 · FUN趣街区 · Anime & Games",
+      "geometry": "L4.geometry.zlib.b64",
+      "imageSize": [
+        650,
+        673
+      ],
+      "source": "Fotografía del mapa L4 de 新世界城, archivo IMG_6409.jpeg",
+      "regionCount": 17,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 40,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L5",
+      "name": "L5 · 绅士休闲 · Gentleman Casual",
+      "geometry": "L5.geometry.zlib.b64",
+      "imageSize": [
+        597,
+        623
+      ],
+      "source": "Fotografía del mapa L5 de 新世界城, archivo IMG_6411.jpeg",
+      "regionCount": 22,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 48,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L6",
+      "name": "L6 · 运动天地 · Sports",
+      "geometry": "L6.geometry.zlib.b64",
+      "imageSize": [
+        598,
+        635
+      ],
+      "source": "Fotografía del mapa L6 de 新世界城, archivo IMG_6412.jpeg",
+      "regionCount": 18,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 32,
+      "geometryReviewApproved": false
+    },
+    {
+      "id": "L7",
+      "name": "L7 · 生活居家 · Lifestyle",
+      "geometry": "L7.geometry.zlib.b64",
+      "imageSize": [
+        565,
+        648
+      ],
+      "source": "Fotografía del mapa L7 de 新世界城, archivo IMG_6413.jpeg",
+      "regionCount": 30,
+      "vectorizationStatus": "PHOTO-COLOUR-CONTOURS-PROVISIONAL",
+      "directoryRecords": 62,
+      "geometryReviewApproved": false
+    }
+  ],
+  "pois": [
+    {
+      "id": "nw-l1-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L1",
+      "x": 196,
+      "y": 280,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l2-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L2",
+      "x": 155,
+      "y": 264,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l3-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L3",
+      "x": 197,
+      "y": 309,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l4-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L4",
+      "x": 201,
+      "y": 293,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l5-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L5",
+      "x": 205,
+      "y": 291,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l6-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L6",
+      "x": 188,
+      "y": 295,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    },
+    {
+      "id": "nw-l7-toilet-reference",
+      "category": "toilet",
+      "name": "Baños · referencia fotográfica (aproximada)",
+      "floor": "L7",
+      "x": 183,
+      "y": 269,
+      "confidence": "estimated-pictogram-photo-not-surveyed"
+    }
+  ],
+  "districts": [
+    {
+      "id": "nw-l1-theme",
+      "name": "Brand Department",
+      "detail": "Marcas, cosmética y relojería",
+      "floor": "L1",
+      "x": 266,
+      "y": 211,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l2-theme",
+      "name": "Elegant Women",
+      "detail": "Moda femenina y complementos",
+      "floor": "L2",
+      "x": 278,
+      "y": 221,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l3-theme",
+      "name": "Charm Lady",
+      "detail": "Moda, calzado y lencería",
+      "floor": "L3",
+      "x": 330,
+      "y": 262,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l4-theme",
+      "name": "Anime & Games",
+      "detail": "Anime, coleccionables y juguetes",
+      "floor": "L4",
+      "x": 338,
+      "y": 256,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l5-theme",
+      "name": "Gentleman Casual",
+      "detail": "Moda y accesorios masculinos",
+      "floor": "L5",
+      "x": 310,
+      "y": 237,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l6-theme",
+      "name": "Sports",
+      "detail": "Deportes, outdoor y experiencias",
+      "floor": "L6",
+      "x": 311,
+      "y": 241,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    },
+    {
+      "id": "nw-l7-theme",
+      "name": "Lifestyle",
+      "detail": "Hogar, electrodomésticos y electrónica",
+      "floor": "L7",
+      "x": 294,
+      "y": 246,
+      "widthPx": 170,
+      "heightPx": 38,
+      "confidence": "directory-floor-heading; position-centre-illustrative-not-signed"
+    }
+  ],
+  "districtSource": "Names directly read from physical L1–L7 floor guide; label position illustrative.",
+  "floorReferencePolicy": "No survey or verified lines; all map and tenant positioning remains provisional.",
+  "photoDigitizationExperiment": {
+    "version": 1,
+    "uniquePhotoFloorCount": 7,
+    "unmappedFloorsFromDirectorySign": [
+      "B1",
+      "L8",
+      "L9",
+      "L10",
+      "L11",
+      "L12"
+    ],
+    "directoryOnlySign": "IMG_6406.jpeg",
+    "duplicateFloorsSkipped": 0,
+    "method": "pastel connected-components and preserved concave/holed photo boundaries; no artificial interior partitions",
+    "floorReport": "photo-vectorization.report.json",
+    "photoDirectoryStored": true,
+    "regionCount": 195,
+    "directoryRecords": 380,
+    "approximateCodeTextAnchors": 270,
+    "photoQAApproved": false,
+    "storeWallsApproved": false,
+    "floorAlignmentApproved": false,
+    "onlineNameValidationStatus": "supplementary-business-category-crosschecks-only",
+    "onlineEvidence": [
+      {
+        "url": "https://ditu.amap.com/place/B001539A1D",
+        "use": "mall location and official category"
+      },
+      {
+        "url": "https://www.thepaper.cn/newsDetail_forward_5032906",
+        "use": "floor themes and market background; 2019 not current tenancy"
+      },
+      {
+        "url": "https://m.winshang.com/news710365.html",
+        "use": "sample floor retail/category descriptions; historic, not 2026 verification"
+      },
+      {
+        "url": "https://sh.city8.com/shopping/8daaou7955t3b3c10a_address",
+        "use": "sample photographed floor 3 brands"
+      }
+    ]
+  }
+}

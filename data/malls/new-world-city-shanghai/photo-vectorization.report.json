@@ -1,0 +1,226 @@
+{
+  "L1": {
+    "floor": "L1",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 59,
+    "vertices": 1261,
+    "triangles": 1259,
+    "pixelArea": 65906,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 6,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      512,
+      555
+    ],
+    "rejectedSmallShapes": 69,
+    "photoSHA256": "ca8facff53493c5b6721edf000f50f6cba893e242d6c676494bb8858337a0e34",
+    "originalUserPhotoSHA256": "e5c74dd60d45185abdeb1933f4724c47563be8e355901d8d24b3617f8aa10ebe",
+    "sourceUserFile": "IMG_6405.jpeg",
+    "cropRect": [
+      240,
+      90,
+      752,
+      645
+    ],
+    "directoryCropTop": 650,
+    "manualPlusOCROnPhotoCodeAnchors": 71,
+    "directoryBrandRecords": 77,
+    "legibleBrandNames": 73,
+    "photoTranscriptionUnverified": true
+  },
+  "L2": {
+    "floor": "L2",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 22,
+    "vertices": 910,
+    "triangles": 960,
+    "pixelArea": 116091,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 7,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      534,
+      581
+    ],
+    "rejectedSmallShapes": 56,
+    "photoSHA256": "d38b18c144f5ef853af897719d46665493fed708b51203821e8ff5ba6ce16dde",
+    "originalUserPhotoSHA256": "6795c4508e7ed8ec21492085515a7d001e4a176bf3cc45a280656ba9e108c1ff",
+    "sourceUserFile": "IMG_6407.jpeg",
+    "cropRect": [
+      193,
+      93,
+      727,
+      674
+    ],
+    "directoryCropTop": 720,
+    "manualPlusOCROnPhotoCodeAnchors": 54,
+    "directoryBrandRecords": 55,
+    "legibleBrandNames": 53,
+    "photoTranscriptionUnverified": true
+  },
+  "L3": {
+    "floor": "L3",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 27,
+    "vertices": 973,
+    "triangles": 1036,
+    "pixelArea": 95554,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 13,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      635,
+      690
+    ],
+    "rejectedSmallShapes": 92,
+    "photoSHA256": "c85e72612d382632c42a4b90cb14c0b22c9c83be16329b31752eae52dcd31386",
+    "originalUserPhotoSHA256": "e0ebadf5be77b5c71fb36a9efb9abd36d00ea8dfb29c5ef0ce35af0fffe5eb52",
+    "sourceUserFile": "IMG_6408.jpeg",
+    "cropRect": [
+      105,
+      0,
+      740,
+      690
+    ],
+    "directoryCropTop": 700,
+    "manualPlusOCROnPhotoCodeAnchors": 52,
+    "directoryBrandRecords": 66,
+    "legibleBrandNames": 64,
+    "photoTranscriptionUnverified": true
+  },
+  "L4": {
+    "floor": "L4",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 17,
+    "vertices": 712,
+    "triangles": 762,
+    "pixelArea": 103120,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 10,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      650,
+      673
+    ],
+    "rejectedSmallShapes": 64,
+    "photoSHA256": "88b2b17fd3fae475180a7cdf20fa290878e2279d7202b7f6be5295afd24ecb8c",
+    "originalUserPhotoSHA256": "0bd6fabdef9ed82f8a5fcf7882dfb0b8f9c050266f457074f57aabf511769c23",
+    "sourceUserFile": "IMG_6409.jpeg",
+    "cropRect": [
+      96,
+      0,
+      746,
+      673
+    ],
+    "directoryCropTop": 695,
+    "manualPlusOCROnPhotoCodeAnchors": 17,
+    "directoryBrandRecords": 40,
+    "legibleBrandNames": 40,
+    "photoTranscriptionUnverified": true
+  },
+  "L5": {
+    "floor": "L5",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 22,
+    "vertices": 708,
+    "triangles": 752,
+    "pixelArea": 65039,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 10,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      597,
+      623
+    ],
+    "rejectedSmallShapes": 76,
+    "photoSHA256": "bc9f09f5241e1f1ddff33c8d9db3623cd1c9f9e4a674ad64f68c32f755990650",
+    "originalUserPhotoSHA256": "02f3d1dd498da312884fb6af1939823bce6672273788dd6b67f17c83c5ca7d8e",
+    "sourceUserFile": "IMG_6411.jpeg",
+    "cropRect": [
+      175,
+      20,
+      772,
+      643
+    ],
+    "directoryCropTop": 675,
+    "manualPlusOCROnPhotoCodeAnchors": 22,
+    "directoryBrandRecords": 48,
+    "legibleBrandNames": 47,
+    "photoTranscriptionUnverified": true
+  },
+  "L6": {
+    "floor": "L6",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 18,
+    "vertices": 845,
+    "triangles": 892,
+    "pixelArea": 84748,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 8,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      598,
+      635
+    ],
+    "rejectedSmallShapes": 83,
+    "photoSHA256": "a880d93984365b4c26aabff5d0cabeb90fdea0dc553a3e7d5f9db05e1d8c6bc5",
+    "originalUserPhotoSHA256": "861b7c4b60686a46eb85eec3f990714a690b2cd83e475337729e80e0749e38fe",
+    "sourceUserFile": "IMG_6412.jpeg",
+    "cropRect": [
+      192,
+      0,
+      790,
+      635
+    ],
+    "directoryCropTop": 630,
+    "manualPlusOCROnPhotoCodeAnchors": 22,
+    "directoryBrandRecords": 32,
+    "legibleBrandNames": 32,
+    "photoTranscriptionUnverified": true
+  },
+  "L7": {
+    "floor": "L7",
+    "status": "PHOTO-COLOUR-CONTOURS-PROVISIONAL-NOT-APPROVED",
+    "method": "direct-on-photograph pastel connected components; no invented subdivisions",
+    "photoSegments": 30,
+    "vertices": 1129,
+    "triangles": 1174,
+    "pixelArea": 89842,
+    "candidatesAreStores": false,
+    "unresolvedJoinedAreas": 10,
+    "geometryValid": true,
+    "overlapPixelArea": 0.0,
+    "photoImageSize": [
+      565,
+      648
+    ],
+    "rejectedSmallShapes": 103,
+    "photoSHA256": "7fabc93e1aff8b2de2540d6aad41cc6406466a04d904495dd00efc6fc5ca3abd",
+    "originalUserPhotoSHA256": "82d08b856351921916b091a5f6111a74512c74f9fa810340eb141895ab952165",
+    "sourceUserFile": "IMG_6413.jpeg",
+    "cropRect": [
+      195,
+      0,
+      760,
+      648
+    ],
+    "directoryCropTop": 680,
+    "manualPlusOCROnPhotoCodeAnchors": 32,
+    "directoryBrandRecords": 62,
+    "legibleBrandNames": 59,
+    "photoTranscriptionUnverified": true
+  }
+}

@@ -9,6 +9,7 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
+from floorplan_vectorizer import feature as automatic_feature
 from refine_curved_floor import (triangulate_clean, as_feature, refine,
                                   decode_shape, write_geometry, read_geometry)
 
@@ -38,6 +39,17 @@ def demo():
         write_geometry(path, result)
         restored = read_geometry(path)
         assert restored == result, 'New curves must survive compact delta compression'
+    # The DEFAULT importer must also recognize true curves, instead of
+    # flattening a contour based on 3.1% of the entire perimeter.
+    ink = np.zeros((280, 300), dtype=np.uint8)
+    cv2.ellipse(ink, (145, 140), (65, 50), 0, 0, 360, 255, -1)
+    raw, _ = cv2.findContours(ink, cv2.RETR_EXTERNAL,
+                              cv2.CHAIN_APPROX_SIMPLE)
+    upgraded = automatic_feature('B1-curved-auto', 1, 'Curve',
+                                 max(raw, key=cv2.contourArea), 1.25)
+    assert upgraded is not None
+    assert len(upgraded[3]) // 2 >= 12
+    assert Polygon(decode_shape(upgraded)).is_valid
     # Protect concavities and avoid inventing convex outlines.
     concave = np.array([[20, 20], [100, 20], [100, 60],
                         [60, 60], [60, 100], [20, 100]], dtype='int32')

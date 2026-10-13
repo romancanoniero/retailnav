@@ -250,7 +250,7 @@
         1440,
         620
       ],
-      "sha256": "f7288ca13bcccb6c33124b06c529e2fa72eb0aa618561d8f9854c70fff7456c5",
+      "sha256": "c238b0c76bb02f180306af107e05b54b4cd434dd4d92d9d2cad8ecfff678adeb",
       "qa": {
         "status": "pending",
         "geometrySha256": null,
@@ -268,7 +268,13 @@
         "issues": [
           "Vectorización preliminar. Muchos límites de tiendas y conexiones no coinciden todavía con el plano original."
         ]
-      }
+      },
+      "rasterSize": [
+        400,
+        172
+      ],
+      "quality": "compressed-preview",
+      "description": "Vista previa real del cartel rectificado y reducido para móvil; cargar foto original para comprobar divisiones pequeñas."
     }
   },
   "floorReferencePolicy": "Los mapas sin foto o sin cotejo aprobado nunca se certifican. Se pueden explorar únicamente como prototipos rotulados NO NAVEGABLE."

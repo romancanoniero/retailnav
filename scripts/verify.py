@@ -22,6 +22,23 @@ assert {"aventura", "ap-plaza"}.issubset(catalog)
 assert len(catalog["aventura"]["floors"]) == 3
 ap = catalog["ap-plaza"]
 assert ap["id"] == "ap-plaza" and ap["navigable"] is False
+assert "id=\"floorPicker\"" in html and "id=\"floorSpacing\"" in html
+assert "id=\"floorSelect\"" in html and "id=\"compareDialog\"" in html
+assert "id=\"showReference\"" in html and "id=\"showVectors\"" in html
+assert "id=\"overlayOpacity\"" in html and "id=\"compareZoom\"" in html
+assert "RetailNavComparison" in html
+reference=ap["floorReferences"]["B1"]
+assert reference["imageSize"]==[1440,620]
+assert reference["qa"]["status"]=="pending"
+assert reference["qa"]["geometrySha256"] is None
+assert not any(reference["qa"]["checks"].values())
+assert reference["quality"] in {"full-resolution","compressed-preview"}
+assert reference["url"].startswith("reference/ap-plaza/")
+asset=root/reference["url"]
+assert asset.is_file() and asset.stat().st_size>1200
+import hashlib
+assert hashlib.sha256(asset.read_bytes()).hexdigest()==reference["sha256"]
+
 assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
 ap_geometry = ap["floors"][0][3]
 assert len(ap_geometry) >= 40

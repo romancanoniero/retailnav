@@ -55,7 +55,8 @@ try {
   assert.ok(pinInfo.drawn>=1,'At least one projected 3D avatar pin must be visible');
   if(viewer.renderer==='WebGL'){
     const solid=await page.evaluate(()=>window.RetailNavPins.getSolidState());
-    assert.equal(solid.mode,'solid-webgl-mesh');
+    log('SOLID_DIAG',solid);
+    assert.equal(solid.mode,'solid-webgl-mesh','Mesh initialization: '+solid.lastError+' / '+solid.lastSkipped);
     assert.ok(solid.triangles>100 && solid.bodyThicknessWorld>.3);
     assert.ok(solid.ringThicknessWorld>.1 && solid.fixedWorldRotation);
     assert.ok(solid.rendered>=1);

@@ -17,7 +17,7 @@ Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos 
 
 La primera vez que un visitante abre RetailNav, el servidor crea una **identidad anónima aleatoria**. La sesión se conserva mediante una cookie segura, HttpOnly y SameSite=Lax. **No se identifica por IP, huella digital del dispositivo ni GPS**.
 
-Al tocar el botón de amigos aparece un **popup compacto por encima del plano**. Su contenido está dividido por líneas horizontales: primero el perfil, luego las invitaciones y amigos, y finalmente solicitudes, ubicación y recuperación plegables.
+Al tocar el icono de amigos aparece un **pulldown compacto anclado a ese botón**. No es un diálogo modal: deja el plano interactivo, se cierra al tocar cualquier otra parte de la pantalla, al pulsar el icono nuevamente o con Escape. El contenido está dividido por líneas horizontales: perfil, invitaciones y amigos, y luego solicitudes, ubicación y recuperación plegables.
 
 1. **Perfil:** cambiar el nombre visible y elegir foto de la galería o tomarla con la cámara. El ID interno permanece inalterable. Las fotos se reducen a JPEG antes de subirlas, se guardan fuera del directorio público y solo el usuario y sus amigos pueden consultarlas.
 2. **Mi QR:** al pulsar el icono del perfil se genera un QR temporal de cinco minutos y un solo uso. El invitado lo escanea en la web o con la Cámara de Safari, solicita el vínculo y quien mostró el QR lo confirma.

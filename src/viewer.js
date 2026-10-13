@@ -205,7 +205,7 @@ function comparison(){
  }
  combo.value=originalLevel;
  $('showReference').checked=true;$('showVectors').checked=true;
- $('overlayOpacity').value='.85';
+ $('overlayOpacity').value='.85';$('compareZoom').value='100';
  if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}
  drawComparison();
  $('compareDialog').showModal();
@@ -252,6 +252,10 @@ function drawComparison(){
  $('traceOverlay').style.display=$('showVectors').checked?'':'none';
  $('traceOverlay').style.opacity=$('overlayOpacity').value;
  $('opacityValue').textContent=Math.round(Number($('overlayOpacity').value)*100)+' %';
+ const zoom=Number($('compareZoom').value)||100;
+ $('compareZoomValue').textContent=zoom+' %';
+ $('compareSvg').style.width=zoom+'%';
+ $('compareSvg').style.maxHeight='none';
 }
 function changeComparePhoto(event){
  const file=event?.target?.files?.[0];
@@ -289,6 +293,7 @@ $('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(refer
 $('showReference').onchange=drawComparison;
 $('showVectors').onchange=drawComparison;
 $('overlayOpacity').oninput=drawComparison;
+$('compareZoom').oninput=drawComparison;
 $('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});}
 async function fetchJSON(url){let c=new AbortController(),timer=setTimeout(()=>c.abort(),15000);try{let res=await fetch(url,{signal:c.signal});if(!res.ok)throw new Error('HTTP '+res.status+' al descargar '+url);let total=Number(res.headers.get('content-length'))||0,got=0,chunks=[],reader=res.body.getReader();while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.byteLength;progress(total?Math.min(25,got/total*25):10,'Descargando vectores: '+Math.ceil(got/1024)+' KB'+(total?' / '+Math.ceil(total/1024)+' KB':''));}let bytes=new Uint8Array(got),off=0;chunks.forEach(x=>{bytes.set(x,off);off+=x.length;});return JSON.parse(new TextDecoder().decode(bytes));}finally{clearTimeout(timer);}}
 function applyMallUi(){
@@ -331,6 +336,7 @@ function applyMallUi(){
     :'Contornos y pasillos trazados sobre tus imágenes.';
   $('mapTitle').textContent=mallId==='ap-plaza'?'AP Plaza · planta B1 (foto)':'Las tres plantas, en su posición relativa';
 }
-async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length])}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length])}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

@@ -410,6 +410,16 @@ try {
   assert.ok(apStatus.viewer.features[0][1]>=40);
   assert.equal(apStatus.social.demoFriendCount,6);
   assert.equal(apStatus.pins.registered,6);
+  const ids=await apPage.evaluate(()=>window.RetailNavUnits.getState());
+  assert.ok(ids.count>=80,'Shop identifiers must survive mall vectorisation');
+  await apPage.locator('#search').fill('K1-31');
+  assert.ok(await apPage.locator('#results .rnUnitResult').count()>=1);
+  await apPage.locator('#results .rnUnitResult').first().click();
+  assert.equal((await apPage.evaluate(()=>window.RetailNavUnits.getState())).selected,'K1-31');
+  await apPage.locator('#rnUnitClose').click();
+  await apPage.locator('#search').fill('');
+  log('STORE_IDS','Shop codes indexed and searchable, including unresolved regions.');
+
   const poi=await apPage.evaluate(()=>window.RetailNavPOI?.getState());
   assert.ok(poi&&poi.count>=10,'AP Plaza must include semantic bathrooms, exits, escalators and information');
   await apPage.waitForFunction(()=>window.RetailNavPOI?.getState().shown.length>=1,

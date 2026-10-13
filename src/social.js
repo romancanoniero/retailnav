@@ -139,7 +139,7 @@ function friendRow(friend){
   locate.title=friend.position?'Mostrar la posición compartida de '+friend.name:'Este contacto no comparte ubicación';
   locate.setAttribute('aria-label',locate.title);
   locate.disabled=!friend.position;
-  const more=button('⋯',()=>{removeWrap.hidden=!removeWrap.hidden;},'rnFriendMore');
+  const more=button('⋯',()=>{removeWrap.hidden=!removeWrap.hidden;row.classList.toggle('rnExpanded',!removeWrap.hidden);},'rnFriendMore');
   more.setAttribute('aria-label','Opciones de '+friend.name);
   actions.append(locate,more);
   const removeWrap=element('div','rnRemoveWrap');

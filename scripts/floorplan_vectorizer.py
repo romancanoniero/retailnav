@@ -92,46 +92,103 @@ def feature(fid, kind, name, contour, tolerance):
 
 
 
-def detect_wall_candidates(image, min_length=14):
-    """Keep dark, straight dividing strokes for review INDEPENDENTLY of fills.
+def grayscale_evidence(image):
+    """Fuse three independent readings of walls without calling any verified.
 
-    Colour-connected components may merge neighbouring stores. The separate
-    linework ledger prevents those borders from silently disappearing.
-    OCR glyph strokes can also be detected; therefore no candidate is marked
-    verified and none becomes an indoor-navigation wall until reviewed.
+    CLAHE restores *local* contrast; adaptive Gaussian threshold handles shadows
+    and unequal lighting; a blurred-image subtraction finds genuinely dark
+    strokes against the local background. No upscaling is invented.
     """
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    enhanced = cv2.createCLAHE(clipLimit=2.2,
+                              tileGridSize=(8, 8)).apply(gray)
+    blurred = cv2.GaussianBlur(enhanced, (3, 3), 0)
+    binary = cv2.adaptiveThreshold(
+        blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY_INV, 25, 7)
     background = cv2.GaussianBlur(gray, (0, 0), 5)
-    dark = np.uint8(cv2.subtract(background, gray) > 20) * 255
-    horizontal = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
-                                 np.ones((1, 8), np.uint8))
-    vertical = cv2.morphologyEx(dark, cv2.MORPH_OPEN,
-                               np.ones((8, 1), np.uint8))
-    strokes = cv2.bitwise_or(horizontal, vertical)
-    raw = cv2.HoughLinesP(strokes, 1, np.pi / 180,
-                          threshold=10, minLineLength=min_length,
-                          maxLineGap=4)
-    if raw is None:
+    locally_dark = np.uint8(cv2.subtract(background, gray) > 16) * 255
+    support = cv2.bitwise_and(
+        binary, cv2.dilate(locally_dark, np.ones((3, 3), np.uint8)))
+    # Long, consistent strokes survive morphology; isolated printed letters
+    # are less likely to erase shop interiors.
+    horizontal = cv2.morphologyEx(
+        support, cv2.MORPH_OPEN, np.ones((1, 8), np.uint8))
+    vertical = cv2.morphologyEx(
+        support, cv2.MORPH_OPEN, np.ones((8, 1), np.uint8))
+    orthogonal = cv2.bitwise_or(horizontal, vertical)
+    return {"gray":gray, "enhanced":enhanced, "binary":binary,
+            "locallyDark":locally_dark, "supported":support,
+            "orthogonal":orthogonal}
+
+
+def detect_wall_candidates(image, min_length=14, evidence=None):
+    """Rank black divider candidates using grayscale + B/W + color evidence.
+
+    Thin shop walls can be straight, angled or in a colored area. Identified
+    glyphs and logos can also be dark. Every candidate remains UNVERIFIED.
+    Scores rank review priority only; they are never a proof of a real wall.
+    """
+    layers = evidence or grayscale_evidence(image)
+    stroke = layers["supported"]
+    dominant = layers["orthogonal"]
+    # Hough finds straight segments including diagonals; the second pass
+    # finds longer horizontal/vertical dividers under perspective correction.
+    raw_a = cv2.HoughLinesP(
+        stroke, 1, np.pi/180, threshold=12,
+        minLineLength=max(min_length, 14), maxLineGap=3)
+    raw_b = cv2.HoughLinesP(
+        dominant, 1, np.pi/180, threshold=10,
+        minLineLength=min_length, maxLineGap=4)
+    raw = [r.reshape(-1,4) for r in (raw_a,raw_b) if r is not None]
+    if not raw:
         return []
-    candidates = {}
-    for x1, y1, x2, y2 in raw.reshape(-1, 4):
-        dx, dy = abs(int(x2)-int(x1)), abs(int(y2)-int(y1))
-        length = float(np.hypot(dx, dy))
-        if length < min_length or min(dx, dy) > max(dx, dy) * .13:
-            continue
-        a = (int(x1), int(y1))
-        b = (int(x2), int(y2))
-        if a > b:
-            a, b = b, a
-        key = tuple(round(n / 2) for n in (*a, *b))
-        if key not in candidates or length > candidates[key]["lengthPx"]:
-            candidates[key] = {
-                "a": list(a), "b": list(b), "lengthPx": round(length, 1),
-                "source": "local-dark-linework", "verified": False,
-                "kind": "unknown-line-or-text", "status": "needs-photo-review",
-            }
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    colour = (hsv[:,:,1] > 24) & (hsv[:,:,2] > 65)
+    height,width=image.shape[:2]
+    candidates={}
+    for x1,y1,x2,y2 in np.concatenate(raw,axis=0):
+        dx,dy=int(x2)-int(x1),int(y2)-int(y1)
+        length=float(np.hypot(dx,dy))
+        if length < min_length:continue
+        a=(int(x1),int(y1));b=(int(x2),int(y2))
+        if a>b:a,b=b,a
+        steps=max(4,int(length))
+        u=np.linspace(a[0],b[0],steps).astype(np.int32)
+        v=np.linspace(a[1],b[1],steps).astype(np.int32)
+        core=float(np.mean(layers["supported"][v,u]>0))
+        adaptive=float(np.mean(layers["binary"][v,u]>0))
+        orientation=("horizontal" if abs(dx)>abs(dy)*3 else
+                     "vertical" if abs(dy)>abs(dx)*3 else "diagonal")
+        # Evidence of colored regions on opposite sides is useful, not
+        # mandatory (monochrome plans contain no chromatic signal).
+        nx,ny=-dy/length,dx/length
+        px1=np.clip(np.rint(u+nx*4).astype(int),0,width-1)
+        py1=np.clip(np.rint(v+ny*4).astype(int),0,height-1)
+        px2=np.clip(np.rint(u-nx*4).astype(int),0,width-1)
+        py2=np.clip(np.rint(v-ny*4).astype(int),0,height-1)
+        color_sides=float(min(np.mean(colour[py1,px1]),
+                              np.mean(colour[py2,px2])))
+        score=round(min(1., .38*core+.30*adaptive+
+                         .20*min(1.,length/(min_length*3))+
+                         .12*color_sides),3)
+        key=(orientation,*[round(n/3) for n in (*a,*b)])
+        item={
+            "a":list(a),"b":list(b),"lengthPx":round(length,1),
+            "orientation":orientation,
+            "evidence":{"adaptiveBW":round(adaptive,3),
+                        "grayscaleLocalContrast":round(core,3),
+                        "colorOnBothSides":round(color_sides,3)},
+            "confidence":score,
+            "source":"adaptive-grayscale+color",
+            "verified":False, "kind":"wall-or-lettering-candidate",
+            "status":"needs-photo-review"
+        }
+        if key not in candidates or score>candidates[key]["confidence"]:
+            candidates[key]=item
     return sorted(candidates.values(),
-                  key=lambda line: (-line["lengthPx"], *line["a"]))
+                  key=lambda line:(-line["confidence"],
+                                   -line["lengthPx"],*line["a"]))[:3000]
 
 
 def apply_reviewed_walls(mask, image, walls):
@@ -159,32 +216,45 @@ def apply_reviewed_walls(mask, image, walls):
     return applied
 
 
-def extract(image, level, area=28, tolerance=.031, reviewed_walls=()):
+def extract(image, level, area=28, tolerance=.031, reviewed_walls=(),
+            mode="hybrid", evidence=None):
+    """Color regions split by dark dividers confirmed across gray and B/W.
+
+    Automatic separations are PROVISIONAL. Never promote candidates to
+    'verified': a sign or word may still create a line.
+    """
     hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
-    gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-    background=cv2.GaussianBlur(gray,(0,0),5)
+    layers=evidence or grayscale_evidence(image)
     colour=np.uint8((hsv[:,:,1]>25)&(hsv[:,:,2]>65))*255
-    local_dark=np.uint8(cv2.subtract(background,gray)>20)*255
-    horizontal=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((1,9),np.uint8))
-    vertical=cv2.morphologyEx(local_dark,cv2.MORPH_OPEN,np.ones((9,1),np.uint8))
-    border=cv2.dilate(cv2.bitwise_or(horizontal,vertical),np.ones((2,2),np.uint8))
+    old_dark=np.uint8(cv2.subtract(
+        cv2.GaussianBlur(layers["gray"],(0,0),5),layers["gray"])>20)*255
+    horizontal=cv2.morphologyEx(
+        old_dark,cv2.MORPH_OPEN,np.ones((1,9),np.uint8))
+    vertical=cv2.morphologyEx(
+        old_dark,cv2.MORPH_OPEN,np.ones((9,1),np.uint8))
+    border=cv2.bitwise_or(horizontal,vertical)
+    if mode=="hybrid":
+        border=cv2.bitwise_or(border,layers["orthogonal"])
+    border=cv2.dilate(border,np.ones((2,2),np.uint8),iterations=1)
     mask=cv2.bitwise_and(colour,cv2.bitwise_not(border))
-    apply_reviewed_walls(mask, image, reviewed_walls)
     if np.mean(colour>0)<.018:
-        mask=cv2.bitwise_and(255-cv2.Canny(gray,60,150),cv2.bitwise_not(border))
-        apply_reviewed_walls(mask, image, reviewed_walls)
+        # A floor plan with pastel/gray areas still has closed black walls.
+        # We keep light interiors of closed walls but never call them routes.
+        gray_interior=cv2.bitwise_not(
+            layers["supported"] if mode=="hybrid"
+            else cv2.Canny(layers["gray"],60,150))
+        mask=cv2.bitwise_and(gray_interior,cv2.bitwise_not(border))
+    apply_reviewed_walls(mask,image,reviewed_walls)
     mask[:5]=0;mask[-5:]=0;mask[:,:5]=0;mask[:,-5:]=0
     count,labels,stats,_=cv2.connectedComponentsWithStats(mask,8)
     candidates=[]
-    # A large department store may occupy >20% of a *small* floor.
-    # Do not silently delete its polygon. Flag oversized regions during review
-    # instead of assuming that a filled region always means background.
     limit=image.shape[0]*image.shape[1]*.90
     for code in range(1,count):
         x,y,w,h,size=map(int,stats[code])
         if size<area or size>limit or w<3 or h<3:continue
         region=np.uint8(labels[y:y+h,x:x+w]==code)*255
-        outlines,_=cv2.findContours(region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        outlines,_=cv2.findContours(
+            region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         if not outlines:continue
         curve=max(outlines,key=cv2.contourArea)
         if cv2.contourArea(curve)<area*.65:continue

@@ -91,7 +91,7 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
                 ensure_ascii=False).encode("utf-8")).hexdigest()
             if qa.get("geometrySha256") != expected_hash or not qa.get("reviewer") or not qa.get("reviewedAt") or not all(qa.get("checks",{}).values()):
                 raise ValueError(slug+"/"+floor_id+": approved geometry requires current signed review, all checks, and matching geometry SHA")
-        elif info.get("navigable",False) or info.get("status") not in ("provisional","mock"):
+        elif info.get("navigable",False) or info.get("status") not in ("provisional","vectorizado-provisional","mock"):
             raise ValueError(slug+"/"+floor_id+": pending review may ONLY publish as non-navigable provisional/mock")
         asset = repo/"public"/"reference"/slug/(floor_id+".webp")
         asset.parent.mkdir(parents=True,exist_ok=True)

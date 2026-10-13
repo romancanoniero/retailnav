@@ -202,3 +202,53 @@ dialog.rnSocialDialog::backdrop{background:rgba(3,10,22,.33);backdrop-filter:blu
 .rnSocialDialog .rnFriendsList .rnRow.rnExpanded{flex-wrap:wrap!important}
 .rnSocialDialog .rnFriendsList .rnRemoveWrap{width:100%;flex:1 0 100%}
 .rnAvatarInitial[hidden]{display:none}
+
+/* Nonmodal icon-anchored pulldown: map stays interactive outside the panel. */
+aside.rnSocialDropdown{
+  --rn-dropdown-top:80px;
+  --rn-dropdown-right:10px;
+  box-sizing:border-box;
+  display:block;
+  position:fixed;
+  inset:auto var(--rn-dropdown-right) auto auto;
+  top:var(--rn-dropdown-top);
+  z-index:120;
+  padding:0;
+  margin:0;
+  width:min(425px,calc(100vw - 20px));
+  max-width:calc(100vw - 20px);
+  height:auto;
+  max-height:min(560px,calc(100dvh - var(--rn-dropdown-top) - 12px));
+  overflow:hidden;
+  border:1px solid #5c9bad;
+  border-radius:17px;
+  background:#0c2032;
+  color:var(--ink);
+  box-shadow:0 16px 46px #000a,0 0 0 1px #2c647575;
+  isolation:isolate;
+}
+aside.rnSocialDropdown .rnSocialBody{
+  box-sizing:border-box;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  max-height:calc(min(560px,100dvh - var(--rn-dropdown-top) - 12px) - 54px);
+  padding:4px 12px 14px;
+}
+aside.rnSocialDropdown .rnPanelHeader{padding:9px 12px;min-height:49px}
+aside.rnSocialDropdown .rnPanelHeader>button{min-width:35px;min-height:35px}
+@media(max-width:760px){
+  aside.rnSocialDropdown{
+    width:calc(100vw - 20px);
+    max-height:min(56dvh,calc(100dvh - var(--rn-dropdown-top) - 15px));
+    border-radius:15px;
+  }
+  aside.rnSocialDropdown .rnSocialBody{
+    max-height:calc(min(56dvh,100dvh - var(--rn-dropdown-top) - 15px) - 51px);
+    padding:3px 10px 12px;
+  }
+}
+@media(max-height:580px){
+  aside.rnSocialDropdown{max-height:calc(100dvh - var(--rn-dropdown-top) - 8px)}
+  aside.rnSocialDropdown .rnSocialBody{max-height:calc(100dvh - var(--rn-dropdown-top) - 60px)}
+}

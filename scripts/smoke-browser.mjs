@@ -80,6 +80,11 @@ try {
   assert.equal(await panel.evaluate(e=>e.hidden),false);
   assert.equal(await page.locator('#friendsBtn').getAttribute('aria-expanded'),'true');
   const panelRect=await panel.boundingBox();
+  log('PULLDOWN_GEOMETRY',{rect:panelRect,style:await panel.evaluate(el=>{
+    const s=getComputedStyle(el);
+    return {left:s.left,right:s.right,width:s.width,top:s.top,position:s.position,
+      transform:s.transform,innerWidth:window.innerWidth,visualWidth:window.visualViewport?.width};
+  })});
   assert.ok(panelRect && panelRect.width<=375 && panelRect.height<610,
     'Friends pulldown must leave the map visible');
   assert.ok(panelRect.x>=0 && panelRect.x+panelRect.width<=390,

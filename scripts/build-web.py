@@ -4,6 +4,7 @@ import json
 import zlib
 import base64
 import csv
+import hashlib
 from pathlib import Path
 from unit_index import attach as attach_unit_codes
 
@@ -33,6 +34,10 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
     assert info.get("navigable") is False, "Only provisional mock photo maps are supported"
     floor_data = []
     units = []
+    photo_references = info.get("floorReferences", {})
+    if set(photo_references) != {f["id"] for f in info["floors"]}:
+        raise ValueError(slug+": all imported floors MUST have an original-photo reference")
+
     for item in info["floors"]:
         floor_id = item["id"]
         assert floor_id.replace("-", "").isalnum()
@@ -42,6 +47,41 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
         assert len(geometry) > 2
         assert all(len(f) == 7 and len(f[3]) >= 6 for f in geometry)
         units.extend(attach_unit_codes(mall_path.parent, floor_id, geometry))
+
+        reference = photo_references[floor_id]
+        target_url = "reference/"+slug+"/"+floor_id+".webp"
+        if reference.get("url") != target_url:
+            raise ValueError(slug+"/"+floor_id+": invalid reference asset URL")
+        parts = sorted(mall_path.parent.glob(floor_id+".reference.webp.b64.part*"))
+        if not parts:
+            raise ValueError(slug+"/"+floor_id+": original registered photo missing (fail closed)")
+        raw = base64.b64decode("".join(p.read_text(encoding="ascii").strip()
+                                         for p in parts),validate=True)
+        sha = hashlib.sha256(raw).hexdigest()
+        if sha != reference.get("sha256"):
+            raise ValueError(slug+"/"+floor_id+": photo changed without updating approved reference hash")
+        # WebP VP8 lossy frame's start code contains the natural image size.
+        marker = raw.find(b"\x9d\x01\x2a",12,100)
+        if raw[:4] != b"RIFF" or raw[8:12] != b"WEBP" or marker == -1:
+            raise ValueError(slug+"/"+floor_id+": source must be a valid VP8 WebP photo")
+        registered_size = [int.from_bytes(raw[marker+3:marker+5],"little")&0x3fff,
+                           int.from_bytes(raw[marker+5:marker+7],"little")&0x3fff]
+        if registered_size != [photo_width,photo_height] or registered_size != reference.get("imageSize"):
+            raise ValueError(slug+"/"+floor_id+": source image and vector coordinate sizes do not match")
+        qa = reference.get("qa",{})
+        if qa.get("status") not in ("pending","approved"):
+            raise ValueError(slug+"/"+floor_id+": all floor comparisons require a QA status")
+        if qa.get("status") == "approved":
+            expected_hash = hashlib.sha256(json.dumps(geometry,separators=(",",":"),
+                ensure_ascii=False).encode("utf-8")).hexdigest()
+            if qa.get("geometrySha256") != expected_hash or not qa.get("reviewer") or not qa.get("reviewedAt") or not all(qa.get("checks",{}).values()):
+                raise ValueError(slug+"/"+floor_id+": approved geometry requires current signed review, all checks, and matching geometry SHA")
+        elif info.get("navigable",False) or info.get("status") not in ("provisional","mock"):
+            raise ValueError(slug+"/"+floor_id+": pending review may ONLY publish as non-navigable provisional/mock")
+        asset = repo/"public"/"reference"/slug/(floor_id+".webp")
+        asset.parent.mkdir(parents=True,exist_ok=True)
+        asset.write_bytes(raw)
+
         step = 8
         width, height = (photo_width + step-1)//step, (photo_height + step-1)//step
         walk = {"x": 0, "y": 0, "step": step, "w": width, "h": height,

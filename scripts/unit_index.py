@@ -104,14 +104,29 @@ def attach(folder, level, geometry):
     with file.open(encoding="utf-8", newline="") as stream:
         for row in csv.DictReader(stream):
             code = row["code"].strip()
-            at = (float(row["x"]), float(row["y"]))
-            matches = [f[0] for f in geometry if inside(at, f)]
+            # Directory-only brand names have NO defensible floor coordinates.
+            # Keep them searchable without silently placing every shop at 0,0.
+            try:
+                x_str,y_str=row.get("x","").strip(),row.get("y","").strip()
+                at=(float(x_str),float(y_str)) if x_str and y_str else None
+            except (ValueError, TypeError):
+                at=None
+            matches = [f[0] for f in geometry if inside(at, f)] if at else []
             polygon_id = matches[0] if len(matches) == 1 else None
             label = {"code": code, "name": row.get("name", "").strip(),
-                "floor": level, "x": at[0], "y": at[1],
+                "floor": level, "x": at[0] if at else None,
+                "y": at[1] if at else None,
                 "polygonId": polygon_id,
                 "source": row.get("source", "unknown"),
-                "relation": "inside-one-component" if polygon_id else "pending"}
+                "positionStatus": row.get("positionStatus", "").strip() or
+                     ("photo-approximation" if at else "directory-only"),
+                "nameStatus": row.get("nameStatus", "").strip(),
+                "category": row.get("category", "").strip(),
+                "tags": row.get("tags", "").strip(),
+                "aliases": row.get("aliases", "").strip(),
+                "enrichmentURL": row.get("enrichmentURL", "").strip(),
+                "relation": ("inside-one-colour-cluster" if polygon_id else
+                             "unplaced-directory" if not at else "pending")}
             manual_by_code[code] = row
             labels.append(label)
             if polygon_id:

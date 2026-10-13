@@ -66,10 +66,24 @@ function create(gl){
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillStyle='#ffffff';
   if(name){
-   ctx.font='700 '+(name.length>14?'19':'24')+'px system-ui,sans-serif';
-   ctx.fillText(name,x+cw/2,y+34,cw-22);
+   ctx.font='800 '+(name.length>14?'19':'24')+'px system-ui,sans-serif';
+   const parts=name.split(/\s+/).filter(Boolean);
+   if(parts.length>1){
+    const left=parts[0],right=parts.slice(1).join(' ');
+    const total=ctx.measureText(left+' '+right).width;
+    const available=Math.min(total,cw-26),start=x+cw/2-available/2;
+    ctx.textAlign='left';
+    ctx.fillStyle='#f6fbff';
+    ctx.fillText(left,start,y+34,cw-35);
+    ctx.fillStyle='#ffbd64';
+    ctx.fillText(' '+right,start+Math.min(ctx.measureText(left).width,cw*.49),y+34,cw*.51);
+    ctx.textAlign='center';
+   }else{
+    ctx.fillStyle='#f6fbff';
+    ctx.fillText(name,x+cw/2,y+34,cw-22);
+   }
    ctx.font='700 18px system-ui,sans-serif';
-   ctx.fillStyle='#c9faff';
+   ctx.fillStyle='#ffcb80';
    ctx.fillText(code,x+cw/2,y+62,cw-24);
   }else{
    ctx.font='800 '+(code.length>9?'27':'34')+'px system-ui,sans-serif';
@@ -192,7 +206,7 @@ function render(gl,mvp){
   const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
   const surface=planar(top,axis,side,halfW,halfW*.43);
   if(state.distance<=230||u.code===selected){
-   rectangle(regular,surface[0],surface[3],surface[2],surface[1],cell);
+   rectangle(regular,surface[0],surface[1],surface[2],surface[3],cell);
    drawnRoof++;visibleCodes.push(u.code);
   }
   const requested=highlights.has(u.code)||u.code===selected;

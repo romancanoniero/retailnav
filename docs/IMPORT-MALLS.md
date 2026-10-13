@@ -91,3 +91,33 @@ Sin estas calibraciones no se presentará un punto interior supuestamente exacto
 Los servicios se guardan en `pois`: baños, información, metro, salidas,
 ascensor y conexiones verticales tentativas. Todos conservan `confidence`
 y algunas posiciones permanecen pendientes de inspección.
+
+
+## Nueva extracción revisable de divisiones y servicios
+
+El vectorizador separa las regiones de color de las líneas negras potencialmente
+divisorias. En cada ejecución produce:
+- B1-wall-candidates.json: trazos candidatos, TODOS sin verificar
+- B1-wall-review.jpg: comparación visual sobre la fotografía de la planta
+- vectorization-review.json: informe de polígonos, identificadores, zonas, servicios y dudas
+
+Estos trazos incluyen ocasionalmente letras y logos. Por ello NO se convierten
+automáticamente en muros ni en rutas: se exige validación visual de cada línea.
+Se pueden incorporar paredes aprobadas mediante --reviewed-walls con un JSON
+indexado por planta; cada línea debe tener puntos a y b, y verified: true.
+
+Para conservar el resto de información del plano:
+- --unit-codes: códigos y nombres de comercios vinculados a posiciones
+- --districts: nombres de zonas independientes de los locales (rótulos 3D)
+- --pois: baños, escaleras, ascensores, accesos, metro e información
+- --wall-min-length: longitud mínima de candidatos a divisiones
+
+IMPORTANTE: un polígono de color no equivale necesariamente a un local.
+Ninguna región se considera exacta ni navegable sin revisar la fuente.
+Si los códigos o las divisiones son demasiado pequeños para leerse en la foto,
+hay que obtener una imagen más cercana o un plano digital de mayor resolución.
+
+Los pines de usuarios tienen otra responsabilidad: se dimensionan por el zoom
+desde src/pins-webgl.js, respetan una altura física máxima y no atraviesan
+los rótulos suspendidos del mapa. Eso corresponde a visualización, no a la
+vectorización que extrae los datos arquitectónicos.

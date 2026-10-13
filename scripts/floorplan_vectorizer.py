@@ -308,6 +308,7 @@ def run():
     p.add_argument("--pois",help="JSON keyed by floor of photo-reviewed bathrooms, lifts, stairs, metro, exits, information etc")
     p.add_argument("--reviewed-walls",help="JSON keyed by floor, containing only checked architectural line segments with verified=true")
     p.add_argument("--wall-min-length",type=int,default=14,help="Minimum image-pixel length of independent unreviewed wall candidates")
+    p.add_argument("--segmentation",choices=["hybrid","color"],default="hybrid",help="Combine local grayscale/BW and original color (or older color-only borders)")
     p.add_argument("--disable-ocr",action="store_true",help="Skip automatic optional OCR suggestions")
     p.add_argument("--labels",help="JSON by level: {\"B1\":[{\"name\":\"KFC\",\"x\":1,\"y\":2}]}")
     p.add_argument("--min-area",type=int,default=28)
@@ -408,12 +409,17 @@ def run():
         # Save the linework separately, even where two colour regions merged.
         # Candidates are not automatically walls: signs and logos contain
         # similar dark strokes. The review JPG makes this uncertainty visible.
-        candidates = detect_wall_candidates(image, args.wall_min_length)
+        evidence=grayscale_evidence(image)
+        cv2.imwrite(str(output/(level+"-grayscale-contrast.jpg")),evidence["enhanced"])
+        cv2.imwrite(str(output/(level+"-adaptive-bw.png")),evidence["binary"])
+        cv2.imwrite(str(output/(level+"-confirmed-strokes.png")),evidence["supported"])
+        candidates = detect_wall_candidates(image, args.wall_min_length, evidence)
         inspected = reviewed_walls.get(level, [])
         accepted = [w for w in inspected if w.get("verified")]
         (output/(level+"-wall-candidates.json")).write_text(
-            json.dumps({"schema":"retailnav.linework-review.v1",
+            json.dumps({"schema":"retailnav.linework-review.v2",
                 "floor":level,"status":"unreviewed",
+                "method":"original-colour+CLAHE-grayscale+adaptive-BW",
                 "candidates":candidates},separators=(",",":"))+"\n",
             encoding="utf-8"
         )
@@ -433,7 +439,8 @@ def run():
               len(accepted),"reviewed dividers. Unreviewed lines never become walls.")
 
 
-        feats=extract(image,level,args.min_area,args.simplify,inspected)
+        feats=extract(image,level,args.min_area,args.simplify,inspected,
+                      args.segmentation,evidence)
         anchors(feats,labels.get(level,[]))
         if len(feats)<3: p.error("Insufficient regions in "+level)
         pixels=[image.shape[1],image.shape[0]]
@@ -463,6 +470,9 @@ def run():
         reports.append({"floor":level,"status":"provisional",
             "polygonCount":len(feats),
             "wallCandidates":len(candidates),
+            "segmentationMethod":args.segmentation,
+            "grayscaleAnalysis":True,
+            "adaptiveBinarization":True,
             "approvedWallCount":len(accepted),
             "printedStoreCodes":len(codes),
             "printedZoneNames":len(district_labels.get(level, [])),

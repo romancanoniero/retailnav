@@ -250,7 +250,10 @@ try {
     assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'orbit-3d');
     assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).rotationAxes,3);
     assert.equal(await page.locator('#rnRollControls').isVisible(),true);
-    const faceA=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
+    const beforeOrbit=await page.evaluate(()=>({
+      state:window.__RETAILNAV__.getState(),
+      pins:window.RetailNavPins.getSolidState()
+    }));
     await page.evaluate(()=>{
       const el=document.querySelector('#canvas'),r=el.getBoundingClientRect();
       const x=r.left+r.width/2,y=r.top+r.height/2;
@@ -260,10 +263,20 @@ try {
       }));
       dispatch('pointerdown',-75);dispatch('pointermove',110);dispatch('pointerup',110);
     });
-    const faceB=await page.evaluate(()=>window.RetailNavPins.getSolidState().frontFacingDot);
-    assert.ok(Math.abs(faceA-faceB)>.05,
-      'World-fixed 3D photo face must change viewing angle on map rotation');
-    log('PIN_PARALLAX',{before:faceA,after:faceB});
+    const afterOrbit=await page.evaluate(()=>window.__RETAILNAV__.getState());
+    assert.ok(afterOrbit.q.some((n,i)=>Math.abs(n-beforeOrbit.state.q[i])>.02),
+      'Free 3D orbit must update camera quaternion on horizontal finger drag');
+    await page.waitForFunction(previous=>
+      window.RetailNavPins.getSolidState().frames>previous,
+      beforeOrbit.pins.frames,{timeout:8000});
+    const faceB=await page.evaluate(()=>window.RetailNavPins.getSolidState());
+    const q=afterOrbit.q;
+    const calculated=1-2*(q[0]*q[0]+q[1]*q[1]);
+    assert.ok(Math.abs(faceB.frontFacingDot-calculated)<.003,
+      '3D friend faces must obey the CURRENT camera quaternion, even when rotation angles have similar cosines');
+    assert.equal(faceB.fixedWorldRotation,true,'Demo friend pins stay world-fixed during free orbit');
+    log('PIN_PARALLAX',{before:beforeOrbit.pins.frontFacingDot,
+      after:faceB.frontFacingDot,cameraQuaternionChanged:true});
     const freeAxes=await page.evaluate(()=>{
       const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
       const r=canvas.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;

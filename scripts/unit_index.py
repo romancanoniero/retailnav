@@ -121,20 +121,42 @@ def attach(folder, level, geometry):
         polygon_id = label["polygonId"]
         manual = manual_by_code.get(label["code"])
         if manual and all(str(manual.get(k,"")).strip() for k in ("front_ax","front_ay","front_bx","front_by")):
-            # The importer accepts manually inspected endpoints even for shop
-            # fragments that cannot yet be mapped to one complete polygon.
+            # Front geometry may be manually established, but it does not imply
+            # that the *roof polygon* is uniquely identified. Do not skip the
+            # independent roof qualification below.
             front = candidate_front(polygons[polygon_id],(label["x"],label["y"]),manual) if polygon_id else _explicit_front(manual)
             if front:
                 label["facade"]=front
                 label["frontStatus"]=front["status"]
-                continue
         if not polygon_id:
             label["frontStatus"] = "unmatched-region"
+            label["roofStatus"] = "unmatched-region"
             continue
         # A fused zone with multiple IDs has no provable per-shop storefront.
         if len(owners[polygon_id]) != 1:
             label["frontStatus"] = "mixed-polygon-requires-splitting"
+            label["roofStatus"] = "mixed-polygon-requires-splitting"
             continue
+        # Only a single identified store with a uniquely matching polygon is
+        # allowed to own the *roof* label. Do not assign a fused roof to two stores.
+        feature = polygons[polygon_id]
+        ring = max(feature[4], key=len) if feature[4] else []
+        points=[]
+        x=y=0
+        for dx,dy in zip(feature[3][::2],feature[3][1::2]):
+            x+=dx;y+=dy;points.append((x/2,y/2))
+        edges=[(points[ring[i]],points[ring[(i+1)%len(ring)]])
+               for i in range(len(ring))] if len(ring)>=3 else []
+        if edges:
+            best=max(edges,key=lambda pair:(pair[1][0]-pair[0][0])**2+
+                                    (pair[1][1]-pair[0][1])**2)
+            vx,vy=best[1][0]-best[0][0],best[1][1]-best[0][1]
+            length=(vx*vx+vy*vy)**.5
+            label["roof"]={"x":label["x"],"y":label["y"],
+                           "axis":[round(vx/length,5),round(vy/length,5)],
+                           "widthPixels":round(max(4.,min(length*.48,18.)),2),
+                           "status":"estimated-plan-polygon"}
+            label["roofStatus"]="estimated-plan-polygon"
         front = candidate_front(polygons[polygon_id],(label["x"],label["y"]))
         if front:
             label["facade"] = front

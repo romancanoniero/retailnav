@@ -419,3 +419,20 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnUnitInfo p{font-size:11px;color:#c0dce5;line-height:1.45}
 #rnUnitClose{position:absolute;right:8px;top:5px;border:0;background:transparent;font-size:20px;color:white}
 @media(max-width:760px){.rnUnitInfo{bottom:125px;left:10px;right:63px}.rnUnitCode{font-size:9px;height:18px}}
+
+#rnIndoorBtn{display:grid;place-items:center;width:41px;min-width:41px;height:41px;padding:0;
+ background:#143b53;color:#c7faff;border:1px solid #4d8b9e;font-size:27px}
+.rnIndoorDialog{width:min(95vw,460px);max-height:85dvh;border-radius:18px;border:1px solid #69a6ba}
+.rnIndoorDialog .dialogbody{display:flex;flex-direction:column;gap:10px;padding:17px;max-height:65dvh;overflow:auto}
+.rnIndoorDialog .dialogbody button{min-height:39px;background:#123d57;color:#e9fbff;border:1px solid #4989a7}
+.rnIndoorDialog .dialogbody button:disabled{opacity:.42}
+.rnIndoorDialog p{line-height:1.4;color:#c9e2eb;font-size:12px;margin:2px 0}
+.rnIndoorDialog p.caption{color:#9db6c6;font-size:11px}
+.rnIndoorDialog input{max-width:100%;padding:10px 12px;background:#132d3d;border:1px solid #528ba1;border-radius:8px;color:#fff}
+.rnMyPositionMarker{position:absolute;z-index:6;pointer-events:none;transform:translate(-50%,-50%)}
+.rnMyPositionMarker[hidden]{display:none!important}
+.rnIndoorDot{display:block;width:16px;height:16px;border:3px solid white;border-radius:100%;
+ background:#219bd9;box-shadow:0 0 0 9px #00e0fe31,0 2px 9px #06243e}
+.rnIndoorArrow{position:absolute;top:-23px;left:8px;display:block;transform:translate(-50%,-90%);
+ transform-origin:50% 100%;color:#47e1ff;font-size:17px;text-shadow:0 1px 3px black}
+@media(max-width:470px){#rnIndoorBtn{width:36px;min-width:36px;height:38px;font-size:23px}}

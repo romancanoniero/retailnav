@@ -114,7 +114,10 @@ try {
   assert.equal(await page.locator('#friendsBtn').getAttribute('aria-expanded'),'false');
   assert.equal(await page.locator('#rnQrDialog').evaluate(el=>el.tagName),'DIALOG');
   await page.locator('#rnQrClose').click();
-  assert.equal(await page.locator('#rnQrDialog').evaluate(el=>el.open),false);
+  await page.waitForFunction(()=>
+    !document.getElementById('rnQrDialog').open &&
+    !document.getElementById('peopleDialog').hidden,
+    null,{timeout:5000});
   assert.equal(await page.locator('#peopleDialog').isVisible(),true,
     'Closing QR must return to the open friends pulldown');
   await page.locator('#rnMakeInvite').click();
@@ -122,7 +125,10 @@ try {
   assert.equal(await page.locator('#peopleDialog').isVisible(),false,
     'Pulldown must also be hidden on subsequent QR opens');
   await page.keyboard.press('Escape');
-  await page.waitForFunction(()=>document.getElementById('rnQrDialog')?.open===false);
+  await page.waitForFunction(()=>
+    !document.getElementById('rnQrDialog').open &&
+    !document.getElementById('peopleDialog').hidden,
+    null,{timeout:5000});
   assert.equal(await page.locator('#peopleDialog').isVisible(),true,
     'Escape closes the QR and restores the friends pulldown');
   await page.locator('#rnMakeInvite').click();
@@ -140,6 +146,10 @@ try {
   assert.equal(decodedQR,link,'QR image must decode to actual invitation even in Safari');
   log('QR','QR modal replaces the pulldown and restores it when dismissed.');
   await page.locator('#rnQrClose').click();
+  await page.waitForFunction(()=>
+    !document.getElementById('rnQrDialog').open &&
+    !document.getElementById('peopleDialog').hidden,
+    null,{timeout:5000});
   assert.equal(await page.locator('#peopleDialog').isVisible(),true,
     'Closing QR reopens the previously active friends pulldown');
 

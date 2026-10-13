@@ -452,12 +452,24 @@ try {
   assert.equal((await apPage.evaluate(()=>window.RetailNavUnits.getState())).selected,'K1-31');
   await apPage.locator('#rnUnitClose').click();
   await apPage.locator('#search').fill('');
+  if(apStatus.viewer.renderer==='WebGL'){
+    await apPage.evaluate(()=>window.RetailNavUnits.focus('A-01'));
+    await apPage.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.raised>=1,
+      null,{timeout:18000});
+    const roof=await apPage.evaluate(()=>window.RetailNavUnits.getRoofState());
+    assert.equal(roof.cameraFacing,false);
+    assert.ok(roof.labelledRoofs>=1);
+    assert.equal(roof.raisedHasExtrudedBody,true);
+    assert.equal(roof.raisedHasPhysicalPosts,true);
+    log('ROOF_SIGNS',roof);
+  }
   log('STORE_IDS','Shop codes indexed and searchable, including unresolved regions.');
 
   const poi=await apPage.evaluate(()=>window.RetailNavPOI?.getState());
   assert.ok(poi&&poi.count>=10,'AP Plaza must include semantic bathrooms, exits, escalators and information');
-  await apPage.waitForFunction(()=>window.RetailNavPOI?.getState().shown.length>=1,
-    null,{timeout:12000});
+  assert.equal(await apPage.evaluate(()=>window.RetailNavPOI.show('ap-b1-info')),true);
+  await apPage.waitForFunction(()=>window.RetailNavPOI?.getState().shown.includes('ap-b1-info'),
+    null,{timeout:18000});
   assert.ok(await apPage.locator('#rnServicesToggle').isVisible());
   await apPage.locator('#search').fill('baños');
   assert.ok(await apPage.locator('#results .rnPoiResult').count()>=2,

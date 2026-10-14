@@ -459,8 +459,17 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnFloorPicker[hidden],.rnFloorSpacing[hidden],.rnReferenceDialog [hidden]{display:none!important}
 .rnReferenceDialog{width:min(97vw,980px);max-width:97vw}
 .rnReferenceDialog .dialogbody{max-height:72dvh;overflow:auto}
-.rnReferenceDialog .comparewrap{overflow:auto;touch-action:pan-x pan-y}
-.rnReferenceDialog .comparewrap svg{max-height:62dvh;min-height:200px}
+.rnReferenceDialog .comparewrap{
+ position:relative;overflow:hidden;touch-action:none;overscroll-behavior:contain;
+ height:min(55dvh,590px);min-height:200px;
+ border:1px solid #9fb8ca;user-select:none;-webkit-user-select:none
+}
+.rnReferenceDialog .comparewrap svg{
+ display:block;max-height:none;min-height:0;transform-origin:0 0;
+ touch-action:none;user-select:none;-webkit-user-select:none;
+ will-change:transform;cursor:grab
+}
+.rnReferenceDialog .comparewrap.rnCompareDragging svg{cursor:grabbing}
 .rnCompareControls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
  margin-bottom:10px;color:#d7ebf5;font-size:12px}
 .rnCompareControls label{display:flex;gap:6px;align-items:center}
@@ -524,7 +533,13 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnCompareTarget{stroke:#ffb73c;stroke-width:3;fill:transparent;stroke-dasharray:5 3;
  vector-effect:non-scaling-stroke}
 .rnReferenceDialog #compareSvg{cursor:crosshair}
+.rnCompareGestureHelp{
+ font-size:11px;color:#b7dae6;line-height:1.45;margin:5px 2px 12px
+}
+.rnCompareResetView{min-height:33px;padding:5px 9px;font-size:11px;
+ border:1px solid #73b6d0;border-radius:8px;background:#12354d}
 @media(max-width:570px){
+ .rnReferenceDialog .comparewrap{height:min(49dvh,530px)}
  .rnAuditInputs{grid-template-columns:1fr}
  .rnReferenceDialog .rnCompareControls{gap:7px}
  .rnReferenceDialog .rnCompareControls label{font-size:11px}

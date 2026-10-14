@@ -181,9 +181,68 @@ try {
   await page.locator('#compareZoom').evaluate(el=>{el.value='200';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).opacity,.33);
   assert.equal(await page.locator('#compareSvg').evaluate(e=>e.style.width),'200%');
+  const compareTouch=await page.evaluate(()=>{
+    const svg=document.getElementById('compareSvg');
+    const viewport=document.getElementById('compareViewport');
+    const r=viewport.getBoundingClientRect();
+    const x=r.left+r.width*.5,y=r.top+r.height*.48;
+    const get=()=>window.RetailNavComparison.getState();
+    const send=(type,id,dx,dy)=>svg.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,button:0,
+      clientX:x+dx,clientY:y+dy,
+      buttons:type==='pointerup'?0:1
+    }));
+    const before=get();
+    send('pointerdown',71,-35,-20);
+    send('pointermove',71,10,5);
+    const panned=get();
+    send('pointerup',71,10,5);
+    send('pointerdown',72,-32,0);
+    send('pointerdown',73,32,0);
+    send('pointermove',73,92,0);
+    const spread=get();
+    send('pointerup',73,92,0);
+    send('pointerup',72,-32,0);
+    send('pointerdown',74,-95,0);
+    send('pointerdown',75,95,0);
+    send('pointermove',75,15,0);
+    const closed=get();
+    send('pointerup',75,15,0);
+    send('pointerup',74,-95,0);
+    return {
+      before,panned,spread,closed,
+      touchAction:getComputedStyle(viewport).touchAction,
+      photographTransform:document.querySelector('#referenceImage').getScreenCTM().toString(),
+      geometryTransform:document.querySelector('#traceOverlay').getScreenCTM().toString()
+    };
+  });
+  assert.equal(compareTouch.touchAction,'none','The iPhone must not scroll the dialog while touching the map');
+  assert.equal(compareTouch.before.zoomPercent,200);
+  assert.ok(compareTouch.panned.panX>compareTouch.before.panX+20,
+    'One-finger right swipe must pan image right');
+  assert.ok(compareTouch.panned.panY>compareTouch.before.panY+8,
+    'One-finger down swipe must pan image down');
+  assert.ok(compareTouch.spread.zoomPercent>compareTouch.panned.zoomPercent,
+    'Pinch OUT must enlarge the photograph and vectors as a single SVG');
+  assert.ok(compareTouch.closed.zoomPercent<compareTouch.spread.zoomPercent,
+    'Pinch IN must reduce scale');
+  assert.equal(compareTouch.photographTransform,compareTouch.geometryTransform,
+    'Source photo and vector paths MUST share exactly the same transform');
+  assert.equal(compareTouch.closed.pointerCount,0,'No stale touch pointers after gesture');
+  await page.locator('#compareResetView').click();
+  const resetCompare=await page.evaluate(()=>window.RetailNavComparison.getState());
+  assert.equal(resetCompare.zoomPercent,100,'Reset centres comparison and restores 100% zoom');
+  assert.ok(Math.abs(resetCompare.panX)<30,'Reset clears large horizontal pan offset');
+  await page.locator('#compareZoom').evaluate(el=>{
+    el.value='300';el.dispatchEvent(new Event('input',{bubbles:true}));
+  });
   await page.locator('#compareLevel').selectOption('LL');
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).level,'LL');
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).hasReference,true);
+  assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).zoomPercent,100,
+    'Changing levels resets pan and zoom, preventing an offscreen floor');
+  log('COMPARE_TOUCH',{pan:true,pinchOut:true,pinchIn:true,zoomReset:true,
+    photoAndGeometryAligned:true});
   await page.locator('#compareDialog [data-close]').click();
   log('COMPARE','Reference and vector layers can be hidden independently, zoomed and switched by floor.');
 
@@ -708,6 +767,20 @@ try {
   await apPage.locator('#showReference').check();
   await apPage.locator('#compareZoom').evaluate(el=>{el.value='225';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal(await apPage.locator('#compareSvg').evaluate(el=>el.style.width),'225%');
+  const apPinch=await apPage.evaluate(()=>{
+    const svg=document.querySelector('#compareSvg'),r=svg.getBoundingClientRect();
+    const send=(t,id,dx)=>svg.dispatchEvent(new PointerEvent(t,{
+      bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,button:0,
+      clientX:r.left+r.width*.5+dx,clientY:r.top+80,
+      buttons:t==='pointerup'?0:1
+    }));
+    send('pointerdown',22,-35);send('pointerdown',23,35);
+    send('pointermove',23,85);
+    const z=window.RetailNavComparison.getState().zoomPercent;
+    send('pointerup',23,85);send('pointerup',22,-35);
+    return z;
+  });
+  assert.ok(apPinch>225,'Touch gestures must work on AP Plaza as well as Aventura');
   await apPage.locator('#compareDialog [data-close]').click();
   log('AP_FLOOR_COMPARISON','No floor widget for one floor; original photo and geometry independently toggle at adjustable zoom.');
   assert.equal(apStatus.viewer.features[0][1],197,

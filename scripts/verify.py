@@ -131,28 +131,30 @@ for feature in ap_geometry:
     assert len(triangles) % 3 == 0 and len(triangles) >= 3
     assert max(triangles) < n
 
-# New World City Shanghai: seven UNIQUE photograph-derived floors; 380 human
-# directory records are NOT the same as the number of independently surveyed
-# shops or colour clusters. Search tags must remain attached to unlocated rows.
+# The primary RetailNav catalog must load the same nine photo-derived floors
+# exposed by /newworld9/. Never mistake candidate regions for certified stores.
 nw = catalog["new-world-city-shanghai"]
 assert nw["id"] == "new-world-city-shanghai"
 assert nw["name"].startswith("新世界城")
 assert nw["navigable"] is False and nw["floorAlignmentApproved"] is False
 assert nw["commercialDirectoryRecords"] == 380
-assert nw["vectorRegionCount"] == 195
-assert len(nw["floors"]) == 7
+assert nw["legacyPhotoVectorRegionCount"] == 195
+assert nw["vectorRegionCount"] == 737
+assert nw["vectorMethod"] == "photo-segmentation-nine-floors-2026-10-14"
+assert len(nw["floors"]) == 9
 assert [fl[0] for fl in nw["floors"]] == [
-    "L1", "L2", "L3", "L4", "L5", "L6", "L7"]
-assert len(nw["districts"]) == 7
-assert len(nw["floorReferences"]) == 7
-nw_units=nw["units"]
-assert len(nw_units) == 380
-assert len({(u["floor"],u["code"]) for u in nw_units}) == 380
-assert all(u["category"] and u["tags"] and u["source"].startswith(
-    "user-photo-directory-") for u in nw_units)
-assert sum(u["name"] != "" for u in nw_units) >= 360
-assert 0 < sum(u["x"] is None for u in nw_units) < 380, (
-    "Unplaced directory stores must not be assigned fabricated coordinates")
+    "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9"]
+assert len(nw["districts"]) == 7  # Historical L1-L7 directory headings.
+assert len(nw["floorReferences"]) == 9
+nw_units = nw["units"]
+old_units = [u for u in nw_units if
+    u["source"].startswith("user-photo-directory-")]
+assert len(old_units) == 380
+assert len(nw_units) >= 380
+assert len({(u["floor"], u["code"]) for u in nw_units}) == len(nw_units)
+assert all(u["category"] and u["tags"] for u in old_units)
+assert sum(bool(u["name"]) for u in old_units) >= 360
+assert 0 < sum(u["x"] is None for u in nw_units) < len(nw_units)
 assert {("L1","1B01"),("L3","3B30"),("L6","6A01"),
     ("L6","6C01"),("L7","7C01")}.issubset(
     {(u["floor"],u["code"]) for u in nw_units})
@@ -162,20 +164,33 @@ assert any("anime" in u["tags"] for u in nw_units)
 assert nw["photoDigitizationExperiment"]["onlineNameVerification"][
     "onlineCorroboratedExamples"] == 6
 assert nw["photoDigitizationExperiment"]["onlineNameVerification"]["perStoreOnlineCrawlDone"] is False
+assert len(nw["pois"]) == 110
+assert {p["category"] for p in nw["pois"]} == {
+    "toilet", "elevator", "vertical-uncertain", "exit"}
+assert all(p["verticalConnectionVerified"] is False for p in nw["pois"])
+assert len(nw["verticalConnectionHypotheses"]) == 39
+assert all("NOT VERIFIED" in edge["status"]
+    for edge in nw["verticalConnectionHypotheses"])
+shops = 0
 for record in nw["floors"]:
-    level=record[0]
-    source=nw["floorReferences"][level]
-    photo=root/source["url"]
-    assert photo.exists() and hashlib.sha256(photo.read_bytes()).hexdigest()==source["sha256"]
-    assert source["qa"]["status"]=="pending"
-    assert source["quality"]=="compressed-preview"
+    level = record[0]
+    source = nw["floorReferences"][level]
+    photo = root/source["url"]
+    assert photo.exists()
+    assert hashlib.sha256(photo.read_bytes()).hexdigest() == source["sha256"]
+    assert source["qa"]["status"] == "pending"
+    assert source["quality"] == "compressed-preview"
     assert all(not approval for approval in source["qa"]["checks"].values())
-    assert len(record[3])>=15, level
-    assert all(f[1] in (1,2) and len(f)==7 for f in record[3])
-    assert all(f[5] and len(f[5])%3==0 for f in record[3])
-assert sum(len(f[3]) for f in nw["floors"]) == 195
-assert nw["photoDigitizationExperiment"]["unmappedFloorsFromDirectorySign"]==[
-    "B1","L8","L9","L10","L11","L12"]
+    assert source["imageSize"] == [1376,768]
+    assert len(record[3]) >= 15, level
+    assert all(f[1] in (1,3) and len(f) == 7 for f in record[3])
+    assert all(f[5] and len(f[5])%3 == 0 for f in record[3])
+    assert all(max(f[5]) < len(f[3])//2 for f in record[3])
+    shops += sum(f[1] == 1 for f in record[3])
+assert sum(len(f[3]) for f in nw["floors"]) == 737
+assert shops == 627
+assert nw["photoDigitizationExperiment"]["unmappedFloorsFromDirectorySign"] == [
+    "B1", "L10", "L11", "L12"]
 
 manifest = json.loads((root / "maps/manifest.json").read_text(encoding="utf-8"))
 assert [f["id"] for f in manifest["floors"]] == ["LL", "UL", "L3"]

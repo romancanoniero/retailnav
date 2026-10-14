@@ -7,6 +7,7 @@ let dirty=true;
 let active='ALL', wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
+let lastEarth3DPitch=-.70,earth2D=false;
 const MIN_PITCH=-Math.PI/2,MAX_PITCH=-.25;
 // World units, not metres: photo maps have no surveyed scale.
 // Previous min=24; min=4 yields up to six times more magnification.
@@ -14,14 +15,191 @@ const MIN_ZOOM_DISTANCE=4,MAX_ZOOM_DISTANCE=850;
 const zoomBounds=n=>clamp(n,MIN_ZOOM_DISTANCE,MAX_ZOOM_DISTANCE);
 const wrapAngle=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function updateCameraRotation(){
- // True camera quaternion: yaw around world Y, pitch around local X,
- // roll around camera-forward Z. All 3 axes are independent in 3D mode.
+ // Map mode Euler presets only. Spherical free orbit updates q directly.
  q=norm(qm(qm(quat([0,1,0],orbitYaw),quat([1,0,0],orbitPitch)),
    quat([0,0,1],orbitRoll)));
+ updateEarthButtons();
+}
+function rotateCameraLocal(axis,angle){
+ q=norm(qm(q,quat(axis,angle)));
+ dirty=true;
+}
+function arcballVector(clientX,clientY){
+ const r=canvas.getBoundingClientRect();
+ const radius=Math.max(48,Math.min(r.width,r.height)*.47);
+ const x=(clientX-r.left-r.width/2)/radius;
+ const y=(r.top+r.height/2-clientY)/radius;
+ const d=x*x+y*y;
+ if(d>1){
+  const k=1/Math.sqrt(d);
+  return [x*k,y*k,0]; // Rim motion allows rotation around screen Z.
+ }
+ return [x,y,Math.sqrt(Math.max(0,1-d))];
+}
+function arcballCameraDelta(start,end){
+ // Inverse model trackball rotation, quaternion [-cross,1+dot].
+ const axis=cross(start,end),w=1+clamp(dot(start,end),-1,1);
+ if(w<1e-6){
+  const fallback=Math.abs(start[0])<.8?[1,0,0]:[0,1,0];
+  return [...norm(cross(start,fallback)),0];
+ }
+ return norm([-axis[0],-axis[1],-axis[2],w]);
+}
+function updateRotationModeUI(){
+ const button=$('pan');
+ button.setAttribute('aria-pressed',String(!panMode));
+ button.setAttribute('aria-label',panMode?'Activar rotación esférica 3D 360 grados':'Cambiar a desplazamiento de mapa');
+ button.title=panMode?'Activar giro 3D 360°: mirar desde cualquier dirección'
+  :'Giro esférico activo · tocar para desplazar el mapa';
+ button.classList.toggle('active',!panMode);
+ $('rnRollControls').hidden=panMode;
+ updateEarthButtons();
+ canvas.setAttribute('aria-label',panMode
+  ?'Modo mapa: un dedo mueve; dos dedos amplían, giran e inclinan. Pulsá 360° para rotación libre.'
+  :'Modo esfera 3D 360°: un dedo gira libremente por los tres ejes, también por debajo. Dos dedos desplazan, amplían y giran.');
+}
+// Google Earth-style reference compass and perspective controls. Without a
+// surveyed bearing, 'N' means the image's top edge, NOT verified true north.
+function updateEarthButtons(){
+ const plan=$('plan'),mode=$('rnViewModeLabel'),north=$('north');
+ if(mode)mode.textContent=earth2D?'3D':'2D';
+ if(plan){
+  plan.setAttribute('aria-pressed',String(earth2D));
+  plan.setAttribute('aria-label',earth2D?'Volver a vista 3D':'Pasar a vista 2D');
+  plan.title=earth2D?'Inclinar para vista 3D':'Ver planta desde arriba (2D)';
+ }
+ if(north){
+  const dir=[0,0,-1],east=dot(dir,qr(q,[1,0,0])),
+       upwards=dot(dir,qr(q,[0,1,0]));
+  const angle=Math.atan2(east,upwards);
+  const arrow=$('rnCompassNeedle');
+  if(arrow)arrow.style.transform='rotate('+(Number.isFinite(angle)?angle:0)+'rad)';
+  north.title='Restablecer orientación de referencia (norte real sin calibrar)';
+ }
+}
+function faceMapNorth(){
+ stopAuto();
+ if(!panMode){
+  panMode=true;
+  orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);
+  updateRotationModeUI();
+ }
+ orbitYaw=0;orbitRoll=0;
+ updateCameraRotation();dirty=true;
+}
+function switchEarth2D(){
+ stopAuto();
+ if(!panMode){
+  panMode=true;
+  orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);
+  updateRotationModeUI();
+ }
+ if(active==='ALL'&&floors.length>1){
+  // 2D refers to one selected level; retain focus and zoom throughout.
+  const floorId=selected?.floor||floors[Math.min(1,floors.length-1)].id;
+  const oldTarget=target.slice(),oldDistance=distance;
+  const previousAngles=[orbitYaw,orbitPitch,orbitRoll];
+  setFloor(floorId);
+  [orbitYaw,orbitPitch,orbitRoll]=previousAngles;
+  target=[oldTarget[0],floors.find(f=>f.id===floorId).y,oldTarget[2]];
+  distance=oldDistance;
+ }
+ if(!earth2D){
+  if(orbitPitch>MIN_PITCH+.04)lastEarth3DPitch=orbitPitch;
+  orbitPitch=MIN_PITCH;earth2D=true;
+ }else{
+  orbitPitch=clamp(lastEarth3DPitch,MIN_PITCH+.16,MAX_PITCH);
+  earth2D=false;
+ }
+ orbitRoll=0;
+ updateCameraRotation();dirty=true;
 }
 const selectedMall=window.RETAILNAV_ACTIVE_MALL||{id:'aventura',name:'Aventura Mall',floors:null,origin:[690,405],scale:.15};
 const mallId=selectedMall.id||'aventura';
 const cfg={origin:selectedMall.origin||[690,405],scale:selectedMall.scale||.15}; const errors=[];
+const heightConfig=selectedMall.verticalGeometry||{};
+const baseFloorMetres=Number(heightConfig.defaultFloorHeightMeters)||4;
+const floorHeightMetres=Object.create(null);
+const heightStorageKey='retailnav:floor-height-v1:'+mallId;
+function validHeight(value){const n=Number(value);return Number.isFinite(n)&&n>=2&&n<=12;}
+function initializeFloorHeights(){
+ let saved={};
+ try{saved=JSON.parse(localStorage.getItem(heightStorageKey)||'{}')||{};}catch{}
+ for(const floor of floors){
+  const preset=heightConfig.floorHeightsMeters?.[floor.id];
+  const chosen=saved[floor.id]??preset??baseFloorMetres;
+  floorHeightMetres[floor.id]=validHeight(chosen)?Number(chosen):baseFloorMetres;
+ }
+ refreshFloorElevations();
+}
+function refreshFloorElevations(){
+ let total=0;
+ for(const floor of floors){
+  floor.elevationMetres=total;
+  floor.floorHeightMetres=floorHeightMetres[floor.id]||baseFloorMetres;
+  floor.y=total*spread/baseFloorMetres;
+  total+=floor.floorHeightMetres;
+ }
+}
+function floorFocusY(){
+ if(!floors.length)return 0;
+ return active==='ALL'?(floors[0].y+floors[floors.length-1].y)/2:
+  (floors.find(f=>f.id===active)?.y||0);
+}
+function editFloorHeight(id,value){
+ if(!floors.some(f=>f.id===id)||!validHeight(value))return false;
+ const before=floorFocusY();
+ floorHeightMetres[id]=Math.round(Number(value)*100)/100;
+ refreshFloorElevations();
+ target[1]+=floorFocusY()-before;
+ try{localStorage.setItem(heightStorageKey,JSON.stringify(floorHeightMetres));}catch{}
+ const v=$('rnHeightValue');
+ if(v&&$('rnHeightLevel')?.value===id)v.value=String(floorHeightMetres[id]);
+ updateHeightCaption();dirty=true;return true;
+}
+function updateHeightCaption(){
+ const id=$('rnHeightLevel')?.value||floors[0]?.id;
+ const metres=id&&floorHeightMetres[id]||baseFloorMetres;
+ const span=$('rnHeightSummary');
+ if(span)span.textContent='Altura '+id+' · '+metres.toFixed(1)+' m';
+ const label=$('rnHeightStatus');
+ if(label)label.textContent='Estimación: '+metres.toFixed(1)+
+  ' m. Los pisos superiores y enlaces 3D se recalculan automáticamente.';
+}
+function bindHeightControls(){
+ const box=$('rnHeightsPanel');
+ if(!box)return;
+ box.hidden=floors.length<=1;
+ const picker=$('rnHeightLevel');
+ picker.replaceChildren();
+ for(const floor of floors){
+  const o=document.createElement('option');o.value=floor.id;o.textContent=floor.id;
+  picker.append(o);
+ }
+ picker.value=floors[0].id;
+ picker.onchange=()=>{
+  $('rnHeightValue').value=String(floorHeightMetres[picker.value]);
+  updateHeightCaption();
+ };
+ const input=$('rnHeightValue');
+ input.value=String(floorHeightMetres[picker.value]);
+ input.onchange=()=>{if(!editFloorHeight(picker.value,input.value)){
+  input.value=String(floorHeightMetres[picker.value]);
+  notify('Altura válida entre 2 y 12 metros por planta.');
+ }};
+ $('rnHeightReset').onclick=()=>{
+  for(const floor of floors){
+   floorHeightMetres[floor.id]=validHeight(heightConfig.floorHeightsMeters?.[floor.id])
+    ?Number(heightConfig.floorHeightsMeters[floor.id]):baseFloorMetres;
+  }
+  try{localStorage.removeItem(heightStorageKey);}catch{}
+  const before=floorFocusY();refreshFloorElevations();
+  target[1]+=floorFocusY()-before;
+  input.value=String(floorHeightMetres[picker.value]);
+  updateHeightCaption();dirty=true;
+ };
+ updateHeightCaption();
+}
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)), vadd=(a,b)=>a.map((v,i)=>v+b[i]), vsub=(a,b)=>a.map((v,i)=>v-b[i]), vmul=(a,s)=>a.map(x=>x*s), dot=(a,b)=>a.reduce((v,x,i)=>v+x*b[i],0), cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]], norm=a=>vmul(a,1/(Math.hypot(...a)||1));
 function quat(axis,a){let s=Math.sin(a/2);return [...vmul(axis,s),Math.cos(a/2)];}
 function qm(a,b){return [a[3]*b[0]+a[0]*b[3]+a[1]*b[2]-a[2]*b[1],a[3]*b[1]-a[0]*b[2]+a[1]*b[3]+a[2]*b[0],a[3]*b[2]+a[0]*b[1]-a[1]*b[0]+a[2]*b[3],a[3]*b[3]-a[0]*b[0]-a[1]*b[1]-a[2]*b[2]];}
@@ -65,8 +243,111 @@ function makeLabels(){
 function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
 function drawRoute(dt){if(!route)return;let floor=floors.find(f=>f.id===route.floor);if(active!=='ALL'&&active!==floor.id)return;if(routeRunning)routeT=(routeT+dt*.14)%1;let arr=[];route.points.forEach(p=>arr.push(...pos(p,.2),0,0,0,1,.65,.23,-3));gl.uniform1f(loc.uY,floor.y);gl.uniform1f(loc.uLine,1);gl.bindBuffer(gl.ARRAY_BUFFER,routeBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.DYNAMIC_DRAW);bind({b:routeBuffer});gl.drawArrays(gl.LINE_STRIP,0,arr.length/10);let lens=[0];for(let i=1;i<route.points.length;i++)lens.push(lens[i-1]+Math.hypot(...vsub(route.points[i],route.points[i-1])));let t=(lens.at(-1)||1)*routeT,i=1;while(i<lens.length-1&&lens[i]<t)i++;let a=route.points[i-1],b=route.points[i]||a,k=(t-lens[i-1])/(lens[i]-lens[i-1]||1);let p=[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([...pos(p,.8),0,0,0,1,.83,.43,-3]),gl.DYNAMIC_DRAW);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*10);gl.drawArrays(gl.POINTS,0,1);}
-function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);floors.forEach(f=>f.y=f.index*spread);if(auto){orbitYaw+=dt*.18;updateCameraRotation();}matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+// Yellow escalator side rails and turquoise vertical lift shafts represent
+// photo-based ALIGNMENT HYPOTHESES, not physical routing or surveyed landings.
+const verticalHypotheses=Array.isArray(selectedMall.verticalConnectionHypotheses)
+ ?selectedMall.verticalConnectionHypotheses:[];
+let verticalConnectionsOn=verticalHypotheses.length>0;
+let verticalBuffer=null;
+const escalatorColor=[.98,.73,.18],elevatorColor=[.28,.76,.95];
+function verticalSegments(){
+ if(!verticalConnectionsOn||active!=='ALL'||!verticalHypotheses.length)return [];
+ const byId=new Map();
+ for(const floor of floors)for(const feature of floor.features)
+  byId.set(feature.id,{floor,feature});
+ const lines=[];
+ function line(a,b,color){lines.push({a,b,color});}
+ for(const link of verticalHypotheses){
+  if(link.type!=='escalator'&&link.type!=='elevator')continue;
+  const lo=byId.get(link.from),hi=byId.get(link.to);
+  if(!lo||!hi||hi.floor.index-lo.floor.index!==1)continue;
+  const a=pos(lo.feature.c,lo.floor.y+.5);
+  const b=pos(hi.feature.c,hi.floor.y+.5);
+  const dx=b[0]-a[0],dz=b[2]-a[2];
+  const horiz=Math.hypot(dx,dz);
+  const tangent=horiz>.001?[-dz/horiz,0,dx/horiz]:[1,0,0];
+  const plus=(v,o,k)=>vadd(v,vmul(o,k));
+  if(link.type==='escalator'){
+   // Two inclined guard rails and visible repeated step treads.
+   const width=1.1;
+   for(const k of [-width,width]){
+    const p=plus(a,tangent,k),q=plus(b,tangent,k);
+    line(p,q,escalatorColor);
+    line(plus(p,[0,1,0],-.32),plus(q,[0,1,0],-.32),[.60,.45,.19]);
+   }
+   for(let step=0;step<=14;step++){
+    const t=step/14,center=vadd(a,vmul(vsub(b,a),t));
+    line(plus(center,tangent,-width),plus(center,tangent,width),
+      step%3===0?[1,.93,.47]:[.74,.58,.27]);
+   }
+  }else{
+   // An elevator is a genuinely vertical guide shaft. Unmatched plan
+   // centroids only get provisional horizontal markers at its ends.
+   const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
+   const w=1.8,fromY=a[1],toY=b[1];
+   const points=[[-w,-w],[w,-w],[w,w],[-w,w]];
+   const low=points.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
+   const top=points.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
+   for(let i=0;i<4;i++){
+    const next=(i+1)%4;
+    line(low[i],top[i],elevatorColor);
+    line(low[i],low[next],[.18,.49,.68]);
+    line(top[i],top[next],[.58,.85,.96]);
+   }
+   line(a,[center[0],fromY,center[2]],[.4,.55,.61]);
+   line(b,[center[0],toY,center[2]],[.4,.55,.61]);
+  }
+ }
+ return lines;
+}
+function drawVerticalWebGL(){
+ if(!gl||!verticalConnectionsOn||active!=='ALL')return;
+ const segments=verticalSegments();if(!segments.length)return;
+ const data=[];
+ for(const seg of segments){
+  for(const p of [seg.a,seg.b]){
+   data.push(...p,0,1,0,...seg.color,-72);
+  }
+ }
+ if(!verticalBuffer)verticalBuffer=gl.createBuffer();
+ gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uSelected,-1);
+ gl.uniform1f(loc.uLine,1);gl.uniform1f(loc.uWire,0);
+ gl.bindBuffer(gl.ARRAY_BUFFER,verticalBuffer);
+ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);
+ bind({b:verticalBuffer});
+ gl.drawArrays(gl.LINES,0,data.length/10);
+ gl.uniform1f(loc.uSelected,selected?selected.gid:-1);
+ gl.uniform1f(loc.uWire,wire?1:0);
+}
+function drawVerticalCanvas(){
+ if(!ctx2d||!verticalConnectionsOn||active!=='ALL')return;
+ const c=ctx2d;
+ for(const seg of verticalSegments()){
+  const a=screen(seg.a),b=screen(seg.b);
+  if(a.w<=0||b.w<=0)continue;
+  c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);
+  c.strokeStyle='rgb('+seg.color.map(x=>Math.round(x*255)).join(',')+')';
+  c.lineWidth=seg.color===escalatorColor?2.1:1.4;
+  c.globalAlpha=.84;c.stroke();
+ }
+ c.globalAlpha=1;
+}
+function verticalConnectionInfo(){
+ const byId=new Map();
+ for(const f of floors)for(const feature of f.features)byId.set(feature.id,{floor:f,feature});
+ return verticalHypotheses.map(link=>{
+  const a=byId.get(link.from),b=byId.get(link.to);
+  if(!a||!b)return null;
+  return {type:link.type,from:link.fromFloor,to:link.toFloor,
+   fromY:a.floor.y,toY:b.floor.y,
+   riseMetres:b.floor.elevationMetres-a.floor.elevationMetres,
+   verified:false};
+ }).filter(Boolean);
+}
+function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
+ refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
+ else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+drawVerticalWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 
@@ -122,19 +403,22 @@ function renderCanvas(dt){
    c.fillStyle='#ffbf5a';c.beginPath();c.arc(u.x,u.y,5,0,Math.PI*2);c.fill();
   }
  }
+ drawVerticalCanvas();
 }
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
 function resetCamera(plan=false){
- stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;orbitRoll=0;updateCameraRotation();
- let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:(floors.length-1)*spread/2):fs[0].y,0];distance=200;
+ stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;orbitRoll=0;
+ earth2D=Boolean(plan);if(!plan)lastEarth3DPitch=orbitPitch;
+ updateCameraRotation();
+ let fs=visible();target=[0,floorFocusY(),0];distance=200;
  resize();matrices();let mx=0,my=0;
  for(const f of fs)for(const o of f.features)for(const v of o.p){
   const p=mp(mvp,[...pos(v,f.y),1]);if(p[3]<=0)continue;
   mx=Math.max(mx,Math.abs(p[0]/p[3]));my=Math.max(my,Math.abs(p[1]/p[3]));
  }
  distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);
- $('plan').setAttribute('aria-pressed',String(plan));dirty=true;
+ updateEarthButtons();dirty=true;
 }
 function setFloor(id){
  if(!ready)return;
@@ -244,7 +528,8 @@ function beginGesture(){
   p.length?[p[0].x,p[0].y]:null;
  matrices();
  gesture={target:target.slice(),distance,yaw:orbitYaw,pitch:orbitPitch,roll:orbitRoll,
-  p:p.map(point=>({...point})),anchor:center?worldPointAt(center[0],center[1],target[1]):null};
+  orientation:q.slice(),p:p.map(point=>({...point})),
+  anchor:center?worldPointAt(center[0],center[1],target[1]):null};
 }
 canvas.addEventListener('pointerdown',e=>{
  if(!ready)return;stopAuto();canvas.focus();
@@ -295,11 +580,16 @@ canvas.addEventListener('pointermove',e=>{
     target=vadd(gesture.target,qr(q,[-dx*unit,dy*unit,0]));
    }
   }else{
+   // Map the gesture to the virtual sphere. Preserve a quaternion even
+   // across upside-down/polar views, so a full rotation never freezes.
+   const begin=arcballVector(gesture.p[0].x,gesture.p[0].y);
+   const end=arcballVector(p[0].x,p[0].y);
+   q=norm(qm(gesture.orientation,arcballCameraDelta(begin,end)));
+   // Public diagnostics / keyboard increments retain their angle counters.
+   // They are NOT used to rebuild the camera orientation in spherical mode.
    orbitYaw=gesture.yaw-dx*.006;
-   orbitPitch=panMode?clamp(gesture.pitch-dy*.004,MIN_PITCH,MAX_PITCH)
-    :wrapAngle(gesture.pitch-dy*.006);
-   orbitRoll=panMode?0:gesture.roll;
-   updateCameraRotation();
+   orbitPitch=gesture.pitch-dy*.006;
+   orbitRoll=gesture.roll;
    $('plan').setAttribute('aria-pressed','false');
   }
  }else if(p.length>=2){
@@ -309,15 +599,28 @@ canvas.addEventListener('pointermove',e=>{
   const angle=Math.atan2(Math.sin(delta),Math.cos(delta));
   const dx=(a.x+b.x-aa.x-bb.x)/2,dy=(a.y+b.y-aa.y-bb.y)/2;
   distance=zoomBounds(gesture.distance*dd/Math.max(5,d));
-  if(panMode){orbitYaw=gesture.yaw+angle;orbitRoll=0;}
-  else{orbitYaw=gesture.yaw;orbitRoll=wrapAngle(gesture.roll+angle);}
-  const tilting=Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.25
-   &&Math.abs(d/dd-1)<.13&&Math.abs(angle)<.10;
-  // iPhone Maps: dragging two fingers UP reveals the map in 3D;
-  // dragging DOWN flattens it. Previous direction was reversed.
-  const wantedPitch=gesture.pitch-(tilting?dy*.0045:0);
-  orbitPitch=panMode?clamp(wantedPitch,MIN_PITCH,MAX_PITCH):wrapAngle(wantedPitch);
-  updateCameraRotation();target=gesture.target.slice();
+  if(panMode){
+   orbitYaw=gesture.yaw+angle;
+   orbitRoll=0;
+   // Google Earth: parallel vertical motion of both fingers tilts, without
+   // disabling simultaneous pinch, twist, or movement of the two-finger centre.
+   const da=a.y-aa.y,db=b.y-bb.y;
+   const sameDirection=da*db>0&&Math.abs(da-db)<Math.max(34,Math.abs(dy)*.9);
+   const tilting=Math.abs(dy)>8&&sameDirection
+    &&Math.abs(dy)>Math.abs(dx)*.65;
+   orbitPitch=clamp(gesture.pitch-(tilting?dy*.0045:0),MIN_PITCH,MAX_PITCH);
+   earth2D=Math.abs(orbitPitch-MIN_PITCH)<.025;
+   if(!earth2D)lastEarth3DPitch=orbitPitch;
+   updateCameraRotation();
+  }else{
+   // Pinch changes distance, centre translation pans, twist rotates around
+   // local Z. No world-up reset, limits or Euler decomposition.
+   q=norm(qm(gesture.orientation,quat([0,0,1],angle)));
+   orbitYaw=gesture.yaw;
+   orbitPitch=gesture.pitch;
+   orbitRoll=wrapAngle(gesture.roll+angle);
+  }
+  target=gesture.target.slice();
   if(gesture.anchor){
    anchorCamera((a.x+b.x)/2,(a.y+b.y)/2,gesture.target,gesture.anchor);
   }else{
@@ -363,16 +666,23 @@ canvas.addEventListener('contextmenu',e=>e.preventDefault());
 canvas.addEventListener('wheel',e=>{
  if(!ready)return;e.preventDefault();stopAuto();
  if(e.altKey&&!panMode){
-  orbitRoll=wrapAngle(orbitRoll+e.deltaY*.002);updateCameraRotation();dirty=true;
+  orbitRoll=wrapAngle(orbitRoll+e.deltaY*.002);
+  rotateCameraLocal([0,0,1],e.deltaY*.002);
  }else if(e.shiftKey){
-  orbitPitch=panMode?clamp(orbitPitch+e.deltaY*.0015,MIN_PITCH,MAX_PITCH)
-   :wrapAngle(orbitPitch+e.deltaY*.0015);updateCameraRotation();dirty=true;
+  if(panMode){
+   orbitPitch=clamp(orbitPitch+e.deltaY*.0015,MIN_PITCH,MAX_PITCH);
+   updateCameraRotation();
+  }else{
+   orbitPitch+=e.deltaY*.0015;
+   rotateCameraLocal([1,0,0],e.deltaY*.0015);
+  }
+  dirty=true;
  }else zoomAt(distance*Math.exp(e.deltaY*(e.ctrlKey?.0025:.0012)),e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener('keydown',e=>{
  if(!ready)return;
  const key=e.key;
- if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','=','-','0','[',']','q','e','PageUp','PageDown'].includes(key))e.preventDefault();
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','=','-','0','[',']','q','e','PageUp','PageDown','n','N','u','U','r','R'].includes(key))e.preventDefault();
  if(key==='ArrowLeft')pan(30,0);
  if(key==='ArrowRight')pan(-30,0);
  if(key==='ArrowUp')pan(0,30);
@@ -380,18 +690,26 @@ canvas.addEventListener('keydown',e=>{
  if(key==='+'||key==='=')distance=zoomBounds(distance*.86);
  if(key==='-')distance=zoomBounds(distance*1.16);
  if(key==='['||key===']'){
-  orbitYaw+=(key==='['?-.12:.12);updateCameraRotation();
+  const angle=key==='['?-.12:.12;
+  orbitYaw+=angle;
+  if(panMode)updateCameraRotation();
+  else rotateCameraLocal([0,1,0],angle);
  }
  if(!panMode&&(key.toLowerCase()==='q'||key.toLowerCase()==='e')){
-  orbitRoll=wrapAngle(orbitRoll+(key.toLowerCase()==='q'?.12:-.12));
-  updateCameraRotation();
+  const angle=key.toLowerCase()==='q'?.12:-.12;
+  orbitRoll=wrapAngle(orbitRoll+angle);
+  rotateCameraLocal([0,0,1],angle);
  }
  if(key==='PageUp'||key==='PageDown'){
-  const next=orbitPitch+(key==='PageUp'?-.14:.14);
-  orbitPitch=panMode?clamp(next,MIN_PITCH,MAX_PITCH):wrapAngle(next);
-  updateCameraRotation();
+  const angle=key==='PageUp'?-.14:.14;
+  orbitPitch=panMode?clamp(orbitPitch+angle,MIN_PITCH,MAX_PITCH)
+   :orbitPitch+angle;
+  if(panMode)updateCameraRotation();
+  else rotateCameraLocal([1,0,0],angle);
  }
- if(key==='0')resetCamera();
+ if(key==='0'||key.toLowerCase()==='r')resetCamera();
+ if(key.toLowerCase()==='n')faceMapNorth();
+ if(key.toLowerCase()==='u')switchEarth2D();
  dirty=true;
 });
 // Same-floor demo pathfinding. Gray corridors only; no unverified vertical connectors or shop entrances.
@@ -789,19 +1107,34 @@ function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],mater
 function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
  zoomAt(distance*.8,r.left+r.width/2,r.top+r.height/2);};
 $('zoomOut').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
- zoomAt(distance*1.25,r.left+r.width/2,r.top+r.height/2);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{
+ zoomAt(distance*1.25,r.left+r.width/2,r.top+r.height/2);};$('reset').onclick=()=>resetCamera();
+ $('north').onclick=faceMapNorth;
+ $('plan').onclick=switchEarth2D;
+ $('pan').onclick=()=>{
  panMode=!panMode;
- if(panMode){orbitRoll=0;orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);updateCameraRotation();}
- $('pan').setAttribute('aria-pressed',String(panMode));
- $('pan').setAttribute('aria-label',panMode?'Entrar en rotación libre 3D':'Volver al modo mapa');
- $('rnRollControls').hidden=panMode;
+ if(!panMode)earth2D=false;
+ if(panMode){
+  // Explicit map-mode switch returns to a stable screen-up camera.
+  orbitRoll=0;orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);
+  updateCameraRotation();
+ }
+ updateRotationModeUI();
  notify(panMode
-  ?'Mapa: un dedo mueve · dos dedos acercan, giran e inclinan.'
-  :'3D libre: un dedo gira X/Y sin límites, dos dedos giran sobre Z, acercan e inclinan. ↶ ↷ para alabeo.');
+  ?'Modo mapa: un dedo desplaza · dos dedos acercan, giran e inclinan.'
+  :'Modo esfera 360°: arrastrá con un dedo en cualquier dirección, incluso por debajo. Dos dedos amplían, mueven y giran.');
  dirty=true;
 };
-$('rollLeft').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll+.18);updateCameraRotation();dirty=true;};
-$('rollRight').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll-.18);updateCameraRotation();dirty=true;};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);$('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';target[1]=targetSpread;};const updateSearchPanel=()=>{
+$('rollLeft').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll+.18);rotateCameraLocal([0,0,1],.18);};
+$('rollRight').onclick=()=>{stopAuto();orbitRoll=wrapAngle(orbitRoll-.18);rotateCameraLocal([0,0,1],-.18);};
+$('rnConnectorsToggle').onclick=()=>{
+ verticalConnectionsOn=!verticalConnectionsOn;
+ $('rnConnectorsToggle').setAttribute('aria-pressed',String(verticalConnectionsOn));
+ notify(verticalConnectionsOn
+  ?'Enlaces 3D dibujados como hipótesis; no son conexiones verificadas.'
+  :'Conexiones verticales ocultas.');
+ dirty=true;
+};$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);
+ $('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';};const updateSearchPanel=()=>{
  // Closing a populated search restores map controls. Never leave a default
  // suggestions sheet covering WC, zoom or friends after the query is cleared.
  $('rnMapSearch').classList.toggle('finding',Boolean($('search').value.trim()));
@@ -882,6 +1215,9 @@ function applyMallUi(){
   $('original').disabled=false;
   $('original').title='Comparar foto y vectorizado de cada planta';
   $('routeBtn').disabled=mallId!=='aventura';
+  const connectorButton=$('rnConnectorsToggle');
+  connectorButton.hidden=!verticalHypotheses.length;
+  connectorButton.setAttribute('aria-pressed',String(verticalConnectionsOn));
   const footer=document.querySelector('.sidebarfooter');
   if(footer&&mallId==='ap-plaza'){
     footer.textContent='AP Plaza: 1 fotografía de B1; 197 polígonos candidatos trazados a partir de un calco visual IA y revisión fotográfica. Tiendas, rutas y escala sin validación física: NO APTO PARA NAVEGACIÓN REAL.';
@@ -900,7 +1236,22 @@ function applyMallUi(){
     ?'L1–L9 · geometrías provisionales sin escala calibrada'
     :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
-async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
-$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+async function init(){try{
+ // Google Earth gestures are the default for every customer.
+ // Sphere-mode remains available explicitly using the 360° control.
+ panMode=true;
+ bindUI();updateRotationModeUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
+ floorHeightsMetres:{...floorHeightMetres},
+ floorElevationsMetres:Object.fromEntries(floors.map(f=>[f.id,f.elevationMetres])),
+ heightEstimatesVerified:Boolean(heightConfig.metresVerified),
+ verticalDisplayExaggeration:spread/baseFloorMetres,
+ verticalConnectorCount:verticalHypotheses.length,
+ verticalConnectionsVisible:verticalConnectionsOn,
+ searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
+ cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
+ orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
+ getVerticalConnections:verticalConnectionInfo,
+ exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

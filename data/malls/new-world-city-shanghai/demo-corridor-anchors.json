@@ -1,0 +1,193 @@
+{
+  "schema": "retailnav.nwc.demo-corridor-anchors.v1",
+  "mallId": "new-world-city-shanghai",
+  "imageSize": [
+    1376,
+    768
+  ],
+  "confidence": "photo-corridor-candidate-unverified",
+  "method": "Manual photographic aisle reference; validate against individual shop and service polygon boundaries on import, not against GPS",
+  "verifiedIndoorPositioning": false,
+  "people": [
+    {
+      "id": "nwc-l1-1",
+      "name": "Elena Ruiz",
+      "floor": "L1",
+      "x": 420,
+      "y": 360,
+      "avatar": "elena",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l1-2",
+      "name": "Mateo Silva",
+      "floor": "L1",
+      "x": 950,
+      "y": 445,
+      "avatar": "mateo",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l2-1",
+      "name": "Valentina Cruz",
+      "floor": "L2",
+      "x": 400,
+      "y": 365,
+      "avatar": "valentina",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l2-2",
+      "name": "Sofía Morales",
+      "floor": "L2",
+      "x": 920,
+      "y": 465,
+      "avatar": "sofia",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l3-1",
+      "name": "Marcos Vega",
+      "floor": "L3",
+      "x": 400,
+      "y": 235,
+      "avatar": "marcos",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l3-2",
+      "name": "Lucía Fernández",
+      "floor": "L3",
+      "x": 950,
+      "y": 435,
+      "avatar": "lucia",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l4-1",
+      "name": "Nico Herrera",
+      "floor": "L4",
+      "x": 400,
+      "y": 265,
+      "avatar": "nico",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l4-2",
+      "name": "Camila Torres",
+      "floor": "L4",
+      "x": 1010,
+      "y": 440,
+      "avatar": "camila",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l5-1",
+      "name": "Tomás Álvarez",
+      "floor": "L5",
+      "x": 600,
+      "y": 248,
+      "avatar": "tomas",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l5-2",
+      "name": "Lina Chen",
+      "floor": "L5",
+      "x": 1050,
+      "y": 415,
+      "avatar": "lucia",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l6-1",
+      "name": "Daniel Wu",
+      "floor": "L6",
+      "x": 450,
+      "y": 270,
+      "avatar": "marcos",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l6-2",
+      "name": "Mei Wang",
+      "floor": "L6",
+      "x": 800,
+      "y": 440,
+      "avatar": "sofia",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l7-1",
+      "name": "Santiago López",
+      "floor": "L7",
+      "x": 450,
+      "y": 232,
+      "avatar": "mateo",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l7-2",
+      "name": "Emma Zhao",
+      "floor": "L7",
+      "x": 800,
+      "y": 455,
+      "avatar": "camila",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l8-1",
+      "name": "Xia Liu",
+      "floor": "L8",
+      "x": 650,
+      "y": 465,
+      "avatar": "valentina",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l8-2",
+      "name": "Lucas Martín",
+      "floor": "L8",
+      "x": 950,
+      "y": 472,
+      "avatar": "nico",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l9-1",
+      "name": "Anna Chen",
+      "floor": "L9",
+      "x": 420,
+      "y": 415,
+      "avatar": "elena",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    },
+    {
+      "id": "nwc-l9-2",
+      "name": "Gabriel Wang",
+      "floor": "L9",
+      "x": 1030,
+      "y": 260,
+      "avatar": "tomas",
+      "source": "mock-photo-corridor-candidate",
+      "verified": false
+    }
+  ]
+}

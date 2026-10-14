@@ -168,6 +168,19 @@ assert len(nw["pois"]) == 110
 assert {p["category"] for p in nw["pois"]} == {
     "toilet", "elevator", "vertical-uncertain", "exit"}
 assert all(p["verticalConnectionVerified"] is False for p in nw["pois"])
+assert len(nw["demoCorridorAnchors"]) == 18
+assert len({p["floor"] for p in nw["demoCorridorAnchors"]}) == 9
+assert all(p["verified"] is False and p["source"] == "mock-photo-corridor-candidate"
+    for p in nw["demoCorridorAnchors"])
+assert nw["verticalGeometry"]["defaultFloorHeightMeters"] == 4.0
+assert nw["verticalGeometry"]["floorHeightsMeters"] == {
+    "L1": 4.0, "L2": 4.0, "L3": 4.0, "L4": 4.0,
+    "L5": 4.0, "L6": 4.0, "L7": 4.0, "L8": 4.0, "L9": 4.0}
+assert nw["verticalGeometry"]["metresVerified"] is False
+assert nw["verticalGeometry"]["connectionMappingsVerified"] is False
+assert "id=\"rnHeightsPanel\"" in html
+assert "id=\"rnConnectorsToggle\"" in html
+assert 'function arcballCameraDelta' in html
 assert len(nw["verticalConnectionHypotheses"]) == 39
 assert all("NOT VERIFIED" in edge["status"]
     for edge in nw["verticalConnectionHypotheses"])

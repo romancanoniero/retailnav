@@ -722,3 +722,55 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .sidebar{display:none!important}
  .stage{width:100%;flex:1;order:1;min-height:0}
 }
+
+
+/* New World City experimental floor heights: independent metre values and visual spacing. */
+.rnHeightsPanel{position:relative;z-index:25;flex:0 0 auto;align-self:center}
+.rnHeightsPanel[hidden]{display:none!important}
+.rnHeightsPanel>summary{cursor:pointer;list-style:none;display:flex;align-items:center;
+ padding:9px 11px;min-height:37px;border:1px solid #527a87;border-radius:11px;
+ color:#d8f6fa;background:#102c3bed;font-size:12px;font-weight:700;
+ white-space:nowrap;touch-action:manipulation}
+.rnHeightsPanel>summary::-webkit-details-marker{display:none}
+.rnHeightsPopover{position:absolute;top:calc(100% + 8px);bottom:auto;left:0;
+ width:min(290px,calc(100vw - 28px));padding:13px 15px;border-radius:12px;
+ background:#102338f6;border:1px solid #4f8297;box-shadow:0 8px 28px #0009;
+ display:flex;flex-direction:column;gap:7px;font-size:12px;color:#dff6ff}
+.rnHeightsPopover strong{font-size:13px;margin-bottom:4px}
+.rnHeightsPopover label{font-size:11px;color:#bdd3e1}
+.rnHeightsPopover input,.rnHeightsPopover select{max-width:100%;min-height:35px;
+ background:#152a3e;color:#fff;border:1px solid #426b82;border-radius:7px;padding:6px}
+.rnHeightsPopover p{font-size:11px;color:#a7c9d5;margin:3px 0;line-height:1.35}
+.rnHeightsPopover button{padding:8px;color:#e9feff;background:#163e57;
+ border:1px solid #57849c;border-radius:8px;cursor:pointer}
+.hudright .rnSphereIcon{font-size:11px;font-weight:800;letter-spacing:-.35px}
+.hudright #pan.active{background:#165979;color:#dcffff;outline:1px solid #5ad9de}
+.hudright #rnConnectorsToggle{font-size:22px;font-weight:700;color:#f6d58b;
+ border:1px solid #926e31}
+.hudright #rnConnectorsToggle[aria-pressed="false"]{opacity:.55}
+@media(max-width:900px){
+ .rnHeightsPanel>summary{padding:8px 7px;min-height:35px;font-size:10px}
+ .rnHeightsPopover{left:auto;right:-36px}
+ .hudright #rnConnectorsToggle{font-size:19px}
+}
+
+
+/* Earth-like navigation: compass is a discrete, accessible orientation control.
+   Bearing is map-photo reference until a surveyed north vector exists. */
+.hudright #north{position:relative;display:flex;align-items:center;justify-content:center;
+ min-height:42px;border:1px solid #4f8a9a;color:#bceefa;border-radius:12px}
+.hudright #north:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#rnCompassNeedle{display:inline-block;font-size:22px;font-weight:800;line-height:1;
+ color:#f47c70;transform-origin:center;transition:transform .12s ease-out}
+.rnNorthN{position:absolute;bottom:0;right:2px;font-size:9px;
+ font-weight:750;color:#c4dce9}
+#rnViewModeLabel{display:inline-block;margin-left:5px;font-size:11px;
+ font-weight:800;line-height:1;vertical-align:middle}
+@media(max-width:900px){
+ .hudright #north{min-height:38px}
+ #rnCompassNeedle{font-size:19px}
+ #rnViewModeLabel{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #rnCompassNeedle{transition:none}
+}

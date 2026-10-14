@@ -57,9 +57,31 @@ const apPeople=apSeed.map(([id,name,x,y,photo],i)=>Object.freeze({
     coordinateSpace:'provisional-plan-pixels',verified:false
   })
 }));
+// New World City demo visitors are placed using the imported, checked
+// photographic corridor candidates. They are NOT live users, GPS fixes,
+// surveyed walkway centres or evidence of actual human presence.
+const nwcAnchors=window.RETAILNAV_ACTIVE_MALL?.demoCorridorAnchors||[];
+const nwcPeople=nwcAnchors.map((seed,i)=>Object.freeze({
+  id:seed.id,
+  name:seed.name,
+  demo:true,
+  avatarUrl:'demo-avatars/'+seed.avatar+'.jpg',
+  visual:Object.freeze({
+    bodyColor:['#7bd7b5','#f394b8','#f5aa5f','#8fb8ff'][i%4],
+    shadowColor:'#365575',rimColor:'#efffff'
+  }),
+  position:Object.freeze({
+    mallId:'new-world-city-shanghai',
+    floor:seed.floor, x:seed.x,y:seed.y,
+    source:'mock',verified:false,coordinateSpace:'provisional-plan-pixels',
+    placementStatus:'photo-corridor-candidate-unverified',
+    altitudeSource:'configurable-floor-height-model'
+  })
+}));
 window.RETAILNAV_DEMO_CONTACTS_BY_MALL=Object.freeze({
   aventura:Object.freeze(list),
-  'ap-plaza':Object.freeze(apPeople)
+  'ap-plaza':Object.freeze(apPeople),
+  'new-world-city-shanghai':Object.freeze(nwcPeople)
 });
 // Unknown/unmapped malls have no invented people or Aventura positions.
 window.RETAILNAV_DEMO_CONTACTS=window.RETAILNAV_DEMO_CONTACTS_BY_MALL[window.RETAILNAV_ACTIVE_MALL_ID]||

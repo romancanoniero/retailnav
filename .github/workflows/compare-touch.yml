@@ -1,0 +1,41 @@
+name: Verify photographed mall pan and pinch on iPhone
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/smoke-photo-compare.mjs"
+      - ".github/workflows/compare-touch.yml"
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Publish RetailNav to Contabo"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: retailnav-photo-compare
+  cancel-in-progress: true
+
+jobs:
+  mobile-compare:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    env:
+      RN_BROWSER: ${{ matrix.engine }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Check interactive comparison on live HTTPS without involving QR
+        run: node scripts/smoke-photo-compare.mjs

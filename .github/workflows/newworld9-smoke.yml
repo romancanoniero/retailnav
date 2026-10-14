@@ -14,6 +14,9 @@ on:
       - 'src/style.css'
       - 'scripts/test-map-pinch-isolated.mjs'
       - 'src/escalators3d.js'
+      - 'src/service-icons3d.js'
+      - 'src/vertical-shafts3d.js'
+      - 'data/malls/new-world-city-shanghai/elevator-shafts.provisional.json'
       - 'data/malls/new-world-city-shanghai/escalator-fixtures.photo.json'
       - '.github/workflows/newworld9-smoke.yml'
   workflow_dispatch:

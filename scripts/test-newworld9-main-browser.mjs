@@ -11,7 +11,7 @@ const root=resolve('public');
 const staticServer=createServer((req,res)=>{
  try{
   const relative=decodeURIComponent(new URL(req.url,'http://localhost').pathname)
-    .replace(/^\\/+/, '')||'index.html';
+    .slice(1)||'index.html';
   const full=resolve(root,relative);
   if(!full.startsWith(root+'/')){res.writeHead(403);res.end();return;}
   const mime={'.html':'text/html','.js':'application/javascript',

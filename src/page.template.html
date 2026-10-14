@@ -72,7 +72,7 @@
 <label for="rnScale100Input">Distancia real correspondiente a 100 píxeles del plano (metros; requiere medición)</label>
 <input id="rnScale100Input" type="number" min="1" max="200" inputmode="decimal" placeholder="Metros por cada 100 píxeles"/>
 <button id="rnMotionBtn" type="button">Activar estimación de pasos (experimental)</button>
-<p class="caption">Se usa el acelerómetro solo después de calibrar punto, dirección y escala. La estimación deriva al caminar: NO es navegación de seguridad ni posicionamiento preciso. No guardamos ni enviamos tus coordenadas a Contabo.</p>
+<p class="caption">Se usa el acelerómetro solo después de calibrar punto, dirección y escala. La estimación deriva al caminar: NO es navegación de seguridad ni posicionamiento preciso. El GPS y el movimiento se procesan localmente: no se envían al servidor. Solo si autorizás ofrecer una referencia por QR se envía temporalmente el punto que marcaste a mano en el plano.</p>
 <section class="rnCoopPanel" aria-labelledby="rnCoopTitle">
   <h3 id="rnCoopTitle">Ubicación adaptativa · ayuda entre teléfonos</h3>
   <p id="rnCoopQuality" role="status" aria-live="polite">Evaluando la calidad de la posición disponible…</p>

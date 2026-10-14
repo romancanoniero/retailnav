@@ -201,6 +201,51 @@ def upgrade(repo, info, old_units):
             'relation': 'one-photo-code-in-one-region-unverified'
                         if obj else 'duplicate-number-regions-require-review'
         })
+    # Synthetic visitors must be located in photographic circulation
+    # candidates, not on shop roofs, bathrooms, elevator/escalator footprints.
+    def point_in_polygon(x, y, boundary):
+        inside = False
+        for i, (ax, ay) in enumerate(boundary):
+            bx, by = boundary[i - 1]
+            if (ay > y) != (by > y) and x < (bx-ax)*(y-ay)/(by-ay)+ax:
+                inside = not inside
+        return inside
+
+    def min_edge_distance(x, y, boundary):
+        from math import hypot
+        nearest = float('inf')
+        for i, (ax, ay) in enumerate(boundary):
+            bx, by = boundary[i-1]
+            dx, dy = bx-ax, by-ay
+            t = max(0, min(1, ((x-ax)*dx+(y-ay)*dy) / (dx*dx+dy*dy or 1)))
+            nearest = min(nearest, hypot(x-ax-t*dx, y-ay-t*dy))
+        return nearest
+
+    demo_doc = json.loads((repo/'data/malls/new-world-city-shanghai'/
+                           'demo-corridor-anchors.json').read_text(encoding='utf-8'))
+    assert demo_doc['mallId'] == 'new-world-city-shanghai'
+    demo_people = demo_doc['people']
+    assert len(demo_people) == 18
+    by_floor = {floor['floor']: floor['regions'] for floor in model['levels']}
+    used = set()
+    for p in demo_people:
+        assert p['id'] not in used
+        used.add(p['id'])
+        assert p['source'] == 'mock-photo-corridor-candidate'
+        assert p['verified'] is False
+        assert p['floor'] in by_floor
+        assert 0 < p['x'] < 1376 and 0 < p['y'] < 768
+        candidate = (p['x'],p['y'])
+        clearance = []
+        for room in by_floor[p['floor']]:
+            polygon = room['path']
+            assert not point_in_polygon(*candidate,polygon), (
+                p['id']+' incorrectly intersects '+room['id'])
+            clearance.append(min_edge_distance(*candidate,polygon))
+        assert min(clearance) >= 7.0, (
+            p['id']+' is too close to a store wall or service footprint')
+    assert len({p['floor'] for p in demo_people}) == 9
+
     count = sum(len(f[3]) for f in floors)
     assert count == 737 and len(unit_index) >= 380
     experiment = dict(info['photoDigitizationExperiment'])
@@ -214,6 +259,7 @@ def upgrade(repo, info, old_units):
         'vectorRegionCount': count, 'legacyPhotoVectorRegionCount': 195,
         'floors': floors, 'floorLabels': [x[0] for x in floors],
         'floorReferences': refs, 'units': unit_index, 'pois': pois,
+        'demoCorridorAnchors': demo_people,
         'navigable': False, 'floorAlignmentApproved': False,
         'verticalConnectionHypotheses': model['verticalConnectionHypotheses'],
         # Heights are working assumptions until a survey establishes them.

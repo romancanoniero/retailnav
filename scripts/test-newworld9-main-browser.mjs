@@ -48,13 +48,28 @@ try {
   assert.equal(mall.navigable,false);
   assert.equal(mall.floorAlignmentApproved,false);
   assert.equal(mall.floorReferences.L8.imageSize[0],1376);
-  // Earth-like controls are default for visitors. Spherical 360° is opt-in.
+  // The user selected full 360° orbit as the DEFAULT, including underside.
+  assert.equal(state.trackball360,true);
+  assert.equal(state.gestureMode,'orbit-3d');
+  assert.equal(state.rotationAxes,3);
+  assert.equal(state.escalatorFixtureCount,25);
+  assert.equal(state.escalatorRenderStats.banks,25);
+  assert.ok(state.escalatorRenderStats.triangles>2500);
+  assert.equal(state.escalatorRenderStats.display,'physical-estimate');
+  const stairs=await page.evaluate(()=>window.__RETAILNAV__.getEscalatorModels());
+  assert.equal(stairs.length,25);
+  assert.ok(stairs.every(s=>s.stepRows>=16&&s.angleDegrees>=27&&s.angleDegrees<=33));
+  assert.ok(stairs.every(s=>s.verified===false&&s.entryExitKnown===false&&s.direction==='unknown'));
+  assert.equal(stairs.filter(s=>s.floor==='L7').length,4);
+  assert.equal(await page.locator('#plan').getAttribute('aria-label'),'Pasar a vista 2D');
+  assert.equal(await page.locator('#north').isVisible(),true);
+  // Secondary mode retains native Earth gestures and compass.
+  await page.locator('#pan').click();
+  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.trackball360,false);
   assert.equal(state.gestureMode,'map-pan');
   assert.equal(state.gestureProfile,'google-earth-touch-v1');
   assert.equal(state.compassReference,'photo-top-only-not-calibrated-true-north');
-  assert.equal(await page.locator('#plan').getAttribute('aria-label'),'Pasar a vista 2D');
-  assert.equal(await page.locator('#north').isVisible(),true);
   assert.equal(state.verticalConnectorCount,39);
   assert.ok(await page.locator('#rnHeightsPanel').isVisible());
   assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
@@ -164,6 +179,10 @@ try {
     'Camera must pass above, below, and upside down without a pole clamp');
   assert.ok(Math.abs(Math.hypot(...spherical.inverted.cameraQuaternion)-1)<.00001);
   await page.locator('#reset').click();
+  // The 2D control intentionally focuses L2, so restore the whole building
+  // before validating geometry changes across its nine storeys.
+  await page.locator('#floorSelect').selectOption('ALL');
+  await page.waitForFunction(()=>window.__RETAILNAV__.getState().active==='ALL');
 
   // Changing L3 from 4m to 6m moves L4-L9 AND recomputes every link from L3.
   const original=await page.evaluate(()=>({
@@ -181,6 +200,10 @@ try {
   assert.equal(updated.state.floorHeightsMetres.L3,6);
   assert.equal(updated.state.floorElevationsMetres.L4,14);
   assert.equal(updated.state.floorElevationsMetres.L9,34);
+  const stairs6=await page.evaluate(()=>window.__RETAILNAV__.getEscalatorModels());
+  assert.equal(stairs6.find(s=>s.id==='L3-west').riseMetres,6);
+  assert.ok(stairs6.every(s=>s.riseMetres<=12&&!s.verified),
+    'Height edits must rebuild only schematic escalator 3D risers');
   const link3=updated.links.find(x=>x.from==='L3'&&x.to==='L4');
   assert.ok(link3&&link3.riseMetres===6);
   assert.ok(updated.links.every(x=>x.verified===false));
@@ -204,6 +227,7 @@ try {
 
   await page.locator('#floorSelect').selectOption('L8');
   await page.waitForFunction(()=>window.__RETAILNAV__?.getState().active==='L8');
+  assert.equal(await page.evaluate(()=>window.__RETAILNAV__.getState().escalatorRenderStats.banks),2);
   await page.locator('#original').click();
   await page.waitForFunction(()=>document.getElementById('compareDialog').open);
   await page.locator('#compareLevel').selectOption('L9');

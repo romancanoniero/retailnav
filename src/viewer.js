@@ -251,54 +251,103 @@ let verticalConnectionsOn=verticalHypotheses.length>0;
 let verticalBuffer=null;
 const escalatorColor=[.98,.73,.18],elevatorColor=[.28,.76,.95];
 function verticalSegments(){
- if(!verticalConnectionsOn||active!=='ALL'||!verticalHypotheses.length)return [];
+ // Never display inferred long yellow 'ladders'. Stairs are now actual
+ // isolated escalator meshes based on their yellow footprint axes.
+ if(!verticalConnectionsOn||active!=='ALL'||!verticalHypotheses.length
+    ||spread>baseFloorMetres*1.4)return [];
  const byId=new Map();
  for(const floor of floors)for(const feature of floor.features)
   byId.set(feature.id,{floor,feature});
  const lines=[];
  function line(a,b,color){lines.push({a,b,color});}
  for(const link of verticalHypotheses){
-  if(link.type!=='escalator'&&link.type!=='elevator')continue;
+  if(link.type!=='elevator')continue;
   const lo=byId.get(link.from),hi=byId.get(link.to);
   if(!lo||!hi||hi.floor.index-lo.floor.index!==1)continue;
   const a=pos(lo.feature.c,lo.floor.y+.5);
   const b=pos(hi.feature.c,hi.floor.y+.5);
   const dx=b[0]-a[0],dz=b[2]-a[2];
   const horiz=Math.hypot(dx,dz);
-  const tangent=horiz>.001?[-dz/horiz,0,dx/horiz]:[1,0,0];
-  const plus=(v,o,k)=>vadd(v,vmul(o,k));
-  if(link.type==='escalator'){
-   // Two inclined guard rails and visible repeated step treads.
-   const width=1.1;
-   for(const k of [-width,width]){
-    const p=plus(a,tangent,k),q=plus(b,tangent,k);
-    line(p,q,escalatorColor);
-    line(plus(p,[0,1,0],-.32),plus(q,[0,1,0],-.32),[.60,.45,.19]);
-   }
-   for(let step=0;step<=14;step++){
-    const t=step/14,center=vadd(a,vmul(vsub(b,a),t));
-    line(plus(center,tangent,-width),plus(center,tangent,width),
-      step%3===0?[1,.93,.47]:[.74,.58,.27]);
-   }
-  }else{
-   // An elevator is a genuinely vertical guide shaft. Unmatched plan
-   // centroids only get provisional horizontal markers at its ends.
-   const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
-   const w=1.8,fromY=a[1],toY=b[1];
-   const points=[[-w,-w],[w,-w],[w,w],[-w,w]];
-   const low=points.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
-   const top=points.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
-   for(let i=0;i<4;i++){
-    const next=(i+1)%4;
-    line(low[i],top[i],elevatorColor);
-    line(low[i],low[next],[.18,.49,.68]);
-    line(top[i],top[next],[.58,.85,.96]);
-   }
-   line(a,[center[0],fromY,center[2]],[.4,.55,.61]);
-   line(b,[center[0],toY,center[2]],[.4,.55,.61]);
+  // Unaligned elevator symbols cannot be interpreted as a continuous shaft.
+  if(horiz>3.5)continue;
+  // Draw only shafts whose photo centres align in adjacent floors.
+  const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
+  const w=1.8,fromY=a[1],toY=b[1];
+  const corners=[[-w,-w],[w,-w],[w,w],[-w,w]];
+  const low=corners.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
+  const top=corners.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
+  for(let i=0;i<4;i++){
+   const next=(i+1)%4;
+   line(low[i],top[i],elevatorColor);
+   line(low[i],low[next],[.18,.49,.68]);
+   line(top[i],top[next],[.58,.85,.96]);
   }
  }
  return lines;
+}
+// Per-photo mechanical escalators are independent WebGL meshes, not a segment
+// connecting two unverified symbols. Cache once for each floor-height setting.
+let escalatorCache=null,escalatorKey='',escalatorGpu=null;
+function escalatorModel(){
+ const fixtures=selectedMall.escalatorFixtures||[];
+ const key=[active,spread.toFixed(3),verticalConnectionsOn,
+  ...floors.map(f=>f.y.toFixed(3))].join('|');
+ if(escalatorCache&&escalatorKey===key)return escalatorCache;
+ escalatorKey=key;
+ escalatorCache=window.RetailNavEscalators?.build?.({
+  fixtures,floors,origin:cfg.origin,scale:cfg.scale,spread,
+  baseStoreyMetres:baseFloorMetres,active,enabled:verticalConnectionsOn
+ })||{faces:new Float32Array(0),edges:new Float32Array(0),
+  items:[],stats:{banks:0,lanes:0,triangles:0,display:'not-configured',
+  navigable:false,landingMappingsVerified:false}};
+ return escalatorCache;
+}
+function drawMechanicalEscalatorsWebGL(){
+ const model=escalatorModel();
+ if(!gl||!model.faces.length)return;
+ if(!escalatorGpu){
+  escalatorGpu={faces:gl.createBuffer(),edges:gl.createBuffer(),key:null};
+ }
+ if(escalatorGpu.key!==escalatorKey){
+  gl.bindBuffer(gl.ARRAY_BUFFER,escalatorGpu.faces);
+  gl.bufferData(gl.ARRAY_BUFFER,model.faces,gl.DYNAMIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER,escalatorGpu.edges);
+  gl.bufferData(gl.ARRAY_BUFFER,model.edges,gl.DYNAMIC_DRAW);
+  escalatorGpu.key=escalatorKey;
+ }
+ gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uSelected,-1);
+ gl.uniform1f(loc.uWire,0);gl.uniform1f(loc.uLine,0);
+ bind({b:escalatorGpu.faces});gl.drawArrays(gl.TRIANGLES,0,model.faces.length/10);
+ gl.uniform1f(loc.uLine,1);
+ bind({b:escalatorGpu.edges});gl.drawArrays(gl.LINES,0,model.edges.length/10);
+ gl.uniform1f(loc.uSelected,selected?.gid||-1);
+ gl.uniform1f(loc.uWire,wire?1:0);
+}
+function drawMechanicalEscalatorsCanvas(){
+ if(!ctx2d)return;
+ const m=escalatorModel();if(!m.faces.length)return;
+ const c=ctx2d;
+ // Simple perspective fallback; in WebGL the exact same physical model is lit
+ // and correctly depth-tested against shops and each adjacent floor.
+ for(let i=0;i<m.faces.length;i+=30){
+  const a=screen(Array.from(m.faces.slice(i,i+3)));
+  const b=screen(Array.from(m.faces.slice(i+10,i+13)));
+  const d=screen(Array.from(m.faces.slice(i+20,i+23)));
+  if(a.w<=.02||b.w<=.02||d.w<=.02)continue;
+  c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);
+  c.lineTo(d.x,d.y);c.closePath();
+  const color=Array.from(m.faces.slice(i+6,i+9)).map(x=>Math.round(x*255));
+  c.fillStyle='rgb('+color.join(',')+')';c.fill();
+ }
+ c.lineWidth=1.7;
+ for(let i=0;i<m.edges.length;i+=20){
+  const a=screen(Array.from(m.edges.slice(i,i+3)));
+  const b=screen(Array.from(m.edges.slice(i+10,i+13)));
+  if(a.w<=.02||b.w<=.02)continue;
+  const rgb=Array.from(m.edges.slice(i+6,i+9)).map(x=>Math.round(x*255));
+  c.strokeStyle='rgb('+rgb.join(',')+')';
+  c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();
+ }
 }
 function drawVerticalWebGL(){
  if(!gl||!verticalConnectionsOn||active!=='ALL')return;
@@ -347,7 +396,7 @@ function verticalConnectionInfo(){
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
  else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawVerticalWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 
@@ -404,6 +453,7 @@ function renderCanvas(dt){
   }
  }
  drawVerticalCanvas();
+ drawMechanicalEscalatorsCanvas();
 }
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
@@ -1237,9 +1287,18 @@ function applyMallUi(){
     :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{
- // Google Earth gestures are the default for every customer.
- // Sphere-mode remains available explicitly using the 360° control.
- panMode=true;
+ // Full 360-degree spherical rotation is the default (including underside).
+ // Touch 360° to return to Earth-like map-pan gestures when needed.
+ panMode=false;
+ if(mallId==='new-world-city-shanghai'){
+  // Reuse four-metre editable floor separation; the prior 26-unit gap
+  // was an exploded view and made escalator rails look like ladders.
+  spread=targetSpread=baseFloorMetres;
+  const control=$('spread');
+  control.min=String(baseFloorMetres);
+  control.value=String(baseFloorMetres);
+  $('spreadValue').textContent='Altura estimada';
+ }
  bindUI();updateRotationModeUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},
@@ -1248,10 +1307,13 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  verticalDisplayExaggeration:spread/baseFloorMetres,
  verticalConnectorCount:verticalHypotheses.length,
  verticalConnectionsVisible:verticalConnectionsOn,
+ escalatorRenderStats:escalatorModel().stats,
+ escalatorFixtureCount:(selectedMall.escalatorFixtures||[]).length,
  searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
  getVerticalConnections:verticalConnectionInfo,
+ getEscalatorModels:()=>escalatorModel().items.slice(),
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

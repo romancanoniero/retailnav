@@ -216,6 +216,17 @@ def upgrade(repo, info, old_units):
         'floorReferences': refs, 'units': unit_index, 'pois': pois,
         'navigable': False, 'floorAlignmentApproved': False,
         'verticalConnectionHypotheses': model['verticalConnectionHypotheses'],
+        # Heights are working assumptions until a survey establishes them.
+        # A change to one storey shifts every upper floor and its 3D connectors.
+        'verticalGeometry': {
+            'defaultFloorHeightMeters': 4.0,
+            'floorHeightsMeters': {f'L{i}': 4.0 for i in range(1, 10)},
+            'metresVerified': False,
+            'horizontalCalibrationVerified': False,
+            'connectionMappingsVerified': False,
+            'source': 'user-estimate-New-World-City-4m-per-floor',
+            'description': 'Alturas por piso editables, no topografía ni medida de obra'
+        },
         'photoDigitizationExperiment': experiment,
         'warning': '737 regiones provisionales fotografiadas, no tiendas certificadas. La navegación real permanece desactivada.'
     }

@@ -612,9 +612,22 @@ function beginGesture(){
   orientation:q.slice(),p:p.map(point=>({...point})),
   anchor:center?worldPointAt(center[0],center[1],target[1]):null};
 }
-canvas.addEventListener('pointerdown',e=>{
- if(!ready)return;stopAuto();canvas.focus();
- try{canvas.setPointerCapture(e.pointerId);}catch{}
+mapGestureViewport.addEventListener('pointerdown',e=>{
+ if(!ready)return;
+ stopAuto();
+ // A single tap on a clickable shop number or POI must retain its own click.
+ // A second finger, however, turns the whole map (including overlays) into
+ // a pinch surface, not a browser zoom or accidental store selection.
+ const startedOnOverlay=e.target!==canvas;
+ if(!startedOnOverlay)canvas.focus();
+ if(!startedOnOverlay||pointers.size){
+  try{mapGestureViewport.setPointerCapture(e.pointerId);}catch{}
+ }
+ if(pointers.size){
+  for(const id of pointers.keys()){
+   try{mapGestureViewport.setPointerCapture(id);}catch{}
+  }
+ }
  // All participants in a two-finger gesture must be ineligible for tap
  // recognition, including the stationary finger lifted last.
  if(pointers.size){
@@ -625,13 +638,13 @@ canvas.addEventListener('pointerdown',e=>{
   &&lastTap&&performance.now()-lastTap.at<320
   &&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<35;
  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,
-  button:e.button,shift:e.shiftKey,moved:false,
+  button:e.button,shift:e.shiftKey,moved:false,startedOnOverlay,
   hadMultitouch:pointers.size>0});
  beginGesture();
  if(gesture)gesture.doubleTapHold=Boolean(doubleTapCandidate);
  canvas.classList.add('dragging');dirty=true;
 });
-canvas.addEventListener('pointermove',e=>{
+mapGestureViewport.addEventListener('pointermove',e=>{
  if(!ready||!pointers.has(e.pointerId))return;
  const ptr=pointers.get(e.pointerId);
  ptr.x=e.clientX;ptr.y=e.clientY;
@@ -714,7 +727,7 @@ canvas.addEventListener('pointermove',e=>{
 });
 function endPointer(e){
  const p=pointers.get(e.pointerId);
- if(p&&!p.hadMultitouch&&pointers.size===1&&!p.moved
+ if(p&&!p.startedOnOverlay&&!p.hadMultitouch&&pointers.size===1&&!p.moved
   &&Math.hypot(p.x-p.startX,p.y-p.startY)<7&&p.button===0){
   const now=performance.now();
   const doubleTap=lastTap&&now-lastTap.at<320&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<32;
@@ -735,12 +748,12 @@ function endPointer(e){
  if(!pointers.size)canvas.classList.remove('dragging');
  dirty=true;
 }
-canvas.addEventListener('pointerup',endPointer);
-canvas.addEventListener('pointercancel',e=>{
+mapGestureViewport.addEventListener('pointerup',endPointer);
+mapGestureViewport.addEventListener('pointercancel',e=>{
  pointers.delete(e.pointerId);beginGesture();
  if(!pointers.size)canvas.classList.remove('dragging');dirty=true;
 });
-canvas.addEventListener('lostpointercapture',e=>{
+mapGestureViewport.addEventListener('lostpointercapture',e=>{
  if(pointers.has(e.pointerId)){pointers.delete(e.pointerId);beginGesture();dirty=true;}
 });
 canvas.addEventListener('contextmenu',e=>e.preventDefault());

@@ -130,4 +130,20 @@ jobs:
           assert response['ok'] is True and response['service']=='retailnav-anonymous-presence'
           print('PASS: contacts API healthy and isolated.')
           PY
+          # Independently verify the NEW New World City nine-floor demo route.
+          curl -fLsS --retry 3 --connect-timeout 10 --max-time 25 \
+            -o /tmp/newworld9-index.html https://improvingyourreality.com/retailnav/newworld9/
+          grep -q 'New World City' /tmp/newworld9-index.html
+          curl -fLsS --retry 3 --connect-timeout 10 --max-time 25 \
+            -o /tmp/newworld9-data.js https://improvingyourreality.com/retailnav/newworld9/data.js
+          grep -q '__NWC9_MODEL_B64' /tmp/newworld9-data.js
+          curl -fLsS --retry 3 --connect-timeout 10 --max-time 25 \
+            -o /tmp/newworld9-L9.webp https://improvingyourreality.com/retailnav/newworld9/photos/L9.webp
+          python3 - <<'PY'
+          from pathlib import Path
+          data=Path('/tmp/newworld9-L9.webp').read_bytes()
+          assert data[:4]==b'RIFF' and data[8:12]==b'WEBP' and len(data)>20000
+          print('PASS: New World City L1-L9 public route, model data and reference image')
+          PY
+
           echo "PASS: RetailNav HTML, GLB 3D and original homepage verified."

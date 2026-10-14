@@ -112,6 +112,7 @@ components = {
     "__REFERENCES__": (repo / "src/references.js").read_text(encoding="utf-8"),
     "__DEMO_FRIENDS__": (repo / "src/demo-friends.js").read_text(encoding="utf-8"),
     "__ESCALATORS__": (repo / "src/escalators3d.js").read_text(encoding="utf-8"),
+    "__ROOF_TEXT_3D__": (repo / "src/roof-text3d.js").read_text(encoding="utf-8"),
     "__JS__": (repo / "src/viewer.js").read_text(encoding="utf-8"),
     "__PIN_RENDERER__": (repo / "src/pins3d.js").read_text(encoding="utf-8"),
     "__PIN_WEBGL_RENDERER__": (repo / "src/pins-webgl.js").read_text(encoding="utf-8"),

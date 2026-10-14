@@ -81,6 +81,9 @@ try {
     };
   });
   assert.ok(roof.summary.serviceRoofs>=6,'Service footprint areas must be solid 3D rooms');
+  assert.ok(roof.summary.servicePictograms>=6,
+    'WC and lift pictograms must be actual raised geometry on the service roofs');
+  assert.ok(roof.summary.services.some(s=>s.extrudedIcon&&s.category==='toilet'));
   assert.ok(roof.summary.commercialRoofs>=550,'3D roofs available for every shop candidate');
   assert.ok(roof.summary.codeLabels>=200,'Many individual codes must have true raised geometry');
   assert.ok(roof.summary.extrudedTriangles>900,'Letters must have top and 3D side triangles');

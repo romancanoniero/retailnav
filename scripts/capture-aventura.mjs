@@ -6,7 +6,7 @@ const OUT = "research-output/aventura";
 await fs.mkdir(OUT, { recursive: true });
 const events = [], network = [], errors = [], captures = [];
 const url = "https://embed.roveiq.com/venues/107?hidesearch=1&hideamenities=1&hidecontrols=1&zoom=18&pitch=0&bearing=0";
-const browser = await chromium.launch({headless:true,args:["--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--disable-dev-shm-usage","--disable-software-rasterizer=false"]});
+const browser = await chromium.launch({headless:true,args:["--use-gl=angle","--use-angle=swiftshader","--enable-webgl","--disable-dev-shm-usage"]});
 const context = await browser.newContext({viewport:{width:2000,height:1200},deviceScaleFactor:1.5,colorScheme:"light",locale:"en-US",reducedMotion:"reduce"});
 const page = await context.newPage();
 page.setDefaultTimeout(12000);

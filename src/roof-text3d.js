@@ -155,7 +155,7 @@ function summarize(floors,units,pois,origin,scale){
  for(const poi of pois||[]){
   if(!poi.geometryId)continue;
   const key=poi.floor+'/'+poi.geometryId;
-  if(['toilet','elevator','exit'].includes(poi.category))amenities.set(key,poi);
+  if(['toilet','elevator'].includes(poi.category))amenities.set(key,poi);
  }
  const attached=new Set();
  const summary={floors:floors.length,commercialRoofs:0,serviceRoofs:0,
@@ -168,10 +168,10 @@ function summarize(floors,units,pois,origin,scale){
    const service=amenities.get(key);
    if(service){
     f.k='amenity';f.amenityCategory=service.category;f.poiId=service.id;
+    f.n=service.category==='toilet'?'Baños · '+floor.id:'Ascensor · '+floor.id;
     attached.add(f.id);summary.serviceRoofs++;
     // Semantic 3D text stays glued to the coloured 3D service footprint.
-    const label=service.category==='toilet'?'WC':
-      service.category==='elevator'?'LIFT':'EXIT';
+    const label=service.category==='toilet'?'WC':'LIFT';
     addText(parts.services,label,f,1.08,'code',.88,.72,origin,scale,SERVICE);
     summary.services.push({floor:floor.id,id:f.id,category:service.category,
       label,poiId:service.id,roofY:1.08,attached:true});
@@ -181,9 +181,11 @@ function summarize(floors,units,pois,origin,scale){
    summary.commercialRoofs++;
    const u=match.get(key);
    const code=String(f.n||u?.code||f.id).trim();
+   f.storeCode=code;
    // Historical tenant names are displayed only when associated with a
    // particular polygon ID. Missing or ambiguous brands are NEVER guessed.
    const name=u?.name?String(u.name).trim():'';
+   f.storeName=name;
    if(!name)summary.unmatchedShopNames++;
    const codeAdded=addText(parts.codes,code,f,1.4,
       name?'code':'center',.87,name?.40:.72,origin,scale,WHITE);

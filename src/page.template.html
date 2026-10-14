@@ -73,6 +73,27 @@
 <input id="rnScale100Input" type="number" min="1" max="200" inputmode="decimal" placeholder="Metros por cada 100 píxeles"/>
 <button id="rnMotionBtn" type="button">Activar estimación de pasos (experimental)</button>
 <p class="caption">Se usa el acelerómetro solo después de calibrar punto, dirección y escala. La estimación deriva al caminar: NO es navegación de seguridad ni posicionamiento preciso. No guardamos ni enviamos tus coordenadas a Contabo.</p>
+<section class="rnCoopPanel" aria-labelledby="rnCoopTitle">
+  <h3 id="rnCoopTitle">Ubicación adaptativa · ayuda entre teléfonos</h3>
+  <p id="rnCoopQuality" role="status" aria-live="polite">Evaluando la calidad de la posición disponible…</p>
+  <p id="rnCoopMode" class="caption">Se emplea la menor cantidad de sensores necesaria, si el navegador los autoriza.</p>
+  <label class="rnCoopConsent"><input id="rnCoopConsent" type="checkbox"> Permitir intercambio temporal y anónimo de referencias con otro teléfono</label>
+  <p class="caption">Solo después de tu autorización. No se envían al servidor GPS, altitud ni acelerómetro. El QR comparte exclusivamente un punto marcado manualmente en el plano. No mide distancias.</p>
+  <button id="rnCoopOffer" type="button" disabled>Ofrecer mi punto como referencia · 90 s</button>
+  <div id="rnCoopShare" class="rnCoopShare" hidden>
+    <div id="rnCoopQr" aria-label="QR temporal para confirmar una referencia junto a otro visitante"></div>
+    <label for="rnCoopLink">Enlace temporal y de un solo uso</label>
+    <input id="rnCoopLink" type="text" readonly aria-label="Enlace de referencia cooperativa"/>
+    <button id="rnCoopCopy" type="button">Copiar enlace</button>
+  </div>
+  <label for="rnCoopCode">Aceptar una referencia recibida</label>
+  <input id="rnCoopCode" type="text" maxlength="300" autocomplete="off" placeholder="Pegá el enlace QR o código temporal"/>
+  <label class="rnCoopConsent"><input id="rnCoopColocated" type="checkbox"> Confirmo que estoy físicamente al lado del otro teléfono y deseo utilizar su punto de referencia</label>
+  <button id="rnCoopJoin" type="button" disabled>Aceptar referencia (provisional)</button>
+  <button id="rnCoopRevoke" type="button" disabled>Cancelar mi código compartido</button>
+  <p id="rnCoopStatus" role="status" aria-live="polite" class="caption">Sin colaboración activa. Tus coordenadas no se transmiten automáticamente.</p>
+  <p class="caption">En Safari web no se puede asegurar un enlace BLE/UWB ni medición ultrasónica. Los códigos QR pueden enviarse a distancia: la cercanía es una declaración humana, no una medición verificada. El mapa aún debe calibrarse.</p>
+</section>
 <button id="rnIndoorResetBtn" type="button">Detener y borrar ubicación de esta sesión</button>
 </div></dialog>
 <dialog id="mallSettingsDialog" class="rnMallSettings" aria-labelledby="mallSettingsTitle">
@@ -190,8 +211,10 @@
 <script>__DISTRICTS_RENDERER__</script>
 <script>__AREA_LABELS_RENDERER__</script>
 <script>__UNIT_SIGNS_WEBGL__</script>
+<script>__POSITIONING_CORE__</script>
 <script>__INDOOR_RENDERER__</script>
 <script>__QRCODE__</script>
 <script>__QRSCANNER__</script>
+<script>__COOPERATIVE_POSITIONING__</script>
 <script>__SOCIAL__</script>
 </body></html>

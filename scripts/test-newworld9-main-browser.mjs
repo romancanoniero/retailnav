@@ -1,13 +1,35 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {resolve} from 'node:path';
+import {resolve,extname} from 'node:path';
+import {createServer} from 'node:http';
+import {readFileSync} from 'node:fs';
+import {once} from 'node:events';
 
+// Host the static app from one HTTP origin. file:// pages taint locally loaded
+// avatars for WebGL texture uploads, while the real Contabo site is same-origin.
+const root=resolve('public');
+const staticServer=createServer((req,res)=>{
+ try{
+  const relative=decodeURIComponent(new URL(req.url,'http://localhost').pathname)
+    .replace(/^\\/+/, '')||'index.html';
+  const full=resolve(root,relative);
+  if(!full.startsWith(root+'/')){res.writeHead(403);res.end();return;}
+  const mime={'.html':'text/html','.js':'application/javascript',
+    '.webp':'image/webp','.jpg':'image/jpeg','.png':'image/png',
+    '.svg':'image/svg+xml','.json':'application/json'};
+  res.writeHead(200,{'Content-Type':mime[extname(full)]||'application/octet-stream'});
+  res.end(readFileSync(full));
+ }catch{res.writeHead(404);res.end();}
+});
+staticServer.listen(0,'127.0.0.1');
+await once(staticServer,'listening');
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1280,height:840}});
 const exceptions=[];
 page.on('pageerror',e=>exceptions.push(String(e)));
 try {
-  await page.goto('file://'+resolve('public/index.html')+'?mall=new-world-city-shanghai');
+  await page.goto('http://127.0.0.1:'+staticServer.address().port
+     +'/index.html?mall=new-world-city-shanghai');
   await page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready, {timeout:45000});
   let state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.mallId,'new-world-city-shanghai');
@@ -113,4 +135,5 @@ try {
   console.log('PASS main RetailNav New World City L1–L9 map / photo comparison / POIs');
 }finally {
   await browser.close();
+  await new Promise(done=>staticServer.close(done));
 }

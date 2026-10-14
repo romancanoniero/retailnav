@@ -15,7 +15,7 @@ misrepresented as deployed Android/iOS apps.
 
 ## Trust model and priority
 
-1. Use browser geolocation **only after user request**. Retain horizontal
+1. Automatically request browser geolocation **at page startup** (the OS/browser retains control of permissions); expose latitude, longitude, altitude, accuracy and any registered indoor position in the map itself. No manual activation button is needed. The user can explicitly stop the watcher; it stays stopped for that session until they choose to retry. Retain horizontal
    accuracy, altitude, vertical accuracy and freshness separately. Raw GPS
    never leaves the browser through the collaborative protocol.
 2. A floor may be proposed by altitude only when *all* are present: a verified
@@ -182,3 +182,33 @@ sensor fusion. Before enabling true multi-peer trilateration, we must build
 a device-compatibility lab and measure UWB/RTT/BLE/acoustic error under
 real mall conditions. No vendor-agnostic iPhone Safari ultrasound or UWB
 distance API can be assumed.
+
+## Automatic position at startup (v2)
+
+The existing application now starts `watchPosition()` immediately upon loading
+in compatible browsers, without waiting for opening "Mi ubicación" or pressing
+"Detectar shopping". A small, persistent, accessible status on the 3D map shows
+when GNSS is searching, available, denied, absent, stale, or stopped. A GNSS
+fix reports latitude, longitude, altitude and horizontal/vertical uncertainties
+in the location details without sharing them with peers or the server.
+
+**This cannot bypass browser/device permission requests.** Motion sensors on
+some Safari devices still require a user gesture to enable. If a browser blocks
+geolocation or the user declines permission, the map shows a meaningful state
+and preserves the manual positioning path.
+
+* A ground-level or above-ground floor with **verified geodetic coordinates,
+  vertical datum and surveyed floor elevations** can automatically appear on
+  the 3D map if the GNSS accuracy meets the strict thresholds in the positioning
+  core.
+* For an uncalibrated mall (including current New World City photographs),
+  GNSS can show location/altitude and proximity **but cannot claim an interior
+  floor or place a pin on an invented coordinate**.
+* "Detener y borrar" clears the local GNSS watch, coordinates and visible
+  position; it never auto-restarts after that action within the same page.
+* A stale registered GNSS anchor is hidden after 30 seconds without a usable
+  update. QR and manual anchors retain their separate provenance.
+
+Automated Chromium and WebKit tests verify immediate startup, accurate
+visible GPS state, no fabricated indoor marker, permission-denied/unavailable
+fall-backs and explicit stop/retry.

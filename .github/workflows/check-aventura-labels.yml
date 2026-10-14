@@ -1,0 +1,49 @@
+name: Cross-check Aventura Mall labels against official map
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - scripts/inspect-aventura-labels.py
+      - .github/workflows/check-aventura-labels.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - name: Inspect map polygons, official store names and ids
+        run: python3 scripts/inspect-aventura-labels.py
+      - name: Verify report against original map structure
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("research-output/aventura/label-source-analysis.json").read_text())
+          assert len(r['geoFloorMatches'])==3
+          assert r['locationsTotal']>0
+          for floor in r["geoFloorMatches"]:
+            assert floor["features"]>=floor["linkedToLocationId"],floor
+          print("SOURCE CROSS CHECK",[(f["floor"],f["features"],f["linkedToLocationId"],f["notMatchingLocation"]) for f in r["geoFloorMatches"]])
+          PY
+      - name: Save source comparison report in isolated research branch
+        run: |
+          set -e
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura/label-source-analysis.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Research: cross-check Aventura floor polygons against official shop directory"
+            git pull --rebase origin research/aventura-hires
+            git push origin HEAD:research/aventura-hires
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aventura-store-label-audit
+          path: research-output/aventura/label-source-analysis.json
+          retention-days: 14

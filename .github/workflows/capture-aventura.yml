@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: retailnav-aventura-public-research
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   capture:

@@ -1,0 +1,61 @@
+name: Render official Aventura aligned floors
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - "scripts/render-aventura-vector.py"
+      - ".github/workflows/render-aventura-vector.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: retailnav-aventura-official-geojson
+  cancel-in-progress: true
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install image renderer
+        run: python3 -m pip install -q numpy cairosvg
+      - name: Render official GIS data into 3 floor images and 3 alignment comparisons
+        run: python3 scripts/render-aventura-vector.py
+      - name: Check real images and projection report
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("research-output/aventura")
+          data=json.loads((p/"map-alignment-report.json").read_text())
+          assert len(data["floors"])==3
+          assert len(data["connectors"])>=10
+          assert len(data["imageFiles"])==6
+          assert all((p/x["png"]).stat().st_size>90000 for x in data["imageFiles"])
+          print("VERIFIED",[(x["png"],x["bytes"]) for x in data["imageFiles"]])
+          PY
+      - name: Commit research images
+        run: |
+          set -e
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura/*.png research-output/aventura/aventura-*.svg research-output/aventura/map-alignment-report.json research-output/aventura/README-vectores.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Research: original official Aventura GIS floor plans and alignment overlays"
+            git pull --rebase origin research/aventura-hires
+            git push origin HEAD:research/aventura-hires
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aventura-aligned-official-GIS-plans
+          path: |
+            research-output/aventura/aventura-planta-*
+            research-output/aventura/aventura-superposicion-*
+            research-output/aventura/map-alignment-report.json
+          retention-days: 14

@@ -60,12 +60,22 @@ function draw(){
   if(!overlay||!view?.getState().ready)return;
   frames++;
   shown=[];
-  const visible=new Set(view.getState().visible);
+  const state=view.getState();
+ const visible=new Set(state.visible);
   for(const p of all){
     if(!canPlace(p))continue;
     let button=markers.get(p.id);
     if(!button){button=make(p);markers.set(p.id,button);}
     if(!enabled||!visible.has(p.floor)){button.hidden=true;continue;}
+    // Bathroom and elevator roofs now exist as true 3D room volumes with
+    // raised WC/LIFT lettering. Suppress the old floating HTML POI badge,
+    // which appears disconnected from the building during 360° rotation.
+    // The physical 3D room remains selectable by tapping its own roof and
+    // the service stays searchable through the POI index.
+    const roofAnchored=window.RETAILNAV_ROOF_ATTACHMENTS?.has(p.geometryId);
+    if(state.renderer==='WebGL'&&roofAnchored){
+      button.hidden=true;continue;
+    }
     const world=view.pinWorld(p.floor,p.x,p.y);
     const projected=world&&view.projectWorld([world[0],world[1]+1.6,world[2]]);
     if(!projected||projected.w<=0||projected.z>=1||projected.z<=-1||

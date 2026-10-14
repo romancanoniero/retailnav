@@ -8,6 +8,8 @@ on:
       - 'scripts/build-web.py'
       - 'scripts/verify.py'
       - 'src/viewer.js'
+      - 'src/escalators3d.js'
+      - 'data/malls/new-world-city-shanghai/escalator-fixtures.photo.json'
       - '.github/workflows/newworld9-smoke.yml'
   workflow_dispatch:
 permissions:
@@ -22,6 +24,7 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/test-newworld9-data.mjs
+      - run: node scripts/test-escalator-geometry.mjs
       - run: python3 scripts/build-web.py
       - run: python3 scripts/verify.py public
       - run: npm install --no-save --ignore-scripts playwright@1.56.1

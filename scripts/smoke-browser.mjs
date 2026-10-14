@@ -32,7 +32,11 @@ try {
   let social=await page.evaluate(()=>window.RetailNavSocial.getState());
   log('START',{renderer:viewer.renderer,active:viewer.active,features:viewer.features,social});
   assert.deepEqual(viewer.visible,['LL','UL','L3']);
-  assert.equal(viewer.gestureMode,'map-pan','One-finger map pan is default');
+  // Product default is full spherical 360° rotation. Switch to Earth-like
+  // panning explicitly for the map-pan, two-finger tilt and pinch checks below.
+  assert.equal(viewer.gestureMode,'orbit-3d','Spherical 360 rotation is the default');
+  await page.locator('#pan').click();
+  assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'map-pan');
   assert.ok(social.anonymous);
   const aventuraLayout=await page.evaluate(()=>{
     const stage=document.querySelector('.stage'),search=document.querySelector('#rnMapSearch');

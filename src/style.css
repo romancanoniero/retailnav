@@ -774,3 +774,26 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 @media(prefers-reduced-motion:reduce){
  #rnCompassNeedle{transition:none}
 }
+
+
+/* iOS Safari: pinch gestures belong to the 3D MAP, not the browser page.
+ * Scope strictly to the render viewport. Keep search, menus, dialogs and the
+ * rest of the page normally pinch-zoomable for accessibility. Also cover
+ * labels, pins and clickable shop numbers sitting above the WebGL canvas. */
+.stage .viewport,
+.stage .viewport #canvas,
+.stage .viewport canvas.rnPinCanvas,
+.stage .viewport .labels,
+.stage .viewport .label,
+.stage .viewport .rnAreaOverlay,
+.stage .viewport .rnAreaLabel,
+.stage .viewport .rnPOIOverlay,
+.stage .viewport .rnPoiMarker,
+.stage .viewport .rnUnitOverlay,
+.stage .viewport .rnUnitCode,
+.stage .viewport .rnMyPositionMarker {
+ touch-action:none;
+ overscroll-behavior:contain;
+ -webkit-user-select:none;
+ user-select:none;
+}

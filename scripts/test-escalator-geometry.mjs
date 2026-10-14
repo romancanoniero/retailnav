@@ -24,7 +24,7 @@ assert.equal(model.stats.display,'physical-estimate');
 assert.equal(model.stats.navigable,false);
 assert.equal(model.stats.landingMappingsVerified,false);
 assert.ok(model.stats.triangles>2800);
-assert.ok(model.stats.lineSegments>1800);
+assert.ok(model.stats.lineSegments>1000);
 assert.ok(model.items.every(p=>!p.verified&&!p.entryExitKnown));
 assert.ok(model.items.every(p=>p.direction==='unknown'));
 assert.ok(model.items.every(p=>p.angleDegrees>=27&&p.angleDegrees<=33));

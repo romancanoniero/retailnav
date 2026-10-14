@@ -270,37 +270,17 @@ function verticalSegments(){
   const horiz=Math.hypot(dx,dz);
   // Unaligned elevator symbols cannot be interpreted as a continuous shaft.
   if(horiz>3.5)continue;
-  const tangent=horiz>.001?[-dz/horiz,0,dx/horiz]:[1,0,0];
-  const plus=(v,o,k)=>vadd(v,vmul(o,k));
-  if(link.type==='escalator'){
-   // Two inclined guard rails and visible repeated step treads.
-   const width=1.1;
-   for(const k of [-width,width]){
-    const p=plus(a,tangent,k),q=plus(b,tangent,k);
-    line(p,q,escalatorColor);
-    line(plus(p,[0,1,0],-.32),plus(q,[0,1,0],-.32),[.60,.45,.19]);
-   }
-   for(let step=0;step<=14;step++){
-    const t=step/14,center=vadd(a,vmul(vsub(b,a),t));
-    line(plus(center,tangent,-width),plus(center,tangent,width),
-      step%3===0?[1,.93,.47]:[.74,.58,.27]);
-   }
-  }else{
-   // An elevator is a genuinely vertical guide shaft. Unmatched plan
-   // centroids only get provisional horizontal markers at its ends.
-   const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
-   const w=1.8,fromY=a[1],toY=b[1];
-   const points=[[-w,-w],[w,-w],[w,w],[-w,w]];
-   const low=points.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
-   const top=points.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
-   for(let i=0;i<4;i++){
-    const next=(i+1)%4;
-    line(low[i],top[i],elevatorColor);
-    line(low[i],low[next],[.18,.49,.68]);
-    line(top[i],top[next],[.58,.85,.96]);
-   }
-   line(a,[center[0],fromY,center[2]],[.4,.55,.61]);
-   line(b,[center[0],toY,center[2]],[.4,.55,.61]);
+  // Draw only shafts whose photo centres align in adjacent floors.
+  const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
+  const w=1.8,fromY=a[1],toY=b[1];
+  const corners=[[-w,-w],[w,-w],[w,w],[-w,w]];
+  const low=corners.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
+  const top=corners.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
+  for(let i=0;i<4;i++){
+   const next=(i+1)%4;
+   line(low[i],top[i],elevatorColor);
+   line(low[i],low[next],[.18,.49,.68]);
+   line(top[i],top[next],[.58,.85,.96]);
   }
  }
  return lines;

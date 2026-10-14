@@ -153,7 +153,7 @@ jobs:
           import json, re
           from pathlib import Path
           html=Path('/tmp/newworld-main-catalog.html').read_text(encoding='utf-8')
-          match=re.search(r'<script id="mallCatalog" type="application/json">([\\s\\S]+?)</script>',html)
+          match=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]+?)</script>',html)
           assert match, 'Public RetailNav missing embedded mall catalog'
           catalog=json.loads(match.group(1))
           mall=catalog['new-world-city-shanghai']

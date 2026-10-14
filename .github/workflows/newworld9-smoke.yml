@@ -8,6 +8,8 @@ on:
       - 'scripts/build-web.py'
       - 'scripts/verify.py'
       - 'src/viewer.js'
+      - 'src/style.css'
+      - 'scripts/test-map-pinch-isolated.mjs'
       - 'src/escalators3d.js'
       - 'data/malls/new-world-city-shanghai/escalator-fixtures.photo.json'
       - '.github/workflows/newworld9-smoke.yml'
@@ -28,6 +30,8 @@ jobs:
       - run: python3 scripts/build-web.py
       - run: python3 scripts/verify.py public
       - run: npm install --no-save --ignore-scripts playwright@1.56.1
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium webkit
       - run: node scripts/test-newworld9-browser.mjs
       - run: node scripts/test-newworld9-main-browser.mjs
+      - run: node scripts/test-map-pinch-isolated.mjs chromium
+      - run: node scripts/test-map-pinch-isolated.mjs webkit

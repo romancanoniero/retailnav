@@ -26,6 +26,11 @@ assert "id=\"floorPicker\"" in html and "id=\"floorSpacing\"" in html
 assert "id=\"floorSelect\"" in html and "id=\"compareDialog\"" in html
 assert "id=\"showReference\"" in html and "id=\"showVectors\"" in html
 assert "id=\"overlayOpacity\"" in html and "id=\"compareZoom\"" in html
+assert 'id="compareViewport"' in html and 'id="compareResetView"' in html
+assert 'touchGesturesEnabled:true' in html and 'panPinchSynchronized:true' in html
+assert 'touch-action:none' in html
+assert html.count('id="compareSvg"') == 1
+
 assert "RetailNavComparison" in html
 reference=ap["floorReferences"]["B1"]
 assert reference["imageSize"]==[1440,620]

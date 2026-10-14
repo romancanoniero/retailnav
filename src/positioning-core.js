@@ -46,21 +46,64 @@ function floorFromAltitude(gps,calibration){
  return {floor:best.floor,reason:'vertical-gps-survey-calibrated',
   candidates,verified:true};
 }
+// Convert GNSS latitude/longitude into a specific indoor floor polygon ONLY
+// after both geo registration and absolute-height datum have been surveyed.
+// Otherwise GPS is useful for mall proximity, never for an invented map point.
+function registeredGpsToPhoto(gps,calibration){
+ const reject=reason=>({anchor:null,reason});
+ const registration=calibration?.geoReference;
+ if(!gps||!finite(gps.latitude)||!finite(gps.longitude))
+  return reject('gps-latitude-longitude-unavailable');
+ if(!calibration||calibration.verified!==true||
+   !registration||registration.approved!==true||
+   registration.datum!=='WGS84'||
+   !Number.isFinite(registration.originLatitude)||
+   !Number.isFinite(registration.originLongitude)||
+   !Array.isArray(registration.xPx)||!Array.isArray(registration.yPx)||
+   registration.xPx.length!==3||registration.yPx.length!==3||
+   ![...registration.xPx,...registration.yPx].every(finite)||
+   !finite(registration.rootMeanSquareErrorM)||
+   registration.rootMeanSquareErrorM>5)
+  return reject('plan-to-geographic-registration-unverified');
+ if(!finite(gps.horizontalAccuracyM)||gps.horizontalAccuracyM>15)
+  return reject('horizontal-gps-accuracy-insufficient');
+ const floor=floorFromAltitude(gps,calibration);
+ if(!floor.floor)return reject('vertical-floor-unverified-'+floor.reason);
+ const rad=registration.originLatitude*Math.PI/180;
+ const east=(gps.longitude-registration.originLongitude)*111320*Math.cos(rad);
+ const north=(gps.latitude-registration.originLatitude)*111132;
+ // Two independently calibrated affine rows, in photo PIXELS.
+ const [x0,xe,xn]=registration.xPx,[y0,ye,yn]=registration.yPx;
+ const x=x0+xe*east+xn*north,y=y0+ye*east+yn*north;
+ const width=registration.imageWidth,height=registration.imageHeight;
+ if(![x,y,width,height].every(finite)||width<1||height<1||
+   x<0||y<0||x>width||y>height)return reject('gps-fix-outside-surveyed-plan');
+ const uncertaintyM=Math.hypot(gps.horizontalAccuracyM,registration.rootMeanSquareErrorM);
+ return {anchor:{floor:floor.floor,x,y,source:'gps-survey-registered',
+   timestampMs:gps.timestampMs,uncertaintyM},
+   reason:'gnss-3d-survey-registered',floorConfidence:floor.candidates[0].probability};
+}
 function evaluate({gps=null,anchor=null,nearMall=false,calibration=null,
  clockMs=now(),floorIds=[]}={}){
  const g=gps&&finite(gps.timestampMs)&&clockMs-gps.timestampMs>=0&&
    clockMs-gps.timestampMs<30000?gps:null;
  const floor=floorFromAltitude(g,calibration);
- const a=anchor&&floorIds.includes(anchor.floor)&&finite(anchor.x)&&
+ const manual=anchor&&floorIds.includes(anchor.floor)&&finite(anchor.x)&&
    finite(anchor.y)&&finite(anchor.timestampMs)&&
    clockMs-anchor.timestampMs>=0&&clockMs-anchor.timestampMs<
-     (anchor.source==='peer-qr-colocation-asserted'?120000:30*60000)
+     (anchor.source==='peer-qr-colocation-asserted'?120000:
+      anchor.source==='gps-survey-registered'?30000:30*60000)
    ?anchor:null;
+ const geo=registeredGpsToPhoto(g,calibration);
+ const candidate=geo.anchor&&floorIds.includes(geo.anchor.floor)?geo.anchor:null;
+ const a=manual||candidate;
  let status='unlocated',reason='no-indoor-reference';
  if(a){
   status=a.source==='peer-qr-colocation-asserted'?'cooperative-provisional':'manual-reference';
   reason=a.source==='peer-qr-colocation-asserted'?
-   'peer-proximity-not-measured':'manually-selected-on-map';
+   'peer-proximity-not-measured':a.source==='gps-survey-registered'?
+   'gnss-3d-survey-registered':'manually-selected-on-map';
+  if(a.source==='gps-survey-registered')status='gps-survey-registered';
  }else if(g&&nearMall){status='gps-near-mall';reason='gps-is-not-map-registered';}
  else if(g){status='gps-only';reason='not-near-calibrated-indoor-reference';}
  let uncertaintyM=a&&finite(a.uncertaintyM)&&a.uncertaintyM>=0?
@@ -94,6 +137,6 @@ function chooseTransport({nativeUwb=false,nativeRtt=false,nativeBle=false,
   reason:browser?'web-physical-ranging-unavailable':'no-compatible-hardware'};
 }
 window.RetailNavPositioningCore=Object.freeze({
- gpsObservation,floorFromAltitude,evaluate,chooseTransport
+ gpsObservation,floorFromAltitude,registeredGpsToPhoto,evaluate,chooseTransport
 });
 })();

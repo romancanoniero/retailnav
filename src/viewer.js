@@ -7,6 +7,7 @@ let dirty=true;
 let active='ALL', wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
+let lastEarth3DPitch=-.70,earth2D=false;
 const MIN_PITCH=-Math.PI/2,MAX_PITCH=-.25;
 // World units, not metres: photo maps have no surveyed scale.
 // Previous min=24; min=4 yields up to six times more magnification.
@@ -17,6 +18,7 @@ function updateCameraRotation(){
  // Map mode Euler presets only. Spherical free orbit updates q directly.
  q=norm(qm(qm(quat([0,1,0],orbitYaw),quat([1,0,0],orbitPitch)),
    quat([0,0,1],orbitRoll)));
+ updateEarthButtons();
 }
 function rotateCameraLocal(axis,angle){
  q=norm(qm(q,quat(axis,angle)));
@@ -45,15 +47,70 @@ function arcballCameraDelta(start,end){
 }
 function updateRotationModeUI(){
  const button=$('pan');
- button.setAttribute('aria-pressed',String(panMode));
+ button.setAttribute('aria-pressed',String(!panMode));
  button.setAttribute('aria-label',panMode?'Activar rotación esférica 3D 360 grados':'Cambiar a desplazamiento de mapa');
  button.title=panMode?'Activar giro 3D 360°: mirar desde cualquier dirección'
   :'Giro esférico activo · tocar para desplazar el mapa';
  button.classList.toggle('active',!panMode);
  $('rnRollControls').hidden=panMode;
+ updateEarthButtons();
  canvas.setAttribute('aria-label',panMode
   ?'Modo mapa: un dedo mueve; dos dedos amplían, giran e inclinan. Pulsá 360° para rotación libre.'
   :'Modo esfera 3D 360°: un dedo gira libremente por los tres ejes, también por debajo. Dos dedos desplazan, amplían y giran.');
+}
+// Google Earth-style reference compass and perspective controls. Without a
+// surveyed bearing, 'N' means the image's top edge, NOT verified true north.
+function updateEarthButtons(){
+ const plan=$('plan'),mode=$('rnViewModeLabel'),north=$('north');
+ if(mode)mode.textContent=earth2D?'3D':'2D';
+ if(plan){
+  plan.setAttribute('aria-pressed',String(earth2D));
+  plan.setAttribute('aria-label',earth2D?'Volver a vista 3D':'Pasar a vista 2D');
+  plan.title=earth2D?'Inclinar para vista 3D':'Ver planta desde arriba (2D)';
+ }
+ if(north){
+  const dir=[0,0,-1],east=dot(dir,qr(q,[1,0,0])),
+       upwards=dot(dir,qr(q,[0,1,0]));
+  const angle=Math.atan2(east,upwards);
+  const arrow=$('rnCompassNeedle');
+  if(arrow)arrow.style.transform='rotate('+(Number.isFinite(angle)?angle:0)+'rad)';
+  north.title='Restablecer orientación de referencia (norte real sin calibrar)';
+ }
+}
+function faceMapNorth(){
+ stopAuto();
+ if(!panMode){
+  panMode=true;
+  orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);
+  updateRotationModeUI();
+ }
+ orbitYaw=0;orbitRoll=0;
+ updateCameraRotation();dirty=true;
+}
+function switchEarth2D(){
+ stopAuto();
+ if(!panMode){
+  panMode=true;
+  orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);
+  updateRotationModeUI();
+ }
+ if(active==='ALL'&&floors.length>1){
+  // 2D refers to one selected level; retain focus and zoom throughout.
+  const floorId=selected?.floor||floors[Math.min(1,floors.length-1)].id;
+  const oldTarget=target.slice(),oldDistance=distance;
+  setFloor(floorId);
+  target=[oldTarget[0],floors.find(f=>f.id===floorId).y,oldTarget[2]];
+  distance=oldDistance;
+ }
+ if(!earth2D){
+  if(orbitPitch>MIN_PITCH+.04)lastEarth3DPitch=orbitPitch;
+  orbitPitch=MIN_PITCH;earth2D=true;
+ }else{
+  orbitPitch=clamp(lastEarth3DPitch,MIN_PITCH+.16,MAX_PITCH);
+  earth2D=false;
+ }
+ orbitRoll=0;
+ updateCameraRotation();dirty=true;
 }
 const selectedMall=window.RETAILNAV_ACTIVE_MALL||{id:'aventura',name:'Aventura Mall',floors:null,origin:[690,405],scale:.15};
 const mallId=selectedMall.id||'aventura';
@@ -349,7 +406,9 @@ function renderCanvas(dt){
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
 function resetCamera(plan=false){
- stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;orbitRoll=0;updateCameraRotation();
+ stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;orbitRoll=0;
+ earth2D=Boolean(plan);if(!plan)lastEarth3DPitch=orbitPitch;
+ updateCameraRotation();
  let fs=visible();target=[0,floorFocusY(),0];distance=200;
  resize();matrices();let mx=0,my=0;
  for(const f of fs)for(const o of f.features)for(const v of o.p){
@@ -357,7 +416,7 @@ function resetCamera(plan=false){
   mx=Math.max(mx,Math.abs(p[0]/p[3]));my=Math.max(my,Math.abs(p[1]/p[3]));
  }
  distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);
- $('plan').setAttribute('aria-pressed',String(plan));dirty=true;
+ updateEarthButtons();dirty=true;
 }
 function setFloor(id){
  if(!ready)return;
@@ -616,7 +675,7 @@ canvas.addEventListener('wheel',e=>{
 canvas.addEventListener('keydown',e=>{
  if(!ready)return;
  const key=e.key;
- if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','=','-','0','[',']','q','e','PageUp','PageDown'].includes(key))e.preventDefault();
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','+','=','-','0','[',']','q','e','PageUp','PageDown','n','N','u','U','r','R'].includes(key))e.preventDefault();
  if(key==='ArrowLeft')pan(30,0);
  if(key==='ArrowRight')pan(-30,0);
  if(key==='ArrowUp')pan(0,30);
@@ -641,7 +700,9 @@ canvas.addEventListener('keydown',e=>{
   if(panMode)updateCameraRotation();
   else rotateCameraLocal([1,0,0],angle);
  }
- if(key==='0')resetCamera();
+ if(key==='0'||key.toLowerCase()==='r')resetCamera();
+ if(key.toLowerCase()==='n')faceMapNorth();
+ if(key.toLowerCase()==='u')switchEarth2D();
  dirty=true;
 });
 // Same-floor demo pathfinding. Gray corridors only; no unverified vertical connectors or shop entrances.
@@ -1039,7 +1100,10 @@ function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],mater
 function bindUI(){$('showAllFloors').onclick=()=>setFloor('ALL');['pointerdown','pointermove','pointerup','wheel','input','change','click','keydown'].forEach(e=>document.addEventListener(e,()=>{dirty=true;},{passive:true,capture:true}));document.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>setFloor(b.dataset.floor));$('zoomIn').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
  zoomAt(distance*.8,r.left+r.width/2,r.top+r.height/2);};
 $('zoomOut').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
- zoomAt(distance*1.25,r.left+r.width/2,r.top+r.height/2);};$('reset').onclick=()=>resetCamera();$('plan').onclick=()=>{const next=$('plan').getAttribute('aria-pressed')!=='true';if(active==='ALL')setFloor(floors[Math.min(1,floors.length-1)].id);resetCamera(next);};$('pan').onclick=()=>{
+ zoomAt(distance*1.25,r.left+r.width/2,r.top+r.height/2);};$('reset').onclick=()=>resetCamera();
+ $('north').onclick=faceMapNorth;
+ $('plan').onclick=switchEarth2D;
+ $('pan').onclick=()=>{
  panMode=!panMode;
  if(panMode){
   // Explicit map-mode switch returns to a stable screen-up camera.
@@ -1165,8 +1229,9 @@ function applyMallUi(){
     :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{
- // New World City is spherical by default; other centres keep map-pan default.
- panMode=mallId!=='new-world-city-shanghai';
+ // Google Earth gestures are the default for every customer.
+ // Sphere-mode remains available explicitly using the 360° control.
+ panMode=true;
  bindUI();updateRotationModeUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},

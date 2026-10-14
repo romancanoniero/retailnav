@@ -1,0 +1,457 @@
+{
+  "url": "https://embed.roveiq.com/venues/107?hidesearch=1&hideamenities=1&hidecontrols=1&zoom=18&pitch=0&bearing=0",
+  "ready": {
+    "venueId": 107,
+    "venueName": "Aventura Mall",
+    "mapType": "rove",
+    "floors": [
+      {
+        "id": 361,
+        "name": "Lower Level",
+        "default": true
+      },
+      {
+        "id": 362,
+        "name": "Upper Level",
+        "default": false
+      },
+      {
+        "id": 363,
+        "name": "Third Level",
+        "default": false
+      }
+    ],
+    "currentFloorId": 361,
+    "commands": [
+      "embed:ping",
+      "map:showFloor",
+      "map:flyToLocation",
+      "map:highlightLocation",
+      "map:clearHighlight",
+      "map:route",
+      "map:clearRoute"
+    ]
+  },
+  "dom": {
+    "text": "",
+    "title": "RoveIQ Maps",
+    "anchors": [],
+    "buttons": [],
+    "canvases": [
+      {
+        "w": 4000,
+        "h": 2400,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 2000,
+          "height": 1200,
+          "top": 0,
+          "right": 2000,
+          "bottom": 1200,
+          "left": 0
+        }
+      }
+    ],
+    "roots": [
+      "SkyOSMapContainer",
+      "rovemap-pins",
+      "roveiq-logo-svg",
+      "svelte-announcer",
+      "CustomCSS"
+    ]
+  },
+  "errors": [],
+  "network": [
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/venues/107?hidesearch=1&hideamenities=1&hidecontrols=1&zoom=18&pitch=0&bearing=0",
+      "type": "text/html"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/entry/start.B1Q01k_Y.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/D8mGX9X-.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BjpYELgB.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DIeogL5L.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/hyaLfPOZ.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/CxokqgjG.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/entry/app.CFUo82qW.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DkeOAsDE.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BUApaBEI.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/8jnST9iH.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DsnmJJEf.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BxstMCWP.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/D8bhugL8.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/9pyzJWCV.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BuSUJYWz.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined",
+      "type": "text/css; charset=utf-8"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/B1tjIbKz.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BfxzicKG.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/0.C_4GkBaB.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/nodes/1.ch1CthYA.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DQo8w5ca.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/69_IOA4Y.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/nodes/0.HYICmigE.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/aFH55cCG.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/Avatar.BpUR4BrQ.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/8.BqcTo5bC.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/B42X339b.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/CCdO4VKV.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/3.BNjWjMbh.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/nodes/8.CpkuE6KU.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/fIqo0vxj.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/ft-thZGf.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/DesktopDirectionsBox.Bz1e-LtM.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/Directions.DjlxLMWX.css",
+      "type": "text/css"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/nodes/3.C3ckVTwl.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BzH_HiDE.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/Ch8acN0L.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/aWghV-a8.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/D9wHy__v.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/CcZgs0Om.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/3XjtsFXH.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DdV1irbp.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/C1ybxaRm.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DOg-K2VT.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/cVVxAr1I.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/BzZe-cu2.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/locations.json",
+      "type": "application/json"
+    },
+    {
+      "status": 200,
+      "url": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/venue.json",
+      "type": "application/json"
+    },
+    {
+      "status": 200,
+      "url": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/map.json",
+      "type": "application/json"
+    },
+    {
+      "status": 200,
+      "url": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/translations.json",
+      "type": "application/json"
+    },
+    {
+      "status": 200,
+      "url": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/translations.json",
+      "type": "application/json"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/expand-collapse.svg",
+      "type": "image/svg+xml"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/DHfKwOfL.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/chunks/CQ-pg4I9.js",
+      "type": "application/javascript"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/fonts/OpenRunde-Regular.woff2",
+      "type": "binary/octet-stream"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/_app/immutable/assets/poweredBy.DhaUDsK4.svg",
+      "type": "image/svg+xml"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/fonts/OpenRunde-Medium.woff2",
+      "type": "binary/octet-stream"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/fonts/OpenRunde-Bold.woff2",
+      "type": "binary/octet-stream"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/adf27766-b7ae-474f-86fe-d7b949841004.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://embed.roveiq.com/fonts/OpenRunde-Semibold.woff2",
+      "type": "binary/octet-stream"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/0729aa35-db66-470e-ae15-4c555557c7da.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/4131457e-7cdf-4f7d-94a5-de1326fa24f3.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/36d34eaa-1c3b-4ed5-9919-49d2b8b11970.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/0bfe43a7-ca90-426d-af5b-0ba7f315394e.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/3c05c984-f6bf-4f5a-a434-36631557eea9.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/425d8534-f9a3-4ec1-8441-e9699be8eddd.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/4c52d7c6-ecbd-4899-8eb6-fd091193fe67.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/781cca27-f512-44a4-8b9d-a8cca5bb67ca.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/49aa41ca-ab1b-4afd-811b-625739c5cfee.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/bef1cead-ffc8-4926-94a4-d11e1b4dbc16.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/d90835c1-4298-42df-94b0-f752320ebbe4.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/178a30d0-73f1-424f-a3bc-a86cf7ee4994.png",
+      "type": "image/png"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/489a2da7-7388-4fbd-98ff-7af38fe51a2f.glb",
+      "type": "model/gltf+json"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/ceb7287a-2cf4-41bf-807f-4eb159f25464.glb",
+      "type": "model/gltf+json"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/84f72394-bc91-4c72-9e25-f3b62fa3bf02.gltf",
+      "type": "text/plain"
+    },
+    {
+      "status": 200,
+      "url": "https://cdn.roveiq.com/e7607a1c-fa7f-4ece-ad4e-2a8ce815b11b.glb",
+      "type": "model/gltf+json"
+    },
+    {
+      "status": 200,
+      "url": "blob:https://embed.roveiq.com/fcafd857-ec82-40c6-af4b-450157f788f0",
+      "type": "image/png"
+    }
+  ]
+}

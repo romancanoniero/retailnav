@@ -1237,9 +1237,18 @@ function applyMallUi(){
     :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{
- // Google Earth gestures are the default for every customer.
- // Sphere-mode remains available explicitly using the 360° control.
- panMode=true;
+ // Full 360-degree spherical rotation is the default (including underside).
+ // Touch 360° to return to Earth-like map-pan gestures when needed.
+ panMode=false;
+ if(mallId==='new-world-city-shanghai'){
+  // Reuse four-metre editable floor separation; the prior 26-unit gap
+  // was an exploded view and made escalator rails look like ladders.
+  spread=targetSpread=baseFloorMetres;
+  const control=$('spread');
+  control.min=String(baseFloorMetres);
+  control.value=String(baseFloorMetres);
+  $('spreadValue').textContent='Altura estimada';
+ }
  bindUI();updateRotationModeUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},

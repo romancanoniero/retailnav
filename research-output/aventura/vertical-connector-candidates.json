@@ -1,0 +1,4319 @@
+[
+  {
+    "path": ".locations[8]",
+    "fields": {
+      "id": 26816,
+      "created_at": "2024-08-23T16:09:34.85132Z",
+      "updated_at": "2026-08-19T16:52:11.36648Z",
+      "venue_id": 107,
+      "name": "Elevator near Bloomingdale's Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[8].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[8].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[9]",
+    "fields": {
+      "id": 26819,
+      "created_at": "2024-08-23T16:12:20.916633Z",
+      "updated_at": "2026-08-19T16:52:11.610402Z",
+      "venue_id": 107,
+      "name": "Elevator near Macy's Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[9].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[9].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[24]",
+    "fields": {
+      "id": 27482,
+      "created_at": "2024-10-16T21:00:52.775643Z",
+      "updated_at": "2026-10-14T17:02:28.995782Z",
+      "venue_id": 107,
+      "name": "Norimoto",
+      "description": "<p><span data-sheets-root=\"1\">Norimoto is a high-end handroll and sushi bar serving an elevated Japanese dining experience at Aventura Mall in Miami.</p>\n<p>Originating from Buenos Aires, Argentina, Norimoto is dedicated to delivering an exceptional sushi experience for true connoisseurs of this refined cuisine. Our commitment to excellence extends to every detail, from selecting the freshest ingredients to perfecting the art of rice preparation.</p>\n<p>At Norimoto, our mission is to make high-quality sushi accessible to a broader audience, while paying homage to our roots. The name Norimoto is inspired by the Japanese word “Nori,” meaning seaweed, and “Moto,” meaning base or origin, with the prefix “Ō” representing respect and superiority. Seaweed is our core inspiration, symbolizing the foundation of our pursuit of perfection.</span></p>\n",
+      "url": "https://norimoto.co/usa/",
+      "phone": "786-351-2388",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2024/10/Logo-NORTIMOTO.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2024/10/Logo-NORTIMOTO.png",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2969,
+          "created_at": "2023-04-10T14:00:13.611329Z",
+          "updated_at": "2026-10-14T17:02:29.976866Z",
+          "name": "Restaurants",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "45"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5609,
+          "created_at": "2024-12-20T20:00:57.060821Z",
+          "updated_at": "2026-10-14T17:02:30.482576Z",
+          "name": "Specialty",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "477"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5612,
+          "created_at": "2024-12-20T20:00:57.660726Z",
+          "updated_at": "2026-10-14T17:02:29.972316Z",
+          "name": "Outdoor Dining",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "473"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5613,
+          "created_at": "2024-12-20T20:00:57.702803Z",
+          "updated_at": "2026-10-14T17:02:30.477608Z",
+          "name": "Quick Bites",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "476"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[26]",
+    "fields": {
+      "id": 26823,
+      "created_at": "2024-08-23T16:13:37.446471Z",
+      "updated_at": "2026-08-19T16:52:13.178368Z",
+      "venue_id": 107,
+      "name": "Elevator near Nordstrom Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[26].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[26].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[31]",
+    "fields": {
+      "id": 26827,
+      "created_at": "2024-08-23T16:35:27.704467Z",
+      "updated_at": "2026-08-19T16:52:14.308948Z",
+      "venue_id": 107,
+      "name": "Elevator near Apple Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[31].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[31].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[32]",
+    "fields": {
+      "id": 26817,
+      "created_at": "2024-08-23T16:09:52.068565Z",
+      "updated_at": "2026-08-19T16:52:14.682201Z",
+      "venue_id": 107,
+      "name": "Elevator near Bloomingdale's Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[32].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[32].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[35]",
+    "fields": {
+      "id": 26824,
+      "created_at": "2024-08-23T16:13:47.924402Z",
+      "updated_at": "2026-08-19T16:52:16.365372Z",
+      "venue_id": 107,
+      "name": "Elevator near Nordstrom Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[35].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[35].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[36]",
+    "fields": {
+      "id": 26828,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-19T16:52:16.619687Z",
+      "venue_id": 107,
+      "name": "Elevator in Treats Food Hall",
+      "address1": "Third Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5552,
+          "created_at": "2024-10-07T16:57:26.840899Z",
+          "updated_at": "2024-10-07T16:57:26.840899Z",
+          "name": "TL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[36].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[36].location_types[1]",
+    "fields": {
+      "id": 5552,
+      "created_at": "2024-10-07T16:57:26.840899Z",
+      "updated_at": "2024-10-07T16:57:26.840899Z",
+      "name": "TL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[37]",
+    "fields": {
+      "id": 26825,
+      "created_at": "2024-08-23T16:13:56.679178Z",
+      "updated_at": "2026-08-19T16:52:16.875231Z",
+      "venue_id": 107,
+      "name": "Elevator near Nordstrom Third Level",
+      "address1": "Third Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5552,
+          "created_at": "2024-10-07T16:57:26.840899Z",
+          "updated_at": "2024-10-07T16:57:26.840899Z",
+          "name": "TL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[37].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[37].location_types[1]",
+    "fields": {
+      "id": 5552,
+      "created_at": "2024-10-07T16:57:26.840899Z",
+      "updated_at": "2024-10-07T16:57:26.840899Z",
+      "name": "TL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[39]",
+    "fields": {
+      "id": 26831,
+      "created_at": "2024-08-23T19:07:44.5471Z",
+      "updated_at": "2026-08-19T16:52:17.416355Z",
+      "venue_id": 107,
+      "name": "Elevator in Outdoor Courtyard Third Level",
+      "address1": "Third Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5552,
+          "created_at": "2024-10-07T16:57:26.840899Z",
+          "updated_at": "2024-10-07T16:57:26.840899Z",
+          "name": "TL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[39].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[39].location_types[1]",
+    "fields": {
+      "id": 5552,
+      "created_at": "2024-10-07T16:57:26.840899Z",
+      "updated_at": "2024-10-07T16:57:26.840899Z",
+      "name": "TL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[40]",
+    "fields": {
+      "id": 26818,
+      "created_at": "2024-08-23T16:10:29.537442Z",
+      "updated_at": "2026-08-19T16:52:17.718666Z",
+      "venue_id": 107,
+      "name": "Elevator near Bloomingdale's Third Level",
+      "address1": "Third Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5552,
+          "created_at": "2024-10-07T16:57:26.840899Z",
+          "updated_at": "2024-10-07T16:57:26.840899Z",
+          "name": "TL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[40].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[40].location_types[1]",
+    "fields": {
+      "id": 5552,
+      "created_at": "2024-10-07T16:57:26.840899Z",
+      "updated_at": "2024-10-07T16:57:26.840899Z",
+      "name": "TL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[60]",
+    "fields": {
+      "id": 26820,
+      "created_at": "2024-08-23T16:12:30.030856Z",
+      "updated_at": "2026-08-19T16:52:21.679223Z",
+      "venue_id": 107,
+      "name": "Elevator near Macy's Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[60].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[60].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[62]",
+    "fields": {
+      "id": 26822,
+      "created_at": "2024-08-23T16:13:08.416369Z",
+      "updated_at": "2026-08-19T16:52:22.193838Z",
+      "venue_id": 107,
+      "name": "Elevator in Center Court Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[62].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[62].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[80]",
+    "fields": {
+      "id": 48083,
+      "created_at": "2026-03-03T23:02:01.076778Z",
+      "updated_at": "2026-10-14T17:01:44.930582Z",
+      "venue_id": 107,
+      "name": "FEULARD Aesthetic Lab",
+      "description": "<p><span class=\"il\">FEULARD</span> Aesthetic Lab integrates clinical skin science with refined hair artistry. Guided by structure and biological precision, the Lab delivers advanced aesthetic treatments and elevated salon craftsmanship across face, scalp, and body. Each experience begins with diagnostics and evolves through tailored protocols designed for visible, measurable results. A modern laboratory of beauty &#8211; disciplined, intelligent, and distinctly refined.</p>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2026/03/feulardlogo1.jpg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2026/03/feulardlogo.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2981,
+          "created_at": "2023-04-10T14:00:15.422571Z",
+          "updated_at": "2026-10-14T17:01:53.867117Z",
+          "name": "Coming Soon",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "195",
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": true,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 3090,
+          "created_at": "2023-05-31T21:00:24.406246Z",
+          "updated_at": "2026-10-14T17:01:56.44198Z",
+          "name": "Spa, Health & Fitness",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "188"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7718,
+          "created_at": "2025-12-11T14:01:42.298782Z",
+          "updated_at": "2026-10-14T17:01:48.572184Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "881"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[107]",
+    "fields": {
+      "id": 20795,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:52.286718Z",
+      "venue_id": 107,
+      "name": "Schutz",
+      "description": "<div>Schutz, a brand born in Brazil, is a footwear brand offering fashion-forward styles with double-take-worthy details. Founded in 1995, the brand curates each collection drop with elevated and empowering styles that focus on feminine silhouettes, quality materials, and bold details designed for the fashion-forward individual. We design for those who aren&#8217;t afraid to speak their mind, who are always ready for a new adventure, and who seek out footwear that will enhance their already on-trend outfit.</div>\n<div></div>\n<div>Schutz designs for bold, sexy, and trendy individuals. We are a one-stop shop for all things footwear, catering to every and any occasion.</div>\n",
+      "url": "http://www.schutz-shoes.com",
+      "phone": "929-401-9104",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2018/10/SCHUTZ.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2018/10/Schutz-logo.jpg",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2982,
+          "created_at": "2023-04-10T14:00:15.630202Z",
+          "updated_at": "2026-10-14T17:01:57.714164Z",
+          "name": "Shoes",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "18"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[125]",
+    "fields": {
+      "id": 20858,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:54.598505Z",
+      "venue_id": 107,
+      "name": "MONTBLANC",
+      "description": "<p>Synonymous with excellence in craftsmanship and design, Montblanc has been pushing the boundaries of innovation ever since the Maison first revolutionized the culture of writing in 1906. Ingenuity and imagination continue to be driving forces for the Maison today as it advances its expression of fine craftsmanship across product categories: writing instruments, watches, leather goods, new technologies and accessories. Reflecting upon its ongoing mission to create fine lifetime companions born from bold ideas and expertly crafted through the skills of the Maison’s artisans, the iconic Montblanc Emblem has become the ultimate seal of performance, quality and an expression of sophisticated style. As part of its on-going commitment to elevating and support those who strive to leave their mark, Montblanc continues to assert its encouragement of education programs around the world and initiatives that inspire people to express their full potential.</p>\n",
+      "url": "http://www.montblanc.com",
+      "phone": "305-931-1898",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/10/MONTBLANC.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/10/Montblanc-logo.png",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2973,
+          "created_at": "2023-04-10T14:00:14.843536Z",
+          "updated_at": "2026-10-14T17:01:57.765077Z",
+          "name": "Menswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "14"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2974,
+          "created_at": "2023-04-10T14:00:14.882315Z",
+          "updated_at": "2026-10-14T17:01:57.760227Z",
+          "name": "Jewelry & Watches",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "17"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2976,
+          "created_at": "2023-04-10T14:00:14.908519Z",
+          "updated_at": "2026-10-14T17:01:57.849951Z",
+          "name": "Specialty & Miscellaneous",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "28"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[128]",
+    "fields": {
+      "id": 20910,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:56.455471Z",
+      "venue_id": 107,
+      "name": "Coco’s Hair Salon",
+      "description": "<p><span data-sheets-root=\"1\">Coco&#8217;s Hair Salon &amp; Spa at Aventura Mall in Miami offers some of the best salon, wedding, and spa services, using elevated skincare techniques for the ultimate pampering experience.</p>\n<p>Coco’s Hair Salon is your one-stop beauty spot, where we focus on making you look and feel amazing. In our store, you’ll find a variety of top-quality hair products and styling tools from popular brands like Kerastase, Moroccan Oil, Olaplex, K18, Paul Mitchell, Redken, and more. At Coco’s, we’re all about boosting your confidence and helping you shine with your natural beauty, inside and out.</span></p>\n",
+      "url": "",
+      "phone": "305-933-9889",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/10/COCOS.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/10/Cocos-Logo-Small-Edit.jpg",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2976,
+          "created_at": "2023-04-10T14:00:14.908519Z",
+          "updated_at": "2026-10-14T17:01:57.849951Z",
+          "name": "Specialty & Miscellaneous",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "28"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 3090,
+          "created_at": "2023-05-31T21:00:24.406246Z",
+          "updated_at": "2026-10-14T17:01:56.44198Z",
+          "name": "Spa, Health & Fitness",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "188"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 4745,
+          "created_at": "2024-02-20T15:01:06.922719Z",
+          "updated_at": "2026-10-14T17:01:57.801129Z",
+          "name": "Beauty & Fragrance",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "230"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[154]",
+    "fields": {
+      "id": 41333,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:46.099331Z",
+      "venue_id": 107,
+      "name": "Wairua",
+      "description": "<p>Discover premium skincare that’s effective, sustainable, and free from harmful ingredients. Wairua offers curated clean beauty products and personalized services for an elevated self-care experience.</p>\n<p>The Abbey is a contemporary open-air district in the heart of Aventura, just steps from Aventura Mall. Spanning over 219,000 square feet across multiple buildings, this vibrant mixed-use destination combines retail, dining, wellness, entertainment, and essential services in one modern setting that where sunlight and style come together.</p>\n<p>How do I get to The Abbey from Aventura Mall?<br />\nTo reach The Abbey from Aventura Mall, exit through either The Cheesecake Factory entrance or the Toku entrance. Once outside, cross the street directly to The Abbey.</p>\n",
+      "url": "https://wairuabeauty.com",
+      "phone": "305-209-7575",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/12/WAIRUA120PX.svg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/12/wairua-logo.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 3090,
+          "created_at": "2023-05-31T21:00:24.406246Z",
+          "updated_at": "2026-10-14T17:01:56.44198Z",
+          "name": "Spa, Health & Fitness",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "188"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 4745,
+          "created_at": "2024-02-20T15:01:06.922719Z",
+          "updated_at": "2026-10-14T17:01:57.801129Z",
+          "name": "Beauty & Fragrance",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "230"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7718,
+          "created_at": "2025-12-11T14:01:42.298782Z",
+          "updated_at": "2026-10-14T17:01:48.572184Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "881"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[156]",
+    "fields": {
+      "id": 20822,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:53.413924Z",
+      "venue_id": 107,
+      "name": "White House Black Market",
+      "description": "<p>Confidence is your strong suit, elevated fashion is ours. Shop our collection of women’s professional, formal, and casual clothing in black and white, with designs that are sure to become wardrobe favorites. Discover the art of powerful, feminine, and authentic style.</p>\n",
+      "url": "http://www.whitehouseblackmarket.com",
+      "phone": "305-937-7747",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/10/WHITE-HOUSE.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/10/white_house_black_market-logo.jpeg",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[163]",
+    "fields": {
+      "id": 26821,
+      "created_at": "2024-08-23T16:12:55.219747Z",
+      "updated_at": "2026-08-19T16:52:26.753315Z",
+      "venue_id": 107,
+      "name": "Elevator in Center Court Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[163].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[163].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[165]",
+    "fields": {
+      "id": 26826,
+      "created_at": "2024-08-23T16:35:16.255895Z",
+      "updated_at": "2026-08-19T16:52:27.006731Z",
+      "venue_id": 107,
+      "name": "Elevator near Apple Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[165].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[165].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[166]",
+    "fields": {
+      "id": 26830,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-19T16:52:27.697356Z",
+      "venue_id": 107,
+      "name": "Elevator in Outdoor Courtyard Upper Level",
+      "address1": "Upper Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5551,
+          "created_at": "2024-10-07T16:57:11.446045Z",
+          "updated_at": "2024-10-07T16:57:11.446045Z",
+          "name": "UL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[166].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[166].location_types[1]",
+    "fields": {
+      "id": 5551,
+      "created_at": "2024-10-07T16:57:11.446045Z",
+      "updated_at": "2024-10-07T16:57:11.446045Z",
+      "name": "UL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[168]",
+    "fields": {
+      "id": 26829,
+      "created_at": "2024-08-23T19:06:37.569446Z",
+      "updated_at": "2026-08-19T16:52:28.255735Z",
+      "venue_id": 107,
+      "name": "Elevator in Outdoor Courtyard Lower Level",
+      "address1": "Lower Level",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 5272,
+          "created_at": "2024-08-23T16:41:23.314668Z",
+          "updated_at": "2024-08-23T16:41:23.314668Z",
+          "name": "Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        },
+        {
+          "id": 5550,
+          "created_at": "2024-10-07T16:57:01.403076Z",
+          "updated_at": "2024-10-07T16:57:01.403076Z",
+          "name": "LL Elevators",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[168].location_types[0]",
+    "fields": {
+      "id": 5272,
+      "created_at": "2024-08-23T16:41:23.314668Z",
+      "updated_at": "2024-08-23T16:41:23.314668Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[168].location_types[1]",
+    "fields": {
+      "id": 5550,
+      "created_at": "2024-10-07T16:57:01.403076Z",
+      "updated_at": "2024-10-07T16:57:01.403076Z",
+      "name": "LL Elevators",
+      "venue_id": 107,
+      "Type": "location",
+      "highlight": false,
+      "highlight_rank": 0,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".locations[183]",
+    "fields": {
+      "id": 52321,
+      "created_at": "2026-05-18T16:00:58.311989Z",
+      "updated_at": "2026-10-14T17:01:44.236891Z",
+      "venue_id": 107,
+      "name": "BYLT",
+      "description": "<p>BYLT is for the go-getter, the pioneer, and the ambitious. The brand exists to instill confidence in a versatile lifestyle, ensuring readiness for every opportunity.<br />\nBy providing transitional apparel, footwear, and accessories that are BYLT better, the company supports life’s accomplishments. Its tailored fits, elevated designs, and enhanced materials are key components of an upgraded life in premium style. Whether at the office, out with friends, or heading into the next training session, individuals are BYLT for any occasion.</p>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2026/05/BYLT-store-logo.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2026/05/BYLT-Logo-aventura-mall.png",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2973,
+          "created_at": "2023-04-10T14:00:14.843536Z",
+          "updated_at": "2026-10-14T17:01:57.765077Z",
+          "name": "Menswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "14"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2981,
+          "created_at": "2023-04-10T14:00:15.422571Z",
+          "updated_at": "2026-10-14T17:01:53.867117Z",
+          "name": "Coming Soon",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "195",
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": true,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2982,
+          "created_at": "2023-04-10T14:00:15.630202Z",
+          "updated_at": "2026-10-14T17:01:57.714164Z",
+          "name": "Shoes",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "18"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[194]",
+    "fields": {
+      "id": 56752,
+      "created_at": "2026-07-14T16:01:41.88393Z",
+      "updated_at": "2026-08-14T20:22:51.682065Z",
+      "venue_id": 107,
+      "name": "Pookie & Sebastian",
+      "description": "<p>Sebastian is a women’s boutique, offering elevated, chic, and feminine fashion for modern women. Our curated collection features stylish dresses, polished separates, statement jewelry, and accessories designed for brunch, special events, vacations, date nights, and everyday refined style.</p>\n<p>As a go-to women’s clothing boutique, we focus on quality, fit, and timeless yet trend-forward pieces that feel confident and effortless. Whether you&#8217;re searching for the perfect wedding guest dress, a vacation-ready outfit, or elevated everyday essentials, the Aventura Mall location delivers a personalized shopping experience in a beautifully curated setting.</p>\n<p>Visit Pookie &amp; Sebastian to discover one of the most loved women’s boutiques in Aventura and shop clothing and accessories designed to make getting dressed feel easy and inspiring.</p>\n",
+      "url": "http://pookieandsebastian.com",
+      "phone": "786-320-5654",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2020/09/pookie-logo-1-1.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2020/09/pookie-logo-1.png",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[195]",
+    "fields": {
+      "id": 41356,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:02:28.275884Z",
+      "venue_id": 107,
+      "name": "Joey Aventura",
+      "description": "<p>JOEY Aventura serves globally inspired cuisine at The Abbey at Aventura, offering an elevated yet welcoming dining experience across a two-level dining room with floor-to-ceiling windows and a large patio.</p>\n<p>JOEY Restaurants is an award-winning, globally inspired brand with a collection of elevated yet comfortable restaurants. JOEY Aventura’s thoughtfully crafted menu features recipes representing cuisine and hospitality standards from across the globe, curated from journeys by the brand’s leadership and culinary teams. From fire-torched sushi and premium cuts of steak to comforting bowls, burgers and handhelds, JOEY Restaurants is committed to blending local culture with innovative and fresh techniques, resulting in delicious harmony of ingredients. Any of JOEY Restaurants dishes can artfully pair with the characters of the bar menu, including wine selections and handcrafted cocktails, from a Spicy Passion Fruit Margarita with serrano pepper-infused tequila to a sweet Real Peach Bellini with a signature rum blend, real peach molasses, sparkling wine, and Sangria. JOEY Aventura is proud to provide great food, a lively environment, and exceptional dining experiences.</p>\n<p>The Abbey is a contemporary open-air district in the heart of Aventura, just steps from Aventura Mall. Spanning over 219,000 square feet across multiple buildings, this vibrant mixed-use destination combines retail, dining, wellness, entertainment, and essential services in one modern setting where sunlight and style come together.</p>\n<p>How do I get to The Abbey from Aventura Mall?<br />\nTo reach The Abbey from Aventura Mall, exit through either The Cheesecake Factory entrance or the Toku entrance. Once outside, cross the street directly to The Abbey.</p>\n",
+      "url": "https://theabbeyataventura.com/dining_products/joey-aventura/",
+      "phone": "786-763-2300",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/12/JOEY-AVENTURA-80PX.svg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/12/JOEY-AVENTURA-80PX.svg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2969,
+          "created_at": "2023-04-10T14:00:13.611329Z",
+          "updated_at": "2026-10-14T17:02:29.976866Z",
+          "name": "Restaurants",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "45"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5611,
+          "created_at": "2024-12-20T20:00:57.646698Z",
+          "updated_at": "2026-10-14T17:02:29.967731Z",
+          "name": "Brunch",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "474"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5612,
+          "created_at": "2024-12-20T20:00:57.660726Z",
+          "updated_at": "2026-10-14T17:02:29.972316Z",
+          "name": "Outdoor Dining",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "473"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7719,
+          "created_at": "2025-12-11T18:02:42.70342Z",
+          "updated_at": "2026-10-14T17:02:28.346428Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "882"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[205]",
+    "fields": {
+      "id": 51643,
+      "created_at": "2026-05-12T18:03:05.445297Z",
+      "updated_at": "2026-10-14T17:01:44.429061Z",
+      "venue_id": 107,
+      "name": "Thirdlove",
+      "description": "<div>Thirdlove was founded on the simple idea that women deserve underwear designed around their bodies, without choosing between comfort and style. The female-founded intimates brand offers elevated essentials including bras, underwear, activewear, sleepwear and lounge — all designed by women, for women.</div>\n<div></div>\n<div>The brand&#8217;s obsession with the perfect fit led to the invention of the half cup. With Thirdlove, comfort and support are guaranteed whether you’re a size AA cup, an H, or somewhere in between. Thirdlove&#8217;s in-store experience comes complete with a team of expert stylists who can help you find your perfect fit with ease.</div>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2026/05/third-love-logo.jpg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2026/05/third-love-logo1.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2981,
+          "created_at": "2023-04-10T14:00:15.422571Z",
+          "updated_at": "2026-10-14T17:01:53.867117Z",
+          "name": "Coming Soon",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "195",
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": true,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[235]",
+    "fields": {
+      "id": 41351,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:02:28.001907Z",
+      "venue_id": 107,
+      "name": "STK Steakhouse",
+      "description": "<p>STK Aventura distinguishes itself with a sophisticated blend of chic dining and lounge areas, complemented by its renowned signature menus and exceptional service that’s further elevated by live DJ performances, making it the perfect destination for any occasion. The venue’s diverse offerings include brunch, lunch, dinner, and a late-night happy hour, each featuring the finest in modern steakhouse cuisine. Indulge in the iconic STK Steakhouse dishes in the stylish ambiance of the restaurant or savor them at home through their convenient delivery partners.</p>\n<p>The Abbey is a contemporary open-air district in the heart of Aventura, just steps from Aventura Mall. Spanning over 219,000 square feet across multiple buildings, this vibrant mixed-use destination combines retail, dining, wellness, entertainment, and essential services in one modern setting that where sunlight and style come together.</p>\n<p>How do I get to The Abbey from Aventura Mall?<br />\nTo reach The Abbey from Aventura Mall, exit through either The Cheesecake Factory entrance or the Toku entrance. Once outside, cross the street directly to The Abbey.</p>\n",
+      "url": "https://theabbeyataventura.com/dining_products/stk-steakhouse/",
+      "phone": "786-347-5299",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/12/STK-120px.svg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/12/STK-120px.svg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2969,
+          "created_at": "2023-04-10T14:00:13.611329Z",
+          "updated_at": "2026-10-14T17:02:29.976866Z",
+          "name": "Restaurants",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "45"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5611,
+          "created_at": "2024-12-20T20:00:57.646698Z",
+          "updated_at": "2026-10-14T17:02:29.967731Z",
+          "name": "Brunch",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "474"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5612,
+          "created_at": "2024-12-20T20:00:57.660726Z",
+          "updated_at": "2026-10-14T17:02:29.972316Z",
+          "name": "Outdoor Dining",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "473"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7719,
+          "created_at": "2025-12-11T18:02:42.70342Z",
+          "updated_at": "2026-10-14T17:02:28.346428Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "882"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[245]",
+    "fields": {
+      "id": 20716,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:50.029901Z",
+      "venue_id": 107,
+      "name": "JD Sports",
+      "description": "<p><span data-sheets-root=\"1\">JD Sports sells the latest sneakers and athletic apparel at Aventura Mall in Miami.</p>\n<p>JD Sports has everything you need to elevate your everyday casual look to eye-catching new heights. Shop the latest footwear from brands like Nike, adidas, Vans and Puma that deliver performance, style, and comfort to fit your on-the-go lifestyle. If you’re looking for athletic slides, basketball sneakers, casual shoes, running gear and everything in between, JD Sports has you covered. Whether you’re training for your next race, refreshing your gym to street look, or just snagging some comfy kicks for every day, there’s something for everyone at JD.</span></p>\n<p>&nbsp;</p>\n",
+      "url": "http://www.jdsports.com",
+      "phone": "786-419-4117",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2022/04/JD.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2022/04/jd-sports-logo.png",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2971,
+          "created_at": "2023-04-10T14:00:14.676582Z",
+          "updated_at": "2026-10-14T17:01:57.373846Z",
+          "name": "Sporting Goods & Athleticwear",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "22"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "13"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2973,
+          "created_at": "2023-04-10T14:00:14.843536Z",
+          "updated_at": "2026-10-14T17:01:57.765077Z",
+          "name": "Menswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "14"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2982,
+          "created_at": "2023-04-10T14:00:15.630202Z",
+          "updated_at": "2026-10-14T17:01:57.714164Z",
+          "name": "Shoes",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "18"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[270]",
+    "fields": {
+      "id": 31146,
+      "created_at": "2025-07-31T17:01:29.255797Z",
+      "updated_at": "2026-10-14T17:02:28.482544Z",
+      "venue_id": 107,
+      "name": "Sanguich",
+      "description": "<p><span data-sheets-root=\"1\">Sanguich serves authentic Cuban sandwiches and classic Miami flavors at Aventura Mall in Miami.</p>\n<p>Daniel Figueredo and Rosa Romero, lifelong Miami locals and culinary entrepreneurs, founded Sanguich with a mission to elevate the classic Cuban sandwich and celebrate their city’s vibrant food culture. Their partnership, rooted in shared Cuban-American heritage and a passion for authentic flavors, inspired a restaurant that transforms traditional recipes into modern culinary experiences that honor Miami’s rich gastronomic landscape.</span></p>\n",
+      "url": "https://sanguich.com/",
+      "phone": "305-481-9389",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/07/Sanguich-logo-1.jpg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/07/Sanguich-logo-1.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2968,
+          "created_at": "2023-04-10T14:00:13.470635Z",
+          "updated_at": "2026-10-14T17:02:30.51306Z",
+          "name": "Treats Food Hall",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "44"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5613,
+          "created_at": "2024-12-20T20:00:57.702803Z",
+          "updated_at": "2026-10-14T17:02:30.477608Z",
+          "name": "Quick Bites",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "476"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[274]",
+    "fields": {
+      "id": 20658,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:02:29.686943Z",
+      "venue_id": 107,
+      "name": "Jrk!",
+      "description": "<p><span data-sheets-root=\"1\">Jrk! is an elevated fast-casual Jamaican restaurant at Aventura Mall in Miami.</p>\n<p>Jrk! is an evolutionary Jamaican eatery that takes an elevated approach to fast-casual dining, combining authentic Jamaican traditions with a steadfast commitment to healthy dining options. Jrk!’s diverse menu highlights include jerk chicken, sweet scotch bonnet cauliflower, pineapple-glazed plantains, vegan “meat” with island herbs, and Jamaican rice &amp; peas.</span></p>\n",
+      "url": "https://www.eatjrk.com",
+      "facebook_url": "",
+      "twitter_url": "",
+      "instagram_url": "",
+      "phone": "305-974-2480",
+      "phone_country": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "country": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2020/08/Logo-JRK.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2020/08/Logo-JRK.png",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2968,
+          "created_at": "2023-04-10T14:00:13.470635Z",
+          "updated_at": "2026-10-14T17:02:30.51306Z",
+          "name": "Treats Food Hall",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "44"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[280]",
+    "fields": {
+      "id": 53906,
+      "created_at": "2026-06-02T15:03:43.128665Z",
+      "updated_at": "2026-10-14T17:02:27.904264Z",
+      "venue_id": 107,
+      "name": "Bubbice",
+      "description": "<p>Flash frozen treats are our specialty, but it&#8217;s how they&#8217;re crafted and served that defines the Bubbice experience. Bubbice is known and loved for the interactive, high-energy, and engaging touch we bring to every event. Our customizable mobile carts are a refined, elevated addition to any space, creating moments that are as memorable as they are delicious.</p>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2026/06/Bubbice-store-logo.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2026/06/Bubbice-store-logo.png",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2967,
+          "created_at": "2023-04-10T14:00:13.428599Z",
+          "updated_at": "2026-10-14T17:02:27.898073Z",
+          "name": "Coming Soon",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "156",
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": true,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[305]",
+    "fields": {
+      "id": 20854,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:54.393052Z",
+      "venue_id": 107,
+      "name": "Oliver Peoples",
+      "description": "<p>Offering a carefully curated selection of vintage-inspired styles, Oliver Peoples is the shop of choice for premier luxury eyewear. To further elevate your experience, we add first-class service and flawless prescriptions to our bespoke lenses.</p>\n",
+      "url": "http://www.oliverpeoples.com",
+      "phone": "305-931-7303",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/10/OLIVERS-PEOPLES.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/10/oliver-peoples-logo-1.jpg",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2983,
+          "created_at": "2023-04-10T14:00:15.750079Z",
+          "updated_at": "2026-10-14T17:01:57.805968Z",
+          "name": "Eyewear",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "19"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[329]",
+    "fields": {
+      "id": 20932,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:57.282885Z",
+      "venue_id": 107,
+      "name": "AMC Aventura 24",
+      "description": "<p><span data-sheets-root=\"1\">AMC Aventura 24 at Aventura Mall in Miami shows the latest films with premium offerings like IMAX, Dolby Cinema, and PRIME at AMC. Enjoy AMC amenities including spacious rocking seats, luxury recliners, and innovative menus for an elevated moviegoing experience.</span></p>\n",
+      "url": "http://www.amctheatres.com",
+      "phone": "305-466-9880",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/10/AMC.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/10/amc-logo.jpeg",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "147"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2985,
+          "created_at": "2023-04-10T14:00:16.112195Z",
+          "updated_at": "2026-10-14T17:01:57.602915Z",
+          "name": "Entertainment",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "27"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[345]",
+    "fields": {
+      "id": 65605,
+      "created_at": "2026-10-13T15:01:51.054914Z",
+      "updated_at": "2026-10-14T17:01:43.700856Z",
+      "venue_id": 107,
+      "name": "James Bark",
+      "description": "<p>JAMES BARK is a modern fashion brand rooted in timeless design, exceptional quality, and a global perspective. Made for those who value sophistication without sacrificing comfort, our collections blend elevated essentials with everyday ease. From crisp polos to jet-set pants, we design staples that transcend trends and move with you.</p>\n<p>Born in the USA and shaped by the world, JAMES BARK stands for premium fabrics, refined fits, and effortless versatility.</p>\n<p>JAMES BARK is style you live in. It&#8217;s not just a brand it&#8217;s a lifestyle.</p>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2026/10/James-Bark-C.jpg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2026/10/James-Bark.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2981,
+          "created_at": "2023-04-10T14:00:15.422571Z",
+          "updated_at": "2026-10-14T17:01:53.867117Z",
+          "name": "Coming Soon",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "195",
+            "bgcolor": "",
+            "fontcolor": "",
+            "showOnDirectory": false
+          },
+          "highlight": true,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[347]",
+    "fields": {
+      "id": 41315,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:01:46.564559Z",
+      "venue_id": 107,
+      "name": "Pure Barre",
+      "description": "<p>Taught by highly-trained teachers, Pure Barre features four group class formats that deliver an effective total-body workout focused on low impact, high-intensity movements that lift and tone muscles and improve strength, agility and flexibility for every body.</p>\n<p>The Abbey is a contemporary open-air district in the heart of Aventura, just steps from Aventura Mall. Spanning over 219,000 square feet across multiple buildings, this vibrant mixed-use destination combines retail, dining, wellness, entertainment, and essential services in one modern setting that where sunlight and style come together.</p>\n<p>How do I get to The Abbey from Aventura Mall?<br />\nTo reach The Abbey from Aventura Mall, exit through either The Cheesecake Factory entrance or the Toku entrance. Once outside, cross the street directly to The Abbey.</p>\n",
+      "url": "https://theabbeyataventura.com/shop_products/pure-barre/",
+      "phone": "786-220-0057",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/12/pure-barre-50PX.svg",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/12/pure-barre-logo.jpg",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 3090,
+          "created_at": "2023-05-31T21:00:24.406246Z",
+          "updated_at": "2026-10-14T17:01:56.44198Z",
+          "name": "Spa, Health & Fitness",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "188"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7718,
+          "created_at": "2025-12-11T14:01:42.298782Z",
+          "updated_at": "2026-10-14T17:01:48.572184Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "881"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[354]",
+    "fields": {
+      "id": 28658,
+      "created_at": "2025-03-21T21:01:03.277577Z",
+      "updated_at": "2026-10-14T17:02:28.672119Z",
+      "venue_id": 107,
+      "name": "Wok N Grill",
+      "description": "<p><span data-sheets-root=\"1\">Introducing Wok N Grill, where the home of Bourbon Chicken gets a fresh new look and an elevated twist. Perfect for on-the-go dining, Wok N Grill at Aventura Mall takes your favorite Asian-inspired dishes to the next level. With a focus on fresh ingredients, bold flavors, and elevated preparation, we deliver an exceptional culinary experience that satisfies both your cravings and your need for speed.</p>\n<p>Our famous Bourbon Chicken, with its signature (and secret) savory glaze, remains at the heart of our menu—but now with even more exciting enhancements. Whether you’re savoring a flavorful stir-fry or one of our perfectly grilled, cooked-to-order teriyaki entrees, every dish is crafted with the quality and care you expect from our family of brands. Taste the difference today at Wok N Grill.</span></p>\n",
+      "url": "",
+      "phone": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2025/03/WORKN-GRILL.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2025/03/WORKN-GRILL.png",
+      "hours": "",
+      "lock_translations": false,
+      "location_types": [
+        {
+          "id": 2968,
+          "created_at": "2023-04-10T14:00:13.470635Z",
+          "updated_at": "2026-10-14T17:02:30.51306Z",
+          "name": "Treats Food Hall",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "44"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".locations[368]",
+    "fields": {
+      "id": 20645,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-10-14T17:02:29.497309Z",
+      "venue_id": 107,
+      "name": "Motek",
+      "description": "<p><span data-sheets-root=\"1\">Motek is a nationally acclaimed Mediterranean and Israeli bistro at Aventura Mall in Miami, offering reliably vibrant cuisine in a convenient yet elevated concept. Inspired by family tradition and bold Eastern Mediterranean flavors, the restaurant’s kosher-style menu spans all-day brunch, lunch, and dinner, alongside house-baked pastries and a robust coffee program. Each dish is thoughtfully crafted using premium ingredients, with a focus on 100% seed-oil-free cooking, underscoring the brand’s commitment to both quality and intention. Beyond its culinary accolades, Motek is distinguished by its signature aesthetic and polished hospitality ethos, creating an environment that feels both transportive and welcoming.</span></p>\n",
+      "url": "http://www.motekcafe.com",
+      "facebook_url": "",
+      "twitter_url": "",
+      "instagram_url": "",
+      "phone": "305-974-2626",
+      "phone_country": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "country": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2021/10/MOTEK.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2021/10/MOTEK.png",
+      "hours": "",
+      "lock_translations": true,
+      "location_types": [
+        {
+          "id": 2969,
+          "created_at": "2023-04-10T14:00:13.611329Z",
+          "updated_at": "2026-10-14T17:02:29.976866Z",
+          "name": "Restaurants",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "45"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5611,
+          "created_at": "2024-12-20T20:00:57.646698Z",
+          "updated_at": "2026-10-14T17:02:29.967731Z",
+          "name": "Brunch",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "474"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5612,
+          "created_at": "2024-12-20T20:00:57.660726Z",
+          "updated_at": "2026-10-14T17:02:29.972316Z",
+          "name": "Outdoor Dining",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "integration_key": "473"
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[0]",
+    "fields": {
+      "id": 178,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-07-01T13:51:19.625335Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957663628663358,
+      "longitude": -80.14294155603804,
+      "accessible": false,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[1]",
+    "fields": {
+      "id": 179,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.745805Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.958154534471777,
+      "longitude": -80.14244944292406,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[2]",
+    "fields": {
+      "id": 181,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.173784Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957174399497685,
+      "longitude": -80.14469586380697,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[3]",
+    "fields": {
+      "id": 183,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.387574Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957034591989064,
+      "longitude": -80.14288340602,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[4]",
+    "fields": {
+      "id": 184,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.621931Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957299851748708,
+      "longitude": -80.14263440953754,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[5]",
+    "fields": {
+      "id": 185,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-13T15:24:25.763324Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.957336345532312,
+      "longitude": -80.14324972516039,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[6]",
+    "fields": {
+      "id": 186,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.077044Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95631115616375,
+      "longitude": -80.14268582528096,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[7]",
+    "fields": {
+      "id": 187,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.498167Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955491950030435,
+      "longitude": -80.14164667867952,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[8]",
+    "fields": {
+      "id": 188,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.310116Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95760243806038,
+      "longitude": -80.1431217028043,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[9]",
+    "fields": {
+      "id": 189,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.273852Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.95584164622311,
+      "longitude": -80.14302601738628,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[10]",
+    "fields": {
+      "id": 190,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.057503Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955757487862595,
+      "longitude": -80.14341843930966,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[11]",
+    "fields": {
+      "id": 191,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.834983Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955341222006837,
+      "longitude": -80.14312557267402,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[12]",
+    "fields": {
+      "id": 192,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.529649Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95577180028369,
+      "longitude": -80.14290535526013,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[13]",
+    "fields": {
+      "id": 180,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:37:35.742403Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95822534764689,
+      "longitude": -80.14394490733265,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[14]",
+    "fields": {
+      "id": 182,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:33.585056Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.957300840738238,
+      "longitude": -80.14450638128206,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[15]",
+    "fields": {
+      "id": 240,
+      "created_at": "2026-07-02T02:36:46.818367Z",
+      "updated_at": "2026-07-02T02:36:46.818367Z",
+      "venue_id": 107,
+      "name": "Escalators",
+      "latitude": 25.95562228709601,
+      "longitude": -80.14166298299588,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        363,
+        361
+      ]
+    }
+  },
+  {
+    "path": ".floor_transitions[16]",
+    "fields": {
+      "id": 241,
+      "created_at": "2026-07-21T14:05:07.455804Z",
+      "updated_at": "2026-08-13T15:24:27.019459Z",
+      "venue_id": 107,
+      "name": "Stairs",
+      "latitude": 25.95673781261497,
+      "longitude": -80.14330644786853,
+      "accessible": true,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        361
+      ],
+      "direction": "both"
+    }
+  },
+  {
+    "path": ".amenities[0]",
+    "fields": {
+      "id": 1384,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T14:42:37.892933Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.955798746179283,
+      "longitude": -80.14296700022774,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[0].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[1]",
+    "fields": {
+      "id": 1385,
+      "created_at": "2025-12-19T19:18:09.941856Z",
+      "updated_at": "2026-06-30T14:42:37.898877Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.955335022550877,
+      "longitude": -80.14314529872338,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[1].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[2]",
+    "fields": {
+      "id": 1386,
+      "created_at": "2025-12-19T19:18:49.219474Z",
+      "updated_at": "2026-06-30T14:42:37.900278Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "description": "",
+      "latitude": 25.955456343104995,
+      "longitude": -80.1430946334138,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[2].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[3]",
+    "fields": {
+      "id": 1387,
+      "created_at": "2025-12-19T19:18:59.390137Z",
+      "updated_at": "2026-06-30T14:42:37.901784Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "description": "",
+      "latitude": 25.955779181265008,
+      "longitude": -80.1429069206964,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[3].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[7]",
+    "fields": {
+      "id": 1392,
+      "created_at": "2025-12-19T19:41:59.951719Z",
+      "updated_at": "2026-06-30T14:42:40.880204Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "description": "",
+      "latitude": 25.955474918533206,
+      "longitude": -80.1430633637023,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[7].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[8]",
+    "fields": {
+      "id": 1393,
+      "created_at": "2025-12-19T19:42:10.496463Z",
+      "updated_at": "2026-06-30T14:42:40.881914Z",
+      "venue_id": 107,
+      "name": "Escalators",
+      "description": "",
+      "latitude": 25.955766962723544,
+      "longitude": -80.1428830619892,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[8].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[10]",
+    "fields": {
+      "id": 926,
+      "created_at": "2024-08-23T19:05:14.477854Z",
+      "updated_at": "2026-06-30T14:42:40.906604Z",
+      "venue_id": 107,
+      "name": "Elevators Near Courtyard UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.958522237519603,
+      "longitude": -80.1422374764406,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[10].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[13]",
+    "fields": {
+      "id": 1388,
+      "created_at": "2025-12-19T19:19:58.617324Z",
+      "updated_at": "2026-06-30T14:42:37.903056Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "description": "",
+      "latitude": 25.955768462964887,
+      "longitude": -80.14288905926777,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[13].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[14]",
+    "fields": {
+      "id": 922,
+      "created_at": "2024-08-20T17:43:52.643094Z",
+      "updated_at": "2026-06-30T14:42:37.904528Z",
+      "venue_id": 107,
+      "name": "Elevator Near Bloomingdales 1st Floor",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.955482250534132,
+      "longitude": -80.14163968764814,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[14].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[24]",
+    "fields": {
+      "id": 1397,
+      "created_at": "2025-12-29T16:03:58.130404Z",
+      "updated_at": "2026-06-30T14:42:37.919Z",
+      "venue_id": 107,
+      "name": "Bank of America Escalators",
+      "description": "",
+      "latitude": 25.95508732295497,
+      "longitude": -80.14244297716904,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[24].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[43]",
+    "fields": {
+      "id": 583,
+      "created_at": "2023-04-12T15:10:18.559431Z",
+      "updated_at": "2026-06-30T14:42:37.944003Z",
+      "venue_id": 107,
+      "name": "Escalators Near Sushi Bar",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.955595902623685,
+      "longitude": -80.1416468639094,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[43].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[44]",
+    "fields": {
+      "id": 1250,
+      "created_at": "2025-06-17T17:08:47.059928Z",
+      "updated_at": "2026-06-30T14:42:37.921723Z",
+      "venue_id": 107,
+      "name": "Escalator near JC Penny LL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.958193300593067,
+      "longitude": -80.14391742704419,
+      "icon": "",
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[44].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[45]",
+    "fields": {
+      "id": 585,
+      "created_at": "2023-04-12T15:11:48.110934Z",
+      "updated_at": "2026-06-30T14:42:37.945342Z",
+      "venue_id": 107,
+      "name": "Stairs LL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.956041558501767,
+      "longitude": -80.14203980325308,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[45].amenity_types[0]",
+    "fields": {
+      "id": 2965,
+      "created_at": "2023-04-07T16:54:38.546524Z",
+      "updated_at": "2023-04-07T16:54:38.546524Z",
+      "name": "Stairs",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[46]",
+    "fields": {
+      "id": 586,
+      "created_at": "2023-04-12T15:13:01.970688Z",
+      "updated_at": "2026-06-30T14:42:37.946519Z",
+      "venue_id": 107,
+      "name": "Escalators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.956323860652603,
+      "longitude": -80.1426875242943,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[46].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[47]",
+    "fields": {
+      "id": 587,
+      "created_at": "2023-04-12T15:13:48.631369Z",
+      "updated_at": "2026-06-30T14:42:37.947908Z",
+      "venue_id": 107,
+      "name": "Main Escalators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957378765867702,
+      "longitude": -80.14324478443491,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[47].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[48]",
+    "fields": {
+      "id": 588,
+      "created_at": "2023-04-12T15:14:30.03599Z",
+      "updated_at": "2026-06-30T14:42:37.949364Z",
+      "venue_id": 107,
+      "name": "Escalators Near Slide",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95818329116709,
+      "longitude": -80.14245753232443,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[48].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[49]",
+    "fields": {
+      "id": 590,
+      "created_at": "2023-04-12T15:15:39.609502Z",
+      "updated_at": "2026-06-30T14:42:37.950924Z",
+      "venue_id": 107,
+      "name": "Escalators Near Nordstrom",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957298340094496,
+      "longitude": -80.14449925414553,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[49].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[50]",
+    "fields": {
+      "id": 591,
+      "created_at": "2023-04-12T15:16:30.968849Z",
+      "updated_at": "2026-06-30T14:42:37.952Z",
+      "venue_id": 107,
+      "name": "Elevator Near Nordstrom",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957158401484904,
+      "longitude": -80.14469470329165,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[50].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[53]",
+    "fields": {
+      "id": 925,
+      "created_at": "2024-08-23T19:04:18.99827Z",
+      "updated_at": "2026-06-30T14:42:37.955786Z",
+      "venue_id": 107,
+      "name": "Elevator Near Courtayard LL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.958542590253316,
+      "longitude": -80.14221981111142,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[53].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[55]",
+    "fields": {
+      "id": 619,
+      "created_at": "2023-05-24T17:39:44.413425Z",
+      "updated_at": "2026-06-30T14:42:37.959042Z",
+      "venue_id": 107,
+      "name": "1st Level Elevator Near Zara",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957664243512312,
+      "longitude": -80.14294154255369,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[55].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[56]",
+    "fields": {
+      "id": 621,
+      "created_at": "2023-05-24T17:43:13.342004Z",
+      "updated_at": "2026-06-30T14:42:37.960693Z",
+      "venue_id": 107,
+      "name": "1st Level Central Elevator ",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957044675973393,
+      "longitude": -80.14288558009888,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[56].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[58]",
+    "fields": {
+      "id": 782,
+      "created_at": "2023-11-22T18:44:45.219267Z",
+      "updated_at": "2026-06-30T14:42:37.963899Z",
+      "venue_id": 107,
+      "name": "Elevators Near Macy’s LL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957306457955042,
+      "longitude": -80.14263801750874,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[58].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[59]",
+    "fields": {
+      "id": 1383,
+      "created_at": "2025-12-19T19:17:07.015545Z",
+      "updated_at": "2026-06-30T14:42:37.965279Z",
+      "venue_id": 107,
+      "name": "Abby Elevator 1",
+      "description": "",
+      "latitude": 25.955747597307628,
+      "longitude": -80.14342408653036,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[59].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[60]",
+    "fields": {
+      "id": 1390,
+      "created_at": "2025-12-19T19:41:32.589425Z",
+      "updated_at": "2026-06-30T14:42:40.875412Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.955854472012344,
+      "longitude": -80.14301589647297,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[60].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[62]",
+    "fields": {
+      "id": 1391,
+      "created_at": "2025-12-19T19:41:44.336241Z",
+      "updated_at": "2026-06-30T14:42:40.877095Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.955346515630765,
+      "longitude": -80.14313047039006,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[62].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[64]",
+    "fields": {
+      "id": 923,
+      "created_at": "2024-08-20T17:44:57.362697Z",
+      "updated_at": "2026-06-30T14:42:40.878427Z",
+      "venue_id": 107,
+      "name": "Elevators Near Bloomingdales 2nd Floor",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.955496975053308,
+      "longitude": -80.14164453667327,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[64].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[67]",
+    "fields": {
+      "id": 1251,
+      "created_at": "2025-06-17T17:09:13.117181Z",
+      "updated_at": "2026-06-30T14:42:40.885389Z",
+      "venue_id": 107,
+      "name": "Escalator Near JC Penny UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.958193300593067,
+      "longitude": -80.14391742704419,
+      "icon": "",
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[67].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[68]",
+    "fields": {
+      "id": 1389,
+      "created_at": "2025-12-19T19:41:22.682123Z",
+      "updated_at": "2026-06-30T14:42:40.886656Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.95574008030228,
+      "longitude": -80.14342707060727,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[68].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[76]",
+    "fields": {
+      "id": 592,
+      "created_at": "2023-04-12T15:18:37.462636Z",
+      "updated_at": "2026-06-30T14:42:40.894927Z",
+      "venue_id": 107,
+      "name": "Escalator Near Sushi Bar UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95550413402593,
+      "longitude": -80.14183761523682,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[76].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[77]",
+    "fields": {
+      "id": 593,
+      "created_at": "2023-04-12T15:19:19.03333Z",
+      "updated_at": "2026-06-30T14:42:40.895886Z",
+      "venue_id": 107,
+      "name": "Escalators Near Bloomingdales UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.955641140744106,
+      "longitude": -80.14159199275973,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[77].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[78]",
+    "fields": {
+      "id": 594,
+      "created_at": "2023-04-12T15:19:55.227645Z",
+      "updated_at": "2026-06-30T14:42:40.896749Z",
+      "venue_id": 107,
+      "name": "Central Stairs UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.956010947627504,
+      "longitude": -80.14197761626622,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[78].amenity_types[0]",
+    "fields": {
+      "id": 2965,
+      "created_at": "2023-04-07T16:54:38.546524Z",
+      "updated_at": "2023-04-07T16:54:38.546524Z",
+      "name": "Stairs",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[79]",
+    "fields": {
+      "id": 596,
+      "created_at": "2023-04-12T15:21:12.455316Z",
+      "updated_at": "2026-06-30T14:42:40.897615Z",
+      "venue_id": 107,
+      "name": "Escalators Near Middle UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.956321281810602,
+      "longitude": -80.14265777581602,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[79].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[80]",
+    "fields": {
+      "id": 597,
+      "created_at": "2023-04-12T15:22:02.20207Z",
+      "updated_at": "2026-06-30T14:42:40.898505Z",
+      "venue_id": 107,
+      "name": "Main Escalators UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95734575266185,
+      "longitude": -80.14325666109254,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[80].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[81]",
+    "fields": {
+      "id": 598,
+      "created_at": "2023-04-12T15:23:05.562052Z",
+      "updated_at": "2026-06-30T14:42:40.899362Z",
+      "venue_id": 107,
+      "name": "Upper Level Escalators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957602536116056,
+      "longitude": -80.14311585053532,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[81].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[82]",
+    "fields": {
+      "id": 599,
+      "created_at": "2023-04-12T15:23:45.578773Z",
+      "updated_at": "2026-06-30T14:42:40.90045Z",
+      "venue_id": 107,
+      "name": "Escalators Near Slide UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95817272022795,
+      "longitude": -80.14247965118251,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[82].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[83]",
+    "fields": {
+      "id": 601,
+      "created_at": "2023-04-12T15:26:18.46468Z",
+      "updated_at": "2026-06-30T14:42:40.901589Z",
+      "venue_id": 107,
+      "name": "Escalators Near Nordstrom UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95729632271255,
+      "longitude": -80.14441714586023,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[83].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[84]",
+    "fields": {
+      "id": 602,
+      "created_at": "2023-04-12T15:26:53.928147Z",
+      "updated_at": "2026-06-30T14:42:40.902431Z",
+      "venue_id": 107,
+      "name": "Nordstrom Elevators UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957159909428057,
+      "longitude": -80.14467006088658,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[84].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[85]",
+    "fields": {
+      "id": 620,
+      "created_at": "2023-05-24T17:41:28.953965Z",
+      "updated_at": "2026-06-30T14:42:40.903589Z",
+      "venue_id": 107,
+      "name": "2nd Level Elevator Near Designer Eyes",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957664243512312,
+      "longitude": -80.14294154255369,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[85].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[86]",
+    "fields": {
+      "id": 622,
+      "created_at": "2023-05-24T17:43:53.38175Z",
+      "updated_at": "2026-06-30T14:42:40.904469Z",
+      "venue_id": 107,
+      "name": "2nd Level Central Elevator",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957044675973393,
+      "longitude": -80.14288558009888,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[86].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[87]",
+    "fields": {
+      "id": 783,
+      "created_at": "2023-11-22T18:45:14.151011Z",
+      "updated_at": "2026-06-30T14:42:40.90555Z",
+      "venue_id": 107,
+      "name": "Elevators Near Macy’s UL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957335105234975,
+      "longitude": -80.14261639305822,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[87].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[89]",
+    "fields": {
+      "id": 615,
+      "created_at": "2023-05-02T00:19:32.585724Z",
+      "updated_at": "2026-06-30T14:42:43.143286Z",
+      "venue_id": 107,
+      "name": "Third Level Escalators ",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95732049802652,
+      "longitude": -80.1444131872491,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[89].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[90]",
+    "fields": {
+      "id": 616,
+      "created_at": "2023-05-02T00:20:28.794663Z",
+      "updated_at": "2026-06-30T14:42:43.144331Z",
+      "venue_id": 107,
+      "name": "Third floor Escalators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957654414755936,
+      "longitude": -80.14310690494257,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[90].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[91]",
+    "fields": {
+      "id": 617,
+      "created_at": "2023-05-02T00:21:08.227245Z",
+      "updated_at": "2026-06-30T14:42:43.145187Z",
+      "venue_id": 107,
+      "name": "Third Floor Escalators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.9581588117382,
+      "longitude": -80.14249334745031,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[91].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[92]",
+    "fields": {
+      "id": 924,
+      "created_at": "2024-08-20T17:46:04.86651Z",
+      "updated_at": "2026-06-30T14:42:43.146688Z",
+      "venue_id": 107,
+      "name": "Elevators Near Bloomingdales 3rd Floor",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.955497648761394,
+      "longitude": -80.14166819122899,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[92].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[93]",
+    "fields": {
+      "id": 1394,
+      "created_at": "2025-12-19T19:42:48.63544Z",
+      "updated_at": "2026-06-30T14:42:43.148753Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "latitude": 25.955362360815844,
+      "longitude": -80.14313068704976,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[93].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[94]",
+    "fields": {
+      "id": 1395,
+      "created_at": "2025-12-19T19:43:00.890636Z",
+      "updated_at": "2026-06-30T14:42:43.149914Z",
+      "venue_id": 107,
+      "name": "Escalators",
+      "description": "",
+      "latitude": 25.95577072792128,
+      "longitude": -80.14290911751442,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[94].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[95]",
+    "fields": {
+      "id": 927,
+      "created_at": "2024-08-23T19:06:09.746243Z",
+      "updated_at": "2026-06-30T14:42:43.151223Z",
+      "venue_id": 107,
+      "name": "Elevators Near Courtyard TL",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95851612350755,
+      "longitude": -80.1422396026336,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[95].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[98]",
+    "fields": {
+      "id": 1396,
+      "created_at": "2025-12-19T19:43:37.740503Z",
+      "updated_at": "2026-06-30T14:42:43.154278Z",
+      "venue_id": 107,
+      "name": "Elevators",
+      "description": "",
+      "latitude": 25.9558494645453,
+      "longitude": -80.14301833684043,
+      "lock_translations": false
+    }
+  },
+  {
+    "path": ".amenities[98].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[99]",
+    "fields": {
+      "id": 603,
+      "created_at": "2023-04-12T15:28:01.874386Z",
+      "updated_at": "2026-06-30T14:42:43.155372Z",
+      "venue_id": 107,
+      "name": "Third Level Elevators",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95718165099207,
+      "longitude": -80.14470352250842,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[99].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[100]",
+    "fields": {
+      "id": 604,
+      "created_at": "2023-04-12T15:28:53.27726Z",
+      "updated_at": "2026-06-30T14:42:43.156287Z",
+      "venue_id": 107,
+      "name": "Third Level Escalators 1",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.95563324190433,
+      "longitude": -80.1415922286213,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[100].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[101]",
+    "fields": {
+      "id": 608,
+      "created_at": "2023-04-12T15:31:47.46327Z",
+      "updated_at": "2026-06-30T14:42:43.157166Z",
+      "venue_id": 107,
+      "name": "Third Level Elevators 3",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957692914163246,
+      "longitude": -80.142998835728,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[101].amenity_types[0]",
+    "fields": {
+      "id": 2958,
+      "created_at": "2023-04-07T16:47:49.009198Z",
+      "updated_at": "2023-04-07T16:47:49.009198Z",
+      "name": "Elevators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[102]",
+    "fields": {
+      "id": 609,
+      "created_at": "2023-04-12T15:32:26.8751Z",
+      "updated_at": "2026-06-30T14:42:43.158014Z",
+      "venue_id": 107,
+      "name": "Third Level Escalators 4",
+      "description": "",
+      "mappedin_id": "",
+      "google_place_id": "",
+      "latitude": 25.957667541589842,
+      "longitude": -80.14310139242718,
+      "icon": "",
+      "lock_translations": true
+    }
+  },
+  {
+    "path": ".amenities[102].amenity_types[0]",
+    "fields": {
+      "id": 2959,
+      "created_at": "2023-04-07T16:47:55.441232Z",
+      "updated_at": "2023-04-07T16:47:55.441232Z",
+      "name": "Escalators",
+      "venue_id": 107,
+      "Type": "amenity",
+      "highlight": false,
+      "lock_translations": true
+    }
+  }
+]

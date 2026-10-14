@@ -1,0 +1,125 @@
+{
+  "source": "RoveIQ Aventura Mall venue 107 GLB",
+  "capturedFrom": "publicly loaded RoveIQ scene URLs",
+  "floorNames": [
+    {
+      "id": 361,
+      "name": "Lower Level"
+    },
+    {
+      "id": 362,
+      "name": "Upper Level"
+    },
+    {
+      "id": 363,
+      "name": "Third Level"
+    }
+  ],
+  "modelToFloorAssociation": "pending metadata validation",
+  "models": [
+    {
+      "url": "https://cdn.roveiq.com/489a2da7-7388-4fbd-98ff-7af38fe51a2f.glb",
+      "bytes": 1070916,
+      "vertices": 28612,
+      "triangles": 25680,
+      "bounds": [
+        [
+          -422.69241,
+          -1e-05,
+          -507.81053
+        ],
+        [
+          342.64548,
+          0.04,
+          484.41034
+        ]
+      ],
+      "dimension": [
+        765.33789,
+        0.04001,
+        992.22087
+      ],
+      "sceneGeometryCount": 1
+    },
+    {
+      "url": "https://cdn.roveiq.com/ceb7287a-2cf4-41bf-807f-4eb159f25464.glb",
+      "bytes": 122544,
+      "vertices": 3305,
+      "triangles": 2568,
+      "bounds": [
+        [
+          228.68641,
+          -2.66421,
+          285.92982
+        ],
+        [
+          264.66305,
+          19.71827,
+          422.09431
+        ]
+      ],
+      "dimension": [
+        35.97664,
+        22.38248,
+        136.16449
+      ],
+      "sceneGeometryCount": 1
+    },
+    {
+      "url": "https://cdn.roveiq.com/e7607a1c-fa7f-4ece-ad4e-2a8ce815b11b.glb",
+      "bytes": 298564,
+      "vertices": 7860,
+      "triangles": 7299,
+      "bounds": [
+        [
+          -1543.75244,
+          0.0,
+          -949.84693
+        ],
+        [
+          1543.75244,
+          0.05,
+          949.84693
+        ]
+      ],
+      "dimension": [
+        3087.50488,
+        0.05,
+        1899.69386
+      ],
+      "sceneGeometryCount": 3
+    }
+  ],
+  "manualVerificationRequired": [
+    "GLB floor ID matching",
+    "spatial shaft correspondences",
+    "3D model licenses"
+  ],
+  "candidateVerticalCount": 191,
+  "renderErrors": [
+    "'NoneType' object has no attribute 'faces'",
+    "'NoneType' object has no attribute 'faces'",
+    "'NoneType' object has no attribute 'faces'"
+  ],
+  "horizontalAxes": [
+    0,
+    2
+  ],
+  "verticalAxis": 1,
+  "globalBounds": [
+    [
+      -1543.75244140625,
+      -949.8469282479891
+    ],
+    [
+      1543.75244140625,
+      949.8469282479891
+    ]
+  ],
+  "imageSize": [
+    4096,
+    2600
+  ],
+  "scale": 1.158081336356976,
+  "images": []
+}

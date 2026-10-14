@@ -48,11 +48,13 @@ try {
   assert.equal(mall.navigable,false);
   assert.equal(mall.floorAlignmentApproved,false);
   assert.equal(mall.floorReferences.L8.imageSize[0],1376);
-  // Full spherical 3D is the default for this mall, with roll/pitch/yaw
-  // independent and no special block on an upside-down camera.
-  assert.equal(state.trackball360,true);
-  assert.equal(state.gestureMode,'orbit-3d');
-  assert.equal(state.rotationAxes,3);
+  // Earth-like controls are default for visitors. Spherical 360° is opt-in.
+  assert.equal(state.trackball360,false);
+  assert.equal(state.gestureMode,'map-pan');
+  assert.equal(state.gestureProfile,'google-earth-touch-v1');
+  assert.equal(state.compassReference,'photo-top-only-not-calibrated-true-north');
+  assert.equal(await page.locator('#plan').getAttribute('aria-label'),'Pasar a vista 2D');
+  assert.equal(await page.locator('#north').isVisible(),true);
   assert.equal(state.verticalConnectorCount,39);
   assert.ok(await page.locator('#rnHeightsPanel').isVisible());
   assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
@@ -63,6 +65,78 @@ try {
     ['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
   assert.ok(guests.every(p=>p.position.verified===false
      &&p.position.placementStatus==='photo-corridor-candidate-unverified'));
+
+  // Google Earth: drag one finger moves map without rotating it.
+  const earth=await page.evaluate(()=>{
+    const view=window.__RETAILNAV__,el=document.querySelector('#canvas');
+    const rect=el.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+    const event=(type,id,dx,dy)=>el.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,button:0,
+      buttons:type==='pointerup'?0:1,clientX:x+dx,clientY:y+dy
+    }));
+    const before=view.getState();
+    event('pointerdown',101,-80,-50);event('pointermove',101,45,35);
+    const panned=view.getState();event('pointerup',101,45,35);
+
+    const preTilt=view.getState();
+    event('pointerdown',102,-50,0);event('pointerdown',103,50,0);
+    event('pointermove',102,-50,-54);
+    event('pointermove',103,50,-54);
+    const tilted=view.getState();
+    event('pointerup',103,50,-54);event('pointerup',102,-50,-54);
+
+    const preTwist=view.getState();
+    event('pointerdown',104,-60,0);event('pointerdown',105,60,0);
+    event('pointermove',105,8,80);
+    const twisted=view.getState();
+    event('pointerup',105,8,80);event('pointerup',104,-60,0);
+
+    const prePinch=view.getState();
+    event('pointerdown',106,-30,0);event('pointerdown',107,30,0);
+    event('pointermove',106,-90,0);event('pointermove',107,90,0);
+    const pinched=view.getState();
+    event('pointerup',107,90,0);event('pointerup',106,-90,0);
+
+    return {before,panned,preTilt,tilted,preTwist,twisted,prePinch,pinched};
+  });
+  assert.ok(Math.hypot(...earth.panned.target.map((v,i)=>v-earth.before.target[i]))>.25,
+    'One-finger drag translates the Earth-style map');
+  assert.ok(earth.panned.q.every((v,i)=>Math.abs(v-earth.before.q[i])<.0001),
+    'Pan should not orbit the camera');
+  assert.ok(earth.tilted.orbitPitch>earth.preTilt.orbitPitch+.12,
+    'Two fingers moving up tilt the map toward a side perspective');
+  assert.ok(earth.twisted.orbitYaw>earth.preTwist.orbitYaw+.4,
+    'Clockwise two-finger twist rotates the map');
+  assert.ok(earth.pinched.distance<earth.prePinch.distance*.55,
+    'Two-finger pinch-out zooms closer');
+  assert.ok(earth.twisted.orbitPitch<=-.25&&earth.twisted.orbitPitch>=-Math.PI/2,
+    'Earth-like tilt never flips the floor upside-down');
+  const northBefore=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  await page.locator('#north').click();
+  const northAfter=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.ok(Math.abs(northAfter.orbitYaw)<.00001,'Compass resets photo reference heading');
+  assert.equal(northAfter.distance,northBefore.distance,'Compass preserves zoom');
+  assert.ok(Math.abs(northAfter.orbitPitch-northBefore.orbitPitch)<.001,
+    'Compass preserves tilt');
+  await page.locator('#plan').click();
+  const flat=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.equal(flat.earth2D,true);
+  assert.ok(Math.abs(flat.orbitPitch+Math.PI/2)<.00001);
+  assert.equal(flat.distance,northAfter.distance,'2D toggle preserves zoom');
+  assert.equal(await page.locator('#rnViewModeLabel').textContent(),'3D');
+  await page.locator('#plan').click();
+  const tiltedAgain=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.equal(tiltedAgain.earth2D,false);
+  assert.ok(tiltedAgain.orbitPitch> -Math.PI/2+.15,'3D restores a usable tilt');
+  assert.equal(tiltedAgain.distance,northAfter.distance,'3D toggle preserves zoom');
+  assert.equal(await page.locator('#rnViewModeLabel').textContent(),'2D');
+
+  // Advanced mode remains available without replacing the Earth gestures.
+  await page.locator('#pan').click();
+  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.equal(state.trackball360,true);
+  assert.equal(state.gestureMode,'orbit-3d');
+  assert.equal(state.rotationAxes,3);
 
   // One finger rotates the quaternion (not just a bounded map pitch).
   const spherical=await page.evaluate(()=>{

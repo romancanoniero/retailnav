@@ -73,7 +73,12 @@ function draw(){
     // The physical 3D room remains selectable by tapping its own roof and
     // the service stays searchable through the POI index.
     const roofAnchored=window.RETAILNAV_ROOF_ATTACHMENTS?.has(p.geometryId);
-    if(state.renderer==='WebGL'&&roofAnchored){
+    const vectorFootprint=Boolean(p.geometryId&&p.source==='photo-colour-candidate');
+    // Render every mapped service as world geometry, never as a detached
+    // screen-coordinate emoji. This applies to WebGL and Canvas fallbacks.
+    // Unmapped services remain searchable via POI.find/show, but should not
+    // generate a fake position or a sticker floating in space.
+    if(roofAnchored||vectorFootprint){
       button.hidden=true;continue;
     }
     const world=view.pinWorld(p.floor,p.x,p.y);

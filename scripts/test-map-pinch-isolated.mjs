@@ -93,6 +93,22 @@ try {
     const mapAfter=window.__RETAILNAV__.getState().distance;
     pointer('pointerup',92,100,0);
     pointer('pointerup',91,-100,0);
+
+    // A pinch may START over a rendered store code or person marker. That
+    // area must also zoom the model instead of falling through to Safari.
+    const overlayBefore=window.__RETAILNAV__.getState().distance;
+    const overlayPointer=(target,type,id,dx,dy)=>target.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,cancelable:true,pointerType:'touch',pointerId:id,button:0,
+      buttons:type==='pointerup'?0:1,clientX:x+dx,clientY:y+dy
+    }));
+    overlayPointer(label,'pointerdown',93,-40,0);
+    overlayPointer(canvas,'pointerdown',94,40,0);
+    overlayPointer(label,'pointermove',93,-100,0);
+    overlayPointer(canvas,'pointermove',94,100,0);
+    const overlayAfter=window.__RETAILNAV__.getState().distance;
+    overlayPointer(canvas,'pointerup',94,100,0);
+    overlayPointer(label,'pointerup',93,-100,0);
+
     const viewAfter=window.visualViewport?.scale??1;
     const barAfter=outside.getBoundingClientRect(),searchAfter=search.getBoundingClientRect();
 
@@ -100,7 +116,7 @@ try {
       styles:{viewport:getStyle(viewport),canvas:getStyle(canvas),
         labels:getStyle(label),pin:getStyle(document.querySelector('.rnPinCanvas')),
         search:getStyle(search)},
-      mapBefore,mapAfter,viewBefore,viewAfter,
+      mapBefore,mapAfter,overlayBefore,overlayAfter,viewBefore,viewAfter,
       topbarWidthDelta:barAfter.width-barBefore.width,
       searchWidthDelta:searchAfter.width-searchBefore.width};
   });
@@ -120,6 +136,8 @@ try {
     'Never disable user page zoom globally');
   assert.ok(summary.mapAfter<summary.mapBefore*.75,
     'Two-finger pinch-out zooms ONLY the 3D map');
+  assert.ok(summary.overlayAfter<summary.overlayBefore*.75,
+    'Pinch that begins over store-label overlay must zoom 3D map');
   assert.ok(Math.abs(summary.viewBefore-summary.viewAfter)<.00001,
     'Browser visual viewport scale must not change');
   assert.ok(Math.abs(summary.topbarWidthDelta)<.01,'Page header must not resize');

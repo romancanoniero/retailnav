@@ -48,6 +48,58 @@ try {
   assert.equal(mall.navigable,false);
   assert.equal(mall.floorAlignmentApproved,false);
   assert.equal(mall.floorReferences.L8.imageSize[0],1376);
+  // Both shops and services now belong to their own REAL 3D polygon
+  // geometry, including actual raised voxel-mesh characters on shop roofs.
+  const roof=await page.evaluate(()=>{
+    const state=window.__RETAILNAV__.getState(),floors=window.__RETAILNAV__.floors;
+    const bath=floors.flatMap(f=>f.features).find(f=>f.k==='amenity'&&
+      f.amenityCategory==='toilet');
+    const lift=floors.flatMap(f=>f.features).find(f=>f.k==='amenity'&&
+      f.amenityCategory==='elevator');
+    const labelled=floors.flatMap(f=>f.features).find(f=>f.k==='unit'&&f.storeName);
+    const roofData=floors.reduce((n,f)=>n+
+      (f.roofText?.codes?.length||0)+(f.roofText?.services?.length||0)+
+      (f.roofText?.names?.length||0),0);
+    const svc=(bath||lift)&&window.RETAILNAV_ACTIVE_MALL.pois.find(
+      p=>p.geometryId===(bath||lift).id&&p.floor===(bath||lift).floor);
+    const hiddenMarker=svc&&document.querySelector(
+      '.rnPoiMarker[data-poi-id="'+svc.id+'"]');
+    return {
+      summary:state.roofTextSummary,bath:{id:bath?.id,k:bath?.k,
+        floor:bath?.floor,category:bath?.amenityCategory,poiId:bath?.poiId},
+      lift:{id:lift?.id,k:lift?.k,category:lift?.amenityCategory},
+      knownLabel:labelled&&{id:labelled.id,name:labelled.storeName,
+        code:labelled.storeCode},
+      roofData,hiddenMarker:!!hiddenMarker&&hiddenMarker.hidden,
+      attached:window.RETAILNAV_ROOF_ATTACHMENTS?.size,
+      visibleCodes:floors.flatMap(f=>f.features).filter(
+        f=>f.k==='unit'&&f.storeCode).length,
+      raisedLettersOnL7:(floors.find(f=>f.id==='L7')?.roofText?.codes?.length||0)>300,
+      serviceFaces:floors.reduce((n,f)=>n+(f.roofGpu?.services?.n||0),0),
+      raisedHasThickness:floors.some(f=>(f.roofText?.codes?.length||0)>100
+        &&f.roofText.codes.some((v,i)=>i%10===4&&Math.abs(v)<.01))
+    };
+  });
+  assert.ok(roof.summary.serviceRoofs>=6,'Service footprint areas must be solid 3D rooms');
+  assert.ok(roof.summary.commercialRoofs>=550,'3D roofs available for every shop candidate');
+  assert.ok(roof.summary.codeLabels>=200,'Many individual codes must have true raised geometry');
+  assert.ok(roof.summary.extrudedTriangles>900,'Letters must have top and 3D side triangles');
+  assert.ok(roof.bath.id&&roof.bath.poiId&&roof.lift.id);
+  assert.ok(roof.raisedLettersOnL7&&roof.raisedHasThickness);
+  assert.ok(roof.serviceFaces>100);
+  assert.equal(roof.hiddenMarker,true,'Bathroom icon must not float detached from roof');
+  assert.ok(roof.attached>=6);
+  assert.ok(roof.visibleCodes>=550);
+  assert.ok(roof.knownLabel||roof.summary.knownNameLabels===0,
+    'Unverified names must never be fabricated');
+  const bathUI=await page.evaluate(()=>{
+    const room=window.__RETAILNAV__.floors.flatMap(f=>f.features).find(
+      f=>f.k==='amenity'&&f.amenityCategory==='toilet');
+    window.__RETAILNAV__.select(room);
+    return document.getElementById('detailName').textContent;
+  });
+  assert.ok(bathUI.includes('Baños'),'Tap on bathroom 3D roof selects its amenity');
+
   // The user selected full 360° orbit as the DEFAULT, including underside.
   assert.equal(state.trackball360,true);
   assert.equal(state.gestureMode,'orbit-3d');

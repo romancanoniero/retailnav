@@ -1,0 +1,36 @@
+name: Inspect Aventura floor previews
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - "scripts/preview-aventura.py"
+      - ".github/workflows/preview-aventura.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - name: Create JPG-safe web previews and test images
+        run: |
+          python3 -m pip install -q pillow
+          python3 scripts/preview-aventura.py
+      - name: Publish visual QA thumbnails
+        run: |
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura/
+          git diff --cached --quiet || {
+            git commit -m "QA: generate nonblank compact 5-floor map thumbnails"
+            git pull --rebase origin research/aventura-hires
+            git push origin HEAD:research/aventura-hires
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aventura-map-QA-thumbnails
+          path: research-output/aventura/*-vista.webp

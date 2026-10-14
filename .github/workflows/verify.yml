@@ -31,6 +31,9 @@ jobs:
           node --check src/districts-webgl.js
           node --check src/area-labels.js
           node --check src/indoor-location.js
+          node --check src/positioning-core.js
+          node --check src/cooperative-positioning.js
+          node --test scripts/test-positioning-core.mjs
           node --check src/qrcode.min.js
           node --check backend/server.mjs
           node --test backend/server.test.mjs

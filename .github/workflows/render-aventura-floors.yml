@@ -1,0 +1,73 @@
+name: Generate Aventura high-resolution aligned floor maps
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - "scripts/render-aventura-floors.py"
+      - ".github/workflows/render-aventura-floors.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: retailnav-aventura-vector-exports
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install SVG and image processing dependencies
+        run: python -m pip install -q CairoSVG Pillow
+      - name: Render 3 floor plans and alignment composites
+        run: python scripts/render-aventura-floors.py
+      - name: Verify high-definition exports
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          names=[
+            'aventura-lower-level',
+            'aventura-upper-level',
+            'aventura-third-level',
+            'aventura-superposicion-ll-ul',
+            'aventura-superposicion-tres-plantas'
+          ]
+          for name in names:
+            png=Path('research-output/aventura')/(name+'.png')
+            svg=Path('research-output/aventura')/(name+'.svg')
+            assert png.exists() and svg.exists(),name
+            with Image.open(png) as im:
+              assert im.size == (6200,7400), (name, im.size)
+            print('Verified',name,png.stat().st_size,'bytes')
+          PY
+      - name: Commit preview images in research-only branch
+        run: |
+          set -euo pipefail
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura/
+          if ! git diff --cached --quiet; then
+            git commit -m "Render verified Aventura LL, UL, L3 reference plans and overlays"
+            git pull --rebase origin research/aventura-hires
+            git push origin HEAD:research/aventura-hires
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aventura-mall-floor-hd-aligned
+          path: |
+            research-output/aventura/aventura-*.png
+            research-output/aventura/aventura-*.svg
+            research-output/aventura/aventura-anclajes.csv
+            research-output/aventura/PLANOS-AVENTURA-LEEME.md
+            research-output/aventura/vector-floor-report.json
+          retention-days: 30

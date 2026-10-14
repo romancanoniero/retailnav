@@ -1,0 +1,755 @@
+{
+  "source": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/map.json",
+  "floors": [
+    {
+      "floorId": 361,
+      "name": "Lower Level",
+      "structures": 263,
+      "verticalConnections": 16,
+      "connectorIds": [
+        178,
+        179,
+        181,
+        183,
+        184,
+        185,
+        186,
+        187,
+        189,
+        190,
+        191,
+        192,
+        180,
+        182,
+        240,
+        241
+      ]
+    },
+    {
+      "floorId": 362,
+      "name": "Upper Level",
+      "structures": 250,
+      "verticalConnections": 17,
+      "connectorIds": [
+        178,
+        179,
+        181,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        180,
+        182,
+        240,
+        241
+      ]
+    },
+    {
+      "floorId": 363,
+      "name": "Third Level",
+      "structures": 93,
+      "verticalConnections": 9,
+      "connectorIds": [
+        178,
+        179,
+        181,
+        187,
+        188,
+        189,
+        192,
+        182,
+        240
+      ]
+    }
+  ],
+  "connectors": [
+    {
+      "id": 178,
+      "type": "Elevator",
+      "lat": 25.957663628663358,
+      "lon": -80.14294155603804,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        2440.736157098901,
+        1951.305181173562
+      ]
+    },
+    {
+      "id": 179,
+      "type": "Escalator",
+      "lat": 25.958154534471777,
+      "lon": -80.14244944292406,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        2398.8323863361766,
+        1692.0213362071224
+      ]
+    },
+    {
+      "id": 181,
+      "type": "Elevator",
+      "lat": 25.957174399497685,
+      "lon": -80.14469586380697,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        2199.6035546186854,
+        2562.282438256945
+      ]
+    },
+    {
+      "id": 183,
+      "type": "Elevator",
+      "lat": 25.957034591989064,
+      "lon": -80.14288340602,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2648.5900695314526,
+        2091.412533367962
+      ]
+    },
+    {
+      "id": 184,
+      "type": "Elevator",
+      "lat": 25.957299851748708,
+      "lon": -80.14263440953754,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2622.1612405521437,
+        1956.0280366587388
+      ]
+    },
+    {
+      "id": 185,
+      "type": "Escalator",
+      "lat": 25.957336345532312,
+      "lon": -80.14324972516039,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2473.131529075514,
+        2118.6110189354795
+      ]
+    },
+    {
+      "id": 186,
+      "type": "Escalator",
+      "lat": 25.95631115616375,
+      "lon": -80.14268582528096,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2916.8920114689568,
+        2216.0836150060713
+      ]
+    },
+    {
+      "id": 187,
+      "type": "Elevator",
+      "lat": 25.955491950030435,
+      "lon": -80.14164667867952,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        3403.2256053257274,
+        2129.786967039112
+      ]
+    },
+    {
+      "id": 188,
+      "type": "Escalator",
+      "lat": 25.95760243806038,
+      "lon": -80.1431217028043,
+      "floor_ids": [
+        362,
+        363
+      ],
+      "pixel": [
+        2419.367117353067,
+        2016.7672964426533
+      ]
+    },
+    {
+      "id": 189,
+      "type": "Elevator",
+      "lat": 25.95584164622311,
+      "lon": -80.14302601738628,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        2986.1730951342424,
+        2427.6692422125802
+      ]
+    },
+    {
+      "id": 190,
+      "type": "Elevator",
+      "lat": 25.955757487862595,
+      "lon": -80.14341843930966,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2924.4045505800837,
+        2558.057012809172
+      ]
+    },
+    {
+      "id": 191,
+      "type": "Elevator",
+      "lat": 25.955341222006837,
+      "lon": -80.14312557267402,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        3118.8913274467,
+        2579.8081137673607
+      ]
+    },
+    {
+      "id": 192,
+      "type": "Escalator",
+      "lat": 25.95577180028369,
+      "lon": -80.14290535526013,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        3034.815023425579,
+        2411.3667760621775
+      ]
+    },
+    {
+      "id": 180,
+      "type": "Escalator",
+      "lat": 25.95822534764689,
+      "lon": -80.14394490733265,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "pixel": [
+        2042.1688499816441,
+        2091.6072793896356
+      ]
+    },
+    {
+      "id": 182,
+      "type": "Escalator",
+      "lat": 25.957300840738238,
+      "lon": -80.14450638128206,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "pixel": [
+        2202.85144614126,
+        2477.9997593147946
+      ]
+    },
+    {
+      "id": 240,
+      "type": "Escalators",
+      "lat": 25.95562228709601,
+      "lon": -80.14166298299588,
+      "floor_ids": [
+        362,
+        363,
+        361
+      ],
+      "pixel": [
+        3359.2055298625396,
+        2101.943737155998
+      ]
+    },
+    {
+      "id": 241,
+      "type": "Stairs",
+      "lat": 25.95673781261497,
+      "lon": -80.14330644786853,
+      "floor_ids": [
+        362,
+        361
+      ],
+      "pixel": [
+        2645.8252256607734,
+        2283.183174303553
+      ]
+    }
+  ],
+  "imageFiles": [
+    {
+      "svg": "aventura-planta-361.svg",
+      "png": "aventura-planta-361.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 1094300
+    },
+    {
+      "svg": "aventura-planta-362.svg",
+      "png": "aventura-planta-362.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 1091841
+    },
+    {
+      "svg": "aventura-planta-363.svg",
+      "png": "aventura-planta-363.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 622039
+    },
+    {
+      "svg": "aventura-superposicion-ll-ul.svg",
+      "png": "aventura-superposicion-ll-ul.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 1362571
+    },
+    {
+      "svg": "aventura-superposicion-ul-l3.svg",
+      "png": "aventura-superposicion-ul-l3.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 1152045
+    },
+    {
+      "svg": "aventura-superposicion-tres-plantas.svg",
+      "png": "aventura-superposicion-tres-plantas.png",
+      "pixels": [
+        5400,
+        3400
+      ],
+      "bytes": 1518791
+    }
+  ],
+  "coordinateSystem": "shared metric projection with one global PCA angle",
+  "metresPerPixel": 0.2798466794957719,
+  "rotationAxis": [
+    0.6258140945812029,
+    -0.7799722552908591
+  ],
+  "limitations": [
+    "Connections are registered point locations, not architectural shaft polygons.",
+    "Escalators can have different entry/exit offsets between floors.",
+    "Map is not a measured architectural blueprint.",
+    "Third-party map reuse rights not evaluated."
+  ],
+  "comparisons": {
+    "lowerUpper": [
+      {
+        "id": 178,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 179,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 181,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 183,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 184,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 185,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 186,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 187,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 189,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 190,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 191,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 192,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 180,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 182,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 240,
+        "name": "Escalators",
+        "floor_ids": [
+          362,
+          363,
+          361
+        ]
+      },
+      {
+        "id": 241,
+        "name": "Stairs",
+        "floor_ids": [
+          362,
+          361
+        ]
+      }
+    ],
+    "upperThird": [
+      {
+        "id": 178,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 179,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 181,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 187,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 188,
+        "name": "Escalator",
+        "floor_ids": [
+          362,
+          363
+        ]
+      },
+      {
+        "id": 189,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 192,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 182,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 240,
+        "name": "Escalators",
+        "floor_ids": [
+          362,
+          363,
+          361
+        ]
+      }
+    ],
+    "all": [
+      {
+        "id": 178,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 179,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 181,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 183,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 184,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 185,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 186,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 187,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 188,
+        "name": "Escalator",
+        "floor_ids": [
+          362,
+          363
+        ]
+      },
+      {
+        "id": 189,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 190,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 191,
+        "name": "Elevator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 192,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 180,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362
+        ]
+      },
+      {
+        "id": 182,
+        "name": "Escalator",
+        "floor_ids": [
+          361,
+          362,
+          363
+        ]
+      },
+      {
+        "id": 240,
+        "name": "Escalators",
+        "floor_ids": [
+          362,
+          363,
+          361
+        ]
+      },
+      {
+        "id": 241,
+        "name": "Stairs",
+        "floor_ids": [
+          362,
+          361
+        ]
+      }
+    ]
+  }
+}

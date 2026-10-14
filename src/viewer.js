@@ -184,9 +184,110 @@ function makeLabels(){
 function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
 function drawRoute(dt){if(!route)return;let floor=floors.find(f=>f.id===route.floor);if(active!=='ALL'&&active!==floor.id)return;if(routeRunning)routeT=(routeT+dt*.14)%1;let arr=[];route.points.forEach(p=>arr.push(...pos(p,.2),0,0,0,1,.65,.23,-3));gl.uniform1f(loc.uY,floor.y);gl.uniform1f(loc.uLine,1);gl.bindBuffer(gl.ARRAY_BUFFER,routeBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.DYNAMIC_DRAW);bind({b:routeBuffer});gl.drawArrays(gl.LINE_STRIP,0,arr.length/10);let lens=[0];for(let i=1;i<route.points.length;i++)lens.push(lens[i-1]+Math.hypot(...vsub(route.points[i],route.points[i-1])));let t=(lens.at(-1)||1)*routeT,i=1;while(i<lens.length-1&&lens[i]<t)i++;let a=route.points[i-1],b=route.points[i]||a,k=(t-lens[i-1])/(lens[i]-lens[i-1]||1);let p=[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([...pos(p,.8),0,0,0,1,.83,.43,-3]),gl.DYNAMIC_DRAW);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*10);gl.drawArrays(gl.POINTS,0,1);}
+// Yellow escalator side rails and turquoise vertical lift shafts represent
+// photo-based ALIGNMENT HYPOTHESES, not physical routing or surveyed landings.
+const verticalHypotheses=Array.isArray(selectedMall.verticalConnectionHypotheses)
+ ?selectedMall.verticalConnectionHypotheses:[];
+let verticalConnectionsOn=verticalHypotheses.length>0;
+let verticalBuffer=null;
+const escalatorColor=[.98,.73,.18],elevatorColor=[.28,.76,.95];
+function verticalSegments(){
+ if(!verticalConnectionsOn||active!=='ALL'||!verticalHypotheses.length)return [];
+ const byId=new Map();
+ for(const floor of floors)for(const feature of floor.features)
+  byId.set(feature.id,{floor,feature});
+ const lines=[];
+ function line(a,b,color){lines.push({a,b,color});}
+ for(const link of verticalHypotheses){
+  if(link.type!=='escalator'&&link.type!=='elevator')continue;
+  const lo=byId.get(link.from),hi=byId.get(link.to);
+  if(!lo||!hi||hi.floor.index-lo.floor.index!==1)continue;
+  const a=pos(lo.feature.c,lo.floor.y+.5);
+  const b=pos(hi.feature.c,hi.floor.y+.5);
+  const dx=b[0]-a[0],dz=b[2]-a[2];
+  const horiz=Math.hypot(dx,dz);
+  const tangent=horiz>.001?[-dz/horiz,0,dx/horiz]:[1,0,0];
+  const plus=(v,o,k)=>vadd(v,vmul(o,k));
+  if(link.type==='escalator'){
+   // Two inclined guard rails and visible repeated step treads.
+   const width=1.1;
+   for(const k of [-width,width]){
+    const p=plus(a,tangent,k),q=plus(b,tangent,k);
+    line(p,q,escalatorColor);
+    line(plus(p,[0,1,0],-.32),plus(q,[0,1,0],-.32),[.60,.45,.19]);
+   }
+   for(let step=0;step<=14;step++){
+    const t=step/14,center=vadd(a,vmul(vsub(b,a),t));
+    line(plus(center,tangent,-width),plus(center,tangent,width),
+      step%3===0?[1,.93,.47]:[.74,.58,.27]);
+   }
+  }else{
+   // An elevator is a genuinely vertical guide shaft. Unmatched plan
+   // centroids only get provisional horizontal markers at its ends.
+   const center=[(a[0]+b[0])/2,0,(a[2]+b[2])/2];
+   const w=1.8,fromY=a[1],toY=b[1];
+   const points=[[-w,-w],[w,-w],[w,w],[-w,w]];
+   const low=points.map(([x,z])=>[center[0]+x,fromY,center[2]+z]);
+   const top=points.map(([x,z])=>[center[0]+x,toY,center[2]+z]);
+   for(let i=0;i<4;i++){
+    const next=(i+1)%4;
+    line(low[i],top[i],elevatorColor);
+    line(low[i],low[next],[.18,.49,.68]);
+    line(top[i],top[next],[.58,.85,.96]);
+   }
+   line(a,[center[0],fromY,center[2]],[.4,.55,.61]);
+   line(b,[center[0],toY,center[2]],[.4,.55,.61]);
+  }
+ }
+ return lines;
+}
+function drawVerticalWebGL(){
+ if(!gl||!verticalConnectionsOn||active!=='ALL')return;
+ const segments=verticalSegments();if(!segments.length)return;
+ const data=[];
+ for(const seg of segments){
+  for(const p of [seg.a,seg.b]){
+   data.push(...p,0,1,0,...seg.color,-72);
+  }
+ }
+ if(!verticalBuffer)verticalBuffer=gl.createBuffer();
+ gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uSelected,-1);
+ gl.uniform1f(loc.uLine,1);gl.uniform1f(loc.uWire,0);
+ gl.bindBuffer(gl.ARRAY_BUFFER,verticalBuffer);
+ gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.DYNAMIC_DRAW);
+ bind({b:verticalBuffer});
+ gl.drawArrays(gl.LINES,0,data.length/10);
+ gl.uniform1f(loc.uSelected,selected?selected.gid:-1);
+ gl.uniform1f(loc.uWire,wire?1:0);
+}
+function drawVerticalCanvas(){
+ if(!ctx2d||!verticalConnectionsOn||active!=='ALL')return;
+ const c=ctx2d;
+ for(const seg of verticalSegments()){
+  const a=screen(seg.a),b=screen(seg.b);
+  if(a.w<=0||b.w<=0)continue;
+  c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);
+  c.strokeStyle='rgb('+seg.color.map(x=>Math.round(x*255)).join(',')+')';
+  c.lineWidth=seg.color===escalatorColor?2.1:1.4;
+  c.globalAlpha=.84;c.stroke();
+ }
+ c.globalAlpha=1;
+}
+function verticalConnectionInfo(){
+ const byId=new Map();
+ for(const f of floors)for(const feature of f.features)byId.set(feature.id,{floor:f,feature});
+ return verticalHypotheses.map(link=>{
+  const a=byId.get(link.from),b=byId.get(link.to);
+  if(!a||!b)return null;
+  return {type:link.type,from:link.fromFloor,to:link.toFloor,
+   fromY:a.floor.y,toY:b.floor.y,
+   riseMetres:b.floor.elevationMetres-a.floor.elevationMetres,
+   verified:false};
+ }).filter(Boolean);
+}
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);refreshFloorElevations();if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
  else rotateCameraLocal([0,1,0],dt*.18);}matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+drawVerticalWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 

@@ -1,0 +1,65 @@
+name: Capture Aventura Mall floor references
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - ".github/workflows/capture-aventura.yml"
+      - "scripts/capture-aventura.mjs"
+      - "scripts/process-aventura.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: retailnav-aventura-public-research
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install headless browser
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Capture public source floor images with consistent camera
+        id: capture
+        continue-on-error: true
+        run: node scripts/capture-aventura.mjs
+      - name: Generate visual floor cross-check
+        continue-on-error: true
+        run: |
+          python3 -m pip install -q pillow numpy opencv-python-headless
+          python3 scripts/process-aventura.py
+      - name: Publish research images to a dedicated branch
+        run: |
+          set -e
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura || true
+          if ! git diff --cached --quiet; then
+            git commit -m "Research: captured Aventura Mall multi-floor map and diagnostic overlays"
+            git push origin HEAD:research/aventura-hires
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aventura-mall-floor-captures
+          path: research-output/aventura/
+          retention-days: 7
+      - name: Capture status
+        run: |
+          test "$CAPTURE_OUTCOME" = "success" || {
+            echo "Capture incomplete. Inspect research-output/aventura/diagnostics.json."
+            exit 1
+          }
+        env:
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}

@@ -17,9 +17,13 @@ const staticServer=createServer((req,res)=>{
   const mime={'.html':'text/html','.js':'application/javascript',
     '.webp':'image/webp','.jpg':'image/jpeg','.png':'image/png',
     '.svg':'image/svg+xml','.json':'application/json'};
+  const bytes=readFileSync(full);
   res.writeHead(200,{'Content-Type':mime[extname(full)]||'application/octet-stream'});
-  res.end(readFileSync(full));
- }catch{res.writeHead(404);res.end();}
+  res.end(bytes);
+ }catch(err){
+  if(!res.headersSent)res.writeHead(404);
+  res.end();
+ }
 });
 staticServer.listen(0,'127.0.0.1');
 await once(staticServer,'listening');

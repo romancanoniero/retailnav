@@ -22,6 +22,86 @@ try {
   assert.equal(mall.navigable,false);
   assert.equal(mall.floorAlignmentApproved,false);
   assert.equal(mall.floorReferences.L8.imageSize[0],1376);
+  // Full spherical 3D is the default for this mall, with roll/pitch/yaw
+  // independent and no special block on an upside-down camera.
+  assert.equal(state.trackball360,true);
+  assert.equal(state.gestureMode,'orbit-3d');
+  assert.equal(state.rotationAxes,3);
+  assert.equal(state.verticalConnectorCount,39);
+  assert.ok(await page.locator('#rnHeightsPanel').isVisible());
+  assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
+  assert.equal(await page.evaluate(()=>window.RetailNavPins.getState().registered),18);
+  const guests=await page.evaluate(()=>window.RETAILNAV_DEMO_CONTACTS);
+  assert.equal(guests.length,18);
+  assert.deepEqual([...new Set(guests.map(p=>p.position.floor))].sort(),
+    ['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
+  assert.ok(guests.every(p=>p.position.verified===false
+     &&p.position.placementStatus==='photo-corridor-candidate-unverified'));
+
+  // One finger rotates the quaternion (not just a bounded map pitch).
+  const spherical=await page.evaluate(()=>{
+    const el=document.getElementById('canvas'),r=el.getBoundingClientRect();
+    const x=r.left+r.width/2,y=r.top+r.height/2;
+    const send=(type,dx,dy)=>el.dispatchEvent(new PointerEvent(type,{
+      bubbles:true,cancelable:true,pointerType:'touch',pointerId:66,
+      button:0,buttons:type==='pointerup'?0:1,clientX:x+dx,clientY:y+dy
+    }));
+    const before=window.__RETAILNAV__.getState().cameraQuaternion;
+    send('pointerdown',-80,-50);
+    send('pointermove',90,150);
+    const after=window.__RETAILNAV__.getState().cameraQuaternion;
+    send('pointerup',90,150);
+    for(let i=0;i<24;i++)el.dispatchEvent(new KeyboardEvent('keydown',{
+       bubbles:true,cancelable:true,key:'PageDown'
+    }));
+    const inverted=window.__RETAILNAV__.getState();
+    return {before,after,inverted};
+  });
+  assert.ok(spherical.before.some((v,i)=>Math.abs(v-spherical.after[i])>.12),
+    'Drag on sphere rotates camera orientation');
+  assert.ok(spherical.inverted.cameraUp.every(Number.isFinite));
+  assert.ok(spherical.inverted.cameraUp[1]<0,
+    'Camera must pass above, below, and upside down without a pole clamp');
+  assert.ok(Math.abs(Math.hypot(...spherical.inverted.cameraQuaternion)-1)<.00001);
+  await page.locator('#reset').click();
+
+  // Changing L3 from 4m to 6m moves L4-L9 AND recomputes every link from L3.
+  const original=await page.evaluate(()=>({
+    state:window.__RETAILNAV__.getState(),
+    links:window.__RETAILNAV__.getVerticalConnections()
+  }));
+  assert.equal(original.state.floorHeightsMetres.L3,4);
+  assert.equal(original.state.floorElevationsMetres.L4,12);
+  const success=await page.evaluate(()=>window.__RETAILNAV__.editFloorHeight('L3',6));
+  assert.equal(success,true);
+  const updated=await page.evaluate(()=>({
+    state:window.__RETAILNAV__.getState(),
+    links:window.__RETAILNAV__.getVerticalConnections()
+  }));
+  assert.equal(updated.state.floorHeightsMetres.L3,6);
+  assert.equal(updated.state.floorElevationsMetres.L4,14);
+  assert.equal(updated.state.floorElevationsMetres.L9,34);
+  const link3=updated.links.find(x=>x.from==='L3'&&x.to==='L4');
+  assert.ok(link3&&link3.riseMetres===6);
+  assert.ok(updated.links.every(x=>x.verified===false));
+  assert.ok(updated.links.find(x=>x.from==='L3').toY>
+    original.links.find(x=>x.from==='L3').toY);
+  await page.locator('#rnHeightsPanel summary').click();
+  await page.locator('#rnHeightLevel').selectOption('L3');
+  assert.equal(await page.locator('#rnHeightValue').inputValue(),'6');
+  await page.locator('#rnHeightValue').fill('5');
+  await page.locator('#rnHeightValue').dispatchEvent('change');
+  assert.equal(await page.evaluate(()=>window.__RETAILNAV__.getState().floorHeightsMetres.L3),5);
+  await page.locator('#rnHeightReset').click();
+  assert.equal(await page.evaluate(()=>window.__RETAILNAV__.getState().floorHeightsMetres.L3),4);
+  await page.locator('#rnHeightsPanel summary').click();
+
+  // Connector show/hide must be a real interaction, not an inert legend.
+  await page.locator('#rnConnectorsToggle').click();
+  assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,false);
+  await page.locator('#rnConnectorsToggle').click();
+  assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,true);
+
   await page.locator('#floorSelect').selectOption('L8');
   await page.waitForFunction(()=>window.__RETAILNAV__?.getState().active==='L8');
   await page.locator('#original').click();

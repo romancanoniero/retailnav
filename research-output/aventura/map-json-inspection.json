@@ -1,0 +1,1489 @@
+{
+  "structure": {
+    "floor_transitions": {
+      "type": "list",
+      "sample": {
+        "count": 17,
+        "items": [
+          {
+            "id": 178,
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "2026-07-01T13:51:19.625335Z",
+            "venue_id": 107,
+            "name": "Elevator",
+            "latitude": 25.957663628663358,
+            "longitude": -80.14294155603804,
+            "accessible": false,
+            "accessible_only": true,
+            "floor_ids": {
+              "count": 3,
+              "items": [
+                361,
+                362,
+                363
+              ]
+            },
+            "file_url": null,
+            "scale": null,
+            "altitude": null,
+            "rotation": null,
+            "direction": null
+          },
+          {
+            "id": 179,
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "2026-06-30T15:38:34.745805Z",
+            "venue_id": 107,
+            "name": "Escalator",
+            "latitude": 25.958154534471777,
+            "longitude": -80.14244944292406,
+            "accessible": false,
+            "accessible_only": false,
+            "floor_ids": {
+              "count": 3,
+              "items": [
+                361,
+                362,
+                363
+              ]
+            },
+            "file_url": null,
+            "scale": null,
+            "altitude": null,
+            "rotation": null,
+            "direction": null
+          },
+          {
+            "id": 181,
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "2026-06-30T15:38:35.173784Z",
+            "venue_id": 107,
+            "name": "Elevator",
+            "latitude": 25.957174399497685,
+            "longitude": -80.14469586380697,
+            "accessible": true,
+            "accessible_only": true,
+            "floor_ids": {
+              "count": 3,
+              "items": [
+                361,
+                362,
+                363
+              ]
+            },
+            "file_url": null,
+            "scale": null,
+            "altitude": null,
+            "rotation": null,
+            "direction": null
+          }
+        ]
+      },
+      "count": 17,
+      "id_samples": [
+        {
+          "id": 178,
+          "name": "Elevator"
+        },
+        {
+          "id": 179,
+          "name": "Escalator"
+        },
+        {
+          "id": 181,
+          "name": "Elevator"
+        },
+        {
+          "id": 183,
+          "name": "Elevator"
+        }
+      ],
+      "floor_id_histogram": {
+        "None": 17
+      }
+    },
+    "floors": {
+      "type": "list",
+      "sample": {
+        "count": 3,
+        "items": [
+          {
+            "id": 361,
+            "created_at": "2026-06-30T14:42:37.88815Z",
+            "updated_at": "2026-06-30T15:44:05.221169Z",
+            "name": "Lower Level",
+            "index": 0,
+            "default": true,
+            "venue_id": 107,
+            "routing_line_height": 2,
+            "structures_dataset": {
+              "id": 4386,
+              "created_at": "2026-10-07T13:56:28.458075Z",
+              "updated_at": "2026-10-07T13:56:28.458075Z",
+              "venue_id": 107,
+              "type": "geojson:structures",
+              "title": "Structures (Lower Level)",
+              "data": {
+                "type": "FeatureCollection",
+                "features": "<nested>"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "routing_dataset": {
+              "id": 2686,
+              "created_at": "2026-06-30T14:42:39.721547Z",
+              "updated_at": "2026-08-24T13:01:35.089946Z",
+              "venue_id": 107,
+              "type": "geojson:routing",
+              "title": "Floor Lower Level - Routing",
+              "data": {
+                "type": "FeatureCollection",
+                "features": "<nested>"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "style_dataset": {
+              "count": 7,
+              "items": [
+                {
+                  "id": 2687,
+                  "created_at": "2026-06-30T14:42:39.743031Z",
+                  "updated_at": "2026-06-30T14:42:39.743031Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Lower Level - Style Purple",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 650,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2688,
+                  "created_at": "2026-06-30T14:42:39.748835Z",
+                  "updated_at": "2026-06-30T14:42:39.748835Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Lower Level - Style Grass",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 628,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2689,
+                  "created_at": "2026-06-30T14:42:39.754395Z",
+                  "updated_at": "2026-06-30T14:42:39.754395Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Lower Level - Style Floors",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 633,
+                  "venue": "<nested>",
+                  "floors": null
+                }
+              ]
+            }
+          },
+          {
+            "id": 362,
+            "created_at": "2026-06-30T14:42:40.873639Z",
+            "updated_at": "2026-06-30T15:44:00.437736Z",
+            "name": "Upper Level",
+            "index": 1,
+            "default": false,
+            "venue_id": 107,
+            "routing_line_height": 2,
+            "structures_dataset": {
+              "id": 2694,
+              "created_at": "2026-06-30T14:42:42.294492Z",
+              "updated_at": "2026-08-13T15:06:36.817047Z",
+              "venue_id": 107,
+              "type": "geojson:structures",
+              "title": "Structures (Upper Level)",
+              "data": {
+                "type": "FeatureCollection",
+                "features": "<nested>"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "routing_dataset": {
+              "id": 2695,
+              "created_at": "2026-06-30T14:42:42.320835Z",
+              "updated_at": "2026-08-13T15:02:45.29012Z",
+              "venue_id": 107,
+              "type": "geojson:routing",
+              "title": "Routing (Upper Level) ",
+              "data": {
+                "type": "FeatureCollection",
+                "features": "<nested>"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "style_dataset": {
+              "count": 7,
+              "items": [
+                {
+                  "id": 2696,
+                  "created_at": "2026-06-30T14:42:42.336173Z",
+                  "updated_at": "2026-06-30T14:42:42.336173Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Upper Level - Style Exterior Walls",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 631,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2697,
+                  "created_at": "2026-06-30T14:42:42.345365Z",
+                  "updated_at": "2026-06-30T14:42:42.345365Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Upper Level - Style Floors",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 633,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2698,
+                  "created_at": "2026-06-30T14:42:42.367181Z",
+                  "updated_at": "2026-06-30T14:42:42.367181Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Upper Level - Style Walls",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 632,
+                  "venue": "<nested>",
+                  "floors": null
+                }
+              ]
+            }
+          },
+          {
+            "id": 363,
+            "created_at": "2026-06-30T14:42:43.138986Z",
+            "updated_at": "2026-06-30T15:44:02.93099Z",
+            "name": "Third Level",
+            "index": 2,
+            "default": false,
+            "venue_id": 107,
+            "routing_line_height": 2,
+            "structures_dataset": {
+              "id": 2703,
+              "created_at": "2026-06-30T14:42:43.859523Z",
+              "updated_at": "2026-10-12T16:00:24.27139Z",
+              "venue_id": 107,
+              "type": "geojson:structures",
+              "title": "Floor Third Level - Structures",
+              "data": {
+                "features": "<nested>",
+                "type": "FeatureCollection"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "routing_dataset": {
+              "id": 2704,
+              "created_at": "2026-06-30T14:42:43.868694Z",
+              "updated_at": "2026-07-02T02:41:41.758926Z",
+              "venue_id": 107,
+              "type": "geojson:routing",
+              "title": "Routing (Third Level) ",
+              "data": {
+                "type": "FeatureCollection",
+                "features": "<nested>"
+              },
+              "floor_ids": null,
+              "style_id": null,
+              "venue": {
+                "id": 0,
+                "created_at": "0001-01-01T00:00:00Z",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "name": "",
+                "description": null,
+                "phone": null,
+                "phone_country": null,
+                "email": null,
+                "address1": null,
+                "address2": null,
+                "city": null,
+                "state": null,
+                "zip": null,
+                "country": null,
+                "logo_img": null,
+                "profile_img": null,
+                "agent_id": null,
+                "quividi_network_id": null,
+                "piwik_site_id": null,
+                "template_id": 0,
+                "settings": null,
+                "custom_domain": null,
+                "organization_id": null,
+                "timezone": "",
+                "dst": false,
+                "agent": "<nested>",
+                "template": "<nested>"
+              },
+              "floors": null
+            },
+            "style_dataset": {
+              "count": 8,
+              "items": [
+                {
+                  "id": 2705,
+                  "created_at": "2026-06-30T14:42:43.87567Z",
+                  "updated_at": "2026-06-30T14:42:43.87567Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Third Level - Style Grass",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 628,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2706,
+                  "created_at": "2026-06-30T14:42:43.880969Z",
+                  "updated_at": "2026-06-30T14:42:43.880969Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Third Level - Style Exterior Walls",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 631,
+                  "venue": "<nested>",
+                  "floors": null
+                },
+                {
+                  "id": 2707,
+                  "created_at": "2026-06-30T14:42:43.886389Z",
+                  "updated_at": "2026-06-30T14:42:43.886389Z",
+                  "venue_id": 107,
+                  "type": "geojson:styles",
+                  "title": "Floor Third Level - Style Vacant Third Floor",
+                  "data": "<nested>",
+                  "floor_ids": null,
+                  "style_id": 634,
+                  "venue": "<nested>",
+                  "floors": null
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "count": 3,
+      "id_samples": [
+        {
+          "id": 361,
+          "name": "Lower Level"
+        },
+        {
+          "id": 362,
+          "name": "Upper Level"
+        },
+        {
+          "id": 363,
+          "name": "Third Level"
+        }
+      ],
+      "floor_id_histogram": {
+        "None": 3
+      }
+    },
+    "lights": {
+      "type": "list",
+      "sample": {
+        "count": 0,
+        "items": []
+      },
+      "count": 0,
+      "id_samples": [],
+      "floor_id_histogram": {}
+    },
+    "map_backgrounds": {
+      "type": "list",
+      "sample": {
+        "count": 0,
+        "items": []
+      },
+      "count": 0,
+      "id_samples": [],
+      "floor_id_histogram": {}
+    },
+    "map_suites": {
+      "type": "list",
+      "sample": {
+        "count": 625,
+        "items": [
+          {
+            "id": 24192,
+            "venue_id": 107,
+            "suite_id": "b1f770f965e3609863fd905e908d5bf5",
+            "settings": {
+              "entrances": {
+                "count": 1,
+                "items": [
+                  "<nested>"
+                ]
+              },
+              "titleSize": 1.1,
+              "titleLatitude": null,
+              "titleRotation": 63,
+              "titleLongitude": null
+            }
+          },
+          {
+            "id": 24133,
+            "venue_id": 107,
+            "suite_id": "701c208288e572d70967f3da7ccad846",
+            "settings": {
+              "entrances": {
+                "count": 1,
+                "items": [
+                  "<nested>"
+                ]
+              },
+              "titleSize": 1.1,
+              "titleLatitude": 25.957129655517548,
+              "titleRotation": 95,
+              "titleLongitude": -80.14414384176804
+            }
+          },
+          {
+            "id": 24317,
+            "venue_id": 107,
+            "suite_id": "8b54ba9188dc4e8bafc9c0d88fd9b781",
+            "settings": {
+              "entrances": {
+                "count": 1,
+                "items": [
+                  "<nested>"
+                ]
+              },
+              "titleRotation": 105
+            }
+          }
+        ]
+      },
+      "count": 625,
+      "id_samples": [
+        {
+          "id": 24192,
+          "settings": {
+            "entrances": [
+              {
+                "lat": 25.957550340103385,
+                "lng": -80.14347352323261,
+                "floor_ids": [
+                  362
+                ]
+              }
+            ],
+            "titleSize": 1.1,
+            "titleLatitude": null,
+            "titleRotation": 63,
+            "titleLongitude": null
+          }
+        },
+        {
+          "id": 24133,
+          "settings": {
+            "entrances": [
+              {
+                "lat": 25.95720585939723,
+                "lng": -80.14414800052272,
+                "floor_ids": [
+                  362
+                ]
+              }
+            ],
+            "titleSize": 1.1,
+            "titleLatitude": 25.957129655517548,
+            "titleRotation": 95,
+            "titleLongitude": -80.14414384176804
+          }
+        },
+        {
+          "id": 24317,
+          "settings": {
+            "entrances": [
+              {
+                "lat": 25.95546410100577,
+                "lng": -80.14124340581158,
+                "floor_ids": [
+                  363
+                ]
+              }
+            ],
+            "titleRotation": 105
+          }
+        },
+        {
+          "id": 25548,
+          "settings": {
+            "entrances": [
+              {
+                "lat": 25.957945043478944,
+                "lng": -80.14392357319593,
+                "floor_ids": [
+                  361
+                ]
+              }
+            ],
+            "titleSize": 1.2,
+            "titleRotation": 99
+          }
+        }
+      ],
+      "floor_id_histogram": {
+        "None": 625
+      }
+    },
+    "map_texts": {
+      "type": "list",
+      "sample": {
+        "count": 0,
+        "items": []
+      },
+      "count": 0,
+      "id_samples": [],
+      "floor_id_histogram": {}
+    }
+  },
+  "extra": {
+    "venueMapSettings": {
+      "backgroundImages": {
+        "count": 0,
+        "items": []
+      },
+      "backgroundMap": "mapbox://styles/smartlinkdev/clgsv0d5o004w01qj38hl6obt",
+      "buildingBaseHeight": 0,
+      "buildingBottomColor": "",
+      "buildingBottomOpacity": 0,
+      "buildingHeight": "4.9",
+      "buildingHighlightColor": "#F5DCE3",
+      "buildingHighlightHeight": "7",
+      "buildingHighlightOpacity": 100,
+      "buildingOpacity": 100,
+      "buildingTopColor": "#FFFFFF",
+      "customObjects": {
+        "count": 4,
+        "items": [
+          {
+            "altitude": 0,
+            "background": true,
+            "created_at": "2023-02-15T21:49:32.680662Z",
+            "description": "Base Layer Test",
+            "fadeDistance": null,
+            "fileLocation": "https://cdn.roveiq.com/e7607a1c-fa7f-4ece-ad4e-2a8ce815b11b.glb",
+            "floors": null,
+            "id": 906,
+            "latitude": 25.9576468521793,
+            "longitude": -80.14269977166907,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "Base Layer",
+            "rotation": 0,
+            "rove_scale": 1,
+            "scale": 25.5,
+            "seasonal": false,
+            "seasonal_dates": null,
+            "updated_at": "2023-02-15T22:10:57.537936Z",
+            "venue_id": 107
+          },
+          {
+            "altitude": -1,
+            "background": true,
+            "created_at": "2023-02-17T02:58:30.21874Z",
+            "description": "",
+            "fadeDistance": null,
+            "fileLocation": "https://cdn.roveiq.com/489a2da7-7388-4fbd-98ff-7af38fe51a2f.glb",
+            "floors": null,
+            "id": 913,
+            "latitude": 25.9576468521793,
+            "longitude": -80.14269977166907,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "Parking Texture",
+            "rotation": 0,
+            "rove_scale": 1,
+            "scale": 25.5,
+            "seasonal": false,
+            "seasonal_dates": null,
+            "updated_at": "2023-03-28T20:28:36.64932Z",
+            "venue_id": 107
+          },
+          {
+            "altitude": -10,
+            "background": false,
+            "created_at": "2023-02-17T20:24:49.442922Z",
+            "description": "TEST PARKING",
+            "fadeDistance": null,
+            "fileLocation": "https://cdn.roveiq.com/ceb7287a-2cf4-41bf-807f-4eb159f25464.glb",
+            "floors": null,
+            "id": 915,
+            "latitude": 25.95764651285434,
+            "longitude": -80.14276321607582,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "TEST PARKING",
+            "rotation": 0,
+            "rove_scale": 1,
+            "scale": 25.5,
+            "seasonal": false,
+            "seasonal_dates": null,
+            "updated_at": "2023-03-31T18:29:58.057548Z",
+            "venue_id": 107
+          }
+        ]
+      },
+      "customStyle": {
+        "count": 15,
+        "items": [
+          {
+            "background": true,
+            "baseHeight": 0,
+            "class": "noclick-grass",
+            "color": "#E4E4E4",
+            "created_at": "2023-01-16T22:59:59.294262Z",
+            "fadeDistance": null,
+            "height": 0.5,
+            "id": 628,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "Grass",
+            "opacity": 0,
+            "updated_at": "2023-02-15T21:50:59.355455Z",
+            "venue_id": 107
+          },
+          {
+            "background": true,
+            "baseHeight": 0,
+            "class": "noclick-parking",
+            "color": "#EEEEEE",
+            "created_at": "2023-01-16T23:00:32.578958Z",
+            "fadeDistance": null,
+            "height": 0.06,
+            "id": 629,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "Parking Lots",
+            "opacity": 100,
+            "updated_at": "2023-03-24T15:21:06.901231Z",
+            "venue_id": 107
+          },
+          {
+            "background": false,
+            "baseHeight": 0,
+            "class": "noclick-decks",
+            "color": "#5B6060",
+            "created_at": "2023-01-16T23:01:09.464717Z",
+            "fadeDistance": null,
+            "height": 10,
+            "id": 630,
+            "maxHeight": null,
+            "minHeight": null,
+            "name": "Parking Deck",
+            "opacity": 100,
+            "updated_at": "2023-02-16T21:45:07.845881Z",
+            "venue_id": 107
+          }
+        ]
+      },
+      "defaultBearing": "90",
+      "defaultCenterLatitude": 25.957044824610534,
+      "defaultCenterLongitude": -80.14296062751477,
+      "defaultPitch": "45",
+      "defaultZoom": 18,
+      "destinationPin": "",
+      "directionsApi": false,
+      "directionsApiType": "",
+      "disableLabels": true,
+      "floors": {
+        "count": 3,
+        "items": [
+          {
+            "dataset_id": null,
+            "default": true,
+            "id": "cld0bpby97ag621of0pny3hyk",
+            "index": 0,
+            "name": "Lower Level"
+          },
+          {
+            "dataset_id": null,
+            "default": false,
+            "id": "clczfg2pd1imr20o6sxx9n4zq",
+            "index": 1,
+            "name": "Upper Level"
+          },
+          {
+            "dataset_id": null,
+            "default": false,
+            "id": "clczfhxeq0wgp29ofcdcur1fk",
+            "index": 2,
+            "name": "Third Level"
+          }
+        ]
+      },
+      "labelFontSize": 15,
+      "mapBackgroundColor": "",
+      "maxZoom": 22,
+      "minZoom": "17",
+      "mobilePitch": "35",
+      "mobileZoom": "16",
+      "navigationMainColor": "#DC4949",
+      "navigationStepSize": 0.0002,
+      "navigationStrokeColor": "",
+      "nonclickable2BaseHeight": 0,
+      "nonclickable2Color": "",
+      "nonclickable2Height": 10,
+      "nonclickable2Name": null,
+      "nonclickable2Opacity": 100,
+      "nonclickable3BaseHeight": 0,
+      "nonclickable3Color": "",
+      "nonclickable3Height": 10,
+      "nonclickable3Name": null,
+      "nonclickable3Opacity": 100,
+      "nonclickable4BaseHeight": 0,
+      "nonclickable4Color": "",
+      "nonclickable4Height": 10,
+      "nonclickable4Name": null,
+      "nonclickable4Opacity": 100,
+      "nonclickableBaseHeight": 0,
+      "nonclickableColor": "",
+      "nonclickableHeight": 10,
+      "nonclickableName": null,
+      "nonclickableOpacity": 100,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "paddingRight": 0
+    },
+    "firstVerticalTransitions": {
+      "count": 17,
+      "items": [
+        {
+          "id": 178,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-07-01T13:51:19.625335Z",
+          "venue_id": 107,
+          "name": "Elevator",
+          "latitude": 25.957663628663358,
+          "longitude": -80.14294155603804,
+          "accessible": false,
+          "accessible_only": true,
+          "floor_ids": {
+            "count": 3,
+            "items": [
+              361,
+              362,
+              363
+            ]
+          },
+          "file_url": null,
+          "scale": null,
+          "altitude": null,
+          "rotation": null,
+          "direction": null
+        },
+        {
+          "id": 179,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-06-30T15:38:34.745805Z",
+          "venue_id": 107,
+          "name": "Escalator",
+          "latitude": 25.958154534471777,
+          "longitude": -80.14244944292406,
+          "accessible": false,
+          "accessible_only": false,
+          "floor_ids": {
+            "count": 3,
+            "items": [
+              361,
+              362,
+              363
+            ]
+          },
+          "file_url": null,
+          "scale": null,
+          "altitude": null,
+          "rotation": null,
+          "direction": null
+        },
+        {
+          "id": 181,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-06-30T15:38:35.173784Z",
+          "venue_id": 107,
+          "name": "Elevator",
+          "latitude": 25.957174399497685,
+          "longitude": -80.14469586380697,
+          "accessible": true,
+          "accessible_only": true,
+          "floor_ids": {
+            "count": 3,
+            "items": [
+              361,
+              362,
+              363
+            ]
+          },
+          "file_url": null,
+          "scale": null,
+          "altitude": null,
+          "rotation": null,
+          "direction": null
+        }
+      ]
+    },
+    "firstSuites": {
+      "count": 625,
+      "items": [
+        {
+          "id": 24192,
+          "venue_id": 107,
+          "suite_id": "b1f770f965e3609863fd905e908d5bf5",
+          "settings": {
+            "entrances": {
+              "count": 1,
+              "items": [
+                {
+                  "lat": 25.957550340103385,
+                  "lng": -80.14347352323261,
+                  "floor_ids": "<nested>"
+                }
+              ]
+            },
+            "titleSize": 1.1,
+            "titleLatitude": null,
+            "titleRotation": 63,
+            "titleLongitude": null
+          }
+        },
+        {
+          "id": 24133,
+          "venue_id": 107,
+          "suite_id": "701c208288e572d70967f3da7ccad846",
+          "settings": {
+            "entrances": {
+              "count": 1,
+              "items": [
+                {
+                  "lat": 25.95720585939723,
+                  "lng": -80.14414800052272,
+                  "floor_ids": "<nested>"
+                }
+              ]
+            },
+            "titleSize": 1.1,
+            "titleLatitude": 25.957129655517548,
+            "titleRotation": 95,
+            "titleLongitude": -80.14414384176804
+          }
+        },
+        {
+          "id": 24317,
+          "venue_id": 107,
+          "suite_id": "8b54ba9188dc4e8bafc9c0d88fd9b781",
+          "settings": {
+            "entrances": {
+              "count": 1,
+              "items": [
+                {
+                  "lat": 25.95546410100577,
+                  "lng": -80.14124340581158,
+                  "floor_ids": "<nested>"
+                }
+              ]
+            },
+            "titleRotation": 105
+          }
+        }
+      ]
+    },
+    "firstMapBackground": {
+      "count": 0,
+      "items": []
+    },
+    "floor0routingDataset": {
+      "id": 2686,
+      "created_at": "2026-06-30T14:42:39.721547Z",
+      "updated_at": "2026-08-24T13:01:35.089946Z",
+      "venue_id": 107,
+      "type": "geojson:routing",
+      "title": "Floor Lower Level - Routing",
+      "data": {
+        "type": "FeatureCollection",
+        "features": {
+          "count": 594,
+          "items": [
+            {
+              "type": "Feature",
+              "id": "00a39f44269299203d242c395454a540",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                }
+              },
+              "properties": {
+                "id": "00a39f44269299203d242c395454a540",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2686",
+                "type": "feature:routing"
+              }
+            },
+            {
+              "type": "Feature",
+              "id": "0138298dffff4f2f8377165fd82dcb13",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                }
+              },
+              "properties": {
+                "id": "0138298dffff4f2f8377165fd82dcb13",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2686",
+                "type": "feature:routing"
+              }
+            },
+            {
+              "type": "Feature",
+              "id": "015245bd3c96e18afc1aa77eb58b8bb3",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                }
+              },
+              "properties": {
+                "id": "015245bd3c96e18afc1aa77eb58b8bb3",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2686",
+                "type": "feature:routing"
+              }
+            }
+          ]
+        }
+      },
+      "floor_ids": null,
+      "style_id": null,
+      "venue": {
+        "id": 0,
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "0001-01-01T00:00:00Z",
+        "name": "",
+        "description": null,
+        "phone": null,
+        "phone_country": null,
+        "email": null,
+        "address1": null,
+        "address2": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null,
+        "logo_img": null,
+        "profile_img": null,
+        "agent_id": null,
+        "quividi_network_id": null,
+        "piwik_site_id": null,
+        "template_id": 0,
+        "settings": null,
+        "custom_domain": null,
+        "organization_id": null,
+        "timezone": "",
+        "dst": false,
+        "agent": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "first_name": "",
+          "last_name": "",
+          "email": "",
+          "phone": null,
+          "phone_country": null,
+          "profile_img": null,
+          "title": null,
+          "admin": false,
+          "advertiser": false,
+          "venue_owner": false,
+          "partner": false,
+          "type": "",
+          "account_verified": false,
+          "jira_name": "",
+          "last_login": "0001-01-01T00:00:00Z",
+          "password_reset_required": false
+        },
+        "template": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "name": "",
+          "css": "",
+          "thumbnail": null,
+          "vue_component": null
+        }
+      },
+      "floors": null
+    },
+    "floor0routingFeatureCount": 594,
+    "floor1routingDataset": {
+      "id": 2695,
+      "created_at": "2026-06-30T14:42:42.320835Z",
+      "updated_at": "2026-08-13T15:02:45.29012Z",
+      "venue_id": 107,
+      "type": "geojson:routing",
+      "title": "Routing (Upper Level) ",
+      "data": {
+        "type": "FeatureCollection",
+        "features": {
+          "count": 489,
+          "items": [
+            {
+              "type": "Feature",
+              "id": "006088ec97f8d2d223136485eca2f278",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "006088ec97f8d2d223136485eca2f278",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2695"
+              }
+            },
+            {
+              "type": "Feature",
+              "id": "00a3dcc549b1d211d169c390f9b5f49e",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "00a3dcc549b1d211d169c390f9b5f49e",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2695"
+              }
+            },
+            {
+              "type": "Feature",
+              "id": "00a4bffc7a9326d1c7787724a484e9bd",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "00a4bffc7a9326d1c7787724a484e9bd",
+                "featureType": "routing_feature",
+                "accessible": null,
+                "bidirectional": null,
+                "width": null,
+                "layerId": "routing_2695"
+              }
+            }
+          ]
+        }
+      },
+      "floor_ids": null,
+      "style_id": null,
+      "venue": {
+        "id": 0,
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "0001-01-01T00:00:00Z",
+        "name": "",
+        "description": null,
+        "phone": null,
+        "phone_country": null,
+        "email": null,
+        "address1": null,
+        "address2": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null,
+        "logo_img": null,
+        "profile_img": null,
+        "agent_id": null,
+        "quividi_network_id": null,
+        "piwik_site_id": null,
+        "template_id": 0,
+        "settings": null,
+        "custom_domain": null,
+        "organization_id": null,
+        "timezone": "",
+        "dst": false,
+        "agent": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "first_name": "",
+          "last_name": "",
+          "email": "",
+          "phone": null,
+          "phone_country": null,
+          "profile_img": null,
+          "title": null,
+          "admin": false,
+          "advertiser": false,
+          "venue_owner": false,
+          "partner": false,
+          "type": "",
+          "account_verified": false,
+          "jira_name": "",
+          "last_login": "0001-01-01T00:00:00Z",
+          "password_reset_required": false
+        },
+        "template": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "name": "",
+          "css": "",
+          "thumbnail": null,
+          "vue_component": null
+        }
+      },
+      "floors": null
+    },
+    "floor1routingFeatureCount": 489,
+    "floor2routingDataset": {
+      "id": 2704,
+      "created_at": "2026-06-30T14:42:43.868694Z",
+      "updated_at": "2026-07-02T02:41:41.758926Z",
+      "venue_id": 107,
+      "type": "geojson:routing",
+      "title": "Routing (Third Level) ",
+      "data": {
+        "type": "FeatureCollection",
+        "features": {
+          "count": 141,
+          "items": [
+            {
+              "id": "000fb8e65db548430bae8160e9bb6b06",
+              "type": "Feature",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "000fb8e65db548430bae8160e9bb6b06"
+              }
+            },
+            {
+              "id": "00fa6f2ffd3b342cb7fc2c7270dd1620",
+              "type": "Feature",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "00fa6f2ffd3b342cb7fc2c7270dd1620"
+              }
+            },
+            {
+              "id": "0109d5d28764413d7f6b083f339f1ec4",
+              "type": "Feature",
+              "geometry": {
+                "coordinates": {
+                  "count": 2,
+                  "items": [
+                    "<nested>",
+                    "<nested>"
+                  ]
+                },
+                "type": "LineString"
+              },
+              "properties": {
+                "id": "0109d5d28764413d7f6b083f339f1ec4"
+              }
+            }
+          ]
+        }
+      },
+      "floor_ids": null,
+      "style_id": null,
+      "venue": {
+        "id": 0,
+        "created_at": "0001-01-01T00:00:00Z",
+        "updated_at": "0001-01-01T00:00:00Z",
+        "name": "",
+        "description": null,
+        "phone": null,
+        "phone_country": null,
+        "email": null,
+        "address1": null,
+        "address2": null,
+        "city": null,
+        "state": null,
+        "zip": null,
+        "country": null,
+        "logo_img": null,
+        "profile_img": null,
+        "agent_id": null,
+        "quividi_network_id": null,
+        "piwik_site_id": null,
+        "template_id": 0,
+        "settings": null,
+        "custom_domain": null,
+        "organization_id": null,
+        "timezone": "",
+        "dst": false,
+        "agent": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "first_name": "",
+          "last_name": "",
+          "email": "",
+          "phone": null,
+          "phone_country": null,
+          "profile_img": null,
+          "title": null,
+          "admin": false,
+          "advertiser": false,
+          "venue_owner": false,
+          "partner": false,
+          "type": "",
+          "account_verified": false,
+          "jira_name": "",
+          "last_login": "0001-01-01T00:00:00Z",
+          "password_reset_required": false
+        },
+        "template": {
+          "id": 0,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z",
+          "name": "",
+          "css": "",
+          "thumbnail": null,
+          "vue_component": null
+        }
+      },
+      "floors": null
+    },
+    "floor2routingFeatureCount": 141
+  }
+}

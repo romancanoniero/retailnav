@@ -122,7 +122,8 @@ function addText(out,text,feature,roof,position,widthFraction,depthFraction,orig
  const factor=Math.min(.093,maxLong/width,maxShort/charHeight);
  if(factor<.003)return false;
  const longitudinal=-width*factor/2;
- const vOrigin=(position==='code'?-1:1)*Math.min(roofCoords.short*.20,charHeight*factor*.55);
+ const vOrigin=(position==='center'?0:position==='code'?-1:1)*
+   Math.min(roofCoords.short*.20,charHeight*factor*.55);
  const base=roof+.018;
  const at=[...roofCoords.center,base];
  let cursor=0;

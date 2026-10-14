@@ -406,7 +406,7 @@ function verticalConnectionInfo(){
 function drawRoofTextWebGL(){
  if(!gl||scan||!labelsOn)return;
  const showCode=distance<340||active!=='ALL';
- const showName=distance<130||active!=='ALL';
+ const showName=showCode; // Show known tenant names whenever their 3D roof ID is visible.
  gl.uniform1f(loc.uSelected,-999);
  gl.uniform1f(loc.uWire,0);
  gl.uniform1f(loc.uLine,0);

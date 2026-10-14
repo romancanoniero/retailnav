@@ -181,6 +181,15 @@ assert nw["verticalGeometry"]["connectionMappingsVerified"] is False
 assert "id=\"rnHeightsPanel\"" in html
 assert "id=\"rnConnectorsToggle\"" in html
 assert 'function arcballCameraDelta' in html
+assert len(nw["escalatorFixtures"]) == 25
+assert len({f["floor"] for f in nw["escalatorFixtures"]}) == 9
+assert all(f["verified"] is False and f["floorPairVerified"] is False
+           and f["entranceExitVerified"] is False
+           and f["direction"] == "unknown"
+           for f in nw["escalatorFixtures"])
+assert nw["escalatorFootprintsMeasured"] is False
+assert "RetailNavEscalators" in html
+assert "mechanical escalators" in html.lower() or "mechanical escalator" in html.lower()
 assert len(nw["verticalConnectionHypotheses"]) == 39
 assert all("NOT VERIFIED" in edge["status"]
     for edge in nw["verticalConnectionHypotheses"])

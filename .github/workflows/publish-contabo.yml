@@ -146,4 +146,22 @@ jobs:
           print('PASS: New World City L1-L9 public route, model data and reference image')
           PY
 
+          # Validate integrated nine-floor map in PRIMARY RetailNav, not only /newworld9/.
+          curl -fLsS --retry 3 --connect-timeout 10 --max-time 60 \
+            -o /tmp/newworld-main-catalog.html 'https://improvingyourreality.com/retailnav/?mall=new-world-city-shanghai'
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          html=Path('/tmp/newworld-main-catalog.html').read_text(encoding='utf-8')
+          match=re.search(r'<script id="mallCatalog" type="application/json">([\\s\\S]+?)</script>',html)
+          assert match, 'Public RetailNav missing embedded mall catalog'
+          catalog=json.loads(match.group(1))
+          mall=catalog['new-world-city-shanghai']
+          assert [floor[0] for floor in mall['floors']]==[
+              'L1','L2','L3','L4','L5','L6','L7','L8','L9'], 'Old seven-floor catalog still live'
+          assert sum(len(floor[3]) for floor in mall['floors'])==737
+          assert mall['navigable'] is False
+          print('PASS: PUBLIC primary RetailNav nine floors and 737 candidate photo regions')
+          PY
+
           echo "PASS: RetailNav HTML, GLB 3D and original homepage verified."

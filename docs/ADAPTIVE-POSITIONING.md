@@ -23,7 +23,13 @@ misrepresented as deployed Android/iOS apps.
    fresh GNSS data, vertical accuracy ≤2m and an unambiguous likelihood
    (posterior > 0.93). Provisional photo-derived New World City floor heights
    have **none** of these prerequisites. Indoor floor remains unknown.
-3. A visitor can explicitly set their own point on the chosen floor plan.
+3. When surveyed floor absolute altitudes and a verified WGS84-to-photo
+   affine map transformation are provided, the browser can convert accurate
+   GPS latitude/longitude/altitude into a specific indoor X/Y/floor.
+   Current Aventura and New World City photographs have no such verified
+   calibration and cannot use this mode. The required registration includes
+   geographic origin, pixel affine rows, image dimensions and RMS error.
+4. A visitor can explicitly set their own point on the chosen floor plan.
    Dead reckoning is opt-in, and only after manual stride-scale + map-heading
    calibration. It stops when error increases. The marker is not GPS.
 4. If the visitor lacks a satisfactory indoor reference, they may request

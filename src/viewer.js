@@ -127,7 +127,7 @@ function renderCanvas(dt){
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}
 function resetCamera(plan=false){
  stopAuto();orbitYaw=plan?0:-.30;orbitPitch=plan?MIN_PITCH:-.70;orbitRoll=0;updateCameraRotation();
- let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:spread):fs[0].y,0];distance=200;
+ let fs=visible();target=[0,active==='ALL'?(floors.length===1?0:(floors.length-1)*spread/2):fs[0].y,0];distance=200;
  resize();matrices();let mx=0,my=0;
  for(const f of fs)for(const o of f.features)for(const v of o.p){
   const p=mp(mvp,[...pos(v,f.y),1]);if(p[3]<=0)continue;
@@ -153,7 +153,7 @@ function setFloor(id){
   ?'Las '+floors.length+' plantas, en su posición relativa'
   :floors.find(f=>f.id===id).name+' / '+id;
  $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
-  ?'Contornos fotográficos agrupados; códigos de comercios vinculados sólo cuando el punto es identificable.'
+  ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
   :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
   :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
     'Contornos y pasillos trazados sobre tus imágenes.');
@@ -782,7 +782,7 @@ window.RetailNavComparison={
  })
 };
 function download(name,bytes,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),30000);}
-function exportSVG(){let fs=visible(),f=fs.length===1?fs[0]:floors[Math.min(1,floors.length-1)];let isAP=mallId==='ap-plaza',box=isAP?'0 0 1440 620':'290 110 800 600';let s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+box+'"><rect x="0" y="0" width="1440" height="620" fill="#f3f7f9"/>'+svgPaths(f)+'</svg>';download('RetailNav-'+mallId+'-'+f.id+'.svg',s,'image/svg+xml');}
+function exportSVG(){let fs=visible(),f=fs.length===1?fs[0]:floors[Math.min(1,floors.length-1)];let reference=selectedMall.floorReferences?.[f.id],isAP=mallId==='ap-plaza',box=reference?.viewBox||(isAP?'0 0 1440 620':'290 110 800 600'),size=reference?.imageSize||(isAP?[1440,620]:[800,600]);let s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+box+'"><rect x="0" y="0" width="'+size[0]+'" height="'+size[1]+'" fill="#f3f7f9"/>'+svgPaths(f)+'</svg>';download('RetailNav-'+mallId+'-'+f.id+'.svg',s,'image/svg+xml');}
 function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',source:selectedMall.source||'Planos aportados',mallId,calibration:'Escala no medida. Coordenadas originales en pixeles registrados.',levels:visible().map(f=>({id:f.id,source:f.source,elevation:f.index*4.5,elevationStatus:'simulada',features:f.features.map(o=>({id:o.id,kind:o.k,label:o.n,geometry:{outer:o.r[0],holes:o.r.slice(1)},status:'trazado-provisional'}))}))};download('RetailNav-'+mallId+'-'+active+'.json',JSON.stringify(out,null,2),'application/json');}
 // GLB 2.0: real triangle meshes with normals, one group per floor, Y up.
 function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],materials=[],len=0;let mat={};for(let floor of visible()){let children=[];for(let f of floor.features){if(!f.flat.length)continue;let bytes=new Uint8Array(f.flat.buffer);parts.push(bytes);let view=views.length;views.push({buffer:0,byteOffset:len,byteLength:bytes.length,byteStride:24,target:34962});let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<f.flat.length;i+=6)for(let j=0;j<3;j++){min[j]=Math.min(min[j],f.flat[i+j]);max[j]=Math.max(max[j],f.flat[i+j]);}let a=accessors.length;accessors.push({bufferView:view,byteOffset:0,componentType:5126,count:f.flat.length/6,type:'VEC3',min,max},{bufferView:view,byteOffset:12,componentType:5126,count:f.flat.length/6,type:'VEC3'});let key=f.k+'-'+floor.index;if(mat[key]===undefined){mat[key]=materials.length;materials.push({name:key,pbrMetallicRoughness:{baseColorFactor:[...palette(f,floor.index,false),1],metallicFactor:.1,roughnessFactor:.8},doubleSided:true});}let m=meshes.length;meshes.push({name:f.id,primitives:[{attributes:{POSITION:a,NORMAL:a+1},material:mat[key],mode:4}]});children.push(nodes.length);nodes.push({name:f.n||f.id,mesh:m,extras:{id:f.id,level:floor.id,status:'trazado-provisional'}});len+=bytes.length;}let group=nodes.length;nodes.push({name:floor.id,children,translation:[0,floor.index*4.5,0],extras:{source:floor.source,elevationStatus:'simulada'}});floor.exportGroup=group;}let doc={asset:{version:'2.0',generator:'RetailNav vector-to-mesh',extras:{realSurvey:false,scale:'unidades de modelo, no metros medidos'}},scene:0,scenes:[{nodes:visible().map(f=>f.exportGroup)}],nodes,meshes,materials,buffers:[{byteLength:len}],bufferViews:views,accessors};let text=new TextEncoder().encode(JSON.stringify(doc));let jlen=(text.length+3)&~3,total=12+8+jlen+8+len,buff=new ArrayBuffer(total),v=new DataView(buff),u=new Uint8Array(buff);v.setUint32(0,0x46546c67,true);v.setUint32(4,2,true);v.setUint32(8,total,true);v.setUint32(12,jlen,true);v.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jlen);u.set(text,20);v.setUint32(20+jlen,len,true);v.setUint32(24+jlen,0x004e4942,true);let off=28+jlen;parts.forEach(p=>{u.set(p,off);off+=p.length;});download('RetailNav-'+mallId+'-'+active+'.glb',buff,'model/gltf-binary');return buff;}
@@ -853,9 +853,9 @@ function applyMallUi(){
   $('mallMobileMeta').textContent=floors.length+' planta(s) · '+
     (mallId==='aventura'?'MOCK':'TRAZADO PROVISIONAL');
   $('mallSourceMessage').textContent=mallId==='new-world-city-shanghai'
-    ?'七个楼层 L1–L7: '+(selectedMall.commercialDirectoryRecords||0)+' entradas del directorio y '+
-       (selectedMall.vectorRegionCount||0)+' sectores de color vectorizados. '+
-       'No son comercios individuales verificados; escala y escaleras no calibradas.'
+    ?'九个楼层 L1–L9: '+(selectedMall.vectorRegionCount||0)+' regiones fotográficas candidatas y '+
+       (selectedMall.commercialDirectoryRecords||0)+' registros históricos del directorio L1–L7. '+
+       'Contornos y comunicaciones verticales sin validar; rutas desactivadas.'
     :mallId==='ap-plaza'
      ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
      :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
@@ -886,19 +886,18 @@ function applyMallUi(){
   if(footer&&mallId==='ap-plaza'){
     footer.textContent='AP Plaza: 1 fotografía de B1; 197 polígonos candidatos trazados a partir de un calco visual IA y revisión fotográfica. Tiendas, rutas y escala sin validación física: NO APTO PARA NAVEGACIÓN REAL.';
   }else if(footer&&mallId==='new-world-city-shanghai'){
-    footer.textContent='新世界城: directorio transcrito de fotografías L1–L7, '+
-     'contornos agrupados según color y códigos sólo aproximados. '+
-     'No se conocen ubicaciones exactas ni fachadas para cada comercio. '+
+    footer.textContent='新世界城: nueve fotografías L1–L9, regiones individualizadas de manera provisional; '+
+     'servicios de circulación separados y directorio histórico L1–L7 conservado. '+
+     'No hay verificación de fachadas, escala ni conexión entre plantas. '+
      'NO APTO PARA NAVEGACIÓN REAL.';
   }
   $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
-    ?''+(selectedMall.vectorRegionCount||0)+' sectores fotográficos agrupados / '+
-      (selectedMall.commercialDirectoryRecords||0)+' entradas de directorio · ubicación provisional. NO NAVEGABLE.'
+    ?''+(selectedMall.vectorRegionCount||0)+' regiones candidatas entre L1–L9 · límites pendientes de revisión. NO NAVEGABLE.'
     :mallId==='ap-plaza'
      ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
      :'Contornos y pasillos trazados sobre tus imágenes.';
   $('mapTitle').textContent=mallId==='new-world-city-shanghai'
-    ?'L1–L7 · reconstrucción por color, sin escala calibrada'
+    ?'L1–L9 · geometrías provisionales sin escala calibrada'
     :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{bindUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);applyMallUi();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);

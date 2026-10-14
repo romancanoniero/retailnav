@@ -821,3 +821,32 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 #rnCoopQr img,#rnCoopQr canvas{max-width:100%;height:auto}
 #rnCoopStatus.error{color:#ffbca7}
 #rnCoopQuality{font-weight:650;color:#c4eff5}
+
+/* Quiet, always-visible positioning quality. Coordinates remain in the
+   accessible details; the map never manufactures a location on photo plans. */
+.rnAutoLocationStatus{
+ display:block;width:max-content;max-width:min(100%,370px);
+ margin-top:5px;padding:4px 8px;border-radius:9px;
+ border:1px solid #39556c;background:rgba(9,29,45,.84);
+ color:#b9cbd8;font-size:11px;font-weight:550;line-height:1.4;
+ white-space:normal;overflow-wrap:break-word;
+}
+.rnAutoLocationStatus[data-state="located"],
+.rnAutoLocationStatus[data-state="verified"]{
+ color:#c4fbf1;border-color:#3b9e89;
+}
+.rnAutoLocationStatus[data-state="blocked"],
+.rnAutoLocationStatus[data-state="waiting"]{
+ color:#f2d7a1;border-color:#986e35;
+}
+.rnAutoLocationStatus[data-state="referenced"]{
+ color:#e2d8f6;border-color:#776b9b;
+}
+#rnIndoorBtn[data-location-state="located"],
+#rnIndoorBtn[data-location-state="verified"]{
+ border-color:#71d1b7;box-shadow:inset 0 0 0 1px #397f75;
+}
+@media(max-width:570px){
+ .rnAutoLocationStatus{margin-top:3px;padding:3px 6px;font-size:9px;
+ max-width:min(70vw,280px);}
+}

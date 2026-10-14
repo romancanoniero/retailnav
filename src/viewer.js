@@ -415,12 +415,14 @@ function comparison(){
  combo.value=originalLevel;
  $('showReference').checked=true;$('showVectors').checked=true;
  $('overlayOpacity').value='.40';$('compareZoom').value='100';
+ resetCompareViewport();
  $('compareMode').value='filled';$('showUnitCodes').checked=true;
  $('compareMarkMode').checked=false;auditPoint=null;
  $('compareSaveIssue').disabled=true;
  if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}
  drawComparison();
  $('compareDialog').showModal();
+ requestAnimationFrame(compareRenderView);
 }
 const RN_SVG='http://www.w3.org/2000/svg';
 let auditPoint=null;
@@ -532,6 +534,7 @@ function drawAuditPins(level){
  }
 }
 function compareMapClick(event){
+ if(performance.now()-compareLastMovement<180)return;
  if(!$('compareMarkMode').checked)return;
  const svg=$('compareSvg');
  const ctm=svg.getScreenCTM();
@@ -589,6 +592,117 @@ function exportAuditIssues(){
  download('RetailNav-'+mallId+'-'+level+'-anomalies.json',
   JSON.stringify(payload,null,2),'application/json');
 }
+// Photo, polygon contours, unit IDs and QA pins live in one SVG viewBox.
+// Moving/scaling the WHOLE SVG retains pixel-perfect photo-to-vector alignment.
+const comparePointers=new Map();
+let comparePan={x:0,y:0},compareAppliedZoom=100,compareGesture=null;
+let compareLastMovement=-Infinity;
+const COMPARE_MIN_ZOOM=50,COMPARE_MAX_ZOOM=1200;
+const compareViewport=$('compareViewport'),compareImage=$('compareSvg');
+function compareClampPan(){
+ const frame=compareViewport.getBoundingClientRect();
+ const content=compareImage.getBoundingClientRect();
+ const gap=Math.min(28,frame.width*.08,frame.height*.08);
+ comparePan.x=clamp(comparePan.x,
+  Math.min(gap,frame.width-content.width-gap),gap);
+ comparePan.y=clamp(comparePan.y,
+  Math.min(gap,frame.height-content.height-gap),gap);
+}
+function compareRenderView(){
+ compareImage.style.width=compareAppliedZoom+'%';
+ compareImage.style.height='auto';
+ compareImage.style.maxHeight='none';
+ compareImage.style.minHeight='0';
+ compareClampPan();
+ compareImage.style.transform='translate3d('+comparePan.x.toFixed(2)+'px,'+
+  comparePan.y.toFixed(2)+'px,0)';
+ $('compareZoomValue').textContent=Math.round(compareAppliedZoom)+' %';
+ $('compareZoom').value=String(Math.round(compareAppliedZoom));
+}
+function compareSetZoom(value,clientX,clientY){
+ const r=compareViewport.getBoundingClientRect();
+ const x=Number.isFinite(clientX)?clientX-r.left:r.width/2;
+ const y=Number.isFinite(clientY)?clientY-r.top:r.height/2;
+ const zoom=clamp(value,COMPARE_MIN_ZOOM,COMPARE_MAX_ZOOM);
+ const k=zoom/compareAppliedZoom;
+ comparePan={x:x-(x-comparePan.x)*k,y:y-(y-comparePan.y)*k};
+ compareAppliedZoom=zoom;compareRenderView();
+}
+function resetCompareViewport(){
+ comparePointers.clear();compareGesture=null;
+ comparePan={x:0,y:0};compareAppliedZoom=100;
+ compareRenderView();
+}
+function compareStartGesture(){
+ const a=[...comparePointers.values()];
+ const r=compareViewport.getBoundingClientRect();
+ const center=a.length===2
+  ?{x:(a[0].x+a[1].x)/2-r.left,y:(a[0].y+a[1].y)/2-r.top}
+  :a.length?{x:a[0].x-r.left,y:a[0].y-r.top}:null;
+ compareGesture=a.length?{pan:{...comparePan},zoom:compareAppliedZoom,
+  points:a.map(p=>({...p})),center,
+  distance:a.length===2?Math.max(4,Math.hypot(
+   a[1].x-a[0].x,a[1].y-a[0].y)):null}:null;
+}
+compareImage.addEventListener('pointerdown',e=>{
+ if(e.pointerType==='mouse'&&e.button!==0)return;
+ comparePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ try{compareImage.setPointerCapture(e.pointerId);}catch{}
+ compareStartGesture();
+ compareViewport.classList.add('rnCompareDragging');
+ e.preventDefault();
+});
+compareImage.addEventListener('pointermove',e=>{
+ const p=comparePointers.get(e.pointerId);
+ if(!p||!compareGesture)return;
+ p.x=e.clientX;p.y=e.clientY;
+ const points=[...comparePointers.values()],g=compareGesture;
+ if(points.length===1){
+  const dx=points[0].x-g.points[0].x,dy=points[0].y-g.points[0].y;
+  if(Math.hypot(dx,dy)<3)return;
+  comparePan={x:g.pan.x+dx,y:g.pan.y+dy};
+ }else if(points.length===2&&g.points.length===2){
+  const r=compareViewport.getBoundingClientRect();
+  const mid={x:(points[0].x+points[1].x)/2-r.left,
+   y:(points[0].y+points[1].y)/2-r.top};
+  const next=clamp(g.zoom*Math.hypot(
+   points[1].x-points[0].x,points[1].y-points[0].y)/g.distance,
+   COMPARE_MIN_ZOOM,COMPARE_MAX_ZOOM);
+  const k=next/g.zoom;
+  compareAppliedZoom=next;
+  comparePan={x:mid.x-(g.center.x-g.pan.x)*k,
+   y:mid.y-(g.center.y-g.pan.y)*k};
+ }else return;
+ compareLastMovement=performance.now();
+ compareRenderView();
+ e.preventDefault();
+});
+const compareEndPointer=e=>{
+ if(!comparePointers.has(e.pointerId))return;
+ comparePointers.delete(e.pointerId);compareStartGesture();
+ if(!comparePointers.size)compareViewport.classList.remove('rnCompareDragging');
+};
+compareImage.addEventListener('pointerup',compareEndPointer);
+compareImage.addEventListener('pointercancel',compareEndPointer);
+compareImage.addEventListener('lostpointercapture',compareEndPointer);
+compareImage.addEventListener('wheel',e=>{
+ e.preventDefault();
+ compareSetZoom(compareAppliedZoom*Math.exp(-e.deltaY*.0015),
+  e.clientX,e.clientY);
+},{passive:false});
+compareImage.addEventListener('dblclick',e=>{
+ e.preventDefault();
+ compareSetZoom(compareAppliedZoom*1.6,e.clientX,e.clientY);
+});
+for(const type of ['gesturestart','gesturechange','gestureend'])
+ compareViewport.addEventListener(type,e=>e.preventDefault(),{passive:false});
+window.addEventListener('resize',()=>{
+ if($('compareDialog').open)compareRenderView();
+});
+window.visualViewport?.addEventListener('resize',()=>{
+ if($('compareDialog').open)compareRenderView();
+});
+
 function drawComparison(){
  const level=$('compareLevel').value;
  const floor=floors.find(f=>f.id===level);
@@ -630,9 +744,8 @@ function drawComparison(){
  drawUnitComparison(level);
  drawAuditPins(level);
  const zoom=Number($('compareZoom').value)||100;
- $('compareZoomValue').textContent=zoom+' %';
- $('compareSvg').style.width=zoom+'%';
- $('compareSvg').style.maxHeight='none';
+ if(zoom!==Math.round(compareAppliedZoom))compareSetZoom(zoom);
+ else compareRenderView();
 }
 function changeComparePhoto(event){
  const file=event?.target?.files?.[0];
@@ -660,6 +773,9 @@ window.RetailNavComparison={
   outlineColor:'#ffffff',fillColor:'#000000',outlineWidthPx:2,
   compareMode:$('compareMode')?.value,
   codeLabelsVisible:Boolean($('showUnitCodes')?.checked),
+  zoomPercent:Math.round(compareAppliedZoom),panX:comparePan.x,panY:comparePan.y,
+  pointerCount:comparePointers.size,touchGesturesEnabled:true,
+  panPinchSynchronized:true,
   issueCount:getAuditIssues($('compareLevel')?.value).length,
   geometricValidation:selectedMall.floorReferences?.[$('compareLevel')?.value]?.qa?.status||'unverified',
   floorCount:floors.length
@@ -711,11 +827,12 @@ document.addEventListener('pointerdown',event=>{
  if(!event.target.closest('#rnMapSearch'))
   $('rnMapSearch').classList.remove('finding');
 },{capture:true});$('closeDetail').onclick=clearSelection;$('focusShop').onclick=()=>{if(!selected)return;let f=selected;setFloor(f.floor);selected=f;target=pos(f.c,floors.find(fl=>fl.id===f.floor).y);distance=95;};$('routeBtn').onclick=findRoute;$('original').onclick=comparison;
-$('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';auditPoint=null;$('compareSaveIssue').disabled=true;drawComparison();};
+$('compareLevel').onchange=()=>{if(referenceObjectUrl){URL.revokeObjectURL(referenceObjectUrl);referenceObjectUrl=null;}$('compareLocalPhoto').value='';auditPoint=null;$('compareSaveIssue').disabled=true;resetCompareViewport();drawComparison();};
 $('showReference').onchange=drawComparison;
 $('showVectors').onchange=drawComparison;
 $('overlayOpacity').oninput=drawComparison;
-$('compareZoom').oninput=drawComparison;
+$('compareZoom').oninput=()=>compareSetZoom(Number($('compareZoom').value));
+$('compareResetView').onclick=resetCompareViewport;
 $('compareMode').onchange=drawComparison;
 $('showUnitCodes').onchange=drawComparison;
 $('compareMarkMode').onchange=()=>{

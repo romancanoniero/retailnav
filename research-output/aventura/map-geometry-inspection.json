@@ -1,0 +1,5739 @@
+{
+  "floors": [
+    {
+      "id": 361,
+      "name": "Lower Level",
+      "structure": {
+        "dataset_id": 4386,
+        "title": "Structures (Lower Level)",
+        "count": 263,
+        "geometry_types": {
+          "Polygon": 263
+        },
+        "properties_keys": {
+          "door_x": 263,
+          "door_y": 263,
+          "id": 263,
+          "loc_id": 228,
+          "uuid": 263,
+          "updated_at": 16,
+          "centroid": 6,
+          "created_at": 6,
+          "type": 6
+        },
+        "features_sample": [
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 15,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.144565,
+                        25.95739
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.144569,
+                        25.957387
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.144572,
+                        25.957383
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": "-80.14465566900562",
+              "door_y": "25.95739535999595",
+              "id": "00152e1de18db8fb80b4055924213cd0",
+              "loc_id": "20811",
+              "uuid": "00152e1de18db8fb80b4055924213cd0"
+            },
+            "id": "00152e1de18db8fb80b4055924213cd0"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.14122,
+                        25.953872
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141208,
+                        25.953877
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141207,
+                        25.953862
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": "-80.1412131536926",
+              "door_y": "25.953867656686622",
+              "id": "028268a7a33c3ee6402d8703a060d361",
+              "loc_id": "21018",
+              "uuid": "028268a7a33c3ee6402d8703a060d361"
+            },
+            "id": "028268a7a33c3ee6402d8703a060d361"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 10,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143239,
+                        25.955431
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143248,
+                        25.955412
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143328,
+                        25.955436
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": "-80.14324675449527",
+              "door_y": "25.955525215154697",
+              "id": "03a74421e793b9636c6f7f16f9976a1f",
+              "loc_id": "41353",
+              "uuid": "03a74421e793b9636c6f7f16f9976a1f"
+            },
+            "id": "03a74421e793b9636c6f7f16f9976a1f"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 7,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143732,
+                        25.957613
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143865,
+                        25.957574
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.144015,
+                        25.957528
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": "-80.14377310315999",
+              "door_y": "25.957658005411716",
+              "id": "040b4b7e173b0627cf3b6ea5a410dd11",
+              "loc_id": "20805",
+              "uuid": "040b4b7e173b0627cf3b6ea5a410dd11"
+            },
+            "id": "040b4b7e173b0627cf3b6ea5a410dd11"
+          }
+        ],
+        "style_id": null
+      },
+      "routing": {
+        "dataset_id": 2686,
+        "title": "Floor Lower Level - Routing",
+        "count": 594,
+        "geometry_types": {
+          "LineString": 594
+        },
+        "properties_keys": {
+          "id": 594,
+          "featureType": 594,
+          "accessible": 594,
+          "bidirectional": 594,
+          "width": 594,
+          "layerId": 594,
+          "type": 594,
+          "floor_id": 73,
+          "mapbox_id": 73,
+          "needs_updated": 73,
+          "roveiqgis_type": 73,
+          "weight": 73,
+          "rovemaps_feature_id": 1,
+          "rovemaps_floor_id": 1,
+          "rovemaps_mapbox_id": 1,
+          "rovemaps_needs_updated": 1,
+          "rovemaps_roveiqgis_type": 1,
+          "rovemaps_weight": 1,
+          "floor_ids": 7,
+          "created_at": 7
+        },
+        "features_sample": [
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142744,
+                    25.958004
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142773,
+                    25.958042
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "00a39f44269299203d242c395454a540",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2686",
+              "type": "feature:routing"
+            },
+            "id": "00a39f44269299203d242c395454a540"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142937,
+                    25.955468
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142979,
+                    25.955458
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "0138298dffff4f2f8377165fd82dcb13",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2686",
+              "type": "feature:routing"
+            },
+            "id": "0138298dffff4f2f8377165fd82dcb13"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.14256,
+                    25.956392
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142578,
+                    25.95636
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "015245bd3c96e18afc1aa77eb58b8bb3",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2686",
+              "type": "feature:routing"
+            },
+            "id": "015245bd3c96e18afc1aa77eb58b8bb3"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143832,
+                    25.957388
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143793,
+                    25.957401
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "018f45a54af24159d6f5b279cc2c498d",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2686",
+              "type": "feature:routing"
+            },
+            "id": "018f45a54af24159d6f5b279cc2c498d"
+          }
+        ],
+        "style_id": null
+      },
+      "styles": [
+        {
+          "dataset_id": 2687,
+          "title": "Floor Lower Level - Style Purple",
+          "count": 6,
+          "geometry_types": {
+            "Polygon": 6
+          },
+          "properties_keys": {
+            "class": 6,
+            "door_x": 6,
+            "door_y": 6,
+            "loc_id": 6
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141898,
+                          25.955452
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141852,
+                          25.955478
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141838,
+                          25.955453
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.14185830220623,
+                "door_y": 25.955460281270955,
+                "loc_id": ""
+              },
+              "id": "1f54bf847292750c5899ea9f454a7a06"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141862,
+                          25.955499
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141852,
+                          25.955478
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141898,
+                          25.955452
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.1418640958551,
+                "door_y": 25.95548152465017,
+                "loc_id": ""
+              },
+              "id": "3966a10d6bc2e22f1ccd5ca23fcc6941"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142903,
+                          25.957035
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142889,
+                          25.957061
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14287,
+                          25.957051
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": null,
+                "door_y": null,
+                "loc_id": ""
+              },
+              "id": "3a04f5e5b989903ac44be27afd9e8d48"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 40,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141998,
+                          25.956038
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142001,
+                          25.956039
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142005,
+                          25.956041
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.14204225055803,
+                "door_y": 25.956042542983116,
+                "loc_id": ""
+              },
+              "id": "5da05ca4cebdc3c6748e6e53ad108e12"
+            }
+          ],
+          "style_id": 650
+        },
+        {
+          "dataset_id": 2688,
+          "title": "Floor Lower Level - Style Grass",
+          "count": 7,
+          "geometry_types": {
+            "Polygon": 7
+          },
+          "properties_keys": {
+            "class": 7,
+            "id": 7
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954486
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140643,
+                          25.954487
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140642,
+                          25.954484
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "2c92619676a37aa5d5c0569ac59a924b"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 19,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140857,
+                          25.955354
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140853,
+                          25.955337
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140858,
+                          25.955343
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "393467ac402c4f27f31826fb40d133f4"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 4,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141564,
+                          25.957117
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141574,
+                          25.957114
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14156,
+                          25.957118
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "4fa5fb3162a2fc81612ad449045bcddc"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140601,
+                          25.954347
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.1406,
+                          25.954344
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140603,
+                          25.954343
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "66938b956d30d48c2ae2723ba7ce9ff7"
+            }
+          ],
+          "style_id": 628
+        },
+        {
+          "dataset_id": 2689,
+          "title": "Floor Lower Level - Style Floors",
+          "count": 3,
+          "geometry_types": {
+            "Polygon": 3
+          },
+          "properties_keys": {
+            "class": 3,
+            "id": 3,
+            "uuid": 1
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 425,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140599,
+                          25.954349
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140598,
+                          25.954345
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140601,
+                          25.954344
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": "a389d972bb0aff176d3d08354ba11143"
+              },
+              "id": "a389d972bb0aff176d3d08354ba11143"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 11,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143188,
+                          25.956293
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143229,
+                          25.956288
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143357,
+                          25.956388
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": "c7dd905c543d4b9f8d358d667b69fefe",
+                "uuid": "c7dd905c543d4b9f8d358d667b69fefe"
+              },
+              "id": "c7dd905c543d4b9f8d358d667b69fefe"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 30,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140847,
+                          25.955324
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140721,
+                          25.954888
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140753,
+                          25.954879
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": 0
+              },
+              "id": "fc3ea3c0c6fdfde89d4e8182a7e42376"
+            }
+          ],
+          "style_id": 633
+        },
+        {
+          "dataset_id": 2691,
+          "title": "abby-stoke",
+          "count": 37,
+          "geometry_types": {
+            "Polygon": 37
+          },
+          "properties_keys": {
+            "id": 37,
+            "layerId": 37,
+            "customStyleId": 33,
+            "featureType": 37,
+            "customStyleColor": 37,
+            "customStyleHeight": 37,
+            "customStyleBackground": 37,
+            "customStyleBaseHeight": 37,
+            "customStyleMinHeight": 33,
+            "customStyleMaxHeight": 33,
+            "customStyleFadeDistance": 33,
+            "customStyleOpacity": 37,
+            "floor_ids": 37,
+            "uuid": 4,
+            "type": 4,
+            "entityKind": 4,
+            "custom_style_id": 4,
+            "status": 4,
+            "fillColor": 4,
+            "fillOpacity": 4,
+            "strokeColor": 4,
+            "strokeWidth": 4,
+            "strokeOpacity": 4,
+            "height": 4,
+            "baseHeight": 4,
+            "created_at": 4,
+            "updated_at": 4
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143137,
+                          25.956039
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143135,
+                          25.956038
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143209,
+                          25.955906
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143211,
+                          25.955912
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143141,
+                          25.956036
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143206,
+                          25.956071
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "083eacb0be2a9b5fcaf85cebdb48e7b1",
+                "layerId": "styles_2691",
+                "customStyleId": "styles_2691",
+                "featureType": "style_feature",
+                "customStyleColor": "#2B2B2B",
+                "customStyleHeight": 5,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "083eacb0be2a9b5fcaf85cebdb48e7b1"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 22,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14312,
+                          25.95624
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142464,
+                          25.955872
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142548,
+                          25.955727
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 21,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142953,
+                          25.955858
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142768,
+                          25.95575
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142818,
+                          25.955662
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "0a4c54502d5ec028d02dca2e6b9a5142",
+                "layerId": "styles_2691",
+                "customStyleId": "styles_2691",
+                "featureType": "style_feature",
+                "customStyleColor": "#2B2B2B",
+                "customStyleHeight": 5,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "0a4c54502d5ec028d02dca2e6b9a5142"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142684,
+                          25.955685
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142675,
+                          25.955687
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142596,
+                          25.95565
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "0b6879b69027b1662050a36179e2b271",
+                "layerId": "styles_2691",
+                "customStyleId": "styles_2691",
+                "featureType": "style_feature",
+                "customStyleColor": "#2B2B2B",
+                "customStyleHeight": 5,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "0b6879b69027b1662050a36179e2b271"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 25,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143405,
+                          25.956303
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14336,
+                          25.956163
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143392,
+                          25.956141
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 24,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143391,
+                          25.956147
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143366,
+                          25.956165
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143408,
+                          25.956297
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "159069415593fd356c4f984a62ba94b5",
+                "layerId": "styles_2691",
+                "customStyleId": "styles_2691",
+                "featureType": "style_feature",
+                "customStyleColor": "#2B2B2B",
+                "customStyleHeight": 5,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "159069415593fd356c4f984a62ba94b5"
+            }
+          ],
+          "style_id": 1611
+        },
+        {
+          "dataset_id": 2692,
+          "title": "Floor Lower Level - Style Parking Lots",
+          "count": 21,
+          "geometry_types": {
+            "Polygon": 21
+          },
+          "properties_keys": {
+            "class": 21,
+            "id": 19
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 164,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140856,
+                          25.953806
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140857,
+                          25.953803
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140858,
+                          25.953801
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "0aa9e05ac41e6eb1465fa2f2a1cd77d3"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143566,
+                          25.956493
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143542,
+                          25.956396
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144902,
+                          25.955989
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "0c44e385ecfe1e65650dece1ac94b73b"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 32,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142235,
+                          25.960061
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142242,
+                          25.960048
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142437,
+                          25.959837
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "0ecb21303af456fc85a34f77c0865f29"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 114,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144825,
+                          25.955323
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144837,
+                          25.955301
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144885,
+                          25.955347
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "19304bc3aa57c6ff8eafc368f12ba455"
+            }
+          ],
+          "style_id": 629
+        },
+        {
+          "dataset_id": 2693,
+          "title": "Exterior Walls",
+          "count": 4,
+          "geometry_types": {
+            "Polygon": 4
+          },
+          "properties_keys": {
+            "id": 4,
+            "layerId": 4,
+            "customStyleId": 4,
+            "featureType": 4,
+            "customStyleColor": 4,
+            "customStyleHeight": 4,
+            "customStyleBackground": 4,
+            "customStyleBaseHeight": 4,
+            "customStyleMinHeight": 4,
+            "customStyleMaxHeight": 4,
+            "customStyleFadeDistance": 4,
+            "customStyleOpacity": 4,
+            "floor_ids": 4
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 43,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144264,
+                          25.95811
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144249,
+                          25.958101
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144252,
+                          25.958094
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "1cf4d5d4a38103683c773c50d6ef98f7",
+                "layerId": "styles_2693",
+                "customStyleId": "styles_2693",
+                "featureType": "style_feature",
+                "customStyleColor": "#000000",
+                "customStyleHeight": 4.8,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "1cf4d5d4a38103683c773c50d6ef98f7"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 229,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144217,
+                          25.958155
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144221,
+                          25.958149
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144236,
+                          25.958157
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "39cbd1f7806d5c5abda7bde8501a08d9",
+                "layerId": "styles_2693",
+                "customStyleId": "styles_2693",
+                "featureType": "style_feature",
+                "customStyleColor": "#000000",
+                "customStyleHeight": 4.8,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "39cbd1f7806d5c5abda7bde8501a08d9"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 473,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14458,
+                          25.957781
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144579,
+                          25.957763
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14458,
+                          25.957759
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "cf856668af4bee29291d7c483dcc864d",
+                "layerId": "styles_2693",
+                "customStyleId": "styles_2693",
+                "featureType": "style_feature",
+                "customStyleColor": "#000000",
+                "customStyleHeight": 4.8,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "cf856668af4bee29291d7c483dcc864d"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 1321,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140591,
+                          25.954346
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140591,
+                          25.954343
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140591,
+                          25.95434
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "dc30f7f259da65680b8c39da9f0b6dfc",
+                "layerId": "styles_2693",
+                "customStyleId": "styles_2693",
+                "featureType": "style_feature",
+                "customStyleColor": "#000000",
+                "customStyleHeight": 4.8,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  361
+                ]
+              },
+              "id": "dc30f7f259da65680b8c39da9f0b6dfc"
+            }
+          ],
+          "style_id": 631
+        },
+        {
+          "dataset_id": 4387,
+          "title": "Walls",
+          "count": 201,
+          "geometry_types": {
+            "Polygon": 201
+          },
+          "properties_keys": {
+            "customStyleBackground": 201,
+            "customStyleBaseHeight": 201,
+            "customStyleColor": 201,
+            "customStyleFadeDistance": 198,
+            "customStyleHeight": 201,
+            "customStyleId": 198,
+            "customStyleMaxHeight": 198,
+            "customStyleMinHeight": 198,
+            "customStyleOpacity": 201,
+            "featureType": 201,
+            "floor_ids": 201,
+            "id": 201,
+            "layerId": 201,
+            "updated_at": 15,
+            "baseHeight": 12,
+            "created_at": 12,
+            "custom_style_id": 12,
+            "entityKind": 12,
+            "fillColor": 12,
+            "fillOpacity": 12,
+            "height": 12,
+            "status": 12,
+            "strokeColor": 12,
+            "strokeOpacity": 12,
+            "strokeWidth": 12,
+            "type": 12,
+            "uuid": 12
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 74,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142452,
+                          25.95695
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142451,
+                          25.956947
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142437,
+                          25.956897
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 39,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142454,
+                          25.956946
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142483,
+                          25.956939
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142459,
+                          25.956861
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleColor": "#000000",
+                "customStyleFadeDistance": null,
+                "customStyleHeight": 5,
+                "customStyleId": "styles_2690",
+                "customStyleMaxHeight": null,
+                "customStyleMinHeight": null,
+                "customStyleOpacity": 100,
+                "featureType": "style_feature",
+                "floor_ids": [
+                  361
+                ],
+                "id": "01a3bbf2e386228dea19c11972731af3",
+                "layerId": "styles_2690"
+              },
+              "id": "01a3bbf2e386228dea19c11972731af3"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 58,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143097,
+                          25.957658
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143095,
+                          25.957658
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143094,
+                          25.957658
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 34,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143097,
+                          25.957655
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143099,
+                          25.957655
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143102,
+                          25.957653
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleColor": "#000000",
+                "customStyleFadeDistance": null,
+                "customStyleHeight": 5,
+                "customStyleId": "styles_2690",
+                "customStyleMaxHeight": null,
+                "customStyleMinHeight": null,
+                "customStyleOpacity": 100,
+                "featureType": "style_feature",
+                "floor_ids": [
+                  361
+                ],
+                "id": "0213925ca9771b14a51f00c6e7dc6d71",
+                "layerId": "styles_2690"
+              },
+              "id": "0213925ca9771b14a51f00c6e7dc6d71"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 41,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14429,
+                          25.957243
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144289,
+                          25.95724
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144275,
+                          25.956901
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 29,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144293,
+                          25.957239
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144356,
+                          25.957233
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144361,
+                          25.957225
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleColor": "#000000",
+                "customStyleFadeDistance": null,
+                "customStyleHeight": 5,
+                "customStyleId": "styles_2690",
+                "customStyleMaxHeight": null,
+                "customStyleMinHeight": null,
+                "customStyleOpacity": 100,
+                "featureType": "style_feature",
+                "floor_ids": [
+                  361
+                ],
+                "id": "048c9b8ae6ab800dfdfb6f09a537b8bc",
+                "layerId": "styles_2690"
+              },
+              "id": "048c9b8ae6ab800dfdfb6f09a537b8bc"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 14,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142264,
+                          25.958168
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142263,
+                          25.958166
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142222,
+                          25.958085
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142265,
+                          25.958164
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142294,
+                          25.95815
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142375,
+                          25.958108
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleColor": "#000000",
+                "customStyleFadeDistance": null,
+                "customStyleHeight": 5,
+                "customStyleId": "styles_2690",
+                "customStyleMaxHeight": null,
+                "customStyleMinHeight": null,
+                "customStyleOpacity": 100,
+                "featureType": "style_feature",
+                "floor_ids": [
+                  361
+                ],
+                "id": "069e98680b77821df16f8c5506ae8612",
+                "layerId": "styles_2690"
+              },
+              "id": "069e98680b77821df16f8c5506ae8612"
+            }
+          ],
+          "style_id": 632
+        }
+      ]
+    },
+    {
+      "id": 362,
+      "name": "Upper Level",
+      "structure": {
+        "dataset_id": 2694,
+        "title": "Structures (Upper Level)",
+        "count": 250,
+        "geometry_types": {
+          "Polygon": 250
+        },
+        "properties_keys": {
+          "id": 250,
+          "uuid": 250,
+          "door_x": 250,
+          "door_y": 250,
+          "loc_id": 188,
+          "type": 1,
+          "centroid": 1,
+          "created_at": 1,
+          "updated_at": 1
+        },
+        "features_sample": [
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 31,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143042,
+                        25.956553
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143021,
+                        25.956485
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143081,
+                        25.956466
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "00706317a1854f4f3187585927e80c54",
+              "uuid": "00706317a1854f4f3187585927e80c54",
+              "door_x": "-80.14321305043518",
+              "door_y": "25.956589801399964"
+            },
+            "id": "00706317a1854f4f3187585927e80c54"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143493,
+                        25.955171
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143461,
+                        25.95514
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143491,
+                        25.955118
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "0233b8bab845ee35ed8a7f2d8d64a5c0",
+              "uuid": "0233b8bab845ee35ed8a7f2d8d64a5c0",
+              "loc_id": "21018",
+              "door_x": "-80.14349800300302",
+              "door_y": "25.95514524624625"
+            },
+            "id": "0233b8bab845ee35ed8a7f2d8d64a5c0"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 30,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141935,
+                        25.957966
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141897,
+                        25.957839
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141984,
+                        25.957813
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "02542d9370720bc3e6e5eedcb9107812",
+              "uuid": "02542d9370720bc3e6e5eedcb9107812",
+              "door_x": "-80.14198914210982",
+              "door_y": "25.958147085937764"
+            },
+            "id": "02542d9370720bc3e6e5eedcb9107812"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.142921,
+                        25.958078
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.142854,
+                        25.957996
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.142922,
+                        25.957941
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "032b6eb379591cf208ce3cbaa69d1fef",
+              "uuid": "032b6eb379591cf208ce3cbaa69d1fef",
+              "loc_id": "29111",
+              "door_x": "-80.14290574564265",
+              "door_y": "25.957981966944743"
+            },
+            "id": "032b6eb379591cf208ce3cbaa69d1fef"
+          }
+        ],
+        "style_id": null
+      },
+      "routing": {
+        "dataset_id": 2695,
+        "title": "Routing (Upper Level) ",
+        "count": 489,
+        "geometry_types": {
+          "LineString": 489
+        },
+        "properties_keys": {
+          "id": 489,
+          "featureType": 489,
+          "accessible": 489,
+          "bidirectional": 489,
+          "width": 489,
+          "layerId": 489
+        },
+        "features_sample": [
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143263,
+                    25.956974
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143229,
+                    25.957037
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "006088ec97f8d2d223136485eca2f278",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2695"
+            },
+            "id": "006088ec97f8d2d223136485eca2f278"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.14225,
+                    25.958511
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142224,
+                    25.958479
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "00a3dcc549b1d211d169c390f9b5f49e",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2695"
+            },
+            "id": "00a3dcc549b1d211d169c390f9b5f49e"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142952,
+                    25.956942
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143009,
+                    25.957152
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "00a4bffc7a9326d1c7787724a484e9bd",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2695"
+            },
+            "id": "00a4bffc7a9326d1c7787724a484e9bd"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143171,
+                    25.955495
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143197,
+                    25.955509
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "015fced08fcb9edbeadf514698d015c0",
+              "featureType": "routing_feature",
+              "accessible": null,
+              "bidirectional": null,
+              "width": null,
+              "layerId": "routing_2695"
+            },
+            "id": "015fced08fcb9edbeadf514698d015c0"
+          }
+        ],
+        "style_id": null
+      },
+      "styles": [
+        {
+          "dataset_id": 2696,
+          "title": "Floor Upper Level - Style Exterior Walls",
+          "count": 1,
+          "geometry_types": {
+            "Polygon": 1
+          },
+          "properties_keys": {
+            "class": 1,
+            "id": 1
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 407,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140624,
+                          25.954533
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140626,
+                          25.954532
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140576,
+                          25.954374
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 424,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141949,
+                          25.958749
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141954,
+                          25.958752
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14196,
+                          25.958754
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-outterWall",
+                "id": 0
+              },
+              "id": "53e0dd1f533ba4016bd9407bc4f75193"
+            }
+          ],
+          "style_id": 631
+        },
+        {
+          "dataset_id": 2697,
+          "title": "Floor Upper Level - Style Floors",
+          "count": 2,
+          "geometry_types": {
+            "Polygon": 2
+          },
+          "properties_keys": {
+            "class": 2
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 109,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144532,
+                          25.959203
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143841,
+                          25.959393
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143735,
+                          25.959082
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor"
+              },
+              "id": "bbfb0e1c31e7c7739830d4b76f786c2c"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 4,
+                "items": [
+                  {
+                    "count": 65,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142518,
+                          25.955345
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142603,
+                          25.955324
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142611,
+                          25.955352
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 10,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142612,
+                          25.955576
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142633,
+                          25.955641
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142609,
+                          25.955684
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 9,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142513,
+                          25.955865
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142747,
+                          25.955999
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142857,
+                          25.955803
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor"
+              },
+              "id": "e3f348d8878a8bc6812a48a9383970b2"
+            }
+          ],
+          "style_id": 633
+        },
+        {
+          "dataset_id": 2698,
+          "title": "Floor Upper Level - Style Walls",
+          "count": 206,
+          "geometry_types": {
+            "Polygon": 206
+          },
+          "properties_keys": {
+            "class": 206,
+            "id": 197
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 21,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141799,
+                          25.956348
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141796,
+                          25.956347
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141442,
+                          25.956156
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 11,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141797,
+                          25.956344
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141797,
+                          25.956344
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14182,
+                          25.956303
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-wal",
+                "id": 0
+              },
+              "id": "0057ee94b39476be31b35e26ffbf5b66"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 18,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142223,
+                          25.956066
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14222,
+                          25.956065
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142169,
+                          25.956037
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 10,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142221,
+                          25.956062
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142221,
+                          25.956062
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14233,
+                          25.955863
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-wal",
+                "id": 0
+              },
+              "id": "021910d8f805cfdfb946bc2c14abcb39"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 18,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142503,
+                          25.956217
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.1425,
+                          25.956215
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142416,
+                          25.956172
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 9,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142501,
+                          25.956213
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142501,
+                          25.956213
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142575,
+                          25.956073
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-wal",
+                "id": 0
+              },
+              "id": "0271e9fb26ec151c1f0fa835df0cf7fb"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143807,
+                          25.95781
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143806,
+                          25.957807
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143786,
+                          25.957738
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143809,
+                          25.957806
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143809,
+                          25.957806
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144076,
+                          25.957726
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-wal",
+                "id": 0
+              },
+              "id": "040919000ca0b54c20eb0c872fedd434"
+            }
+          ],
+          "style_id": 632
+        },
+        {
+          "dataset_id": 2699,
+          "title": "Floor Upper Level - Style Purple",
+          "count": 7,
+          "geometry_types": {
+            "Polygon": 7
+          },
+          "properties_keys": {
+            "class": 7,
+            "door_x": 6,
+            "door_y": 6,
+            "loc_id": 6
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141816,
+                          25.955513
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141803,
+                          25.955489
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141868,
+                          25.955452
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.14181967788019,
+                "door_y": 25.95549914699882,
+                "loc_id": ""
+              },
+              "id": "096d186172dcc06df78d9029e32451a0"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143146,
+                          25.957575
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143108,
+                          25.957645
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143094,
+                          25.957637
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.14312180046535,
+                "door_y": 25.957603207149397,
+                "loc_id": ""
+              },
+              "id": "4f84fd2a5503a6bd806f61cd71f2b13b"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 25,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141997,
+                          25.955984
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142004,
+                          25.955983
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142007,
+                          25.955998
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": null,
+                "door_y": null,
+                "loc_id": ""
+              },
+              "id": "5498c0903dc6508b726ebe311e1fefa9"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141827,
+                          25.955534
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141816,
+                          25.955513
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141881,
+                          25.955476
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-purp",
+                "door_x": -80.14182885115758,
+                "door_y": 25.95551411392509,
+                "loc_id": ""
+              },
+              "id": "72eeca4081c58d59b4c9875abcd43817"
+            }
+          ],
+          "style_id": 650
+        },
+        {
+          "dataset_id": 2700,
+          "title": "Floor Upper Level - Style Grass",
+          "count": 7,
+          "geometry_types": {
+            "Polygon": 7
+          },
+          "properties_keys": {
+            "class": 7,
+            "id": 7
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 4,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141033,
+                          25.954034
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141033,
+                          25.954034
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141045,
+                          25.95403
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "0df2641d5d33f9dca3e2ee160c21804b"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 4,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143322,
+                          25.959219
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143308,
+                          25.959224
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143325,
+                          25.959218
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "5a2f63f0969576367526ba419140c559"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954504
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140647,
+                          25.954505
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954502
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "610d449d2e55b82b229ee1af99933ad9"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954486
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140643,
+                          25.954487
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140642,
+                          25.954484
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "64e7bcf00cd63cc22bad560492c9b526"
+            }
+          ],
+          "style_id": 628
+        },
+        {
+          "dataset_id": 2701,
+          "title": "Floor Upper Level - Style Parking Lots",
+          "count": 21,
+          "geometry_types": {
+            "Polygon": 21
+          },
+          "properties_keys": {
+            "class": 21,
+            "id": 21
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 15,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142438,
+                          25.955302
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142252,
+                          25.955356
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142121,
+                          25.95498
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": null
+              },
+              "id": "0ebff64fbeded26b139cd6ca1c3ce8cb"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 103,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140591,
+                          25.959282
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.139871,
+                          25.959327
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.139746,
+                          25.957466
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "165886130206845f38a771760ce9b027"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 19,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.13972,
+                          25.957161
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.139634,
+                          25.956609
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140089,
+                          25.956492
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "24139a84439e3c358d2e69b7d84b3f81"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 257,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141667,
+                          25.954927
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141618,
+                          25.954872
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141375,
+                          25.954052
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "2f330a22dd4ca5c98202a95eae8be401"
+            }
+          ],
+          "style_id": 629
+        },
+        {
+          "dataset_id": 2702,
+          "title": "Floor Upper Level - Style abby-stoke",
+          "count": 21,
+          "geometry_types": {
+            "Polygon": 21
+          },
+          "properties_keys": {
+            "class": 21,
+            "id": 4
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143168,
+                          25.955551
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143164,
+                          25.955549
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143208,
+                          25.955478
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "15c98b00250d95ad6d89a8bc6b43d5d5"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143196,
+                          25.956282
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14312,
+                          25.956238
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143157,
+                          25.956174
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143194,
+                          25.956276
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143227,
+                          25.956218
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143159,
+                          25.95618
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "1af51c271c7c727065a82778dd6fee00"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142823,
+                          25.955922
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142881,
+                          25.955814
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142959,
+                          25.955858
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14291,
+                          25.955933
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142953,
+                          25.955859
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142883,
+                          25.95582
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "2059b99adb1dedc6743cbaf4ac1dcca6"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143134,
+                          25.956161
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14311,
+                          25.956202
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142841,
+                          25.95605
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143271,
+                          25.956143
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143218,
+                          25.95611
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142967,
+                          25.955969
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "250c30ae5cc2f99b5622823c54d37110"
+            }
+          ],
+          "style_id": 1611
+        }
+      ]
+    },
+    {
+      "id": 363,
+      "name": "Third Level",
+      "structure": {
+        "dataset_id": 2703,
+        "title": "Floor Third Level - Structures",
+        "count": 93,
+        "geometry_types": {
+          "Polygon": 93
+        },
+        "properties_keys": {
+          "door_x": 69,
+          "door_y": 69,
+          "id": 93,
+          "loc_id": 86,
+          "uuid": 12,
+          "centroid": 4,
+          "created_at": 4,
+          "type": 4,
+          "updated_at": 4,
+          "output_x": 1,
+          "output_y": 1
+        },
+        "features_sample": [
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143016,
+                        25.957709
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.14299,
+                        25.957693
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143002,
+                        25.957671
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": "-80.14301357551204",
+              "door_y": "25.957693460478165",
+              "id": "00764b9fddc6eb1da0a717b15066f995",
+              "loc_id": "37897",
+              "uuid": "00764b9fddc6eb1da0a717b15066f995"
+            },
+            "id": "00764b9fddc6eb1da0a717b15066f995"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 7,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143025,
+                        25.957875
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.142869,
+                        25.958001
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.142851,
+                        25.957936
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": null,
+              "door_y": null,
+              "id": "038edbce547c38eaccf9a4a1b49acd5d",
+              "loc_id": null
+            },
+            "id": "038edbce547c38eaccf9a4a1b49acd5d"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143154,
+                        25.957946
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143215,
+                        25.957981
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.143097,
+                        25.958189
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "door_x": -80.14305773663973,
+              "door_y": 25.958127408660502,
+              "id": "04cc408376d0e435f2ad55c7f7ba2414",
+              "loc_id": 21061
+            },
+            "id": "04cc408376d0e435f2ad55c7f7ba2414"
+          },
+          {
+            "geometry_type": "Polygon",
+            "coordinates": {
+              "count": 1,
+              "items": [
+                {
+                  "count": 5,
+                  "items": [
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.14172,
+                        25.954513
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.141694,
+                        25.954516
+                      ]
+                    },
+                    {
+                      "count": 2,
+                      "items": [
+                        -80.1417,
+                        25.9545
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "06533c8851b1dcea1b18b6542a482099",
+              "loc_id": "21018"
+            },
+            "id": "06533c8851b1dcea1b18b6542a482099"
+          }
+        ],
+        "style_id": null
+      },
+      "routing": {
+        "dataset_id": 2704,
+        "title": "Routing (Third Level) ",
+        "count": 141,
+        "geometry_types": {
+          "LineString": 141
+        },
+        "properties_keys": {
+          "id": 141
+        },
+        "features_sample": [
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143178,
+                    25.957889
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.143079,
+                    25.95782
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "000fb8e65db548430bae8160e9bb6b06"
+            },
+            "id": "000fb8e65db548430bae8160e9bb6b06"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142808,
+                    25.957965
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.142781,
+                    25.957978
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "00fa6f2ffd3b342cb7fc2c7270dd1620"
+            },
+            "id": "00fa6f2ffd3b342cb7fc2c7270dd1620"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.144575,
+                    25.957306
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.144572,
+                    25.9573
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "0109d5d28764413d7f6b083f339f1ec4"
+            },
+            "id": "0109d5d28764413d7f6b083f339f1ec4"
+          },
+          {
+            "geometry_type": "LineString",
+            "coordinates": {
+              "count": 2,
+              "items": [
+                {
+                  "count": 2,
+                  "items": [
+                    -80.144578,
+                    25.957336
+                  ]
+                },
+                {
+                  "count": 2,
+                  "items": [
+                    -80.144575,
+                    25.957306
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "id": "02e47a53a83e6ddf08f2956d95c2934f"
+            },
+            "id": "02e47a53a83e6ddf08f2956d95c2934f"
+          }
+        ],
+        "style_id": null
+      },
+      "styles": [
+        {
+          "dataset_id": 2705,
+          "title": "Floor Third Level - Style Grass",
+          "count": 6,
+          "geometry_types": {
+            "Polygon": 6
+          },
+          "properties_keys": {
+            "class": 6,
+            "id": 6
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 4,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141564,
+                          25.957117
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141574,
+                          25.957114
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14156,
+                          25.957118
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "15419ff0c9e300a543509f9c6b665c89"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954486
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140643,
+                          25.954487
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140642,
+                          25.954484
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "242c9205c32b0d9d3918186172b46cab"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954504
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140647,
+                          25.954505
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140646,
+                          25.954502
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "33399e0d6c9767ad5b32e0da49f87090"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 4,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141033,
+                          25.954034
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141033,
+                          25.954034
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141045,
+                          25.95403
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-grass",
+                "id": 0
+              },
+              "id": "8c8ee0bd70e64430453171fd83660993"
+            }
+          ],
+          "style_id": 628
+        },
+        {
+          "dataset_id": 2706,
+          "title": "Floor Third Level - Style Exterior Walls",
+          "count": 3,
+          "geometry_types": {
+            "Polygon": 3
+          },
+          "properties_keys": {
+            "class": 3,
+            "id": 3
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 34,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144351,
+                          25.957804
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14407,
+                          25.957644
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144043,
+                          25.957545
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 33,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144356,
+                          25.957782
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144752,
+                          25.957763
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144744,
+                          25.957462
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-outterWall",
+                "id": 0
+              },
+              "id": "17aae0752e31c944c6e842b39ed22fbc"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 86,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141136,
+                          25.956222
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140958,
+                          25.955565
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141052,
+                          25.955396
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 86,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141152,
+                          25.956195
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141252,
+                          25.956167
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141253,
+                          25.956167
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-outterWall",
+                "id": 0
+              },
+              "id": "58705424c2839455db0085c2f522f198"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 34,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142192,
+                          25.958884
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142133,
+                          25.958818
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142058,
+                          25.958597
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 34,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142197,
+                          25.958856
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142241,
+                          25.958831
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142326,
+                          25.958777
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-outterWall",
+                "id": 0
+              },
+              "id": "f3d3d881f0846ba56f26439a181402e7"
+            }
+          ],
+          "style_id": 631
+        },
+        {
+          "dataset_id": 2707,
+          "title": "Floor Third Level - Style Vacant Third Floor",
+          "count": 1,
+          "geometry_types": {
+            "Polygon": 1
+          },
+          "properties_keys": {
+            "class": 1,
+            "id": 1
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144749,
+                          25.957226
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144734,
+                          25.956818
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.145446,
+                          25.956787
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-Vacant",
+                "id": 0
+              },
+              "id": "6fda79a4b0fccf920502ebb92a0e071f"
+            }
+          ],
+          "style_id": 634
+        },
+        {
+          "dataset_id": 2708,
+          "title": "Floor Third Level - Style Floors",
+          "count": 4,
+          "geometry_types": {
+            "Polygon": 4
+          },
+          "properties_keys": {
+            "class": 4,
+            "id": 3
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 16,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144752,
+                          25.957763
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144356,
+                          25.957782
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144089,
+                          25.957629
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": null
+              },
+              "id": "1de1ddcac3e58b26ffad3cdf474b3b88"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 32,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142464,
+                          25.955152
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14248,
+                          25.955144
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142477,
+                          25.955139
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 19,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142898,
+                          25.955332
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142787,
+                          25.95536
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142846,
+                          25.955569
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor"
+              },
+              "id": "5628daff6cc04e0aaf0d5bcd84f23c7c"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 27,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143305,
+                          25.957843
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143092,
+                          25.958224
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143075,
+                          25.958238
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": null
+              },
+              "id": "96e8c52d05791eddff47a9d736dbab4c"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 39,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141957,
+                          25.956404
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141848,
+                          25.956342
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141793,
+                          25.956438
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-floor",
+                "id": null
+              },
+              "id": "b5b0581dfdea52e51f5f308678163640"
+            }
+          ],
+          "style_id": 633
+        },
+        {
+          "dataset_id": 2709,
+          "title": "Purple",
+          "count": 5,
+          "geometry_types": {
+            "Polygon": 5
+          },
+          "properties_keys": {
+            "door_x": 5,
+            "door_y": 5,
+            "loc_id": 5,
+            "id": 5,
+            "layerId": 5,
+            "customStyleId": 5,
+            "featureType": 5,
+            "customStyleColor": 5,
+            "customStyleHeight": 5,
+            "customStyleBackground": 5,
+            "customStyleBaseHeight": 5,
+            "customStyleMinHeight": 5,
+            "customStyleMaxHeight": 5,
+            "customStyleFadeDistance": 5,
+            "customStyleOpacity": 5,
+            "floor_ids": 5
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142229,
+                          25.958548
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142214,
+                          25.958528
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142238,
+                          25.95851
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "door_x": -80.14223323309301,
+                "door_y": 25.958528056309888,
+                "loc_id": null,
+                "id": "338cea2ae25b2cefb42d08f0e4586369",
+                "layerId": "styles_2709",
+                "customStyleId": "styles_2709",
+                "featureType": "style_feature",
+                "customStyleColor": "#99A2C2",
+                "customStyleHeight": 4.9,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  363
+                ]
+              },
+              "id": "338cea2ae25b2cefb42d08f0e4586369"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144404,
+                          25.957338
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144404,
+                          25.95732
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144484,
+                          25.957318
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "door_x": null,
+                "door_y": null,
+                "loc_id": null,
+                "id": "5a9f06b186ea704edecf20f32371e6a4",
+                "layerId": "styles_2709",
+                "customStyleId": "styles_2709",
+                "featureType": "style_feature",
+                "customStyleColor": "#99A2C2",
+                "customStyleHeight": 4.9,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  363
+                ]
+              },
+              "id": "5a9f06b186ea704edecf20f32371e6a4"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142486,
+                          25.958211
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142477,
+                          25.958191
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142531,
+                          25.958166
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "door_x": -80.14248302713048,
+                "door_y": 25.958199985330737,
+                "loc_id": null,
+                "id": "96751fb5f21dc913a1828a0f729948f0",
+                "layerId": "styles_2709",
+                "customStyleId": "styles_2709",
+                "featureType": "style_feature",
+                "customStyleColor": "#99A2C2",
+                "customStyleHeight": 4.9,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  363
+                ]
+              },
+              "id": "96751fb5f21dc913a1828a0f729948f0"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142975,
+                          25.957729
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142962,
+                          25.957704
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142984,
+                          25.957693
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "door_x": -80.14298322594885,
+                "door_y": 25.957714138981526,
+                "loc_id": null,
+                "id": "bfa9b5c68d9403e6405b392ec2fdac80",
+                "layerId": "styles_2709",
+                "customStyleId": "styles_2709",
+                "featureType": "style_feature",
+                "customStyleColor": "#99A2C2",
+                "customStyleHeight": 4.9,
+                "customStyleBackground": false,
+                "customStyleBaseHeight": 0,
+                "customStyleMinHeight": null,
+                "customStyleMaxHeight": null,
+                "customStyleFadeDistance": null,
+                "customStyleOpacity": 100,
+                "floor_ids": [
+                  363
+                ]
+              },
+              "id": "bfa9b5c68d9403e6405b392ec2fdac80"
+            }
+          ],
+          "style_id": 650
+        },
+        {
+          "dataset_id": 2710,
+          "title": "Floor Third Level - Style abby-stoke",
+          "count": 6,
+          "geometry_types": {
+            "Polygon": 6
+          },
+          "properties_keys": {
+            "class": 6,
+            "id": 1
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 11,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143039,
+                          25.955855
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143189,
+                          25.95594
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143208,
+                          25.955907
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 11,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143191,
+                          25.955946
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143041,
+                          25.955861
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142983,
+                          25.955969
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "00a8cb6fc24c7d5deb52eb54bdc134ad"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142771,
+                          25.956016
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142883,
+                          25.955815
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14296,
+                          25.955857
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 7,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142885,
+                          25.955821
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142777,
+                          25.956014
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143007,
+                          25.956142
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke",
+                "id": "34af6f7a1c7c0151a50c19f2e0397f45"
+              },
+              "id": "2f914b6d387140464a97aecd5935de3e"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142566,
+                          25.955704
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142525,
+                          25.955563
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142579,
+                          25.955548
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142604,
+                          25.955653
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142576,
+                          25.955554
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14253,
+                          25.955566
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "59f2c1663eb12f5e1fcf91e163feac41"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 18,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142568,
+                          25.955528
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142517,
+                          25.955351
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142583,
+                          25.95533
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 18,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142614,
+                          25.955349
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142589,
+                          25.955357
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142581,
+                          25.955333
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-stroke"
+              },
+              "id": "65ad76a26186687cc1adf6142e4729e5"
+            }
+          ],
+          "style_id": 1611
+        },
+        {
+          "dataset_id": 2711,
+          "title": "Walls (Third Level)",
+          "count": 67,
+          "geometry_types": {
+            "Polygon": 67
+          },
+          "properties_keys": {
+            "id": 67,
+            "class": 67
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144686,
+                          25.9572
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144686,
+                          25.957197
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144684,
+                          25.957174
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144689,
+                          25.957197
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144689,
+                          25.957197
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144716,
+                          25.957196
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "02eeae3b8895d21ef6540c45a1491f84",
+                "class": "noclick-wal"
+              },
+              "id": "02eeae3b8895d21ef6540c45a1491f84"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 2,
+                "items": [
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14166572772525,
+                          25.955646818181336
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14166372772526,
+                          25.955643818181336
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14165172772526,
+                          25.955629818181336
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "count": 6,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14166572772525,
+                          25.955642818181335
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14166572772525,
+                          25.955642818181335
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14172272772525,
+                          25.955594818181336
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "07ee0a3180ccf242dededbd8b980dd2a",
+                "class": "noclick-wal"
+              },
+              "id": "07ee0a3180ccf242dededbd8b980dd2a"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 9,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144225,
+                          25.957718
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144221,
+                          25.957722
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144351,
+                          25.957794
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "0b1556bd7c609456e7e679c14d4fc5b8",
+                "class": "noclick-wal"
+              },
+              "id": "0b1556bd7c609456e7e679c14d4fc5b8"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 13,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142743,
+                          25.957912
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142742,
+                          25.957913
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.142737,
+                          25.957905
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "id": "0c152abebcef4ffdd18285abf7bf9764",
+                "class": "noclick-wal"
+              },
+              "id": "0c152abebcef4ffdd18285abf7bf9764"
+            }
+          ],
+          "style_id": 632
+        },
+        {
+          "dataset_id": 2712,
+          "title": "Floor Third Level - Style Parking Lots",
+          "count": 21,
+          "geometry_types": {
+            "Polygon": 21
+          },
+          "properties_keys": {
+            "class": 21,
+            "id": 21
+          },
+          "features_sample": [
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 83,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.1409,
+                          25.958148
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.140895,
+                          25.958122
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.141088,
+                          25.958063
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "0df65fb42b46103cbef546d0e02f4b0c"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 120,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.145989,
+                          25.957253
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.145989,
+                          25.957237
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.14599,
+                          25.957223
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "0ea9737f8492edc027363a0824879ddb"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 146,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.13995,
+                          25.961316
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.139958,
+                          25.961316
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.139965,
+                          25.961315
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "1ca98b8bfe43b00cf9f05b3dcd58eed0"
+            },
+            {
+              "geometry_type": "Polygon",
+              "coordinates": {
+                "count": 1,
+                "items": [
+                  {
+                    "count": 5,
+                    "items": [
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143566,
+                          25.956493
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.143542,
+                          25.956396
+                        ]
+                      },
+                      {
+                        "count": 2,
+                        "items": [
+                          -80.144902,
+                          25.955989
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "properties": {
+                "class": "noclick-parking",
+                "id": 0
+              },
+              "id": "36310cf6abdd3b5cb6a1f31dbbb9947d"
+            }
+          ],
+          "style_id": 629
+        }
+      ]
+    }
+  ],
+  "allFloorTransitions": [
+    {
+      "id": 178,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-07-01T13:51:19.625335Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957663628663358,
+      "longitude": -80.14294155603804,
+      "accessible": false,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 179,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.745805Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.958154534471777,
+      "longitude": -80.14244944292406,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 181,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.173784Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957174399497685,
+      "longitude": -80.14469586380697,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 183,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.387574Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957034591989064,
+      "longitude": -80.14288340602,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 184,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.621931Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.957299851748708,
+      "longitude": -80.14263440953754,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 185,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-13T15:24:25.763324Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.957336345532312,
+      "longitude": -80.14324972516039,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 186,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.077044Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95631115616375,
+      "longitude": -80.14268582528096,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 187,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.498167Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955491950030435,
+      "longitude": -80.14164667867952,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 188,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.310116Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95760243806038,
+      "longitude": -80.1431217028043,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 189,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.273852Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.95584164622311,
+      "longitude": -80.14302601738628,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 190,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:36.057503Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955757487862595,
+      "longitude": -80.14341843930966,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 191,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:35.834983Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "latitude": 25.955341222006837,
+      "longitude": -80.14312557267402,
+      "accessible": true,
+      "accessible_only": true,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 192,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:34.529649Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95577180028369,
+      "longitude": -80.14290535526013,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 180,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:37:35.742403Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.95822534764689,
+      "longitude": -80.14394490733265,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 182,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T15:38:33.585056Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "latitude": 25.957300840738238,
+      "longitude": -80.14450638128206,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        361,
+        362,
+        363
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 240,
+      "created_at": "2026-07-02T02:36:46.818367Z",
+      "updated_at": "2026-07-02T02:36:46.818367Z",
+      "venue_id": 107,
+      "name": "Escalators",
+      "latitude": 25.95562228709601,
+      "longitude": -80.14166298299588,
+      "accessible": false,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        363,
+        361
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": null
+    },
+    {
+      "id": 241,
+      "created_at": "2026-07-21T14:05:07.455804Z",
+      "updated_at": "2026-08-13T15:24:27.019459Z",
+      "venue_id": 107,
+      "name": "Stairs",
+      "latitude": 25.95673781261497,
+      "longitude": -80.14330644786853,
+      "accessible": true,
+      "accessible_only": false,
+      "floor_ids": [
+        362,
+        361
+      ],
+      "file_url": null,
+      "scale": null,
+      "altitude": null,
+      "rotation": null,
+      "direction": "both"
+    }
+  ]
+}

@@ -401,10 +401,51 @@ function verticalConnectionInfo(){
    verified:false};
  }).filter(Boolean);
 }
+// Roof text is real prism geometry, subject to the same camera,
+ // depth buffer, tilt and 360° rotations as the corresponding shop roof.
+function drawRoofTextWebGL(){
+ if(!gl||scan||!labelsOn)return;
+ const showCode=distance<340||active!=='ALL';
+ const showName=distance<130||active!=='ALL';
+ gl.uniform1f(loc.uSelected,-999);
+ gl.uniform1f(loc.uWire,0);
+ gl.uniform1f(loc.uLine,0);
+ for(const floor of visible()){
+  gl.uniform1f(loc.uY,floor.y);
+  const groups=floor.roofGpu||{};
+  for(const key of ['services',...(showCode?['codes']:[]),...(showName?['names']:[])]){
+   if(!groups[key])continue;
+   bind(groups[key]);gl.drawArrays(gl.TRIANGLES,0,groups[key].n);
+  }
+ }
+ gl.uniform1f(loc.uY,0);
+ gl.uniform1f(loc.uSelected,selected?selected.gid:-1);
+ gl.uniform1f(loc.uWire,wire?1:0);
+}
+function drawRoofTextCanvas(){
+ if(!ctx2d||!labelsOn||scan||distance>180)return;
+ const ctx=ctx2d,limit=active==='ALL'?24000:90000;
+ for(const floor of visible()){
+  for(const key of ['services','codes',...(active==='ALL'?[]:['names'])]){
+   const vertices=floor.roofText?.[key];
+   if(!vertices)continue;
+   const step=30,count=Math.min(vertices.length,limit);
+   for(let i=0;i+step<=count;i+=step){
+    const a=screen([vertices[i],vertices[i+1]+floor.y,vertices[i+2]]);
+    const b=screen([vertices[i+10],vertices[i+11]+floor.y,vertices[i+12]]);
+    const c=screen([vertices[i+20],vertices[i+21]+floor.y,vertices[i+22]]);
+    if(a.w<=.02||b.w<=.02||c.w<=.02)continue;
+    ctx.fillStyle='rgb('+[6,7,8].map(k=>Math.round(vertices[i+k]*255)).join(',')+')';
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+    ctx.lineTo(c.x,c.y);ctx.closePath();ctx.fill();
+   }
+  }
+ }
+}
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
  else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 
@@ -462,6 +503,7 @@ function renderCanvas(dt){
  }
  drawVerticalCanvas();
  drawMechanicalEscalatorsCanvas();
+ drawRoofTextCanvas();
 }
 
 function stopAuto(){auto=false;$('auto').setAttribute('aria-pressed','false');}

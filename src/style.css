@@ -732,7 +732,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  color:#d8f6fa;background:#102c3bed;font-size:12px;font-weight:700;
  white-space:nowrap;touch-action:manipulation}
 .rnHeightsPanel>summary::-webkit-details-marker{display:none}
-.rnHeightsPopover{position:absolute;bottom:calc(100% + 8px);left:0;
+.rnHeightsPopover{position:absolute;top:calc(100% + 8px);bottom:auto;left:0;
  width:min(290px,calc(100vw - 28px));padding:13px 15px;border-radius:12px;
  background:#102338f6;border:1px solid #4f8297;box-shadow:0 8px 28px #0009;
  display:flex;flex-direction:column;gap:7px;font-size:12px;color:#dff6ff}

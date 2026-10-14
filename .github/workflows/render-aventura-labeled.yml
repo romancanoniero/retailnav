@@ -1,0 +1,70 @@
+name: Validate original Aventura map with official store labels
+on:
+  push:
+    branches: [research/aventura-hires]
+    paths:
+      - scripts/render-aventura-labeled.py
+      - .github/workflows/render-aventura-labeled.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: retailnav-aventura-verified-labels
+  cancel-in-progress: true
+jobs:
+  labeled-floors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/aventura-hires
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install label and SVG dependencies
+        run: python3 -m pip install --disable-pip-version-check -q pillow shapely cairosvg
+      - name: Render official source store names with exact polygon joins
+        run: python3 scripts/render-aventura-labeled.py
+      - name: Validate independent floor images and official name mappings
+        run: |
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          base=Path("research-output/aventura")
+          data=json.loads((base/"aventura-label-validation.json").read_text())
+          assert data["recordCount"]>200, data["recordCount"]
+          assert len(data["images"])==3
+          for info in data["images"]:
+              svg=(base/info["svg"]).read_text()
+              png=(base/info["png"])
+              assert png.stat().st_size>200000, info
+              ids=re.findall(r'data-location-id="(\d+)"',svg)
+              rows=[x for x in data["records"] if x["floorId"]==info["floorId"]]
+              assert len(ids)==len(rows),(len(ids),len(rows))
+              assert sum(x["labelMode"]=="full-name" for x in rows)>5
+              print("VERIFIED",info["floorName"],len(rows),"mapped store names",png.stat().st_size,"bytes")
+          assert sum(x["totalPolygons"] for x in data["floorSummaries"])==606
+          print("NO ORIGINAL MAP CHANGES")
+          PY
+      - name: Publish labeled export without overwriting original images
+        run: |
+          set -e
+          git config user.name "RetailNav Research"
+          git config user.email "actions@users.noreply.github.com"
+          git add research-output/aventura/*-con-comercios.svg research-output/aventura/*-con-comercios.png
+          git add research-output/aventura/aventura-label-validation.json research-output/aventura/aventura-comercios-mapeados.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "Research: independently validated and labeled Aventura floor plans"
+            git pull --rebase origin research/aventura-hires
+            git push origin HEAD:research/aventura-hires
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aventura-verified-labels
+          path: |
+            research-output/aventura/*-con-comercios.*
+            research-output/aventura/aventura-label-validation.json
+            research-output/aventura/aventura-comercios-mapeados.csv
+          retention-days: 14

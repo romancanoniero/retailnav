@@ -33,9 +33,13 @@ function updateMessage(){
  const gps=near?'Dentro de la zona aproximada de '+mall.name+'.':
   gpsDistance===null?'GPS desactivado.':'No se ha confirmado este shopping por GPS.';
  const isPeer=anchor?.source==='peer-qr-colocation-asserted';
+ const isSurveyGps=anchor?.source==='gps-survey-registered';
  const place=anchor
-  ?(isPeer?'Referencia QR colaborativa no verificada: ':'Referencia interior manual: ')+
-   anchor.floor+' · '+(isPeer?'cercanía declarada, no medida; ':'posición seleccionada; ')+
+  ?(isPeer?'Referencia QR colaborativa no verificada: ':
+    isSurveyGps?'GPS 3D registrado con mapa y alturas verificadas: ':
+    'Referencia interior manual: ')+
+   anchor.floor+' · '+(isPeer?'cercanía declarada, no medida; ':
+    isSurveyGps?'coordenadas GNSS calibradas; ':'posición seleccionada; ')+
    (Number.isFinite(uncertaintyMetres)?'incertidumbre orientativa ±'+
       Math.round(uncertaintyMetres)+' m.':'sin precisión métrica calibrada.')
   :'No hay referencia interior. El GPS por sí solo no identifica un pasillo.';
@@ -75,6 +79,17 @@ ui.gps?.addEventListener('click',()=>{
   gpsObservedAt=observed?.timestampMs??null;
   gpsDistance=proximity(pos.coords.latitude,pos.coords.longitude);
   near=gpsDistance<=((mall.gps?.radiusM||0)+Math.min(gpsAccuracy,150));
+  // A photo-only mall cannot map GPS to indoor X/Y/Z. A fully registered,
+  // surveyed mall may: no BLE, infrastructure or guessed floor required.
+  const registered=window.RetailNavPositioningCore?.registeredGpsToPhoto(
+    observed,mall.geodeticFloorCalibration||null)?.anchor;
+  if(registered&&(anchor===null||
+      ['peer-qr-colocation-asserted','gps-survey-registered'].includes(anchor.source))&&
+      window.__RETAILNAV__?.floors?.some(f=>f.id===registered.floor)){
+    anchor=registered;uncertaintyMetres=registered.uncertaintyM;
+    stepEnabled=false;ui.point.hidden=false;
+    window.__RETAILNAV__?.invalidate?.();
+  }
   if(!near&&anchor){
     // Hide stale mall anchor if GPS leaves the expected area by a large margin.
     const outside=gpsDistance>(mall.gps?.radiusM||0)+Math.max(500,gpsAccuracy*2);
@@ -230,11 +245,14 @@ window.RetailNavIndoor={draw,adoptPeerAnchor,getState:()=>({
  gpsAltitudeM:gpsAltitude,gpsVerticalAccuracyM:gpsVerticalAccuracy,
  gpsTimestampMs:gpsObservedAt,
  anchor:anchor?{...anchor}:null,
- indoorSource:anchor?(anchor.source==='manual'?'manual-anchor':'peer-qr-provisional'):null,
+ indoorSource:anchor?(anchor.source==='manual'?'manual-anchor':
+   anchor.source==='gps-survey-registered'?'gps-3d-survey-registered':
+   'peer-qr-provisional'):null,
  headingDeg:heading,headingSource,aligned:compassOffset!==null,
  steps,motionScaleCalibrated:motionScale!==null,stepEnabled,
  uncertaintyMetres,geolocationStored:false,sendsDataToServer:false,
  confidence:anchor?(anchor.source==='peer-qr-colocation-asserted'?'peer-unverified':
+   anchor.source==='gps-survey-registered'?'gnss-survey-calibrated':
    stepEnabled?'low-dead-reckoning':'manual-anchor'):'none'
 })};
 })();

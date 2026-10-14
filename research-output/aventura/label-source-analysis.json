@@ -1,0 +1,6712 @@
+{
+  "locationsTotal": 413,
+  "locationFirstRecords": [
+    {
+      "id": 51635,
+      "created_at": "2026-05-11T17:03:05.267212Z",
+      "updated_at": "2026-10-14T17:01:48.585699Z",
+      "venue_id": 107,
+      "name": "Andres Otalora",
+      "description": "<p><span data-sheets-root=\"1\">Andrés Otálora offers elegant, feminine women’s fashion at Aventura Mall in Miami.</p>\n<p>Andrés Otálora is an iconic Colombian designer who founded his brand in his hometown, Cali, Colombia, in 1992. Throughout his exte",
+      "url": "https://andresotalora.com/",
+      "facebook_url": null,
+      "twitter_url": null,
+      "instagram_url": null,
+      "phone": "786-367-8049",
+      "phone_country": null,
+      "email": null,
+      "address1": null,
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2024/11/Andres-Otalora-store-logo-at-aventura-mall-1.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2024/11/Andres-Otalora-store-logo-at-aventura-mall.jpg",
+      "details_logo_img": null,
+      "hours": "",
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "bf45617112c3b0aee2fea5c04710579d"
+        ],
+        "titleSize": 1,
+        "titleDisplay": "",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 242.9,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "type": "dict",
+            "keys": [
+              "2",
+              "4",
+              "8"
+            ]
+          },
+          "negativeKeywords": {
+            "type": "list",
+            "length": 0
+          },
+          "positiveKeywords": {
+            "type": "list",
+            "length": 73
+          }
+        },
+        "titleLongitude": null,
+        "integration_key": 78398,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "web_img": null,
+      "mobile_img": null,
+      "hours_entries": [],
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "lock_translations": false,
+      "menu_image_urls": [],
+      "lng": null,
+      "lat": null,
+      "sort_name": null,
+      "location_type_ids": null,
+      "category_ids": null,
+      "location_types": [
+        {
+          "id": 2970,
+          "created_at": "2023-04-10T14:00:14.672338Z",
+          "updated_at": "2026-10-14T17:01:57.839643Z",
+          "name": "All Retailers",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 2972,
+          "created_at": "2023-04-10T14:00:14.720416Z",
+          "updated_at": "2026-10-14T17:01:57.718951Z",
+          "name": "Womenswear & Accessories",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 7718,
+          "created_at": "2025-12-11T14:01:42.298782Z",
+          "updated_at": "2026-10-14T17:01:48.572184Z",
+          "name": "The Abbey",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": false
+        }
+      ]
+    },
+    {
+      "id": 28478,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-19T16:52:09.638767Z",
+      "venue_id": 107,
+      "name": "Parking Garage near Macy’s Women",
+      "description": null,
+      "url": null,
+      "facebook_url": null,
+      "twitter_url": null,
+      "instagram_url": null,
+      "phone": null,
+      "phone_country": null,
+      "email": null,
+      "address1": "Lower Level",
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": null,
+      "logo_img": null,
+      "details_logo_img": null,
+      "hours": null,
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "b8841caf72fe4a638a2a0a559cfc17bc",
+          "b8841caf72fe4a638a2a0a559cfc17bc"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "      ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "type": "dict",
+            "keys": []
+          },
+          "negativeKeywords": {
+            "type": "list",
+            "length": 0
+          },
+          "positiveKeywords": {
+            "type": "list",
+            "length": 0
+          }
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "web_img": null,
+      "mobile_img": null,
+      "hours_entries": [],
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "lock_translations": true,
+      "menu_image_urls": [],
+      "lng": null,
+      "lat": null,
+      "sort_name": null,
+      "location_type_ids": null,
+      "category_ids": null,
+      "location_types": [
+        {
+          "id": 5631,
+          "created_at": "2025-02-04T21:04:31.044527Z",
+          "updated_at": "2025-02-04T21:04:31.044527Z",
+          "name": "Parking",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "bgcolor",
+              "fontcolor",
+              "showOnDirectory"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    },
+    {
+      "id": 28481,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-08-19T16:52:10.165955Z",
+      "venue_id": 107,
+      "name": "Parking Garage near Nordstrom",
+      "description": null,
+      "url": null,
+      "facebook_url": null,
+      "twitter_url": null,
+      "instagram_url": null,
+      "phone": null,
+      "phone_country": null,
+      "email": null,
+      "address1": "Lower Level",
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": null,
+      "logo_img": null,
+      "details_logo_img": null,
+      "hours": null,
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "a3c55fb912cf703aa0c2e832ec92fefe",
+          "a3c55fb912cf703aa0c2e832ec92fefe"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "     ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "type": "dict",
+            "keys": []
+          },
+          "negativeKeywords": {
+            "type": "list",
+            "length": 0
+          },
+          "positiveKeywords": {
+            "type": "list",
+            "length": 0
+          }
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "web_img": null,
+      "mobile_img": null,
+      "hours_entries": [],
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "lock_translations": true,
+      "menu_image_urls": [],
+      "lng": null,
+      "lat": null,
+      "sort_name": null,
+      "location_type_ids": null,
+      "category_ids": null,
+      "location_types": [
+        {
+          "id": 5631,
+          "created_at": "2025-02-04T21:04:31.044527Z",
+          "updated_at": "2025-02-04T21:04:31.044527Z",
+          "name": "Parking",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "bgcolor",
+              "fontcolor",
+              "showOnDirectory"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": 0,
+          "lock_translations": true
+        }
+      ]
+    },
+    {
+      "id": 20685,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-09-30T14:02:23.809105Z",
+      "venue_id": 107,
+      "name": "Starbucks at Macy's",
+      "description": "<p><span data-sheets-root=\"1\">Located on the Lower Level near Macy’s, Starbucks at Aventura Mall in Miami offers a convenient stop for Arabica coffee, espresso drinks, tea and light bites while shopping, dining or spending the day at one of South Flo",
+      "url": "https://www.starbucks.com",
+      "facebook_url": "",
+      "twitter_url": "",
+      "instagram_url": "",
+      "phone": "305-682-3371",
+      "phone_country": "",
+      "email": null,
+      "address1": null,
+      "address2": null,
+      "city": "",
+      "state": "",
+      "zip": "",
+      "country": "",
+      "banner_img": "https://aventuramall.com/wp-content/uploads/2017/11/STARBUCKS.png",
+      "logo_img": "https://aventuramall.com/wp-content/uploads/2017/11/STARBUCKS.png",
+      "details_logo_img": null,
+      "hours": "",
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "12b0c37e274251b7f44622dc2976544b",
+          "12b0c37e274251b7f44622dc2976544b"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": "",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 1,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "type": "dict",
+            "keys": [
+              "2",
+              "4",
+              "8"
+            ]
+          },
+          "negativeKeywords": {
+            "type": "list",
+            "length": 28
+          },
+          "positiveKeywords": {
+            "type": "list",
+            "length": 94
+          }
+        },
+        "titleLongitude": null,
+        "integration_key": 1749,
+        "buildingImageScale": 0,
+        "buildingImageWidth": 0,
+        "buildingImageHeight": 0,
+        "hoverHighlightColor": null
+      },
+      "web_img": null,
+      "mobile_img": null,
+      "hours_entries": [],
+      "seasonal_hours_entries": [],
+      "seasonal_dates": {},
+      "disabled": null,
+      "lock_translations": true,
+      "menu_image_urls": [],
+      "lng": null,
+      "lat": null,
+      "sort_name": null,
+      "location_type_ids": null,
+      "category_ids": null,
+      "location_types": [
+        {
+          "id": 2966,
+          "created_at": "2023-04-10T14:00:13.418109Z",
+          "updated_at": "2026-10-14T17:02:30.468181Z",
+          "name": "Cafés",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5609,
+          "created_at": "2024-12-20T20:00:57.060821Z",
+          "updated_at": "2026-10-14T17:02:30.482576Z",
+          "name": "Specialty",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        },
+        {
+          "id": 5610,
+          "created_at": "2024-12-20T20:00:57.082098Z",
+          "updated_at": "2026-10-14T17:02:30.338765Z",
+          "name": "Sweets & Treats",
+          "venue_id": 107,
+          "Type": "location",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "integration_key"
+            ]
+          },
+          "highlight": false,
+          "highlight_rank": null,
+          "lock_translations": true
+        }
+      ]
+    }
+  ],
+  "locationKeys": {
+    "id": 413,
+    "created_at": 413,
+    "updated_at": 413,
+    "venue_id": 413,
+    "name": 413,
+    "description": 413,
+    "url": 413,
+    "facebook_url": 413,
+    "twitter_url": 413,
+    "instagram_url": 413,
+    "phone": 413,
+    "phone_country": 413,
+    "email": 413,
+    "address1": 413,
+    "address2": 413,
+    "city": 413,
+    "state": 413,
+    "zip": 413,
+    "country": 413,
+    "banner_img": 413,
+    "logo_img": 413,
+    "details_logo_img": 413,
+    "hours": 413,
+    "settings": 413,
+    "web_img": 413,
+    "mobile_img": 413,
+    "hours_entries": 413,
+    "seasonal_hours_entries": 413,
+    "seasonal_dates": 413,
+    "disabled": 413,
+    "lock_translations": 413,
+    "menu_image_urls": 413,
+    "lng": 413,
+    "lat": 413,
+    "sort_name": 413,
+    "location_type_ids": 413,
+    "category_ids": 413,
+    "location_types": 407
+  },
+  "locationTypes": {
+    "All Retailers": 263,
+    "Womenswear & Accessories": 153,
+    "The Abbey": 35,
+    "Parking": 5,
+    "Cafés": 25,
+    "Specialty": 31,
+    "Sweets & Treats": 22,
+    "Coming Soon": 24,
+    "Menswear & Accessories": 117,
+    "Shoes": 97,
+    "Elevators": 16,
+    "LL Elevators": 6,
+    "Strollers": 2,
+    "Hydration Station": 1,
+    "Dog-Friendly": 3,
+    "Shops": 2,
+    "Eyewear": 33,
+    "Farmer’s Market": 1,
+    "Mall Management Office": 1,
+    "Jewelry & Watches": 49,
+    "Home, Gifts & Furniture": 36,
+    "Childrenswear & Toys": 34,
+    "Department Stores": 10,
+    "Beauty & Fragrance": 52,
+    "Treats Food Hall": 18,
+    "Quick Bites": 17,
+    "Restaurants": 24,
+    "Services": 16,
+    "Spa, Health & Fitness": 20,
+    "Outdoor Dining": 21,
+    "Entertainment": 6,
+    "Rainbow Valley": 1,
+    "Restrooms": 7,
+    "Brunch": 17,
+    "UL Elevators": 6,
+    "TL Elevators": 4,
+    "ATM": 5,
+    "Sporting Goods & Athleticwear": 33,
+    "What’s New": 31,
+    "Eateries": 16,
+    "Jessica’s Dog Park": 1,
+    "Specialty & Miscellaneous": 43,
+    "Shops At The Abbey": 1,
+    "Electronics": 9,
+    "Gifts & Specialty": 5,
+    "Automobile": 4,
+    "Amenities & Services": 2,
+    "Car Rental": 1,
+    "Dining at The Abbey": 1,
+    "Beauty &amp; Fragrance": 1,
+    "Adopt-A-Pet": 1,
+    "Concierge": 1,
+    "Public Safety – Lost & Found": 1,
+    "Currency Exchange": 1,
+    "TSA Pre": 1
+  },
+  "linkedPolygonIds": 470,
+  "linkedDistinctIds": 408,
+  "geoFloorMatches": [
+    {
+      "floor": "Lower Level",
+      "floorId": 361,
+      "features": 263,
+      "linkedToLocationId": 209,
+      "noLocId": 41,
+      "notMatchingLocation": 13,
+      "nonemptyIdsSample": [
+        "20811",
+        "21018",
+        "41353",
+        "20805",
+        "29855",
+        "41356",
+        "20868",
+        "21018",
+        "26819",
+        "25529",
+        "20672",
+        "20730",
+        "20924",
+        "20770",
+        "20944",
+        "37848",
+        "20646",
+        "24077"
+      ],
+      "locationNamesSample": [
+        {
+          "id": 20811,
+          "name": "CH Carolina Herrera",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 41353,
+          "name": "Sweetgreen",
+          "address1": null,
+          "types": [
+            "Restaurants",
+            "Eateries",
+            "Specialty",
+            "Outdoor Dining",
+            "Quick Bites",
+            "The Abbey"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20805,
+          "name": "The North Face",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Sporting Goods & Athleticwear",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Shoes",
+            "Childrenswear & Toys"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 29855,
+          "name": "ATM near Schutz",
+          "address1": "Lower Level",
+          "types": [
+            "ATM"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 41356,
+          "name": "Joey Aventura",
+          "address1": null,
+          "types": [
+            "Restaurants",
+            "Brunch",
+            "Outdoor Dining",
+            "The Abbey"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20868,
+          "name": "Lucky Eyes",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Jewelry & Watches",
+            "Home, Gifts & Furniture",
+            "Gifts & Specialty"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 26819,
+          "name": "Elevator near Macy's Lower Level",
+          "address1": "Lower Level",
+          "types": [
+            "Elevators",
+            "LL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 25529,
+          "name": "Creed",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20672,
+          "name": "Amazonica",
+          "address1": null,
+          "types": [
+            "Cafés",
+            "Eateries",
+            "Specialty",
+            "Sweets & Treats",
+            "Quick Bites"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20730,
+          "name": "Ralph Lauren",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Home, Gifts & Furniture",
+            "Shoes",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20924,
+          "name": "Avis Car Rental",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Automobile",
+            "Amenities & Services",
+            "Car Rental"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20770,
+          "name": "Marc Jacobs",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Shoes"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20944,
+          "name": "Cartier",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Menswear & Accessories",
+            "Jewelry & Watches",
+            "Eyewear"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 37848,
+          "name": "CVS Health",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Specialty & Miscellaneous",
+            "Spa, Health & Fitness",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20646,
+          "name": "Carrot Express",
+          "address1": null,
+          "types": [
+            "Cafés",
+            "Eateries",
+            "Quick Bites"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 24077,
+          "name": "OMG Brigadeiros",
+          "address1": null,
+          "types": [
+            "Specialty",
+            "Sweets & Treats"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 27482,
+          "name": "Norimoto",
+          "address1": null,
+          "types": [
+            "Restaurants",
+            "Specialty",
+            "Outdoor Dining",
+            "Quick Bites"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 25456,
+          "name": "Venchi",
+          "address1": null,
+          "types": [
+            "Specialty",
+            "Sweets & Treats"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        }
+      ],
+      "locationsWithCoordinatesSample": [
+        {
+          "id": 20811,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-10-14T17:01:52.945762Z",
+          "venue_id": 107,
+          "name": "CH Carolina Herrera",
+          "description": "<p><span data-sheets-root=\"1\">Visit CH Carolina Herrera at Aventura Mall in Miami, the lifestyle-focused label from Carolina Herrera. Shop refined ready-to-wear clothing for women, men, and children, along with handbags, leather goods, accessories, a",
+          "url": "http://www.chcarolinaherrera.com",
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": "305-931-8115",
+          "phone_country": null,
+          "email": null,
+          "address1": null,
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": "https://aventuramall.com/wp-content/uploads/2017/11/CarolinaHerrera.png",
+          "logo_img": "https://aventuramall.com/wp-content/uploads/2017/11/carolina-herrera.jpg",
+          "details_logo_img": null,
+          "hours": "",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "yelp",
+              "color",
+              "height",
+              "feed_id",
+              "floorIds",
+              "suiteIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "googleMapsUrl",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "integration_key",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight",
+              "hoverHighlightColor"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": true,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null,
+          "location_types": {
+            "type": "list",
+            "length": 3
+          }
+        },
+        {
+          "id": 21018,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-06-30T14:42:44.193849Z",
+          "venue_id": 107,
+          "name": "Parking Lot",
+          "description": null,
+          "url": null,
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": null,
+          "phone_country": null,
+          "email": null,
+          "address1": "Lower Level",
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": "https://cdn.roveiq.com/23e9bfd1-2142-4479-aecd-3c0c90983887.png",
+          "logo_img": "https://cdn.roveiq.com/6d2ed215-a535-46bd-8eb3-94a65bcb461a.png",
+          "details_logo_img": null,
+          "hours": null,
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "color",
+              "height",
+              "floorIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": true,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null
+        }
+      ]
+    },
+    {
+      "floor": "Upper Level",
+      "floorId": 362,
+      "features": 250,
+      "linkedToLocationId": 170,
+      "noLocId": 63,
+      "notMatchingLocation": 17,
+      "nonemptyIdsSample": [
+        "21018",
+        "29111",
+        "20797",
+        "51643",
+        "20662",
+        "20671",
+        "28396",
+        "37967",
+        "20854",
+        "20893",
+        "20755",
+        "20833",
+        "26827",
+        "42144",
+        "20930",
+        "20871",
+        "24818",
+        "26820"
+      ],
+      "locationNamesSample": [
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 29111,
+          "name": "Mejuri",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Jewelry & Watches",
+            "What’s New"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 51643,
+          "name": "Thirdlove",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Coming Soon"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20662,
+          "name": "Serafina Miami",
+          "address1": null,
+          "types": [
+            "Restaurants",
+            "Brunch",
+            "Outdoor Dining"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 28396,
+          "name": "Designer Eyes",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Eyewear"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 37967,
+          "name": "Zara Upper Level",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Shoes",
+            "Childrenswear & Toys",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20854,
+          "name": "Oliver Peoples",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Eyewear"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20893,
+          "name": "G-Star RAW",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20755,
+          "name": "Vilebrequin",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Childrenswear & Toys"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20833,
+          "name": "Swarovski",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Jewelry & Watches",
+            "Gifts & Specialty"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 26827,
+          "name": "Elevator near Apple Upper Level",
+          "address1": "Upper Level",
+          "types": [
+            "Elevators",
+            "UL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 42144,
+          "name": "Bloomingdale's Upper Level",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Jewelry & Watches",
+            "Home, Gifts & Furniture",
+            "Shoes",
+            "Department Stores",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20930,
+          "name": "Ann Taylor",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20871,
+          "name": "Longchamp",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 26820,
+          "name": "Elevator near Macy's Upper Level",
+          "address1": "Upper Level",
+          "types": [
+            "Elevators",
+            "UL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 42139,
+          "name": "Macy's Upper Level",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Jewelry & Watches",
+            "Home, Gifts & Furniture",
+            "Shoes",
+            "Childrenswear & Toys",
+            "Department Stores",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 41963,
+          "name": "BOSS Upper Level",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Sporting Goods & Athleticwear",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Shoes"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 51311,
+          "name": "Initio Parfums Privés",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Coming Soon",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 26817,
+          "name": "Elevator near Bloomingdale's Upper Level",
+          "address1": "Upper Level",
+          "types": [
+            "Elevators",
+            "UL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 25714,
+          "name": "Jessica’s Dog Park",
+          "address1": "Upper Level",
+          "types": [
+            "Jessica’s Dog Park",
+            "Dog-Friendly"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        }
+      ],
+      "locationsWithCoordinatesSample": [
+        {
+          "id": 21018,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-06-30T14:42:44.193849Z",
+          "venue_id": 107,
+          "name": "Parking Lot",
+          "description": null,
+          "url": null,
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": null,
+          "phone_country": null,
+          "email": null,
+          "address1": "Lower Level",
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": "https://cdn.roveiq.com/23e9bfd1-2142-4479-aecd-3c0c90983887.png",
+          "logo_img": "https://cdn.roveiq.com/6d2ed215-a535-46bd-8eb3-94a65bcb461a.png",
+          "details_logo_img": null,
+          "hours": null,
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "color",
+              "height",
+              "floorIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": true,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null
+        },
+        {
+          "id": 29111,
+          "created_at": "2025-04-02T15:01:21.149415Z",
+          "updated_at": "2026-10-14T17:01:47.971872Z",
+          "venue_id": 107,
+          "name": "Mejuri",
+          "description": "<p style=\"text-align: left;\"><span data-sheets-root=\"1\">Mejuri offers everyday fine jewelry at Aventura Mall in Miami. Shop responsibly-sourced gold rings, necklaces, earrings, and bracelets designed to last a lifetime.</p>\n<p>Since being founded in ",
+          "url": "https://mejuri.com/",
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": "754-210-9020 ",
+          "phone_country": null,
+          "email": null,
+          "address1": null,
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": "https://aventuramall.com/wp-content/uploads/2025/04/MEJURI.png",
+          "logo_img": "https://aventuramall.com/wp-content/uploads/2025/04/mejuri-logo.jpg",
+          "details_logo_img": null,
+          "hours": "",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "yelp",
+              "color",
+              "height",
+              "feed_id",
+              "floorIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "googleMapsUrl",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "integration_key",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight",
+              "hoverHighlightColor"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": false,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null,
+          "location_types": {
+            "type": "list",
+            "length": 4
+          }
+        }
+      ]
+    },
+    {
+      "floor": "Third Level",
+      "floorId": 363,
+      "features": 93,
+      "linkedToLocationId": 56,
+      "noLocId": 32,
+      "notMatchingLocation": 5,
+      "nonemptyIdsSample": [
+        "37897",
+        "21061",
+        "21018",
+        "26828",
+        "21018",
+        "21018",
+        "29986",
+        "26825",
+        "21019",
+        "20683",
+        "21018",
+        "21018",
+        "21018",
+        "21019",
+        "20932",
+        "20864",
+        "20677",
+        "20682"
+      ],
+      "locationNamesSample": [
+        {
+          "id": 37897,
+          "name": "Mango Biche - Treats Food Hall",
+          "address1": null,
+          "types": [
+            "Cafés",
+            "Treats Food Hall",
+            "Eateries"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21061,
+          "name": "Restrooms in Treats Food Hall ",
+          "address1": "Third Level",
+          "types": [
+            "Restrooms"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 26828,
+          "name": "Elevator in Treats Food Hall",
+          "address1": "Third Level",
+          "types": [
+            "Elevators",
+            "TL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 29986,
+          "name": "Auntie Anne's - Treats Food Hall",
+          "address1": null,
+          "types": [
+            "Cafés",
+            "Treats Food Hall",
+            "Specialty",
+            "Sweets & Treats"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 26825,
+          "name": "Elevator near Nordstrom Third Level",
+          "address1": "Third Level",
+          "types": [
+            "Elevators",
+            "TL Elevators"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21019,
+          "name": "Parking Garage",
+          "address1": "Upper Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 20683,
+          "name": "Chipotle Mexican Grill",
+          "address1": null,
+          "types": [
+            "Treats Food Hall"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 21018,
+          "name": "Parking Lot",
+          "address1": "Lower Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 21019,
+          "name": "Parking Garage",
+          "address1": "Upper Level",
+          "types": [],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids"
+          ]
+        },
+        {
+          "id": 20932,
+          "name": "AMC Aventura 24",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Entertainment"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20864,
+          "name": "Macy's Men's Home Furniture",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Menswear & Accessories",
+            "Home, Gifts & Furniture",
+            "Department Stores"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20677,
+          "name": "Shake Shack",
+          "address1": null,
+          "types": [
+            "Treats Food Hall"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20682,
+          "name": "Little Brittany Creperie",
+          "address1": null,
+          "types": [
+            "Treats Food Hall"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 20863,
+          "name": "Macy's",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Womenswear & Accessories",
+            "Menswear & Accessories",
+            "Jewelry & Watches",
+            "Home, Gifts & Furniture",
+            "Shoes",
+            "Childrenswear & Toys",
+            "Department Stores",
+            "Beauty & Fragrance"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        },
+        {
+          "id": 31087,
+          "name": "CAMP",
+          "address1": null,
+          "types": [
+            "All Retailers",
+            "Childrenswear & Toys",
+            "Entertainment"
+          ],
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "venue_id",
+            "name",
+            "description",
+            "url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "phone",
+            "phone_country",
+            "email",
+            "address1",
+            "address2",
+            "city",
+            "state",
+            "zip",
+            "country",
+            "banner_img",
+            "logo_img",
+            "details_logo_img",
+            "hours",
+            "settings",
+            "web_img",
+            "mobile_img",
+            "hours_entries",
+            "seasonal_hours_entries",
+            "seasonal_dates",
+            "disabled",
+            "lock_translations",
+            "menu_image_urls",
+            "lng",
+            "lat",
+            "sort_name",
+            "location_type_ids",
+            "category_ids",
+            "location_types"
+          ]
+        }
+      ],
+      "locationsWithCoordinatesSample": [
+        {
+          "id": 37897,
+          "created_at": "2025-10-14T14:02:41.719634Z",
+          "updated_at": "2026-10-14T17:02:28.419576Z",
+          "venue_id": 107,
+          "name": "Mango Biche - Treats Food Hall",
+          "description": "<p>Custom cut mango salads, fresh juices and popsicles. Whether you favor salty, sweet or even spicy, there are customized options for every taste bud. If you like bold flavors, try the Mango Salad topped with chili pepper, salt and fresh squeezed le",
+          "url": "https://www.mangobichemia.com",
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": "",
+          "phone_country": null,
+          "email": null,
+          "address1": null,
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": "https://aventuramall.com/wp-content/uploads/2021/11/mango-biche-mia-food-stand-250x250-1.png",
+          "logo_img": "https://aventuramall.com/wp-content/uploads/2021/11/mango-biche-mia-food-stand-250x250-1.png",
+          "details_logo_img": null,
+          "hours": "",
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "yelp",
+              "color",
+              "height",
+              "feed_id",
+              "floorIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "googleMapsUrl",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "integration_key",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight",
+              "hoverHighlightColor"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "dict",
+            "keys": []
+          },
+          "seasonal_hours_entries": {
+            "type": "dict",
+            "keys": []
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": false,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null,
+          "location_types": {
+            "type": "list",
+            "length": 3
+          }
+        },
+        {
+          "id": 21061,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2026-08-19T16:52:30.079349Z",
+          "venue_id": 107,
+          "name": "Restrooms in Treats Food Hall ",
+          "description": null,
+          "url": null,
+          "facebook_url": null,
+          "twitter_url": null,
+          "instagram_url": null,
+          "phone": null,
+          "phone_country": null,
+          "email": null,
+          "address1": "Third Level",
+          "address2": null,
+          "city": null,
+          "state": null,
+          "zip": null,
+          "country": null,
+          "banner_img": null,
+          "logo_img": null,
+          "details_logo_img": null,
+          "hours": null,
+          "settings": {
+            "type": "dict",
+            "keys": [
+              "yelp",
+              "color",
+              "height",
+              "floorIds",
+              "suiteIds",
+              "clickable",
+              "entrances",
+              "suite_ids",
+              "titleSize",
+              "titleDisplay",
+              "buildingColor",
+              "buildingImage",
+              "googleMapsUrl",
+              "titleLatitude",
+              "titleRotation",
+              "buildingHeight",
+              "highlightColor",
+              "searchSettings",
+              "titleLongitude",
+              "buildingImageScale",
+              "buildingImageWidth",
+              "buildingImageHeight",
+              "hoverHighlightColor"
+            ]
+          },
+          "web_img": null,
+          "mobile_img": null,
+          "hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_hours_entries": {
+            "type": "list",
+            "length": 0
+          },
+          "seasonal_dates": {
+            "type": "dict",
+            "keys": []
+          },
+          "disabled": null,
+          "lock_translations": true,
+          "menu_image_urls": {
+            "type": "list",
+            "length": 0
+          },
+          "lng": null,
+          "lat": null,
+          "sort_name": null,
+          "location_type_ids": null,
+          "category_ids": null,
+          "location_types": {
+            "type": "list",
+            "length": 1
+          }
+        }
+      ]
+    }
+  ],
+  "brandExamples": [
+    {
+      "id": 28478,
+      "name": "Parking Garage near Macy’s Women",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "b8841caf72fe4a638a2a0a559cfc17bc",
+          "b8841caf72fe4a638a2a0a559cfc17bc"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "      ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "types": [
+        "Parking"
+      ]
+    },
+    {
+      "id": 28481,
+      "name": "Parking Garage near Nordstrom",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "a3c55fb912cf703aa0c2e832ec92fefe",
+          "a3c55fb912cf703aa0c2e832ec92fefe"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "     ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "types": [
+        "Parking"
+      ]
+    },
+    {
+      "id": 20685,
+      "name": "Starbucks at Macy's",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "12b0c37e274251b7f44622dc2976544b",
+          "12b0c37e274251b7f44622dc2976544b"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": "",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 1,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "mac",
+            "mac",
+            "macy",
+            "macys"
+          ],
+          "positiveKeywords": [
+            "B",
+            "C",
+            "L",
+            "M"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1749,
+        "buildingImageScale": 0,
+        "buildingImageWidth": 0,
+        "buildingImageHeight": 0,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Cafés",
+        "Specialty",
+        "Sweets & Treats"
+      ]
+    },
+    {
+      "id": 26816,
+      "name": "Elevator near Bloomingdale's Lower Level",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d92a7529060b3efe4230802f1a5ca800",
+          "d92a7529060b3efe4230802f1a5ca800"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "LL Elevators"
+      ]
+    },
+    {
+      "id": 26819,
+      "name": "Elevator near Macy's Lower Level",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "07ae9c609ca012fe420a950a99c1d4f9",
+          "07ae9c609ca012fe420a950a99c1d4f9"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "  ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "LL Elevators"
+      ]
+    },
+    {
+      "id": 28479,
+      "name": "Parking Garage near Apple",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "6fee46b81c286321a97fa159640abaa2",
+          "6fee46b81c286321a97fa159640abaa2"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "     ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "types": [
+        "Parking"
+      ]
+    },
+    {
+      "id": 42140,
+      "name": "Nordstrom Upper Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d2f35a129e96a1df1119324b0c9862fb",
+          "d2f35a129e96a1df1119324b0c9862fb"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://cdn.roveiq.com/178a30d0-73f1-424f-a3bc-a86cf7ee4994.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 92,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Ali",
+            "Alic",
+            "Alice",
+            "Alice a"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 92820,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 50,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 29986,
+      "name": "Auntie Anne's - Treats Food Hall",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "0f555155f869a4ee9d92f34e05c553c9",
+          "0f555155f869a4ee9d92f34e05c553c9"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "  ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "tre",
+            "trea",
+            "treat",
+            "treats"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1675,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Cafés",
+        "Treats Food Hall",
+        "Specialty",
+        "Sweets & Treats"
+      ]
+    },
+    {
+      "id": 26823,
+      "name": "Elevator near Nordstrom Lower Level",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "7176326a9b37505bb1a8567f9f8c3390",
+          "7176326a9b37505bb1a8567f9f8c3390"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "LL Elevators"
+      ]
+    },
+    {
+      "id": 26827,
+      "name": "Elevator near Apple Upper Level",
+      "address1": "Upper Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "1b3706d9819fafc1314dc464fbd74d83",
+          "1b3706d9819fafc1314dc464fbd74d83"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "UL Elevators"
+      ]
+    },
+    {
+      "id": 26817,
+      "name": "Elevator near Bloomingdale's Upper Level",
+      "address1": "Upper Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "27d2e39e95eb618c583a8d6d7ebc558e",
+          "27d2e39e95eb618c583a8d6d7ebc558e"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "UL Elevators"
+      ]
+    },
+    {
+      "id": 26824,
+      "name": "Elevator near Nordstrom Upper Level",
+      "address1": "Upper Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d5083bf2a91592b9ae9e855bb6872879",
+          "d5083bf2a91592b9ae9e855bb6872879"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "UL Elevators"
+      ]
+    },
+    {
+      "id": 26828,
+      "name": "Elevator in Treats Food Hall",
+      "address1": "Third Level",
+      "settings": {
+        "suite_ids": [
+          "0739937bc759009f9d1f773cbc5d6983",
+          "0739937bc759009f9d1f773cbc5d6983"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "titleRotation": "",
+        "buildingHeight": "0.1",
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        }
+      },
+      "types": [
+        "Elevators",
+        "TL Elevators"
+      ]
+    },
+    {
+      "id": 26825,
+      "name": "Elevator near Nordstrom Third Level",
+      "address1": "Third Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "147c79838d68206ac4487e04f3fd785d",
+          "147c79838d68206ac4487e04f3fd785d"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "TL Elevators"
+      ]
+    },
+    {
+      "id": 26818,
+      "name": "Elevator near Bloomingdale's Third Level",
+      "address1": "Third Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "90ef9371a44136e83b92b3d68ef8170a",
+          "90ef9371a44136e83b92b3d68ef8170a"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "TL Elevators"
+      ]
+    },
+    {
+      "id": 42142,
+      "name": "Macy's Men's Home Furniture Upper Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "a4442deb00528e27610e3fe4382a029d",
+          "a4442deb00528e27610e3fe4382a029d",
+          "a4442deb00528e27610e3fe4382a029d"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F63",
+        "buildingImage": "https://cdn.roveiq.com/425d8534-f9a3-4ec1-8441-e9699be8eddd.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 18,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Acc",
+            "Acce",
+            "Acces",
+            "Access"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 92822,
+        "buildingImageScale": "0.01",
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 75,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Department Stores"
+      ]
+    },
+    {
+      "id": 37967,
+      "name": "Zara Upper Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": null,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "11a996d5e64e0b845389777a0641b005",
+          "11a996d5e64e0b845389777a0641b005",
+          "11a996d5e64e0b845389777a0641b005"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "ZARA",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 305,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Acc",
+            "Acce",
+            "Acces",
+            "Access"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 90772,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 29857,
+      "name": "ATM near H&M",
+      "address1": "Upper Level",
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d746cdfa4c72d4e726c7411af6f6aeee",
+          "d746cdfa4c72d4e726c7411af6f6aeee"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "  ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 4,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "ATM"
+      ]
+    },
+    {
+      "id": 26820,
+      "name": "Elevator near Macy's Upper Level",
+      "address1": "Upper Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "210a2ee3b920693d42b568c00a9826de",
+          "210a2ee3b920693d42b568c00a9826de"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "UL Elevators"
+      ]
+    },
+    {
+      "id": 20920,
+      "name": "Bloomingdale's",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "66256ac5a1558451e9affb94ca2ce721",
+          "d1b8cd766c827d817ba1ebaa12e6221f",
+          "66256ac5a1558451e9affb94ca2ce721",
+          "d1b8cd766c827d817ba1ebaa12e6221f"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://cdn.roveiq.com/3c05c984-f6bf-4f5a-a434-36631557eea9.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 104,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "ald",
+            "aldo",
+            "go g",
+            "go gr"
+          ],
+          "positiveKeywords": [
+            "bab",
+            "baby",
+            "new",
+            "new"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1319,
+        "buildingImageScale": "0.01",
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 50,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 20668,
+      "name": "Nordstrom Café Bistro",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "e26008562e0e1219885b9966cb08451f",
+          "e26008562e0e1219885b9966cb08451f"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "      ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 1,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "spa"
+          ],
+          "positiveKeywords": [
+            "cof",
+            "coff",
+            "coffe",
+            "coffee"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 2312,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Cafés",
+        "Eateries"
+      ]
+    },
+    {
+      "id": 37971,
+      "name": "Nike Upper Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": null,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "3bf7f9bf060199ff8dbe516e371bb290",
+          "3bf7f9bf060199ff8dbe516e371bb290",
+          "3bf7f9bf060199ff8dbe516e371bb290"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "NIKE",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 305,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Acc",
+            "Acce",
+            "Acces",
+            "Access"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 90768,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ]
+    },
+    {
+      "id": 20809,
+      "name": "Zara",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": null,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "911dca7051a9b76abff6df4570254a15",
+          "911dca7051a9b76abff6df4570254a15"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 115,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "tar",
+            "targ",
+            "targe",
+            "target"
+          ],
+          "positiveKeywords": [
+            "fore",
+            "forev",
+            "foreve",
+            "forever"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1871,
+        "buildingImageScale": "0",
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 26826,
+      "name": "Elevator near Apple Lower Level",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "910a02c751c824015d0974201371c592",
+          "910a02c751c824015d0974201371c592"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "    ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 0.1,
+        "highlightColor": null,
+        "searchSettings": {
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null
+      },
+      "types": [
+        "Elevators",
+        "LL Elevators"
+      ]
+    },
+    {
+      "id": 21061,
+      "name": "Restrooms in Treats Food Hall ",
+      "address1": "Third Level",
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "04cc408376d0e435f2ad55c7f7ba2414",
+          "04cc408376d0e435f2ad55c7f7ba2414"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://smartlink-kiosk-cms-ads.s3.us-east-2.amazonaws.com/0e29309b-ae21-4f04-bfaa-ca10dd4e4d9e.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 145,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "joe",
+            "joey",
+            "tre",
+            "treat"
+          ],
+          "positiveKeywords": [
+            "bath",
+            "bathr",
+            "bathro",
+            "bathroo"
+          ]
+        },
+        "titleLongitude": null,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 15,
+        "buildingImageHeight": 15,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Restrooms"
+      ]
+    },
+    {
+      "id": 20891,
+      "name": "H&M",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "582297fecf02aa1a808c2008b681e436",
+          "582297fecf02aa1a808c2008b681e436"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "",
+        "buildingImage": "",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 18,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "CH ",
+            "CH Car",
+            "CH Caroli",
+            "CH Carolina "
+          ],
+          "positiveKeywords": [
+            "swi",
+            "swim",
+            "swimw",
+            "swimwe"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1429,
+        "buildingImageScale": "0",
+        "buildingImageWidth": 0,
+        "buildingImageHeight": 0,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ]
+    },
+    {
+      "id": 28477,
+      "name": "Parking Garage near Bloomingdale’s",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "32e2d3f976f0a2e4dbf1e168ec2d4fc7",
+          "32e2d3f976f0a2e4dbf1e168ec2d4fc7"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "     ",
+        "buildingColor": "#acacac",
+        "buildingImage": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": "0.0012",
+        "buildingImageWidth": 512,
+        "buildingImageHeight": 512
+      },
+      "types": [
+        "Parking"
+      ]
+    },
+    {
+      "id": 29856,
+      "name": "ATM NEAR MACYS",
+      "address1": "Lower Level",
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "691a715c07d641978945b40fbad0e551",
+          "691a715c07d641978945b40fbad0e551",
+          "691a715c07d641978945b40fbad0e551"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "      ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": 4,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {},
+          "negativeKeywords": [],
+          "positiveKeywords": []
+        },
+        "titleLongitude": null,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "ATM"
+      ]
+    },
+    {
+      "id": 24596,
+      "name": "Restroom Near Macy's",
+      "address1": "Lower Level",
+      "settings": {
+        "color": "",
+        "height": 0,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "7f695980b7bbefafb2e9f23403606418",
+          "7f695980b7bbefafb2e9f23403606418"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "  ",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "",
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "mac",
+            "macy",
+            "macys",
+            "macys"
+          ],
+          "positiveKeywords": [
+            "toi",
+            "toil",
+            "toile",
+            "toilet"
+          ]
+        },
+        "titleLongitude": null,
+        "buildingImageScale": 0,
+        "buildingImageWidth": 0,
+        "buildingImageHeight": 0
+      },
+      "types": [
+        "Restrooms"
+      ]
+    },
+    {
+      "id": 20863,
+      "name": "Macy's",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "60aa0c9e9f2adfbd2c564ec7a6dac12d",
+          "4872d208fc34fcfa897b234bb6186490",
+          "60aa0c9e9f2adfbd2c564ec7a6dac12d",
+          "4872d208fc34fcfa897b234bb6186490"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://smartlink-kiosk-cms-ads.s3.us-east-2.amazonaws.com/ffa957de-3ef3-4026-b93c-356950c73542.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "18",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "sta",
+            "star",
+            "starb",
+            "starbu"
+          ],
+          "positiveKeywords": [
+            "swi",
+            "swim",
+            "swimw",
+            "swimwe"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1516,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 75,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 42139,
+      "name": "Macy's Upper Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "238b7754d3bdfbd79e3b3fe15016880e",
+          "238b7754d3bdfbd79e3b3fe15016880e"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://cdn.roveiq.com/4c52d7c6-ecbd-4899-8eb6-fd091193fe67.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 18,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Acc",
+            "Acce",
+            "Acces",
+            "Access"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 92821,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 75,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 37969,
+      "name": "H&M Third Level",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "eadc48a8d6c245c2d933d466e3c211e6",
+          "eadc48a8d6c245c2d933d466e3c211e6",
+          "eadc48a8d6c245c2d933d466e3c211e6"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "H&M ",
+        "buildingColor": "",
+        "buildingImage": "",
+        "googleMapsUrl": null,
+        "titleLatitude": 25.955375541976224,
+        "titleRotation": 99,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "designer"
+          ],
+          "positiveKeywords": [
+            "Acc",
+            "Acce",
+            "Acces",
+            "Access"
+          ]
+        },
+        "titleLongitude": -80.14160405247996,
+        "integration_key": 90770,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ]
+    },
+    {
+      "id": 28384,
+      "name": "Nike",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": null,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "debbd44386c4f5e145003fd3370036dd",
+          "debbd44386c4f5e145003fd3370036dd"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 130,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "cof",
+            "coff",
+            "coffe",
+            "coffee"
+          ],
+          "positiveKeywords": [
+            "ath",
+            "athl",
+            "athle",
+            "athlet"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 51029,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ]
+    },
+    {
+      "id": 29984,
+      "name": "Rosetta Bakery - Treats Food Hall",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d03aa0ea11d43bf71424da4916a685e5",
+          "d03aa0ea11d43bf71424da4916a685e5"
+        ],
+        "titleSize": 0.8,
+        "titleDisplay": "Rosetta\nBakery",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": 25.957984343821906,
+        "titleRotation": 118.28,
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "Baker",
+            "Bakery",
+            "Bre",
+            "Brea"
+          ]
+        },
+        "titleLongitude": -80.14277294708668,
+        "integration_key": 87133,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Treats Food Hall"
+      ]
+    },
+    {
+      "id": 20864,
+      "name": "Macy's Men's Home Furniture",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "80ce296b0594ff5b282b43bf151fbc50",
+          "32b4b2841c25b3438649845af7e5eb49",
+          "80ce296b0594ff5b282b43bf151fbc50",
+          "32b4b2841c25b3438649845af7e5eb49"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://cdn.roveiq.com/4131457e-7cdf-4f7d-94a5-de1326fa24f3.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 18,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "macys women"
+          ],
+          "positiveKeywords": [
+            "sak",
+            "saks",
+            "dio",
+            "dior"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1514,
+        "buildingImageScale": "0.01",
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 75,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Department Stores"
+      ]
+    },
+    {
+      "id": 20856,
+      "name": "Nordstrom",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "6a86547ec054475ea65b999b88213639",
+          "6a86547ec054475ea65b999b88213639"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://smartlink-kiosk-cms-ads.s3.us-east-2.amazonaws.com/d1245fc9-fc24-4908-a8fe-0b3d4d265328.png",
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 92,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "toy",
+            "toys",
+            "heal",
+            "hea"
+          ],
+          "positiveKeywords": [
+            "sak",
+            "saks",
+            "ugg",
+            "uggs"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 1540,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 200,
+        "buildingImageHeight": 50,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 20946,
+      "name": "Apple",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "suiteIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "afe666fc9afcd1f07016c49075052dbc",
+          "afe666fc9afcd1f07016c49075052dbc"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": "#2E3F64",
+        "buildingImage": "https://smartlink-kiosk-cms-ads.s3.us-east-2.amazonaws.com/04c25b93-fa84-45db-ac0f-194011633198.png",
+        "googleMapsUrl": null,
+        "titleLatitude": 25.958271250048583,
+        "titleRotation": 115,
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "samso",
+            "samson",
+            "samsoni",
+            "samsonit"
+          ],
+          "positiveKeywords": [
+            "sam",
+            "sams",
+            "samsu",
+            "samsun"
+          ]
+        },
+        "titleLongitude": -80.14177668631204,
+        "integration_key": 126,
+        "buildingImageScale": 0.01,
+        "buildingImageWidth": 35,
+        "buildingImageHeight": 35,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ]
+    },
+    {
+      "id": 20945,
+      "name": "CHANEL Fragrance and Beauty Boutique",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "871eaefd71ed6cd69e1ed5c08515a4a3",
+          "871eaefd71ed6cd69e1ed5c08515a4a3"
+        ],
+        "titleSize": 0.8,
+        "titleDisplay": "CHANEL\nFragrance\nand Beauty\nBoutique",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": 62.08,
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "fit",
+            "fitn",
+            "fitne",
+            "fitnes"
+          ],
+          "positiveKeywords": [
+            "ult",
+            "ulta",
+            "dio",
+            "dior"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 787,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 20840,
+      "name": "Sephora",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 14,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "d54f65341a83dd26eee070e110e432f3",
+          "d54f65341a83dd26eee070e110e432f3"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "",
+        "buildingColor": null,
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": 25.956746473521434,
+        "titleRotation": "18",
+        "buildingHeight": 0,
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [
+            "pla",
+            "play",
+            "fit",
+            "fitn"
+          ],
+          "positiveKeywords": [
+            "ult",
+            "ulta",
+            "dio",
+            "dior"
+          ]
+        },
+        "titleLongitude": -80.14267721786827,
+        "integration_key": 1599,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Beauty & Fragrance"
+      ]
+    },
+    {
+      "id": 37897,
+      "name": "Mango Biche - Treats Food Hall",
+      "address1": null,
+      "settings": {
+        "yelp": {
+          "id": null,
+          "locked": false
+        },
+        "color": "",
+        "height": 0,
+        "feed_id": 13,
+        "floorIds": [],
+        "clickable": false,
+        "entrances": [],
+        "suite_ids": [
+          "00764b9fddc6eb1da0a717b15066f995",
+          "00764b9fddc6eb1da0a717b15066f995"
+        ],
+        "titleSize": 1.25,
+        "titleDisplay": "   ",
+        "buildingColor": "",
+        "buildingImage": null,
+        "googleMapsUrl": null,
+        "titleLatitude": null,
+        "titleRotation": "",
+        "buildingHeight": "",
+        "highlightColor": null,
+        "searchSettings": {
+          "translations": {
+            "2": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "4": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            },
+            "8": {
+              "type": "dict",
+              "keys": [
+                "negativeKeywords",
+                "positiveKeywords"
+              ]
+            }
+          },
+          "negativeKeywords": [],
+          "positiveKeywords": [
+            "bow",
+            "bowl",
+            "bowls",
+            "fas"
+          ]
+        },
+        "titleLongitude": null,
+        "integration_key": 90274,
+        "buildingImageScale": null,
+        "buildingImageWidth": null,
+        "buildingImageHeight": null,
+        "hoverHighlightColor": null
+      },
+      "types": [
+        "Cafés",
+        "Treats Food Hall",
+        "Eateries"
+      ]
+    }
+  ],
+  "mapSuitesSample": [
+    {
+      "id": 24192,
+      "venue_id": 107,
+      "suite_id": "b1f770f965e3609863fd905e908d5bf5",
+      "settings": {
+        "entrances": {
+          "type": "list",
+          "length": 1
+        },
+        "titleSize": 1.1,
+        "titleLatitude": null,
+        "titleRotation": 63,
+        "titleLongitude": null
+      }
+    },
+    {
+      "id": 24133,
+      "venue_id": 107,
+      "suite_id": "701c208288e572d70967f3da7ccad846",
+      "settings": {
+        "entrances": {
+          "type": "list",
+          "length": 1
+        },
+        "titleSize": 1.1,
+        "titleLatitude": 25.957129655517548,
+        "titleRotation": 95,
+        "titleLongitude": -80.14414384176804
+      }
+    },
+    {
+      "id": 24317,
+      "venue_id": 107,
+      "suite_id": "8b54ba9188dc4e8bafc9c0d88fd9b781",
+      "settings": {
+        "entrances": {
+          "type": "list",
+          "length": 1
+        },
+        "titleRotation": 105
+      }
+    }
+  ],
+  "venueAmenitiesSample": [
+    {
+      "id": 1384,
+      "created_at": "0001-01-01T00:00:00Z",
+      "updated_at": "2026-06-30T14:42:37.892933Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "mappedin_id": null,
+      "google_place_id": null,
+      "latitude": 25.955798746179283,
+      "longitude": -80.14296700022774,
+      "icon": null,
+      "settings": {
+        "mapboxFloor": "cld0bpby97ag621of0pny3hyk",
+        "rove_floor_id": 361
+      },
+      "lock_translations": false,
+      "phone": null,
+      "phone_country": null,
+      "email": null,
+      "address1": null,
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": null,
+      "logo_img": null,
+      "hours_entries": {},
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "amenity_type_ids": null,
+      "category_ids": null,
+      "amenity_types": [
+        {
+          "type": "dict",
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "venue_id",
+            "Type",
+            "settings",
+            "highlight",
+            "highlight_rank",
+            "lock_translations"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1385,
+      "created_at": "2025-12-19T19:18:09.941856Z",
+      "updated_at": "2026-06-30T14:42:37.898877Z",
+      "venue_id": 107,
+      "name": "Elevator",
+      "description": "",
+      "mappedin_id": null,
+      "google_place_id": null,
+      "latitude": 25.955335022550877,
+      "longitude": -80.14314529872338,
+      "icon": null,
+      "settings": {
+        "mapboxFloor": "cld0bpby97ag621of0pny3hyk",
+        "rove_floor_id": 361
+      },
+      "lock_translations": false,
+      "phone": null,
+      "phone_country": null,
+      "email": null,
+      "address1": null,
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": null,
+      "logo_img": null,
+      "hours_entries": {},
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "amenity_type_ids": null,
+      "category_ids": null,
+      "amenity_types": [
+        {
+          "type": "dict",
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "venue_id",
+            "Type",
+            "settings",
+            "highlight",
+            "highlight_rank",
+            "lock_translations"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1386,
+      "created_at": "2025-12-19T19:18:49.219474Z",
+      "updated_at": "2026-06-30T14:42:37.900278Z",
+      "venue_id": 107,
+      "name": "Escalator",
+      "description": "",
+      "mappedin_id": null,
+      "google_place_id": null,
+      "latitude": 25.955456343104995,
+      "longitude": -80.1430946334138,
+      "icon": null,
+      "settings": {
+        "mapboxFloor": "cld0bpby97ag621of0pny3hyk",
+        "rove_floor_id": 361
+      },
+      "lock_translations": false,
+      "phone": null,
+      "phone_country": null,
+      "email": null,
+      "address1": null,
+      "address2": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null,
+      "banner_img": null,
+      "logo_img": null,
+      "hours_entries": {},
+      "seasonal_hours_entries": {},
+      "seasonal_dates": {},
+      "disabled": null,
+      "amenity_type_ids": null,
+      "category_ids": null,
+      "amenity_types": [
+        {
+          "type": "dict",
+          "keys": [
+            "id",
+            "created_at",
+            "updated_at",
+            "name",
+            "venue_id",
+            "Type",
+            "settings",
+            "highlight",
+            "highlight_rank",
+            "lock_translations"
+          ]
+        }
+      ]
+    }
+  ]
+}

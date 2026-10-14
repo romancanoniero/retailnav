@@ -16,6 +16,8 @@ on:
       - 'backend/server.test.mjs'
       - 'scripts/test-positioning-core.mjs'
       - 'scripts/test-positioning-web-e2e.mjs'
+      - 'scripts/test-automatic-positioning.mjs'
+      - 'src/page.template.html'
       - 'src/poi-layer.js'
       - 'scripts/test-newworld9-main-browser.mjs'
       - 'src/style.css'
@@ -49,5 +51,7 @@ jobs:
       - run: node scripts/test-positioning-core.mjs
       - run: node scripts/test-positioning-web-e2e.mjs chromium
       - run: node scripts/test-positioning-web-e2e.mjs webkit
+      - run: node scripts/test-automatic-positioning.mjs chromium
+      - run: node scripts/test-automatic-positioning.mjs webkit
       - run: node scripts/test-map-pinch-isolated.mjs chromium
       - run: node scripts/test-map-pinch-isolated.mjs webkit

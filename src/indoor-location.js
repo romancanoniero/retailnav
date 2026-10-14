@@ -1,8 +1,8 @@
-/* RetailNav opt-in positioning.
- * GPS only identifies the mall. Phone orientation gives a direction estimate.
- * An indoor point requires a physical anchor: a map tap or a calibrated QR.
- * Motion provides optional dead reckoning AFTER explicit plan scale calibration.
- * Nothing in this module sends coordinates to the backend or persists them.
+/* RetailNav automatic local positioning. Geolocation starts at app startup;
+ * the BROWSER still owns the permission decision. Photo-only malls cannot
+ * turn a GNSS fix into a fabricated indoor floor or pixel coordinate.
+ * Motion requires gesture/scale calibration; peer sharing remains opt-in.
+ * Raw coordinates and sensor observations never leave this module.
  */
 (()=>{
 'use strict';
@@ -14,10 +14,12 @@ const ui={open:$('rnIndoorBtn'),panel:$('rnIndoorDialog'),
  motion:$('rnMotionBtn'),scale:$('rnScale100Input'),
  status:$('rnIndoorStatus'),heading:$('rnHeadingStatus'),
  position:$('rnIndoorPositionStatus'),point:$('rnMyPositionMarker'),
- reset:$('rnIndoorResetBtn')};
+ reset:$('rnIndoorResetBtn'),live:$('rnAutoLocationStatus')};
 if(!ui.panel||!ui.point)return;
 let near=false,gpsAccuracy=null,gpsDistance=null,geoWatch=null;
 let gpsAltitude=null,gpsVerticalAccuracy=null,gpsObservedAt=null;
+let gpsLatitude=null,gpsLongitude=null,gpsStatus='starting';
+let gpsStartedAutomatically=false,gpsManuallyStopped=false,gpsGeneration=0;
 let anchor=null,heading=null,headingSource='unavailable',compassEnabled=false;
 let compassOffset=null,stepEnabled=false,steps=0,lastMotion=0,gravitational=9.81;
 let uncertaintyMetres=null,motionScale=null,compassListener=false,motionListener=false;
@@ -29,9 +31,50 @@ function proximity(lat,lon) {
  const a=Math.sin(dphi/2)**2+Math.cos(phi)*Math.cos(ph2)*Math.sin(dl/2)**2;
  return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
+function renderLiveLocation(){
+ const fresh=Number.isFinite(gpsObservedAt)&&Date.now()-gpsObservedAt<30000;
+ const hasFix=fresh&&Number.isFinite(gpsLatitude)&&Number.isFinite(gpsLongitude);
+ const a=anchor,validAnchor=a&&Number.isFinite(a.timestampMs)&&
+   Date.now()-a.timestampMs<(a.source==='gps-survey-registered'?30000:
+     a.source==='peer-qr-colocation-asserted'?120000:30*60000);
+ let text='Buscando ubicación…',state='locating';
+ if(gpsStatus==='denied'){text='Ubicación no autorizada · tocar ◎';state='blocked';}
+ else if(gpsStatus==='unavailable'){text='GPS no disponible · ubicación manual';state='blocked';}
+ else if(gpsStatus==='stopped'){text='Ubicación detenida';state='stopped';}
+ else if(hasFix){
+  text='GPS ±'+Math.round(gpsAccuracy??0)+' m · '+(near?'Shopping cercano':'Zona sin confirmar');
+  state='located';
+ }else if(gpsStatus==='timeout'||gpsStatus==='error'){
+  text='Señal GPS insuficiente · reintentar';state='waiting';
+ }else if(gpsStatus==='stale'){text='GPS antiguo · esperando señal';state='waiting';}
+ if(validAnchor){
+  const type=a.source==='gps-survey-registered'?'GPS 3D calibrado':
+    a.source==='peer-qr-colocation-asserted'?'QR provisional':'Punto manual';
+  text=type+' · '+a.floor+(hasFix?' · ±'+Math.round(gpsAccuracy??0)+' m GPS':'');
+  state=a.source==='gps-survey-registered'?'verified':'referenced';
+ }else if(hasFix){
+  text='GPS ±'+Math.round(gpsAccuracy??0)+' m · Piso sin determinar';
+ }
+ const full=hasFix?'Lat '+gpsLatitude.toFixed(6)+', Lon '+gpsLongitude.toFixed(6)+
+  '. Error horizontal ±'+Math.round(gpsAccuracy??0)+' m. '+
+  (Number.isFinite(gpsAltitude)?'Altitud '+Math.round(gpsAltitude)+' m. ':'Altitud no disponible. ')+
+  (Number.isFinite(gpsVerticalAccuracy)?'Precisión vertical ±'+
+   Math.round(gpsVerticalAccuracy)+' m. ':'Precisión vertical no disponible. '):'';
+ if(ui.live){ui.live.textContent=text;ui.live.dataset.state=state;
+  ui.live.title=full+(validAnchor?' Planta candidata '+a.floor+'. ':'')+
+   'No se inventan plantas ni coordenadas sobre un plano sin calibración.';}
+ if(ui.open){
+  ui.open.dataset.locationState=state;
+  ui.open.title=text+(full?' · '+full:'');
+  ui.open.setAttribute('aria-label','Mi ubicación: '+text+'. Abrir detalles');
+ }
+}
 function updateMessage(){
  const gps=near?'Dentro de la zona aproximada de '+mall.name+'.':
-  gpsDistance===null?'GPS desactivado.':'No se ha confirmado este shopping por GPS.';
+  gpsStatus==='starting'||gpsStatus==='locating'?'Localizando automáticamente…':
+  gpsStatus==='denied'?'El navegador denegó la ubicación.':
+  gpsStatus==='stopped'?'Ubicación automática detenida.':
+  gpsDistance===null?'GPS sin señal todavía.':'No se ha confirmado este shopping por GPS.';
  const isPeer=anchor?.source==='peer-qr-colocation-asserted';
  const isSurveyGps=anchor?.source==='gps-survey-registered';
  const place=anchor
@@ -43,7 +86,10 @@ function updateMessage(){
    (Number.isFinite(uncertaintyMetres)?'incertidumbre orientativa ±'+
       Math.round(uncertaintyMetres)+' m.':'sin precisión métrica calibrada.')
   :'No hay referencia interior. El GPS por sí solo no identifica un pasillo.';
- ui.status.textContent=gps+(gpsAccuracy!==null?' Precisión horizontal GPS: ±'+Math.round(gpsAccuracy)+' m.':'')+
+ ui.status.textContent=gps+
+  (Number.isFinite(gpsLatitude)&&Number.isFinite(gpsLongitude)?
+   ' Latitud '+gpsLatitude.toFixed(6)+'; longitud '+gpsLongitude.toFixed(6)+'.':'')+
+  (gpsAccuracy!==null?' Precisión horizontal GPS: ±'+Math.round(gpsAccuracy)+' m.':'')+
   (Number.isFinite(gpsAltitude)?' Altitud GPS: '+Math.round(gpsAltitude)+' m':
     ' Altitud no disponible')+
   (Number.isFinite(gpsVerticalAccuracy)?' (±'+Math.round(gpsVerticalAccuracy)+' m vertical).':
@@ -54,24 +100,41 @@ function updateMessage(){
   'Orientación '+Math.round(heading)+'° ('+headingSource+'). '+(
     compassOffset===null?'Aún no alineada al plano.':'Alineada manualmente al mapa.'
   )+(steps?' · '+steps+' pasos detectados':'');
+ renderLiveLocation();
 }
 function reset(){
+ // Explicit Stop persists for this page session. Never silently restart a
+ // watcher immediately after the user has revoked local positioning.
+ gpsManuallyStopped=true;gpsGeneration++;
  anchor=null;heading=null;compassOffset=null;steps=0;near=false;
  gpsDistance=null;gpsAccuracy=null;uncertaintyMetres=null;motionScale=null;
+ gpsLatitude=null;gpsLongitude=null;
  gpsAltitude=null;gpsVerticalAccuracy=null;gpsObservedAt=null;stepEnabled=false;
- if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null;}
+ gpsStatus='stopped';
+ if(geoWatch!==null){navigator.geolocation?.clearWatch(geoWatch);geoWatch=null;}
  ui.scale.value='';ui.point.hidden=true;updateMessage();
  window.dispatchEvent(new Event('retailnav:indoor-observation'));
  window.__RETAILNAV__?.invalidate?.();
 }
-ui.open?.addEventListener('click',()=>{updateMessage();ui.panel.showModal();});
-ui.close?.addEventListener('click',()=>ui.panel.close());
-ui.reset?.addEventListener('click',reset);
-ui.gps?.addEventListener('click',()=>{
- if(!navigator.geolocation){ui.status.textContent='GPS no disponible en este navegador.';return;}
- ui.status.textContent='Solicitando permiso de ubicación al navegador…';
+function startGeolocation(automatic=false){
+ if(gpsManuallyStopped&&automatic)return false;
+ if(!navigator.geolocation){
+  gpsStatus='unavailable';updateMessage();return false;
+ }
+ gpsManuallyStopped=false;
+ if(automatic)gpsStartedAutomatically=true;
+ const generation=++gpsGeneration;
  if(geoWatch!==null){navigator.geolocation.clearWatch(geoWatch);geoWatch=null;}
+ gpsStatus='locating';
+ ui.status.textContent=automatic?'Detectando automáticamente tu ubicación…':
+  'Actualizando ubicación del navegador…';
+ updateMessage();
+ try{
  geoWatch=navigator.geolocation.watchPosition(pos=>{
+  if(generation!==gpsGeneration||gpsManuallyStopped)return;
+  gpsStatus='active';
+  gpsLatitude=Number.isFinite(pos.coords.latitude)?pos.coords.latitude:null;
+  gpsLongitude=Number.isFinite(pos.coords.longitude)?pos.coords.longitude:null;
   gpsAccuracy=pos.coords.accuracy;
   const observed=window.RetailNavPositioningCore?.gpsObservation(pos);
   gpsAltitude=observed?.altitudeM??null;
@@ -98,10 +161,25 @@ ui.gps?.addEventListener('click',()=>{
   updateMessage();
   window.dispatchEvent(new Event('retailnav:indoor-observation'));
  },err=>{
-  ui.status.textContent=err.code===1?'Permiso de GPS denegado; la ubicación manual sigue disponible.':
-    'GPS no disponible. Podés elegir el punto manualmente.';
+  if(generation!==gpsGeneration||gpsManuallyStopped)return;
+  gpsStatus=err.code===1?'denied':err.code===3?'timeout':'unavailable';
+  updateMessage();
+  window.dispatchEvent(new Event('retailnav:indoor-observation'));
  },{enableHighAccuracy:true,maximumAge:15000,timeout:13000});
-});
+ }catch(e){
+  if(generation!==gpsGeneration)return false;
+  gpsStatus='error';updateMessage();return false;
+ }
+ return true;
+}
+ui.open?.addEventListener('click',()=>{updateMessage();ui.panel.showModal();});
+ui.close?.addEventListener('click',()=>ui.panel.close());
+ui.reset?.addEventListener('click',reset);
+ui.gps?.addEventListener('click',()=>startGeolocation(false));
+// Geolocation requires a browser/system permission, but generally not a
+// gesture; start on page load without waiting for the user to press ◎.
+// If an engine requires a gesture, the explicit refresh button remains.
+window.setTimeout(()=>startGeolocation(true),0);
 ui.anchor?.addEventListener('click',()=>{
  ui.panel.close();
  if(!window.__RETAILNAV__?.getState().ready)return;
@@ -202,6 +280,13 @@ ui.motion?.addEventListener('click',async()=>{
  }catch(e){ui.position.textContent='Sensor de movimiento: '+e.message;}
 });
 function draw(){
+ // A stale 3D GPS position must never remain rendered as a current fix.
+ if(anchor?.source==='gps-survey-registered'&&Date.now()-anchor.timestampMs>30000){
+  anchor=null;uncertaintyMetres=null;ui.point.hidden=true;
+  gpsStatus=gpsStatus==='active'?'stale':gpsStatus;
+  updateMessage();
+  window.dispatchEvent(new Event('retailnav:indoor-observation'));
+ }
  if(!anchor||!ui.point)return;
  const view=window.__RETAILNAV__;
  if(!view?.getState().visible.includes(anchor.floor)){ui.point.hidden=true;return;}
@@ -242,8 +327,9 @@ function adoptPeerAnchor(reference){
 }
 window.RetailNavIndoor={draw,adoptPeerAnchor,getState:()=>({
  nearMall:near,gpsAccuracyM:gpsAccuracy,mallDistanceM:gpsDistance,
- gpsAltitudeM:gpsAltitude,gpsVerticalAccuracyM:gpsVerticalAccuracy,
- gpsTimestampMs:gpsObservedAt,
+ gpsLatitude,gpsLongitude,gpsAltitudeM:gpsAltitude,
+ gpsVerticalAccuracyM:gpsVerticalAccuracy,gpsTimestampMs:gpsObservedAt,
+ gpsStatus,gpsStartedAutomatically,gpsManuallyStopped,
  anchor:anchor?{...anchor}:null,
  indoorSource:anchor?(anchor.source==='manual'?'manual-anchor':
    anchor.source==='gps-survey-registered'?'gps-3d-survey-registered':

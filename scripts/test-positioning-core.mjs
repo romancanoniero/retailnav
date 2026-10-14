@@ -72,3 +72,32 @@ test('transport is honest: web WebRTC/QR do not measure physical distances',()=>
  assert.equal(core.chooseTransport({nativeRtt:true}).ranging,true);
  assert.equal(core.chooseTransport({acousticPermission:true}).ranging,false);
 });
+
+test('GPS lat/lon + height can locate a level ONLY with surveyed map affine',()=>{
+ const t=Date.now();
+ const cal={verified:true,verticalDatum:'WGS84-ellipsoid',
+  floorAltitudesM:{L1:12,L2:16,L3:20},
+  geoReference:{approved:true,datum:'WGS84',
+   originLatitude:25.957,originLongitude:-80.143,
+   xPx:[600,5,0],yPx:[300,0,-5],
+   imageWidth:1376,imageHeight:768,
+   rootMeanSquareErrorM:1.8}
+ };
+ const gps={latitude:25.95701,longitude:-80.14299,
+  horizontalAccuracyM:4.0,verticalAccuracyM:.7,
+  altitudeM:16.05,timestampMs:t};
+ const result=core.registeredGpsToPhoto(gps,cal);
+ assert.equal(result.anchor.floor,'L2');
+ assert.equal(result.anchor.source,'gps-survey-registered');
+ assert.ok(result.anchor.x>600&&result.anchor.x<610);
+ assert.ok(result.anchor.y<300);
+ const assessed=core.evaluate({gps,nearMall:true,calibration:cal,
+  floorIds:['L1','L2','L3'],clockMs:t});
+ assert.equal(assessed.status,'gps-survey-registered');
+ assert.equal(assessed.helpNeeded,false);
+ assert.ok(assessed.horizontalUncertaintyM>=4);
+ assert.equal(core.registeredGpsToPhoto(gps,{...cal,
+  geoReference:{...cal.geoReference,approved:false}}).anchor,null);
+ assert.equal(core.registeredGpsToPhoto({...gps,horizontalAccuracyM:90},cal).anchor,null);
+ assert.equal(core.registeredGpsToPhoto({...gps,altitudeM:18},cal).anchor,null);
+});

@@ -570,6 +570,37 @@ function zoomAt(next,clientX,clientY){
  distance=zoomBounds(next);
  anchorCamera(clientX,clientY,origin,anchor);dirty=true;
 }
+// iOS Safari may promote a two-finger gesture into PAGE ZOOM even though the
+// WebGL canvas uses touch-action:none, especially when the gesture crosses a
+// clickable store label or another layer over the map. Cancel that browser
+// gesture ONLY while it originated in the mall-render viewport. The search,
+// toolbar, dialogs and other page content remain normally zoomable.
+const mapGestureViewport=canvas.closest('.viewport');
+const mapTouchIdentifiers=new Set();
+mapGestureViewport.addEventListener('touchstart',e=>{
+ for(const touch of e.changedTouches)mapTouchIdentifiers.add(touch.identifier);
+},{passive:true});
+function removeEndedMapTouches(e){
+ for(const touch of e.changedTouches)mapTouchIdentifiers.delete(touch.identifier);
+}
+document.addEventListener('touchend',removeEndedMapTouches,
+ {passive:true,capture:true});
+document.addEventListener('touchcancel',removeEndedMapTouches,
+ {passive:true,capture:true});
+document.addEventListener('touchmove',e=>{
+ // iOS 13–16 fallback for browsers that ignore touch-action on descendants.
+ // One-finger taps, text inputs and gestures begun outside the MAP are exempt.
+ if(e.cancelable&&e.touches.length>=2&&
+    [...e.touches].every(t=>mapTouchIdentifiers.has(t.identifier)))
+  e.preventDefault();
+},{passive:false,capture:true});
+for(const kind of ['gesturestart','gesturechange','gestureend']){
+ document.addEventListener(kind,e=>{
+  const insideMap=mapGestureViewport.contains(e.target);
+  if(e.cancelable&&(insideMap||mapTouchIdentifiers.size>=2))
+   e.preventDefault();
+ },{passive:false,capture:true});
+}
 const pointers=new Map();
 let gesture=null,lastTap=null;
 function beginGesture(){

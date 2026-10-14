@@ -155,6 +155,38 @@ function addText(out,text,feature,roof,position,widthFraction,depthFraction,orig
  }
  return true;
 }
+function addServiceSymbol(out,feature,roof,category,origin,scale){
+ const shape=toRoofCoords(feature,origin,scale);
+ const size=Math.min(.62,shape.long*.17,shape.short*.21);
+ if(size<.04)return false;
+ // Raised male/female persons and elevator cabins physically belong to the
+ // room roof. Their outlines stay visible when the viewer is tilted 360°.
+ const at=[...shape.center,roof+.018],z=shape.short*.20,axis=shape.rotated;
+ const tile=(x0,x1,y0,y1,color=SERVICE,depth=.08)=>
+  raisedRectangle(out,at,{x0:x0*size,x1:x1*size,
+   z0:z+y0*size,z1:z+y1*size},depth,SIDE,color,axis);
+ tile(-1.20,1.20,-.84,.90,[.10,.24,.34],.026);
+ if(category==='toilet'){
+  for(const box of [
+   [-.80,-.55,-.55,-.28],[-.86,-.50,-.24,.40],
+   [-1.00,-.87,-.20,.20],[-.49,-.38,-.20,.20],
+   [-.82,-.69,.39,.73],[-.63,-.50,.39,.73],
+   [.46,.72,-.55,-.28],[.42,.76,-.25,.02],
+   [.34,.84,.04,.43],[.28,.90,.30,.47],
+   [.43,.55,.45,.72],[.65,.77,.45,.72]
+  ])tile(...box);
+ }else if(category==='elevator'){
+  for(const box of [
+   [-1.01,-.89,-.66,.72],[.89,1.01,-.66,.72],
+   [-1.00,1.00,-.66,-.53],[-1.00,1.00,.61,.73],
+   [-.56,-.37,-.25,-.04],[.37,.56,-.25,-.04],
+   [-.58,-.35,-.01,.42],[.35,.58,-.01,.42],
+   [-.13,.13,-.47,-.31],[-.06,.06,-.68,-.40],
+   [-.13,.13,.47,.62],[-.06,.06,.52,.76]
+  ])tile(...box);
+ }
+ return true;
+}
 function summarize(floors,units,pois,origin,scale){
  const match=new Map(),ambiguous=new Set();
  for(const unit of units||[]){
@@ -172,7 +204,7 @@ function summarize(floors,units,pois,origin,scale){
  }
  const attached=new Set();
  const summary={floors:floors.length,commercialRoofs:0,serviceRoofs:0,
-   codeLabels:0,knownNameLabels:0,extrudedTriangles:0,
+   codeLabels:0,knownNameLabels:0,servicePictograms:0,extrudedTriangles:0,
    unmatchedShopNames:0,roomLabels:[],services:[]};
  for(const floor of floors){
   const parts={codes:[],names:[],services:[],stats:{}};
@@ -186,8 +218,11 @@ function summarize(floors,units,pois,origin,scale){
     // Semantic 3D text stays glued to the coloured 3D service footprint.
     const label=service.category==='toilet'?'WC':'LIFT';
     addText(parts.services,label,f,1.08,'code',.88,.72,origin,scale,SERVICE);
+    const iconAdded=addServiceSymbol(parts.services,f,1.08,service.category,origin,scale);
+    if(iconAdded)summary.servicePictograms++;
     summary.services.push({floor:floor.id,id:f.id,category:service.category,
-      label,poiId:service.id,roofY:1.08,attached:true});
+      label,poiId:service.id,roofY:1.08,attached:true,
+      extrudedIcon:iconAdded});
     continue;
    }
    if(f.k!=='unit')continue;

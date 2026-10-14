@@ -246,6 +246,33 @@ def upgrade(repo, info, old_units):
             p['id']+' is too close to a store wall or service footprint')
     assert len({p['floor'] for p in demo_people}) == 9
 
+    # Mechanical escalators are independently digitised from the yellow
+    # pictograms. Old purple/blue region segmentation omitted several banks.
+    # A bank's visual axis does NOT prove an arrival floor or up/down sense.
+    escalator_doc = json.loads((repo/'data/malls/new-world-city-shanghai'/
+                               'escalator-fixtures.photo.json').read_text(encoding='utf-8'))
+    assert escalator_doc['imageSize'] == [1376, 768]
+    assert escalator_doc['levelCorrespondenceVerified'] is False
+    escalator_fixtures = escalator_doc['fixtures']
+    assert len(escalator_fixtures) == 25
+    assert {e['floor'] for e in escalator_fixtures} == set(by_floor)
+    ids = set()
+    for e in escalator_fixtures:
+        from math import hypot
+        assert e['id'] not in ids
+        ids.add(e['id'])
+        assert e['floor'] in by_floor
+        assert e['lanes'] in [1, 2] and e['verified'] is False
+        assert e['direction'] == 'unknown'
+        assert all(0 < pt[0] < 1376 and 0 < pt[1] < 768
+                   for pt in [e['p0'], e['p1']])
+        assert hypot(e['p1'][0]-e['p0'][0],
+                     e['p1'][1]-e['p0'][1]) > 32
+        e['adjacentFloorCandidate'] = (
+            'L'+str(int(e['floor'][1:])+1) if e['floor'] != 'L9' else 'L8')
+        e['floorPairVerified'] = False
+        e['entranceExitVerified'] = False
+
     count = sum(len(f[3]) for f in floors)
     assert count == 737 and len(unit_index) >= 380
     experiment = dict(info['photoDigitizationExperiment'])
@@ -260,6 +287,8 @@ def upgrade(repo, info, old_units):
         'floors': floors, 'floorLabels': [x[0] for x in floors],
         'floorReferences': refs, 'units': unit_index, 'pois': pois,
         'demoCorridorAnchors': demo_people,
+        'escalatorFixtures': escalator_fixtures,
+        'escalatorFootprintsMeasured': False,
         'navigable': False, 'floorAlignmentApproved': False,
         'verticalConnectionHypotheses': model['verticalConnectionHypotheses'],
         # Heights are working assumptions until a survey establishes them.

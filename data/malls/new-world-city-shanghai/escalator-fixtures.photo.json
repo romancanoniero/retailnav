@@ -1,0 +1,446 @@
+{
+  "schema": "retailnav.newworld.photo-escalator-fixtures.v1",
+  "source": "Original photographed floor plan signs L1-L9, annotation geometry from yellow-symbol masks; no measured dimensions or registered landing correspondences",
+  "imageSize": [
+    1376,
+    768
+  ],
+  "physicalStoreyHeightEstimateM": 4,
+  "nominalInclineDegrees": 30,
+  "entranceExitDetermined": false,
+  "levelCorrespondenceVerified": false,
+  "routingApproved": false,
+  "notes": [
+    "Axes are plan-symbol approximate axes, not surveyed steps or wayfinding endpoints.",
+    "The black arrows encode a direction of travel but a photograph alone does not establish which endpoint is the upper/lower floor landing.",
+    "Rendering uses bounded default 30-degree rise and editable floor heights. No real-world orientation or actual direction has been confirmed.",
+    "Pairs of adjacent belts are schematic, not a verified count of independent up/down runs."
+  ],
+  "fixtures": [
+    {
+      "id": "L1-centre-upper-left",
+      "floor": "L1",
+      "p0": [
+        673.9,
+        283.3
+      ],
+      "p1": [
+        618,
+        305.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L1-centre-upper-right",
+      "floor": "L1",
+      "p0": [
+        760.5,
+        274
+      ],
+      "p1": [
+        737.9,
+        310.8
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L1-centre-lower-left",
+      "floor": "L1",
+      "p0": [
+        618.3,
+        380.3
+      ],
+      "p1": [
+        673.3,
+        408.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L1-centre-lower-right",
+      "floor": "L1",
+      "p0": [
+        737.7,
+        380.5
+      ],
+      "p1": [
+        760.2,
+        416.3
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L1-east-upper",
+      "floor": "L1",
+      "p0": [
+        1077.6,
+        262.2
+      ],
+      "p1": [
+        1116.7,
+        300.2
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L1-east-lower",
+      "floor": "L1",
+      "p0": [
+        1115.5,
+        386.2
+      ],
+      "p1": [
+        1074.2,
+        427.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L2-west",
+      "floor": "L2",
+      "p0": [
+        531,
+        293.4
+      ],
+      "p1": [
+        524.6,
+        441.7
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L2-east",
+      "floor": "L2",
+      "p0": [
+        896.4,
+        294.7
+      ],
+      "p1": [
+        875.2,
+        439.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L3-west",
+      "floor": "L3",
+      "p0": [
+        558.6,
+        262.7
+      ],
+      "p1": [
+        476.7,
+        323.6
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L3-east",
+      "floor": "L3",
+      "p0": [
+        933.8,
+        263.5
+      ],
+      "p1": [
+        837.6,
+        407.4
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L3-middle-horizontal",
+      "floor": "L3",
+      "p0": [
+        517.8,
+        408.6
+      ],
+      "p1": [
+        334,
+        409.4
+      ],
+      "lanes": 1,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L4-west",
+      "floor": "L4",
+      "p0": [
+        511.4,
+        339.5
+      ],
+      "p1": [
+        444.2,
+        417.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L4-east",
+      "floor": "L4",
+      "p0": [
+        1007.7,
+        288.8
+      ],
+      "p1": [
+        904.5,
+        413.1
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L5-west",
+      "floor": "L5",
+      "p0": [
+        583.1,
+        265.1
+      ],
+      "p1": [
+        481.6,
+        343.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L5-east",
+      "floor": "L5",
+      "p0": [
+        992.2,
+        267.3
+      ],
+      "p1": [
+        853.1,
+        392.9
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L6-west",
+      "floor": "L6",
+      "p0": [
+        359.4,
+        312.4
+      ],
+      "p1": [
+        454.2,
+        408.9
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L6-east",
+      "floor": "L6",
+      "p0": [
+        1043.2,
+        311.6
+      ],
+      "p1": [
+        945.8,
+        407.7
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L7-nw",
+      "floor": "L7",
+      "p0": [
+        550,
+        267.2
+      ],
+      "p1": [
+        600.1,
+        319.3
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L7-ne",
+      "floor": "L7",
+      "p0": [
+        1020.6,
+        264.8
+      ],
+      "p1": [
+        969.4,
+        317.5
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L7-sw",
+      "floor": "L7",
+      "p0": [
+        601.7,
+        370.5
+      ],
+      "p1": [
+        550.6,
+        422.7
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L7-se",
+      "floor": "L7",
+      "p0": [
+        970.2,
+        370.7
+      ],
+      "p1": [
+        1021.7,
+        421.8
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L8-north",
+      "floor": "L8",
+      "p0": [
+        919.6,
+        263.5
+      ],
+      "p1": [
+        805.5,
+        265.2
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L8-south",
+      "floor": "L8",
+      "p0": [
+        1013.9,
+        404.8
+      ],
+      "p1": [
+        969,
+        448.8
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L9-west",
+      "floor": "L9",
+      "p0": [
+        500.7,
+        282
+      ],
+      "p1": [
+        374.5,
+        394.4
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    },
+    {
+      "id": "L9-east",
+      "floor": "L9",
+      "p0": [
+        987.5,
+        281.4
+      ],
+      "p1": [
+        867.9,
+        387.4
+      ],
+      "lanes": 2,
+      "direction": "unknown",
+      "ends": "unverified",
+      "orientationConfidence": "symbol-axis-candidate",
+      "verified": false
+    }
+  ]
+}

@@ -753,3 +753,24 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  .rnHeightsPopover{left:auto;right:-36px}
  .hudright #rnConnectorsToggle{font-size:19px}
 }
+
+
+/* Earth-like navigation: compass is a discrete, accessible orientation control.
+   Bearing is map-photo reference until a surveyed north vector exists. */
+.hudright #north{position:relative;display:flex;align-items:center;justify-content:center;
+ min-height:42px;border:1px solid #4f8a9a;color:#bceefa;border-radius:12px}
+.hudright #north:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#rnCompassNeedle{display:inline-block;font-size:22px;font-weight:800;line-height:1;
+ color:#f47c70;transform-origin:center;transition:transform .12s ease-out}
+.rnNorthN{position:absolute;bottom:0;right:2px;font-size:9px;
+ font-weight:750;color:#c4dce9}
+#rnViewModeLabel{display:inline-block;margin-left:5px;font-size:11px;
+ font-weight:800;line-height:1;vertical-align:middle}
+@media(max-width:900px){
+ .hudright #north{min-height:38px}
+ #rnCompassNeedle{font-size:19px}
+ #rnViewModeLabel{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #rnCompassNeedle{transition:none}
+}

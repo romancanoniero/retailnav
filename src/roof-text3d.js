@@ -22,23 +22,36 @@ function glyph(char){
  ctx.fillStyle='#fff';ctx.textBaseline='top';
  ctx.fillText(char,1,0);
  const image=ctx.getImageData(0,0,width,height).data;
+ // Rasterize glyphs at half resolution and merge contiguous cells. This
+ // substantially reduces triangles and RAM on iPhones while preserving
+ // genuinely extruded geometric text, even with Chinese CJK characters.
+ const stride=2,w=Math.ceil(width/stride),h=Math.ceil(height/stride);
+ function filled(x,y){
+  let sum=0,n=0;
+  for(let row=y*stride;row<Math.min(height,(y+1)*stride);row++)
+   for(let col=x*stride;col<Math.min(width,(x+1)*stride);col++){
+    sum+=image[(row*width+col)*4+3];n++;
+   }
+  return sum>=n*79;
+ }
  const complete=[],active=new Map();
- for(let y=0;y<height;y++){
+ for(let y=0;y<h;y++){
   const segments=[];
   let x=0;
-  while(x<width){
-   while(x<width&&image[(y*width+x)*4+3]<110)x++;
-   if(x>=width)break;
+  while(x<w){
+   while(x<w&&!filled(x,y))x++;
+   if(x>=w)break;
    const a=x;
-   while(x<width&&image[(y*width+x)*4+3]>=110)x++;
+   while(x<w&&filled(x,y))x++;
    segments.push([a,x]);
   }
   const current=new Map();
   for(const [x0,x1] of segments){
    const key=x0+':'+x1;
    const previous=active.get(key);
-   if(previous){previous.y1=y+1;current.set(key,previous);}
-   else current.set(key,{x0,x1,y0:y,y1:y+1});
+   if(previous){previous.y1=Math.min(height,(y+1)*stride);current.set(key,previous);}
+   else current.set(key,{x0:x0*stride,x1:Math.min(width,x1*stride),
+    y0:y*stride,y1:Math.min(height,(y+1)*stride)});
   }
   for(const [key,rect] of active)if(!current.has(key))complete.push(rect);
   active.clear();

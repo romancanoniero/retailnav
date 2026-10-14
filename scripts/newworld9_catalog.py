@@ -273,6 +273,34 @@ def upgrade(repo, info, old_units):
         e['floorPairVerified'] = False
         e['entranceExitVerified'] = False
 
+    # Source-linked lift shaft visual hypotheses; never routing edges.
+    shafts_doc = json.loads((repo/'data/malls/new-world-city-shanghai'/
+                            'elevator-shafts.provisional.json').read_text(encoding='utf-8'))
+    assert shafts_doc['mallId'] == 'new-world-city-shanghai'
+    assert shafts_doc['canUseForRouting'] is False
+    shaft_candidates = shafts_doc['candidates']
+    assert len(shaft_candidates) == 3
+    assert sum(bool(c['primary']) for c in shaft_candidates) == 1
+    for shaft in shaft_candidates:
+        assert shaft['verified'] is False
+        assert shaft['correspondenceVerified'] is False
+        obs = shaft['observations']
+        ids_seen = set()
+        for point in obs:
+            fid, ident = point['floor'], point['geometryId']
+            assert (fid, ident) not in ids_seen
+            ids_seen.add((fid, ident))
+            candidates = [feature for feature in by_floor[fid]
+                          if feature['id'] == ident]
+            assert len(candidates) == 1
+            assert candidates[0]['kind'] == 'elevator'
+            assert all(abs(a-b) < 0.1 for a,b in zip(
+                point['xy'], candidates[0]['xy']))
+        indexes = [int(p['floor'][1:]) for p in obs]
+        assert indexes == list(range(min(indexes), max(indexes)+1))
+    assert [p['floor'] for p in shaft_candidates[0]['observations']] == [
+        'L'+str(i) for i in range(1, 10)]
+
     count = sum(len(f[3]) for f in floors)
     assert count == 737 and len(unit_index) >= 380
     experiment = dict(info['photoDigitizationExperiment'])
@@ -288,6 +316,8 @@ def upgrade(repo, info, old_units):
         'floorReferences': refs, 'units': unit_index, 'pois': pois,
         'demoCorridorAnchors': demo_people,
         'escalatorFixtures': escalator_fixtures,
+        'verticalShaftCandidates': shaft_candidates,
+        'verticalShaftMappingsVerified': False,
         'escalatorFootprintsMeasured': False,
         'navigable': False, 'floorAlignmentApproved': False,
         'verticalConnectionHypotheses': model['verticalConnectionHypotheses'],

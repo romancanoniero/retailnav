@@ -1,0 +1,199 @@
+{
+  "schema": "retailnav.lift-shafts.photo-hypotheses.v1",
+  "mallId": "new-world-city-shanghai",
+  "evidence": "Photographed yellow lift footprints L1–L9, 1376x768 each; plan crops not metrically registered",
+  "geometryStatus": "ESTIMATED-NOT-SURVEYED",
+  "canUseForRouting": false,
+  "note": "Continuous lift-shaft is an illustrative hypothesis. Photo registration mismatch on L3 West is 75.9 pixels; no route or verified shaft correspondence is implied.",
+  "candidates": [
+    {
+      "id": "west-core-L1-L9",
+      "primary": true,
+      "coreCenterPx": [
+        246,
+        340
+      ],
+      "widthEstimateM": 3.4,
+      "depthEstimateM": 3.6,
+      "verified": false,
+      "correspondenceVerified": false,
+      "assessment": "Provisional projected core; L3 plan misregistration appears significant",
+      "observations": [
+        {
+          "floor": "L1",
+          "geometryId": "L1-067",
+          "xy": [
+            225.99,
+            330
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L2",
+          "geometryId": "L2-029",
+          "xy": [
+            236,
+            336.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L3",
+          "geometryId": "L3-049",
+          "xy": [
+            173,
+            360.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L4",
+          "geometryId": "L4-035",
+          "xy": [
+            236.5,
+            352.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L5",
+          "geometryId": "L5-026",
+          "xy": [
+            259.75,
+            344.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L6",
+          "geometryId": "L6-032",
+          "xy": [
+            246,
+            352.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L7",
+          "geometryId": "L7-033",
+          "xy": [
+            271.87,
+            334
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L8",
+          "geometryId": "L8-049",
+          "xy": [
+            260.5,
+            324
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L9",
+          "geometryId": "L9-015",
+          "xy": [
+            242,
+            339
+          ],
+          "verification": "position-based-unverified"
+        }
+      ]
+    },
+    {
+      "id": "north-core-L1-L4",
+      "primary": false,
+      "coreCenterPx": [
+        714,
+        192
+      ],
+      "widthEstimateM": 3.4,
+      "depthEstimateM": 3.6,
+      "verified": false,
+      "correspondenceVerified": false,
+      "assessment": "Partial run only; not assumed to extend into L5-L6",
+      "observations": [
+        {
+          "floor": "L1",
+          "geometryId": "L1-005",
+          "xy": [
+            733,
+            206.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L2",
+          "geometryId": "L2-010",
+          "xy": [
+            699,
+            212
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L3",
+          "geometryId": "L3-015",
+          "xy": [
+            714.89,
+            188.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L4",
+          "geometryId": "L4-002",
+          "xy": [
+            721,
+            174
+          ],
+          "verification": "position-based-unverified"
+        }
+      ]
+    },
+    {
+      "id": "north-core-L7-L9",
+      "primary": false,
+      "coreCenterPx": [
+        695,
+        174
+      ],
+      "widthEstimateM": 3.4,
+      "depthEstimateM": 3.6,
+      "verified": false,
+      "correspondenceVerified": false,
+      "assessment": "Partial run only; connection to lower north shaft is not established",
+      "observations": [
+        {
+          "floor": "L7",
+          "geometryId": "L7-008",
+          "xy": [
+            689.5,
+            181.5
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L8",
+          "geometryId": "L8-013",
+          "xy": [
+            701,
+            157
+          ],
+          "verification": "position-based-unverified"
+        },
+        {
+          "floor": "L9",
+          "geometryId": "L9-002",
+          "xy": [
+            696,
+            171
+          ],
+          "verification": "position-based-unverified"
+        }
+      ]
+    }
+  ]
+}

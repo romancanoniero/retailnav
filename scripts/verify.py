@@ -190,6 +190,17 @@ assert all(f["verified"] is False and f["floorPairVerified"] is False
 assert nw["escalatorFootprintsMeasured"] is False
 assert "RetailNavEscalators" in html
 assert "mechanical escalators" in html.lower() or "mechanical escalator" in html.lower()
+assert len(nw["verticalShaftCandidates"]) == 3
+assert nw["verticalShaftMappingsVerified"] is False
+assert len(nw["verticalShaftCandidates"][0]["observations"]) == 9
+assert [o["floor"] for o in nw["verticalShaftCandidates"][0]["observations"]] == [
+    "L"+str(n) for n in range(1,10)]
+assert all(not shaft["verified"] and not shaft["correspondenceVerified"]
+           for shaft in nw["verticalShaftCandidates"])
+assert "RetailNavServiceIcons" in html
+assert "RetailNavVerticalShafts" in html
+assert "framed-transparent-shaft" in html
+assert "window.RETAILNAV_ROOF_ATTACHMENTS" in html
 assert len(nw["verticalConnectionHypotheses"]) == 39
 assert all("NOT VERIFIED" in edge["status"]
     for edge in nw["verticalConnectionHypotheses"])

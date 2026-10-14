@@ -226,7 +226,7 @@ function buffer(arr){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl
  }
 }}
 function shader(type,src){let s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
-function initGL(){gl=canvas.getContext('webgl',{antialias:true,alpha:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});if(!gl){ctx2d=canvas.getContext('2d',{alpha:true});if(!ctx2d)throw new Error('El navegador no permite dibujar el mapa interactivo.');return;}program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,`attribute vec3 aPos;attribute vec3 aNormal;attribute vec3 aColor;attribute float aId;uniform mat4 uMvp;uniform float uY;uniform float uPoint;varying vec3 vNormal;varying vec3 vColor;varying float vId;void main(){vec3 p=aPos;p.y+=uY;gl_Position=uMvp*vec4(p,1.);gl_PointSize=uPoint;vNormal=aNormal;vColor=aColor;vId=aId;}`));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,`precision mediump float;varying vec3 vNormal;varying vec3 vColor;varying float vId;uniform float uSelected;uniform float uLine;uniform float uWire;void main(){bool sel=abs(vId-uSelected)<.1;vec3 c=sel?vec3(1.,.68,.29):vColor;float light=.58+.42*abs(dot(normalize(vNormal+vec3(.0001)),normalize(vec3(-.4,.8,.3))));if(uLine>.5)light=1.;if(uWire>.5&&uLine<.5)c*=.32;gl_FragColor=vec4(c*light,1.);}`));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));gl.useProgram(program);loc={};['aPos','aNormal','aColor','aId'].forEach(x=>loc[x]=gl.getAttribLocation(program,x));['uMvp','uY','uPoint','uSelected','uLine','uWire'].forEach(x=>loc[x]=gl.getUniformLocation(program,x));gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.clearColor(0,0,0,0);canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();fail('El sistema suspendio el renderizador 3D. Recarga la pagina para recuperarlo.');});}
+function initGL(){gl=canvas.getContext('webgl',{antialias:true,alpha:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});if(!gl){ctx2d=canvas.getContext('2d',{alpha:true});if(!ctx2d)throw new Error('El navegador no permite dibujar el mapa interactivo.');return;}program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,`attribute vec3 aPos;attribute vec3 aNormal;attribute vec3 aColor;attribute float aId;uniform mat4 uMvp;uniform float uY;uniform float uPoint;varying vec3 vNormal;varying vec3 vColor;varying float vId;void main(){vec3 p=aPos;p.y+=uY;gl_Position=uMvp*vec4(p,1.);gl_PointSize=uPoint;vNormal=aNormal;vColor=aColor;vId=aId;}`));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,`precision mediump float;varying vec3 vNormal;varying vec3 vColor;varying float vId;uniform float uSelected;uniform float uLine;uniform float uWire;uniform float uAlpha;void main(){bool sel=abs(vId-uSelected)<.1;vec3 c=sel?vec3(1.,.68,.29):vColor;float light=.58+.42*abs(dot(normalize(vNormal+vec3(.0001)),normalize(vec3(-.4,.8,.3))));if(uLine>.5)light=1.;if(uWire>.5&&uLine<.5)c*=.32;gl_FragColor=vec4(c*light,uAlpha);}`));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));gl.useProgram(program);loc={};['aPos','aNormal','aColor','aId'].forEach(x=>loc[x]=gl.getAttribLocation(program,x));['uMvp','uY','uPoint','uSelected','uLine','uWire','uAlpha'].forEach(x=>loc[x]=gl.getUniformLocation(program,x));gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);gl.clearColor(0,0,0,0);canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();fail('El sistema suspendio el renderizador 3D. Recarga la pagina para recuperarlo.');});}
 function bind(g){gl.bindBuffer(gl.ARRAY_BUFFER,g.b);let names=['aPos','aNormal','aColor','aId'],sizes=[3,3,3,1],offs=[0,12,24,36];names.forEach((n,i)=>{gl.enableVertexAttribArray(loc[n]);gl.vertexAttribPointer(loc[n],sizes[i],gl.FLOAT,false,40,offs[i]);});}
 let grid;
 function makeGrid(){if(!gl)return;let a=[];for(let n=-85;n<=85;n+=5){for(let p of [[n,-.9,-70],[n,-.9,70],[-85,-.9,n],[85,-.9,n]])a.push(...p,0,0,0,.065,.13,.19,-2);}let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(a),gl.STATIC_DRAW);grid={b,n:a.length/10};}
@@ -262,7 +262,8 @@ function verticalSegments(){
  // Never display inferred long yellow 'ladders'. Stairs are now actual
  // isolated escalator meshes based on their yellow footprint axes.
  if(!verticalConnectionsOn||active!=='ALL'||!verticalHypotheses.length
-    ||spread>baseFloorMetres*1.4)return [];
+    ||spread>baseFloorMetres*1.4||
+    (selectedMall.verticalShaftCandidates||[]).length)return [];
  const byId=new Map();
  for(const floor of floors)for(const feature of floor.features)
   byId.set(feature.id,{floor,feature});
@@ -357,6 +358,88 @@ function drawMechanicalEscalatorsCanvas(){
   c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();
  }
 }
+// One continuous lift core (L1-L9) is shown by default. Additional,
+ // independently evidenced partial shafts become visible at close zoom.
+ // They are explicitly provisional photo-based illustrations, not paths.
+let shaftCache=null,shaftKey='',shaftGpu=null;
+function liftShaftModel(){
+ const candidates=selectedMall.verticalShaftCandidates||[];
+ const detailed=distance<105;
+ const key=[active,verticalConnectionsOn,detailed,
+  ...floors.map(f=>f.y.toFixed(3))].join('|');
+ if(shaftCache&&key===shaftKey)return shaftCache;
+ shaftKey=key;
+ shaftCache=window.RetailNavVerticalShafts?.build?.({
+  candidates,floors,origin:cfg.origin,scale:cfg.scale,active,
+  enabled:verticalConnectionsOn,includeSecondary:detailed
+ })||{solid:new Float32Array(0),glass:new Float32Array(0),
+  edges:new Float32Array(0),shafts:[],
+  stats:{count:0,continuousCount:0,verified:false,navigationApproved:false}};
+ return shaftCache;
+}
+function drawLiftShaftsWebGL(){
+ if(!gl||active!=='ALL'||!verticalConnectionsOn)return;
+ const model=liftShaftModel();
+ if(!model.solid.length)return;
+ if(!shaftGpu){
+  shaftGpu={solid:gl.createBuffer(),glass:gl.createBuffer(),
+   edges:gl.createBuffer(),key:null};
+ }
+ if(shaftGpu.key!==shaftKey){
+  for(const name of ['solid','glass','edges']){
+   gl.bindBuffer(gl.ARRAY_BUFFER,shaftGpu[name]);
+   gl.bufferData(gl.ARRAY_BUFFER,model[name],gl.DYNAMIC_DRAW);
+  }
+  shaftGpu.key=shaftKey;
+ }
+ gl.uniform1f(loc.uY,0);
+ gl.uniform1f(loc.uSelected,-4000);
+ gl.uniform1f(loc.uWire,0);
+ gl.uniform1f(loc.uLine,0);
+ gl.uniform1f(loc.uAlpha,1);
+ bind({b:shaftGpu.solid});
+ gl.drawArrays(gl.TRIANGLES,0,model.solid.length/10);
+ // Transparent vertical panes are depth-tested against shops and floors.
+ gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+ gl.depthMask(false);
+ gl.uniform1f(loc.uAlpha,model.stats.glassOpacity||.19);
+ bind({b:shaftGpu.glass});
+ gl.drawArrays(gl.TRIANGLES,0,model.glass.length/10);
+ gl.depthMask(true);gl.disable(gl.BLEND);
+ gl.uniform1f(loc.uAlpha,1);
+ gl.uniform1f(loc.uLine,1);
+ bind({b:shaftGpu.edges});
+ gl.drawArrays(gl.LINES,0,model.edges.length/10);
+ gl.uniform1f(loc.uSelected,selected?selected.gid:-1);
+ gl.uniform1f(loc.uWire,wire?1:0);
+}
+function drawLiftShaftsCanvas(){
+ if(!ctx2d||active!=='ALL'||!verticalConnectionsOn)return;
+ const model=liftShaftModel(),c=ctx2d;
+ const triangle=(data,alpha)=>{
+  c.globalAlpha=alpha;
+  for(let i=0;i<data.length;i+=30){
+   const a=screen([data[i],data[i+1],data[i+2]]);
+   const b=screen([data[i+10],data[i+11],data[i+12]]);
+   const d=screen([data[i+20],data[i+21],data[i+22]]);
+   if(a.w<=.02||b.w<=.02||d.w<=.02)continue;
+   c.fillStyle='rgb('+[6,7,8].map(k=>Math.round(data[i+k]*255)).join(',')+')';
+   c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);
+   c.lineTo(d.x,d.y);c.closePath();c.fill();
+  }
+ };
+ triangle(model.glass,.19);triangle(model.solid,1);
+ c.globalAlpha=.83;c.lineWidth=1.9;
+ for(let i=0;i<model.edges.length;i+=20){
+  const a=screen([model.edges[i],model.edges[i+1],model.edges[i+2]]);
+  const b=screen([model.edges[i+10],model.edges[i+11],model.edges[i+12]]);
+  if(a.w<=.02||b.w<=.02)continue;
+  const data=model.edges;
+  c.strokeStyle='rgb('+[6,7,8].map(k=>Math.round(data[i+k]*255)).join(',')+')';
+  c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();
+ }
+ c.globalAlpha=1;
+}
 function drawVerticalWebGL(){
  if(!gl||!verticalConnectionsOn||active!=='ALL')return;
  const segments=verticalSegments();if(!segments.length)return;
@@ -444,8 +527,8 @@ function drawRoofTextCanvas(){
 }
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
- else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+ else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawLiftShaftsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
 
@@ -503,6 +586,7 @@ function renderCanvas(dt){
  }
  drawVerticalCanvas();
  drawMechanicalEscalatorsCanvas();
+ drawLiftShaftsCanvas();
  drawRoofTextCanvas();
 }
 
@@ -1406,11 +1490,14 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  escalatorRenderStats:escalatorModel().stats,
  escalatorFixtureCount:(selectedMall.escalatorFixtures||[]).length,
  roofTextSummary:roofSummary,
+ liftShaftStats:liftShaftModel().stats,
+ liftShaftCandidateCount:(selectedMall.verticalShaftCandidates||[]).length,
  searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
  getVerticalConnections:verticalConnectionInfo,
  getEscalatorModels:()=>escalatorModel().items.slice(),
+ getLiftShaftModels:()=>liftShaftModel().shafts.slice(),
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 init();
 })();

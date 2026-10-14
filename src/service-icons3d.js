@@ -46,8 +46,9 @@ const SYMBOLS={
   polygon(rect(-.96,.96,-.36,-.25)),
   polygon(rect(-.96,.96,.84,.95)),
   polygon(rect(-.055,.055,-.22,.83)),
-  ...people(-.51,'male'),
-  ...people(.52,'female')
+  ...people(-.57,'male'),
+  ...people(0,'female'),
+  ...people(.57,'male')
  ]
 };
 const colours={toilet:[.97,.995,1],elevator:[.12,.14,.15]};

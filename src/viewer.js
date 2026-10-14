@@ -98,7 +98,9 @@ function switchEarth2D(){
   // 2D refers to one selected level; retain focus and zoom throughout.
   const floorId=selected?.floor||floors[Math.min(1,floors.length-1)].id;
   const oldTarget=target.slice(),oldDistance=distance;
+  const previousAngles=[orbitYaw,orbitPitch,orbitRoll];
   setFloor(floorId);
+  [orbitYaw,orbitPitch,orbitRoll]=previousAngles;
   target=[oldTarget[0],floors.find(f=>f.id===floorId).y,oldTarget[2]];
   distance=oldDistance;
  }
@@ -1110,6 +1112,7 @@ $('zoomOut').onclick=()=>{stopAuto();const r=canvas.getBoundingClientRect();
  $('plan').onclick=switchEarth2D;
  $('pan').onclick=()=>{
  panMode=!panMode;
+ if(!panMode)earth2D=false;
  if(panMode){
   // Explicit map-mode switch returns to a stable screen-up camera.
   orbitRoll=0;orbitPitch=clamp(orbitPitch,MIN_PITCH,MAX_PITCH);

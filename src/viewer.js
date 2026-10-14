@@ -333,11 +333,16 @@ canvas.addEventListener('pointermove',e=>{
     target=vadd(gesture.target,qr(q,[-dx*unit,dy*unit,0]));
    }
   }else{
+   // Map the gesture to the virtual sphere. Preserve a quaternion even
+   // across upside-down/polar views, so a full rotation never freezes.
+   const begin=arcballVector(gesture.p[0].x,gesture.p[0].y);
+   const end=arcballVector(p[0].x,p[0].y);
+   q=norm(qm(gesture.orientation,arcballCameraDelta(begin,end)));
+   // Public diagnostics / keyboard increments retain their angle counters.
+   // They are NOT used to rebuild the camera orientation in spherical mode.
    orbitYaw=gesture.yaw-dx*.006;
-   orbitPitch=panMode?clamp(gesture.pitch-dy*.004,MIN_PITCH,MAX_PITCH)
-    :wrapAngle(gesture.pitch-dy*.006);
-   orbitRoll=panMode?0:gesture.roll;
-   updateCameraRotation();
+   orbitPitch=gesture.pitch-dy*.006;
+   orbitRoll=gesture.roll;
    $('plan').setAttribute('aria-pressed','false');
   }
  }else if(p.length>=2){
@@ -347,15 +352,23 @@ canvas.addEventListener('pointermove',e=>{
   const angle=Math.atan2(Math.sin(delta),Math.cos(delta));
   const dx=(a.x+b.x-aa.x-bb.x)/2,dy=(a.y+b.y-aa.y-bb.y)/2;
   distance=zoomBounds(gesture.distance*dd/Math.max(5,d));
-  if(panMode){orbitYaw=gesture.yaw+angle;orbitRoll=0;}
-  else{orbitYaw=gesture.yaw;orbitRoll=wrapAngle(gesture.roll+angle);}
-  const tilting=Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.25
-   &&Math.abs(d/dd-1)<.13&&Math.abs(angle)<.10;
-  // iPhone Maps: dragging two fingers UP reveals the map in 3D;
-  // dragging DOWN flattens it. Previous direction was reversed.
-  const wantedPitch=gesture.pitch-(tilting?dy*.0045:0);
-  orbitPitch=panMode?clamp(wantedPitch,MIN_PITCH,MAX_PITCH):wrapAngle(wantedPitch);
-  updateCameraRotation();target=gesture.target.slice();
+  if(panMode){
+   orbitYaw=gesture.yaw+angle;
+   orbitRoll=0;
+   const tilting=Math.abs(dy)>9&&Math.abs(dy)>Math.abs(dx)*1.25
+    &&Math.abs(d/dd-1)<.13&&Math.abs(angle)<.10;
+   // iPhone Maps: two fingers up increases the incline without inversion.
+   orbitPitch=clamp(gesture.pitch-(tilting?dy*.0045:0),MIN_PITCH,MAX_PITCH);
+   updateCameraRotation();
+  }else{
+   // Pinch changes distance, centre translation pans, twist rotates around
+   // local Z. No world-up reset, limits or Euler decomposition.
+   q=norm(qm(gesture.orientation,quat([0,0,1],angle)));
+   orbitYaw=gesture.yaw;
+   orbitPitch=gesture.pitch;
+   orbitRoll=wrapAngle(gesture.roll+angle);
+  }
+  target=gesture.target.slice();
   if(gesture.anchor){
    anchorCamera((a.x+b.x)/2,(a.y+b.y)/2,gesture.target,gesture.anchor);
   }else{
@@ -401,10 +414,17 @@ canvas.addEventListener('contextmenu',e=>e.preventDefault());
 canvas.addEventListener('wheel',e=>{
  if(!ready)return;e.preventDefault();stopAuto();
  if(e.altKey&&!panMode){
-  orbitRoll=wrapAngle(orbitRoll+e.deltaY*.002);updateCameraRotation();dirty=true;
+  orbitRoll=wrapAngle(orbitRoll+e.deltaY*.002);
+  rotateCameraLocal([0,0,1],e.deltaY*.002);
  }else if(e.shiftKey){
-  orbitPitch=panMode?clamp(orbitPitch+e.deltaY*.0015,MIN_PITCH,MAX_PITCH)
-   :wrapAngle(orbitPitch+e.deltaY*.0015);updateCameraRotation();dirty=true;
+  if(panMode){
+   orbitPitch=clamp(orbitPitch+e.deltaY*.0015,MIN_PITCH,MAX_PITCH);
+   updateCameraRotation();
+  }else{
+   orbitPitch+=e.deltaY*.0015;
+   rotateCameraLocal([1,0,0],e.deltaY*.0015);
+  }
+  dirty=true;
  }else zoomAt(distance*Math.exp(e.deltaY*(e.ctrlKey?.0025:.0012)),e.clientX,e.clientY);
 },{passive:false});
 canvas.addEventListener('keydown',e=>{
@@ -418,16 +438,22 @@ canvas.addEventListener('keydown',e=>{
  if(key==='+'||key==='=')distance=zoomBounds(distance*.86);
  if(key==='-')distance=zoomBounds(distance*1.16);
  if(key==='['||key===']'){
-  orbitYaw+=(key==='['?-.12:.12);updateCameraRotation();
+  const angle=key==='['?-.12:.12;
+  orbitYaw+=angle;
+  if(panMode)updateCameraRotation();
+  else rotateCameraLocal([0,1,0],angle);
  }
  if(!panMode&&(key.toLowerCase()==='q'||key.toLowerCase()==='e')){
-  orbitRoll=wrapAngle(orbitRoll+(key.toLowerCase()==='q'?.12:-.12));
-  updateCameraRotation();
+  const angle=key.toLowerCase()==='q'?.12:-.12;
+  orbitRoll=wrapAngle(orbitRoll+angle);
+  rotateCameraLocal([0,0,1],angle);
  }
  if(key==='PageUp'||key==='PageDown'){
-  const next=orbitPitch+(key==='PageUp'?-.14:.14);
-  orbitPitch=panMode?clamp(next,MIN_PITCH,MAX_PITCH):wrapAngle(next);
-  updateCameraRotation();
+  const angle=key==='PageUp'?-.14:.14;
+  orbitPitch=panMode?clamp(orbitPitch+angle,MIN_PITCH,MAX_PITCH)
+   :orbitPitch+angle;
+  if(panMode)updateCameraRotation();
+  else rotateCameraLocal([1,0,0],angle);
  }
  if(key==='0')resetCamera();
  dirty=true;

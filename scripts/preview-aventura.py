@@ -2,12 +2,12 @@ from pathlib import Path
 from PIL import Image,ImageStat
 import json
 r=Path("research-output/aventura")
-names=["aventura-lower-level","aventura-upper-level","aventura-third-level","aventura-superposicion-ll-ul","aventura-superposicion-tres-plantas"]
+names=["aventura-planta-361","aventura-planta-362","aventura-planta-363","aventura-superposicion-ll-ul","aventura-superposicion-ul-l3","aventura-superposicion-tres-plantas"]
 checks=[]
 for name in names:
     path=r/(name+".png")
     with Image.open(path) as pic:
-        assert pic.size==(6200,7400),(name,pic.size)
+        assert pic.size==(5400,3400),(name,pic.size)
         thumb=pic.convert("RGB")
         thumb.thumbnail((1000,1200),Image.Resampling.LANCZOS)
         preview=r/(name+"-vista.webp")

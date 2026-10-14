@@ -1,0 +1,7342 @@
+{
+  "sourceMap": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/map.json",
+  "sourceDirectory": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/locations.json",
+  "validation": "exact loc_id -> id join, without inventing names",
+  "totalDirectoryLocations": 413,
+  "floorSummaries": [
+    {
+      "floorId": 361,
+      "floorName": "Lower Level",
+      "totalPolygons": 263,
+      "linkedShops": 175,
+      "matched_ids": 209,
+      "mapped_facility_not_a_shop": 34,
+      "no_location_id": 41,
+      "id_not_in_official_directory": 13,
+      "full-name": 29,
+      "compact-marker": 146,
+      "unmatched": 54
+    },
+    {
+      "floorId": 362,
+      "floorName": "Upper Level",
+      "totalPolygons": 250,
+      "linkedShops": 140,
+      "no_location_id": 63,
+      "matched_ids": 170,
+      "mapped_facility_not_a_shop": 30,
+      "id_not_in_official_directory": 17,
+      "full-name": 13,
+      "compact-marker": 127,
+      "unmatched": 80
+    },
+    {
+      "floorId": 363,
+      "floorName": "Third Level",
+      "totalPolygons": 93,
+      "linkedShops": 29,
+      "matched_ids": 56,
+      "no_location_id": 32,
+      "mapped_facility_not_a_shop": 27,
+      "id_not_in_official_directory": 5,
+      "full-name": 9,
+      "compact-marker": 20,
+      "unmatched": 37
+    }
+  ],
+  "images": [
+    {
+      "floorId": 361,
+      "floorName": "Lower Level",
+      "name": "aventura-lower-level-con-comercios",
+      "svg": "aventura-lower-level-con-comercios.svg",
+      "png": "aventura-lower-level-con-comercios.png",
+      "pngBytes": 2565126
+    },
+    {
+      "floorId": 362,
+      "floorName": "Upper Level",
+      "name": "aventura-upper-level-con-comercios",
+      "svg": "aventura-upper-level-con-comercios.svg",
+      "png": "aventura-upper-level-con-comercios.png",
+      "pngBytes": 2567360
+    },
+    {
+      "floorId": 363,
+      "floorName": "Third Level",
+      "name": "aventura-third-level-con-comercios",
+      "svg": "aventura-third-level-con-comercios.svg",
+      "png": "aventura-third-level-con-comercios.png",
+      "pngBytes": 1334299
+    }
+  ],
+  "recordCount": 344,
+  "records": [
+    {
+      "locationId": "20863",
+      "name": "Macy's",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 94,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3689.7,
+        3775.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20882",
+      "name": "JCPenney",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 136,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2145.1,
+        2825.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20856",
+      "name": "Nordstrom",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 108,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1382.7,
+        3928.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20920",
+      "name": "Bloomingdale's",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 101,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        4043.5,
+        5703.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20864",
+      "name": "Macy's Men's Home Furniture",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Department Stores"
+      ],
+      "polygonIndex": 133,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        4379.5,
+        4862.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41334",
+      "name": "Anatomy",
+      "category": "Sporting Goods & Athleticwear",
+      "types": [
+        "Sporting Goods & Athleticwear",
+        "Spa, Health & Fitness",
+        "What’s New",
+        "The Abbey"
+      ],
+      "polygonIndex": 106,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2961.0,
+        4998.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20809",
+      "name": "Zara",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 154,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3098.6,
+        3543.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20946",
+      "name": "Apple",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 187,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3576.8,
+        3240.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20929",
+      "name": "Anthropologie",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Shoes"
+      ],
+      "polygonIndex": 86,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4095.4,
+        5193.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20844",
+      "name": "RH",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 201,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        4007.3,
+        4927.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20938",
+      "name": "Abercrombie & Fitch",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 230,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3567.2,
+        4792.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20896",
+      "name": "GAP",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 122,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2404.3,
+        3383.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20667",
+      "name": "The Cheesecake Factory",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 76,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3402.9,
+        5210.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28384",
+      "name": "Nike",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 237,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2991.1,
+        3182.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20892",
+      "name": "Gucci",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear",
+        "Childrenswear & Toys",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 210,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2051.4,
+        4051.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20724",
+      "name": "Aritzia",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 126,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3315.6,
+        4620.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20869",
+      "name": "Louis Vuitton",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 90,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1853.7,
+        4133.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46044",
+      "name": "Bershka",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Eyewear",
+        "What’s New"
+      ],
+      "polygonIndex": 112,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3694.3,
+        4917.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20935",
+      "name": "Adidas",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 224,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2862.8,
+        3294.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28275",
+      "name": "Saint Laurent",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 198,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1859.4,
+        3816.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20840",
+      "name": "Sephora",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 226,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3055.6,
+        4336.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20944",
+      "name": "Cartier",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Eyewear"
+      ],
+      "polygonIndex": 16,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2553.3,
+        3658.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20763",
+      "name": "Hermès",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 47,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1986.1,
+        3822.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41352",
+      "name": "Amalfi Llama",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 245,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2806.3,
+        5491.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20917",
+      "name": "Burberry",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 70,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2521.0,
+        3961.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28292",
+      "name": "Dior",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 242,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2529.3,
+        4158.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "26586",
+      "name": "Prada",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 206,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2810.8,
+        3911.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29973",
+      "name": "Google",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "Electronics",
+        "What’s New"
+      ],
+      "polygonIndex": 125,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3818.7,
+        4963.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20663",
+      "name": "Divieto Ristorante",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 174,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2032.1,
+        3412.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20928",
+      "name": "A|X Armani Exchange",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 121,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2741.6,
+        4339.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41355",
+      "name": "North Italia",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 26,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3052.7,
+        5450.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20645",
+      "name": "Motek",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 84,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3303.3,
+        2898.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20867",
+      "name": "Lululemon Athletica",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 203,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2753.7,
+        3376.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20884",
+      "name": "J. Crew",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 75,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3155.9,
+        4832.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20734",
+      "name": "Ferragamo",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 124,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2961.6,
+        3903.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20664",
+      "name": "CVI.CHE 105",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 123,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3416.4,
+        3301.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29536",
+      "name": "New Balance",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys",
+        "What’s New"
+      ],
+      "polygonIndex": 180,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2109.9,
+        3588.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "31076",
+      "name": "Edikted",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "What’s New"
+      ],
+      "polygonIndex": 29,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2410.4,
+        3561.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20758",
+      "name": "Zadig & Voltaire",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 83,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3185.9,
+        4591.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20828",
+      "name": "Tiffany & Co.",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Eyewear"
+      ],
+      "polygonIndex": 225,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2372.4,
+        4073.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41356",
+      "name": "Joey Aventura",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 6,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2446.8,
+        4786.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41344",
+      "name": "Jarana | Gastón Acurio",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 199,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3131.8,
+        5746.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20900",
+      "name": "Foot Locker",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 209,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2404.1,
+        3237.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "26231",
+      "name": "SKIMS",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 222,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3492.2,
+        4615.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "24260",
+      "name": "BOSS",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 64,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2819.8,
+        4409.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "38074",
+      "name": "Dolce & Gabbana Lower Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 243,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1681.8,
+        4174.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41351",
+      "name": "STK Steakhouse",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 202,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2874.9,
+        5797.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20805",
+      "name": "The North Face",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 3,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2135.3,
+        3728.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20874",
+      "name": "LensCrafters",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear",
+        "Services"
+      ],
+      "polygonIndex": 244,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2862.1,
+        4742.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20859",
+      "name": "Michael Kors",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes"
+      ],
+      "polygonIndex": 169,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2863.8,
+        4637.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20730",
+      "name": "Ralph Lauren",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 12,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2777.0,
+        4509.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41354",
+      "name": "Pura Vida Miami",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Restaurants",
+        "Eateries",
+        "Specialty",
+        "Brunch",
+        "Outdoor Dining",
+        "Quick Bites",
+        "The Abbey"
+      ],
+      "polygonIndex": 81,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2984.7,
+        5227.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20804",
+      "name": "Jimmy Choo",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 190,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1739.5,
+        4086.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20943",
+      "name": "Fendi",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 184,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2201.2,
+        3802.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41311",
+      "name": "One Medical",
+      "category": "Services",
+      "types": [
+        "Services",
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 152,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2466.7,
+        5225.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20933",
+      "name": "AllSaints",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 141,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2876.5,
+        3574.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20906",
+      "name": "Diesel",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 58,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3447.0,
+        4580.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20811",
+      "name": "CH Carolina Herrera",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 0,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1681.0,
+        3851.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20902",
+      "name": "Ferrari",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Specialty & Miscellaneous"
+      ],
+      "polygonIndex": 195,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3064.0,
+        4120.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20656",
+      "name": "Pollos & Jarras",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 79,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3344.1,
+        3362.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20661",
+      "name": "Pubbelly Sushi",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 221,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3133.2,
+        3067.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22449",
+      "name": "AMIRI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 127,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1959.3,
+        4178.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46314",
+      "name": "Brooks Brothers",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 219,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3812.3,
+        5407.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20827",
+      "name": "Tory Burch",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 41,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2967.7,
+        4252.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37828",
+      "name": "Ossobuco",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 93,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3209.5,
+        2960.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "21983",
+      "name": "Gaby Cucina",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 204,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3210.9,
+        3068.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20806",
+      "name": "Vans",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 159,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2110.6,
+        3666.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20717",
+      "name": "Valentino",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes"
+      ],
+      "polygonIndex": 61,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2605.4,
+        4207.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28374",
+      "name": "Kurt Geiger",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 148,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3421.4,
+        5033.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41353",
+      "name": "Sweetgreen",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Eateries",
+        "Specialty",
+        "Outdoor Dining",
+        "Quick Bites",
+        "The Abbey"
+      ],
+      "polygonIndex": 2,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2637.5,
+        5282.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20842",
+      "name": "Sandro",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 62,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3268.6,
+        4931.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20941",
+      "name": "Givenchy",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 35,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2283.8,
+        3969.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20939",
+      "name": "7 For All Mankind",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 59,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3223.2,
+        4894.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20861",
+      "name": "Mayors",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 161,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2731.4,
+        4222.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20910",
+      "name": "Coco’s Hair Salon",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 119,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4001.1,
+        5418.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20744",
+      "name": "Rolex at Mayors",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 51,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2655.1,
+        4230.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41317",
+      "name": "Lego",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys",
+        "The Abbey"
+      ],
+      "polygonIndex": 156,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2347.7,
+        5027.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "24277",
+      "name": "Pinko",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes"
+      ],
+      "polygonIndex": 50,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3096.8,
+        4415.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20675",
+      "name": "Rosetta Bakery",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Treats Food Hall",
+        "Eateries",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 42,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3295.2,
+        3412.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46012",
+      "name": "Celine",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Coming Soon",
+        "Shoes"
+      ],
+      "polygonIndex": 142,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2410.2,
+        3705.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20793",
+      "name": "David Yurman",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 194,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2603.0,
+        3774.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20718",
+      "name": "GANNI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 214,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3327.6,
+        4947.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20771",
+      "name": "Coach",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 164,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2796.8,
+        4576.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20820",
+      "name": "Y-3",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 215,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3125.0,
+        4527.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20800",
+      "name": "MCM",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Specialty & Miscellaneous",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 89,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2345.8,
+        3985.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20680",
+      "name": "Joe & The Juice",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Quick Bites"
+      ],
+      "polygonIndex": 36,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3067.3,
+        3089.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41318",
+      "name": "Next Health",
+      "category": "Services",
+      "types": [
+        "Services",
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 211,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2455.2,
+        5087.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20837",
+      "name": "Splendid",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 92,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3046.6,
+        4863.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20794",
+      "name": "Maje",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 162,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3372.3,
+        4990.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20779",
+      "name": "Warby Parker",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear",
+        "Services"
+      ],
+      "polygonIndex": 193,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2752.7,
+        3488.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27225",
+      "name": "Cinq à Sept",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 55,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3010.1,
+        4847.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41299",
+      "name": "Bank of America",
+      "category": "Services",
+      "types": [
+        "Services",
+        "The Abbey"
+      ],
+      "polygonIndex": 251,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3229.4,
+        5764.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "48410",
+      "name": "Alexander Wang",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 177,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2670.9,
+        3560.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20782",
+      "name": "FARM Rio",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 179,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2808.2,
+        3730.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "48085",
+      "name": "NINI AND LOLI at The Abbey",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys",
+        "The Abbey"
+      ],
+      "polygonIndex": 80,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2534.0,
+        5146.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20770",
+      "name": "Marc Jacobs",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 15,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2874.5,
+        3693.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20795",
+      "name": "Schutz",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 44,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3787.2,
+        5303.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55805",
+      "name": "Honey Veil",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Coming Soon"
+      ],
+      "polygonIndex": 129,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2015.3,
+        3248.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20858",
+      "name": "MONTBLANC",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Specialty & Miscellaneous"
+      ],
+      "polygonIndex": 213,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2935.5,
+        4189.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "48083",
+      "name": "FEULARD Aesthetic Lab",
+      "category": "Coming Soon",
+      "types": [
+        "Coming Soon",
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 167,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2758.2,
+        4970.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41335",
+      "name": "Hastens",
+      "category": "Specialty & Miscellaneous",
+      "types": [
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "The Abbey"
+      ],
+      "polygonIndex": 228,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2609.6,
+        5125.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "21979",
+      "name": "Aventura Slide Tower",
+      "category": "",
+      "types": [],
+      "polygonIndex": 49,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3467.3,
+        3036.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "48082",
+      "name": "MODA 39",
+      "category": "Womenswear & Accessories",
+      "types": [
+        "Womenswear & Accessories",
+        "The Abbey"
+      ],
+      "polygonIndex": 77,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2688.5,
+        4968.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25456",
+      "name": "Venchi",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 21,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3261.0,
+        3352.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41316",
+      "name": "If So",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Childrenswear & Toys",
+        "The Abbey"
+      ],
+      "polygonIndex": 236,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2641.1,
+        4940.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20834",
+      "name": "Sunglass Hut",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 178,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3653.6,
+        5105.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28269",
+      "name": "Balmain",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 246,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2224.9,
+        3991.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20810",
+      "name": "Ocean Breeze Nail Salon & Spa",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Services",
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 165,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2074.9,
+        3189.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41331",
+      "name": "Lola and The Boys",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys",
+        "What’s New",
+        "The Abbey"
+      ],
+      "polygonIndex": 185,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2967.5,
+        5318.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20883",
+      "name": "Janie and Jack",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 192,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2358.9,
+        3187.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20873",
+      "name": "Lids",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 37,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2306.7,
+        3149.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25529",
+      "name": "Creed",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 10,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2734.3,
+        3541.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41314",
+      "name": "Skin Laundry",
+      "category": "Spa, Health & Fitness",
+      "types": [
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance",
+        "The Abbey"
+      ],
+      "polygonIndex": 143,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2646.7,
+        5177.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27028",
+      "name": "AMI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 147,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2671.2,
+        3649.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41336",
+      "name": "The Shade Store",
+      "category": "Home, Gifts & Furniture",
+      "types": [
+        "Home, Gifts & Furniture",
+        "The Abbey"
+      ],
+      "polygonIndex": 191,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2358.6,
+        5178.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20845",
+      "name": "Porsche Design",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Specialty & Miscellaneous",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 39,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3017.4,
+        4560.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20727",
+      "name": "BVLGARI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 170,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2795.3,
+        4237.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20739",
+      "name": "Kick Essentials",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Shoes"
+      ],
+      "polygonIndex": 27,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3063.7,
+        4570.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20681",
+      "name": "Mrs. Fields",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 46,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2175.1,
+        3384.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "21062",
+      "name": "Aventura Mall Concierge",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Concierge"
+      ],
+      "polygonIndex": 96,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2656.6,
+        3838.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25715",
+      "name": "Dog Station",
+      "category": "",
+      "types": [],
+      "polygonIndex": 172,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1945.9,
+        3238.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29878",
+      "name": "Auntie Anne's",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 48,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2084.9,
+        3236.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41333",
+      "name": "Wairua",
+      "category": "Spa, Health & Fitness",
+      "types": [
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance",
+        "The Abbey"
+      ],
+      "polygonIndex": 107,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2691.6,
+        5223.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28276",
+      "name": "Ladurée",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 40,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2118.3,
+        3855.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41332",
+      "name": "7th Avenue",
+      "category": "Specialty & Miscellaneous",
+      "types": [
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "The Abbey"
+      ],
+      "polygonIndex": 99,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2529.6,
+        5294.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20732",
+      "name": "Azulu",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 176,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3453.3,
+        5066.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20776",
+      "name": "Messika",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 120,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2637.6,
+        3693.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20926",
+      "name": "Aventura Pups",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 183,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2956.2,
+        4789.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41343",
+      "name": "Salt & Straw",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats",
+        "The Abbey"
+      ],
+      "polygonIndex": 65,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2719.2,
+        5184.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28589",
+      "name": "Yann Couvreur",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 31,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2966.1,
+        4029.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25622",
+      "name": "Rainbow Valley Playground",
+      "category": "Entertainment",
+      "types": [
+        "Entertainment",
+        "Rainbow Valley"
+      ],
+      "polygonIndex": 66,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2206.0,
+        3184.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25539",
+      "name": "Bianco Gelato",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 71,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2189.0,
+        3317.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20924",
+      "name": "Avis Car Rental",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Automobile",
+        "Amenities & Services",
+        "Car Rental"
+      ],
+      "polygonIndex": 13,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1623.6,
+        3316.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20731",
+      "name": "JCPenney Optical",
+      "category": "Shops",
+      "types": [
+        "Shops",
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 111,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2219.4,
+        3061.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37898",
+      "name": "Chloe",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 118,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4006.8,
+        5823.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41350",
+      "name": "The Salty",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Specialty",
+        "Sweets & Treats",
+        "The Abbey"
+      ],
+      "polygonIndex": 254,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2709.3,
+        5375.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20647",
+      "name": "Cielito Artisan Pops",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 234,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2993.6,
+        4629.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55739",
+      "name": "Tonella's Flower Truck",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 208,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2874.7,
+        4293.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20672",
+      "name": "Amazonica",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 11,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3026.2,
+        4650.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20868",
+      "name": "Lucky Eyes",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Gifts & Specialty"
+      ],
+      "polygonIndex": 7,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3092.0,
+        4680.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51639",
+      "name": "Flabelus",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 241,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2311.2,
+        3611.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55874",
+      "name": "Clive Christian",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 145,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2345.8,
+        3908.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20752",
+      "name": "Crystal Laser Gifts",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 69,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3520.4,
+        4943.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "40152",
+      "name": "Sakura",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 32,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2899.6,
+        4380.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20659",
+      "name": "Naughty Coffee",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Specialty"
+      ],
+      "polygonIndex": 229,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2355.9,
+        3777.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20646",
+      "name": "Carrot Express",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Quick Bites"
+      ],
+      "polygonIndex": 18,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3950.2,
+        5103.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20687",
+      "name": "Caviar & More",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Quick Bites"
+      ],
+      "polygonIndex": 181,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3204.0,
+        4750.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20704",
+      "name": "Fortune International Realty",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Services"
+      ],
+      "polygonIndex": 163,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2885.5,
+        4332.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20638",
+      "name": "Ralph’s Coffee",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Specialty"
+      ],
+      "polygonIndex": 91,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2938.4,
+        4518.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25872",
+      "name": "Masse by Bachour",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 54,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3873.3,
+        5280.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20885",
+      "name": "iStore",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 250,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2303.1,
+        3573.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20923",
+      "name": "Babycottons",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 102,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3592.7,
+        4986.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29888",
+      "name": "Chocolate On Tap",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats",
+        "Quick Bites"
+      ],
+      "polygonIndex": 207,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3302.4,
+        4810.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25716",
+      "name": "Public Safety – Lost & Found",
+      "category": "Public Safety – Lost & Found",
+      "types": [
+        "Public Safety – Lost & Found"
+      ],
+      "polygonIndex": 140,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3140.2,
+        4180.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29545",
+      "name": "Gelskins",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous"
+      ],
+      "polygonIndex": 117,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3687.0,
+        5039.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37942",
+      "name": "Eye Origin",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous"
+      ],
+      "polygonIndex": 182,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3492.4,
+        4926.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20644",
+      "name": "Mango Biche",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries",
+        "Specialty",
+        "Quick Bites"
+      ],
+      "polygonIndex": 53,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3743.6,
+        5144.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "24077",
+      "name": "OMG Brigadeiros",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 19,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3777.2,
+        5218.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "40173",
+      "name": "The Abbey",
+      "category": "",
+      "types": [],
+      "polygonIndex": 216,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2814.1,
+        5147.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27482",
+      "name": "Norimoto",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Specialty",
+        "Outdoor Dining",
+        "Quick Bites"
+      ],
+      "polygonIndex": 20,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3608.8,
+        5288.3
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27850",
+      "name": "Golden Goose",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Shoes"
+      ],
+      "polygonIndex": 72,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4000.9,
+        5767.4
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20908",
+      "name": "Currency Exchange International",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Services",
+        "Currency Exchange"
+      ],
+      "polygonIndex": 97,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2659.7,
+        3829.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55819",
+      "name": "JASON HYDE",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 151,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2901.8,
+        3468.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29088",
+      "name": "Illesteva",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 157,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2728.6,
+        3691.2
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27206",
+      "name": "No Tech Kids Activities",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys",
+        "Entertainment"
+      ],
+      "polygonIndex": 238,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3185.0,
+        3398.9
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37848",
+      "name": "CVS Health",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 17,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3372.3,
+        3578.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "40990",
+      "name": "Kylie Cosmetics",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 87,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3358.9,
+        3556.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55887",
+      "name": "Lucky Box",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Entertainment"
+      ],
+      "polygonIndex": 22,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3339.6,
+        3534.5
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37827",
+      "name": "Dyson",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Home, Gifts & Furniture",
+        "Electronics",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 160,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3067.6,
+        3339.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20895",
+      "name": "Gap Kids & Baby Gap",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 114,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2400.8,
+        3400.8
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20668",
+      "name": "Nordstrom Café Bistro",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries"
+      ],
+      "polygonIndex": 240,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1547.5,
+        3983.6
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28436",
+      "name": "Lower Level Strollers",
+      "category": "Strollers",
+      "types": [
+        "Strollers"
+      ],
+      "polygonIndex": 134,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1779.7,
+        3768.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27208",
+      "name": "Hydration Station",
+      "category": "Hydration Station",
+      "types": [
+        "Hydration Station",
+        "Dog-Friendly"
+      ],
+      "polygonIndex": 135,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3232.6,
+        3227.1
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20913",
+      "name": "Christian Louboutin",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 88,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1543.2,
+        3957.7
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20685",
+      "name": "Starbucks at Macy's",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 24,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3353.2,
+        3697.0
+      ],
+      "floorId": 361,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "42139",
+      "name": "Macy's Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 26,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3683.1,
+        3780.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "42143",
+      "name": "JCPenney Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 133,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2143.3,
+        2846.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "42140",
+      "name": "Nordstrom Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 195,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1395.8,
+        3938.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "42144",
+      "name": "Bloomingdale's Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 20,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4051.0,
+        5684.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "42142",
+      "name": "Macy's Men's Home Furniture Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Department Stores"
+      ],
+      "polygonIndex": 161,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4378.4,
+        4861.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37967",
+      "name": "Zara Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 13,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3089.7,
+        3560.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20922",
+      "name": "Banana Republic",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 100,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3924.8,
+        4919.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20847",
+      "name": "Victoria’s Secret and PINK",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 221,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3482.6,
+        5083.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41313",
+      "name": "CCRM Fertility",
+      "category": "Services",
+      "types": [
+        "Services",
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 181,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2382.0,
+        5112.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37971",
+      "name": "Nike Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 54,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2914.7,
+        3276.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46058",
+      "name": "Uniqlo",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Coming Soon",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 241,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        4043.2,
+        5236.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20891",
+      "name": "H&M",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 81,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3761.2,
+        5374.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20643",
+      "name": "Toku",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 78,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2446.5,
+        4214.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37972",
+      "name": "Louis Vuitton Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 214,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1742.7,
+        4204.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20716",
+      "name": "JD Sports",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 223,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3078.9,
+        4371.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37970",
+      "name": "Apple Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 69,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3539.9,
+        3305.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20722",
+      "name": "Mania Jeans – Noizz",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 193,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2428.8,
+        3376.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37968",
+      "name": "Saint Laurent Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Shoes",
+        "Eyewear"
+      ],
+      "polygonIndex": 50,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1846.2,
+        3671.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20915",
+      "name": "Champs Sports",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 110,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2157.3,
+        3520.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20931",
+      "name": "American Eagle",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 210,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3680.2,
+        4785.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "50121",
+      "name": "Anatomy Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Spa, Health & Fitness",
+        "What’s New",
+        "The Abbey"
+      ],
+      "polygonIndex": 174,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2760.4,
+        4844.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20889",
+      "name": "Hollister",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 74,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2468.7,
+        3557.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20660",
+      "name": "Tap 42 Craft Kitchen & Bar",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 130,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3285.9,
+        2923.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20665",
+      "name": "Bella Luna",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 92,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2664.2,
+        4360.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55806",
+      "name": "SuitSupply",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Coming Soon"
+      ],
+      "polygonIndex": 172,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2847.1,
+        4701.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20728",
+      "name": "Mango",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 173,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3093.7,
+        4225.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25640",
+      "name": "Massimo Dutti",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 88,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2339.3,
+        4061.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41356",
+      "name": "Joey Aventura",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining",
+        "The Abbey"
+      ],
+      "polygonIndex": 217,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2448.8,
+        4778.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20921",
+      "name": "Bath & Body Works/White Barn",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Home, Gifts & Furniture",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 176,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3468.1,
+        4629.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20829",
+      "name": "Tesla",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Automobile"
+      ],
+      "polygonIndex": 122,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3132.3,
+        3124.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46013",
+      "name": "On",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 147,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2502.2,
+        4013.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41963",
+      "name": "BOSS Upper Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 28,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2801.5,
+        4398.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22457",
+      "name": "Alo Yoga",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 218,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2886.3,
+        3651.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20801",
+      "name": "Aerie",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 112,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3741.8,
+        4886.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20713",
+      "name": "Garage",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 59,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2465.9,
+        3242.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20773",
+      "name": "Levi's",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 146,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3287.4,
+        4665.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20777",
+      "name": "Free People",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 66,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3394.9,
+        4600.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20700",
+      "name": "Eternity Gallery",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 230,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2101.7,
+        4138.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20930",
+      "name": "Ann Taylor",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 21,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3513.1,
+        4774.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20786",
+      "name": "PacSun",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 118,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2162.6,
+        3395.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20662",
+      "name": "Serafina Miami",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants",
+        "Brunch",
+        "Outdoor Dining"
+      ],
+      "polygonIndex": 7,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3054.8,
+        3048.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28463",
+      "name": "Tecovas",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Specialty & Miscellaneous",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 85,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3416.9,
+        3373.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20818",
+      "name": "Zumiez",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 154,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2068.1,
+        3338.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22028",
+      "name": "Vuori",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 37,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2742.9,
+        3377.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20839",
+      "name": "Skechers",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 153,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2429.7,
+        3480.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "30575",
+      "name": "Lumini Med Spa",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Spa, Health & Fitness",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 220,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3194.3,
+        2972.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20756",
+      "name": "BLENDED",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 180,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1907.3,
+        4038.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28280",
+      "name": "Rivian",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Automobile",
+        "What’s New"
+      ],
+      "polygonIndex": 219,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3391.6,
+        3478.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20737",
+      "name": "Anne Fontaine",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 196,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1956.9,
+        3826.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20909",
+      "name": "Crocs",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 245,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2232.9,
+        3601.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20836",
+      "name": "Steve Madden",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Shoes"
+      ],
+      "polygonIndex": 98,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3134.0,
+        4810.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20876",
+      "name": "Lacoste",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 158,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3288.9,
+        3414.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "30965",
+      "name": "Sukoshi",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 34,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3240.5,
+        4855.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20822",
+      "name": "White House Black Market",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 124,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3583.2,
+        4797.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "48968",
+      "name": "Missoni",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 155,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2241.6,
+        4036.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41454",
+      "name": "Fit 2 Run",
+      "category": "Sporting Goods & Athleticwear",
+      "types": [
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "The Abbey"
+      ],
+      "polygonIndex": 141,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2979.6,
+        5199.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "21842",
+      "name": "Dr. Martens",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 80,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3144.7,
+        4923.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20813",
+      "name": "Aldo",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 99,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3206.0,
+        4505.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20880",
+      "name": "Journeys",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 187,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2060.1,
+        3194.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51319",
+      "name": "Wilson",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 67,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2698.8,
+        3508.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20879",
+      "name": "Kay Jewelers",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 97,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3014.3,
+        4863.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20796",
+      "name": "Psycho Bunny",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 51,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2876.1,
+        4547.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20832",
+      "name": "T-Mobile",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 90,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2359.0,
+        3169.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20819",
+      "name": "Zales",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 136,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2903.8,
+        3890.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20893",
+      "name": "G-Star RAW",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 15,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2729.5,
+        3449.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "55960",
+      "name": "Racing Miami",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 225,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2783.0,
+        4628.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22029",
+      "name": "BRITTO",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture"
+      ],
+      "polygonIndex": 228,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2577.0,
+        4159.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20765",
+      "name": "The B-12 Store",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Services",
+        "Spa, Health & Fitness"
+      ],
+      "polygonIndex": 192,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2370.5,
+        3220.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20789",
+      "name": "Camilla",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 137,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2802.3,
+        3708.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27101",
+      "name": "NINI AND LOLI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 232,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2948.7,
+        3868.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20736",
+      "name": "Reformation",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 213,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2666.8,
+        3676.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20807",
+      "name": "Intimissimi",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 96,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3377.9,
+        4980.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37825",
+      "name": "Guizio",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes",
+        "What’s New"
+      ],
+      "polygonIndex": 125,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2773.2,
+        3747.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20825",
+      "name": "TUMI",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Specialty & Miscellaneous"
+      ],
+      "polygonIndex": 205,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2607.5,
+        3697.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20769",
+      "name": "Gilly Hicks by Hollister",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 160,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2453.2,
+        3647.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41319",
+      "name": "Tremble",
+      "category": "Spa, Health & Fitness",
+      "types": [
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 94,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2943.6,
+        5044.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20849",
+      "name": "Perfumania",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 242,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2056.1,
+        3251.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29064",
+      "name": "Alma by Angel",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 45,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3273.9,
+        4990.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20729",
+      "name": "Anine Bing",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 183,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2597.9,
+        3582.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25699",
+      "name": "Dolce Vita",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 39,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3287.2,
+        4872.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20855",
+      "name": "Oakley",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Eyewear"
+      ],
+      "polygonIndex": 149,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3112.9,
+        4474.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20787",
+      "name": "Nespresso",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "Electronics"
+      ],
+      "polygonIndex": 108,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2844.2,
+        3842.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "38075",
+      "name": "Dolce & Gabbana",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Eyewear",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 104,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1718.0,
+        4064.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28657",
+      "name": "MAC Cosmetics",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 198,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2982.5,
+        4142.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20945",
+      "name": "CHANEL Fragrance and Beauty Boutique",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 135,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2712.6,
+        4220.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37207",
+      "name": "Amouage",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance",
+        "What’s New"
+      ],
+      "polygonIndex": 211,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2015.2,
+        3832.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27100",
+      "name": "Runner's Depot",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes"
+      ],
+      "polygonIndex": 203,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2997.3,
+        3882.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20831",
+      "name": "TAG Heuer",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 79,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2725.9,
+        3861.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51643",
+      "name": "Thirdlove",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Coming Soon"
+      ],
+      "polygonIndex": 6,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3038.8,
+        4120.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46038",
+      "name": "Bananhot",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "What’s New"
+      ],
+      "polygonIndex": 246,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3101.3,
+        4115.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22027",
+      "name": "Swatch",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 46,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3146.0,
+        4527.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41298",
+      "name": "The Keyes",
+      "category": "Specialty & Miscellaneous",
+      "types": [
+        "Specialty & Miscellaneous",
+        "Coming Soon",
+        "Services",
+        "The Abbey"
+      ],
+      "polygonIndex": 129,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2721.5,
+        4951.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41312",
+      "name": "Sher Dental",
+      "category": "Services",
+      "types": [
+        "Services",
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 117,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2551.9,
+        5124.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20912",
+      "name": "Cigar Box",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Gifts & Specialty"
+      ],
+      "polygonIndex": 64,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2715.6,
+        4294.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20940",
+      "name": "120% Lino",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 131,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1754.1,
+        3860.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51635",
+      "name": "Andres Otalora",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "The Abbey"
+      ],
+      "polygonIndex": 182,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2589.1,
+        5173.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28396",
+      "name": "Designer Eyes",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 9,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2679.2,
+        3565.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51641",
+      "name": "Gorjana",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches",
+        "What’s New"
+      ],
+      "polygonIndex": 170,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2490.5,
+        3727.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20755",
+      "name": "Vilebrequin",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 16,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2139.6,
+        4005.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20826",
+      "name": "Tous",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 109,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3038.3,
+        4544.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25455",
+      "name": "Charlotte Tilbury",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 233,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2788.5,
+        3943.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20843",
+      "name": "Robert Graham",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 127,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3337.6,
+        4949.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20871",
+      "name": "Longchamp",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 22,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2396.7,
+        3978.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20774",
+      "name": "Agua de Coco",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 103,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2872.6,
+        3974.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41315",
+      "name": "Pure Barre",
+      "category": "Spa, Health & Fitness",
+      "types": [
+        "Spa, Health & Fitness",
+        "The Abbey"
+      ],
+      "polygonIndex": 144,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2859.1,
+        5005.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29111",
+      "name": "Mejuri",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Jewelry & Watches",
+        "What’s New"
+      ],
+      "polygonIndex": 3,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2849.3,
+        3422.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51312",
+      "name": "Parfums De Marly",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Coming Soon",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 184,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2071.6,
+        3852.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20853",
+      "name": "Optical World",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear",
+        "Services"
+      ],
+      "polygonIndex": 56,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3086.8,
+        4559.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20918",
+      "name": "Breitling",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 143,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2588.4,
+        4030.3
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20738",
+      "name": "UNOde50",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 105,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2573.7,
+        3738.1
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20870",
+      "name": "Longines",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 178,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2751.0,
+        3924.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20749",
+      "name": "Hive & Colony",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories"
+      ],
+      "polygonIndex": 89,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2509.7,
+        3778.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20833",
+      "name": "Swarovski",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches",
+        "Gifts & Specialty"
+      ],
+      "polygonIndex": 17,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2835.2,
+        3943.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20650",
+      "name": "Läderach Chocolatier Suisse",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 236,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2782.6,
+        4224.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20798",
+      "name": "Ray-Ban",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 65,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2598.7,
+        4080.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20854",
+      "name": "Oliver Peoples",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 14,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2448.6,
+        3726.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20750",
+      "name": "Agua Bendita",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories"
+      ],
+      "polygonIndex": 207,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4048.0,
+        5419.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28388",
+      "name": "IWC Schaffhausen",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches",
+        "What’s New"
+      ],
+      "polygonIndex": 244,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2620.1,
+        3772.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20905",
+      "name": "Edward Beiner",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Eyewear"
+      ],
+      "polygonIndex": 73,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3658.4,
+        5101.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20881",
+      "name": "Jo Malone London",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 229,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2447.2,
+        3945.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20719",
+      "name": "Aesop",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Beauty & Fragrance",
+        "Gifts & Specialty"
+      ],
+      "polygonIndex": 55,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2582.1,
+        3813.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25428",
+      "name": "Evry Jewels",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 43,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2413.0,
+        3706.7
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25714",
+      "name": "Jessica’s Dog Park",
+      "category": "Jessica’s Dog Park",
+      "types": [
+        "Jessica’s Dog Park",
+        "Dog-Friendly"
+      ],
+      "polygonIndex": 31,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2922.6,
+        3008.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20812",
+      "name": "Bond No.9",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 128,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2605.7,
+        4123.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20860",
+      "name": "Mia Jewels",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Jewelry & Watches"
+      ],
+      "polygonIndex": 157,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2796.1,
+        4302.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51311",
+      "name": "Initio Parfums Privés",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Coming Soon",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 29,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2119.4,
+        3847.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29108",
+      "name": "Tissot",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "What’s New"
+      ],
+      "polygonIndex": 179,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2931.9,
+        4200.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27848",
+      "name": "Trudon",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "Beauty & Fragrance",
+        "Gifts & Specialty"
+      ],
+      "polygonIndex": 87,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2938.7,
+        4157.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20872",
+      "name": "L'Occitane",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 115,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2807.9,
+        4260.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "30966",
+      "name": "TSA PreCheck® Enrollment Provided by CLEAR",
+      "category": "Specialty & Miscellaneous",
+      "types": [
+        "Specialty & Miscellaneous",
+        "TSA Pre"
+      ],
+      "polygonIndex": 186,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2626.9,
+        4217.2
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25711",
+      "name": "ALT. Fragrances",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 68,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3114.3,
+        4684.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27207",
+      "name": "Pet Adoptions",
+      "category": "Adopt-A-Pet",
+      "types": [
+        "Adopt-A-Pet",
+        "Dog-Friendly"
+      ],
+      "polygonIndex": 189,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3071.7,
+        3204.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20684",
+      "name": "59th & Lex",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Eateries"
+      ],
+      "polygonIndex": 164,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3946.8,
+        5515.4
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20862",
+      "name": "Massage Haven",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Services",
+        "Spa, Health & Fitness"
+      ],
+      "polygonIndex": 70,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3320.2,
+        3591.9
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25625",
+      "name": "World Phones",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 156,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3065.9,
+        4658.8
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28476",
+      "name": "Baobab Collection",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Home, Gifts & Furniture",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 35,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2759.6,
+        3629.5
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37935",
+      "name": "Douglas Elliman",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Services"
+      ],
+      "polygonIndex": 116,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2600.2,
+        3916.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20907",
+      "name": "Design A Cell",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Specialty & Miscellaneous",
+        "Electronics"
+      ],
+      "polygonIndex": 224,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2657.9,
+        3895.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25863",
+      "name": "La Petite Pepite",
+      "category": "Specialty",
+      "types": [
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 52,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2622.1,
+        3872.0
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28437",
+      "name": "Upper Level Strollers",
+      "category": "Strollers",
+      "types": [
+        "Strollers"
+      ],
+      "polygonIndex": 177,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        4094.7,
+        5370.6
+      ],
+      "floorId": 362,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20863",
+      "name": "Macy's",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Childrenswear & Toys",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 29,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3670.8,
+        3788.6
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20932",
+      "name": "AMC Aventura 24",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Entertainment"
+      ],
+      "polygonIndex": 21,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3572.9,
+        4929.5
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20920",
+      "name": "Bloomingdale's",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Jewelry & Watches",
+        "Home, Gifts & Furniture",
+        "Shoes",
+        "Department Stores",
+        "Beauty & Fragrance"
+      ],
+      "polygonIndex": 79,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3993.9,
+        5707.5
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20864",
+      "name": "Macy's Men's Home Furniture",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Menswear & Accessories",
+        "Home, Gifts & Furniture",
+        "Department Stores"
+      ],
+      "polygonIndex": 22,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        4334.6,
+        4877.7
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "41362",
+      "name": "Industrious",
+      "category": "Specialty & Miscellaneous",
+      "types": [
+        "Specialty & Miscellaneous",
+        "Services",
+        "The Abbey"
+      ],
+      "polygonIndex": 54,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2588.5,
+        5218.6
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20904",
+      "name": "Equinox Aventura",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Sporting Goods & Athleticwear",
+        "Spa, Health & Fitness"
+      ],
+      "polygonIndex": 61,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1973.1,
+        3782.3
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "27882",
+      "name": "Arcade Zone Entertainment",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Entertainment"
+      ],
+      "polygonIndex": 74,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3339.8,
+        3453.2
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37969",
+      "name": "H&M Third Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Shoes",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 88,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3714.1,
+        5373.7
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "31087",
+      "name": "CAMP",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Childrenswear & Toys",
+        "Entertainment"
+      ],
+      "polygonIndex": 30,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        1682.6,
+        3709.4
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "46057",
+      "name": "Uniqlo Third Level",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Womenswear & Accessories",
+        "Menswear & Accessories",
+        "Coming Soon",
+        "Childrenswear & Toys"
+      ],
+      "polygonIndex": 56,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3903.2,
+        5355.4
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "51638",
+      "name": "Neko",
+      "category": "All Retailers",
+      "types": [
+        "All Retailers",
+        "Coming Soon",
+        "Spa, Health & Fitness"
+      ],
+      "polygonIndex": 57,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        3282.5,
+        2879.9
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "25528",
+      "name": "UDON",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 62,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2637.1,
+        3520.7
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "28658",
+      "name": "Wok N Grill",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 51,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2803.5,
+        3264.9
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20677",
+      "name": "Shake Shack",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 24,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2846.7,
+        3200.6
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "22030",
+      "name": "Doggi’s Arepa Bar",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 65,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2849.7,
+        3637.2
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20637",
+      "name": "Yalla Motek",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 46,
+      "labelMode": "full-name",
+      "anchorPixels": [
+        2954.7,
+        3706.4
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20669",
+      "name": "Villa Pizza",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 55,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2896.0,
+        3684.0
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20683",
+      "name": "Chipotle Mexican Grill",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 12,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2688.4,
+        3576.8
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20651",
+      "name": "YIP",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 73,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3085.3,
+        3639.8
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20658",
+      "name": "Jrk!",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 33,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        3022.6,
+        3662.0
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20639",
+      "name": "Tacology Express",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 37,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2782.6,
+        3358.9
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "31146",
+      "name": "Sanguich",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall",
+        "Quick Bites"
+      ],
+      "polygonIndex": 70,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2752.7,
+        3423.7
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29984",
+      "name": "Rosetta Bakery - Treats Food Hall",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 78,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2945.4,
+        3434.0
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29879",
+      "name": "Häagen-Dazs",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 83,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2959.6,
+        3566.1
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "20682",
+      "name": "Little Brittany Creperie",
+      "category": "Treats Food Hall",
+      "types": [
+        "Treats Food Hall"
+      ],
+      "polygonIndex": 28,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2883.7,
+        3346.2
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "37897",
+      "name": "Mango Biche - Treats Food Hall",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Treats Food Hall",
+        "Eateries"
+      ],
+      "polygonIndex": 0,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2784.7,
+        3653.2
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29986",
+      "name": "Auntie Anne's - Treats Food Hall",
+      "category": "Cafés",
+      "types": [
+        "Cafés",
+        "Treats Food Hall",
+        "Specialty",
+        "Sweets & Treats"
+      ],
+      "polygonIndex": 8,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        2913.3,
+        3390.7
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29861",
+      "name": "La Pizza & La Pasta",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants"
+      ],
+      "polygonIndex": 41,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1871.6,
+        4208.9
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    },
+    {
+      "locationId": "29862",
+      "name": "Il Pastaio",
+      "category": "Restaurants",
+      "types": [
+        "Restaurants"
+      ],
+      "polygonIndex": 85,
+      "labelMode": "compact-marker",
+      "anchorPixels": [
+        1873.1,
+        4218.4
+      ],
+      "floorId": 363,
+      "source": "RoveIQ locations.json + structures_dataset.properties.loc_id"
+    }
+  ],
+  "unmatchedPolygons": [
+    {
+      "polygonIndex": 5,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 14,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 23,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 25,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 28,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 30,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 38,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 43,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 45,
+      "id": "24801",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 52,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 56,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 63,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 67,
+      "id": "46046",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 73,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 82,
+      "id": "41342",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 85,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 98,
+      "id": "25094",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 103,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 113,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 116,
+      "id": "20712",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 128,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 131,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 132,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 137,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 139,
+      "id": "29868",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 144,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 146,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 149,
+      "id": "46052",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 155,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 158,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 175,
+      "id": "25641",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 186,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 188,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 196,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 217,
+      "id": "20666",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 220,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 223,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 227,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 232,
+      "id": "24816",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 235,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 239,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 247,
+      "id": "28264",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 248,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 249,
+      "id": "20835",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 252,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 253,
+      "id": "20823",
+      "status": "missing-from-directory",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 255,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 256,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 257,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 258,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 259,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 260,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 261,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 262,
+      "status": "no-location-id",
+      "floorId": 361
+    },
+    {
+      "polygonIndex": 0,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 2,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 4,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 5,
+      "id": "20797",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 8,
+      "id": "20671",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 10,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 11,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 12,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 18,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 23,
+      "id": "24818",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 25,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 27,
+      "id": "25639",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 32,
+      "id": "24101",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 33,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 41,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 42,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 44,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 47,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 48,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 53,
+      "id": "24109",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 58,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 60,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 62,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 63,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 71,
+      "id": "24819",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 72,
+      "id": "27886",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 75,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 76,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 77,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 82,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 83,
+      "id": "28297",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 91,
+      "id": "48950",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 93,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 95,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 102,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 111,
+      "id": "26574",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 113,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 114,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 119,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 120,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 121,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 123,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 134,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 138,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 139,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 142,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 145,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 150,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 152,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 159,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 162,
+      "id": "29839",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 165,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 166,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 167,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 168,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 169,
+      "id": "20723",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 175,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 185,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 188,
+      "id": "20743",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 190,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 191,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 197,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 199,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 204,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 209,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 212,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 215,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 216,
+      "id": "46059",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 222,
+      "id": "20720",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 227,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 234,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 235,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 237,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 238,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 239,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 240,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 243,
+      "id": "20823",
+      "status": "missing-from-directory",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 247,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 248,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 249,
+      "status": "no-location-id",
+      "floorId": 362
+    },
+    {
+      "polygonIndex": 1,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 5,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 9,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 13,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 14,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 16,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 18,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 23,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 25,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 26,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 27,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 31,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 32,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 34,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 36,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 38,
+      "id": "29877",
+      "status": "missing-from-directory",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 42,
+      "id": "24109",
+      "status": "missing-from-directory",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 45,
+      "id": "20692",
+      "status": "missing-from-directory",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 47,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 48,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 49,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 59,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 63,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 66,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 67,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 68,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 75,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 76,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 77,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 81,
+      "id": "28267",
+      "status": "missing-from-directory",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 82,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 84,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 86,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 87,
+      "id": "24820",
+      "status": "missing-from-directory",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 89,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 91,
+      "status": "no-location-id",
+      "floorId": 363
+    },
+    {
+      "polygonIndex": 92,
+      "status": "no-location-id",
+      "floorId": 363
+    }
+  ],
+  "warnings": [
+    "Original floor images unchanged; these are NEW labeled versions.",
+    "Names and categories are from the official RoveIQ public locations directory.",
+    "No name is assigned to a polygon without an exact official ID match.",
+    "Parking and elevator geometry is not assigned fictitious shop names.",
+    "Compact venues have an information dot; the exact official names are in the CSV and SVG tooltip.",
+    "The mall's own map is not a certified architectural floor survey."
+  ]
+}

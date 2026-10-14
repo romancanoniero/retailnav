@@ -1,0 +1,345 @@
+floor_id,location_id,official_name,category,types,polygon_index,label_mode,anchor_px,anchor_py,source
+361,20863,Macy's,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",94,full-name,3689.7,3775.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20882,JCPenney,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Childrenswear & Toys | Department Stores | Beauty & Fragrance",136,full-name,2145.1,2825.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20856,Nordstrom,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",108,full-name,1382.7,3928.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20920,Bloomingdale's,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Department Stores | Beauty & Fragrance",101,full-name,4043.5,5703.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20864,Macy's Men's Home Furniture,All Retailers,"All Retailers | Menswear & Accessories | Home, Gifts & Furniture | Department Stores",133,full-name,4379.5,4862.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41334,Anatomy,Sporting Goods & Athleticwear,"Sporting Goods & Athleticwear | Spa, Health & Fitness | What’s New | The Abbey",106,full-name,2961.0,4998.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20809,Zara,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys | Beauty & Fragrance,154,full-name,3098.6,3543.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20946,Apple,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,187,full-name,3576.8,3240.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20929,Anthropologie,All Retailers,"All Retailers | Womenswear & Accessories | Home, Gifts & Furniture | Shoes",86,compact-marker,4095.4,5193.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20844,RH,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture",201,full-name,4007.3,4927.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20938,Abercrombie & Fitch,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,230,compact-marker,3567.2,4792.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20896,GAP,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,122,full-name,2404.3,3383.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20667,The Cheesecake Factory,Restaurants,Restaurants | Brunch | Outdoor Dining,76,compact-marker,3402.9,5210.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28384,Nike,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,237,full-name,2991.1,3182.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20892,Gucci,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear | Childrenswear & Toys | Beauty & Fragrance,210,full-name,2051.4,4051.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20724,Aritzia,All Retailers,All Retailers | Womenswear & Accessories,126,full-name,3315.6,4620.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20869,Louis Vuitton,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear | Beauty & Fragrance,90,full-name,1853.7,4133.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,46044,Bershka,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Eyewear | What’s New,112,full-name,3694.3,4917.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20935,Adidas,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,224,full-name,2862.8,3294.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28275,Saint Laurent,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear,198,full-name,1859.4,3816.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20840,Sephora,All Retailers,All Retailers | Specialty & Miscellaneous | Beauty & Fragrance,226,full-name,3055.6,4336.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20944,Cartier,All Retailers,All Retailers | Menswear & Accessories | Jewelry & Watches | Eyewear,16,compact-marker,2553.3,3658.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20763,Hermès,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Eyewear | Beauty & Fragrance",47,full-name,1986.1,3822.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41352,Amalfi Llama,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,245,compact-marker,2806.3,5491.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20917,Burberry,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear | Beauty & Fragrance,70,compact-marker,2521.0,3961.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28292,Dior,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear | Beauty & Fragrance | What’s New,242,full-name,2529.3,4158.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,26586,Prada,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Eyewear | Beauty & Fragrance | What’s New,206,full-name,2810.8,3911.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29973,Google,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture | Electronics | What’s New",125,full-name,3818.7,4963.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20663,Divieto Ristorante,Restaurants,Restaurants | Brunch | Outdoor Dining,174,compact-marker,2032.1,3412.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20928,A|X Armani Exchange,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,121,full-name,2741.6,4339.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41355,North Italia,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,26,compact-marker,3052.7,5450.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20645,Motek,Restaurants,Restaurants | Brunch | Outdoor Dining,84,full-name,3303.3,2898.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20867,Lululemon Athletica,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,203,compact-marker,2753.7,3376.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20884,J. Crew,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Childrenswear & Toys,75,compact-marker,3155.9,4832.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20734,Ferragamo,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear,124,compact-marker,2961.6,3903.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20664,CVI.CHE 105,Restaurants,Restaurants | Brunch | Outdoor Dining,123,compact-marker,3416.4,3301.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29536,New Balance,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys | What’s New,180,compact-marker,2109.9,3588.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,31076,Edikted,All Retailers,All Retailers | Womenswear & Accessories | What’s New,29,compact-marker,2410.4,3561.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20758,Zadig & Voltaire,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,83,compact-marker,3185.9,4591.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20828,Tiffany & Co.,All Retailers,"All Retailers | Jewelry & Watches | Home, Gifts & Furniture | Eyewear",225,compact-marker,2372.4,4073.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41356,Joey Aventura,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,6,compact-marker,2446.8,4786.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41344,Jarana | Gastón Acurio,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,199,compact-marker,3131.8,5746.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20900,Foot Locker,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,209,compact-marker,2404.1,3237.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,26231,SKIMS,All Retailers,All Retailers | Womenswear & Accessories,222,compact-marker,3492.2,4615.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,24260,BOSS,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,64,full-name,2819.8,4409.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,38074,Dolce & Gabbana Lower Level,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Home, Gifts & Furniture | Shoes | Eyewear | Beauty & Fragrance | What’s New",243,compact-marker,1681.8,4174.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41351,STK Steakhouse,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,202,compact-marker,2874.9,5797.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20805,The North Face,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,3,compact-marker,2135.3,3728.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20874,LensCrafters,All Retailers,All Retailers | Eyewear | Services,244,compact-marker,2862.1,4742.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20859,Michael Kors,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes,169,compact-marker,2863.8,4637.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20730,Ralph Lauren,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Home, Gifts & Furniture | Shoes | Beauty & Fragrance",12,compact-marker,2777.0,4509.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41354,Pura Vida Miami,Cafés,Cafés | Restaurants | Eateries | Specialty | Brunch | Outdoor Dining | Quick Bites | The Abbey,81,compact-marker,2984.7,5227.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20804,Jimmy Choo,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,190,full-name,1739.5,4086.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20943,Fendi,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear,184,compact-marker,2201.2,3802.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41311,One Medical,Services,"Services | Spa, Health & Fitness | The Abbey",152,compact-marker,2466.7,5225.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20933,AllSaints,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,141,compact-marker,2876.5,3574.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20906,Diesel,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,58,compact-marker,3447.0,4580.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20811,CH Carolina Herrera,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,0,compact-marker,1681.0,3851.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20902,Ferrari,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Specialty & Miscellaneous,195,compact-marker,3064.0,4120.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20656,Pollos & Jarras,Restaurants,Restaurants | Outdoor Dining,79,compact-marker,3344.1,3362.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20661,Pubbelly Sushi,Restaurants,Restaurants | Brunch | Outdoor Dining,221,compact-marker,3133.2,3067.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,22449,AMIRI,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,127,full-name,1959.3,4178.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,46314,Brooks Brothers,All Retailers,All Retailers | Menswear & Accessories,219,compact-marker,3812.3,5407.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20827,Tory Burch,All Retailers,All Retailers | Womenswear & Accessories | Jewelry & Watches | Shoes | Eyewear,41,compact-marker,2967.7,4252.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,37828,Ossobuco,Restaurants,Restaurants | Outdoor Dining,93,compact-marker,3209.5,2960.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,21983,Gaby Cucina,Restaurants,Restaurants | Brunch | Outdoor Dining,204,compact-marker,3210.9,3068.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20806,Vans,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,159,compact-marker,2110.6,3666.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20717,Valentino,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes,61,compact-marker,2605.4,4207.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28374,Kurt Geiger,All Retailers,All Retailers | Womenswear & Accessories | Shoes | What’s New,148,compact-marker,3421.4,5033.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41353,Sweetgreen,Restaurants,Restaurants | Eateries | Specialty | Outdoor Dining | Quick Bites | The Abbey,2,compact-marker,2637.5,5282.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20842,Sandro,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,62,compact-marker,3268.6,4931.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20941,Givenchy,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Eyewear | Beauty & Fragrance,35,compact-marker,2283.8,3969.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20939,7 For All Mankind,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,59,compact-marker,3223.2,4894.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20861,Mayors,All Retailers,All Retailers | Jewelry & Watches,161,compact-marker,2731.4,4222.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20910,Coco’s Hair Salon,All Retailers,"All Retailers | Specialty & Miscellaneous | Spa, Health & Fitness | Beauty & Fragrance",119,compact-marker,4001.1,5418.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20744,Rolex at Mayors,All Retailers,All Retailers | Jewelry & Watches,51,compact-marker,2655.1,4230.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41317,Lego,All Retailers,All Retailers | Childrenswear & Toys | The Abbey,156,compact-marker,2347.7,5027.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,24277,Pinko,All Retailers,All Retailers | Womenswear & Accessories | Jewelry & Watches | Shoes,50,compact-marker,3096.8,4415.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20675,Rosetta Bakery,Cafés,Cafés | Treats Food Hall | Eateries | Sweets & Treats | Quick Bites,42,compact-marker,3295.2,3412.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,46012,Celine,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Coming Soon | Shoes,142,compact-marker,2410.2,3705.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20793,David Yurman,All Retailers,All Retailers | Jewelry & Watches,194,compact-marker,2603.0,3774.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20718,GANNI,All Retailers,All Retailers | Womenswear & Accessories | Shoes,214,compact-marker,3327.6,4947.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20771,Coach,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,164,compact-marker,2796.8,4576.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20820,Y-3,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,215,compact-marker,3125.0,4527.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20800,MCM,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Specialty & Miscellaneous | Shoes | Eyewear,89,compact-marker,2345.8,3985.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20680,Joe & The Juice,Cafés,Cafés | Eateries | Quick Bites,36,compact-marker,3067.3,3089.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41318,Next Health,Services,"Services | Spa, Health & Fitness | The Abbey",211,compact-marker,2455.2,5087.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20837,Splendid,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,92,compact-marker,3046.6,4863.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20794,Maje,All Retailers,All Retailers | Womenswear & Accessories | Shoes,162,compact-marker,3372.3,4990.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20779,Warby Parker,All Retailers,All Retailers | Eyewear | Services,193,compact-marker,2752.7,3488.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27225,Cinq à Sept,All Retailers,All Retailers | Womenswear & Accessories | Shoes,55,compact-marker,3010.1,4847.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41299,Bank of America,Services,Services | The Abbey,251,compact-marker,3229.4,5764.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,48410,Alexander Wang,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | What’s New,177,compact-marker,2670.9,3560.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20782,FARM Rio,All Retailers,All Retailers | Womenswear & Accessories,179,compact-marker,2808.2,3730.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,48085,NINI AND LOLI at The Abbey,All Retailers,All Retailers | Childrenswear & Toys | The Abbey,80,compact-marker,2534.0,5146.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20770,Marc Jacobs,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,15,compact-marker,2874.5,3693.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20795,Schutz,All Retailers,All Retailers | Womenswear & Accessories | Shoes,44,full-name,3787.2,5303.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,55805,Honey Veil,Cafés,Cafés | Coming Soon,129,compact-marker,2015.3,3248.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20858,MONTBLANC,All Retailers,All Retailers | Menswear & Accessories | Jewelry & Watches | Specialty & Miscellaneous,213,compact-marker,2935.5,4189.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,48083,FEULARD Aesthetic Lab,Coming Soon,"Coming Soon | Spa, Health & Fitness | The Abbey",167,compact-marker,2758.2,4970.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41335,Hastens,Specialty & Miscellaneous,"Specialty & Miscellaneous | Home, Gifts & Furniture | The Abbey",228,compact-marker,2609.6,5125.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,21979,Aventura Slide Tower,,,49,compact-marker,3467.3,3036.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,48082,MODA 39,Womenswear & Accessories,Womenswear & Accessories | The Abbey,77,compact-marker,2688.5,4968.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25456,Venchi,Specialty,Specialty | Sweets & Treats,21,compact-marker,3261.0,3352.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41316,If So,All Retailers,All Retailers | Womenswear & Accessories | Childrenswear & Toys | The Abbey,236,compact-marker,2641.1,4940.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20834,Sunglass Hut,All Retailers,All Retailers | Eyewear,178,compact-marker,3653.6,5105.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28269,Balmain,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Eyewear,246,compact-marker,2224.9,3991.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20810,Ocean Breeze Nail Salon & Spa,All Retailers,"All Retailers | Specialty & Miscellaneous | Services | Spa, Health & Fitness | Beauty & Fragrance",165,compact-marker,2074.9,3189.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41331,Lola and The Boys,All Retailers,All Retailers | Childrenswear & Toys | What’s New | The Abbey,185,compact-marker,2967.5,5318.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20883,Janie and Jack,All Retailers,All Retailers | Childrenswear & Toys,192,compact-marker,2358.9,3187.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20873,Lids,All Retailers,All Retailers | Sporting Goods & Athleticwear | Menswear & Accessories,37,compact-marker,2306.7,3149.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25529,Creed,All Retailers,All Retailers | Beauty & Fragrance,10,compact-marker,2734.3,3541.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41314,Skin Laundry,"Spa, Health & Fitness","Spa, Health & Fitness | Beauty & Fragrance | The Abbey",143,compact-marker,2646.7,5177.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27028,AMI,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,147,compact-marker,2671.2,3649.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41336,The Shade Store,"Home, Gifts & Furniture","Home, Gifts & Furniture | The Abbey",191,compact-marker,2358.6,5178.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20845,Porsche Design,All Retailers,All Retailers | Menswear & Accessories | Jewelry & Watches | Specialty & Miscellaneous | Shoes | Eyewear,39,compact-marker,3017.4,4560.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20727,BVLGARI,All Retailers,All Retailers | Jewelry & Watches,170,compact-marker,2795.3,4237.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20739,Kick Essentials,All Retailers,All Retailers | Shoes,27,compact-marker,3063.7,4570.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20681,Mrs. Fields,Specialty,Specialty | Sweets & Treats,46,compact-marker,2175.1,3384.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,21062,Aventura Mall Concierge,All Retailers,All Retailers | Concierge,96,compact-marker,2656.6,3838.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25715,Dog Station,,,172,compact-marker,1945.9,3238.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29878,Auntie Anne's,Cafés,Cafés | Specialty | Sweets & Treats,48,compact-marker,2084.9,3236.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41333,Wairua,"Spa, Health & Fitness","Spa, Health & Fitness | Beauty & Fragrance | The Abbey",107,full-name,2691.6,5223.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28276,Ladurée,Cafés,Cafés | Eateries | Specialty | Sweets & Treats | Quick Bites,40,compact-marker,2118.3,3855.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41332,7th Avenue,Specialty & Miscellaneous,"Specialty & Miscellaneous | Home, Gifts & Furniture | The Abbey",99,compact-marker,2529.6,5294.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20732,Azulu,All Retailers,All Retailers | Womenswear & Accessories | Shoes,176,compact-marker,3453.3,5066.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20776,Messika,All Retailers,All Retailers | Jewelry & Watches,120,compact-marker,2637.6,3693.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20926,Aventura Pups,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture",183,compact-marker,2956.2,4789.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41343,Salt & Straw,Specialty,Specialty | Sweets & Treats | The Abbey,65,compact-marker,2719.2,5184.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28589,Yann Couvreur,Cafés,Cafés | Eateries | Specialty | Sweets & Treats | Quick Bites,31,compact-marker,2966.1,4029.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25622,Rainbow Valley Playground,Entertainment,Entertainment | Rainbow Valley,66,compact-marker,2206.0,3184.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25539,Bianco Gelato,Specialty,Specialty | Sweets & Treats,71,compact-marker,2189.0,3317.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20924,Avis Car Rental,All Retailers,All Retailers | Automobile | Amenities & Services | Car Rental,13,compact-marker,1623.6,3316.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20731,JCPenney Optical,Shops,Shops | All Retailers | Eyewear,111,compact-marker,2219.4,3061.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,37898,Chloe,All Retailers,All Retailers | Womenswear & Accessories | Shoes,118,compact-marker,4006.8,5823.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,41350,The Salty,Cafés,Cafés | Specialty | Sweets & Treats | The Abbey,254,compact-marker,2709.3,5375.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20647,Cielito Artisan Pops,Specialty,Specialty | Sweets & Treats,234,compact-marker,2993.6,4629.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,55739,Tonella's Flower Truck,All Retailers,"All Retailers | Home, Gifts & Furniture",208,compact-marker,2874.7,4293.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20672,Amazonica,Cafés,Cafés | Eateries | Specialty | Sweets & Treats | Quick Bites,11,compact-marker,3026.2,4650.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20868,Lucky Eyes,All Retailers,"All Retailers | Jewelry & Watches | Home, Gifts & Furniture | Gifts & Specialty",7,compact-marker,3092.0,4680.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,51639,Flabelus,All Retailers,All Retailers | Shoes | What’s New,241,compact-marker,2311.2,3611.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,55874,Clive Christian,All Retailers,All Retailers | Beauty & Fragrance | What’s New,145,compact-marker,2345.8,3908.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20752,Crystal Laser Gifts,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture",69,compact-marker,3520.4,4943.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,40152,Sakura,Specialty,Specialty | Sweets & Treats,32,compact-marker,2899.6,4380.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20659,Naughty Coffee,Cafés,Cafés | Specialty,229,compact-marker,2355.9,3777.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20646,Carrot Express,Cafés,Cafés | Eateries | Quick Bites,18,compact-marker,3950.2,5103.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20687,Caviar & More,Cafés,Cafés | Eateries | Specialty | Quick Bites,181,compact-marker,3204.0,4750.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20704,Fortune International Realty,All Retailers,All Retailers | Specialty & Miscellaneous | Services,163,compact-marker,2885.5,4332.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20638,Ralph’s Coffee,Cafés,Cafés | Specialty,91,compact-marker,2938.4,4518.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25872,Masse by Bachour,Cafés,Cafés | Eateries | Specialty | Sweets & Treats | Quick Bites,54,compact-marker,3873.3,5280.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20885,iStore,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,250,compact-marker,2303.1,3573.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20923,Babycottons,All Retailers,All Retailers | Childrenswear & Toys,102,compact-marker,3592.7,4986.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29888,Chocolate On Tap,Specialty,Specialty | Sweets & Treats | Quick Bites,207,compact-marker,3302.4,4810.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,25716,Public Safety – Lost & Found,Public Safety – Lost & Found,Public Safety – Lost & Found,140,compact-marker,3140.2,4180.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29545,Gelskins,All Retailers,All Retailers | Specialty & Miscellaneous,117,compact-marker,3687.0,5039.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,37942,Eye Origin,All Retailers,All Retailers | Specialty & Miscellaneous,182,compact-marker,3492.4,4926.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20644,Mango Biche,Cafés,Cafés | Eateries | Specialty | Quick Bites,53,compact-marker,3743.6,5144.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,24077,OMG Brigadeiros,Specialty,Specialty | Sweets & Treats,19,compact-marker,3777.2,5218.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,40173,The Abbey,,,216,compact-marker,2814.1,5147.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27482,Norimoto,Restaurants,Restaurants | Specialty | Outdoor Dining | Quick Bites,20,compact-marker,3608.8,5288.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27850,Golden Goose,All Retailers,All Retailers | Shoes,72,compact-marker,4000.9,5767.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20908,Currency Exchange International,All Retailers,All Retailers | Services | Currency Exchange,97,compact-marker,2659.7,3829.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,55819,JASON HYDE,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches,151,compact-marker,2901.8,3468.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,29088,Illesteva,All Retailers,All Retailers | Eyewear,157,compact-marker,2728.6,3691.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27206,No Tech Kids Activities,All Retailers,All Retailers | Childrenswear & Toys | Entertainment,238,compact-marker,3185.0,3398.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,37848,CVS Health,All Retailers,"All Retailers | Specialty & Miscellaneous | Spa, Health & Fitness | Beauty & Fragrance",17,compact-marker,3372.3,3578.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,40990,Kylie Cosmetics,All Retailers,All Retailers | Beauty & Fragrance,87,compact-marker,3358.9,3556.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,55887,Lucky Box,All Retailers,All Retailers | Specialty & Miscellaneous | Entertainment,22,compact-marker,3339.6,3534.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,37827,Dyson,All Retailers,"All Retailers | Home, Gifts & Furniture | Electronics | Beauty & Fragrance | What’s New",160,compact-marker,3067.6,3339.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20895,Gap Kids & Baby Gap,All Retailers,All Retailers | Childrenswear & Toys,114,compact-marker,2400.8,3400.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20668,Nordstrom Café Bistro,Cafés,Cafés | Eateries,240,compact-marker,1547.5,3983.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,28436,Lower Level Strollers,Strollers,Strollers,134,compact-marker,1779.7,3768.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,27208,Hydration Station,Hydration Station,Hydration Station | Dog-Friendly,135,compact-marker,3232.6,3227.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20913,Christian Louboutin,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,88,compact-marker,1543.2,3957.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+361,20685,Starbucks at Macy's,Cafés,Cafés | Specialty | Sweets & Treats,24,compact-marker,3353.2,3697.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,42139,Macy's Upper Level,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",26,full-name,3683.1,3780.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,42143,JCPenney Upper Level,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",133,full-name,2143.3,2846.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,42140,Nordstrom Upper Level,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",195,full-name,1395.8,3938.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,42144,Bloomingdale's Upper Level,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Department Stores | Beauty & Fragrance",20,compact-marker,4051.0,5684.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,42142,Macy's Men's Home Furniture Upper Level,All Retailers,"All Retailers | Menswear & Accessories | Home, Gifts & Furniture | Department Stores",161,compact-marker,4378.4,4861.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37967,Zara Upper Level,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys | Beauty & Fragrance,13,compact-marker,3089.7,3560.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20922,Banana Republic,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Home, Gifts & Furniture",100,compact-marker,3924.8,4919.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20847,Victoria’s Secret and PINK,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Beauty & Fragrance,221,compact-marker,3482.6,5083.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41313,CCRM Fertility,Services,"Services | Spa, Health & Fitness | The Abbey",181,compact-marker,2382.0,5112.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37971,Nike Upper Level,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,54,compact-marker,2914.7,3276.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,46058,Uniqlo,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Coming Soon | Childrenswear & Toys,241,full-name,4043.2,5236.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20891,H&M,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,81,full-name,3761.2,5374.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20643,Toku,Restaurants,Restaurants | Brunch | Outdoor Dining,78,full-name,2446.5,4214.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37972,Louis Vuitton Upper Level,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear | Beauty & Fragrance,214,full-name,1742.7,4204.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20716,JD Sports,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,223,full-name,3078.9,4371.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37970,Apple Upper Level,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,69,compact-marker,3539.9,3305.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20722,Mania Jeans – Noizz,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Childrenswear & Toys,193,compact-marker,2428.8,3376.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37968,Saint Laurent Upper Level,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Shoes | Eyewear,50,compact-marker,1846.2,3671.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20915,Champs Sports,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,110,compact-marker,2157.3,3520.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20931,American Eagle,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,210,compact-marker,3680.2,4785.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,50121,Anatomy Upper Level,All Retailers,"All Retailers | Spa, Health & Fitness | What’s New | The Abbey",174,compact-marker,2760.4,4844.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20889,Hollister,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Childrenswear & Toys,74,full-name,2468.7,3557.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20660,Tap 42 Craft Kitchen & Bar,Restaurants,Restaurants | Brunch | Outdoor Dining,130,compact-marker,3285.9,2923.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20665,Bella Luna,Restaurants,Restaurants | Brunch | Outdoor Dining,92,compact-marker,2664.2,4360.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,55806,SuitSupply,All Retailers,All Retailers | Menswear & Accessories | Coming Soon,172,compact-marker,2847.1,4701.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20728,Mango,All Retailers,All Retailers | Womenswear & Accessories | Shoes,173,full-name,3093.7,4225.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25640,Massimo Dutti,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,88,compact-marker,2339.3,4061.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41356,Joey Aventura,Restaurants,Restaurants | Brunch | Outdoor Dining | The Abbey,217,compact-marker,2448.8,4778.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20921,Bath & Body Works/White Barn,All Retailers,"All Retailers | Home, Gifts & Furniture | Beauty & Fragrance",176,compact-marker,3468.1,4629.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20829,Tesla,All Retailers,All Retailers | Automobile,122,full-name,3132.3,3124.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,46013,On,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | What’s New,147,full-name,2502.2,4013.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41963,BOSS Upper Level,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,28,compact-marker,2801.5,4398.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,22457,Alo Yoga,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,218,compact-marker,2886.3,3651.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20801,Aerie,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories,112,compact-marker,3741.8,4886.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20713,Garage,All Retailers,All Retailers | Womenswear & Accessories,59,compact-marker,2465.9,3242.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20773,Levi's,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Childrenswear & Toys,146,compact-marker,3287.4,4665.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20777,Free People,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories,66,compact-marker,3394.9,4600.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20700,Eternity Gallery,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture",230,compact-marker,2101.7,4138.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20930,Ann Taylor,All Retailers,All Retailers | Womenswear & Accessories,21,compact-marker,3513.1,4774.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20786,PacSun,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,118,compact-marker,2162.6,3395.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20662,Serafina Miami,Restaurants,Restaurants | Brunch | Outdoor Dining,7,compact-marker,3054.8,3048.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28463,Tecovas,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Specialty & Miscellaneous | Shoes | What’s New,85,compact-marker,3416.9,3373.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20818,Zumiez,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,154,compact-marker,2068.1,3338.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,22028,Vuori,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories,37,compact-marker,2742.9,3377.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20839,Skechers,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,153,compact-marker,2429.7,3480.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,30575,Lumini Med Spa,All Retailers,"All Retailers | Spa, Health & Fitness | Beauty & Fragrance",220,compact-marker,3194.3,2972.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20756,BLENDED,All Retailers,All Retailers | Womenswear & Accessories,180,compact-marker,1907.3,4038.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28280,Rivian,All Retailers,All Retailers | Automobile | What’s New,219,compact-marker,3391.6,3478.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20737,Anne Fontaine,All Retailers,All Retailers | Womenswear & Accessories,196,compact-marker,1956.9,3826.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20909,Crocs,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,245,compact-marker,2232.9,3601.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20836,Steve Madden,All Retailers,All Retailers | Shoes,98,compact-marker,3134.0,4810.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20876,Lacoste,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,158,compact-marker,3288.9,3414.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,30965,Sukoshi,All Retailers,All Retailers | Beauty & Fragrance | What’s New,34,compact-marker,3240.5,4855.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20822,White House Black Market,All Retailers,All Retailers | Womenswear & Accessories,124,compact-marker,3583.2,4797.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,48968,Missoni,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Home, Gifts & Furniture | Shoes | What’s New",155,full-name,2241.6,4036.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41454,Fit 2 Run,Sporting Goods & Athleticwear,Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | The Abbey,141,compact-marker,2979.6,5199.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,21842,Dr. Martens,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,80,compact-marker,3144.7,4923.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20813,Aldo,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,99,compact-marker,3206.0,4505.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20880,Journeys,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes,187,compact-marker,2060.1,3194.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51319,Wilson,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes | What’s New,67,compact-marker,2698.8,3508.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20879,Kay Jewelers,All Retailers,All Retailers | Jewelry & Watches,97,compact-marker,3014.3,4863.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20796,Psycho Bunny,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,51,compact-marker,2876.1,4547.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20832,T-Mobile,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,90,compact-marker,2359.0,3169.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20819,Zales,All Retailers,All Retailers | Jewelry & Watches,136,compact-marker,2903.8,3890.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20893,G-Star RAW,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,15,compact-marker,2729.5,3449.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,55960,Racing Miami,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories,225,compact-marker,2783.0,4628.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,22029,BRITTO,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture",228,compact-marker,2577.0,4159.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20765,The B-12 Store,All Retailers,"All Retailers | Specialty & Miscellaneous | Services | Spa, Health & Fitness",192,compact-marker,2370.5,3220.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20789,Camilla,All Retailers,All Retailers | Womenswear & Accessories | Shoes,137,compact-marker,2802.3,3708.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,27101,NINI AND LOLI,All Retailers,All Retailers | Childrenswear & Toys,232,compact-marker,2948.7,3868.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20736,Reformation,All Retailers,All Retailers | Womenswear & Accessories,213,compact-marker,2666.8,3676.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20807,Intimissimi,All Retailers,All Retailers | Womenswear & Accessories,96,compact-marker,3377.9,4980.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37825,Guizio,All Retailers,All Retailers | Womenswear & Accessories | Shoes | What’s New,125,compact-marker,2773.2,3747.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20825,TUMI,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Specialty & Miscellaneous,205,compact-marker,2607.5,3697.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20769,Gilly Hicks by Hollister,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Beauty & Fragrance,160,compact-marker,2453.2,3647.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41319,Tremble,"Spa, Health & Fitness","Spa, Health & Fitness | The Abbey",94,compact-marker,2943.6,5044.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20849,Perfumania,All Retailers,All Retailers | Beauty & Fragrance,242,compact-marker,2056.1,3251.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,29064,Alma by Angel,All Retailers,All Retailers | Womenswear & Accessories,45,compact-marker,3273.9,4990.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20729,Anine Bing,All Retailers,All Retailers | Womenswear & Accessories | Shoes,183,compact-marker,2597.9,3582.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25699,Dolce Vita,All Retailers,All Retailers | Womenswear & Accessories | Shoes,39,compact-marker,3287.2,4872.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20855,Oakley,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Eyewear,149,compact-marker,3112.9,4474.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20787,Nespresso,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture | Electronics",108,compact-marker,2844.2,3842.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,38075,Dolce & Gabbana,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Home, Gifts & Furniture | Shoes | Eyewear | Beauty & Fragrance | What’s New",104,compact-marker,1718.0,4064.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28657,MAC Cosmetics,All Retailers,All Retailers | Beauty & Fragrance,198,compact-marker,2982.5,4142.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20945,CHANEL Fragrance and Beauty Boutique,All Retailers,All Retailers | Eyewear | Beauty & Fragrance,135,compact-marker,2712.6,4220.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37207,Amouage,All Retailers,All Retailers | Beauty & Fragrance | What’s New,211,compact-marker,2015.2,3832.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,27100,Runner's Depot,All Retailers,All Retailers | Sporting Goods & Athleticwear | Womenswear & Accessories | Menswear & Accessories | Shoes,203,compact-marker,2997.3,3882.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20831,TAG Heuer,All Retailers,All Retailers | Jewelry & Watches,79,compact-marker,2725.9,3861.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51643,Thirdlove,All Retailers,All Retailers | Womenswear & Accessories | Coming Soon,6,compact-marker,3038.8,4120.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,46038,Bananhot,All Retailers,All Retailers | Womenswear & Accessories | What’s New,246,compact-marker,3101.3,4115.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,22027,Swatch,All Retailers,All Retailers | Jewelry & Watches,46,compact-marker,3146.0,4527.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41298,The Keyes,Specialty & Miscellaneous,Specialty & Miscellaneous | Coming Soon | Services | The Abbey,129,compact-marker,2721.5,4951.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41312,Sher Dental,Services,"Services | Spa, Health & Fitness | The Abbey",117,compact-marker,2551.9,5124.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20912,Cigar Box,All Retailers,All Retailers | Specialty & Miscellaneous | Gifts & Specialty,64,compact-marker,2715.6,4294.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20940,120% Lino,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,131,compact-marker,1754.1,3860.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51635,Andres Otalora,All Retailers,All Retailers | Womenswear & Accessories | The Abbey,182,compact-marker,2589.1,5173.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28396,Designer Eyes,All Retailers,All Retailers | Eyewear,9,compact-marker,2679.2,3565.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51641,Gorjana,All Retailers,All Retailers | Jewelry & Watches | What’s New,170,compact-marker,2490.5,3727.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20755,Vilebrequin,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Childrenswear & Toys,16,compact-marker,2139.6,4005.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20826,Tous,All Retailers,All Retailers | Womenswear & Accessories | Jewelry & Watches,109,compact-marker,3038.3,4544.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25455,Charlotte Tilbury,All Retailers,All Retailers | Beauty & Fragrance,233,compact-marker,2788.5,3943.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20843,Robert Graham,All Retailers,All Retailers | Menswear & Accessories,127,compact-marker,3337.6,4949.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20871,Longchamp,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories,22,compact-marker,2396.7,3978.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20774,Agua de Coco,All Retailers,All Retailers | Womenswear & Accessories,103,compact-marker,2872.6,3974.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,41315,Pure Barre,"Spa, Health & Fitness","Spa, Health & Fitness | The Abbey",144,compact-marker,2859.1,5005.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,29111,Mejuri,All Retailers,All Retailers | Womenswear & Accessories | Jewelry & Watches | What’s New,3,compact-marker,2849.3,3422.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51312,Parfums De Marly,All Retailers,All Retailers | Coming Soon | Beauty & Fragrance,184,compact-marker,2071.6,3852.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20853,Optical World,All Retailers,All Retailers | Eyewear | Services,56,compact-marker,3086.8,4559.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20918,Breitling,All Retailers,All Retailers | Jewelry & Watches,143,compact-marker,2588.4,4030.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20738,UNOde50,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches,105,compact-marker,2573.7,3738.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20870,Longines,All Retailers,All Retailers | Jewelry & Watches,178,compact-marker,2751.0,3924.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20749,Hive & Colony,All Retailers,All Retailers | Menswear & Accessories,89,compact-marker,2509.7,3778.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20833,Swarovski,All Retailers,All Retailers | Jewelry & Watches | Gifts & Specialty,17,compact-marker,2835.2,3943.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20650,Läderach Chocolatier Suisse,Specialty,Specialty | Sweets & Treats,236,compact-marker,2782.6,4224.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20798,Ray-Ban,All Retailers,All Retailers | Eyewear,65,compact-marker,2598.7,4080.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20854,Oliver Peoples,All Retailers,All Retailers | Eyewear,14,compact-marker,2448.6,3726.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20750,Agua Bendita,All Retailers,All Retailers | Womenswear & Accessories,207,compact-marker,4048.0,5419.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28388,IWC Schaffhausen,All Retailers,All Retailers | Jewelry & Watches | What’s New,244,compact-marker,2620.1,3772.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20905,Edward Beiner,All Retailers,All Retailers | Eyewear,73,compact-marker,3658.4,5101.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20881,Jo Malone London,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture | Beauty & Fragrance",229,compact-marker,2447.2,3945.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20719,Aesop,All Retailers,All Retailers | Specialty & Miscellaneous | Beauty & Fragrance | Gifts & Specialty,55,compact-marker,2582.1,3813.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25428,Evry Jewels,All Retailers,All Retailers | Womenswear & Accessories | Jewelry & Watches,43,compact-marker,2413.0,3706.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25714,Jessica’s Dog Park,Jessica’s Dog Park,Jessica’s Dog Park | Dog-Friendly,31,compact-marker,2922.6,3008.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20812,Bond No.9,All Retailers,All Retailers | Beauty & Fragrance,128,compact-marker,2605.7,4123.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20860,Mia Jewels,All Retailers,All Retailers | Jewelry & Watches,157,compact-marker,2796.1,4302.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,51311,Initio Parfums Privés,All Retailers,All Retailers | Coming Soon | Beauty & Fragrance,29,compact-marker,2119.4,3847.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,29108,Tissot,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | What’s New,179,compact-marker,2931.9,4200.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,27848,Trudon,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Specialty & Miscellaneous | Home, Gifts & Furniture | Beauty & Fragrance | Gifts & Specialty",87,compact-marker,2938.7,4157.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20872,L'Occitane,All Retailers,All Retailers | Beauty & Fragrance,115,compact-marker,2807.9,4260.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,30966,TSA PreCheck® Enrollment Provided by CLEAR,Specialty & Miscellaneous,Specialty & Miscellaneous | TSA Pre,186,compact-marker,2626.9,4217.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25711,ALT. Fragrances,All Retailers,All Retailers | Beauty & Fragrance,68,compact-marker,3114.3,4684.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,27207,Pet Adoptions,Adopt-A-Pet,Adopt-A-Pet | Dog-Friendly,189,compact-marker,3071.7,3204.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20684,59th & Lex,Cafés,Cafés | Eateries,164,compact-marker,3946.8,5515.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20862,Massage Haven,All Retailers,"All Retailers | Specialty & Miscellaneous | Services | Spa, Health & Fitness",70,compact-marker,3320.2,3591.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25625,World Phones,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,156,compact-marker,3065.9,4658.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28476,Baobab Collection,All Retailers,"All Retailers | Specialty & Miscellaneous | Home, Gifts & Furniture | Beauty & Fragrance",35,compact-marker,2759.6,3629.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,37935,Douglas Elliman,All Retailers,All Retailers | Specialty & Miscellaneous | Services,116,compact-marker,2600.2,3916.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,20907,Design A Cell,All Retailers,All Retailers | Specialty & Miscellaneous | Electronics,224,compact-marker,2657.9,3895.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,25863,La Petite Pepite,Specialty,Specialty | Sweets & Treats,52,compact-marker,2622.1,3872.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+362,28437,Upper Level Strollers,Strollers,Strollers,177,compact-marker,4094.7,5370.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20863,Macy's,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Childrenswear & Toys | Department Stores | Beauty & Fragrance",29,full-name,3670.8,3788.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20932,AMC Aventura 24,All Retailers,All Retailers | Entertainment,21,full-name,3572.9,4929.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20920,Bloomingdale's,All Retailers,"All Retailers | Womenswear & Accessories | Menswear & Accessories | Jewelry & Watches | Home, Gifts & Furniture | Shoes | Department Stores | Beauty & Fragrance",79,full-name,3993.9,5707.5,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20864,Macy's Men's Home Furniture,All Retailers,"All Retailers | Menswear & Accessories | Home, Gifts & Furniture | Department Stores",22,full-name,4334.6,4877.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,41362,Industrious,Specialty & Miscellaneous,Specialty & Miscellaneous | Services | The Abbey,54,full-name,2588.5,5218.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20904,Equinox Aventura,All Retailers,"All Retailers | Sporting Goods & Athleticwear | Spa, Health & Fitness",61,compact-marker,1973.1,3782.3,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,27882,Arcade Zone Entertainment,All Retailers,All Retailers | Entertainment,74,compact-marker,3339.8,3453.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,37969,H&M Third Level,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Shoes | Childrenswear & Toys,88,compact-marker,3714.1,5373.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,31087,CAMP,All Retailers,All Retailers | Childrenswear & Toys | Entertainment,30,full-name,1682.6,3709.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,46057,Uniqlo Third Level,All Retailers,All Retailers | Womenswear & Accessories | Menswear & Accessories | Coming Soon | Childrenswear & Toys,56,compact-marker,3903.2,5355.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,51638,Neko,All Retailers,"All Retailers | Coming Soon | Spa, Health & Fitness",57,full-name,3282.5,2879.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,25528,UDON,Treats Food Hall,Treats Food Hall,62,full-name,2637.1,3520.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,28658,Wok N Grill,Treats Food Hall,Treats Food Hall,51,compact-marker,2803.5,3264.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20677,Shake Shack,Treats Food Hall,Treats Food Hall,24,compact-marker,2846.7,3200.6,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,22030,Doggi’s Arepa Bar,Treats Food Hall,Treats Food Hall,65,compact-marker,2849.7,3637.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20637,Yalla Motek,Treats Food Hall,Treats Food Hall,46,full-name,2954.7,3706.4,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20669,Villa Pizza,Treats Food Hall,Treats Food Hall,55,compact-marker,2896.0,3684.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20683,Chipotle Mexican Grill,Treats Food Hall,Treats Food Hall,12,compact-marker,2688.4,3576.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20651,YIP,Treats Food Hall,Treats Food Hall,73,compact-marker,3085.3,3639.8,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20658,Jrk!,Treats Food Hall,Treats Food Hall,33,compact-marker,3022.6,3662.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20639,Tacology Express,Treats Food Hall,Treats Food Hall,37,compact-marker,2782.6,3358.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,31146,Sanguich,Treats Food Hall,Treats Food Hall | Quick Bites,70,compact-marker,2752.7,3423.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,29984,Rosetta Bakery - Treats Food Hall,Treats Food Hall,Treats Food Hall,78,compact-marker,2945.4,3434.0,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,29879,Häagen-Dazs,Treats Food Hall,Treats Food Hall,83,compact-marker,2959.6,3566.1,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,20682,Little Brittany Creperie,Treats Food Hall,Treats Food Hall,28,compact-marker,2883.7,3346.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,37897,Mango Biche - Treats Food Hall,Cafés,Cafés | Treats Food Hall | Eateries,0,compact-marker,2784.7,3653.2,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,29986,Auntie Anne's - Treats Food Hall,Cafés,Cafés | Treats Food Hall | Specialty | Sweets & Treats,8,compact-marker,2913.3,3390.7,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,29861,La Pizza & La Pasta,Restaurants,Restaurants,41,compact-marker,1871.6,4208.9,RoveIQ locations.json + structures_dataset.properties.loc_id
+363,29862,Il Pastaio,Restaurants,Restaurants,85,compact-marker,1873.1,4218.4,RoveIQ locations.json + structures_dataset.properties.loc_id

@@ -140,6 +140,20 @@ function state(me){
         updated:me.location.updated,source:'manual'}:null,
     locationExpiresAfterMs:LOCATION_AGE};
 }
+// Positioning cooperation is a separate, ephemeral consent-based channel.
+ // Offers exist IN MEMORY only: no raw GPS, accelerometer samples, peer graphs,
+ // background ranging or long-term surveillance are recorded.
+const OFFER_TTL_MS=90_000,positionOffers=new Map();
+const validMallId=id=>typeof id==='string'&&/^[a-z0-9-]{2,80}$/.test(id);
+const validFloorLabel=floor=>typeof floor==='string'&&/^[A-Z0-9-]{1,12}$/.test(floor);
+function pruneOffers(){
+ const t=Date.now();
+ for(const [key,offer] of positionOffers)
+  if(offer.expiresAt<=t)positionOffers.delete(key);
+}
+function removeOwnOffers(userId){
+ for(const [key,offer] of positionOffers)if(offer.ownerId===userId)positionOffers.delete(key);
+}
 const app=http.createServer(async(req,res)=>{
   try{
     const url=new URL(req.url||'/','http://localhost');
@@ -162,6 +176,62 @@ const app=http.createServer(async(req,res)=>{
     if(!auth)return reject(res,401,'Sesión anónima no disponible. Recargá la página.');
     const me=auth.user;
     if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me));
+    // Web fallback: a human explicitly shows an in-person QR to another
+    // visitor. It is NOT a verified ranging method, Bluetooth or GPS transfer.
+    if(req.method==='POST'&&url.pathname==='/positioning/offer'){
+      const p=await parse(req);
+      const stamp=Date.now();
+      if(!validMallId(p.mallId)||!validFloorLabel(p.floor)||
+        p.source!=='manual-anchor'||
+        !Number.isFinite(p.x)||!Number.isFinite(p.y)||
+        p.x<0||p.x>2000||p.y<0||p.y>2000||
+        p.explicitConsent!==true||
+        !Number.isFinite(p.observedAtMs)||
+        stamp-p.observedAtMs<0||stamp-p.observedAtMs>120000)
+        return reject(res,400,'La referencia manual debe ser reciente y el intercambio autorizado');
+      pruneOffers();
+      removeOwnOffers(me.id);
+      if(positionOffers.size>=3000)return reject(res,503,'Capacidad temporal agotada');
+      const code=token(),expiresAt=Date.now()+OFFER_TTL_MS;
+      positionOffers.set(hash(code),{
+        ownerId:me.id,mallId:p.mallId,floor:p.floor,
+        x:Math.round(p.x*10)/10,y:Math.round(p.y*10)/10,
+        issuedAt:stamp,expiresAt
+      });
+      return send(res,201,{code,expiresAt,oneUse:true,
+        sharing:'manual-map-anchor-only',anonymous:true,
+        metricAccuracyKnown:false,physicalProximityVerified:false});
+    }
+    if(req.method==='POST'&&url.pathname==='/positioning/revoke'){
+      removeOwnOffers(me.id);
+      return send(res,200,{revoked:true});
+    }
+    if(req.method==='POST'&&url.pathname==='/positioning/claim'){
+      const p=await parse(req);
+      if(typeof p.code!=='string'||!/^[A-Za-z0-9_-]{40,90}$/.test(p.code)||
+        !validMallId(p.mallId)||p.explicitConsent!==true||
+        p.confirmColocated!==true)
+        return reject(res,400,'Confirmación explícita y código válido requeridos');
+      pruneOffers();
+      const key=hash(p.code),offer=positionOffers.get(key);
+      if(!offer)return reject(res,410,'Referencia vencida, utilizada o cancelada');
+      if(offer.mallId!==p.mallId)return reject(res,409,'Este código pertenece a otro shopping');
+      if(offer.ownerId===me.id)return reject(res,400,'No podés usar tu propia referencia');
+      // The token can be relayed over the Internet: QR is an assertion of
+      // co-location by users, NEVER independently verified physical range.
+      positionOffers.delete(key);
+      return send(res,200,{
+        mallId:offer.mallId,floor:offer.floor,x:offer.x,y:offer.y,
+        source:'peer-qr-colocation-asserted',
+        coordinateSpace:'mall-photo-pixels',
+        expiresAt:Date.now()+120000,
+        observedAtMs:offer.issuedAt,
+        physicalProximityVerified:false,
+        horizontalAccuracyM:null,altitudeM:null,rangeMeters:null,
+        floorConfidence:'unverified',
+        warning:'Proximidad declarada por las personas, no medida físicamente. Comprobá tu lugar en el plano.'
+      });
+    }
     if(req.method==='GET'&&url.pathname.startsWith('/avatar/')){
       const id=url.pathname.slice('/avatar/'.length);
       if(!validId(id)||!(id===me.id||me.friends.includes(id)))
@@ -289,6 +359,7 @@ const app=http.createServer(async(req,res)=>{
       save();return send(res,200,state(me));
     }
     if(req.method==='POST'&&url.pathname==='/account/delete'){
+      removeOwnOffers(me.id);
       for(const [key,session] of Object.entries(db.sessions))
         if(session.userId===me.id)delete db.sessions[key];
       for(const [key,invitation] of Object.entries(db.invites))

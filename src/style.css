@@ -797,3 +797,27 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
  -webkit-user-select:none;
  user-select:none;
 }
+
+
+/* Adaptive anonymous positioning: scrolls inside the existing geolocation
+   dialog and never covers the mall map or silently opens sensor permissions. */
+.rnCoopPanel{border:1px solid #416c7f;border-radius:14px;background:rgba(10,30,47,.78);
+ padding:13px;display:flex;flex-direction:column;gap:10px;margin-top:15px}
+.rnCoopPanel h3{font-size:15px;margin:0;color:#c4f7ff}
+.rnCoopPanel>p{margin:0;line-height:1.45}
+.rnCoopPanel .caption{font-size:12px;color:#adbfce}
+.rnCoopPanel label{color:#e1f0fa;font-weight:520}
+.rnCoopConsent{display:flex;gap:9px;align-items:flex-start;line-height:1.45;font-size:13px}
+.rnCoopConsent input[type="checkbox"]{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#65e6e0}
+.rnCoopPanel button{width:100%;min-height:42px}
+.rnCoopPanel button:disabled{opacity:.44}
+.rnCoopPanel input[type="text"]{width:100%;min-height:42px;border-radius:10px;
+ background:#0c2032;color:#f4fcff;border:1px solid #4c7889;padding:9px}
+.rnCoopShare{display:flex;flex-direction:column;align-items:stretch;gap:8px;
+ padding:10px;background:#112d3f;border:1px solid #567a86;border-radius:12px}
+.rnCoopShare[hidden]{display:none!important}
+#rnCoopQr{align-self:center;border:6px solid white;background:white;border-radius:7px;
+ line-height:0;max-width:100%;overflow:hidden}
+#rnCoopQr img,#rnCoopQr canvas{max-width:100%;height:auto}
+#rnCoopStatus.error{color:#ffbca7}
+#rnCoopQuality{font-weight:650;color:#c4eff5}

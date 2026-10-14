@@ -111,4 +111,59 @@ test('request provenance, session and API protection',async()=>{
   const method=await req('GET','/invite/preview?code=guess');
   assert.equal(method.status,401);
 });
+test('adaptive positioning: anonymous transient QR reference, consent and replay defense',async()=>{
+ const sender=await req('POST','/session',{});
+ const receiver=await req('POST','/session',{});
+ const stranger=await req('POST','/session',{});
+ const anchor={mallId:'new-world-city-shanghai',floor:'L4',
+  x:511.23,y:235.4,source:'manual-anchor',
+  observedAtMs:Date.now(),explicitConsent:true};
+ assert.equal((await req('POST','/positioning/offer',anchor,null)).status,401);
+ assert.equal((await req('POST','/positioning/offer',{
+  ...anchor,explicitConsent:false},sender.cookie)).status,400);
+ assert.equal((await req('POST','/positioning/offer',{
+  ...anchor,source:'peer-qr-colocation-asserted'},sender.cookie)).status,400);
+ assert.equal((await req('POST','/positioning/offer',{
+  ...anchor,observedAtMs:Date.now()-500000},sender.cookie)).status,400);
+ assert.equal((await req('POST','/positioning/offer',{
+  ...anchor,floor:'L4',x:2001},sender.cookie)).status,400);
+ const created=await req('POST','/positioning/offer',anchor,sender.cookie);
+ assert.equal(created.status,201);
+ assert.ok(created.data.code.length>=40);
+ assert.equal(created.data.oneUse,true);
+ assert.equal(created.data.metricAccuracyKnown,false);
+ assert.equal(created.data.physicalProximityVerified,false);
+ assert.ok(created.data.expiresAt>Date.now());
+ const payload={code:created.data.code,mallId:anchor.mallId,
+  explicitConsent:true,confirmColocated:true};
+ assert.equal((await req('POST','/positioning/claim',{
+  ...payload,explicitConsent:false},receiver.cookie)).status,400);
+ assert.equal((await req('POST','/positioning/claim',payload,sender.cookie)).status,400);
+ assert.equal((await req('POST','/positioning/claim',{
+  ...payload,mallId:'aventura'},stranger.cookie)).status,409);
+ const used=await req('POST','/positioning/claim',payload,receiver.cookie);
+ assert.equal(used.status,200);
+ assert.deepEqual([used.data.floor,used.data.x,used.data.y],['L4',511.2,235.4]);
+ assert.equal(used.data.mallId,anchor.mallId);
+ assert.equal(used.data.coordinateSpace,'mall-photo-pixels');
+ assert.equal(used.data.rangeMeters,null);
+ assert.equal(used.data.horizontalAccuracyM,null);
+ assert.equal(used.data.altitudeM,null);
+ assert.equal(used.data.physicalProximityVerified,false);
+ assert.equal(used.data.floorConfidence,'unverified');
+ assert.equal((await req('POST','/positioning/claim',payload,stranger.cookie)).status,410);
+ // No peer location or travel history is persisted to the existing social DB.
+ const saved=readFileSync(path.join(dir,'presence.json'),'utf8');
+ assert.ok(!saved.includes(created.data.code));
+ assert.ok(!saved.includes('511.2'));
+ assert.ok(!saved.includes('positioningOffers'));
+ const second=await req('POST','/positioning/offer',{
+  ...anchor,observedAtMs:Date.now()},sender.cookie);
+ assert.equal(second.status,201);
+ assert.equal((await req('POST','/positioning/revoke',{},sender.cookie)).status,200);
+ assert.equal((await req('POST','/positioning/claim',{
+  ...payload,code:second.data.code},receiver.cookie)).status,410);
+ assert.equal((await req('POST','/positioning/offer',anchor,sender.cookie,
+  'https://evil.example')).status,403);
+});
 test.after(async()=>{await new Promise(resolve=>app.close(resolve));rmSync(dir,{recursive:true,force:true});});

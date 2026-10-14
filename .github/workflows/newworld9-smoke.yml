@@ -9,6 +9,13 @@ on:
       - 'scripts/verify.py'
       - 'src/viewer.js'
       - 'src/roof-text3d.js'
+      - 'src/positioning-core.js'
+      - 'src/cooperative-positioning.js'
+      - 'src/indoor-location.js'
+      - 'backend/server.mjs'
+      - 'backend/server.test.mjs'
+      - 'scripts/test-positioning-core.mjs'
+      - 'scripts/test-positioning-web-e2e.mjs'
       - 'src/poi-layer.js'
       - 'scripts/test-newworld9-main-browser.mjs'
       - 'src/style.css'
@@ -39,5 +46,8 @@ jobs:
       - run: npx playwright install --with-deps chromium webkit
       - run: node scripts/test-newworld9-browser.mjs
       - run: node scripts/test-newworld9-main-browser.mjs
+      - run: node scripts/test-positioning-core.mjs
+      - run: node scripts/test-positioning-web-e2e.mjs chromium
+      - run: node scripts/test-positioning-web-e2e.mjs webkit
       - run: node scripts/test-map-pinch-isolated.mjs chromium
       - run: node scripts/test-map-pinch-isolated.mjs webkit

@@ -10,6 +10,15 @@ root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("public")
 assert root.is_dir()
 html = (root / "index.html").read_text(encoding="utf-8")
 assert "<canvas" in html and "RetailNav" in html and "modelData" in html
+assert 'id="rnCoopConsent"' in html
+assert 'id="rnCoopOffer"' in html
+assert 'id="rnCoopJoin"' in html
+assert 'id="rnCoopQr"' in html
+assert 'window.RetailNavPositioningCore' in html
+assert 'window.RetailNavCooperativePositioning' in html
+assert 'peer-qr-colocation-asserted' in html
+assert 'gpsVerticalAccuracyM' in html
+
 script = re.search(r'<script id="modelData" type="application/json">([\s\S]+?)</script>', html)
 assert script, "Standalone HTML missing embedded 3-floor data"
 inline = json.loads(script.group(1))

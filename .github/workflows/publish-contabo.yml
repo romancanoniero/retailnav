@@ -36,6 +36,10 @@ jobs:
           node --check src/demo-friends.js
           node --check src/pins3d.js
           node --check src/jsqr.js
+          node --check src/positioning-core.js
+          node --check src/cooperative-positioning.js
+          node --check src/indoor-location.js
+          node --test scripts/test-positioning-core.mjs
           node --check backend/server.mjs
           node --test backend/server.test.mjs
           node --test scripts/test-demo-model.mjs

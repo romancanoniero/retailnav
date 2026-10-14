@@ -18,6 +18,9 @@ assert 'window.RetailNavPositioningCore' in html
 assert 'window.RetailNavCooperativePositioning' in html
 assert 'peer-qr-colocation-asserted' in html
 assert 'gpsVerticalAccuracyM' in html
+assert 'id="rnAutoLocationStatus"' in html
+assert 'gpsStartedAutomatically' in html
+assert 'startGeolocation(true)' in html
 
 script = re.search(r'<script id="modelData" type="application/json">([\s\S]+?)</script>', html)
 assert script, "Standalone HTML missing embedded 3-floor data"

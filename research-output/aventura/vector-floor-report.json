@@ -1,0 +1,63 @@
+{
+  "source": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/map.json",
+  "originalFloorIDs": [
+    [
+      361,
+      "Lower Level"
+    ],
+    [
+      362,
+      "Upper Level"
+    ],
+    [
+      363,
+      "Third Level"
+    ]
+  ],
+  "verticalTransitions": 17,
+  "scalePixelPerMeter": 6.681270585604792,
+  "resolution": [
+    6200,
+    7400
+  ],
+  "coordinateSystem": "lon/lat -> common local projected plane, north up",
+  "outputs": [
+    {
+      "floor_id": 361,
+      "floor": "Lower Level",
+      "name": "aventura-lower-level",
+      "svg": "aventura-lower-level.svg",
+      "png": "aventura-lower-level.png",
+      "pngBytes": 2346586
+    },
+    {
+      "floor_id": 362,
+      "floor": "Upper Level",
+      "name": "aventura-upper-level",
+      "svg": "aventura-upper-level.svg",
+      "png": "aventura-upper-level.png",
+      "pngBytes": 2390417
+    },
+    {
+      "floor_id": 363,
+      "floor": "Third Level",
+      "name": "aventura-third-level",
+      "svg": "aventura-third-level.svg",
+      "png": "aventura-third-level.png",
+      "pngBytes": 1252415
+    },
+    {
+      "name": "aventura-superposicion-ll-ul",
+      "svg": "aventura-superposicion-ll-ul.svg",
+      "png": "aventura-superposicion-ll-ul.png",
+      "pngBytes": 2561747
+    },
+    {
+      "name": "aventura-superposicion-tres-plantas",
+      "svg": "aventura-superposicion-tres-plantas.svg",
+      "png": "aventura-superposicion-tres-plantas.png",
+      "pngBytes": 2903154
+    }
+  ],
+  "caveat": "Research reference, based on RoveIQ GeoJSON; shaft alignment not independently surveyed"
+}

@@ -37,8 +37,11 @@ function build(options){
  }
  for(const f of fixtures){
   if(!enabled||(active!=='ALL'&&active!==f.floor))continue;
-  const floor=lookup.get(f.floor),other=lookup.get(f.adjacentFloorCandidate);
+  const floor=lookup.get(f.floor);
   if(!floor)continue;
+  const adjacent=f.adjacentFloorCandidate||
+    (floor.index+1<floors.length?floors[floor.index+1]?.id:floors[floor.index-1]?.id);
+  const other=lookup.get(adjacent);
   const dx=f.p1[0]-f.p0[0],dz=f.p1[1]-f.p0[1];
   const sourceRun=M.hypot(dx,dz)*scale;
   if(sourceRun<3)continue;
@@ -103,7 +106,7 @@ function build(options){
    }
   }
   items.push({
-   id:f.id,floor:f.floor,pairedFloorCandidate:f.adjacentFloorCandidate,
+   id:f.id,floor:f.floor,pairedFloorCandidate:adjacent,
    lanes:laneCount,entryExitKnown:false,verified:false,
    direction:'unknown',
    stepRows:rows,angleDegrees:M.round(pitch*100)/100,

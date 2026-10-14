@@ -84,6 +84,30 @@ try {
   assert.ok(roof.summary.servicePictograms>=6,
     'WC and lift pictograms must be actual raised geometry on the service roofs');
   assert.ok(roof.summary.services.some(s=>s.extrudedIcon&&s.category==='toilet'));
+  assert.ok(roof.summary.services.some(s=>s.extrudedIcon&&s.category==='elevator'));
+  const vectorServices=await page.evaluate(()=>{
+    const library=window.RetailNavServiceIcons;
+    return {
+      version:library?.version,categories:library?.categories,
+      bathroomPolygons:library?.shapes?.toilet?.length||0,
+      elevatorPolygons:library?.shapes?.elevator?.length||0,
+      bathroomSvg:library?.svg?.('toilet'),
+      elevatorSvg:library?.svg?.('elevator'),
+      detachedCandidatesVisible:[...document.querySelectorAll('.rnPoiMarker')]
+        .filter(el=>!el.hidden&&window.RETAILNAV_ACTIVE_MALL.pois.some(
+          p=>p.id===el.dataset.poiId&&p.source==='photo-colour-candidate')).length
+    };
+  });
+  assert.ok(vectorServices.version.includes('3d-v1'));
+  assert.deepEqual(vectorServices.categories,['toilet','elevator']);
+  assert.ok(vectorServices.bathroomPolygons>=10);
+  assert.ok(vectorServices.elevatorPolygons>=18);
+  assert.ok(vectorServices.bathroomSvg.includes('<svg')&&
+    vectorServices.bathroomSvg.includes('<polygon'));
+  assert.ok(vectorServices.elevatorSvg.includes('<svg')&&
+    vectorServices.elevatorSvg.includes('<polygon'));
+  assert.equal(vectorServices.detachedCandidatesVisible,0,
+    'Photo-derived services must not leave disconnected emoji on screen');
   assert.ok(roof.summary.commercialRoofs>=550,'3D roofs available for every shop candidate');
   assert.ok(roof.summary.codeLabels>=200,'Many individual codes must have true raised geometry');
   assert.ok(roof.summary.extrudedTriangles>900,'Letters must have top and 3D side triangles');
@@ -126,6 +150,21 @@ try {
   assert.equal(state.gestureProfile,'google-earth-touch-v1');
   assert.equal(state.compassReference,'photo-top-only-not-calibrated-true-north');
   assert.equal(state.verticalConnectorCount,39);
+  assert.equal(state.liftShaftCandidateCount,3);
+  assert.equal(state.liftShaftStats.continuousCount,1);
+  assert.equal(state.liftShaftStats.shape,'framed-transparent-shaft');
+  assert.equal(state.liftShaftStats.navigationApproved,false);
+  const liftCores=await page.evaluate(()=>window.__RETAILNAV__.getLiftShaftModels());
+  assert.equal(liftCores.length,1);
+  assert.equal(liftCores[0].from,'L1');
+  assert.equal(liftCores[0].to,'L9');
+  assert.deepEqual(liftCores[0].floors,
+    ['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
+  assert.ok(liftCores[0].heightWorld>34);
+  assert.ok(liftCores[0].continuous===true);
+  assert.ok(liftCores[0].maxPhotoDeviationPx>50,
+    'L3 registration mismatch must remain explicitly provisional');
+  assert.equal(liftCores[0].landingMatchVerified,false);
   assert.ok(await page.locator('#rnHeightsPanel').isVisible());
   assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
   assert.equal(await page.evaluate(()=>window.RetailNavPins.getState().registered),18);
@@ -255,6 +294,10 @@ try {
   assert.equal(updated.state.floorHeightsMetres.L3,6);
   assert.equal(updated.state.floorElevationsMetres.L4,14);
   assert.equal(updated.state.floorElevationsMetres.L9,34);
+  const lifted=await page.evaluate(()=>window.__RETAILNAV__.getLiftShaftModels());
+  assert.equal(lifted.length,1);
+  assert.ok(Math.abs(lifted[0].heightWorld-liftCores[0].heightWorld-2)<.01,
+    'Changing the L3 height extends the continuous shaft automatically');
   const stairs6=await page.evaluate(()=>window.__RETAILNAV__.getEscalatorModels());
   assert.equal(stairs6.find(s=>s.id==='L3-west').riseMetres,6);
   assert.ok(stairs6.every(s=>s.riseMetres<=12&&!s.verified),

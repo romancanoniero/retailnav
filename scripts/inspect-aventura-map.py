@@ -35,3 +35,28 @@ data={"structure":structure,"extra":extra}
 out=root/"map-json-inspection.json"
 out.write_text(json.dumps(data,ensure_ascii=False,indent=2,default=str))
 print("INSPECTED",out,len(json.dumps(data)),"keys",[k+" ("+str(v.get("count",""))+")" for k,v in structure.items()])
+
+
+# Exact GeoJSON feature samples for composing native high-definition vector floor maps.
+def describe(dataset):
+    if not isinstance(dataset,dict): return {"type":type(dataset).__name__}
+    data=dataset.get("data",{})
+    if isinstance(data,str):
+        try:data=json.loads(data)
+        except Exception:return {"error":"data is non-json string","head":data[:200]}
+    feats=data.get("features",[]) if isinstance(data,dict) else []
+    types=collections.Counter(f.get("geometry",{}).get("type") for f in feats if isinstance(f,dict) and isinstance(f.get("geometry"),dict))
+    props=collections.Counter(str(k) for f in feats if isinstance(f.get("properties"),dict) for k in f["properties"])
+    first=[]
+    for f in feats[:4]:
+        if not isinstance(f,dict):continue
+        geometry=f.get("geometry") or {}
+        first.append({"geometry_type":geometry.get("type"),"coordinates":safe(geometry.get("coordinates"),4),"properties":f.get("properties"),"id":f.get("id")})
+    return {"dataset_id":dataset.get("id"),"title":dataset.get("title"),"count":len(feats),"geometry_types":dict(types),"properties_keys":dict(props),"features_sample":first,"style_id":dataset.get("style_id")}
+floorGeometries=[]
+for f in doc.get("floors",[]):
+    floorGeometries.append({"id":f.get("id"),"name":f.get("name"),"structure":describe(f.get("structures_dataset")),
+        "routing":describe(f.get("routing_dataset")),
+        "styles":[describe(s) for s in f.get("style_dataset",[])]})
+print("floor_geometry_statistics",json.dumps([{"id":f["id"],"name":f["name"],"struct":f["structure"]["count"],"routing":f["routing"]["count"],"styles":[(s["title"],s["count"],s["geometry_types"]) for s in f["styles"]]} for f in floorGeometries]))
+(root/"map-geometry-inspection.json").write_text(json.dumps({"floors":floorGeometries,"allFloorTransitions":doc.get("floor_transitions",[])},ensure_ascii=False,indent=2,default=str))

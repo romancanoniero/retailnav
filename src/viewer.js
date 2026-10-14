@@ -14,10 +14,46 @@ const MIN_ZOOM_DISTANCE=4,MAX_ZOOM_DISTANCE=850;
 const zoomBounds=n=>clamp(n,MIN_ZOOM_DISTANCE,MAX_ZOOM_DISTANCE);
 const wrapAngle=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function updateCameraRotation(){
- // True camera quaternion: yaw around world Y, pitch around local X,
- // roll around camera-forward Z. All 3 axes are independent in 3D mode.
+ // Map mode Euler presets only. Spherical free orbit updates q directly.
  q=norm(qm(qm(quat([0,1,0],orbitYaw),quat([1,0,0],orbitPitch)),
    quat([0,0,1],orbitRoll)));
+}
+function rotateCameraLocal(axis,angle){
+ q=norm(qm(q,quat(axis,angle)));
+ dirty=true;
+}
+function arcballVector(clientX,clientY){
+ const r=canvas.getBoundingClientRect();
+ const radius=Math.max(48,Math.min(r.width,r.height)*.47);
+ const x=(clientX-r.left-r.width/2)/radius;
+ const y=(r.top+r.height/2-clientY)/radius;
+ const d=x*x+y*y;
+ if(d>1){
+  const k=1/Math.sqrt(d);
+  return [x*k,y*k,0]; // Rim motion allows rotation around screen Z.
+ }
+ return [x,y,Math.sqrt(Math.max(0,1-d))];
+}
+function arcballCameraDelta(start,end){
+ // Inverse model trackball rotation, quaternion [-cross,1+dot].
+ const axis=cross(start,end),w=1+clamp(dot(start,end),-1,1);
+ if(w<1e-6){
+  const fallback=Math.abs(start[0])<.8?[1,0,0]:[0,1,0];
+  return [...norm(cross(start,fallback)),0];
+ }
+ return norm([-axis[0],-axis[1],-axis[2],w]);
+}
+function updateRotationModeUI(){
+ const button=$('pan');
+ button.setAttribute('aria-pressed',String(panMode));
+ button.setAttribute('aria-label',panMode?'Activar rotación esférica 3D 360 grados':'Cambiar a desplazamiento de mapa');
+ button.title=panMode?'Activar giro 3D 360°: mirar desde cualquier dirección'
+  :'Giro esférico activo · tocar para desplazar el mapa';
+ button.classList.toggle('active',!panMode);
+ $('rnRollControls').hidden=panMode;
+ canvas.setAttribute('aria-label',panMode
+  ?'Modo mapa: un dedo mueve; dos dedos amplían, giran e inclinan. Pulsá 360° para rotación libre.'
+  :'Modo esfera 3D 360°: un dedo gira libremente por los tres ejes, también por debajo. Dos dedos desplazan, amplían y giran.');
 }
 const selectedMall=window.RETAILNAV_ACTIVE_MALL||{id:'aventura',name:'Aventura Mall',floors:null,origin:[690,405],scale:.15};
 const mallId=selectedMall.id||'aventura';
@@ -65,7 +101,8 @@ function makeLabels(){
 function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
 function drawRoute(dt){if(!route)return;let floor=floors.find(f=>f.id===route.floor);if(active!=='ALL'&&active!==floor.id)return;if(routeRunning)routeT=(routeT+dt*.14)%1;let arr=[];route.points.forEach(p=>arr.push(...pos(p,.2),0,0,0,1,.65,.23,-3));gl.uniform1f(loc.uY,floor.y);gl.uniform1f(loc.uLine,1);gl.bindBuffer(gl.ARRAY_BUFFER,routeBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.DYNAMIC_DRAW);bind({b:routeBuffer});gl.drawArrays(gl.LINE_STRIP,0,arr.length/10);let lens=[0];for(let i=1;i<route.points.length;i++)lens.push(lens[i-1]+Math.hypot(...vsub(route.points[i],route.points[i-1])));let t=(lens.at(-1)||1)*routeT,i=1;while(i<lens.length-1&&lens[i]<t)i++;let a=route.points[i-1],b=route.points[i]||a,k=(t-lens[i-1])/(lens[i]-lens[i-1]||1);let p=[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([...pos(p,.8),0,0,0,1,.83,.43,-3]),gl.DYNAMIC_DRAW);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*10);gl.drawArrays(gl.POINTS,0,1);}
-function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);floors.forEach(f=>f.y=f.index*spread);if(auto){orbitYaw+=dt*.18;updateCameraRotation();}matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();let diff=targetSpread-spread;spread+=diff*Math.min(1,dt*8);floors.forEach(f=>f.y=f.index*spread);if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
+ else rotateCameraLocal([0,1,0],dt*.18);}matrices();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
 drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();requestAnimationFrame(render);}
@@ -244,7 +281,8 @@ function beginGesture(){
   p.length?[p[0].x,p[0].y]:null;
  matrices();
  gesture={target:target.slice(),distance,yaw:orbitYaw,pitch:orbitPitch,roll:orbitRoll,
-  p:p.map(point=>({...point})),anchor:center?worldPointAt(center[0],center[1],target[1]):null};
+  orientation:q.slice(),p:p.map(point=>({...point})),
+  anchor:center?worldPointAt(center[0],center[1],target[1]):null};
 }
 canvas.addEventListener('pointerdown',e=>{
  if(!ready)return;stopAuto();canvas.focus();

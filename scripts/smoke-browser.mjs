@@ -209,8 +209,11 @@ try {
     const closed=get();
     send('pointerup',75,15,0);
     send('pointerup',74,-95,0);
+    // Capture AFTER releasing both fingers; 'closed' is a mid-gesture
+    // snapshot and is expected to still contain two live pointer IDs.
+    const afterRelease=get();
     return {
-      before,panned,spread,closed,
+      before,panned,spread,closed,afterRelease,
       touchAction:getComputedStyle(viewport).touchAction,
       photographTransform:document.querySelector('#referenceImage').getScreenCTM().toString(),
       geometryTransform:document.querySelector('#traceOverlay').getScreenCTM().toString()
@@ -228,7 +231,8 @@ try {
     'Pinch IN must reduce scale');
   assert.equal(compareTouch.photographTransform,compareTouch.geometryTransform,
     'Source photo and vector paths MUST share exactly the same transform');
-  assert.equal(compareTouch.closed.pointerCount,0,'No stale touch pointers after gesture');
+  assert.equal(compareTouch.closed.pointerCount,2,'Both synthetic fingers remain active during pinch-in');
+  assert.equal(compareTouch.afterRelease.pointerCount,0,'No stale touch pointers after releasing both fingers');
   await page.locator('#compareResetView').click();
   const resetCompare=await page.evaluate(()=>window.RetailNavComparison.getState());
   assert.equal(resetCompare.zoomPercent,100,'Reset centres comparison and restores 100% zoom');

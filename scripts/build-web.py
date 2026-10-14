@@ -96,6 +96,14 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
         floor_data.append([floor_id, item["name"], item["source"], geometry, walk])
     catalog[slug] = {**info, "floors": floor_data, "units": units,
                      "floorLabels": [f[0] for f in floor_data]}
+# The photographed nine-floor model is now loaded INSIDE the RetailNav main
+# mall selector, keeping Aventura and AP Plaza unchanged. The historical seven
+# floor source files remain available for side-by-side regression review.
+if "new-world-city-shanghai" in catalog:
+    from newworld9_catalog import upgrade as upgrade_newworld9
+    old = catalog["new-world-city-shanghai"]
+    catalog["new-world-city-shanghai"] = upgrade_newworld9(repo, old, old["units"])
+
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
     "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),

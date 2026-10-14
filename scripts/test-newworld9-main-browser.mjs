@@ -179,6 +179,10 @@ try {
     'Camera must pass above, below, and upside down without a pole clamp');
   assert.ok(Math.abs(Math.hypot(...spherical.inverted.cameraQuaternion)-1)<.00001);
   await page.locator('#reset').click();
+  // The 2D control intentionally focuses L2, so restore the whole building
+  // before validating geometry changes across its nine storeys.
+  await page.locator('#floorSelect').selectOption('ALL');
+  await page.waitForFunction(()=>window.__RETAILNAV__.getState().active==='ALL');
 
   // Changing L3 from 4m to 6m moves L4-L9 AND recomputes every link from L3.
   const original=await page.evaluate(()=>({

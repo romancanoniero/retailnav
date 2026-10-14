@@ -1,0 +1,116 @@
+[
+  {
+    "name": "aventura-planta-361",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-planta-361-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 18736,
+    "nonwhitePercent": 14.06,
+    "meanRGB": [
+      247.5,
+      249.3,
+      250.5
+    ]
+  },
+  {
+    "name": "aventura-planta-362",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-planta-362-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 18682,
+    "nonwhitePercent": 13.55,
+    "meanRGB": [
+      247.7,
+      249.3,
+      250.4
+    ]
+  },
+  {
+    "name": "aventura-planta-363",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-planta-363-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 12494,
+    "nonwhitePercent": 9.68,
+    "meanRGB": [
+      249.8,
+      251.1,
+      251.9
+    ]
+  },
+  {
+    "name": "aventura-superposicion-ll-ul",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-superposicion-ll-ul-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 22230,
+    "nonwhitePercent": 11.22,
+    "meanRGB": [
+      252.6,
+      247.9,
+      245.0
+    ]
+  },
+  {
+    "name": "aventura-superposicion-ul-l3",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-superposicion-ul-l3-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 20162,
+    "nonwhitePercent": 8.54,
+    "meanRGB": [
+      251.1,
+      248.7,
+      250.1
+    ]
+  },
+  {
+    "name": "aventura-superposicion-tres-plantas",
+    "size": [
+      5400,
+      3400
+    ],
+    "preview": "aventura-superposicion-tres-plantas-vista.webp",
+    "previewSize": [
+      1000,
+      630
+    ],
+    "previewBytes": 22610,
+    "nonwhitePercent": 10.78,
+    "meanRGB": [
+      250.6,
+      247.5,
+      245.8
+    ]
+  }
+]

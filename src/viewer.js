@@ -4,7 +4,7 @@
 const $=id=>document.getElementById(id), K=['anchor','unit','zone','corridor','void','slab'];
 let data, floors=[], gl, ctx2d=null, program, loc, canvas=$('canvas'), frame=0, lastTime=0, mvp, invMvp, toastTimer, ready=false;
 let dirty=true;
-let active='ALL', wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
+let active='ALL', searchFloorSet=null,searchCommitted='',searchMatchedVectors=new Set(),wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
 let lastEarth3DPitch=-.70,earth2D=false;
@@ -230,7 +230,11 @@ function palette(f,i,line){
                  f.k==='slab'||f.k==='corridor'?.32:.23;
  return blendColors(base,floorTone,influence).map(x=>Math.max(0,Math.min(1,x)));
 }
-function geometry(floor){let faces=[],edges=[],points=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);f.flat=[];function tri(a,b,c,n){[a,b,c].forEach(p=>{emit(faces,p,n,col,f.gid);f.flat.push(...p,...n);});}
+function geometry(floor){let faces=[],edges=[],points=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
+ if(searchMatchedVectors.has(f.floor+':'+f.id)){
+  col=mapRgb('mapSelected',[1,.69,.29]);edgeCol=[1,.88,.29];
+ }
+ f.flat=[];function tri(a,b,c,n){[a,b,c].forEach(p=>{emit(faces,p,n,col,f.gid);f.flat.push(...p,...n);});}
 if(f.k!=='void'){for(let i=0;i<f.t.length;i+=3){let a=pos(f.p[f.t[i]],h),b=pos(f.p[f.t[i+1]],h),c=pos(f.p[f.t[i+2]],h);if(cross(vsub(b,a),vsub(c,a))[1]<0)[b,c]=[c,b];tri(a,b,c,[0,1,0]);}}
 for(const ring of f.r){for(let j=0;j<ring.length;j++){let a=pos(ring[j],h),b=pos(ring[(j+1)%ring.length],h);emit(edges,a,[0,0,0],edgeCol,f.gid);emit(edges,b,[0,0,0],edgeCol,f.gid);emit(points,a,[0,0,0],edgeCol,f.gid);if(['anchor','unit','amenity','zone','slab'].includes(f.k)){let bottom=f.k==='slab'?-.55:0,aa=[a[0],bottom,a[2]],bb=[b[0],bottom,b[2]],normal=norm([b[2]-a[2],0,a[0]-b[0]]);tri(aa,bb,b,normal);tri(aa,b,a,normal);if(Math.hypot(a[0]-b[0],a[2]-b[2])>1.1){emit(edges,aa,[0,0,0],vmul(edgeCol,.65),f.gid);emit(edges,a,[0,0,0],vmul(edgeCol,.65),f.gid);}}}}
 f.flat=new Float32Array(f.flat);}
@@ -249,7 +253,66 @@ function bind(g){gl.bindBuffer(gl.ARRAY_BUFFER,g.b);let names=['aPos','aNormal',
 let grid;
 function makeGrid(){if(!gl)return;let a=[];const tone=mapRgb('mapGrid',[.065,.13,.19]);for(let n=-85;n<=85;n+=5){for(let p of [[n,-.9,-70],[n,-.9,70],[-85,-.9,n],[85,-.9,n]])a.push(...p,0,0,0,...tone,-2);}if(grid?.b)gl.deleteBuffer(grid.b);let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(a),gl.STATIC_DRAW);grid={b,n:a.length/10};}
 function resize(){let r=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;if(gl)gl.viewport(0,0,w,h);} }
-function visible(){return floors.filter(f=>active==='ALL'||f.id===active);}
+function visible(){return floors.filter(f=>searchFloorSet?searchFloorSet.has(f.id):active==='ALL'||f.id===active);}
+function groundReferenceFloor(){
+ const preferred=selectedMall.defaultVisitorReference?.floor;
+ return floors.some(f=>f.id===preferred)?preferred:
+  (floors.find(f=>['PB','G','GF','P0','L1','1','LL'].includes(f.id))?.id||floors[0]?.id);
+}
+function visitorFloorReference(){
+ const positioning=window.RetailNavIndoor?.getState?.();
+ const floor=positioning?.referenceFloor||positioning?.anchor?.floor;
+ return floors.some(f=>f.id===floor)?floor:groundReferenceFloor();
+}
+function showFloorReference(){
+ const label=$('rnFloorReference');
+ if(!label)return;
+ const pos=window.RetailNavIndoor?.getState?.();
+ const floor=visitorFloorReference();
+ const actual=Boolean(pos?.anchor&&pos?.referenceSource!=='fallback-entry'&&pos?.referenceSource!=='fallback-floor');
+ label.textContent=(actual?'Planta indicada ':'Referencia provisional ')+floor+
+  (searchFloorSet?' · '+searchFloorSet.size+' plantas abiertas':'');
+ label.title=actual?'Referencia del usuario; la precisión depende de su fuente':
+  'Sin piso interior verificado: planta baja/1 o primera planta disponible. No equivale a posición GPS.';
+}
+function applySearchFloors(query){
+ const term=String(query||'').trim();
+ if(!term){clearSearchFloors();return {floors:[],matches:0};}
+ window.RetailNavUnits?.setQuery?.(term);
+ searchCommitted=term;
+ const matches=window.RetailNavUnits?.find?.(term)||[];
+ const ref=visitorFloorReference();
+ if(ref)active=ref;
+ searchFloorSet=new Set([ref,...matches.map(u=>u.floor)].filter(id=>floors.some(f=>f.id===id)));
+ searchMatchedVectors=new Set((window.RetailNavUnits?.getMatchedVectors?.()||[])
+  .map(v=>v.floor+':'+v.polygonId));
+ rebuildSearchGeometry();
+ const picker=$('floorSelect');
+ if(picker&&[...picker.options].some(opt=>opt.value===active))picker.value=active;
+ $('showAllFloors').hidden=floors.length<2;
+ $('showAllFloors').textContent='← Todas las plantas';
+ $('floorSpacing').hidden=floors.length<2;
+ $('spread').disabled=floors.length<2;
+ $('mapTitle').textContent='Tu planta '+ref+' y '+matches.length+' locales coincidentes';
+ $('mapSubtitle').textContent='Plantas visibles: '+[...searchFloorSet].join(', ')+
+  '. Geometría y productos asociados según directorio provisional.';
+ showFloorReference();dirty=true;
+ return {floors:[...searchFloorSet],userFloor:ref,matches:matches.length,
+  vectors:searchMatchedVectors.size};
+}
+function clearSearchFloors(){
+ searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
+ window.RetailNavUnits?.clearQuery?.();
+ rebuildSearchGeometry();showFloorReference();dirty=true;
+}
+function rebuildSearchGeometry(){
+ if(!ready||!gl)return;
+ for(const floor of floors){
+  for(const item of Object.values(floor.gpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+  for(const item of Object.values(floor.roofGpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+  geometry(floor);
+ }
+}
 function screen(p){let v=mp(mvp,[...p,1]);let r=canvas.getBoundingClientRect();return {x:(v[0]/v[3]*.5+.5)*r.width,y:(.5-v[1]/v[3]*.5)*r.height,z:v[2]/v[3],w:v[3]};}
 let labelElems=[];let placingPosition=false;
 function makeLabels(){
@@ -578,7 +641,9 @@ function renderCanvas(dt){
  for(const {floor,f} of candidates){
   const fh=height(f),fy=floor.y,top=fy+fh,isSelected=selected&&selected.gid===f.gid;
   if(scan){c.fillStyle=isSelected?'#ffc977':'#6ce2e2';c.globalAlpha=.8;for(const r of f.r)for(let j=0;j<r.length;j+=2){let pt=xyz(pos(r[j],top));if(!pt)continue;c.beginPath();c.arc(pt.x,pt.y,Math.max(.7,1.3*(215/distance)),0,Math.PI*2);c.fill();}c.globalAlpha=1;continue;}
-  let color=isSelected?mapColor('mapSelected','#ab7133'):(themed?rgbHex(palette(f,floor.index,false)):colors[f.k]);let line=isSelected?mapColor('mapSelected','#ffd17a'):(themed?rgbHex(palette(f,floor.index,true)):lines[f.k]);
+  const searchMatch=searchMatchedVectors.has(f.floor+':'+f.id);
+   let color=isSelected||searchMatch?mapColor('mapSelected','#ab7133'):(themed?rgbHex(palette(f,floor.index,false)):colors[f.k]);
+   let line=isSelected||searchMatch?'#FFDE69':(themed?rgbHex(palette(f,floor.index,true)):lines[f.k]);
   if(['anchor','unit','amenity','zone','slab'].includes(f.k)){
    c.fillStyle=themed?(isSelected?mapColor('mapSelected','#ab7133'):rgbHex(blendColors(palette(f,floor.index,false),mapRgb('mapOutline',[.25,.3,.35]),.22))):(isSelected?'rgba(165,99,40,.72)':'rgba(25,65,85,.67)');
    for(const r of f.r)for(let i=0;i<r.length;i++){
@@ -590,8 +655,8 @@ function renderCanvas(dt){
   c.beginPath();let any=false;for(const r of f.r)any=pth(r,top)||any;
   if(!any)continue;
   c.fillStyle=color;c.globalAlpha=f.k==='slab'?.92:f.k==='corridor'?.60:wire?.16:f.k==='void'?.42:.87;c.fill('evenodd');c.globalAlpha=1;
-  c.strokeStyle=line;c.lineWidth=isSelected?2.2:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
-  if(isSelected){c.shadowColor='#ffc672';c.shadowBlur=13;}else if(f.k==='corridor'){c.shadowColor='#25c6c9';c.shadowBlur=2;}
+  c.strokeStyle=line;c.lineWidth=isSelected||searchMatch?2.2:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
+  if(isSelected||searchMatch){c.shadowColor='#ffc672';c.shadowBlur=13;}else if(f.k==='corridor'){c.shadowColor='#25c6c9';c.shadowBlur=2;}
   c.stroke();c.shadowBlur=0;
  }
  if(route&&visible().some(x=>x.id===route.floor)){
@@ -627,7 +692,11 @@ function setFloor(id){
  if(!ready)return;
  if(floors.length===1)id=floors[0].id;
  if(id!=='ALL'&&!floors.some(f=>f.id===id))return;
- active=id;
+ if(searchFloorSet){
+  searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
+  window.RetailNavUnits?.clearQuery?.();rebuildSearchGeometry();
+ }
+ active=id;showFloorReference();
  $('showAllFloors').hidden=floors.length<=1||id==='ALL';
  document.querySelector('.stage')?.classList.toggle('focused',id!=='ALL');
  route=null;routeRunning=false;$('routeInfo').textContent='';

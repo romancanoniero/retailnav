@@ -60,6 +60,8 @@ try{
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['L1','L5'],
   'confirming an existing luggage tag must open user floor and all matching floors');
+ assert.equal(await page.locator('#floorSelect').inputValue(),'MATCHES',
+  'Floor picker must clearly display multi-floor search mode instead of pretending only L1 is open');
  assert.equal(state.highlightedVectorCount,0,
   'The photographed directory entry 5A10 does not yet have a verified map region; never invent a polygon');
  assert.equal(await page.locator('.rnUnitResult').filter({hasText:'5A10'}).count(),1);

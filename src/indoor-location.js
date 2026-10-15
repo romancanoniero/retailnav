@@ -71,7 +71,9 @@ function renderLiveLocation(){
  }
  if(!validAnchor&&reference.floor){
   text+=' · Referencia provisional '+reference.floor;
-  state='provisional';
+  // Keep GPS permission/fix status independent from the displayed floor:
+  // a ground-level fallback is never a substitute for a valid GNSS reading.
+  if(state==='locating')state='provisional';
  }
  const full=hasFix?'Lat '+gpsLatitude.toFixed(6)+', Lon '+gpsLongitude.toFixed(6)+
   '. Error horizontal ±'+Math.round(gpsAccuracy??0)+' m. '+

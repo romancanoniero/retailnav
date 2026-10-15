@@ -13,6 +13,8 @@ on:
       - "scripts/test-map-cache.mjs"
       - "scripts/smoke-browser.mjs"
       - "scripts/test-map-cache-browser.mjs"
+      - "deploy/deploy-isolated.sh"
+      - "docs/MAP-CACHE-VERSIONS.md"
   workflow_dispatch:
   pull_request:
     paths:
@@ -21,6 +23,7 @@ on:
       - "src/viewer.js"
       - "scripts/build-web.py"
       - "scripts/verify.py"
+      - "deploy/deploy-isolated.sh"
 permissions:
   contents: read
 jobs:
@@ -37,6 +40,8 @@ jobs:
           node --check src/map-cache.js
           node --check src/viewer.js
           node --check src/mall-selector.js
+      - name: Verify deploy shell syntax
+        run: bash -n deploy/deploy-isolated.sh
       - name: Cache version and offline unit tests
         run: node --test scripts/test-map-cache.mjs
       - name: Generate immutable mall packages from the canonical vectorized files

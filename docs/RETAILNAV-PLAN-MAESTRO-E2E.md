@@ -715,7 +715,7 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 
 ### 2026-10-15 — BRAND-UX-02 — tipografías por shopping, identidad de carga y contraste
 
-- **Estado:** desarrollado en PR #36, en comprobación de CI/Contabo antes de marcarlo como desplegado.
+- **Estado:** implementado, fusionado y desplegado en Contabo (PR #36, commit `e770f03e093acc6309652d7925668fc8e6948e5b`, publicación CI `38690684382` concluida correctamente; suites de paleta, caché, nueve plantas de New World City e iPhone superadas).
 - **Requerimiento:** toda la web app del visitante debe utilizar la tipografía elegida por el shopping, **con preset obligatorio**; la pantalla blanca de carga coloca **logo verificado (si existe) sobre el nombre del shopping y debajo «Powered by RetailNav»**, luego muestra el estado y progreso.
 - **Defaults:** Aventura Mall usa `theme.font=editorial`; un mall sin paleta publicada usa `modern` clásico. Presets permitidos: `editorial`, `modern`, `rounded`. Los cambios de visitantes sólo son vista previa local aislada por shopping; la elección pública será responsabilidad del futuro panel de administración autenticado.
 - **Función E2E:** `src/mall-theme.js` valida preset, asigna el stack de fuentes y expone un generador para Canvas; `src/style.css` aplica el preset a toda la UI, diálogos, buscador, controles, etiquetas, SVG y capa de carga. `src/roof-text3d.js` reconstruye glifos de nombres y códigos sobre la malla, `src/districts-webgl.js` reconstituye el atlas de letreros y `src/viewer.js` refresca esas letras sin alterar los polígonos del plano. `src/mall-selector.js` replica el logo del registro persistente o respaldo verificado en la pantalla de carga.

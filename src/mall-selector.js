@@ -20,11 +20,9 @@ function get(id){return document.getElementById(id);}
 // reviewed copy as a fallback when the optional API is unavailable.
 function setMallHeaderBrand(mall){
  const header=get('mallHeaderName'),img=get('mallHeaderLogo');
- const loadingIcon=get('rnMapDownloadLogo');
  if(header)header.textContent=mall.name||'Centro comercial';
- if(loadingIcon){loadingIcon.hidden=true;loadingIcon.removeAttribute('src');}
- // Both brand placements intentionally use the same approved image. The
- // loader never shows a missing icon or the logo of a different shopping.
+ // The separate loader-brand script has already loaded the logo before
+ // this large catalog/viewer script, so never reset the loader here.
  window.RETAILNAV_BRAND_STATUS={mallId:mall.id,source:'none',databaseRegistered:false,visible:false};
  if(!img)return;
  img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');
@@ -42,14 +40,8 @@ function setMallHeaderBrand(mall){
  const fallback=safeImage(mall.logoSymbolUrl||mall.logoUrl||mall.logo);
  const state=window.RETAILNAV_BRAND_STATUS;
  if(fallback){
-  img.onload=()=>{
-   img.hidden=false;state.visible=true;
-   if(loadingIcon){loadingIcon.src=img.currentSrc||img.src;loadingIcon.hidden=false;}
-  };
-  img.onerror=()=>{
-   img.hidden=true;state.visible=false;
-   if(loadingIcon){loadingIcon.hidden=true;loadingIcon.removeAttribute('src');}
-  };
+  img.onload=()=>{img.hidden=false;state.visible=true;};
+  img.onerror=()=>{img.hidden=true;state.visible=false;};
   img.src=fallback.href;
   state.source='static';
  }
@@ -80,7 +72,7 @@ function setMallHeaderBrand(mall){
    // Only replace the static logo after successfully loading the DB asset.
    img.src=logo.href;
    img.hidden=false;
-   if(loadingIcon){loadingIcon.src=logo.href;loadingIcon.hidden=false;}
+   window.RetailNavLoaderBrand?.useVerifiedLogo?.(logo.href);
    state.source='database';
    state.visible=true;
    state.databaseRegistered=true;

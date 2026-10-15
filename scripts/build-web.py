@@ -104,11 +104,38 @@ if "new-world-city-shanghai" in catalog:
     old = catalog["new-world-city-shanghai"]
     catalog["new-world-city-shanghai"] = upgrade_newworld9(repo, old, old["units"])
 
+# Publish immutable geometry snapshots per mall. Keeping their versions in the
+# lightweight HTML catalog lets the browser validate Cache Storage before
+# showing any 3D floor. No mall geometry is embedded in the HTML anymore.
+map_dir = repo / "public" / "maps" / "malls"
+map_dir.mkdir(parents=True, exist_ok=True)
+for slug, mall in catalog.items():
+    floor_data = mall["floors"]
+    assert floor_data and len({item[0] for item in floor_data}) == len(floor_data)
+    # Include mall-specific POIs, commercial metadata and geometry in the
+    # version input, so a name/landmark edit also invalidates the map snapshot.
+    map_bytes = json.dumps(mall, ensure_ascii=False, separators=(",", ":"),
+                           sort_keys=True).encode("utf-8")
+    version = hashlib.sha256(map_bytes).hexdigest()
+    bundle = {"schema": "retailnav.map.bundle.v1", "mallId": slug,
+              "version": version, "floors": floor_data}
+    payload = json.dumps(bundle, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    target = map_dir / (slug+"-"+version+".json")
+    target.write_bytes(payload)
+    mall["mapAsset"] = {
+        "url": "maps/malls/"+target.name,
+        "version": version,
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "bytes": len(payload), "floorCount": len(floor_data),
+    }
+    del mall["floors"]
+
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
     "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),
     "__CSS__": (repo / "src/style.css").read_text(encoding="utf-8"),
-    "__MODEL__": json.dumps(floors, ensure_ascii=False, separators=(",", ":")),
+    "__MODEL__": "[]",  # legacy compatibility; map data is never embedded
+    "__MAP_CACHE__": (repo / "src/map-cache.js").read_text(encoding="utf-8"),
     "__REFERENCES__": (repo / "src/references.js").read_text(encoding="utf-8"),
     "__DEMO_FRIENDS__": (repo / "src/demo-friends.js").read_text(encoding="utf-8"),
     "__ESCALATORS__": (repo / "src/escalators3d.js").read_text(encoding="utf-8"),

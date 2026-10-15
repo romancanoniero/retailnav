@@ -246,15 +246,18 @@ export async function handleMallAdmin(req,res,url){
     id,name:input.name,city:input.city,website:input.website||'',
     logoUrl:input.logoUrl||null,theme:validateTheme(input.theme||{}),
     floors:input.floors,units:input.units,pois:input.pois,
+    preservedCatalog:input.preservedCatalog||existing.preservedCatalog||null,
     scale:input.scale??.15,revision:existing.revision+1,updatedBy:user.username,
     updatedAt:new Date().toISOString()
    };
-   if(candidate.logoUrl&&!/^api\/public\/assets\/[a-z0-9-]+\/[a-f0-9]{64}\.(png|jpg|webp)$/.test(candidate.logoUrl))
+   const officialSourceLogo=id==='aventura'&&candidate.logoUrl==='branding/aventura-logo.svg';
+   if(candidate.logoUrl&&!officialSourceLogo&&!/^api\/public\/assets\/[a-z0-9-]+\/[a-f0-9]{64}\.(png|jpg|webp)$/.test(candidate.logoUrl))
     return error(res,400,'El logo debe provenir de los archivos del shopping');
-   if(candidate.logoUrl&&!candidate.logoUrl.startsWith('api/public/assets/'+id+'/'))
+   if(candidate.logoUrl&&!officialSourceLogo&&!candidate.logoUrl.startsWith('api/public/assets/'+id+'/'))
     return error(res,403,'No podés usar recursos de otro shopping');
    for(const f of candidate.floors||[]){
-    if(f.imageUrl&&(!/^api\/public\/assets\/[a-z0-9-]+\/[a-f0-9]{64}\.(png|jpg|webp)$/.test(f.imageUrl)||
+    const isOriginal=Boolean(f.compactFloor)&&candidate.preservedCatalog?.floorReferences?.[f.id]?.url===f.imageUrl;
+    if(f.imageUrl&&!isOriginal&&(!/^api\/public\/assets\/[a-z0-9-]+\/[a-f0-9]{64}\.(png|jpg|webp)$/.test(f.imageUrl)||
       !f.imageUrl.startsWith('api/public/assets/'+id+'/')))
      return error(res,403,'Imagen de planta de otro shopping');
    }

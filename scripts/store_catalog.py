@@ -15,6 +15,39 @@ SCHEMA = "retailnav.mall.stores.v1"
 EVIDENCE = {"photo-store-name-unverified", "mall-reviewed-products"}
 
 
+def aventura_vector_references(mall):
+    """Publish already identified Aventura units/anchors with VECTOR IDs only.
+
+    The input photographs have no verified lease/store numbers. A vector
+    reference such as LL-008 must NEVER be misrepresented as a tenant code.
+    This is deliberately not an inventory of operating businesses.
+    """
+    if mall.get("id") != "aventura" or mall.get("units"):
+        return
+    units = []
+    for fid, _name, _source, features, _walk in mall["floors"]:
+        for record in features:
+            identifier, kind, label = record[0], record[1], record[2]
+            if kind not in (0, 1):
+                continue
+            coordinates = record[6]
+            named = (kind == 0 and bool(label) and
+                     label not in ("Ancla sin identificar",))
+            units.append({
+                "floor": fid, "code": identifier,
+                "codeKind": "map-vector-reference-not-lease-number",
+                "name": label if named else "",
+                "category": "ancla indicada en plano" if kind == 0 else "local sin identificar",
+                "aliases": "", "tags": "",
+                "polygonId": identifier,
+                "x": coordinates[0], "y": coordinates[1],
+                "source": "original-aventura-mall-photographed-guide",
+                "nameStatus": "photo-named-not-tenant-verified" if named else "unidentified",
+                "positionStatus": "vector-centroid-photo-provisional-not-entrance"
+            })
+    mall["units"] = units
+
+
 def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     hints_file = repo / "data" / "store-products" / (mall_id + ".json")
     hints = {}
@@ -95,6 +128,7 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
 
 
 def publish_table(repo: Path, mall_id: str, mall: dict) -> dict:
+    aventura_vector_references(mall)
     doc = build_table(repo, mall_id, mall)
     raw = (json.dumps(doc, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf8")
     relative = "catalog/malls/" + mall_id + "/stores.json"

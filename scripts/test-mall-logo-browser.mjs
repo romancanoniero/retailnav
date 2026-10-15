@@ -78,6 +78,14 @@ try{
  assert.deepEqual(state.parentChildren,['mallHeaderLogo','mallHeaderName']);
  assert.ok(state.imageRight<=state.titleLeft+2,'logo must be on LEFT of name');
  assert.match(state.logoSrc,/api\/mall-brands\/aventura\/logo\.svg$/);
+ const loadingLogo=await page.locator('#rnMapDownloadLogo').evaluate(el=>({
+  url:el.getAttribute('src'),loaded:el.complete&&el.naturalWidth>0,hidden:el.hidden
+ }));
+ assert.equal(loadingLogo.hidden,false);
+ assert.equal(loadingLogo.loaded,true);
+ assert.match(loadingLogo.url,/api\/mall-brands\/aventura\/logo\.svg$/);
+ const loaderFont=await page.locator('#rnMapDownloadMall').evaluate(el=>getComputedStyle(el).fontFamily);
+ assert.match(loaderFont,/Helvetica Neue/,'Aventura default typography should apply even to white loading screen');
  console.log('PASS registered logo from persistent JSON database to left of Aventura Mall');
 
  await page.locator('#mallSettingsBtn').click();
@@ -89,6 +97,23 @@ try{
  await page.waitForFunction(()=>getComputedStyle(document.getElementById('mallHeaderName')).color==='rgb(16, 15, 15)');
  await page.locator('#mallSettingsClose').click();
  console.log('PASS title follows branded swatches and remains readable after local preview changes');
+ await page.locator('#mallSettingsBtn').click();
+ await page.locator('#rnPaletteOptions summary').click();
+ await page.locator('#rnTypographyPreset').selectOption('rounded');
+ await page.waitForFunction(()=>{
+  const font=window.RetailNavThemes?.getState()?.theme?.font;
+  return font==='rounded'&&
+   ['mallHeaderName','rnMapDownloadMall','search','mallSettingsTitle'].every(id=>
+    getComputedStyle(document.getElementById(id)).fontFamily.includes('Trebuchet MS'));
+ });
+ await page.locator('#rnPaletteSave').click();
+ await page.locator('#mallSettingsClose').click();
+ const fontAfter=await page.evaluate(()=>window.RetailNavThemes.getState().theme.font);
+ assert.equal(fontAfter,'rounded');
+ const stateAfterFont=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.equal(stateAfterFont.ready,true);
+ assert.equal(stateAfterFont.features.length,3);
+ console.log('PASS selected shopping typography affects header, loader, search and dialogs without altering map');
 
  // API failure must NOT prevent maps or hide the mall name.
  serveDb=false;
@@ -104,6 +129,12 @@ try{
  assert.equal(logo.hidden,false);
  assert.equal(logo.complete,true);
  assert.match(logo.src,/branding\/aventura-mark\.svg$/);
+ const fallbackLoading=await fallback.locator('#rnMapDownloadLogo').evaluate(el=>({
+  hidden:el.hidden,src:el.getAttribute('src'),loaded:el.complete&&el.naturalWidth>0
+ }));
+ assert.equal(fallbackLoading.hidden,false);
+ assert.equal(fallbackLoading.loaded,true);
+ assert.match(fallbackLoading.src,/branding\/aventura-mark\.svg$/);
  console.log('PASS approved static logo fallback while API is unavailable');
 
  await page.goto(origin+'?mall=ap-plaza',{waitUntil:'domcontentloaded',timeout:45000});
@@ -118,6 +149,10 @@ try{
  assert.equal(alternate.logo,true);
  assert.equal(alternate.nameColor,'rgb(101, 230, 224)');
  assert.equal(alternate.theme.mallNameColor,'#65E6E0');
+ assert.equal(alternate.theme.theme.font,'modern');
+ assert.match(await page.locator('#mallHeaderName').evaluate(el=>getComputedStyle(el).fontFamily),
+  /Segoe UI/);
+ assert.equal(await page.locator('#rnMapDownloadLogo').isVisible(),false);
  assert.ok(alternate.theme.mallNameContrast>=4.5);
  assert.deepEqual(errors,[]);
  console.log('PASS mall isolation (other shops unchanged)');

@@ -20,6 +20,7 @@ const COLOR_KEYS={
  mapOutline:'Contornos y divisiones',mapVoid:'Aberturas y vacíos',
  mapAmenity:'Servicios e información',mapSelected:'Local seleccionado',
  mapRoute:'Recorrido',mapGrid:'Cuadrícula 3D',
+ mapText:'Numeración sobre locales',mapNameText:'Nombres sobre locales',
  mapFloor1:'Tono de planta inferior',mapFloor2:'Tono de planta superior',
  mapFloor3:'Tono de tercera planta'
 };
@@ -30,6 +31,7 @@ const CLASSIC=Object.freeze({
  mapZone:'#34516A',mapSlab:'#183044',mapOutline:'#70B8C6',
  mapVoid:'#1E283C',mapAmenity:'#09BED3',mapSelected:'#FFAE4A',
  mapRoute:'#FFCE70',mapGrid:'#102131',
+ mapText:'#F0FAFF',mapNameText:'#FFE08F',
  mapFloor1:'#365B71',mapFloor2:'#4A6A80',mapFloor3:'#55748A',
  font:'modern',corners:'soft'
 });
@@ -40,6 +42,7 @@ const CONTRAST=Object.freeze({
  mapZone:'#E5E5E5',mapSlab:'#F1F1F1',mapOutline:'#111111',
  mapVoid:'#BDBDBD',mapAmenity:'#0E4C73',mapSelected:'#955100',
  mapRoute:'#845000',mapGrid:'#D0D0D0',
+ mapText:'#111111',mapNameText:'#222222',
  mapFloor1:'#CCCCCC',mapFloor2:'#EEEEEE',mapFloor3:'#F3F3F3',
  font:'modern',corners:'square'
 });
@@ -50,7 +53,7 @@ const uiVars={
  mapUnit:'map-unit',mapAnchor:'map-anchor',mapCorridor:'map-corridor',
  mapZone:'map-zone',mapSlab:'map-slab',mapOutline:'map-outline',
  mapVoid:'map-void',mapAmenity:'map-amenity',mapSelected:'map-selected',
- mapRoute:'map-route',mapGrid:'map-grid',mapFloor1:'map-floor1',
+ mapRoute:'map-route',mapGrid:'map-grid',mapText:'map-text',mapNameText:'map-name-text',mapFloor1:'map-floor1',
  mapFloor2:'map-floor2',mapFloor3:'map-floor3'
 };
 const $=id=>document.getElementById(id);

@@ -18,8 +18,11 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - ".github/workflows/map-cache.yml"
       - "src/map-cache.js"
       - "src/page.template.html"
+      - "src/style.css"
+      - "scripts/test-map-cache-browser.mjs"
       - "src/viewer.js"
       - "scripts/build-web.py"
       - "scripts/verify.py"

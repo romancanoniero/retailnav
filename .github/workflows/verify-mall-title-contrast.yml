@@ -5,6 +5,10 @@ on:
     paths:
       - "src/style.css"
       - "src/mall-theme.js"
+      - "src/mall-selector.js"
+      - "src/roof-text3d.js"
+      - "src/districts-webgl.js"
+      - "src/viewer.js"
       - "scripts/test-mall-themes.mjs"
       - "scripts/test-mall-logo-browser.mjs"
       - "scripts/test-map-cache-browser.mjs"
@@ -26,6 +30,10 @@ jobs:
         run: |
           node --check src/mall-theme.js
           node --check src/mall-selector.js
+          node --check src/roof-text3d.js
+          node --check src/districts-webgl.js
+          node --check src/viewer.js
+          node --check scripts/test-map-cache-browser.mjs
           node --check scripts/test-mall-logo-browser.mjs
           node --test scripts/test-mall-themes.mjs
           node --test scripts/test-map-cache.mjs
@@ -48,7 +56,7 @@ jobs:
         run: |
           npm install --no-save --ignore-scripts playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Validate computed header colors and dynamic palette on iPhone viewport
+      - name: Validate global typography, on-screen logo and computed header colors on iPhone
         run: node scripts/test-mall-logo-browser.mjs
       - name: Verify versioned mall cache and geometry unaffected
         run: node scripts/test-map-cache-browser.mjs

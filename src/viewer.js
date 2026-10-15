@@ -1450,28 +1450,62 @@ $('rnConnectorsToggle').onclick=()=>{
   :'Conexiones verticales ocultas.');
  dirty=true;
 };$('auto').onclick=()=>{auto=!auto;$('auto').setAttribute('aria-pressed',String(auto));};$('wire').onclick=()=>{wire=!wire;$('wire').setAttribute('aria-pressed',String(wire));};$('points').onclick=()=>{scan=!scan;$('points').setAttribute('aria-pressed',String(scan));if(scan)notify('Puntos muestreados de estos vectores. No son datos LiDAR.');};$('labelsToggle').onclick=()=>{labelsOn=!labelsOn;$('labelsToggle').setAttribute('aria-pressed',String(labelsOn));};$('spread').oninput=()=>{targetSpread=Number($('spread').value);
- $('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';};const updateSearchPanel=()=>{
- // Closing a populated search restores map controls. Never leave a default
- // suggestions sheet covering WC, zoom or friends after the query is cleared.
- $('rnMapSearch').classList.toggle('finding',Boolean($('search').value.trim()));
- $('detail').hidden=true;results();
+ $('spreadValue').textContent=targetSpread>5?'Separadas':'Apiladas';};const renderSuggestions=()=>{
+ const host=$('rnSearchSuggestions'),query=$('search')?.value.trim()||'';
+ if(!host)return;
+ host.replaceChildren();
+ const options=window.RetailNavUnits?.suggestions?.(query,10)||[];
+ host.hidden=!query||!options.length;
+ for(const option of options){
+  const b=document.createElement('button');
+  b.type='button';b.className='rnSuggestedTag';b.setAttribute('role','option');
+  b.dataset.tag=option.term;
+  const label=document.createElement('span');label.textContent=option.term;
+  const count=document.createElement('small');
+  count.textContent=option.count+' locales · '+(option.verified?'algunas etiquetas revisadas':'etiqueta provisional');
+  b.append(label,count);
+  b.addEventListener('click',event=>{event.preventDefault();confirmSearch(option.term);});
+  host.append(b);
+ }
+};
+const confirmSearch=value=>{
+ const query=String(value||$('search').value).trim();
+ if(!query)return;
+ $('search').value=query;
+ const report=applySearchFloors(query);
+ $('rnMapSearch').classList.remove('finding');
+ $('rnSearchSuggestions').hidden=true;
+ $('search').blur();results();drawSearchMarkers();
+ notify(report.matches+' locales para «'+query+'» · plantas '+report.floors.join(', ')+
+  '. Productos y ubicaciones según directorio provisional.');
+};
+const updateSearchPanel=()=>{
+ const query=$('search').value.trim();
+ $('rnMapSearch').classList.toggle('finding',Boolean(query));
+ $('detail').hidden=true;
+ if(searchFloorSet&&query!==searchCommitted)clearSearchFloors();
+ results();renderSuggestions();
 };
 $('search').oninput=updateSearchPanel;
 $('search').onfocus=updateSearchPanel;
 $('search').addEventListener('keydown',event=>{
  if(event.key==='Escape'){
-  $('rnMapSearch').classList.remove('finding');$('search').blur();
+  $('rnMapSearch').classList.remove('finding');
+  $('rnSearchSuggestions').hidden=true;$('search').blur();
   event.stopPropagation();return;
  }
- if($('search').value.trim()&&(event.key==='ArrowDown'||event.key==='Enter')){
-  const first=$('results').querySelector('button:not([disabled])');
-  if(first){
-   event.preventDefault();
-   if(event.key==='Enter')first.click();else first.focus();
-  }
+ if(event.key==='Enter'&&$('search').value.trim()){
+  event.preventDefault();confirmSearch($('search').value);return;
+ }
+ if(event.key==='ArrowDown'){
+  const first=$('rnSearchSuggestions').querySelector('button:not([disabled])')||
+   $('results').querySelector('button:not([disabled])');
+  if(first){event.preventDefault();first.focus();}
  }
 });
-$('results').addEventListener('click',()=>$('rnMapSearch').classList.remove('finding'));
+$('results').addEventListener('click',()=>{
+ $('rnMapSearch').classList.remove('finding');$('rnSearchSuggestions').hidden=true;
+});
 document.addEventListener('pointerdown',event=>{
  if(!event.target.closest('#rnMapSearch'))
   $('rnMapSearch').classList.remove('finding');
@@ -1491,6 +1525,18 @@ $('compareSvg').addEventListener('click',compareMapClick);
 $('compareSaveIssue').onclick=saveAuditIssue;
 $('compareExportIssues').onclick=exportAuditIssues;
 $('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});
+ window.addEventListener('retailnav:indoor-observation',()=>{
+ showFloorReference();
+ if(searchFloorSet&&searchCommitted){
+  const previous=JSON.stringify([...searchFloorSet]);
+  const nextFloor=visitorFloorReference();
+  if(!searchFloorSet.has(nextFloor)||active!==nextFloor){
+   const report=applySearchFloors(searchCommitted);
+   if(JSON.stringify(report.floors)!==previous)results();
+  }
+ }
+ dirty=true;
+});
  window.addEventListener('orientationchange',()=>{resize();dirty=true;});
  window.visualViewport?.addEventListener('resize',()=>{resize();dirty=true;});}
 async function fetchJSON(url){let c=new AbortController(),timer=setTimeout(()=>c.abort(),15000);try{let res=await fetch(url,{signal:c.signal});if(!res.ok)throw new Error('HTTP '+res.status+' al descargar '+url);let total=Number(res.headers.get('content-length'))||0,got=0,chunks=[],reader=res.body.getReader();while(true){let {done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.byteLength;progress(total?Math.min(25,got/total*25):10,'Descargando vectores: '+Math.ceil(got/1024)+' KB'+(total?' / '+Math.ceil(total/1024)+' KB':''));}let bytes=new Uint8Array(got),off=0;chunks.forEach(x=>{bytes.set(x,off);off+=x.length;});return JSON.parse(new TextDecoder().decode(bytes));}finally{clearTimeout(timer);}}

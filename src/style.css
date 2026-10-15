@@ -988,3 +988,13 @@ body .topbar .rnMallBrand strong,body.rnThemeEnabled .rnMallBrand strong.rnHasWo
   max-width:40px;height:29px}
  body .topbar .rnMallBrand strong{font-size:clamp(14px,3.9vw,18px)}
 }
+
+/* Accessible mall-name contrast. This selector intentionally comes after the
+ * original light-on-dark header styles and after per-tenant theme rules.
+ * Palette logic chooses a saturated shopping accent when readable, otherwise
+ * falls back to its main text tone with WCAG AA contrast against the header. */
+body .topbar .rnMallBrand strong,
+body.rnThemeEnabled .topbar .rnMallBrand strong,
+body.rnThemeEnabled .topbar .rnMallBrand strong.rnHasWordmark{
+ color:var(--rn-mall-name-color,#EEF5FB);
+}

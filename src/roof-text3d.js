@@ -12,13 +12,15 @@ const ctx=scratch.getContext('2d',{willReadFrequently:true});
 const glyphs=new Map();
 const FONT='800 15px Arial, "PingFang SC", "Noto Sans CJK SC", sans-serif';
 function glyph(char){
- if(glyphs.has(char))return glyphs.get(char);
+ const font=window.RetailNavThemes?.canvasFont?.(800,15)||FONT;
+ const cacheKey=font+'|'+char;
+ if(glyphs.has(cacheKey))return glyphs.get(cacheKey);
  if(!ctx)return {rects:[],advance:9};
- ctx.font=FONT;
+ ctx.font=font;
  const advance=Math.max(5,Math.min(23,Math.ceil(ctx.measureText(char).width)));
  const width=advance+3,height=20;
  scratch.width=width;scratch.height=height;
- ctx.clearRect(0,0,width,height);ctx.font=FONT;
+ ctx.clearRect(0,0,width,height);ctx.font=font;
  ctx.fillStyle='#fff';ctx.textBaseline='top';
  ctx.fillText(char,1,0);
  const image=ctx.getImageData(0,0,width,height).data;
@@ -59,7 +61,7 @@ function glyph(char){
  }
  complete.push(...active.values());
  const value={rects:complete,advance:advance+1};
- glyphs.set(char,value);
+ glyphs.set(cacheKey,value);
  return value;
 }
 function textWidth(text){

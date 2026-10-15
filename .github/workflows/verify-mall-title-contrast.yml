@@ -7,6 +7,8 @@ on:
       - "src/mall-theme.js"
       - "scripts/test-mall-themes.mjs"
       - "scripts/test-mall-logo-browser.mjs"
+      - "scripts/test-map-cache-browser.mjs"
+      - "src/page.template.html"
       - ".github/workflows/verify-mall-title-contrast.yml"
   workflow_dispatch:
 permissions:

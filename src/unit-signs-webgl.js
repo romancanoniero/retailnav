@@ -38,8 +38,14 @@ function program(gl){
 }
 function create(gl){
  const shaderProgram=program(gl);
- const items=roofEntries.slice(0,300);
- const cw=192,ch=85,cols=8,rows=Math.max(1,Math.ceil(items.length/cols));
+ const cw=192,ch=85;
+ const maxTexture=gl.getParameter(gl.MAX_TEXTURE_SIZE)||4096;
+ const cols=Math.max(1,Math.min(8,Math.floor(maxTexture/cw)));
+ const maxRows=Math.max(1,Math.floor(maxTexture/ch));
+ // Use every mapped store that fits the actual GPU texture limit; every
+ // search match still has a source-linked textual result and DOM badge.
+ const items=roofEntries.slice(0,cols*maxRows);
+ const rows=Math.max(1,Math.ceil(items.length/cols));
  const atlas=document.createElement('canvas');
  atlas.width=cw*cols;atlas.height=ch*rows;
  const ctx=atlas.getContext('2d');
@@ -89,7 +95,7 @@ function create(gl){
    ctx.font='800 '+(code.length>9?'27':'34')+'px system-ui,sans-serif';
    ctx.fillText(code,x+cw/2,y+ch/2,cw-22);
   }
-  cells.set(item.code,{u0:(x+2)/atlas.width,u1:(x+cw-2)/atlas.width,
+  cells.set(item.storeId||(item.floor+':'+item.code),{u0:(x+2)/atlas.width,u1:(x+cw-2)/atlas.width,
    v0:1-(y+2)/atlas.height,v1:1-(y+ch-2)/atlas.height});
  }
  const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
@@ -183,7 +189,7 @@ function render(gl,mvp){
  }
  const state=view.getState();
  const visibleFloors=new Set(state.visible);
- const highlights=new Set(unitsApi.getHighlightedCodes?.()||[]);
+ const highlights=new Set(unitsApi.getHighlightedStoreIds?.()||[]);
  const selected=state.selectedCode??unitsApi.getState().selected;
  const regular=[],special={posts:[],body:[],trim:[],text:[]};
  drawnRoof=0;drawnRaised=0;frames++;visibleCodes=[];
@@ -193,7 +199,8 @@ function render(gl,mvp){
   const roof=u.roof;
   const unit=view.floors.find(f=>f.id===u.floor)?.features.find(f=>f.id===u.polygonId);
   if(!unit||!roof)continue;
-  const cell=resource.cells.get(u.code);if(!cell)continue;
+  const key=u.storeId||(u.floor+':'+u.code);
+  const cell=resource.cells.get(key);if(!cell)continue;
   const floorWorld=view.pinWorld(u.floor,roof.x,roof.y);
   if(!floorWorld)continue;
   const roofY={anchor:2.2,unit:1.4,zone:.55,corridor:.08}[unit.k]??1.4;
@@ -205,11 +212,11 @@ function render(gl,mvp){
   const pxToWorld=window.RETAILNAV_ACTIVE_MALL?.scale||.12;
   const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
   const surface=planar(top,axis,side,halfW,halfW*.43);
-  if(state.distance<=230||u.code===selected){
+  if(state.distance<=230||key===selected||highlights.has(key)){
    rectangle(regular,surface[0],surface[1],surface[2],surface[3],cell);
    drawnRoof++;visibleCodes.push(u.code);
   }
-  const requested=highlights.has(u.code)||u.code===selected;
+  const requested=highlights.has(key)||key===selected;
   const feature=Boolean(u.featured||(u.name&&u.name.length>0));
   if(requested||feature&&autoFeatured<3){
    if(raisedCount>=7&&!requested)continue;

@@ -28,13 +28,50 @@ mkdir "$TEMP/source"
 tar -xzf "$TEMP/retailnav.tgz" -C "$TEMP/source" --strip-components=1
 test -s "$TEMP/source/backend/server.mjs"
 test -s "$TEMP/source/backend/server.test.mjs"
+test -s "$TEMP/source/backend/mall-brands.mjs"
+test -s "$TEMP/source/public/branding/aventura-mark.svg"
 
-# The persistent state is kept completely outside release directories.
-mkdir -p "$BASE/api" "$BASE/state"
-chmod 700 "$BASE/state"
+# Mall marks are a persistent asset database, separate from release files,
+# anonymous visitor identities and private images. Seed from the original
+# publisher only if it agrees byte-for-byte with the reviewed first-party
+# SVG already committed to GitHub. No silent overwrites on later deploys.
+mkdir -p "$BASE/api" "$BASE/state" "$BASE/state/brand-assets"
+chmod 700 "$BASE/state" "$BASE/state/brand-assets"
+BRAND_ASSET="$BASE/state/brand-assets/aventura-mark.svg"
+TRUSTED="$TEMP/source/public/branding/aventura-mark.svg"
+TRUSTED_SHA="$(sha256sum "$TRUSTED" | awk '{print $1}')"
+if [[ -e "$BRAND_ASSET" || -L "$BRAND_ASSET" ]]; then
+  [[ -f "$BRAND_ASSET" && ! -L "$BRAND_ASSET" ]] || {
+    echo "Unmanaged mall logo path; refusing to overwrite" >&2
+    exit 5
+  }
+  [[ "$(sha256sum "$BRAND_ASSET" | awk '{print $1}')" == "$TRUSTED_SHA" ]] || {
+    echo "Persisted mall logo changed: manual review required" >&2
+    exit 5
+  }
+else
+  CANDIDATE="$TEMP/aventura-mark.downloaded.svg"
+  if ! curl --proto '=https' --tlsv1.2 -fLsS --retry 1 --connect-timeout 9 --max-time 24 \
+      "https://aventuramall.com/wp-content/uploads/2025/01/logo-2.svg" -o "$CANDIDATE" || \
+     [[ "$(sha256sum "$CANDIDATE" | awk '{print $1}')" != "$TRUSTED_SHA" ]]; then
+    echo "Official logo unreachable or changed; preserving previously reviewed source copy"
+    cp "$TRUSTED" "$CANDIDATE"
+  else
+    echo "Official Aventura logo fetched and SHA-256 matched original"
+  fi
+  cp "$CANDIDATE" "$BASE/state/brand-assets/.aventura-mark.next"
+  chmod 600 "$BASE/state/brand-assets/.aventura-mark.next"
+  mv "$BASE/state/brand-assets/.aventura-mark.next" "$BRAND_ASSET"
+fi
+
 if [[ -f "$BASE/api/server.mjs" ]]; then
   cp "$BASE/api/server.mjs" "$TEMP/server.previous.mjs"
 fi
+if [[ -f "$BASE/api/mall-brands.mjs" ]]; then
+  cp "$BASE/api/mall-brands.mjs" "$TEMP/mall-brands.previous.mjs"
+fi
+cp "$TEMP/source/backend/mall-brands.mjs" "$BASE/api/.mall-brands.next"
+mv -f "$BASE/api/.mall-brands.next" "$BASE/api/mall-brands.mjs"
 cp "$TEMP/source/backend/server.mjs" "$BASE/api/.server.next"
 mv -f "$BASE/api/.server.next" "$BASE/api/server.mjs"
 

@@ -104,6 +104,13 @@ if "new-world-city-shanghai" in catalog:
     old = catalog["new-world-city-shanghai"]
     catalog["new-world-city-shanghai"] = upgrade_newworld9(repo, old, old["units"])
 
+# Public store tables are exported per mall from the original source records.
+# They bind each photographed code to exactly its own floor and optional
+# candidate vector, without promoting unverified shop boundaries to truth.
+from store_catalog import publish_table
+for mall_slug, mall_data in catalog.items():
+    publish_table(repo, mall_slug, mall_data)
+
 # Each mall owns its presentation: map colors, text, accents and logo. The
 # source file can later be published by an authorized mall administrator.
 # Only whitelisted HEX colors and two bounded style selectors reach the UI;

@@ -162,7 +162,7 @@ async function load(){
   try{
    const response=await fetch(url,{cache:'no-store',credentials:'same-origin',signal:controller.signal});
    if(!response.ok)throw Error('HTTP '+response.status+' al solicitar el mapa.');
-   if(new URL(response.url).origin!==location.origin)throw Error('Origen de mapa no autorizado.');
+   if(response.url&&new URL(response.url).origin!==location.origin)throw Error('Origen de mapa no autorizado.');
    const bytes=await readStream(response);
    const floors=await decoded(bytes); // Validate before storing or displaying.
    origin='network';

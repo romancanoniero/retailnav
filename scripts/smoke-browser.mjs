@@ -30,8 +30,14 @@ try {
   await waitReady(page);
   let viewer=await page.evaluate(()=>window.__RETAILNAV__.getState());
   let social=await page.evaluate(()=>window.RetailNavSocial.getState());
+  await page.waitForFunction(()=>{
+   const img=document.querySelector('#mallHeaderLogo');
+   return img&&!img.hidden&&img.complete&&img.naturalWidth>0;
+  },null,{timeout:15000});
   log('START',{renderer:viewer.renderer,active:viewer.active,features:viewer.features,social});
-  assert.deepEqual(viewer.visible,['LL','UL','L3']);
+  assert.deepEqual(viewer.visible,['LL'],
+   'Aventura should start on the provisional visitor ground floor');
+  assert.equal(viewer.referenceFloor,'LL');
   // Product default is full spherical 360° rotation. Switch to Earth-like
   // panning explicitly for the map-pan, two-finger tilt and pinch checks below.
   assert.equal(viewer.gestureMode,'orbit-3d','Spherical 360 rotation is the default');
@@ -48,8 +54,8 @@ try {
      searchInsideMap:stage.contains(document.querySelector('#search')),
      searchVisible:b.width>0&&b.height>0,
      searchNearTop:b.top>=a.top-2&&b.top<a.top+135,
-     brandOrder:document.querySelector('#mallHeaderName').compareDocumentPosition(
-       document.querySelector('#mallHeaderLogo'))&Node.DOCUMENT_POSITION_FOLLOWING,
+     brandOrder:document.querySelector('#mallHeaderLogo').compareDocumentPosition(
+       document.querySelector('#mallHeaderName'))&Node.DOCUMENT_POSITION_FOLLOWING,
      oldRetailNavWordmark:!!document.querySelector('.topbar .brand')
     };
   });
@@ -57,8 +63,8 @@ try {
   assert.equal(aventuraLayout.searchCount,1,'Exactly one real map search input');
   assert.ok(aventuraLayout.searchInsideMap&&aventuraLayout.searchVisible&&aventuraLayout.searchNearTop,
     'Aventura mall search sits visibly ABOVE the map, not below the viewer');
-  assert.ok(aventuraLayout.brandOrder,'Optional mall logo follows mall name in DOM');
-  assert.equal(aventuraLayout.logoHidden,true,'No fabricated logo when none is configured');
+  assert.ok(aventuraLayout.brandOrder,'Official Aventura logo precedes the mall name');
+  assert.equal(aventuraLayout.logoHidden,false,'Official Aventura logo should be available');
   assert.equal(aventuraLayout.oldRetailNavWordmark,false);
   assert.equal(viewer.searchPlacement,'map-top');
   log('TOP_MAP_SEARCH_AVENTURA',aventuraLayout);
@@ -119,7 +125,8 @@ try {
   // A small one-touch floor picker replaces the giant screen-covering
   // floating floor badge. The separation control remains collapsed.
   assert.equal(await page.locator('#floorPicker').isVisible(),true);
-  assert.equal(await page.locator('#floorSpacing').isVisible(),true);
+  assert.equal(await page.locator('#floorSpacing').isVisible(),false,
+   'Single reference floor should hide multi-level spacing');
   assert.equal(await page.locator('#labels .label.floor').count(),0);
   await page.locator('#floorSelect').selectOption('UL');
   viewer=await page.evaluate(()=>window.__RETAILNAV__.getState());
@@ -1064,7 +1071,8 @@ try {
   assert.equal(await nwPage.locator('#mallHeaderName').innerText(),
     '新世界城 · Shanghai New World City');
   assert.deepEqual(nw.floorLabels,['L1','L2','L3','L4','L5','L6','L7']);
-  assert.deepEqual(nw.viewer.visible,nw.floorLabels);
+  assert.deepEqual(nw.viewer.visible,['L1'],
+   'New World City should start on first/ground floor');
   assert.equal(nw.geometryRegions,195,'195 colour-island REGIONS, not stores');
   assert.equal(nw.directoryRecords,380);
   assert.equal(nw.units.count,380);

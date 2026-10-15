@@ -148,9 +148,35 @@ PY
   fi
   sleep 3
 done
+if [[ "$READY" == true ]]; then
+  # Confirm the PRIVATE persistent JSON brand registry (not just the static
+  # fallback) and the actual SVG bytes before reporting a successful deploy.
+  if ! curl -fLsS --connect-timeout 4 --max-time 12 \
+       https://improvingyourreality.com/retailnav/api/mall-brands/aventura -o "$TEMP/registered-brand.json" 2>/dev/null || \
+     ! python3 - "$TEMP/registered-brand.json" "$TRUSTED_SHA" <<'PY'
+import json,sys
+r=json.load(open(sys.argv[1],encoding='utf8'))
+assert r['available'] is True and r['mallId']=='aventura'
+assert r['logo']['sha256']==sys.argv[2]
+assert r['logo']['url']=='api/mall-brands/aventura/logo.svg'
+assert r['logo']['placement']=='left-of-name'
+assert r['logo']['sourceUrl']=='https://aventuramall.com/wp-content/uploads/2025/01/logo-2.svg'
+PY
+  then
+    READY=false
+  elif ! curl -fLsS --connect-timeout 4 --max-time 12 \
+        https://improvingyourreality.com/retailnav/api/mall-brands/aventura/logo.svg -o "$TEMP/live-brand.svg" || \
+       [[ "$(sha256sum "$TEMP/live-brand.svg" | awk '{print $1}')" != "$TRUSTED_SHA" ]]; then
+    READY=false
+  fi
+fi
 if [[ "$READY" != true ]]; then
-  echo "API verification failed; inspect only RetailNav API logs" >&2
+  echo "API or persistent mall logo verification failed; inspect only RetailNav API logs" >&2
   docker logs --tail 50 retailnav-api-1 2>&1 || true
+  if [[ -f "$TEMP/mall-brands.previous.mjs" ]]; then
+    cp "$TEMP/mall-brands.previous.mjs" "$BASE/api/.mall-brands.rollback"
+    mv -f "$BASE/api/.mall-brands.rollback" "$BASE/api/mall-brands.mjs"
+  fi
   if [[ -f "$TEMP/server.previous.mjs" ]]; then
     cp "$TEMP/server.previous.mjs" "$BASE/api/.server.rollback"
     mv -f "$BASE/api/.server.rollback" "$BASE/api/server.mjs"
@@ -163,4 +189,5 @@ if [[ "$READY" != true ]]; then
   exit 5
 fi
 echo "RETAILNAV_SOCIAL_API_READY revision=$REV"
+echo "AVENTURA_LOGO_REGISTERED sha256=$TRUSTED_SHA source=aventuramall.com placement=left-of-name"
 echo "PERSISTENT_STATE=$BASE/state (never overwritten by subsequent releases)"

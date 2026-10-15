@@ -212,11 +212,13 @@ function summarize(floors,units,pois,origin,scale){
    f.storeName=name;
    if(!name)summary.unmatchedShopNames++;
    const codeAdded=addText(parts.codes,code,f,1.4,
-      name?'code':'center',.87,name?.40:.72,origin,scale,WHITE);
+      name?'code':'center',.87,name?.40:.72,origin,scale,
+       window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE);
    if(codeAdded)summary.codeLabels++;
    let nameAdded=false;
    if(name)nameAdded=addText(parts.names,name,f,1.4,
-     'name',.86,.36,origin,scale,GOLD);
+     'name',.86,.36,origin,scale,
+       window.RetailNavThemes?.rgb?.('mapNameText',GOLD)||GOLD);
    if(nameAdded)summary.knownNameLabels++;
    summary.roomLabels.push({floor:floor.id,id:f.id,code,name,
      verified:false,roofY:1.4,

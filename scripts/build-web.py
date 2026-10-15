@@ -111,6 +111,12 @@ from store_catalog import publish_table
 for mall_slug, mall_data in catalog.items():
     publish_table(repo, mall_slug, mall_data)
 
+# Only photographed/reviewed mall entrances are valid visitor defaults.
+# Source-free malls keep a ground-floor fallback but NO invented position.
+from visitor_reference import attach_visitor_reference
+for mall_slug, mall_data in catalog.items():
+    attach_visitor_reference(mall_data)
+
 # Each mall owns its presentation: map colors, text, accents and logo. The
 # source file can later be published by an authorized mall administrator.
 # Only whitelisted HEX colors and two bounded style selectors reach the UI;

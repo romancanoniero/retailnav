@@ -13,6 +13,7 @@ const active=Object.hasOwn(catalog,requested)?requested:'aventura';
 window.RETAILNAV_MALL_CATALOG=catalog;
 window.RETAILNAV_ACTIVE_MALL_ID=active;
 window.RETAILNAV_ACTIVE_MALL=catalog[active];
+window.RetailNavThemes?.apply?.(catalog[active]);
 function get(id){return document.getElementById(id);}
 // Branding is mall-specific, not a fixed RetailNav wordmark. An optional
 // logo is shown ON THE RIGHT of the name only if a same-origin image exists.
@@ -20,7 +21,7 @@ function setMallHeaderBrand(mall){
  const header=get('mallHeaderName'),img=get('mallHeaderLogo');
  if(header)header.textContent=mall.name||'Centro comercial';
  if(!img)return;
- img.hidden=true;img.removeAttribute('src');
+ img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');
  const raw=mall.logoUrl||mall.logo;
  if(typeof raw!=='string'||!raw.trim())return;
  try{
@@ -29,8 +30,8 @@ function setMallHeaderBrand(mall){
   if(url.origin!==location.origin||!url.pathname.startsWith(root)||
    !/\.(?:svg|png|webp|jpe?g)$/i.test(url.pathname))return;
   img.alt='Logotipo de '+mall.name;
-  img.onload=()=>{img.hidden=false;};
-  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');};
+  img.onload=()=>{img.hidden=false;header?.classList.toggle('rnHasWordmark',mall.brandLogoKind==='wordmark');};
+  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');};
   img.src=url.href;
  }catch{img.hidden=true;}
 }
@@ -46,6 +47,7 @@ for(const id of Object.keys(catalog)){
   select.append(option);
 }
 select.value=active;
+window.RetailNavThemes?.setupEditor?.();
 function switchMall(id){
   if(!Object.hasOwn(catalog,id))return;
   const destination=new URL(location.href);

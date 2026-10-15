@@ -113,6 +113,25 @@
 <select id="mallSelect" aria-label="Elegir mapa de shopping"></select>
 <button type="button" id="mallApplyBtn">Cambiar mapa</button>
 <p class="caption">Cada shopping tiene sus propios mapas y amigos ficticios. Los vínculos reales se mantienen privados; no se mostrarán ubicaciones de Aventura en AP Plaza.</p>
+<details class="rnThemeEditor" id="rnPaletteOptions">
+  <summary>Paleta de colores del mapa y presentación</summary>
+  <p id="rnThemeName" class="caption">Paleta predeterminada del shopping.</p>
+  <p class="caption">Vista previa local: podés probar colores sin modificar el mapa oficial ni los datos de otros usuarios. Un administrador podrá publicar estos ajustes desde su portal.</p>
+  <label for="rnPalettePreset">Paleta base</label>
+  <select id="rnPalettePreset" aria-label="Elegir paleta de colores">
+    <option value="default">Predeterminada del shopping</option>
+    <option value="classic">Clásica RetailNav</option>
+    <option value="contrast">Contraste alto</option>
+    <option value="custom">Personalizada</option>
+  </select>
+  <div class="rnPaletteColorGrid" id="rnPaletteColors" aria-label="Colores del mapa y de la interfaz"></div>
+  <div class="rnPaletteActions">
+    <button type="button" id="rnPaletteSave">Guardar en este dispositivo</button>
+    <button type="button" id="rnPaletteReset">Restablecer predeterminada</button>
+    <button type="button" id="rnPaletteExport">Exportar propuesta JSON</button>
+  </div>
+  <p id="rnPaletteStatus" class="caption" role="status" aria-live="polite"></p>
+</details>
 <hr>
 <button type="button" id="mallDetectBtn">Detectar shopping cercano (GPS)</button>
 <p class="caption">Solo después de pulsarlo pediremos permiso. El navegador obtiene una ubicación aproximada para sugerir el shopping; RetailNav no la almacena ni la envía al servidor. GPS no determina un local, una planta ni un pasillo.</p>
@@ -206,6 +225,7 @@
 <div hidden id="polygonCount"></div>
 <script id="modelData" type="application/json">__MODEL__</script>
 <script id="mallCatalog" type="application/json">__MALL_CATALOG__</script>
+<script>__MALL_THEMES__</script>
 <script>__MALL_SELECTOR__</script>
 <script>__MAP_CACHE__</script>
 <script>__REFERENCES__</script>

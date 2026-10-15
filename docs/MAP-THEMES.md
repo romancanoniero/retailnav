@@ -1,6 +1,6 @@
 # RetailNav — Paletas configurables por shopping y colores del mapa 3D
 
-**Estado:** implementación en la rama `feature/mall-map-palette-20261015`, pendiente de pasar las pruebas y de merge/despliegue.
+**Estado:** paletas de Aventura y editor de vista previa publicados. La legibilidad del nombre del shopping se corrigió globalmente tras detectar texto pálido sobre fondos claros (octubre de 2026).
 
 ## Decisión
 
@@ -56,6 +56,16 @@ Los colores de cada centro comercial se definen en un **manifiesto de branding p
 **Valores validables:** colores CSS en formato hexadecimal exacto `#RRGGBB`, tipografía `editorial|modern|rounded` y esquinas `soft|square`. No se aceptan hojas de estilo, URLs CSS, imágenes externas ni JavaScript incrustados en la configuración.
 
 **Presets:** predeterminado propio del shopping, `retailnav-classic` (estilo oscuro preservado para los otros centros del prototipo) y `high-contrast` para vista previa de contraste. No mezclar el tema de un shopping con el de otro.
+
+### Color legible del nombre de todos los shoppings
+
+El título de la cabecera usa el **acento fuerte** (`theme.accent`) de la paleta del shopping si ofrece contraste suficiente contra la superficie de la cabecera (`theme.surface`); en su defecto, usa `theme.text`, después `theme.accentText` y, como última protección, blanco o negro. Se exige una relación de contraste mínima de **4,5:1 (WCAG AA para texto normal)**, también para temas personalizados y cambios en tiempo real.
+
+- **Aventura Mall:** con fondo blanco, el nombre se muestra en **#100F0F** (negro de la marca) junto al logotipo original situado a su izquierda, nunca en el antiguo celeste pálido.
+- **AP Plaza / New World City y malls sin tema propio:** se conserva la interfaz oscura y se presenta el nombre con acento clásico **#65E6E0** de alto contraste.
+- **Personalización:** al cambiar `accent`, `surface` o `text` se actualiza automáticamente el nombre sin recargar la página ni afectar la geometría, los niveles, la búsqueda ni los usuarios.
+- **Implementación:** `src/mall-theme.js` calcula `--rn-mall-name-color`; `src/style.css` aplica explícitamente este token al elemento `#mallHeaderName`, superando la regla antigua de título `#EEFAFF` que quedaba ilegible sobre fondos claros.
+- **Pruebas:** `scripts/test-mall-themes.mjs` calcula el contraste, `scripts/test-mall-logo-browser.mjs` comprueba el color CSS real en móvil y los tres shoppings conservan el mapa intacto.
 
 ### Capas del mapa cubiertas
 

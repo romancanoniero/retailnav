@@ -713,6 +713,19 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Siguiente acción concreta:** ...
 ```
 
+### 2026-10-15 — BRAND-LOGO-01 — símbolo oficial a la izquierda y registro persistente en Contabo
+
+- **Estado:** desplegado y verificado (PR #35, commit squash `89baa1a6817e3830cac7dd674622a2868d630e2f`; CI Contabo `38688214456` exitoso).
+- **Funcionalidad:** el monograma SVG oficial de Aventura Mall (`logo-2.svg`, color `#100F0F`) queda visualmente a la izquierda de su nombre textual; el texto nunca se oculta. Diseño adaptado a móviles.
+- **Fuente:** `https://aventuramall.com/wp-content/uploads/2025/01/logo-2.svg`. El despliegue lo descargó efectivamente desde el sitio oficial y comparó SHA-256 contra la copia auditada.
+- **Persistencia:** `/home/iankmp/retailnav-host/state/brand-assets/aventura-mark.svg`; registro independiente `/home/iankmp/retailnav-host/state/mall-brands.json`. Base JSON persistente actual, **no SQL**. No se borra en despliegues de web ni comparte datos con usuarios anónimos.
+- **API:** `GET /retailnav/api/mall-brands/aventura` entrega metadatos públicos sólo si el registro y el archivo son íntegros; `GET /retailnav/api/mall-brands/aventura/logo.svg` entrega el SVG validado. El navegador usa esa URL tras comprobar carga y conserva el logo estático original como respaldo.
+- **SHA-256 verificado en VPS y entrega pública:** `674470c62a81ad6d3dffedaa52ef1cc9080f34cd4d5e4ea661814a655c3f1a5b`.
+- **Pruebas E2E:** API, permanencia entre reinicios, falta/corrupción de archivo, login y amigos existentes, navegador móvil con comprobación geométrica «logo a la izquierda → nombre a la derecha», caché de mapas y tres plantas sin alteraciones. La publicación validó tanto el registro como los bytes del logo desde HTTPS.
+- **Documentación:** `docs/AVENTURA-LOGO-VPS.md`.
+- **Pendiente:** implementar gestión normalizada de assets por empleados autenticados desde el portal de shopping, control de licencia y migración a almacenamiento transaccional multitenant; **no abrir escritura de logos al visitante**.
+- **Siguiente acción:** reutilizar el contrato `logoAssetId`/registros auditables en la futura consola de shopping, evitando otro registro paralelo.
+
 ### 2026-10-15 — MALL-THEME-01 — paleta Aventura y colores de mapa 3D
 
 - **Estado:** implementado y validado en GitHub (PR #34, squash `716cefb7`); comprobación final de Contabo según CI de publicación.
@@ -737,7 +750,7 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 **Repositorio:** https://github.com/romancanoniero/retailnav  
 **Producción/prototipo:** https://improvingyourreality.com/retailnav/  
 **Código estable:** rama `main`. **Trabajo administrativo en curso:** `feature/mall-manager-branding`.  
-**Explicación actual:** `README.md`, `docs/IMPORT-MALLS.md`, `docs/MAP-CACHE-VERSIONS.md`, `docs/ADAPTIVE-POSITIONING.md`.
+**Explicación actual:** `README.md`, `docs/IMPORT-MALLS.md`, `docs/MAP-CACHE-VERSIONS.md`, `docs/ADAPTIVE-POSITIONING.md`, `docs/MAP-THEMES.md` y `docs/AVENTURA-LOGO-VPS.md`.
 
 Fuentes principales:
 

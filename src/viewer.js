@@ -560,10 +560,11 @@ function renderCanvas(dt){
  function xyz(q){const a=screen(q);return a.w>.02?a:null;}
  const colors={slab:'#183044',corridor:'#18747b',anchor:'#355d82',unit:'#355565',amenity:'#09bed3',zone:'#34516a',void:'#1e283c'};
  const lines={slab:'#4894a4',corridor:'#45d4d6',anchor:'#96c2db',unit:'#70b8c6',amenity:'#cefbfd',zone:'#648fa2',void:'#a488ae'};
+ const themed=Boolean(window.RetailNavThemes?.getState?.().enabled);
  // Grid stays anchored to the model rather than to screen pixels.
- c.lineWidth=.6;c.strokeStyle='rgba(68,142,168,.14)';c.beginPath();
+ c.lineWidth=.6;c.strokeStyle=mapColor('mapGrid','rgba(68,142,168,.14)');c.globalAlpha=themed?.24:1;c.beginPath();
  for(let n=-80;n<=80;n+=8){let a=xyz([n,-.9,-65]),b=xyz([n,-.9,65]),d=xyz([-85,-.9,n]),e=xyz([85,-.9,n]);if(a&&b){c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);}if(d&&e){c.moveTo(d.x,d.y);c.lineTo(e.x,e.y);}}
- c.stroke();
+ c.stroke();c.globalAlpha=1;
  // Far-to-near ordering, retaining holes and the disconnected L3 islands.
  const candidates=[];
  for(const floor of visible()){
@@ -577,9 +578,9 @@ function renderCanvas(dt){
  for(const {floor,f} of candidates){
   const fh=height(f),fy=floor.y,top=fy+fh,isSelected=selected&&selected.gid===f.gid;
   if(scan){c.fillStyle=isSelected?'#ffc977':'#6ce2e2';c.globalAlpha=.8;for(const r of f.r)for(let j=0;j<r.length;j+=2){let pt=xyz(pos(r[j],top));if(!pt)continue;c.beginPath();c.arc(pt.x,pt.y,Math.max(.7,1.3*(215/distance)),0,Math.PI*2);c.fill();}c.globalAlpha=1;continue;}
-  let color=isSelected?'#ab7133':colors[f.k],line=isSelected?'#ffd17a':lines[f.k];
+  let color=isSelected?mapColor('mapSelected','#ab7133'):(themed?rgbHex(palette(f,floor.index,false)):colors[f.k]);let line=isSelected?mapColor('mapSelected','#ffd17a'):(themed?rgbHex(palette(f,floor.index,true)):lines[f.k]);
   if(['anchor','unit','amenity','zone','slab'].includes(f.k)){
-   c.fillStyle=isSelected?'rgba(165,99,40,.72)':'rgba(25,65,85,.67)';
+   c.fillStyle=themed?(isSelected?mapColor('mapSelected','#ab7133'):rgbHex(blendColors(palette(f,floor.index,false),mapRgb('mapOutline',[.25,.3,.35]),.22))):(isSelected?'rgba(165,99,40,.72)':'rgba(25,65,85,.67)');
    for(const r of f.r)for(let i=0;i<r.length;i++){
     const aa=xyz(pos(r[i],fy+(f.k==='slab'?-.45:0))),ab=xyz(pos(r[(i+1)%r.length],fy+(f.k==='slab'?-.45:0))),ba=xyz(pos(r[(i+1)%r.length],top)),bb=xyz(pos(r[i],top));
     if(!aa||!ab||!ba||!bb)continue;
@@ -595,11 +596,11 @@ function renderCanvas(dt){
  }
  if(route&&visible().some(x=>x.id===route.floor)){
   const floor=floors.find(x=>x.id===route.floor),pts=route.points.map(p=>xyz(pos(p,floor.y+.5))).filter(Boolean);
-  if(pts.length>1){c.lineWidth=3;c.strokeStyle='#ffd06c';c.shadowBlur=8;c.shadowColor='#ffc462';c.setLineDash([8,5]);c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.stroke();c.setLineDash([]);c.shadowBlur=0;
+  if(pts.length>1){c.lineWidth=3;c.strokeStyle=mapColor('mapRoute','#ffd06c');c.shadowBlur=8;c.shadowColor=mapColor('mapRoute','#ffc462');c.setLineDash([8,5]);c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.stroke();c.setLineDash([]);c.shadowBlur=0;
    if(routeRunning)routeT=(routeT+dt*.14)%1;
    const s=routeT*(pts.length-1),i=Math.min(pts.length-2,Math.floor(s)),t=s-i;
    const u={x:pts[i].x*(1-t)+pts[i+1].x*t,y:pts[i].y*(1-t)+pts[i+1].y*t};
-   c.fillStyle='#ffbf5a';c.beginPath();c.arc(u.x,u.y,5,0,Math.PI*2);c.fill();
+   c.fillStyle=mapColor('mapRoute','#ffbf5a');c.beginPath();c.arc(u.x,u.y,5,0,Math.PI*2);c.fill();
   }
  }
  drawVerticalCanvas();
@@ -1498,7 +1499,7 @@ async function init(){try{
  bindUI();updateRotationModeUI();let embedded=$('modelData');data=window.RetailNavMapCache?await window.RetailNavMapCache.load():(selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json')));floors=unpack(data);
  const roofSummary=window.RetailNavRoofText?.prepare?.(floors,selectedMall.units||[],selectedMall.pois||[],cfg.origin,cfg.scale)||null;
  initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
-$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame((time)=>{try{render(time);requestAnimationFrame(()=>window.RetailNavMapCache?.ready?.());}catch(e){fail('Error al dibujar el mapa: '+e.message);}});window.__RETAILNAV__={getState:()=>({ready,mallId,mapCache:window.RetailNavMapCache?.getState?.(),renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame((time)=>{try{render(time);requestAnimationFrame(()=>window.RetailNavMapCache?.ready?.());}catch(e){fail('Error al dibujar el mapa: '+e.message);}});window.__RETAILNAV__={getState:()=>({ready,mallId,mapCache:window.RetailNavMapCache?.getState?.(),mapTheme:window.RetailNavThemes?.getState?.(),renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},
  floorElevationsMetres:Object.fromEntries(floors.map(f=>[f.id,f.elevationMetres])),
  heightEstimatesVerified:Boolean(heightConfig.metresVerified),
@@ -1517,5 +1518,28 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  getEscalatorModels:()=>escalatorModel().items.slice(),
  getLiftShaftModels:()=>liftShaftModel().shafts.slice(),
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+// Theme preview re-colors loaded mesh buffers without redownloading geometry.
+let pendingThemeRefresh=false;
+function onThemeChange(){
+ if(!ready||pendingThemeRefresh)return;
+ pendingThemeRefresh=true;
+ requestAnimationFrame(()=>{
+  pendingThemeRefresh=false;
+  try{
+   if(gl){
+    for(const floor of floors){
+     for(const item of Object.values(floor.gpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+     for(const item of Object.values(floor.roofGpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+    }
+    makeGrid();
+    gl.useProgram(program);
+    gl.uniform3fv(loc.uSelectedColor,new Float32Array(mapRgb('mapSelected',[1,.68,.29])));
+    for(const floor of floors)geometry(floor);
+   }
+   dirty=true;
+  }catch(e){console.warn('RetailNav map recoloring:',e);}
+ });
+}
+window.addEventListener('retailnav:themechange',onThemeChange);
 init();
 })();

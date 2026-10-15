@@ -104,6 +104,41 @@ if "new-world-city-shanghai" in catalog:
     old = catalog["new-world-city-shanghai"]
     catalog["new-world-city-shanghai"] = upgrade_newworld9(repo, old, old["units"])
 
+# Each mall owns its presentation: map colors, text, accents and logo. The
+# source file can later be published by an authorized mall administrator.
+# Only whitelisted HEX colors and two bounded style selectors reach the UI;
+# geometric coordinates and triangulation stay completely unchanged.
+for slug, mall in catalog.items():
+    source = repo / "data" / "mall-themes" / (slug+".json")
+    if not source.is_file():
+        continue  # Preserve the original dark RetailNav style for all other malls.
+    config = json.loads(source.read_text(encoding="utf8"))
+    assert config.get("schema")=="retailnav.mall.theme.v1" and config.get("mallId")==slug
+    theme = config["theme"]
+    assert isinstance(theme,dict) and len(theme)>=15
+    allowed_colors = {"background","surface","text","muted","accent","accentText","border",
+                      "mapUnit","mapAnchor","mapCorridor","mapZone","mapSlab","mapOutline",
+                      "mapVoid","mapAmenity","mapRoute","mapSelected","mapGrid",
+                      "mapFloor1","mapFloor2","mapFloor3"}
+    allowed_styles = {"font":{"modern","editorial","rounded"},"corners":{"soft","square"}}
+    import re
+    for key, value in theme.items():
+        if key in allowed_colors:
+            assert isinstance(value,str) and re.fullmatch(r"#[0-9A-Fa-f]{6}",value), (slug,key)
+        else:
+            assert key in allowed_styles and value in allowed_styles[key], (slug,key)
+    logo = config.get("logoUrl")
+    if logo:
+        assert logo.startswith("branding/") and logo.endswith(".svg")
+        asset = repo/"public"/logo
+        assert asset.is_file() and asset.stat().st_size>100
+        mall["logoUrl"] = logo
+        mall["brandLogoKind"] = config.get("brandLogoKind","wordmark")
+    mall["theme"] = theme
+    mall["themePreset"] = config["preset"]
+    mall["brandSource"] = config.get("source",{}).get("site","")
+    mall["themeSchema"] = "retailnav.mall.theme.v1"
+
 # Publish immutable geometry snapshots per mall. Keeping their versions in the
 # lightweight HTML catalog lets the browser validate Cache Storage before
 # showing any 3D floor. No mall geometry is embedded in the HTML anymore.
@@ -132,6 +167,7 @@ for slug, mall in catalog.items():
 
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
+    "__MALL_THEMES__": (repo / "src/mall-theme.js").read_text(encoding="utf-8"),
     "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),
     "__CSS__": (repo / "src/style.css").read_text(encoding="utf-8"),
     "__MODEL__": "[]",  # legacy compatibility; map data is never embedded

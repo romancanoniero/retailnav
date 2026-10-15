@@ -165,6 +165,43 @@ test('mall title contrast remains legible in custom dark themes too',()=>{
  assert.ok(fallback.mallNameContrast>=4.5);
 });
 
+test('each shopping has a usable typography preset applied to the entire UI',()=>{
+ const env=environment();
+ const aventura=env.instance.apply({id:'aventura',name:'Aventura Mall',
+  theme:aventuraConfig.theme});
+ assert.equal(aventura.theme.font,'editorial');
+ assert.match(env.css.get('--rn-font-family'),/Helvetica Neue/);
+ assert.match(env.instance.fontFamily(),/Helvetica Neue/);
+ assert.match(env.instance.canvasFont(800,15),/^800 15px /);
+ assert.equal(env.instance.editFont('rounded'),true);
+ assert.equal(env.instance.getState().theme.font,'rounded');
+ assert.match(env.css.get('--rn-font-family'),/Trebuchet MS/);
+ assert.match(env.instance.canvasFont(800,15),/Trebuchet MS/);
+ assert.equal(env.instance.editFont('url(javascript:alert(1))'),false);
+ env.instance.reset();
+ assert.equal(env.instance.getState().theme.font,'editorial');
+ assert.match(env.css.get('--rn-font-family'),/Helvetica Neue/);
+ const ap=env.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(ap.theme.font,'modern');
+ assert.match(env.css.get('--rn-font-family'),/Segoe UI/);
+});
+
+test('font choices remain isolated to the selected shopping across reloads',()=>{
+ const storage=new Map();
+ const one=environment(storage);
+ one.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(one.instance.editFont('rounded'),true);
+ assert.equal(one.instance.save(),true);
+ const two=environment(storage);
+ two.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(two.instance.getState().theme.font,'modern');
+ assert.match(two.instance.fontFamily(),/Segoe UI/);
+ two.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(two.instance.getState().theme.font,'rounded');
+ two.instance.reset();
+ assert.equal(two.instance.getState().theme.font,'editorial');
+});
+
 test('cache version and mall geometry sources remain distinct from local-only previews',()=>{
  const src=readFileSync('scripts/build-web.py','utf8');
  const cache=readFileSync('src/map-cache.js','utf8');

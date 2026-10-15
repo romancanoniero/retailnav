@@ -1,5 +1,8 @@
 name: Import official Aventura Mall branding
 on:
+  push:
+    branches: [feature/mall-manager-branding]
+    paths: [.github/workflows/import-aventura-brand.yml]
   workflow_dispatch:
 permissions:
   contents: write

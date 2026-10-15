@@ -134,6 +134,16 @@ for slug, mall in catalog.items():
         assert asset.is_file() and asset.stat().st_size>100
         mall["logoUrl"] = logo
         mall["brandLogoKind"] = config.get("brandLogoKind","wordmark")
+    symbol = config.get("logoSymbolUrl")
+    if symbol:
+        assert symbol.startswith("branding/") and symbol.endswith(".svg")
+        symbol_asset=repo/"public"/symbol
+        assert symbol_asset.is_file() and symbol_asset.stat().st_size>100
+        mall["logoSymbolUrl"] = symbol
+        mall["logoPlacement"] = config.get("logoPlacement","left-of-name")
+        assert mall["logoPlacement"]=="left-of-name"
+        mall["publicLogoMetadataUrl"] = config.get("publicLogoMetadataUrl","")
+        assert mall["publicLogoMetadataUrl"] == "api/mall-brands/"+slug
     mall["theme"] = theme
     mall["themePreset"] = config["preset"]
     mall["brandSource"] = config.get("source",{}).get("site","")

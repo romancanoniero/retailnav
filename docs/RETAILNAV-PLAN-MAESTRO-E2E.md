@@ -58,6 +58,8 @@
 
 ### En desarrollo, **no confirmado como producción**
 
+El soporte de **paletas publicadas por shopping, logos y colores de geometría 3D**, con **editor de vista previa local** para visitantes, fue incorporado a `main` en el PR #34. La lista de tokens, fuentes, alcance y pruebas está en `docs/MAP-THEMES.md`. **Aún no está habilitado que un empleado publique el tema para todos los visitantes sin desarrollador.**
+
 La rama `feature/mall-manager-branding` contiene trabajo iniciado para identidad visual individual y portal humano de administración: logos oficiales de Aventura obtenidos desde `aventuramall.com`; `src/mall-theme.js`, `public/admin/`, `backend/mall-admin.mjs` y `backend/mall-geometry.mjs`, más adaptación del catálogo y visor. **Estado: WIP / revisión necesaria; no asumir integración E2E ni merge**. Debe completarse CI, pruebas de seguridad/tenants, migración, despliegue de backend y revisión visual antes de promoción.
 
 ### Tabla de estados iniciales
@@ -72,7 +74,7 @@ Convención: **[P] prototipo operativo**, **[D] desarrollo parcial**, **[F] futu
 | SYS-04 | Directorio de locales y búsqueda | [P] parcial | `src/units.js`, datos de mapas | Actualización real, categorías, pertenencia y validación |
 | SYS-05 | Amigos, QR y presencia consentida | [P] parcial | `backend/server.mjs`, `src/social.js` | Robustecer múltiples dispositivos/escala y auditoría |
 | SYS-06 | Localización interior automática fiable | [F] | `docs/ADAPTIVE-POSITIONING.md` | Calibración + piloto medido |
-| ADM-01 | Paleta, fuentes y logo por shopping | [D] | Rama `feature/mall-manager-branding` | Test y publicación sin regresión |
+| ADM-01 | Paleta, fuentes y logo por shopping | [P] valores oficiales y vista previa local; [D] publicación global administrativa | `docs/MAP-THEMES.md`, PR #34; portal `feature/mall-manager-branding` | Publicación autenticada por tenant + E2E de permisos |
 | ADM-02 | Portal humano de mapas y locales | [D] | Rama `feature/mall-manager-branding` | E2E de permisos, carga, revisión, publicación |
 | ADM-03 | Plataforma SaaS y colaboradores | [F] | Este documento | Identidad y RBAC global |
 | MRC-01 | Portal/propiedad del comercio | [F] | Este documento | Reclamo y verificación de sucursal |
@@ -710,6 +712,16 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Qué quedó sin hacer:** ...
 - **Siguiente acción concreta:** ...
 ```
+
+### 2026-10-15 — MALL-THEME-01 — paleta Aventura y colores de mapa 3D
+
+- **Estado:** implementado y validado en GitHub (PR #34, squash `716cefb7`); comprobación final de Contabo según CI de publicación.
+- **Descripción:** el logotipo SVG original de Aventura Mall y su paleta editorial inspirada en el sitio se configuran por `data/mall-themes/aventura.json`. Afecta a pasillos, tiendas, anclas, losas, contornos, selección, rutas, plantas y texto 3D. AP Plaza y New World City retienen colores clásicos.
+- **Archivos:** `src/mall-theme.js`, `src/viewer.js`, `src/roof-text3d.js`, `src/mall-selector.js`, `src/style.css`, `src/page.template.html`, `scripts/build-web.py`, `public/branding/` y `docs/MAP-THEMES.md`.
+- **Seguridad:** cambios desde el selector sólo crean una vista previa de este dispositivo; NO dan permisos sobre el tenant ni modifican la versión pública.
+- **Pruebas:** `scripts/test-mall-themes.mjs`, `scripts/test-mall-theme-browser.mjs`, CI `map-themes.yml`; conserva `scripts/verify.py` y `scripts/test-map-cache-browser.mjs`.
+- **Pendiente:** publicar estilos oficialmente desde el portal autenticado del shopping, con QA, auditoría, derechos del logo y sin redescargar el mapa cuando sólo cambia el tema. Integrar el contrato `retailnav.mall.theme.v1` con el desarrollo WIP del portal.
+- **Siguiente acción:** completar integración del portal multi-tenant con pruebas de roles, publicación y revertir cambios de paleta.
 
 ### 2026-10-15 — DOC-01 — visión de arquitectura para expansión SaaS
 

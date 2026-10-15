@@ -112,6 +112,7 @@
 <label for="mallSelect">Mapa del shopping</label>
 <select id="mallSelect" aria-label="Elegir mapa de shopping"></select>
 <button type="button" id="mallApplyBtn">Cambiar mapa</button>
+<p class="caption"><a href="admin/" class="rnAdminLink">Administrar un shopping (personal autorizado)</a></p>
 <p class="caption">Cada shopping tiene sus propios mapas y amigos ficticios. Los vínculos reales se mantienen privados; no se mostrarán ubicaciones de Aventura en AP Plaza.</p>
 <hr>
 <button type="button" id="mallDetectBtn">Detectar shopping cercano (GPS)</button>
@@ -206,26 +207,44 @@
 <div hidden id="polygonCount"></div>
 <script id="modelData" type="application/json">__MODEL__</script>
 <script id="mallCatalog" type="application/json">__MALL_CATALOG__</script>
+<script>__MALL_THEME__</script>
 <script>__MALL_SELECTOR__</script>
-<script>__MAP_CACHE__</script>
-<script>__REFERENCES__</script>
-<script>__DEMO_FRIENDS__</script>
-<script>__ESCALATORS__</script>
-<script>__SERVICE_ICONS_3D__</script>
-<script>__LIFT_SHAFTS_3D__</script>
-<script>__ROOF_TEXT_3D__</script>
-<script>__JS__</script>
-<script>__PIN_RENDERER__</script>
-<script>__PIN_WEBGL_RENDERER__</script>
-<script>__POI_RENDERER__</script>
-<script>__UNITS_RENDERER__</script>
-<script>__DISTRICTS_RENDERER__</script>
-<script>__AREA_LABELS_RENDERER__</script>
-<script>__UNIT_SIGNS_WEBGL__</script>
-<script>__POSITIONING_CORE__</script>
-<script>__INDOOR_RENDERER__</script>
-<script>__QRCODE__</script>
-<script>__QRSCANNER__</script>
-<script>__COOPERATIVE_POSITIONING__</script>
-<script>__SOCIAL__</script>
+<script type="text/retailnav-module">__MAP_CACHE__</script>
+<script type="text/retailnav-module">__REFERENCES__</script>
+<script type="text/retailnav-module">__DEMO_FRIENDS__</script>
+<script type="text/retailnav-module">__ESCALATORS__</script>
+<script type="text/retailnav-module">__SERVICE_ICONS_3D__</script>
+<script type="text/retailnav-module">__LIFT_SHAFTS_3D__</script>
+<script type="text/retailnav-module">__ROOF_TEXT_3D__</script>
+<script type="text/retailnav-module">__JS__</script>
+<script type="text/retailnav-module">__PIN_RENDERER__</script>
+<script type="text/retailnav-module">__PIN_WEBGL_RENDERER__</script>
+<script type="text/retailnav-module">__POI_RENDERER__</script>
+<script type="text/retailnav-module">__UNITS_RENDERER__</script>
+<script type="text/retailnav-module">__DISTRICTS_RENDERER__</script>
+<script type="text/retailnav-module">__AREA_LABELS_RENDERER__</script>
+<script type="text/retailnav-module">__UNIT_SIGNS_WEBGL__</script>
+<script type="text/retailnav-module">__POSITIONING_CORE__</script>
+<script type="text/retailnav-module">__INDOOR_RENDERER__</script>
+<script type="text/retailnav-module">__QRCODE__</script>
+<script type="text/retailnav-module">__QRSCANNER__</script>
+<script type="text/retailnav-module">__COOPERATIVE_POSITIONING__</script>
+<script type="text/retailnav-module">__SOCIAL__</script>
+<script>
+Promise.resolve(window.RETAILNAV_BOOTSTRAP).then(()=>{
+ // Run the existing renderer/POI/social modules in their original sequence,
+ // AFTER the API catalog has resolved a human-published shopping.
+ const entries=document.querySelectorAll('script[type="text/retailnav-module"]');
+ for(const src of entries){
+  const executable=document.createElement('script');
+  executable.textContent=src.textContent;
+  document.body.appendChild(executable);
+  src.remove();
+ }
+}).catch(error=>{
+ console.error('RetailNav startup failure:',error);
+ const el=document.getElementById('rnMapDownloadMessage');
+ if(el)el.textContent='No fue posible iniciar RetailNav. Actualizá la página.';
+});
+</script>
 </body></html>

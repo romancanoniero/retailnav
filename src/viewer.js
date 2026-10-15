@@ -292,7 +292,15 @@ function applySearchFloors(query){
   .map(v=>v.floor+':'+v.polygonId));
  rebuildSearchGeometry();
  const picker=$('floorSelect');
- if(picker&&[...picker.options].some(opt=>opt.value===active))picker.value=active;
+ if(picker){
+  let group=picker.querySelector('option[value="MATCHES"]');
+  if(!group){
+   group=document.createElement('option');group.value='MATCHES';
+   picker.prepend(group);
+  }
+  group.textContent='Mi planta + '+matches.length+' coincidencias ('+searchFloorSet.size+' pisos)';
+  picker.value='MATCHES';
+ }
  $('showAllFloors').hidden=floors.length<2;
  $('showAllFloors').textContent='← Todas las plantas';
  $('floorSpacing').hidden=floors.length<2;
@@ -307,6 +315,9 @@ function applySearchFloors(query){
 function clearSearchFloors(){
  searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
  window.RetailNavUnits?.clearQuery?.();
+ const picker=$('floorSelect');
+ picker?.querySelector('option[value="MATCHES"]')?.remove();
+ if(picker&&[...picker.options].some(o=>o.value===active))picker.value=active;
  target[1]=floorFocusY();
  rebuildSearchGeometry();showFloorReference();dirty=true;
 }
@@ -375,7 +386,7 @@ function makeLabels(){
   }
  }
 }
-function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
+function updateLabels(){let rect=canvas.getBoundingClientRect();for(let o of labelElems){let p=o.p.slice();p[1]+=o.floor.y;let s=screen(p),show=(searchFloorSet?.has(o.floor.id)||active==='ALL'||active===o.floor.id)&&(labelsOn||o.always||selected===o.f)&&s.w>0&&s.z<1&&(o.always||(s.x>25&&s.x<rect.width-20))&&s.y>95&&s.y<rect.height-110;if(!o.always&&active==='ALL'&&selected!==o.f)show=false;o.el.hidden=!show;if(show){o.el.style.left=(o.always?clamp(s.x,48,rect.width-48):s.x)+'px';o.el.style.top=s.y+'px';o.el.classList.toggle('selected',selected===o.f);}}}
 let routeBuffer;
 function drawRoute(dt){if(!route)return;let floor=floors.find(f=>f.id===route.floor);if(active!=='ALL'&&active!==floor.id)return;if(routeRunning)routeT=(routeT+dt*.14)%1;let arr=[];const routeColor=mapRgb('mapRoute',[1,.65,.23]);route.points.forEach(p=>arr.push(...pos(p,.2),0,0,0,...routeColor,-3));gl.uniform1f(loc.uY,floor.y);gl.uniform1f(loc.uLine,1);gl.bindBuffer(gl.ARRAY_BUFFER,routeBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.DYNAMIC_DRAW);bind({b:routeBuffer});gl.drawArrays(gl.LINE_STRIP,0,arr.length/10);let lens=[0];for(let i=1;i<route.points.length;i++)lens.push(lens[i-1]+Math.hypot(...vsub(route.points[i],route.points[i-1])));let t=(lens.at(-1)||1)*routeT,i=1;while(i<lens.length-1&&lens[i]<t)i++;let a=route.points[i-1],b=route.points[i]||a,k=(t-lens[i-1])/(lens[i]-lens[i-1]||1);let p=[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k];gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([...pos(p,.8),0,0,0,...routeColor,-3]),gl.DYNAMIC_DRAW);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*10);gl.drawArrays(gl.POINTS,0,1);}
 // Yellow escalator side rails and turquoise vertical lift shafts represent
@@ -740,6 +751,7 @@ function setFloor(id){
  if(id!=='ALL'&&!floors.some(f=>f.id===id))return;
  if(searchFloorSet){
   searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
+  $('floorSelect')?.querySelector('option[value="MATCHES"]')?.remove();
   window.RetailNavUnits?.clearQuery?.();rebuildSearchGeometry();
  }
  active=id;showFloorReference();
@@ -1625,7 +1637,7 @@ function applyMallUi(){
     select.append(option);
   }
   select.value=single?floors[0].id:'ALL';
-  select.onchange=()=>setFloor(select.value);
+  select.onchange=()=>{if(select.value!=='MATCHES')setFloor(select.value);};
   $('spread').disabled=single;
   $('showAllFloors').hidden=true;
   $('showAllFloors').textContent='← Todas las plantas';

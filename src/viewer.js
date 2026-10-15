@@ -4,7 +4,7 @@
 const $=id=>document.getElementById(id), K=['anchor','unit','zone','corridor','void','slab'];
 let data, floors=[], gl, ctx2d=null, program, loc, canvas=$('canvas'), frame=0, lastTime=0, mvp, invMvp, toastTimer, ready=false;
 let dirty=true;
-let active='ALL', searchFloorSet=null,searchCommitted='',searchMatchedVectors=new Set(),searchMarkerElements=new Map(),wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
+let active='ALL', searchFloorSet=null,searchCommitted='',searchMatchedVectors=new Set(),searchMarkerElements=new Map(),lastIndoorReferenceSource=null,wire=false, scan=false, auto=false, panMode=true, labelsOn=true, originalLevel='UL', selected=null, route=null, routeRunning=false, routeT=0;
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
 let lastEarth3DPitch=-.70,earth2D=false;
@@ -1567,16 +1567,25 @@ $('compareSaveIssue').onclick=saveAuditIssue;
 $('compareExportIssues').onclick=exportAuditIssues;
 $('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>$('exportDialog').showModal();$('jsonBtn').onclick=exportJSON;$('svgBtn').onclick=exportSVG;$('glbBtn').onclick=exportGLB;$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());window.addEventListener('resize',()=>{if(ready){resize();dirty=true;}});
  window.addEventListener('retailnav:indoor-observation',()=>{
- showFloorReference();
+ if(!ready)return;
+ const source=window.RetailNavIndoor?.getState?.()?.referenceSource||'fallback-floor';
+ const last=lastIndoorReferenceSource;
+ lastIndoorReferenceSource=source;
+ const nextFloor=visitorFloorReference();
  if(searchFloorSet&&searchCommitted){
-  const previous=JSON.stringify([...searchFloorSet]);
-  const nextFloor=visitorFloorReference();
+  const before=JSON.stringify([...searchFloorSet]);
   if(!searchFloorSet.has(nextFloor)||active!==nextFloor){
    const report=applySearchFloors(searchCommitted);
-   if(JSON.stringify(report.floors)!==previous)results();
+   if(JSON.stringify(report.floors)!==before)results();
   }
+ }else if(nextFloor&&active!==nextFloor&&
+  (source!=='fallback-entry'&&source!=='fallback-floor'||
+   last&&last!=='fallback-entry'&&last!=='fallback-floor')){
+  // Follow an independently selected/manual or surveyed floor and return to
+  // provisional ground only when a previous anchor was invalidated.
+  setFloor(nextFloor);
  }
- dirty=true;
+ showFloorReference();dirty=true;
 });
  window.addEventListener('orientationchange',()=>{resize();dirty=true;});
  window.visualViewport?.addEventListener('resize',()=>{resize();dirty=true;});}

@@ -51,8 +51,10 @@ function safeUrl(){
     !/^([a-f0-9]{64})$/.test(meta.sha256||''))throw Error('Información de versión del mapa inválida');
  const uri=new URL(meta.url,document.baseURI);
  const appRoot=new URL('.',document.baseURI);
- if(uri.origin!==location.origin||!uri.pathname.startsWith(appRoot.pathname+'maps/malls/'))
-  throw Error('El mapa no pertenece al sitio RetailNav');
+ const staticUrl=appRoot.pathname+'maps/malls/'+mallId+'-'+meta.version+'.json';
+  const dynamicUrl=appRoot.pathname+'api/public/maps/'+mallId+'/'+meta.version+'.json';
+  if(uri.origin!==location.origin||![staticUrl,dynamicUrl].includes(uri.pathname))
+   throw Error('El mapa no pertenece al shopping y versión seleccionados');
  return uri.href;
 }
 function validate(bundle){
@@ -141,12 +143,15 @@ async function putCache(cache,url,bytes){
   // Old versions of THIS mall can be removed only after the new map has been verified.
   // The cache of other malls must never be affected.
   const start=new URL('maps/malls/'+mallId+'-',document.baseURI).pathname;
+  const startDynamic=new URL('api/public/maps/'+mallId+'/',document.baseURI).pathname;
   for(const key of await cache.keys()){
    const pathname=new URL(key.url).pathname;
    const suffix=pathname.startsWith(start)?pathname.slice(start.length):'';
    // Exact mall slug + immutable 64-character content hash, never a prefix
    // match that could accidentally evict a DIFFERENT similarly named mall.
-   if(key.url!==url&&/^[a-f0-9]{64}[.]json$/.test(suffix))await cache.delete(key);
+   const dynamicSuffix=pathname.startsWith(startDynamic)?pathname.slice(startDynamic.length):'';
+   if(key.url!==url&&(/^[a-f0-9]{64}[.]json$/.test(suffix)||
+       /^[a-f0-9]{64}[.]json$/.test(dynamicSuffix)))await cache.delete(key);
   }
  }catch(e){cacheStatus='unavailable';console.warn('El mapa funciona pero no se pudo guardar para uso sin conexión.',e);}
 }

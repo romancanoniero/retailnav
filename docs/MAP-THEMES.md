@@ -67,6 +67,25 @@ El título de la cabecera usa el **acento fuerte** (`theme.accent`) de la paleta
 - **Implementación:** `src/mall-theme.js` calcula `--rn-mall-name-color`; `src/style.css` aplica explícitamente este token al elemento `#mallHeaderName`, superando la regla antigua de título `#EEFAFF` que quedaba ilegible sobre fondos claros.
 - **Pruebas:** `scripts/test-mall-themes.mjs` calcula el contraste, `scripts/test-mall-logo-browser.mjs` comprueba el color CSS real en móvil y los tres shoppings conservan el mapa intacto.
 
+### Tipografía propia de cada shopping (toda la app)
+
+La identidad publicada de **cada shopping siempre define un preset de letra**, y si todavía no tiene una paleta personalizada se utiliza automáticamente `modern` de RetailNav. El manifiesto de Aventura usa `editorial`. Los únicos valores válidos son `editorial`, `modern` y `rounded` y sus fuentes de respaldo incluyen variantes para caracteres chinos sin descargar archivos de terceros.
+
+- El runtime `src/mall-theme.js` resuelve un stack seguro de fuentes y publica `--rn-font-family`. `src/style.css` lo aplica a **toda la experiencia del visitante**: encabezado, nombre y logotipo de shopping, menús, formularios, controles, búsqueda, listas, etiquetas HTML, diálogos y **pantalla blanca de carga**.
+- Los números y nombres genuinamente tridimensionales sobre los locales se rasterizan con el mismo preset mediante `src/roof-text3d.js`; `src/viewer.js` vuelve a construir sólo la geometría del texto cuando se cambia la tipografía, **nunca los polígonos comerciales ni las coordenadas**.
+- Los carteles WebGL de sectores o zonas (`src/districts-webgl.js`) regeneran su textura de texto cuando cambia la fuente; se mantienen sus anclajes y ubicación.
+- La rueda dentada ofrece **«Tipografía de toda la aplicación»** con una lista de tres presets. Los visitantes pueden **previsualizar** y guardar el ajuste sólo en su propio dispositivo, separado por shopping, o restablecer el preset oficial. Esto **no** autoriza publicar una tipografía global para otros visitantes.
+- Los futuros operadores del shopping publicarán su preset desde el portal autenticado usando el mismo campo `theme.font` y validación de valores autorizados, según `docs/RETAILNAV-PLAN-MAESTRO-E2E.md`.
+- Pruebas: `scripts/test-mall-themes.mjs` (presets, valores rechazados, persistencia, aislamiento) y `scripts/test-mall-logo-browser.mjs` (tipografía CSS calculada del header, buscador, diálogos y loader; mapa intacto).
+
+### Logo del shopping durante la descarga
+
+En la pantalla blanca, **si el shopping tiene un logo disponible y verificado**, la composición es vertical:
+
+**logo del shopping → nombre del shopping → Powered by RetailNav → estado/progreso de descarga**.
+
+Si el shopping no dispone de imagen, se oculta el logo **sin mostrar un símbolo genérico o una imagen rota**. Se reutiliza el mismo logomark comprobado que aparece a la izquierda del nombre en la cabecera: primero una copia oficial de respaldo y, cuando se verifica, el asset persistente de la VPS. Nunca se utiliza el logo de un shopping distinto. La pantalla continúa siendo blanca y el mapa sólo se revela cuando el bundle está listo.
+
 ### Capas del mapa cubiertas
 
 - **WebGL:** caras superiores y laterales de locales y anclas, losas, pasillos, áreas, huecos, líneas y contornos, cuadrícula, selección y recorrido; distinción de tonos LL/UL/L3; exportación GLB recoge los colores actuales.

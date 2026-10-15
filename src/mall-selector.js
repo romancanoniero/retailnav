@@ -15,25 +15,70 @@ window.RETAILNAV_ACTIVE_MALL_ID=active;
 window.RETAILNAV_ACTIVE_MALL=catalog[active];
 window.RetailNavThemes?.apply?.(catalog[active]);
 function get(id){return document.getElementById(id);}
-// Branding is mall-specific, not a fixed RetailNav wordmark. An optional
-// logo is shown ON THE RIGHT of the name only if a same-origin image exists.
+// Mall branding uses an official logo mark to the LEFT of the mall name.
+// The persisted VPS brand registry is authoritative; use the previously
+// reviewed copy as a fallback when the optional API is unavailable.
 function setMallHeaderBrand(mall){
  const header=get('mallHeaderName'),img=get('mallHeaderLogo');
  if(header)header.textContent=mall.name||'Centro comercial';
+ window.RETAILNAV_BRAND_STATUS={mallId:mall.id,source:'none',databaseRegistered:false,visible:false};
  if(!img)return;
  img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');
- const raw=mall.logoUrl||mall.logo;
- if(typeof raw!=='string'||!raw.trim())return;
- try{
-  const url=new URL(raw,document.baseURI);
-  const root=new URL('.',document.baseURI).pathname;
-  if(url.origin!==location.origin||!url.pathname.startsWith(root)||
-   !/\.(?:svg|png|webp|jpe?g)$/i.test(url.pathname))return;
-  img.alt='Logotipo de '+mall.name;
-  img.onload=()=>{img.hidden=false;header?.classList.toggle('rnHasWordmark',mall.brandLogoKind==='wordmark');};
-  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');};
-  img.src=url.href;
- }catch{img.hidden=true;}
+ img.alt='Símbolo de '+(mall.name||'centro comercial');
+ const appRoot=new URL('.',document.baseURI);
+ function safeImage(raw){
+  if(typeof raw!=='string'||!raw.trim())return null;
+  try{
+   const uri=new URL(raw,document.baseURI);
+   if(uri.origin!==location.origin||!uri.pathname.startsWith(appRoot.pathname)||
+      !/\.(?:svg|png|webp|jpe?g)$/i.test(uri.pathname))return null;
+   return uri;
+  }catch{return null;}
+ }
+ const fallback=safeImage(mall.logoSymbolUrl||mall.logoUrl||mall.logo);
+ const state=window.RETAILNAV_BRAND_STATUS;
+ if(fallback){
+  img.onload=()=>{img.hidden=false;state.visible=true;};
+  img.onerror=()=>{img.hidden=true;state.visible=false;};
+  img.src=fallback.href;
+  state.source='static';
+ }
+ const endpoint='api/mall-brands/'+mall.id;
+ if(mall.publicLogoMetadataUrl!==endpoint||!/^[a-z0-9-]{2,80}$/.test(mall.id))return;
+ // Never block map loading for a decorative brand asset.
+ window.RETAILNAV_BRAND_REQUEST=(async()=>{
+  try{
+   const reply=await fetch(new URL(endpoint,document.baseURI),{
+    method:'GET',credentials:'same-origin',cache:'no-store'
+   });
+   if(!reply.ok)return false;
+   const record=await reply.json();
+   if(record.mallId!==mall.id||record.available!==true||
+      record.logo?.placement!=='left-of-name'||
+      record.logo?.mime!=='image/svg+xml'||
+      !/^[a-f0-9]{64}$/.test(record.logo.sha256||'')||
+      record.logo.url!==endpoint+'/logo.svg')return false;
+   const logo=safeImage(record.logo.url);
+   if(!logo)return false;
+   const probe=new Image();
+   const ready=await new Promise(resolve=>{
+    probe.onload=()=>resolve(true);
+    probe.onerror=()=>resolve(false);
+    probe.src=logo.href;
+   });
+   if(!ready)return false;
+   // Only replace the static logo after successfully loading the DB asset.
+   img.src=logo.href;
+   img.hidden=false;
+   state.source='database';
+   state.visible=true;
+   state.databaseRegistered=true;
+   return true;
+  }catch(error){
+   console.warn('RetailNav: logo persistente no disponible; usando la copia de respaldo.',error);
+   return false;
+  }
+ })();
 }
 setMallHeaderBrand(window.RETAILNAV_ACTIVE_MALL);
 function human(mall){return mall.name+' · '+mall.city+(mall.status==='vectorizado-provisional'?' · EN REVISIÓN':'');}

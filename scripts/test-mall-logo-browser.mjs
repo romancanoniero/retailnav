@@ -98,7 +98,8 @@ try{
  await page.locator('#mallSettingsClose').click();
  console.log('PASS title follows branded swatches and remains readable after local preview changes');
  await page.locator('#mallSettingsBtn').click();
- await page.locator('#rnPaletteOptions summary').click();
+ if(!await page.locator('#rnPaletteOptions').evaluate(el=>el.open))
+  await page.locator('#rnPaletteOptions summary').click();
  await page.locator('#rnTypographyPreset').selectOption('rounded');
  await page.waitForFunction(()=>{
   const font=window.RetailNavThemes?.getState()?.theme?.font;

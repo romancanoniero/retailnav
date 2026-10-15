@@ -184,7 +184,7 @@ for slug, mall in catalog.items():
     logo = mall.get("logoSymbolUrl") or mall.get("logoUrl")
     if logo is not None:
         assert isinstance(logo, str) and re.fullmatch(
-            r"branding/[A-Za-z0-9][A-Za-z0-9._-]*\\.(?:svg|png|webp|jpe?g)", logo
+            r"branding/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:svg|png|webp|jpe?g)", logo
         ) is not None, (slug, "invalid early logo path")
         assert (repo/"public"/logo).is_file(), (slug, "logo asset missing")
     font = mall.get("theme", {}).get("font", "modern")
@@ -192,11 +192,11 @@ for slug, mall in catalog.items():
     loader_brands[slug] = {"name": mall["name"], "logoSymbolUrl": logo, "font": font}
 loader_brand_payload = json.dumps(loader_brands, ensure_ascii=False, separators=(",", ":"))
 # Protect JSON script tags against HTML termination and JS separators.
-loader_brand_payload = (loader_brand_payload.replace("<", r"\\u003c")
-                        .replace(">", r"\\u003e")
-                        .replace("&", r"\\u0026")
-                        .replace("\u2028", r"\\u2028")
-                        .replace("\u2029", r"\\u2029"))
+loader_brand_payload = (loader_brand_payload.replace("<", r"\u003c")
+                        .replace(">", r"\u003e")
+                        .replace("&", r"\u0026")
+                        .replace("\u2028", r"\u2028")
+                        .replace("\u2029", r"\u2029"))
 
 components = {
     "__LOADER_BRAND_CATALOG__": loader_brand_payload,

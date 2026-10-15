@@ -1,0 +1,38 @@
+{
+  "schema": "retailnav.mall.theme.v1",
+  "mallId": "aventura",
+  "preset": "aventura-editorial",
+  "logoUrl": "branding/aventura-logo.svg",
+  "brandLogoKind": "wordmark",
+  "source": {
+    "site": "https://aventuramall.com/",
+    "brandLogo": "https://aventuramall.com/wp-content/uploads/2025/01/logo.svg",
+    "mark": "https://aventuramall.com/wp-content/uploads/2025/01/logo-2.svg",
+    "notes": "Official Aventura logo is black (#100F0F). Earth/ivory map shades are RetailNav's adapted presentation to harmonize with the official monochrome website, not asserted as the mall's proprietary color specification."
+  },
+  "theme": {
+    "background": "#F5F1EA",
+    "surface": "#FFFFFF",
+    "text": "#17150F",
+    "muted": "#665F54",
+    "accent": "#100F0F",
+    "accentText": "#FFFFFF",
+    "border": "#DCD4C8",
+    "mapUnit": "#CDB99E",
+    "mapAnchor": "#AA957A",
+    "mapCorridor": "#EDE3D4",
+    "mapZone": "#D9C7AE",
+    "mapSlab": "#F2E9DB",
+    "mapOutline": "#514739",
+    "mapVoid": "#D3C8B8",
+    "mapAmenity": "#57717C",
+    "mapRoute": "#AA7132",
+    "mapSelected": "#BE833B",
+    "mapGrid": "#D3C6B8",
+    "mapFloor1": "#D0BA9C",
+    "mapFloor2": "#E1D0B7",
+    "mapFloor3": "#F1E5D4",
+    "font": "editorial",
+    "corners": "soft"
+  }
+}

@@ -118,7 +118,7 @@ for slug, mall in catalog.items():
     assert isinstance(theme,dict) and len(theme)>=15
     allowed_colors = {"background","surface","text","muted","accent","accentText","border",
                       "mapUnit","mapAnchor","mapCorridor","mapZone","mapSlab","mapOutline",
-                      "mapVoid","mapAmenity","mapRoute","mapSelected","mapGrid",
+                      "mapVoid","mapAmenity","mapRoute","mapSelected","mapGrid","mapText","mapNameText",
                       "mapFloor1","mapFloor2","mapFloor3"}
     allowed_styles = {"font":{"modern","editorial","rounded"},"corners":{"soft","square"}}
     import re

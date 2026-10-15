@@ -55,8 +55,8 @@ try{
   .some(e=>e.dataset.tag==='equipaje'),null,{timeout:7000});
  assert.equal(await page.locator('#rnSearchSuggestions').isVisible(),true);
  assert.equal(await page.locator('.rnSuggestedTag[data-tag="equipaje"]').count(),1);
- await input.press('Enter');
- await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='equi',null,{timeout:8000});
+ await page.locator('.rnSuggestedTag[data-tag="equipaje"]').click();
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='equipaje',null,{timeout:8000});
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['L1','L5'],
   'confirming an existing luggage tag must open user floor and all matching floors');

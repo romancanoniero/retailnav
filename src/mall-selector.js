@@ -9,7 +9,7 @@ let catalog={};
 try{catalog=JSON.parse(node?.textContent||'{}');}catch(e){console.error('Mall catalog invalid',e);}
 const url=new URL(location.href);
 const requested=url.searchParams.get('mall');
-const active=Object.hasOwn(catalog,requested)?requested:'aventura';
+let active=Object.hasOwn(catalog,requested)?requested:'aventura';
 window.RETAILNAV_MALL_CATALOG=catalog;
 window.RETAILNAV_ACTIVE_MALL_ID=active;
 window.RETAILNAV_ACTIVE_MALL=catalog[active];
@@ -20,7 +20,7 @@ function setMallHeaderBrand(mall){
  const header=get('mallHeaderName'),img=get('mallHeaderLogo');
  if(header)header.textContent=mall.name||'Centro comercial';
  if(!img)return;
- img.hidden=true;img.removeAttribute('src');
+ img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');
  const raw=mall.logoUrl||mall.logo;
  if(typeof raw!=='string'||!raw.trim())return;
  try{
@@ -29,13 +29,46 @@ function setMallHeaderBrand(mall){
   if(url.origin!==location.origin||!url.pathname.startsWith(root)||
    !/\.(?:svg|png|webp|jpe?g)$/i.test(url.pathname))return;
   img.alt='Logotipo de '+mall.name;
-  img.onload=()=>{img.hidden=false;};
-  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');};
+  img.onload=()=>{img.hidden=false;header?.classList.toggle('rnHasWordmark',mall.brandLogoKind==='wordmark');};
+  img.onerror=()=>{img.hidden=true;img.removeAttribute('src');header?.classList.remove('rnHasWordmark');};
   img.src=url.href;
  }catch{img.hidden=true;}
 }
-setMallHeaderBrand(window.RETAILNAV_ACTIVE_MALL);
+// Resolve human-published shopping records before initializing modules that
+// capture the active mall. The shipped static catalog remains the fallback.
+window.RETAILNAV_BOOTSTRAP=(async()=>{
+ try{
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),3500);
+  try{
+   const res=await fetch(new URL('api/catalog',document.baseURI).href,{
+     cache:'no-store',credentials:'same-origin',signal:controller.signal
+   });
+   if(res.ok){
+    const remote=await res.json();
+    if(remote.schema==='retailnav.catalog.admin.v1'&&remote.malls&&
+       typeof remote.malls==='object'&&!Array.isArray(remote.malls)){
+     for(const [id,record] of Object.entries(remote.malls)){
+      if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)||id.length>72||
+         !record||record.id!==id||!record.mapAsset||!Array.isArray(record.floorLabels))continue;
+      // Overrides are published by the authenticated API, not supplied
+      // by URL parameters, localStorage or untrusted external domains.
+      catalog[id]={...(catalog[id]||{}),...record};
+     }
+    }
+   }
+  }finally{clearTimeout(timer);}
+ }catch(e){console.warn('RetailNav: catálogo dinámico no disponible; usando mapas locales.',e);}
+ active=Object.hasOwn(catalog,requested)?requested:'aventura';
+ window.RETAILNAV_MALL_CATALOG=catalog;
+ window.RETAILNAV_ACTIVE_MALL_ID=active;
+ window.RETAILNAV_ACTIVE_MALL=catalog[active];
+ setMallHeaderBrand(window.RETAILNAV_ACTIVE_MALL);
+ window.RetailNavTheme?.apply?.(catalog[active]);
+ return setupUI();
+})();
 function human(mall){return mall.name+' · '+mall.city+(mall.status==='vectorizado-provisional'?' · EN REVISIÓN':'');}
+function setupUI(){
 const panel=get('mallSettingsDialog');
 const select=get('mallSelect');
 if(!panel||!select)return;
@@ -87,4 +120,5 @@ get('mallDetectBtn').addEventListener('click',()=>{
     output.textContent=error.code===1?'Permiso de GPS denegado. Puedes seleccionar el shopping manualmente.':'No se pudo determinar tu ubicación. El selector manual sigue disponible.';
   },{enableHighAccuracy:false,timeout:12000,maximumAge:60000});
 });
+}
 })();

@@ -876,3 +876,95 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
   padding:10px 22px;min-height:46px;border:0;border-radius:12px;font-weight:700}
 .rnMapDownloadScreen button[hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){.rnMapDownloadScreen *{transition:none!important;animation:none!important}}
+
+
+/* RetailNav multi-shopping themes. A mall's branded colors do not modify
+   source map geometry, routing, friends or the mandatory white download layer. */
+body.rnThemeEnabled{
+  --bg:var(--rn-theme-bg);--panel:var(--rn-theme-surface);
+  --ink:var(--rn-theme-text);--muted:var(--rn-theme-muted);
+  --line:var(--rn-theme-border);--cyan:var(--rn-theme-accent);
+  --gold:var(--rn-theme-map-route);
+  background:var(--rn-theme-bg);color:var(--rn-theme-text);color-scheme:light;
+}
+body.rnThemeEnabled[data-rn-font=editorial]{font-family:"Helvetica Neue",Arial,system-ui,sans-serif}
+body.rnThemeEnabled[data-rn-font=modern]{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body.rnThemeEnabled[data-rn-font=rounded]{font-family:"Trebuchet MS","Avenir Next",Arial,sans-serif}
+body.rnThemeEnabled .topbar,
+body.rnThemeEnabled .sidebar{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .sidebar{background:var(--rn-theme-bg)}
+body.rnThemeEnabled .stage{background:radial-gradient(ellipse at 50% 44%,var(--rn-theme-surface) 0%,var(--rn-theme-bg) 87%)}
+body.rnThemeEnabled .eyebrow,body.rnThemeEnabled .rnMallBrand{color:var(--rn-theme-text)}
+body.rnThemeEnabled .metric,body.rnThemeEnabled .detail,
+body.rnThemeEnabled .searchbox input{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .metric span,body.rnThemeEnabled .caption,
+body.rnThemeEnabled .note,body.rnThemeEnabled .legend{color:var(--rn-theme-muted)}
+body.rnThemeEnabled .pill,body.rnThemeEnabled .tabs,body.rnThemeEnabled .tools,
+body.rnThemeEnabled .separation,body.rnThemeEnabled .statusbar,
+body.rnThemeEnabled .rnFloorPicker,body.rnThemeEnabled .label{
+  background:var(--rn-theme-surface);color:var(--rn-theme-text);
+  border-color:var(--rn-theme-border);backdrop-filter:none
+}
+body.rnThemeEnabled .tabs button,
+body.rnThemeEnabled .tools button{background:transparent;color:var(--rn-theme-text)}
+body.rnThemeEnabled button{border-color:var(--rn-theme-border);color:var(--rn-theme-text);background:var(--rn-theme-surface)}
+body.rnThemeEnabled button:hover{background:var(--rn-theme-bg);border-color:var(--rn-theme-map-outline)}
+body.rnThemeEnabled button.active,body.rnThemeEnabled button[aria-pressed=true],
+body.rnThemeEnabled .tabs button.active,body.rnThemeEnabled .rnMallSettings #mallApplyBtn{
+  background:var(--rn-theme-accent);color:var(--rn-theme-accent-text);
+  border-color:var(--rn-theme-accent)
+}
+body.rnThemeEnabled .pill.ready .dot{background:var(--rn-theme-accent)}
+body.rnThemeEnabled .pill.ready{color:var(--rn-theme-text)}
+body.rnThemeEnabled .rnMapSearch .resultlist,body.rnThemeEnabled .rnMapSearch .result,
+body.rnThemeEnabled .resultlist{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .result.active{background:var(--rn-theme-bg);color:var(--rn-theme-text);border:1px solid var(--rn-theme-border)}
+body.rnThemeEnabled .result .levelbadge{color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .hudright button,
+body.rnThemeEnabled .socialTopBtn,
+body.rnThemeEnabled .rnShowAll{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .separation label{color:var(--rn-theme-muted)}
+body.rnThemeEnabled .label.selected{color:var(--rn-theme-map-selected);border-color:var(--rn-theme-map-selected)}
+body.rnThemeEnabled .label.floor{border-left-color:var(--rn-theme-accent)}
+body.rnThemeEnabled .sidebarfooter{border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallSettings{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallSettings label{color:var(--rn-theme-text)}
+body.rnThemeEnabled .rnMallSettings select{background:var(--rn-theme-surface);color:var(--rn-theme-text);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallSettings #mallLocationStatus{background:var(--rn-theme-bg);border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallSettings hr{border-top-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallSettings .dialoghead{border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnMallBrand strong.rnHasWordmark{display:none}
+body.rnThemeEnabled .rnMallBrand img{height:39px;max-width:min(31vw,175px)}
+body.rnThemeEnabled .rnMallBrand img[hidden]{display:none!important}
+body.rnThemeEnabled .rnMallBrand{gap:8px}
+body.rnThemeEnabled[data-rn-corners=square] button,
+body.rnThemeEnabled[data-rn-corners=square] input,
+body.rnThemeEnabled[data-rn-corners=square] select,
+body.rnThemeEnabled[data-rn-corners=square] .metric,
+body.rnThemeEnabled[data-rn-corners=square] .pill,
+body.rnThemeEnabled[data-rn-corners=square] .rnMallSettings,
+body.rnThemeEnabled[data-rn-corners=square] .tabs{border-radius:2px!important}
+
+/* Optional on-device palette preview, located in the existing mall selector.
+   Tenant-wide publishing belongs to the authenticated mall admin module. */
+.rnMallSettings .dialogbody{max-height:min(73dvh,700px);overflow:auto}
+.rnThemeEditor{border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.rnThemeEditor summary{cursor:pointer;font-size:13px;font-weight:700;line-height:1.4;list-style-position:inside}
+.rnThemeEditor[open] summary{margin-bottom:11px}
+.rnThemeEditor .rnPaletteColorGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}
+.rnThemeEditor .rnPaletteColorRow{display:flex;align-items:center;justify-content:space-between;gap:6px;
+  padding:8px;border:1px solid var(--line);border-radius:8px;min-width:0;min-height:48px}
+.rnThemeEditor .rnPaletteColorRow span{font-size:11px;line-height:1.35;min-width:0}
+.rnThemeEditor input[type=color]{flex:0 0 45px;width:45px;height:34px;padding:2px;border-radius:6px;
+  background:transparent;border:1px solid var(--line);cursor:pointer}
+.rnThemeEditor .rnPaletteActions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.rnThemeEditor .rnPaletteActions button{font-size:11px;padding:8px;min-height:35px;flex:1 1 130px}
+.rnThemeEditor #rnPaletteStatus{line-height:1.45;margin-top:9px}
+body.rnThemeEnabled .rnThemeEditor{border-color:var(--rn-theme-border)}
+body.rnThemeEnabled .rnThemeEditor .rnPaletteColorRow{border-color:var(--rn-theme-border)}
+@media(max-width:470px){
+ .rnThemeEditor .rnPaletteColorGrid{grid-template-columns:1fr 1fr}
+ .rnThemeEditor .rnPaletteColorRow{padding:5px}
+ .rnThemeEditor .rnPaletteColorRow span{font-size:10px}
+ body.rnThemeEnabled .rnMallBrand img{height:29px;max-width:128px}
+}

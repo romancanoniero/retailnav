@@ -23,7 +23,7 @@ function fakeCache(){
   const body=entries.get(url);
   return body?new Response(body.slice(0),{status:200,headers:{'Content-Type':'application/json'}}):undefined;
  },async put(url,response){entries.set(url,new Uint8Array(await response.arrayBuffer()));},
- async delete(url){return entries.delete(url);},
+ async delete(url){return entries.delete(typeof url==='string'?url:url.url);},
  async keys(){return [...entries.keys()].map(url=>({url}));}};
 }
 function contextFor(asset,{cache=fakeCache(),network=true,mutateFetch,allowCache=true}={}){

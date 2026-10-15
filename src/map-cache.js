@@ -142,7 +142,11 @@ async function putCache(cache,url,bytes){
   // The cache of other malls must never be affected.
   const start=new URL('maps/malls/'+mallId+'-',document.baseURI).pathname;
   for(const key of await cache.keys()){
-   if(key.url!==url&&new URL(key.url).pathname.startsWith(start))await cache.delete(key);
+   const pathname=new URL(key.url).pathname;
+   const suffix=pathname.startsWith(start)?pathname.slice(start.length):'';
+   // Exact mall slug + immutable 64-character content hash, never a prefix
+   // match that could accidentally evict a DIFFERENT similarly named mall.
+   if(key.url!==url&&/^[a-f0-9]{64}[.]json$/.test(suffix))await cache.delete(key);
   }
  }catch(e){cacheStatus='unavailable';console.warn('El mapa funciona pero no se pudo guardar para uso sin conexión.',e);}
 }

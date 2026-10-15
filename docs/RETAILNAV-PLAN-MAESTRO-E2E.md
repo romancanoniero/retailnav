@@ -715,7 +715,7 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 
 ### 2026-10-15 — STORE-SEARCH-01 — registro por shopping, tags, búsqueda multipiso y planta provisional
 
-- **Estado:** implementado en la rama `feature/store-search-floor-follow-orientation-20261015` para QA y revisión; **aún no fusionar ni declarar publicado** sin el CI y Contabo verdes.
+- **Estado:** implementado, verificado y desplegado en Contabo (PR #39, squash `c8225de7ff57a1e4adceeec18519482a5dc23bd8`; CI multitenant, nueve niveles, posicionamiento Chromium/WebKit y caché correctos; publicación `38704454440` completada con éxito).
 - **Contrato:** tabla JSON pública y versionada por shopping `public/catalog/malls/<mallId>/stores.json`, fuente `scripts/store_catalog.py`. Cada fila contiene `storeId=mallId:floor:code`, comercio, código, nombres, etiquetas, términos de producto, `polygonId`, estado de verificación de identidad/vector/productos y trazabilidad de foto.
 - **Aventura:** tiendas ancla identificadas y demás locales vectorizados se registran usando códigos **de referencia geométrica**, no números de arrendamiento inventados. En Shanghai L1–L9 se conservan todos los registros originales del directorio y solo se vinculan los polígonos realmente identificados.
 - **Ejemplo equipaje:** `L5 / 5A10 / 美旅箱包` etiquetado provisionalmente como equipaje/maletas con evidencia de la foto `IMG_6411.jpeg`; el código **carece actualmente de polígono identificado**, por tanto L5 sí se abre y el local aparece en la lista, pero **no se inventa un vector iluminado ni una ubicación puntual**. Requiere nueva revisión del plano.
@@ -725,7 +725,7 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Pruebas:** `scripts/test-store-search-browser.mjs`, `.github/workflows/mall-store-search.yml`, QA de `scripts/verify.py`/caché y validación de índices por tienda/planta/vector.
 - **Contrato administrativo a construir:** permisos de revisión de plano, código comercial, vector, producto y entrada; publicación versionada, trazabilidad de cambios y auditoría de permisos, sin sobrescribir planos ni datos antiguos.
 - **Documentación de continuidad:** `docs/STORE-SEARCH-POSITIONING-E2E.md`.
-- **Siguiente paso:** finalizar pruebas en móvil y despliegue si pasan; identificar por revisión fotográfica el polígono real de 5A10, y vectorizar posteriormente la capa de Auckland Airport que quedó pendiente como solicitud independiente.
+- **Siguiente paso:** revisión fotográfica para identificar el polígono real de 5A10 y el resto de los códigos sin región (New World City: 24 de 395 asociados provisionalmente), y vectorizar la capa de Auckland Airport que quedó pendiente como solicitud independiente.
 
 ### 2026-10-15 — BRAND-UX-03 — logo visible desde el primer render del cargador
 

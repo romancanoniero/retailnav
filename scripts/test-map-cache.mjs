@@ -49,7 +49,7 @@ function contextFor(asset,{cache=fakeCache(),network=true,mutateFetch,allowCache
  const errors=[];
  const console={warn(...x){errors.push(['warn',...x]);},error(...x){errors.push(['error',...x]);}};
  vm.runInNewContext(code,{window,document,location,caches:window.caches,crypto:webcrypto,
-  console,URL,Response,TextDecoder,Uint8Array,ArrayBuffer,AbortController,setTimeout,clearTimeout},
+  console,fetch,URL,Response,TextDecoder,Uint8Array,ArrayBuffer,AbortController,setTimeout,clearTimeout},
   {filename:'map-cache.js',timeout:3000});
  return {controller:window.RetailNavMapCache,cache,nodes,calls,errors};
 }

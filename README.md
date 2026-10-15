@@ -2,6 +2,8 @@
 
 [**Abrir RetailNav en Improving Your Reality**](https://improvingyourreality.com/retailnav/)
 
+> **Desarrollo futuro y continuidad E2E:** [Plan Maestro de RetailNav — módulos SaaS, administradores de shoppings, comercios, web y apps móviles](docs/RETAILNAV-PLAN-MAESTRO-E2E.md). Este documento registra funcionalidades, roles, seguridad, contratos de datos, flujos E2E, pruebas, riesgos, decisiones pendientes y el estado real de implementación. **Leer y actualizar antes de comenzar cualquier módulo nuevo**; las capacidades propuestas no deben confundirse con funciones ya desplegadas.
+
 Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos aportados y experiencia social de visita en grupo. Funciona en Safari y navegadores modernos, sin instalar una app.
 
 ## Visor 3D

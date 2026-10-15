@@ -62,6 +62,13 @@ try{
  assert.equal(white,'rgb(255, 255, 255)','Loading background should be white');
  assert.equal(await page.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
  assert.equal(await page.locator('#rnMapDownloadPowered').isVisible(),true);
+ const creditSize=await page.locator('#rnMapDownloadPowered').evaluate(el=>
+  parseFloat(getComputedStyle(el).fontSize));
+ assert.equal(creditSize,11,
+  'Powered by RetailNav must remain smaller than the mall name and loading instructions');
+ const titleSize=await page.locator('#rnMapDownloadMall').evaluate(el=>
+  parseFloat(getComputedStyle(el).fontSize));
+ assert.ok(titleSize>creditSize*2);
  const loadingOrder=await page.locator('.rnMapDownloadCenter').evaluate(el=>
   [...el.children].map(node=>node.id).slice(0,3));
  assert.deepEqual(loadingOrder,['rnMapDownloadLogo','rnMapDownloadMall','rnMapDownloadPowered'],

@@ -22,6 +22,17 @@ catalog = {
     "aventura": {
         "id": "aventura", "name": "Aventura Mall", "city": "Aventura, Florida",
         "source": "Tres planos originales aportados", "status": "mock",
+        # First-party logo (Aventura Mall website, 2025/01/logo.svg) and palette
+        # sampled from its official Aventura Merge main.css, Oct 2026.
+        "logoUrl": "branding/aventura-logo.svg", "brandLogoKind": "wordmark",
+        "theme": {
+            "background": "#f3efe6", "surface": "#ffffff", "text": "#17150f",
+            "muted": "#706e6e", "accent": "#17150f", "accentText": "#ffffff",
+            "border": "#e1d9c9", "mapUnit": "#847b6b", "mapAnchor": "#3a352c",
+            "mapCorridor": "#e1d9c9", "mapZone": "#c7beac",
+            "mapSlab": "#f7f3ea", "mapOutline": "#17150f",
+            "font": "editorial", "corners": "soft"
+        },
         "floors": floors, "floorLabels": ["LL", "UL", "L3"],
         "origin": [690, 405], "scale": 0.15, "navigable": False,
         "gps": {"lat": 25.95706, "lon": -80.14275, "radiusM": 600},

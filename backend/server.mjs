@@ -4,6 +4,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {handleMallAdmin} from './mall-admin.mjs';
 
 const PORT = Number(process.env.PORT || 3181);
 const DATA_DIR = process.env.RETAILNAV_DATA_DIR || '/data';
@@ -157,6 +158,10 @@ function removeOwnOffers(userId){
 const app=http.createServer(async(req,res)=>{
   try{
     const url=new URL(req.url||'/','http://localhost');
+    if(url.pathname==='/catalog'||url.pathname.startsWith('/admin/')||url.pathname.startsWith('/public/')){
+      await handleMallAdmin(req,res,url);
+      return;
+    }
     if(req.method==='GET'&&url.pathname==='/health')
       return send(res,200,{ok:true,service:'retailnav-anonymous-presence'});
     if(req.method==='POST'&&!ALLOWED_ORIGINS.has(req.headers.origin))

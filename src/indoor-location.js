@@ -69,7 +69,7 @@ function renderLiveLocation(){
  }else if(hasFix){
   text='GPS ±'+Math.round(gpsAccuracy??0)+' m · Piso sin determinar';
  }
- if(!validAnchor&&reference.floor){
+ if(!validAnchor&&reference.floor&&gpsStatus!=='stopped'){
   text+=' · Referencia provisional '+reference.floor;
   // Keep GPS permission/fix status independent from the displayed floor:
   // a ground-level fallback is never a substitute for a valid GNSS reading.

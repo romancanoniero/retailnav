@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtempSync, rmSync, readFileSync} from 'node:fs';
+import {mkdtempSync, rmSync, readFileSync, mkdirSync, copyFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 
@@ -8,6 +8,8 @@ const dir=mkdtempSync(path.join(tmpdir(),'retailnav-presence-'));
 process.env.NODE_ENV='test';
 process.env.RETAILNAV_DATA_DIR=dir;
 process.env.RETAILNAV_ALLOWED_ORIGINS='https://improvingyourreality.com';
+mkdirSync(path.join(dir,'brand-assets'),{recursive:true});
+copyFileSync('public/branding/aventura-mark.svg',path.join(dir,'brand-assets','aventura-mark.svg'));
 const {app}=await import('./server.mjs');
 await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));
 const base='http://127.0.0.1:'+app.address().port;
@@ -21,6 +23,23 @@ async function req(method,url,body,session,customOrigin=origin){
   let data=await res.json();
   return {status:res.status,data,cookie:res.headers.get('set-cookie')?.split(';')[0]};
 }
+test('registered first-party Aventura mark survives visitor session creation',async()=>{
+ const initial=await req('GET','/mall-brands/aventura');
+ assert.equal(initial.status,200);
+ assert.equal(initial.data.available,true);
+ assert.equal(initial.data.logo.placement,'left-of-name');
+ assert.equal(initial.data.logo.url,'api/mall-brands/aventura/logo.svg');
+ const file=JSON.parse(readFileSync(path.join(dir,'mall-brands.json'),'utf8'));
+ assert.equal(file.records.aventura.logo.sha256,initial.data.logo.sha256);
+ const logo=await fetch(base+'/mall-brands/aventura/logo.svg');
+ assert.equal(logo.status,200);
+ assert.equal(logo.headers.get('content-type'),'image/svg+xml; charset=utf-8');
+ assert.match(await logo.text(),/#100F0F/);
+ const user=await req('POST','/session',{});
+ assert.equal(user.status,201);
+ assert.equal((await req('GET','/mall-brands/aventura')).status,200);
+ assert.equal((await req('GET','/mall-brands/another')).status,404);
+});
 test('anonymous people survive browser sessions; QR linking requires mutual acceptance',async()=>{
   const a=await req('POST','/session',{});
   const b=await req('POST','/session',{});

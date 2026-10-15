@@ -175,7 +175,32 @@ for slug, mall in catalog.items():
     }
     del mall["floors"]
 
+# The white loader needs only a tiny public identity catalog, not the
+# complete map/shops catalog. It runs BEFORE the large viewer modules parse.
+# Keep this separate from any private mall data or user/account metadata.
+import re
+loader_brands = {}
+for slug, mall in catalog.items():
+    logo = mall.get("logoSymbolUrl") or mall.get("logoUrl")
+    if logo is not None:
+        assert isinstance(logo, str) and re.fullmatch(
+            r"branding/[A-Za-z0-9][A-Za-z0-9._-]*\\.(?:svg|png|webp|jpe?g)", logo
+        ) is not None, (slug, "invalid early logo path")
+        assert (repo/"public"/logo).is_file(), (slug, "logo asset missing")
+    font = mall.get("theme", {}).get("font", "modern")
+    assert font in ("editorial", "modern", "rounded"), (slug, "invalid font preset")
+    loader_brands[slug] = {"name": mall["name"], "logoSymbolUrl": logo, "font": font}
+loader_brand_payload = json.dumps(loader_brands, ensure_ascii=False, separators=(",", ":"))
+# Protect JSON script tags against HTML termination and JS separators.
+loader_brand_payload = (loader_brand_payload.replace("<", r"\\u003c")
+                        .replace(">", r"\\u003e")
+                        .replace("&", r"\\u0026")
+                        .replace("\u2028", r"\\u2028")
+                        .replace("\u2029", r"\\u2029"))
+
 components = {
+    "__LOADER_BRAND_CATALOG__": loader_brand_payload,
+    "__LOADER_BRAND_JS__": (repo / "src/loader-brand.js").read_text(encoding="utf-8"),
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
     "__MALL_THEMES__": (repo / "src/mall-theme.js").read_text(encoding="utf-8"),
     "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),

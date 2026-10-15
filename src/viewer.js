@@ -284,6 +284,10 @@ function applySearchFloors(query){
  const ref=visitorFloorReference();
  if(ref)active=ref;
  searchFloorSet=new Set([ref,...matches.map(u=>u.floor)].filter(id=>floors.some(f=>f.id===id)));
+ // Frame the vertical range of the open shop floors without moving any
+ // actual slabs, recalculating their height or altering escalator landings.
+ const openedY=floors.filter(f=>searchFloorSet.has(f.id)).map(f=>f.y);
+ if(openedY.length)target[1]=(Math.min(...openedY)+Math.max(...openedY))/2;
  searchMatchedVectors=new Set((window.RetailNavUnits?.getMatchedVectors?.()||[])
   .map(v=>v.floor+':'+v.polygonId));
  rebuildSearchGeometry();
@@ -303,6 +307,7 @@ function applySearchFloors(query){
 function clearSearchFloors(){
  searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
  window.RetailNavUnits?.clearQuery?.();
+ target[1]=floorFocusY();
  rebuildSearchGeometry();showFloorReference();dirty=true;
 }
 function drawSearchMarkers(){

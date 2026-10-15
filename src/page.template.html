@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080f1c"><meta name="description" content="RetailNav: tres plantas vectorizadas a partir de los planos aportados de Aventura Mall. Visor WebGL interactivo, comparacion de fuente y exportacion GLB."><title>RetailNav | Aventura Mall - Visor 3D</title><style>__CSS__</style></head>
 <body>
+<div id="rnMapDownloadScreen" class="rnMapDownloadScreen" role="status" aria-live="polite" aria-label="Descarga del mapa del centro comercial">
+  <div class="rnMapDownloadCenter">
+    <div class="rnMapDownloadMark" aria-hidden="true">RetailNav</div>
+    <h1 id="rnMapDownloadMall">Aventura Mall</h1>
+    <p id="rnMapDownloadMessage">Comprobando si el mapa está guardado en este dispositivo…</p>
+    <progress id="rnMapDownloadProgress" value="0" max="100" aria-label="Progreso de carga del mapa"></progress>
+    <p id="rnMapDownloadDetail">Verificando la versión del mapa seleccionado.</p>
+    <button id="rnMapDownloadRetry" type="button" hidden>Reintentar descarga</button>
+  </div>
+</div>
 <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-layers" viewBox="0 0 24 24"><path d="m3 8 9-5 9 5-9 5-9-5Zm0 4 9 5 9-5M3 16l9 5 9-5"/></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
@@ -197,6 +207,7 @@
 <script id="modelData" type="application/json">__MODEL__</script>
 <script id="mallCatalog" type="application/json">__MALL_CATALOG__</script>
 <script>__MALL_SELECTOR__</script>
+<script>__MAP_CACHE__</script>
 <script>__REFERENCES__</script>
 <script>__DEMO_FRIENDS__</script>
 <script>__ESCALATORS__</script>

@@ -65,7 +65,7 @@ server {
     try_files $uri =404;
   }
   # Versioned floor JSON has immutable content and cannot mix two releases.
-  location ~ ^/maps/malls/[a-z0-9-]+[a-f0-9]{64}\\.json$ {
+  location ~ ^/maps/malls/[a-z0-9-]+[a-f0-9]{64}\.json$ {
     add_header Cache-Control "public, max-age=31536000, immutable" always;
     default_type application/json;
     try_files $uri =404;

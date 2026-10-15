@@ -66,7 +66,9 @@ export function validateDraft(d){
    throw Error('Local con datos incompletos');
  for(const p of d.pois)if(!p||!ids.has(p.floor)||!validId(p.id)||
    !safeText(p.name||'',90)||!safeText(p.category||'',90)||
-   !Number.isFinite(p.x)||!Number.isFinite(p.y))throw Error('Servicio o referencia inválida');
+   (!Number.isFinite(p.x)||!Number.isFinite(p.y))&&
+    !(p.confidence==='posición-pendiente'&&p.x==null&&p.y==null))
+    throw Error('Servicio o referencia inválida');
  return true;
 }
 function cross(a,b,c){return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);}

@@ -59,6 +59,7 @@ const uiVars={
 const $=id=>document.getElementById(id);
 let mallId='',mall=null,base={...CLASSIC},value={...CLASSIC};
 let enabled=false,origin='classic',mode='default',temporary=false;
+let mallNameColor=CLASSIC.accent;
 const storageKey=id=>'retailnav:theme-preview:v1:'+id;
 function safePatch(input){
  const cleaned={};
@@ -73,6 +74,30 @@ function safePatch(input){
 function hexToRgb(hex){
  return HEX.test(hex||'')?[1,3,5].map(n=>parseInt(hex.slice(n,n+2),16)/255):null;
 }
+// Prefer a strong brand accent when it is readable against the ACTUAL header
+// surface; otherwise use the palette's text color. Enforce WCAG AA (4.5:1)
+// for every center, including custom, on-device palette previews.
+function relativeLuminance(hex){
+ const components=hexToRgb(hex);
+ if(!components)return 0;
+ const linear=components.map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+ return .2126*linear[0]+.7152*linear[1]+.0722*linear[2];
+}
+function contrastRatio(a,b){
+ const aL=relativeLuminance(a),bL=relativeLuminance(b);
+ return (Math.max(aL,bL)+.05)/(Math.min(aL,bL)+.05);
+}
+function chooseMallNameColor(){
+ // The unbranded, legacy topbar background is #0b1523 in style.css.
+ const surface=enabled?value.surface:'#0B1523';
+ for(const candidate of [value.accent,value.text,value.accentText]){
+  if(HEX.test(candidate||'')&&contrastRatio(candidate,surface)>=4.5)
+   return candidate;
+ }
+ // Extreme user-edited combinations may have no legible palette swatch;
+ // preserve visibility, never render invisible title text.
+ return contrastRatio('#FFFFFF',surface)>=4.5?'#FFFFFF':'#111111';
+}
 function color(key,fallback){return enabled&&HEX.test(value[key]||'')?value[key]:fallback;}
 function rgb(key,fallback){
  const hex=enabled&&HEX.test(value[key]||'')?value[key]:null;
@@ -80,6 +105,8 @@ function rgb(key,fallback){
 }
 function drawCSS(){
  const body=document.body;
+ mallNameColor=chooseMallNameColor();
+ document.documentElement.style.setProperty('--rn-mall-name-color',mallNameColor);
  body.classList.toggle('rnThemeEnabled',enabled);
  if(!enabled){
   body.removeAttribute('data-rn-font');
@@ -171,6 +198,7 @@ function reset(){
 function getState(){return {
  mallId,preset:mall?.themePreset||'retailnav-classic',
  enabled,origin,mode,temporary,
+ mallNameColor,mallNameContrast:+contrastRatio(mallNameColor,enabled?value.surface:'#0B1523').toFixed(2),
  theme:{...value}
 };}
 function setupEditor(){

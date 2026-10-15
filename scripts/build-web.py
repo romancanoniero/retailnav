@@ -143,6 +143,7 @@ for slug, mall in catalog.items():
 
 components = {
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),
+    "__MALL_THEME__": (repo / "src/mall-theme.js").read_text(encoding="utf-8"),
     "__MALL_SELECTOR__": (repo / "src/mall-selector.js").read_text(encoding="utf-8"),
     "__CSS__": (repo / "src/style.css").read_text(encoding="utf-8"),
     "__MODEL__": "[]",  # legacy compatibility; map data is never embedded

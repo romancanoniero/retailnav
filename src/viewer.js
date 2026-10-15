@@ -674,8 +674,8 @@ $('resultCount').textContent=q?(list.length+pois.length+shopIds.length+districtM
     ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
     :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
-function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
-function progress(n,message){$('loading').hidden=false;$('progress').value=n;$('loadText').textContent=message;}
+function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;window.RetailNavMapCache?.showError?.(message);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
+function progress(n,message){$('loading').hidden=true;window.RetailNavMapCache?.prepare?.(message,Math.min(99,Math.round(78+Math.max(0,n)*.2)));}
 // Map-first touch controls: one finger pans; two fingers zoom, twist and tilt.
 // Movement is anchored to the world point beneath the gesture, avoiding jumps.
 function pan(dx,dy){
@@ -1255,7 +1255,7 @@ function drawComparison(){
  if(!floor)return;
  const entry=selectedMall.floorReferences?.[level];
  const size=entry?.imageSize||
-   (mallId==='aventura'?[1320,941]:(selectedMall.floors.find(f=>f[0]===level)?.[5]||[1440,620]));
+   (mallId==='aventura'?[1320,941]:(data?.find?.(f=>f[0]===level)?.[5]||[1440,620]));
  const box=entry?.viewBox||(mallId==='aventura'?'290 100 800 620':
    '0 0 '+size[0]+' '+size[1]);
  $('compareSvg').setAttribute('viewBox',box);
@@ -1477,10 +1477,10 @@ async function init(){try{
   control.value=String(baseFloorMetres);
   $('spreadValue').textContent='Altura estimada';
  }
- bindUI();updateRotationModeUI();progress(5,'Preparando los vectores de '+selectedMall.name+'...');let embedded=$('modelData');data=selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json'));floors=unpack(data);
+ bindUI();updateRotationModeUI();let embedded=$('modelData');data=window.RetailNavMapCache?await window.RetailNavMapCache.load():(selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json')));floors=unpack(data);
  const roofSummary=window.RetailNavRoofText?.prepare?.(floors,selectedMall.units||[],selectedMall.pois||[],cfg.origin,cfg.scale)||null;
  initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
-$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame(render);window.__RETAILNAV__={getState:()=>({ready,mallId,renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
+$('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame((time)=>{try{render(time);requestAnimationFrame(()=>window.RetailNavMapCache?.ready?.());}catch(e){fail('Error al dibujar el mapa: '+e.message);}});window.__RETAILNAV__={getState:()=>({ready,mallId,mapCache:window.RetailNavMapCache?.getState?.(),renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},
  floorElevationsMetres:Object.fromEntries(floors.map(f=>[f.id,f.elevationMetres])),
  heightEstimatesVerified:Boolean(heightConfig.metresVerified),

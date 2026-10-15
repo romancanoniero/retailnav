@@ -1043,7 +1043,7 @@ try {
     const catalog=window.RETAILNAV_ACTIVE_MALL;
     return {mallName:catalog.name,viewer,units:state,
       floorLabels:catalog.floorLabels,
-      geometryRegions:catalog.floors.reduce((n,f)=>n+f[3].length,0),
+      geometryRegions:window.__RETAILNAV__.floors.reduce((n,f)=>n+f.features.length,0),
       directoryRecords:catalog.commercialDirectoryRecords,
       navigable:catalog.navigable,
       demoPeople:window.RETAILNAV_DEMO_CONTACTS.length,

@@ -57,6 +57,19 @@ server {
   root /srv/retailnav/current;
   index index.html;
   charset utf-8;
+  # HTML is always revalidated so the lightweight catalog can advertise
+  # updated per-shopping map versions. Browser Cache Storage is the source
+  # of actual reusable geometry, not an accidentally stale HTML response.
+  location = /index.html {
+    add_header Cache-Control "no-cache, must-revalidate" always;
+    try_files $uri =404;
+  }
+  # Versioned floor JSON has immutable content and cannot mix two releases.
+  location ~ ^/maps/malls/[a-z0-9-]+[a-f0-9]{64}\.json$ {
+    add_header Cache-Control "public, max-age=31536000, immutable" always;
+    default_type application/json;
+    try_files $uri =404;
+  }
   location / { try_files $uri $uri/ =404; }
   location ~* \.glb$ {
     types { model/gltf-binary glb; }

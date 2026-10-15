@@ -25,13 +25,47 @@ assert 'startGeolocation(true)' in html
 script = re.search(r'<script id="modelData" type="application/json">([\s\S]+?)</script>', html)
 assert script, "Standalone HTML missing embedded 3-floor data"
 inline = json.loads(script.group(1))
-assert [f[0] for f in inline] == ["LL", "UL", "L3"]
+assert inline == [], "Map geometry must not be embedded in the HTML"
 
 catalog_match = re.search(r'<script id="mallCatalog" type="application/json">([\s\S]+?)</script>', html)
 assert catalog_match, "Standalone HTML must embed mall selector data"
 catalog = json.loads(catalog_match.group(1))
 assert {"aventura", "ap-plaza"}.issubset(catalog)
-assert len(catalog["aventura"]["floors"]) == 3
+assert 'window.RetailNavMapCache' in html
+assert 'id="rnMapDownloadScreen"' in html
+assert 'id="rnMapDownloadProgress"' in html
+assert 'id="rnMapDownloadMall"' in html
+assert 'id="rnMapDownloadRetry"' in html
+assert 'id="rnMapDownloadMessage"' in html
+import hashlib
+bundles = {}
+for slug, mall in catalog.items():
+    assert "floors" not in mall, slug+": full map must not be embedded"
+    asset = mall["mapAsset"]
+    assert asset["floorCount"] == len(mall["floorLabels"])
+    assert len(asset["version"]) == len(asset["sha256"]) == 64
+    assert asset["url"].startswith("maps/malls/"+slug+"-")
+    assert asset["url"].endswith(asset["version"]+".json")
+    asset_path = root / asset["url"]
+    assert asset_path.is_file(), asset_path
+    payload = asset_path.read_bytes()
+    assert asset["bytes"] == len(payload)
+    assert hashlib.sha256(payload).hexdigest() == asset["sha256"]
+    bundle = json.loads(payload)
+    assert bundle["schema"] == "retailnav.map.bundle.v1"
+    assert bundle["mallId"] == slug and bundle["version"] == asset["version"]
+    assert len(bundle["floors"]) == asset["floorCount"]
+    assert [f[0] for f in bundle["floors"]] == mall["floorLabels"]
+    assert all(isinstance(f[3], list) and f[3] for f in bundle["floors"])
+    original = dict(mall)
+    original.pop("mapAsset")
+    original["floors"] = bundle["floors"]
+    signed_bytes = json.dumps(original, ensure_ascii=False, separators=(",", ":"),
+                              sort_keys=True).encode("utf-8")
+    assert hashlib.sha256(signed_bytes).hexdigest() == asset["version"]
+    bundles[slug] = bundle
+assert len(bundles["aventura"]["floors"]) == 3
+assert [f[0] for f in bundles["aventura"]["floors"]] == ["LL","UL","L3"]
 ap = catalog["ap-plaza"]
 assert ap["id"] == "ap-plaza" and ap["navigable"] is False
 assert "id=\"floorPicker\"" in html and "id=\"floorSpacing\"" in html
@@ -56,8 +90,8 @@ assert asset.is_file() and asset.stat().st_size>1200
 import hashlib
 assert hashlib.sha256(asset.read_bytes()).hexdigest()==reference["sha256"]
 
-assert len(ap["floors"]) == 1 and ap["floors"][0][0] == "B1"
-ap_geometry = ap["floors"][0][3]
+assert len(bundles["ap-plaza"]["floors"]) == 1 and bundles["ap-plaza"]["floors"][0][0] == "B1"
+ap_geometry = bundles["ap-plaza"]["floors"][0][3]
 assert len(ap_geometry) == 197, "Provisional AP Plaza AI2D v2 contains 197 candidates"
 source_manifest=json.loads(Path("data/malls/ap-plaza/mall.json").read_text(encoding="utf8"))
 floor_manifest=source_manifest["floors"][0]
@@ -153,8 +187,8 @@ assert nw["commercialDirectoryRecords"] == 380
 assert nw["legacyPhotoVectorRegionCount"] == 195
 assert nw["vectorRegionCount"] == 737
 assert nw["vectorMethod"] == "photo-segmentation-nine-floors-2026-10-14"
-assert len(nw["floors"]) == 9
-assert [fl[0] for fl in nw["floors"]] == [
+assert len(bundles["new-world-city-shanghai"]["floors"]) == 9
+assert [fl[0] for fl in bundles["new-world-city-shanghai"]["floors"]] == [
     "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9"]
 assert len(nw["districts"]) == 7  # Historical L1-L7 directory headings.
 assert len(nw["floorReferences"]) == 9
@@ -217,7 +251,7 @@ assert len(nw["verticalConnectionHypotheses"]) == 39
 assert all("NOT VERIFIED" in edge["status"]
     for edge in nw["verticalConnectionHypotheses"])
 shops = 0
-for record in nw["floors"]:
+for record in bundles["new-world-city-shanghai"]["floors"]:
     level = record[0]
     source = nw["floorReferences"][level]
     photo = root/source["url"]
@@ -232,7 +266,7 @@ for record in nw["floors"]:
     assert all(f[5] and len(f[5])%3 == 0 for f in record[3])
     assert all(max(f[5]) < len(f[3])//2 for f in record[3])
     shops += sum(f[1] == 1 for f in record[3])
-assert sum(len(f[3]) for f in nw["floors"]) == 737
+assert sum(len(f[3]) for f in bundles["new-world-city-shanghai"]["floors"]) == 737
 assert shops == 627
 assert nw["photoDigitizationExperiment"]["unmappedFloorsFromDirectorySign"] == [
     "B1", "L10", "L11", "L12"]

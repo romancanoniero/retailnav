@@ -119,6 +119,89 @@ test('high-contrast palette allows accessible temporary view without changing ba
  assert.equal(e.instance.getState().enabled,true);
 });
 
+
+test('each mall title uses a strong brand palette color with WCAG AA contrast',()=>{
+ const env=environment();
+ const aventura=env.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(aventura.mallNameColor,'#100F0F');
+ assert.ok(aventura.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),'#100F0F');
+ const classic=env.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(classic.mallNameColor,'#65E6E0');
+ assert.ok(classic.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),'#65E6E0');
+});
+
+test('changing theme updates mall title color; weak accent falls back to readable text',()=>{
+ const env=environment();
+ env.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(env.instance.edit('accent','#FFFFFF'),true);
+ let state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#17150F');
+ assert.ok(state.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),state.mallNameColor);
+ assert.equal(env.instance.edit('text','#FFFFFF'),true);
+ state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#111111');
+ assert.ok(state.mallNameContrast>=4.5);
+ env.instance.preset('contrast');
+ state=env.instance.getState();
+ assert.ok(state.mallNameContrast>=4.5);
+ assert.equal(state.mallNameColor,'#111111');
+ env.instance.reset();
+ state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#100F0F');
+});
+
+test('mall title contrast remains legible in custom dark themes too',()=>{
+ const env=environment();
+ const theme={...aventuraConfig.theme,surface:'#151515',accent:'#202020',text:'#F5E9CE'};
+ const result=env.instance.apply({id:'example-mall',name:'Test center',theme});
+ assert.equal(result.mallNameColor,'#F5E9CE');
+ assert.ok(result.mallNameContrast>=4.5);
+ const intense={...theme,accent:'#101010',text:'#151515',accentText:'#151515'};
+ const fallback=env.instance.apply({id:'example-mall',name:'Test center',theme:intense});
+ assert.equal(fallback.mallNameColor,'#FFFFFF');
+ assert.ok(fallback.mallNameContrast>=4.5);
+});
+
+test('each shopping has a usable typography preset applied to the entire UI',()=>{
+ const env=environment();
+ const aventura=env.instance.apply({id:'aventura',name:'Aventura Mall',
+  theme:aventuraConfig.theme});
+ assert.equal(aventura.theme.font,'editorial');
+ assert.match(env.css.get('--rn-font-family'),/Helvetica Neue/);
+ assert.match(env.instance.fontFamily(),/Helvetica Neue/);
+ assert.match(env.instance.canvasFont(800,15),/^800 15px /);
+ assert.equal(env.instance.editFont('rounded'),true);
+ assert.equal(env.instance.getState().theme.font,'rounded');
+ assert.match(env.css.get('--rn-font-family'),/Trebuchet MS/);
+ assert.match(env.instance.canvasFont(800,15),/Trebuchet MS/);
+ assert.equal(env.instance.editFont('url(javascript:alert(1))'),false);
+ env.instance.reset();
+ assert.equal(env.instance.getState().theme.font,'editorial');
+ assert.match(env.css.get('--rn-font-family'),/Helvetica Neue/);
+ const ap=env.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(ap.theme.font,'modern');
+ assert.match(env.css.get('--rn-font-family'),/Segoe UI/);
+});
+
+test('font choices remain isolated to the selected shopping across reloads',()=>{
+ const storage=new Map();
+ const one=environment(storage);
+ one.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(one.instance.editFont('rounded'),true);
+ assert.equal(one.instance.save(),true);
+ const two=environment(storage);
+ two.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(two.instance.getState().theme.font,'modern');
+ assert.match(two.instance.fontFamily(),/Segoe UI/);
+ two.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(two.instance.getState().theme.font,'rounded');
+ two.instance.reset();
+ assert.equal(two.instance.getState().theme.font,'editorial');
+});
+
 test('cache version and mall geometry sources remain distinct from local-only previews',()=>{
  const src=readFileSync('scripts/build-web.py','utf8');
  const cache=readFileSync('src/map-cache.js','utf8');

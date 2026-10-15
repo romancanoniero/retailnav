@@ -3,8 +3,9 @@
 <body>
 <div id="rnMapDownloadScreen" class="rnMapDownloadScreen" role="status" aria-live="polite" aria-label="Descarga del mapa del centro comercial">
   <div class="rnMapDownloadCenter">
-    <div class="rnMapDownloadMark" aria-hidden="true">RetailNav</div>
+    <img id="rnMapDownloadLogo" class="rnMapDownloadLogo" alt="" hidden>
     <h1 id="rnMapDownloadMall">Aventura Mall</h1>
+    <p class="rnMapDownloadMark" id="rnMapDownloadPowered">Powered by RetailNav</p>
     <p id="rnMapDownloadMessage">Comprobando si el mapa está guardado en este dispositivo…</p>
     <progress id="rnMapDownloadProgress" value="0" max="100" aria-label="Progreso de carga del mapa"></progress>
     <p id="rnMapDownloadDetail">Verificando la versión del mapa seleccionado.</p>
@@ -116,6 +117,13 @@
 <details class="rnThemeEditor" id="rnPaletteOptions">
   <summary>Paleta de colores del mapa y presentación</summary>
   <p id="rnThemeName" class="caption">Paleta predeterminada del shopping.</p>
+  <label for="rnTypographyPreset">Tipografía de toda la aplicación</label>
+  <select id="rnTypographyPreset" aria-label="Seleccionar tipografía del shopping">
+    <option value="editorial">Editorial elegante</option>
+    <option value="modern">Moderna</option>
+    <option value="rounded">Redondeada</option>
+  </select>
+  <p id="rnTypographyStatus" class="caption">Se aplicará el preset predeterminado de este shopping.</p>
   <p class="caption">Vista previa local: podés probar colores sin modificar el mapa oficial ni los datos de otros usuarios. Un administrador podrá publicar estos ajustes desde su portal.</p>
   <label for="rnPalettePreset">Paleta base</label>
   <select id="rnPalettePreset" aria-label="Elegir paleta de colores">

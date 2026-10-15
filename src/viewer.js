@@ -1520,6 +1520,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 // Theme preview re-colors loaded mesh buffers without redownloading geometry.
 let pendingThemeRefresh=false;
+let lastRoofFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
 function recolorRoofText(){
  const ink=mapRgb('mapText',[.94,.98,1]);
  const titles=mapRgb('mapNameText',[1,.88,.56]);
@@ -1546,6 +1547,14 @@ function onThemeChange(){
     for(const floor of floors){
      for(const item of Object.values(floor.gpu||{}))if(item?.b)gl.deleteBuffer(item.b);
      for(const item of Object.values(floor.roofGpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+    }
+    const currentRoofFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
+    if(currentRoofFont!==lastRoofFont){
+     // The glyph geometry itself is generated from Canvas text masks. A font
+     // preset switch must re-rasterize those glyphs, not only recolor them.
+     window.RetailNavRoofText?.prepare?.(floors,selectedMall.units||[],
+      selectedMall.pois||[],cfg.origin,cfg.scale);
+     lastRoofFont=currentRoofFont;
     }
     recolorRoofText();
     makeGrid();

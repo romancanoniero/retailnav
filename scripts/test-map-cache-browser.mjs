@@ -60,6 +60,18 @@ try{
   'First-time unpopulated cache must display full white screen');
  const white=await page.locator('#rnMapDownloadScreen').evaluate(el=>getComputedStyle(el).backgroundColor);
  assert.equal(white,'rgb(255, 255, 255)','Loading background should be white');
+ assert.equal(await page.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
+ assert.equal(await page.locator('#rnMapDownloadPowered').isVisible(),true);
+ const loadingOrder=await page.locator('.rnMapDownloadCenter').evaluate(el=>
+  [...el.children].map(node=>node.id).slice(0,3));
+ assert.deepEqual(loadingOrder,['rnMapDownloadLogo','rnMapDownloadMall','rnMapDownloadPowered'],
+  'Loaded shopping logo must be above its name and Powered by RetailNav');
+ await page.waitForFunction(()=>{
+  const logo=document.getElementById('rnMapDownloadLogo');
+  return logo&&!logo.hidden&&logo.complete&&logo.naturalWidth>0;
+ },null,{timeout:10000});
+ assert.match(await page.locator('#rnMapDownloadLogo').getAttribute('src'),
+  /branding\/aventura-mark\.svg$/);
  const first=await waitReady('aventura');
  assert.equal(first.mapCache.origin,'network');
  assert.equal(requests.size,1);
@@ -81,6 +93,10 @@ try{
  console.log('PASS cache hit without downloading geometry');
 
  await page.goto(base+'?mall=ap-plaza',{waitUntil:'domcontentloaded',timeout:45000});
+ await page.waitForFunction(()=>document.getElementById('rnMapDownloadMall').textContent==='AP Plaza');
+ assert.equal(await page.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
+ assert.equal(await page.locator('#rnMapDownloadLogo').isVisible(),false,
+  'Shoppings without a logo must not show placeholder artwork');
  const ap=await waitReady('ap-plaza');
  assert.equal(ap.features.length,1);
  assert.equal(ap.mapCache.origin,'network');
@@ -138,6 +154,9 @@ try{
  assert.equal(broken.overlayVisible,true);
  assert.equal(await failure.locator('#rnMapDownloadRetry').isVisible(),true);
  assert.equal(await failure.locator('#rnMapDownloadScreen').isVisible(),true);
+ assert.equal(await failure.locator('#rnMapDownloadMall').textContent(),'AP Plaza');
+ assert.equal(await failure.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
+ assert.equal(await failure.locator('#rnMapDownloadLogo').isVisible(),false);
  assert.equal(await failure.evaluate(()=>!!window.__RETAILNAV__?.getState().ready),false,
   'Failed download must never expose an incomplete map');
  await other.close();

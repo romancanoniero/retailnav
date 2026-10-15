@@ -73,10 +73,10 @@ function init(gl){
   ctx.fillStyle='rgba(255,255,255,.10)';
   ctx.beginPath();ctx.roundRect(x+18,y+16,cw-36,12,5);ctx.fill();
   ctx.fillStyle='#ffffff';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.font='800 '+(d.name.length>22?23:30)+'px system-ui,sans-serif';
+  ctx.font=window.RetailNavThemes?.canvasFont?.(800,d.name.length>22?23:30)||('800 '+(d.name.length>22?23:30)+'px system-ui,sans-serif');
   ctx.fillText(d.name,x+cw/2,y+(d.detail?40:ch/2),cw-28);
   if(d.detail){
-   ctx.fillStyle='#c8ebf7';ctx.font='500 16px system-ui,sans-serif';
+   ctx.fillStyle='#c8ebf7';ctx.font=window.RetailNavThemes?.canvasFont?.(500,16)||'500 16px system-ui,sans-serif';
    ctx.fillText(d.detail,x+cw/2,y+73,cw-32);
   }
   cells.set(d.id,{
@@ -279,5 +279,21 @@ window.RetailNavDistricts={
   frames,focused,lastError
  })
 };
+// Rebuild only the texture atlas (and its context resources) when the shopping
+// font changes; source names, anchors, floor coordinates and geometry remain
+// unchanged. Every district sign continues to use the selected font preset.
+let previousFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
+window.addEventListener('retailnav:themechange',()=>{
+ const currentFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
+ if(previousFont===currentFont)return;
+ previousFont=currentFont;
+ if(gpu){
+  gpu.gl.deleteTexture(gpu.atlas);
+  gpu.gl.deleteBuffer(gpu.buffer);
+  gpu.gl.deleteProgram(gpu.program);
+  gpu=null;
+ }
+ window.__RETAILNAV__?.invalidate?.();
+});
 window.__RETAILNAV__?.invalidate?.();
 })();

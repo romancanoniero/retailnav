@@ -9,6 +9,11 @@
 'use strict';
 const HEX=/^#[0-9a-fA-F]{6}$/;
 const FONT=['editorial','modern','rounded'];
+const FONT_STACKS=Object.freeze({
+ editorial:'"Helvetica Neue","Avenir Next",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif',
+ modern:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Noto Sans CJK SC",sans-serif',
+ rounded:'"Trebuchet MS","Avenir Next Rounded","Arial Rounded MT Bold",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif'
+});
 const CORNERS=['soft','square'];
 const COLOR_KEYS={
  background:'Fondo de la aplicación',surface:'Paneles y tarjetas',
@@ -59,6 +64,7 @@ const uiVars={
 const $=id=>document.getElementById(id);
 let mallId='',mall=null,base={...CLASSIC},value={...CLASSIC};
 let enabled=false,origin='classic',mode='default',temporary=false;
+let mallNameColor=CLASSIC.accent;
 const storageKey=id=>'retailnav:theme-preview:v1:'+id;
 function safePatch(input){
  const cleaned={};
@@ -73,6 +79,30 @@ function safePatch(input){
 function hexToRgb(hex){
  return HEX.test(hex||'')?[1,3,5].map(n=>parseInt(hex.slice(n,n+2),16)/255):null;
 }
+// Prefer a strong brand accent when it is readable against the ACTUAL header
+// surface; otherwise use the palette's text color. Enforce WCAG AA (4.5:1)
+// for every center, including custom, on-device palette previews.
+function relativeLuminance(hex){
+ const components=hexToRgb(hex);
+ if(!components)return 0;
+ const linear=components.map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+ return .2126*linear[0]+.7152*linear[1]+.0722*linear[2];
+}
+function contrastRatio(a,b){
+ const aL=relativeLuminance(a),bL=relativeLuminance(b);
+ return (Math.max(aL,bL)+.05)/(Math.min(aL,bL)+.05);
+}
+function chooseMallNameColor(){
+ // The unbranded, legacy topbar background is #0b1523 in style.css.
+ const surface=enabled?value.surface:'#0B1523';
+ for(const candidate of [value.accent,value.text,value.accentText]){
+  if(HEX.test(candidate||'')&&contrastRatio(candidate,surface)>=4.5)
+   return candidate;
+ }
+ // Extreme user-edited combinations may have no legible palette swatch;
+ // preserve visibility, never render invisible title text.
+ return contrastRatio('#FFFFFF',surface)>=4.5?'#FFFFFF':'#111111';
+}
 function color(key,fallback){return enabled&&HEX.test(value[key]||'')?value[key]:fallback;}
 function rgb(key,fallback){
  const hex=enabled&&HEX.test(value[key]||'')?value[key]:null;
@@ -80,6 +110,10 @@ function rgb(key,fallback){
 }
 function drawCSS(){
  const body=document.body;
+ const currentFont=FONT.includes(value.font)?value.font:'modern';
+ document.documentElement.style.setProperty('--rn-font-family',FONT_STACKS[currentFont]);
+ mallNameColor=chooseMallNameColor();
+ document.documentElement.style.setProperty('--rn-mall-name-color',mallNameColor);
  body.classList.toggle('rnThemeEnabled',enabled);
  if(!enabled){
   body.removeAttribute('data-rn-font');
@@ -88,7 +122,7 @@ function drawCSS(){
   for(const [key,name] of Object.entries(uiVars)){
    document.documentElement.style.setProperty('--rn-theme-'+name,value[key]);
   }
-  body.dataset.rnFont=value.font;
+  body.dataset.rnFont=currentFont;
   body.dataset.rnCorners=value.corners;
  }
  $('rnThemeName')?.replaceChildren(document.createTextNode(
@@ -153,6 +187,21 @@ function edit(key,newColor){
  enabled=true;origin='preview';mode='custom';temporary=true;
  drawCSS();return true;
 }
+function editFont(fontPreset){
+ if(!FONT.includes(fontPreset))return false;
+ value.font=fontPreset;
+ enabled=true;origin='preview';mode='custom';temporary=true;
+ drawCSS();return true;
+}
+function fontFamily(){
+ const currentFont=FONT.includes(value.font)?value.font:'modern';
+ return FONT_STACKS[currentFont];
+}
+function canvasFont(weight=700,size=14){
+ const w=Number.isFinite(Number(weight))?Math.max(100,Math.min(900,Number(weight))):700;
+ const px=Number.isFinite(Number(size))?Math.max(8,Math.min(128,Number(size))):14;
+ return w+' '+px+'px '+fontFamily();
+}
 function save(){
  if(!mallId)return false;
  try{
@@ -171,6 +220,7 @@ function reset(){
 function getState(){return {
  mallId,preset:mall?.themePreset||'retailnav-classic',
  enabled,origin,mode,temporary,
+ mallNameColor,mallNameContrast:+contrastRatio(mallNameColor,enabled?value.surface:'#0B1523').toFixed(2),
  theme:{...value}
 };}
 function setupEditor(){
@@ -189,8 +239,14 @@ function setupEditor(){
   wrapper.append(text,control);
   host.append(wrapper);
  }
+ const typography=$('rnTypographyPreset');
+ if(typography)typography.value=FONT.includes(value.font)?value.font:'modern';
+ const fontStatus=$('rnTypographyStatus');
+ if(fontStatus)fontStatus.textContent='Tipografía '+(value.font||'modern')+
+  (origin==='preview'?' · vista previa local':' · preset del shopping');
  const chooser=$('rnPalettePreset');
  chooser?.addEventListener('change',()=>preset(chooser.value));
+ $('rnTypographyPreset')?.addEventListener('change',event=>editFont(event.target.value));
  $('rnPaletteSave')?.addEventListener('click',save);
  $('rnPaletteReset')?.addEventListener('click',reset);
  $('rnPaletteExport')?.addEventListener('click',()=>{
@@ -205,7 +261,7 @@ function setupEditor(){
  updateEditor();
 }
 window.RetailNavThemes={
- apply,edit,preset,save,reset,color,rgb,getState,
+ apply,edit,editFont,preset,save,reset,color,rgb,getState,fontFamily,canvasFont,
  setupEditor,hexToRgb,keys:Object.freeze([...allKeys]),
  presets:Object.freeze({classic:{...CLASSIC},contrast:{...CONTRAST}})
 };

@@ -713,6 +713,17 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Siguiente acción concreta:** ...
 ```
 
+### 2026-10-15 — BRAND-UX-02 — tipografías por shopping, identidad de carga y contraste
+
+- **Estado:** desarrollado en PR #36, en comprobación de CI/Contabo antes de marcarlo como desplegado.
+- **Requerimiento:** toda la web app del visitante debe utilizar la tipografía elegida por el shopping, **con preset obligatorio**; la pantalla blanca de carga coloca **logo verificado (si existe) sobre el nombre del shopping y debajo «Powered by RetailNav»**, luego muestra el estado y progreso.
+- **Defaults:** Aventura Mall usa `theme.font=editorial`; un mall sin paleta publicada usa `modern` clásico. Presets permitidos: `editorial`, `modern`, `rounded`. Los cambios de visitantes sólo son vista previa local aislada por shopping; la elección pública será responsabilidad del futuro panel de administración autenticado.
+- **Función E2E:** `src/mall-theme.js` valida preset, asigna el stack de fuentes y expone un generador para Canvas; `src/style.css` aplica el preset a toda la UI, diálogos, buscador, controles, etiquetas, SVG y capa de carga. `src/roof-text3d.js` reconstruye glifos de nombres y códigos sobre la malla, `src/districts-webgl.js` reconstituye el atlas de letreros y `src/viewer.js` refresca esas letras sin alterar los polígonos del plano. `src/mall-selector.js` replica el logo del registro persistente o respaldo verificado en la pantalla de carga.
+- **Accesibilidad:** nombre del shopping con color fuerte de paleta y contraste mínimo de 4,5:1 sobre su cabecera. La carga mantiene fondo blanco, y malls sin logo omiten la imagen sin marcador roto.
+- **Pruebas:** unitarias de presets/aislamiento/estilos, navegador táctil de 390×844 para icono registrado en la carga, carga sin logo, título/«Powered by RetailNav», fuente calculada en distintos componentes y cambios sin perder 3D; tests existentes de caché y todas las plantas.
+- **Pendiente:** integrar los mismos presets y permisos de publicación con el futuro portal humano de shoppings, evitando crear una segunda nomenclatura de fuentes. No permitir CSS arbitrario ni URL de fuentes externas por un visitante.
+- **Documentación:** `docs/MAP-THEMES.md`, `docs/MAP-CACHE-VERSIONS.md`.
+
 ### 2026-10-15 — BRAND-LOGO-01 — símbolo oficial a la izquierda y registro persistente en Contabo
 
 - **Estado:** desplegado y verificado (PR #35, commit squash `89baa1a6817e3830cac7dd674622a2868d630e2f`; CI Contabo `38688214456` exitoso).

@@ -84,7 +84,8 @@ function focus(code,floor){
   :Number.isFinite(u.x)&&Number.isFinite(u.y)
    ?'Código de directorio con ubicación aproximada del texto, sin pared atribuida.'
    :'Comercio identificado en el directorio; ubicación exacta sin verificar.')+
-   activity+(u.tags?' · Productos/servicios: '+u.tags.replaceAll(',',', '):'')+
+   activity+(u.tags?' · Etiquetas del directorio: '+u.tags.replaceAll(',',', '):'')+
+   (u.productTerms?.length?' · Productos asociados (por verificar): '+u.productTerms.join(', '):'')+
    '. Directorio fotográfico; la presencia comercial puede cambiar.';
  if(u.enrichmentURL){
   try{
@@ -116,7 +117,7 @@ function paint(){
   for(const el of buttons.values())el.hidden=true;
   return;
  }
- const codesOn=state.distance<145||Boolean(selected);
+ const codesOn=state.distance<145||Boolean(selected)||Boolean(searchHighlights.length);
  const floors=new Set(state.visible);
  const occupied=[];
  for(const u of units){
@@ -126,11 +127,11 @@ function paint(){
    el=document.createElement('button');
    el.type='button';el.className='rnUnitCode';
    el.textContent=u.code;
-   el.dataset.unitCode=u.code;
+   el.dataset.unitCode=u.code;el.dataset.storeId=key;
    el.title=u.name?u.code+' · '+u.name:u.code+' · código del plano';
    el.setAttribute('aria-label','Local '+el.title);
-   el.addEventListener('click',e=>{e.stopPropagation();focus(u.code)});
-   host.appendChild(el);buttons.set(u.code,el);
+   el.addEventListener('click',e=>{e.stopPropagation();focus(u.code,u.floor)});
+   host.appendChild(el);buttons.set(key,el);
   }
   if(!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
     !floors.has(u.floor)||(selected&&key!==selected&&state.distance>=145&&!searchHighlights.includes(key))){
@@ -143,18 +144,21 @@ function paint(){
   }
   const rect=[p.x-23,p.y-12,p.x+23,p.y+12];
   const collides=occupied.some(q=>rect[0]<q[2]+3&&rect[2]>q[0]-3&&rect[1]<q[3]+3&&rect[3]>q[1]-3);
-  if(collides&&u.code!==selected){el.hidden=true;continue;}
+  if(collides&&key!==selected&&!searchHighlights.includes(key)){el.hidden=true;continue;}
   occupied.push(rect);
-  el.hidden=false;el.classList.toggle('selected',u.code===selected);
+  el.hidden=false;el.classList.toggle('selected',key===selected);
+  el.classList.toggle('search-match',searchHighlights.includes(key));
   el.style.left=p.x.toFixed(1)+'px';el.style.top=p.y.toFixed(1)+'px';
   visibleCount++;
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,find,setQuery,
- getHighlightedCodes:()=>searchHighlights.slice(),
+window.RetailNavUnits={draw:paint,focus,find,suggestions,setQuery,clearQuery,
+ getHighlightedCodes,getHighlightedStoreIds:()=>searchHighlights.slice(),
+ getMatchedVectors,
  getUnits:()=>units.slice(),getState:()=>({
  count:units.length,selected,frames,visibleCount,searchHighlights:searchHighlights.slice(),
+ committedQuery,matchedVectorCount:getMatchedVectors().length,tagCount:tags.size,
  matched:units.filter(u=>u.polygonId).length,
  located:units.filter(u=>Number.isFinite(u.x)&&Number.isFinite(u.y)).length,
  withTags:units.filter(u=>u.tags).length,

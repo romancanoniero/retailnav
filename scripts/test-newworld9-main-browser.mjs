@@ -48,6 +48,15 @@ try {
   assert.equal(mall.navigable,false);
   assert.equal(mall.floorAlignmentApproved,false);
   assert.equal(mall.floorReferences.L8.imageSize[0],1376);
+  // Default: the visitor's provisional reference floor. The previous
+  // nine-floor regression now explicitly selects the all-floors view to
+  // check exactly the same 25 escalator banks and geometric invariants.
+  assert.equal(state.active,'L1');
+  assert.deepEqual(state.visible,['L1']);
+  await page.locator('#floorSelect').selectOption('ALL');
+  await page.waitForFunction(()=>window.__RETAILNAV__?.getState().active==='ALL');
+  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
+  assert.deepEqual(state.visible,['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
   // Both shops and services now belong to their own REAL 3D polygon
   // geometry, including actual raised voxel-mesh characters on shop roofs.
   const roof=await page.evaluate(()=>{

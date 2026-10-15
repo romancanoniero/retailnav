@@ -1,0 +1,124 @@
+name: Verify per-mall shop indexes and indoor multi-floor search
+on:
+  push:
+    branches: [feature/store-search-floor-follow-orientation-20261015]
+    paths:
+      - "src/viewer.js"
+      - "src/units.js"
+      - "src/unit-signs-webgl.js"
+      - "src/indoor-location.js"
+      - "src/page.template.html"
+      - "src/style.css"
+      - "scripts/build-web.py"
+      - "scripts/store_catalog.py"
+      - "scripts/visitor_reference.py"
+      - "scripts/test-store-search-browser.mjs"
+      - "data/store-products/**"
+      - ".github/workflows/mall-store-search.yml"
+  pull_request:
+    paths:
+      - "src/viewer.js"
+      - "src/units.js"
+      - "src/unit-signs-webgl.js"
+      - "src/indoor-location.js"
+      - "src/page.template.html"
+      - "src/style.css"
+      - "scripts/build-web.py"
+      - "scripts/store_catalog.py"
+      - "scripts/visitor_reference.py"
+      - "scripts/test-store-search-browser.mjs"
+      - "data/store-products/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse scripts and build current photographed-floor catalog
+        run: |
+          python3 -m py_compile scripts/build-web.py scripts/store_catalog.py scripts/visitor_reference.py
+          node --check src/viewer.js
+          node --check src/units.js
+          node --check src/unit-signs-webgl.js
+          node --check src/indoor-location.js
+          node --check scripts/test-store-search-browser.mjs
+          python3 scripts/build-web.py
+          python3 scripts/verify.py public
+          node --test scripts/test-map-cache.mjs scripts/test-positioning-core.mjs
+      - name: Verify every shop code references its own mall and real polygon only
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,re
+          from pathlib import Path
+          html=Path("public/index.html").read_text()
+          src=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]*?)</script>',html)
+          assert src
+          malls=json.loads(src.group(1))
+          assert set(malls)=={"aventura","ap-plaza","new-world-city-shanghai"},set(malls)
+          for slug,info in malls.items():
+              table=Path("public/catalog/malls")/slug/"stores.json"
+              raw=table.read_bytes()
+              data=json.loads(raw)
+              assert data["schema"]=="retailnav.mall.stores.v1"
+              assert data["mallId"]==slug
+              assert len(data["records"])==info["storeCatalog"]["total"]
+              assert info["storeCatalog"]["sha256"]==hashlib.sha256(raw).hexdigest()
+              package=json.loads((Path("public")/info["mapAsset"]["url"]).read_text())
+              floors={f[0]:set(a[0] for a in f[3]) for f in package["floors"]}
+              ids=set()
+              for u in data["records"]:
+                  key=(u["floor"],u["code"])
+                  assert key not in ids,key
+                  ids.add(key)
+                  assert u["storeId"]==slug+":"+u["floor"]+":"+u["code"]
+                  assert u["mallId"]==slug
+                  assert u["floor"] in floors
+                  assert u["productsVerified"] is False
+                  assert u["vectorVerified"] is False
+                  if u.get("polygonId"):
+                      assert u["polygonId"] in floors[u["floor"]],key
+              reference=info["defaultVisitorReference"]
+              assert reference["floor"] in floors
+              if reference["entry"]:
+                  entry=reference["entry"]
+                  assert entry["floor"]==reference["floor"]
+                  assert entry["evidence"] and isinstance(entry["x"],(float,int))
+              print("PASS",slug,"stores",len(ids),"linked",data["stats"]["linkedProvisional"],
+                    "ground floor",reference["floor"],"entry candidate",bool(reference["entry"]))
+          nwc=json.loads(Path("public/catalog/malls/new-world-city-shanghai/stores.json").read_text())
+          travel=[u for u in nwc["records"] if u["floor"]=="L5" and u["code"]=="5A10"]
+          assert len(travel)==1,travel
+          assert "equipaje" in travel[0]["productTerms"]
+          assert travel[0]["productsVerified"] is False
+          assert nwc["stats"]["total"]>380
+          aventura=json.loads(Path("public/catalog/malls/aventura/stores.json").read_text())
+          assert aventura["stats"]["total"]>=100
+          assert any("JCPenney" in u.get("name","") for u in aventura["records"])
+          assert all(u.get("codeKind")=="map-vector-reference-not-lease-number" for u in aventura["records"])
+          assert malls["new-world-city-shanghai"]["defaultVisitorReference"]["entry"] is None
+          print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
+          PY
+  browser:
+    runs-on: ubuntu-latest
+    needs: catalog
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python3 scripts/build-web.py
+      - name: Install browser
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: All-floor autocomplete and provisional entry reference iPhone smoke
+        run: node scripts/test-store-search-browser.mjs
+      - name: Preserve map versioning, loader and Aventura logo
+        run: node scripts/test-map-cache-browser.mjs

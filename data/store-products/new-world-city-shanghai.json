@@ -1,0 +1,24 @@
+{
+  "schema": "retailnav.store-products.v1",
+  "mallId": "new-world-city-shanghai",
+  "sourceDescription": "Only explicitly named luggage-oriented shops are annotated; all store ownership/stock remains unverified until the mall approves.",
+  "annotations": [
+    {
+      "floor": "L5",
+      "code": "5A10",
+      "evidence": "photo-store-name-unverified",
+      "source": "L5-user-supplied-directory-photo-IMG_6411.jpeg",
+      "sourceText": "美旅箱包",
+      "products": [
+        "equipaje",
+        "maletas",
+        "valijas",
+        "luggage",
+        "suitcases",
+        "travel cases",
+        "行李箱",
+        "旅行箱"
+      ]
+    }
+  ]
+}

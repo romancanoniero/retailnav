@@ -23,6 +23,20 @@ let gpsStartedAutomatically=false,gpsManuallyStopped=false,gpsGeneration=0;
 let anchor=null,heading=null,headingSource='unavailable',compassEnabled=false;
 let compassOffset=null,stepEnabled=false,steps=0,lastMotion=0,gravitational=9.81;
 let uncertaintyMetres=null,motionScale=null,compassListener=false,motionListener=false;
+const reference=mall.defaultVisitorReference||{};
+const entry=reference.entry;
+const fallbackAnchor=entry&&Number.isFinite(entry.x)&&Number.isFinite(entry.y)&&
+ typeof entry.floor==='string'?{
+  floor:entry.floor,x:entry.x,y:entry.y,source:'fallback-entry',
+  name:entry.name,entryVerified:Boolean(entry.entryVerified),timestampMs:null
+ }:null;
+function effectiveReference(){
+ // Explicit manual, peer or surveyed fixes take precedence unless clearly outside.
+ const outside=gpsStatus==='active'&&!near&&Number.isFinite(gpsDistance)&&
+  Number.isFinite(gpsAccuracy)&&gpsDistance>(mall.gps?.radiusM||0)+Math.max(500,gpsAccuracy*2);
+ return outside?(fallbackAnchor||null):(anchor||fallbackAnchor||null);
+}
+const referenceFloor=()=>effectiveReference()?.floor||reference.floor||null;
 const radians=d=>d*Math.PI/180;
 function proximity(lat,lon) {
  if(!mall.gps)return Infinity;
@@ -55,6 +69,12 @@ function renderLiveLocation(){
  }else if(hasFix){
   text='GPS ±'+Math.round(gpsAccuracy??0)+' m · Piso sin determinar';
  }
+ if(!validAnchor&&reference.floor&&gpsStatus!=='stopped'){
+  text+=' · Referencia provisional '+reference.floor;
+  // Keep GPS permission/fix status independent from the displayed floor:
+  // a ground-level fallback is never a substitute for a valid GNSS reading.
+  if(state==='locating')state='provisional';
+ }
  const full=hasFix?'Lat '+gpsLatitude.toFixed(6)+', Lon '+gpsLongitude.toFixed(6)+
   '. Error horizontal ±'+Math.round(gpsAccuracy??0)+' m. '+
   (Number.isFinite(gpsAltitude)?'Altitud '+Math.round(gpsAltitude)+' m. ':'Altitud no disponible. ')+
@@ -85,7 +105,11 @@ function updateMessage(){
     isSurveyGps?'coordenadas GNSS calibradas; ':'posición seleccionada; ')+
    (Number.isFinite(uncertaintyMetres)?'incertidumbre orientativa ±'+
       Math.round(uncertaintyMetres)+' m.':'sin precisión métrica calibrada.')
-  :'No hay referencia interior. El GPS por sí solo no identifica un pasillo.';
+  :fallbackAnchor
+   ?'Referencia provisional '+fallbackAnchor.floor+' · '+fallbackAnchor.name+
+     '. Acceso dibujado en el plano; NO representa tu ubicación GPS.'
+   :'Referencia provisional '+(reference.floor||'sin planta')+
+     ': no hay entrada registrada con coordenadas; no se coloca esfera.';
  ui.status.textContent=gps+
   (Number.isFinite(gpsLatitude)&&Number.isFinite(gpsLongitude)?
    ' Latitud '+gpsLatitude.toFixed(6)+'; longitud '+gpsLongitude.toFixed(6)+'.':'')+
@@ -211,6 +235,14 @@ function readOrientation(e){
  }
  updateMessage();window.__RETAILNAV__?.invalidate?.();
 }
+// Use orientation readings automatically where the browser permits them
+// without a user gesture. Safari/iOS still requires the explicit button and
+// sensor authorization; never bypass or misstate its permission model.
+const orientationCtor=window.DeviceOrientationEvent;
+if(orientationCtor&&typeof orientationCtor.requestPermission!=='function'){
+ window.addEventListener('deviceorientation',readOrientation,{passive:true});
+ compassListener=true;
+}
 ui.compass?.addEventListener('click',async()=>{
  const ctor=window.DeviceOrientationEvent;
  if(!ctor){ui.heading.textContent='No hay sensor de orientación disponible.';return;}
@@ -287,18 +319,31 @@ function draw(){
   updateMessage();
   window.dispatchEvent(new Event('retailnav:indoor-observation'));
  }
- if(!anchor||!ui.point)return;
+ if(!ui.point)return;
+ const referencePoint=effectiveReference();
+ if(!referencePoint){ui.point.hidden=true;return;}
+ const provisional=referencePoint.source==='fallback-entry';
+ ui.point.classList.toggle('is-provisional',provisional);
+ ui.point.title=provisional?'Referencia de acceso provisional (NO tu posición): '+referencePoint.name:
+  'Referencia interior: '+referencePoint.source;
+ ui.point.setAttribute('aria-label',ui.point.title);
  const view=window.__RETAILNAV__;
- if(!view?.getState().visible.includes(anchor.floor)){ui.point.hidden=true;return;}
- const world=view.pinWorld(anchor.floor,anchor.x,anchor.y);
+ if(!view?.getState().visible.includes(referencePoint.floor)){ui.point.hidden=true;return;}
+ const world=view.pinWorld(referencePoint.floor,referencePoint.x,referencePoint.y);
  const p=world&&view.projectWorld([world[0],world[1]+2,world[2]]);
  if(!p||p.w<=0||p.z<=-1||p.z>=1||p.x<5||p.y<5||
   p.x>ui.point.parentElement.clientWidth-5||
   p.y>ui.point.parentElement.clientHeight-5){ui.point.hidden=true;return;}
  ui.point.hidden=false;ui.point.style.left=p.x+'px';ui.point.style.top=p.y+'px';
  const arrow=ui.point.querySelector('.rnIndoorArrow');
- if(arrow&&heading!==null&&compassOffset!==null){
-  const r=radians(heading-compassOffset);
+ if(arrow){
+  arrow.hidden=heading===null;
+  arrow.title=compassOffset===null?
+   'Sentido provisional del teléfono; norte del plano sin calibrar':
+   'Orientación de dispositivo calibrada manualmente';
+ }
+ if(arrow&&heading!==null){
+  const r=radians(heading-(compassOffset??0));
   const dist=7;
   const p2=view.projectWorld([world[0]+Math.sin(r)*dist,world[1]+2,world[2]-Math.cos(r)*dist]);
   if(p2&&p2.w>0)arrow.style.transform='translate(-50%,-90%) rotate('+
@@ -326,6 +371,12 @@ function adoptPeerAnchor(reference){
  return true;
 }
 window.RetailNavIndoor={draw,adoptPeerAnchor,getState:()=>({
+ referenceFloor:referenceFloor(),
+ referencePoint:effectiveReference()?{...effectiveReference()}:null,
+ referenceSource:effectiveReference()?.source||'fallback-floor',
+ entryReferenceAvailable:Boolean(fallbackAnchor),
+ defaultGroundFloor:reference.floor||null,
+ mapHasRecognizedEntrance:Boolean(entry?.entryVerified),
  nearMall:near,gpsAccuracyM:gpsAccuracy,mallDistanceM:gpsDistance,
  gpsLatitude,gpsLongitude,gpsAltitudeM:gpsAltitude,
  gpsVerticalAccuracyM:gpsVerticalAccuracy,gpsTimestampMs:gpsObservedAt,
@@ -341,4 +392,5 @@ window.RetailNavIndoor={draw,adoptPeerAnchor,getState:()=>({
    anchor.source==='gps-survey-registered'?'gnss-survey-calibrated':
    stepEnabled?'low-dead-reckoning':'manual-anchor'):'none'
 })};
+window.dispatchEvent(new Event('retailnav:indoor-observation'));
 })();

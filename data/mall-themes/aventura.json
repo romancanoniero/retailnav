@@ -36,5 +36,8 @@
     "corners": "soft",
     "mapText": "#211B13",
     "mapNameText": "#57442E"
-  }
+  },
+  "logoSymbolUrl": "branding/aventura-mark.svg",
+  "logoPlacement": "left-of-name",
+  "publicLogoMetadataUrl": "api/mall-brands/aventura"
 }

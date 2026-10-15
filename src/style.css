@@ -968,3 +968,23 @@ body.rnThemeEnabled .rnThemeEditor .rnPaletteColorRow{border-color:var(--rn-them
  .rnThemeEditor .rnPaletteColorRow span{font-size:10px}
  body.rnThemeEnabled .rnMallBrand img{height:29px;max-width:128px}
 }
+
+
+/* Persistent first-party mall logomark: left of the mall name, never
+ * replace/hide the readable name; keep touch controls usable on mobile. */
+body .topbar .rnMallBrand{display:flex;flex-direction:row;align-items:center;
+ justify-content:flex-start;gap:8px;max-width:min(300px,56vw);
+ overflow:hidden;flex:0 1 auto;min-width:0}
+body .topbar .rnMallBrand img,body.rnThemeEnabled .rnMallBrand img{
+ display:block;flex:0 0 auto;width:auto;max-width:56px;height:36px;
+ object-fit:contain;object-position:center}
+body .topbar .rnMallBrand img[hidden]{display:none!important}
+body .topbar .rnMallBrand strong,body.rnThemeEnabled .rnMallBrand strong.rnHasWordmark{
+ display:block!important;min-width:0;white-space:nowrap;overflow:hidden;
+ text-overflow:ellipsis;line-height:1.2}
+@media(max-width:470px){
+ body .topbar .rnMallBrand{max-width:min(56vw,220px);gap:6px}
+ body .topbar .rnMallBrand img,body.rnThemeEnabled .rnMallBrand img{
+  max-width:40px;height:29px}
+ body .topbar .rnMallBrand strong{font-size:clamp(14px,3.9vw,18px)}
+}

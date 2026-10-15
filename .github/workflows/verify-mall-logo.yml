@@ -1,0 +1,75 @@
+name: Verify persistent Aventura logo on left
+on:
+  push:
+    branches: [feature/aventura-logo-persistent-db-left]
+    paths:
+      - "backend/mall-brands*"
+      - "backend/server.mjs"
+      - "backend/server.test.mjs"
+      - "src/mall-selector.js"
+      - "src/page.template.html"
+      - "src/style.css"
+      - "scripts/build-web.py"
+      - "scripts/test-mall-logo-browser.mjs"
+      - "deploy/deploy-social.sh"
+      - "data/mall-themes/aventura.json"
+      - ".github/workflows/verify-mall-logo.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check logo API, script syntax and preserved user sessions
+        run: |
+          node --check backend/mall-brands.mjs
+          node --check backend/server.mjs
+          node --check src/mall-selector.js
+          bash -n deploy/deploy-social.sh
+          node --test backend/mall-brands.test.mjs backend/server.test.mjs
+      - name: Build actual map and verify logo position, manifest and intact floors
+        run: |
+          python3 scripts/build-web.py
+          python3 scripts/verify.py public
+          python3 - <<'PY'
+          import json,re,hashlib
+          from pathlib import Path
+          html=Path('public/index.html').read_text()
+          assert '<img id="mallHeaderLogo" alt="" hidden><strong id="mallHeaderName"' in html
+          m=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]*?)</script>',html)
+          assert m
+          catalog=json.loads(m.group(1))
+          m=catalog['aventura']
+          assert m['logoSymbolUrl']=='branding/aventura-mark.svg'
+          assert m['publicLogoMetadataUrl']=='api/mall-brands/aventura'
+          assert m['logoPlacement']=='left-of-name'
+          assert m['mapAsset']['floorCount']==3
+          assert all('publicLogoMetadataUrl' not in mall for k,mall in catalog.items() if k!='aventura')
+          img=Path('public/branding/aventura-mark.svg').read_bytes()
+          assert b'#100F0F' in img and b'viewBox="0 0 112 69"' in img
+          print('PASS Aventura official logo',hashlib.sha256(img).hexdigest(),'3 original floors')
+          PY
+  browser:
+    runs-on: ubuntu-latest
+    needs: tests
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python3 scripts/build-web.py
+      - name: Install browser in isolated CI
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Real mobile browser smoke for logo placement and persistence
+        run: node scripts/test-mall-logo-browser.mjs
+      - name: Regression for versioned map download
+        run: node scripts/test-map-cache-browser.mjs

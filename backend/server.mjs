@@ -4,6 +4,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {createMallBrandRegistry} from './mall-brands.mjs';
 
 const PORT = Number(process.env.PORT || 3181);
 const DATA_DIR = process.env.RETAILNAV_DATA_DIR || '/data';
@@ -46,6 +47,7 @@ function jpegDimensions(buffer){
 function avatarFile(id){return path.join(AVATAR_DIR,id+'.jpg');}
 const allowedFloor=floor=>['LL','UL','L3'].includes(floor);
 fs.mkdirSync(DATA_DIR,{recursive:true,mode:0o700});
+const mallBrands=createMallBrandRegistry(DATA_DIR);
 let db;
 try {
   db=JSON.parse(fs.readFileSync(FILE,'utf8'));
@@ -157,6 +159,9 @@ function removeOwnOffers(userId){
 const app=http.createServer(async(req,res)=>{
   try{
     const url=new URL(req.url||'/','http://localhost');
+    if(url.pathname.startsWith('/mall-brands/')){
+      if(mallBrands.handle(req,res,url))return;
+    }
     if(req.method==='GET'&&url.pathname==='/health')
       return send(res,200,{ok:true,service:'retailnav-anonymous-presence'});
     if(req.method==='POST'&&!ALLOWED_ORIGINS.has(req.headers.origin))

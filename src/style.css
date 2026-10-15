@@ -998,3 +998,53 @@ body.rnThemeEnabled .topbar .rnMallBrand strong,
 body.rnThemeEnabled .topbar .rnMallBrand strong.rnHasWordmark{
  color:var(--rn-mall-name-color,#EEF5FB);
 }
+
+
+/* Universal tenant typography. Every shopping always has a safe preset:
+ * Aventura = editorial, other original malls = modern (classic default).
+ * Active preset is set by the validated palette runtime. Apply to all DOM
+ * text, forms, map labels, menus, dialogs, the white loading layer and mobile
+ * components. Embedded map canvas/WebGL labels have their own font API. */
+:root{--rn-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Noto Sans CJK SC",sans-serif}
+html,body,body *{
+ font-family:var(--rn-font-family)!important;
+}
+
+/* The mall logo must be loaded and approved before the white map screen shows
+ * it. Keep blank space compact for malls without a logo, including AP Plaza. */
+.rnMapDownloadScreen .rnMapDownloadLogo{
+ display:block;
+ align-self:center;
+ width:auto;
+ max-width:min(196px,54vw);
+ height:auto;
+ max-height:min(100px,17dvh);
+ object-fit:contain;
+ object-position:center;
+ margin:0 auto 6px;
+}
+.rnMapDownloadScreen .rnMapDownloadLogo[hidden]{
+ display:none!important;
+}
+.rnMapDownloadScreen .rnMapDownloadCenter h1{
+ text-align:center;
+ overflow-wrap:anywhere;
+}
+/* Preset selector is part of the same local theme preview used by color swatches. */
+.rnThemeEditor #rnTypographyPreset{
+ display:block;
+ width:100%;
+ min-width:0;
+ margin:8px 0 5px;
+ border:1px solid var(--line);
+ border-radius:9px;
+ padding:10px 12px;
+ background:var(--panel);
+ color:var(--ink);
+ font-size:13px;
+}
+body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
+ background:var(--rn-theme-surface);
+ color:var(--rn-theme-text);
+ border-color:var(--rn-theme-border);
+}

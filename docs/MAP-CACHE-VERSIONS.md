@@ -14,6 +14,16 @@ Abrir la página para un centro comercial seleccionado (por ejemplo, `?mall=aven
 6. Después de preparar la geometría en memoria y dibujar el primer frame, se oculta la pantalla blanca y se revela el visor. Nunca se muestra un mapa mezclado o incompleto.
 7. Si la descarga falla no se oculta la capa blanca: muestra un mensaje y un botón real para reintentar. Una versión antigua no se presenta como actual.
 
+## Primer render del logo (corrección de octubre de 2026)
+
+El logo puede aparecer después o no aparecer en la pantalla de descarga si su código espera al `onload` del logo de la cabecera, que se inicializa junto al catálogo completo y visor 3D. Este orden **no es válido** para una pantalla que tiene que existir *antes* de ese visor. Una prueba que consulta el logo sólo después de `window.__RETAILNAV__.ready` no detecta el problema.
+
+La solución utiliza un **manifiesto compacto y público de marcas** generado en `scripts/build-web.py` e insertado mediante `__LOADER_BRAND_CATALOG__` inmediatamente después de la capa blanca. `src/loader-brand.js` se ejecuta en ese punto, resuelve `?mall=`, coloca el nombre correcto, aplica el preset de tipografía y comienza a cargar el logo local validado **antes de analizar el resto de la página**. Cuando la imagen se carga, la hace visible sobre el nombre. La consulta posterior a la base persistente de logos puede sustituirlo por la misma imagen verificada servida desde la API, pero ya no condiciona su aparición inicial.
+
+El cargador y la cabecera son consumidores independientes del logo aprobado: `src/mall-selector.js` ya no borra, reemplaza ni espera a que cargue el logo de cabecera para actualizar el cargador. Los shoppings sin logo permanecen sin imagen. Los datos de mapa, mapas en caché, amigos y contactos siguen intactos.
+
+**Prueba obligatoria:** `scripts/test-loader-brand-first-paint.mjs` entrega HTML dividido en dos partes y pausa la segunda durante 2,4 segundos para simular una conexión móvil lenta. En **Chromium y WebKit de Safari** verifica que el símbolo de Aventura está descargado, tiene dimensiones visibles y se encuentra **encima del nombre mientras el catálogo completo y el visor todavía no existen en el DOM**. También comprueba AP Plaza sin logo, desaparición limpia del logotipo cuando el archivo falla y las tres plantas después de la carga.
+
 ## Consideraciones
 
 - El mapa en caché es contenido cartográfico público, **no** contactos, fotos privadas, perfiles, datos de ubicación ni sesiones de usuario.

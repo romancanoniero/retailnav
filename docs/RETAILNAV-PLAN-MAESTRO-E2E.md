@@ -713,6 +713,15 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Siguiente acción concreta:** ...
 ```
 
+### 2026-10-15 — BRAND-UX-03 — logo visible desde el primer render del cargador
+
+- **Estado:** implementado en la rama `fix/loader-brand-first-paint-20261015`, sujeto a CI, revisión y despliegue a Contabo.
+- **Problema detectado:** el logo superior de la pantalla blanca sólo se configuraba después de cargar el catálogo/visor completo y después del `onload` del logo de cabecera; podía no verse mientras se leía/descargaba el mapa, especialmente en Safari con conexión lenta.
+- **Solución:** manifiesto **público compacto** con ID/nombre/logo/preset de fuente por shopping en la parte inicial del HTML; `src/loader-brand.js` configura y carga imagen segura inmediatamente después de crear la capa de carga, antes de procesar los scripts pesados. Ya no depende de `src/mall-selector.js` ni de la cabecera. El logo se muestra arriba del nombre, después `Powered by RetailNav` en 11 px, seguido del progreso. El mall sin recurso carece de imagen.
+- **Integridad:** misma marca validada, origen local controlado y eventual recurso de VPS ya verificado; no se mezclan shoppings ni se cambian vectores, versiones, datos comerciales, amistades o backend.
+- **E2E nueva:** `scripts/test-loader-brand-first-paint.mjs`, HTML entregado por tramos con 2,4 segundos de retraso antes del visor, logo visible en Chromium y Safari WebKit cuando el catálogo principal aún no se analizó; recuperación sin logo si falla la imagen y pruebas de las tres plantas. Flujo documentado en `docs/MAP-CACHE-VERSIONS.md`.
+- **Próxima acción:** aprobar CI E2E y publicar en Contabo; registrar el commit y estado de la API sin declarar resultado antes de verificar.
+
 ### 2026-10-15 — BRAND-UX-02 — tipografías por shopping, identidad de carga y contraste
 
 - **Estado:** implementado, fusionado y desplegado en Contabo (PR #36, commit `e770f03e093acc6309652d7925668fc8e6948e5b`, publicación CI `38690684382` concluida correctamente; suites de paleta, caché, nueve plantas de New World City e iPhone superadas).

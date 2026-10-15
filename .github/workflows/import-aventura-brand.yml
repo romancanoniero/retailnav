@@ -1,0 +1,61 @@
+name: Import official Aventura Mall branding
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/mall-manager-branding
+      - name: Download first-party logo assets and inspect source palette
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from collections import Counter
+          from urllib.request import urlopen,Request
+          import re,hashlib,json,xml.etree.ElementTree as ET
+          target=Path('public/branding')
+          target.mkdir(parents=True,exist_ok=True)
+          urls={
+            'aventura-logo.svg':'https://aventuramall.com/wp-content/uploads/2025/01/logo.svg',
+            'aventura-mark.svg':'https://aventuramall.com/wp-content/uploads/2025/01/logo-2.svg',
+          }
+          for name,url in urls.items():
+            request=Request(url,headers={'User-Agent':'Mozilla/5.0 RetailNav Branding Import'})
+            with urlopen(request,timeout=35) as resp:
+              if resp.url.split('/')[2] != 'aventuramall.com':raise ValueError('Unexpected redirect')
+              body=resp.read(250001)
+            if len(body)>250000 or len(body)<100: raise ValueError('Unusual SVG size')
+            raw=body.decode('utf-8-sig')
+            if re.search(r'<\s*(script|foreignObject|iframe|image)\b|javascript:|data:text/html|onload\s*=|onerror\s*=',raw,re.I):
+              raise ValueError('Unsafe external SVG features detected')
+            svg=ET.fromstring(raw)
+            if not svg.tag.endswith('svg'):raise ValueError('Logo is not an SVG')
+            (target/name).write_bytes(body)
+            print(name,'bytes',len(body),'sha256',hashlib.sha256(body).hexdigest())
+            colors=Counter(re.findall(r'#[0-9A-Fa-f]{3,8}\b',raw))
+            print('LOGO COLORS',colors.most_common(16))
+          cssurl='https://aventuramall.com/wp-content/themes/aventura-merge/compiler/main.css?ver=1786544223'
+          with urlopen(Request(cssurl,headers={'User-Agent':'Mozilla/5.0 RetailNav Branding Review'}),timeout=35) as resp:
+            css=resp.read(4000000).decode('utf-8','replace')
+          styles=Counter(re.findall(r'#[0-9A-Fa-f]{6}\b',css))
+          print('CSS BYTES',len(css))
+          print('COMMON CSS COLORS',styles.most_common(35))
+          for name,regex in [('body',r'body\s*\{[^}]{0,1200}\}'),('header',r'(?:\.header|header)\s*\{[^}]{0,1200}\}'),('buttons',r'(?:\.btn|button)\s*\{[^}]{0,1000}\}')]:
+            matches=re.findall(regex,css,re.I)
+            print('CSS SELECTOR',name, [m[:700] for m in matches[:4]])
+          PY
+      - name: Commit official SVG assets only
+        run: |
+          git config user.name "RetailNav Brand Assets"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/branding/aventura-logo.svg public/branding/aventura-mark.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "Import Aventura Mall first-party SVG logo and brand mark"
+            git pull --rebase origin feature/mall-manager-branding
+            git push origin HEAD:feature/mall-manager-branding
+          fi

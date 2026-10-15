@@ -60,6 +60,12 @@ try{
   'First-time unpopulated cache must display full white screen');
  const white=await page.locator('#rnMapDownloadScreen').evaluate(el=>getComputedStyle(el).backgroundColor);
  assert.equal(white,'rgb(255, 255, 255)','Loading background should be white');
+ assert.equal(await page.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
+ assert.equal(await page.locator('#rnMapDownloadPowered').isVisible(),true);
+ const loadingOrder=await page.locator('.rnMapDownloadCenter').evaluate(el=>
+  [...el.children].map(node=>node.id).slice(0,2));
+ assert.deepEqual(loadingOrder,['rnMapDownloadMall','rnMapDownloadPowered'],
+  'Mall name must appear immediately above Powered by RetailNav');
  const first=await waitReady('aventura');
  assert.equal(first.mapCache.origin,'network');
  assert.equal(requests.size,1);
@@ -81,6 +87,8 @@ try{
  console.log('PASS cache hit without downloading geometry');
 
  await page.goto(base+'?mall=ap-plaza',{waitUntil:'domcontentloaded',timeout:45000});
+ await page.waitForFunction(()=>document.getElementById('rnMapDownloadMall').textContent==='AP Plaza');
+ assert.equal(await page.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
  const ap=await waitReady('ap-plaza');
  assert.equal(ap.features.length,1);
  assert.equal(ap.mapCache.origin,'network');
@@ -138,6 +146,8 @@ try{
  assert.equal(broken.overlayVisible,true);
  assert.equal(await failure.locator('#rnMapDownloadRetry').isVisible(),true);
  assert.equal(await failure.locator('#rnMapDownloadScreen').isVisible(),true);
+ assert.equal(await failure.locator('#rnMapDownloadMall').textContent(),'AP Plaza');
+ assert.equal(await failure.locator('#rnMapDownloadPowered').textContent(),'Powered by RetailNav');
  assert.equal(await failure.evaluate(()=>!!window.__RETAILNAV__?.getState().ready),false,
   'Failed download must never expose an incomplete map');
  await other.close();

@@ -713,6 +713,20 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Siguiente acción concreta:** ...
 ```
 
+### 2026-10-15 — STORE-SEARCH-01 — registro por shopping, tags, búsqueda multipiso y planta provisional
+
+- **Estado:** implementado en la rama `feature/store-search-floor-follow-orientation-20261015` para QA y revisión; **aún no fusionar ni declarar publicado** sin el CI y Contabo verdes.
+- **Contrato:** tabla JSON pública y versionada por shopping `public/catalog/malls/<mallId>/stores.json`, fuente `scripts/store_catalog.py`. Cada fila contiene `storeId=mallId:floor:code`, comercio, código, nombres, etiquetas, términos de producto, `polygonId`, estado de verificación de identidad/vector/productos y trazabilidad de foto.
+- **Aventura:** tiendas ancla identificadas y demás locales vectorizados se registran usando códigos **de referencia geométrica**, no números de arrendamiento inventados. En Shanghai L1–L9 se conservan todos los registros originales del directorio y solo se vinculan los polígonos realmente identificados.
+- **Ejemplo equipaje:** `L5 / 5A10 / 美旅箱包` etiquetado provisionalmente como equipaje/maletas con evidencia de la foto `IMG_6411.jpeg`; el código **carece actualmente de polígono identificado**, por tanto L5 sí se abre y el local aparece en la lista, pero **no se inventa un vector iluminado ni una ubicación puntual**. Requiere nueva revisión del plano.
+- **Búsqueda:** sugerencias incrementales de etiquetas existentes en el shopping, normalización de texto, confirmación con Enter/tap y apertura conjunta de la planta del usuario y todas las plantas con coincidencias; colorea cada vector que tenga relación de fuente y coloca insignias solo en tiendas con coordenadas del plano. El buscador ya no limita a cuatro resultados.
+- **Ubicación:** se utiliza planta real cuando esté realmente calibrada o declarada por el usuario; sin GPS interior utilizable o fuera de la zona aproximada, el predeterminado es planta baja o 1 (o la primera disponible), y la esfera **solo se sitúa en un acceso previamente registrado**, siempre distinguido como provisional; si no hay entrada real se informa y no se inventa. Brújula representada con flecha direccional cuando el navegador la habilita, sin fingir norte del plano calibrado.
+- **Implementación:** `src/viewer.js`, `src/units.js`, `src/indoor-location.js`, `src/unit-signs-webgl.js`, `src/style.css`, `src/page.template.html`, `scripts/build-web.py`, `scripts/store_catalog.py`, `scripts/visitor_reference.py` y `data/store-products/`.
+- **Pruebas:** `scripts/test-store-search-browser.mjs`, `.github/workflows/mall-store-search.yml`, QA de `scripts/verify.py`/caché y validación de índices por tienda/planta/vector.
+- **Contrato administrativo a construir:** permisos de revisión de plano, código comercial, vector, producto y entrada; publicación versionada, trazabilidad de cambios y auditoría de permisos, sin sobrescribir planos ni datos antiguos.
+- **Documentación de continuidad:** `docs/STORE-SEARCH-POSITIONING-E2E.md`.
+- **Siguiente paso:** finalizar pruebas en móvil y despliegue si pasan; identificar por revisión fotográfica el polígono real de 5A10, y vectorizar posteriormente la capa de Auckland Airport que quedó pendiente como solicitud independiente.
+
 ### 2026-10-15 — BRAND-UX-03 — logo visible desde el primer render del cargador
 
 - **Estado:** implementado, verificado y desplegado en Contabo (PR #38, commit `da3de85979573cc41378e5876e61ead3b7b43da5`, CI de primera carga en Chromium y Safari WebKit + caché y New World 9 niveles; despliegue `38692659243` completado correctamente).

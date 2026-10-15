@@ -60,7 +60,8 @@ try{
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['L1','L5'],
   'confirming an existing luggage tag must open user floor and all matching floors');
- assert.equal(state.highlightedVectorCount,1);
+ assert.equal(state.highlightedVectorCount,0,
+  'The photographed directory entry 5A10 does not yet have a verified map region; never invent a polygon');
  assert.equal(await page.locator('.rnUnitResult').filter({hasText:'5A10'}).count(),1);
  assert.ok((await page.locator('#rnFloorReference').textContent()).includes('L1'));
  const matches=await page.evaluate(()=>window.RetailNavUnits.find('equipaje')
@@ -68,9 +69,10 @@ try{
    ({storeId,code,floor,polygonId,productsVerified})));
  assert.deepEqual(matches,[{storeId:'new-world-city-shanghai:L5:5A10',
   code:'5A10',floor:'L5',polygonId:matches[0].polygonId,productsVerified:false}]);
- assert.ok(matches[0].polygonId);
+ assert.equal(matches[0].polygonId,null,
+  '5A10 must remain a directory-only candidate until the photographed code is mapped');
  assert.equal((await page.evaluate(()=>window.RetailNavUnits.getHighlightedCodes())).length,1);
- console.log('PASS incremental autocomplete and luggage across reference L1 plus vectorized L5');
+ console.log('PASS incremental autocomplete and luggage directory result across L1/L5 without inventing an absent vector');
 
  await input.fill('ropa');
  await input.press('Enter');

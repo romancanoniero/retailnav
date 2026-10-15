@@ -33,6 +33,8 @@
     "mapFloor2": "#E1D0B7",
     "mapFloor3": "#F1E5D4",
     "font": "editorial",
-    "corners": "soft"
+    "corners": "soft",
+    "mapText": "#211B13",
+    "mapNameText": "#57442E"
   }
 }

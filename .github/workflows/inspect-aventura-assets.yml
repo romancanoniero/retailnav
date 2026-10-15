@@ -1,0 +1,26 @@
+name: Inspect Aventura official branding
+on:
+  push:
+    branches: [feature/mall-manager-branding]
+    paths: [.github/workflows/inspect-aventura-assets.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Inspect only official Aventura website assets
+        run: |
+          python3 - <<'PY'
+          import urllib.request,re,html
+          u='https://aventuramall.com/'
+          request=urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0 (compatible; RetailNavBrandReview/1.0)'})
+          with urllib.request.urlopen(request,timeout=30) as resp: page=resp.read().decode('utf8','replace')
+          print('OFFICIAL HOMEPAGE BYTES',len(page))
+          for pattern in (r'<img[^>]*(?:logo|Logo)[^>]*>',r'<svg[^>]*(?:logo|Logo)[^>]*>',r'<link[^>]*stylesheet[^>]*>',r'<source[^>]*(?:logo|Logo)[^>]*>',r'[^"\s<>]{1,200}(?:logo|Logo)[^"\s<>]{1,200}'):
+            matches=re.findall(pattern,page,re.I)
+            print('MATCHES',pattern,'COUNT',len(matches))
+            for candidate in matches[:15]: print('ASSET',html.unescape(candidate[:500]))
+          PY

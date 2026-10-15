@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#111a22">
+<title>RetailNav | Administración de shoppings</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1a2e3a;background:#f4f6f8;font-size:14px}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}
+button{background:#152c39;color:white;border:0;border-radius:9px;padding:10px 14px;min-height:40px;cursor:pointer}
+button:hover{filter:brightness(1.1)}button.secondary{color:#152c39;background:#e5ebf0}button.danger{background:#9b302d}
+button:disabled{opacity:.35;cursor:default}input,select,textarea{border:1px solid #afc0cb;border-radius:8px;background:#fff;color:#152c39;padding:10px;min-width:0;max-width:100%}
+input[type=color]{width:62px;height:40px;padding:3px;cursor:pointer}input[type=file]{max-width:100%}
+input[type=checkbox]{width:20px;height:20px;vertical-align:middle}.muted{color:#617583;font-size:12px;line-height:1.6}
+label{font-size:12px;font-weight:600;display:grid;gap:6px}strong{font-weight:700}
+header{background:#132632;color:white;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 22px}
+header a{color:#d4ecf2;text-decoration:none}.shell{max-width:1500px;margin:0 auto;padding:19px;display:grid;grid-template-columns:265px minmax(0,1fr);gap:16px}
+.panel,.pane{background:white;border:1px solid #dbe3e9;border-radius:16px;padding:18px;min-width:0}
+.panel h2,.pane h2{font-size:18px;margin:0 0 13px}.panel h3,.pane h3{font-size:15px;margin:20px 0 9px}
+.flex{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.stack{display:grid;gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:11px}.wide{grid-column:1/-1}
+.menu{display:grid;gap:5px;margin:10px 0}.menu button{background:transparent;color:#193444;text-align:left}
+.menu button.selected{background:#d9eaf0;color:#12303e;font-weight:700}
+hr{border:0;border-top:1px solid #e2e9ed;margin:17px 0}
+#feedback{margin:12px auto;max-width:1300px;border-radius:10px;padding:12px 16px;background:#e4eef6;color:#15394f}
+#feedback[hidden]{display:none}#feedback.error{background:#ffece9;color:#8d2920}
+#signin{max-width:410px;margin:9vh auto;background:white;border:1px solid #e0e7e9;border-radius:20px;padding:28px;box-shadow:0 12px 50px #11334a12}
+#signin h1{font-size:23px}#signin .stack{margin-top:20px}
+#workspace[hidden],#signin[hidden],.view[hidden],[hidden]{display:none!important}
+#mallButtons button{width:100%;text-align:left;background:#edf1f4;color:#153242;border-radius:8px;margin:3px 0}
+#mallButtons button.current{background:#1a404f;color:white}
+#palette{display:grid;grid-template-columns:repeat(auto-fit,minmax(186px,1fr));gap:12px}
+.coloritem{display:flex;align-items:center;gap:10px;background:#f6f8f9;border:1px solid #e4e7e9;border-radius:11px;padding:8px}
+.coloritem label{flex:1}.coloritem input[type=color]{flex:0 0 58px}
+#brandPreview{border-radius:14px;min-height:120px;padding:20px;margin-top:14px;display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+#brandPreview img{max-width:160px;max-height:72px;object-fit:contain}
+#brandPreview button{font-weight:700}
+#floorSvg{display:block;background:#fafafa;width:100%;height:auto;max-height:58vh;border:1px dashed #a4b5bf;border-radius:11px;touch-action:manipulation;cursor:crosshair}
+#floorSvg text{pointer-events:none;font-size:14px;font-weight:700;fill:#173647;paint-order:stroke;stroke:white;stroke-width:3}
+#floorSvg polygon{fill:rgba(89,170,177,.22);stroke:#168b9a;stroke-width:2}
+#floorSvg polyline{fill:none;stroke:#d17d19;stroke-width:3;stroke-dasharray:8 5}
+#floorSvg circle{fill:#dc8113;stroke:white;stroke-width:2}
+.mini{font-size:11px;line-height:1.5;background:#f5f8fa;padding:7px 9px;border-radius:7px}
+tr td,tr th{padding:9px;border-bottom:1px solid #e0e6eb;font-size:12px;text-align:left;vertical-align:middle}
+table{border-collapse:collapse;width:100%;table-layout:auto}table button{min-height:29px;padding:5px 8px;font-size:11px}
+.scroll{overflow:auto;max-height:310px}select{min-height:40px}
+.session{font-size:12px;color:#b9d6e4}
+#newPassword{padding:10px;background:#fff9d7;color:#5e4715;overflow-wrap:anywhere;font-family:monospace}
+small{display:block}
+@media(max-width:830px){.shell{grid-template-columns:1fr;padding:10px}.panel{padding:13px}.pane{padding:14px}header{padding:12px}.menu{display:flex;overflow:auto}.menu button{white-space:nowrap}#floorSvg{max-height:45vh}}
+</style>
+</head>
+<body>
+<header>
+ <div><strong>RetailNav</strong> <span style="opacity:.7">/ Administración de centros comerciales</span></div>
+ <div class="flex"><span id="sessionName" class="session"></span><a href="../">Ver mapas</a><button id="signout" class="secondary" hidden>Cerrar sesión</button></div>
+</header>
+<div id="feedback" role="status" aria-live="polite" hidden></div>
+<section id="signin">
+ <h1>Acceso del personal autorizado</h1>
+ <p class="muted">Cada shopping gestiona únicamente sus propios mapas y su identidad visual. El ingreso es independiente de las cuentas de visitantes.</p>
+ <form id="signinForm" class="stack">
+ <label>Usuario administrativo<input id="loginUser" autocomplete="username" required></label>
+ <label>Contraseña<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+ <button type="submit">Entrar al panel</button>
+ </form>
+ <p class="muted">Las cuentas se entregan por el administrador de RetailNav. No existe registro público automático con permisos de edición.</p>
+</section>
+<div id="workspace" hidden class="shell">
+ <aside class="panel">
+  <h2>Mis shoppings</h2>
+  <div id="mallButtons"></div>
+  <div id="platformTools" hidden>
+   <hr><h3>Dar de alta un shopping</h3>
+   <form id="createMall" class="stack">
+    <label>Identificador URL<input name="id" placeholder="mi-centro-comercial" required pattern="[a-z0-9-]+"></label>
+    <label>Nombre del shopping<input name="name" required></label>
+    <label>Ciudad<input name="city"></label>
+    <button type="submit">Crear borrador</button>
+   </form>
+   <hr><h3>Importar un shopping existente</h3>
+   <select id="seedMall"></select><button id="seedBtn" type="button" class="secondary">Conservar e importar su mapa actual</button>
+   <hr><h3>Autorizar un empleado</h3>
+   <form id="createAccount" class="stack">
+    <label>Usuario<input name="username" placeholder="responsable@shopping.com" required></label>
+    <label>Shopping<select name="mallId" id="accountMall"></select></label>
+    <button type="submit">Crear acceso</button>
+   </form>
+   <p id="newPassword" hidden></p>
+  </div>
+ </aside>
+ <main class="pane">
+  <section id="emptyMall"><h2>Seleccioná un shopping</h2><p>Podés crear uno nuevo o editar su identidad, planos, comercios y servicios.</p></section>
+  <div id="editor" hidden>
+   <div class="flex" style="justify-content:space-between">
+    <div><h2 id="editorTitle">Shopping</h2><p id="revisionInfo" class="muted"></p></div>
+    <div class="flex"><button id="saveDraft" type="button">Guardar borrador</button><button id="exportDraft" class="secondary" type="button">Exportar JSON</button></div>
+   </div>
+   <nav class="menu" aria-label="Secciones de administración">
+    <button class="selected" type="button" data-tab="identity">Identidad visual</button>
+    <button type="button" data-tab="floors">Plantas y polígonos</button>
+    <button type="button" data-tab="stores">Locales y buscador</button>
+    <button type="button" data-tab="services">Servicios y referencias</button>
+    <button type="button" data-tab="publication">Publicación y versiones</button>
+   </nav>
+   <section class="view" data-view="identity">
+    <h3>Datos generales</h3>
+    <div class="grid">
+     <label>Nombre<input id="nameInput" maxlength="100"></label>
+     <label>Ciudad<input id="cityInput" maxlength="130"></label>
+     <label class="wide">Sitio oficial (HTTPS)<input id="websiteInput" placeholder="https://"></label>
+    </div>
+    <hr><h3>Logo del shopping</h3>
+    <div class="flex"><input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp">
+     <button id="uploadLogo" type="button">Subir logo</button></div>
+    <p class="muted">El logo queda en el espacio privado de tu shopping hasta su publicación. Para seguridad, los nuevos SVG externos no se admiten; usá PNG, JPG o WebP.</p>
+    <hr><h3>Colores del sitio y del mapa 3D</h3>
+    <div id="palette"></div>
+    <div class="grid" style="margin-top:14px">
+     <label>Tipografía<select id="fontPreset"><option value="editorial">Editorial elegante</option><option value="modern">Moderna</option><option value="rounded">Redondeada</option></select></label>
+     <label>Esquinas<select id="cornersPreset"><option value="soft">Suaves</option><option value="square">Rectas</option></select></label>
+    </div>
+    <div id="brandPreview" aria-label="Vista previa de la identidad visual">
+     <img id="previewLogo" hidden alt="Logo del shopping"><span id="previewName" style="font-weight:700;font-size:21px">Shopping</span>
+     <button type="button" tabindex="-1" style="pointer-events:none">Buscar locales</button>
+    </div>
+   </section>
+   <section class="view" data-view="floors" hidden>
+    <h3>Plantas, imágenes y sectores</h3>
+    <p class="muted">Primero cargá la foto o plano 2D de cada planta. Después dibujá el contorno de cada local haciendo clic en sus vértices. La geometría importada que ya existía se conserva íntegra y no se sobrescribe al cambiar el estilo.</p>
+    <div class="grid">
+     <label>Planta a editar<select id="floorSelectAdmin"></select></label>
+     <label>Nombre de la planta<input id="floorName" placeholder="Planta baja"></label>
+    </div>
+    <div class="flex" style="margin:12px 0">
+     <button id="addFloor" type="button" class="secondary">Agregar planta</button>
+     <button id="deleteFloor" type="button" class="danger">Quitar planta</button>
+     <input id="floorImageFile" type="file" accept="image/png,image/jpeg,image/webp">
+     <button id="uploadFloorPhoto" type="button">Subir plano 2D</button>
+    </div>
+    <div id="floorEditTools">
+     <div class="grid">
+      <label>ID del sector<input id="polygonId" placeholder="LL-101"></label>
+      <label>Tipo<select id="polygonKind"><option value="unit">Local comercial</option><option value="anchor">Tienda ancla</option><option value="corridor">Pasillo</option><option value="zone">Zona</option><option value="slab">Losa / área del edificio</option><option value="void">Vacío / apertura</option></select></label>
+      <label class="wide">Nombre o número del sector<input id="polygonName" placeholder="Local 101"></label>
+     </div>
+     <div class="flex" style="margin:10px 0">
+      <button id="finishPolygon" type="button">Cerrar y guardar polígono</button>
+      <button id="undoVertex" class="secondary" type="button">Deshacer punto</button>
+      <button id="clearVertices" class="secondary" type="button">Cancelar dibujo</button>
+      <span id="polygonHint" class="muted">Tocá el plano para marcar sus vértices.</span>
+     </div>
+    </div>
+    <svg id="floorSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" aria-label="Plano de planta: tocar para dibujar polígonos" tabindex="0"></svg>
+    <div class="scroll"><table><thead><tr><th>Sector</th><th>Clase</th><th>Vértices</th><th>Acción</th></tr></thead><tbody id="polygonRows"></tbody></table></div>
+   </section>
+   <section class="view" data-view="stores" hidden>
+    <h3>Directorio de locales</h3>
+    <p class="muted">Importá un CSV con columnas <code>floor,code,name,category,tags,polygonId</code> o agregá locales individualmente. El buscador utiliza los nombres, categorías y palabras clave; los locales sin polígono quedan señalados como pendientes de localización.</p>
+    <div class="flex"><input id="csvInput" type="file" accept=".csv,text/csv">
+     <button id="importCsv" type="button">Importar CSV</button><button id="csvTemplate" type="button" class="secondary">Descargar plantilla</button></div>
+    <form id="storeForm" class="grid" style="margin:13px 0">
+     <label>Planta<select name="floor" id="storeFloor" required></select></label>
+     <label>Código<input name="code" required placeholder="101"></label>
+     <label>Comercio<input name="name" placeholder="Nombre comercial"></label>
+     <label>Actividad / categoría<input name="category" placeholder="Ropa, gastronomía..."></label>
+     <label class="wide">Productos y palabras clave<input name="tags" placeholder="zapatillas, deportes, running"></label>
+     <label>Sector / polígono<input name="polygonId" placeholder="LL-101"></label>
+     <button type="submit">Agregar o actualizar local</button>
+    </form>
+    <p id="storeCount" class="muted"></p>
+    <div class="scroll"><table><thead><tr><th>Planta</th><th>Código</th><th>Comercio</th><th>Categoría</th><th>Acción</th></tr></thead><tbody id="storeRows"></tbody></table></div>
+   </section>
+   <section class="view" data-view="services" hidden>
+    <h3>Ascensores, escaleras y servicios</h3>
+    <p class="muted">Guardá referencias verificables por planta. La relación física entre plantas y el ruteo permanecen deshabilitados hasta su validación técnica.</p>
+    <form id="poiForm" class="grid">
+     <label>Planta<select name="floor" id="poiFloor"></select></label>
+     <label>ID<input name="id" placeholder="L1-LIFT-1" required></label>
+     <label>Tipo<select name="category"><option value="elevator">Ascensor</option><option value="escalator">Escalera mecánica</option><option value="toilet">Baños</option><option value="information">Información</option><option value="exit">Salida</option><option value="other">Otro</option></select></label>
+     <label>Nombre<input name="name" placeholder="Ascensor central"></label>
+     <label>X (píxeles)<input name="x" type="number" step=".1" required></label>
+     <label>Y (píxeles)<input name="y" type="number" step=".1" required></label>
+     <button type="submit">Guardar referencia</button>
+    </form>
+    <div class="scroll"><table><thead><tr><th>Planta</th><th>Referencia</th><th>Coordenadas</th><th>Acción</th></tr></thead><tbody id="poiRows"></tbody></table></div>
+   </section>
+   <section class="view" data-view="publication" hidden>
+    <h3>Revisión y publicación</h3>
+    <p class="muted">Guardar un borrador no cambia la web de visitantes. Publicar genera una versión inmutable que RetailNav descarga y guarda automáticamente en la caché del teléfono. El mapa publicado conserva la etiqueta <strong>provisional / no apto para navegación física</strong>.</p>
+    <p id="reviewSummary" class="mini"></p>
+    <label class="flex" style="margin:20px 0"><input type="checkbox" id="publishCheck"> He revisado el plano, la información comercial y las referencias visuales.</label>
+    <div class="flex"><button id="publishBtn" type="button">Publicar versión del shopping</button><a id="openPublicMall" target="_blank" rel="noopener" href="../">Ver versión publicada</a></div>
+    <hr><h3>Historial y reversión</h3>
+    <div id="historyList"></div>
+    <hr><h3>Respaldo / traslado de un operador</h3>
+    <div class="flex"><input id="draftFileInput" type="file" accept=".json,application/json"><button id="importDraft" type="button">Cargar JSON en borrador</button></div>
+   </section>
+  </div>
+ </main>
+</div>
+<script src="admin.js" defer></script>
+</body></html>

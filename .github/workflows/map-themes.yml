@@ -1,0 +1,77 @@
+name: Verify shopping palettes and Aventura map branding
+on:
+  push:
+    branches: [feature/mall-map-palette-20261015]
+    paths:
+      - "src/**"
+      - "scripts/build-web.py"
+      - "scripts/test-mall-themes.mjs"
+      - "scripts/test-mall-theme-browser.mjs"
+      - "src/page.template.html"
+      - "data/mall-themes/**"
+      - "public/branding/**"
+      - ".github/workflows/map-themes.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: retailnav-mall-theme-qa
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JS parse and tenant-theme unit cases
+        run: |
+          node --check src/mall-theme.js
+          node --check src/viewer.js
+          node --check src/mall-selector.js
+          node --test scripts/test-mall-themes.mjs
+          node --test scripts/test-map-cache.mjs
+      - name: Build official Aventura theme with original mall geometries
+        run: |
+          python3 scripts/build-web.py
+          python3 scripts/verify.py public
+          python3 - <<'PY'
+          import json,re
+          from pathlib import Path
+          text=Path("public/index.html").read_text()
+          m=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]*?)</script>',text)
+          assert m
+          catalog=json.loads(m.group(1))
+          aventura=catalog['aventura']
+          assert aventura['logoUrl']=='branding/aventura-logo.svg'
+          assert aventura['theme']['mapUnit']=='#CDB99E'
+          assert aventura['theme']['mapOutline']=='#514739'
+          assert aventura['mapAsset']['floorCount']==3
+          assert 'theme' not in catalog['ap-plaza']
+          assert 'theme' not in catalog['new-world-city-shanghai']
+          for slug,info in catalog.items():
+              b=json.loads(Path('public',info['mapAsset']['url']).read_text())
+              assert [f[0] for f in b['floors']]==info['floorLabels']
+          print("PASS original map data, approved brand tokens and immutable floor versions")
+          PY
+  browser:
+    runs-on: ubuntu-latest
+    needs: validate
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Produce map files
+        run: python3 scripts/build-web.py
+      - name: Install isolated Playwright browser
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Validate branded Aventura 3D map and tenant-specific palette editor
+        run: node scripts/test-mall-theme-browser.mjs
+      - name: Prevent regressions in map downloads and existing mall cache
+        run: node scripts/test-map-cache-browser.mjs

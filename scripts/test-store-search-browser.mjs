@@ -86,7 +86,24 @@ try{
  assert.equal(many.highlighted,many.matches);
  assert.ok(many.state.visible.includes('L1'));
  assert.ok(many.state.visible.length>1);
- console.log('PASS all matching store vectors, not only first four or current floor');
+ console.log('PASS all matching directory entries, not only first four or current floor');
+
+ const withVector=await page.evaluate(()=>window.RetailNavUnits.getUnits()
+  .find(u=>u.polygonId&&u.name));
+ assert.ok(withVector,'fixture needs at least one photograph-associated commercial polygon');
+ await input.fill(withVector.code);
+ await input.press('Enter');
+ await page.waitForFunction(code=>window.__RETAILNAV__?.getState()?.committedSearch===code,
+  withVector.code,{timeout:8000});
+ const mapped=await page.evaluate(()=>({
+  vectors:window.RetailNavUnits.getMatchedVectors(),
+  open:window.__RETAILNAV__.getState().visible,
+  highlighted:window.__RETAILNAV__.getState().highlightedVectorCount
+ }));
+ assert.ok(mapped.highlighted>=1,'all legitimately related vector regions must be highlighted');
+ assert.ok(mapped.vectors.some(v=>v.floor===withVector.floor&&v.polygonId===withVector.polygonId));
+ assert.ok(mapped.open.includes(withVector.floor)&&mapped.open.includes('L1'));
+ console.log('PASS independently matched source polygon is highlighted on its own floor');
 
  // Explicit user selection overrides the provisional reference, without
  // pretending the GNSS system measured the floor.

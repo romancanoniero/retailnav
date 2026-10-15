@@ -37,6 +37,15 @@ export function validateDraft(d){
     f.width<120||f.height<120||f.width>12000||f.height>12000||ids.has(f.id))
    throw Error('Planta incorrecta o repetida');
   ids.add(f.id);
+  if(f.compactFloor!==undefined){
+   const v=f.compactFloor;
+   if(!Array.isArray(v)||v.length<5||v[0]!==f.id||!Array.isArray(v[3])||v[3].length<1||
+       !v[3].every(p=>Array.isArray(p)&&p.length===7&&Array.isArray(p[3])&&Array.isArray(p[5]))||
+       !v[4]||typeof v[4].bits!=='string')
+    throw Error('La geometría histórica de esta planta está corrupta');
+   // Never silently destroy original polygon rings, holes or triangulation.
+   continue;
+  }
   if(!Array.isArray(f.polygons)||f.polygons.length>1800)throw Error('Demasiados polígonos en '+f.id);
   let used=new Set();
   for(const p of f.polygons){
@@ -116,25 +125,32 @@ function compactPolygon(p){
 }
 export function compile(d){
  validateDraft(d);
- if(!d.floors.length||d.floors.some(f=>!f.polygons.length))
+ if(!d.floors.length||d.floors.some(f=>!f.compactFloor&&!f.polygons?.length))
   throw Error('Todas las plantas deben contener al menos un polígono revisable');
  const floors=d.floors.map(f=>{
+  if(f.compactFloor)return f.compactFloor;
   const w=Math.ceil(f.width/8),h=Math.ceil(f.height/8);
   return [f.id,f.name,f.source||'Plano suministrado por el shopping, pendiente de validación',
    f.polygons.map(compactPolygon),
    {x:0,y:0,step:8,w,h,bits:Buffer.alloc(Math.ceil(w*h/8)).toString('base64')}];
  });
- const references={};
- for(const f of d.floors)if(f.imageUrl)references[f.id]={
+ const references={...(d.preservedCatalog?.floorReferences||{})};
+ for(const f of d.floors)if(f.imageUrl&&f.imageUrl.startsWith('api/public/assets/'))references[f.id]={
   url:f.imageUrl,imageSize:[f.width,f.height],viewBox:'0 0 '+f.width+' '+f.height,
   qa:{status:'pending',checks:{sourceApproved:false,dimensionsApproved:false,polygonReviewApproved:false}}
  };
+ const original=d.preservedCatalog&&typeof d.preservedCatalog==='object'&&!Array.isArray(d.preservedCatalog)
+  ?{...d.preservedCatalog}:{};
+ delete original.mapAsset;
+ delete original.floors;
  const publicMall={
+  ...original,
   id:d.id,name:d.name,city:d.city,website:d.website||'',source:'Administración del shopping',
   status:'vectorizado-provisional',navigable:false,indoorPositionCalibrated:false,
-  floors,origin:[d.floors[0].width/2,d.floors[0].height/2],scale:Number(d.scale)||.15,
+  floors,origin:Array.isArray(original.origin)?original.origin:[d.floors[0].width/2,d.floors[0].height/2],
+  scale:Number(d.scale)||Number(original.scale)||.15,
   floorLabels:d.floors.map(f=>f.id),floorReferences:references,
-  units:d.units,pois:d.pois.map(p=>({...p,verified:false,confidence:'posición-pendiente'})),
+  units:d.units,pois:d.pois.map(p=>({...p,verified:false,confidence:p.confidence||'posición-pendiente'})),
   theme:validateTheme(d.theme||{}),logoUrl:d.logoUrl||null
  };
  return publicMall;

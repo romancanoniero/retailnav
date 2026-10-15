@@ -119,6 +119,52 @@ test('high-contrast palette allows accessible temporary view without changing ba
  assert.equal(e.instance.getState().enabled,true);
 });
 
+
+test('each mall title uses a strong brand palette color with WCAG AA contrast',()=>{
+ const env=environment();
+ const aventura=env.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(aventura.mallNameColor,'#100F0F');
+ assert.ok(aventura.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),'#100F0F');
+ const classic=env.instance.apply({id:'ap-plaza',name:'AP Plaza'});
+ assert.equal(classic.mallNameColor,'#65E6E0');
+ assert.ok(classic.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),'#65E6E0');
+});
+
+test('changing theme updates mall title color; weak accent falls back to readable text',()=>{
+ const env=environment();
+ env.instance.apply({id:'aventura',name:'Aventura Mall',theme:aventuraConfig.theme});
+ assert.equal(env.instance.edit('accent','#FFFFFF'),true);
+ let state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#17150F');
+ assert.ok(state.mallNameContrast>=4.5);
+ assert.equal(env.css.get('--rn-mall-name-color'),state.mallNameColor);
+ assert.equal(env.instance.edit('text','#FFFFFF'),true);
+ state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#111111');
+ assert.ok(state.mallNameContrast>=4.5);
+ env.instance.preset('contrast');
+ state=env.instance.getState();
+ assert.ok(state.mallNameContrast>=4.5);
+ assert.equal(state.mallNameColor,'#111111');
+ env.instance.reset();
+ state=env.instance.getState();
+ assert.equal(state.mallNameColor,'#100F0F');
+});
+
+test('mall title contrast remains legible in custom dark themes too',()=>{
+ const env=environment();
+ const theme={...aventuraConfig.theme,surface:'#151515',accent:'#202020',text:'#F5E9CE'};
+ const result=env.instance.apply({id:'example-mall',name:'Test center',theme});
+ assert.equal(result.mallNameColor,'#F5E9CE');
+ assert.ok(result.mallNameContrast>=4.5);
+ const intense={...theme,accent:'#101010',text:'#151515',accentText:'#151515'};
+ const fallback=env.instance.apply({id:'example-mall',name:'Test center',theme:intense});
+ assert.equal(fallback.mallNameColor,'#FFFFFF');
+ assert.ok(fallback.mallNameContrast>=4.5);
+});
+
 test('cache version and mall geometry sources remain distinct from local-only previews',()=>{
  const src=readFileSync('scripts/build-web.py','utf8');
  const cache=readFileSync('src/map-cache.js','utf8');

@@ -196,6 +196,16 @@ export async function handleMallAdmin(req,res,url){
    return out(res,200,{ok:true},{'Set-Cookie':clearCookie});
   }
   if(req.method==='GET'&&url.pathname==='/admin/malls')return out(res,200,{malls:listMalls(user)});
+  const preview=/^\/admin\/malls\/([a-z0-9-]+)\/asset\/([a-f0-9]{64})\.(png|jpg|webp)$/.exec(url.pathname);
+  if(req.method==='GET'&&preview){
+   const [,slug,hash,ext]=preview;
+   if(!requires(user,slug))return error(res,403,'Archivo de otro shopping');
+   try{
+    const bytes=fs.readFileSync(assetPath(slug,hash,ext));
+    if(sha(bytes)!==hash)return error(res,409,'Archivo modificado');
+    return fileResponse(res,bytes,{png:'image/png',jpg:'image/jpeg',webp:'image/webp'}[ext]);
+   }catch{return error(res,404,'Archivo no disponible');}
+  }
   if(req.method==='POST'&&url.pathname==='/admin/accounts'){
    if(user.role!=='platform')return error(res,403,'Solo administradores de RetailNav.');
    const p=await body(req,2048);
@@ -275,6 +285,7 @@ export async function handleMallAdmin(req,res,url){
    fs.mkdirSync(versions,{recursive:true,mode:0o700});
    const target=path.join(versions,version+'.json');
    if(!fs.existsSync(target))fs.writeFileSync(target,payload,{mode:0o600,flag:'wx'});
+   atomic(path.join(versions,version+'.meta.json'),meta);
    atomic(publicationFile(id),{version,meta,publishedAt:new Date().toISOString(),by:user.username});
    const history=read(historyFile(id),[]);
    history.unshift({version,publishedAt:new Date().toISOString(),by:user.username,

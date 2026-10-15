@@ -1520,6 +1520,22 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 // Theme preview re-colors loaded mesh buffers without redownloading geometry.
 let pendingThemeRefresh=false;
+function recolorRoofText(){
+ const ink=mapRgb('mapText',[.94,.98,1]);
+ const titles=mapRgb('mapNameText',[1,.88,.56]);
+ const edge=[.20,.32,.39];
+ for(const floor of floors){
+  for(const [kind,target] of [['codes',ink],['names',titles]]){
+   const verts=floor.roofText?.[kind];
+   if(!verts)continue;
+   for(let i=0;i<verts.length;i+=10){
+    // Extruded top face and lateral prisms already have reliable normals.
+    const color=verts[i+4]>.9?target:edge;
+    verts[i+6]=color[0];verts[i+7]=color[1];verts[i+8]=color[2];
+   }
+  }
+ }
+}
 function onThemeChange(){
  if(!ready||pendingThemeRefresh)return;
  pendingThemeRefresh=true;
@@ -1531,6 +1547,7 @@ function onThemeChange(){
      for(const item of Object.values(floor.gpu||{}))if(item?.b)gl.deleteBuffer(item.b);
      for(const item of Object.values(floor.roofGpu||{}))if(item?.b)gl.deleteBuffer(item.b);
     }
+    recolorRoofText();
     makeGrid();
     gl.useProgram(program);
     gl.uniform3fv(loc.uSelectedColor,new Float32Array(mapRgb('mapSelected',[1,.68,.29])));

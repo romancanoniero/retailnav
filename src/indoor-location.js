@@ -233,6 +233,14 @@ function readOrientation(e){
  }
  updateMessage();window.__RETAILNAV__?.invalidate?.();
 }
+// Use orientation readings automatically where the browser permits them
+// without a user gesture. Safari/iOS still requires the explicit button and
+// sensor authorization; never bypass or misstate its permission model.
+const orientationCtor=window.DeviceOrientationEvent;
+if(orientationCtor&&typeof orientationCtor.requestPermission!=='function'){
+ window.addEventListener('deviceorientation',readOrientation,{passive:true});
+ compassListener=true;
+}
 ui.compass?.addEventListener('click',async()=>{
  const ctor=window.DeviceOrientationEvent;
  if(!ctor){ui.heading.textContent='No hay sensor de orientación disponible.';return;}

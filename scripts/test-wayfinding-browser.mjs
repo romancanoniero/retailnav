@@ -147,6 +147,11 @@ try{
   assert.equal(await page.locator('#peopleDialog').isVisible(),false,
    'marking an origin must not open the contacts drawer');
  };
+ await page.locator('#showAllFloors').tap();await settle();
+ assert.deepEqual((await state()).visible,['LL','UL','L3']);
+ await native();
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
+  'connector icons must be absent in the ordinary all-floor map, independently of wayfinding CSS');
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  await page.locator('#search').fill('Coffee');
  await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();

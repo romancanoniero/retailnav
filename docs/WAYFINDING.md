@@ -11,6 +11,10 @@ El plano vectorial 3D sigue siendo la superficie de interacción. La selección 
 
 La vista previa no incluye una flecha presentada como orientación segura, instrucciones de giro, tiempos de llegada, accesibilidad garantizada ni navegación entre plantas. No tenemos una orientación verificada del visitante ni datos suficientes para esas afirmaciones. Los iconos de ascensor o escalera tampoco sustituyen la explicación espacial de la diferencia de plantas.
 
+## Cabecera de tablet
+
+La búsqueda conserva un único campo y se coloca a la derecha del nombre del shopping en la cabecera de tablet. El indicador de renderizador «WebGL listo» deja de mostrarse al visitante. Las acciones secundarias permanecen accesibles desde «Más» para no reducir el campo de búsqueda ni los controles táctiles en orientación vertical. Al volver al tamaño de teléfono, el mismo campo regresa al mapa conservando su consulta.
+
 ## Evidencia y límites
 
 La compilación utiliza el archivo público `map.json` del mapa oficial de Aventura, venue 107:

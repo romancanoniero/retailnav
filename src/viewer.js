@@ -644,6 +644,7 @@ function reframeAfterResize(){
   if(wayfinding&&!wayfinding.placing)focusCatalogStore(wayfinding.storeId,wayfinding.floor);
  },100);
 }
+window.addEventListener('retailnav:header-layout',reframeAfterResize);
 function bindWayfinding(){
  $('rnWayfindingLocate').onclick=beginWayfindingLocation;
  $('rnWayfindingOriginFloor').onchange=()=>{
@@ -2212,7 +2213,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
   wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
-  searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
+  searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
   showSearchMatches:applySearchFloors,clearSearchMatches:clearSearchFloors,

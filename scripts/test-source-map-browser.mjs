@@ -32,6 +32,17 @@ try{
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready&&window.RetailNavMeetups,
   null,{timeout:85000});
  const state=()=>page.evaluate(()=>window.__RETAILNAV__.getState());
+ await page.waitForFunction(()=>document.querySelector('#rnMapSearch')?.parentElement===
+  document.querySelector('.topbar'));
+ const header=await page.evaluate(()=>({
+  height:document.querySelector('.topbar').getBoundingClientRect().height,
+  brandRight:document.querySelector('.rnMallBrand').getBoundingClientRect().right,
+  searchLeft:document.querySelector('#rnMapSearch .searchbox').getBoundingClientRect().left,
+  count:document.querySelectorAll('#search').length
+ }));
+ assert.ok(Math.abs(header.height-70)<1);
+ assert.ok(header.searchLeft>=header.brandRight+4,'tablet search sits beside the mall name');
+ assert.equal(header.count,1);assert.equal(await page.locator('#badge').isVisible(),false);
  const settle=async()=>{
   await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
   await page.evaluate(()=>new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok))));

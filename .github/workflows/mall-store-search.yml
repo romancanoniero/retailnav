@@ -10,6 +10,7 @@ on:
       - "scripts/test-source-map*"
       - "scripts/test-wayfinding-browser.mjs"
       - "src/wayfinding-route.js"
+      - "src/tablet-header.js"
       - "scripts/import-routing-preview.py"
       - "scripts/test-wayfinding-route.mjs"
       - "data/official-maps/**"
@@ -41,6 +42,7 @@ on:
       - "scripts/test-source-map*"
       - "scripts/test-wayfinding-browser.mjs"
       - "src/wayfinding-route.js"
+      - "src/tablet-header.js"
       - "scripts/import-routing-preview.py"
       - "scripts/test-wayfinding-route.mjs"
       - "data/official-maps/**"
@@ -85,6 +87,7 @@ jobs:
           python3 -m py_compile scripts/build-web.py scripts/store_catalog.py scripts/visitor_reference.py
           node --check src/viewer.js
           node --check src/wayfinding-route.js
+          node --check src/tablet-header.js
           node --check src/units.js
           node --check src/search-i18n.js
           node --check src/poi-layer.js

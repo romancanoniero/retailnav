@@ -77,6 +77,42 @@ try{
   assert.equal(await page.locator('#rnPOIOverlay .rnPoiMarker:visible').count(),0,
    'uncertain connector symbols must not clutter orientation');
  };
+ const tabletHeader=async()=>{
+  await page.waitForFunction(()=>document.querySelector('#rnMapSearch')?.parentElement===
+   document.querySelector('.topbar'));
+  const h=await page.evaluate(()=>{
+   const box=el=>el.getBoundingClientRect().toJSON();
+   const visible=el=>{const r=el.getBoundingClientRect();return (
+    !(el.closest('details:not([open])')&&!el.matches('summary'))&&r.width>0&&r.height>0&&
+    getComputedStyle(el).visibility!=='hidden'&&getComputedStyle(el).display!=='none');};
+   return {header:box(document.querySelector('.topbar')),brand:box(document.querySelector('.rnMallBrand')),
+    search:box(document.querySelector('#rnMapSearch .searchbox')),
+    controls:[...document.querySelectorAll('.topbar button,.topbar summary')]
+     .filter(el=>!el.closest('#rnMapSearch')&&visible(el)).map(el=>({id:el.id,rect:box(el)}))};
+  });
+  const overlap=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&
+   Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1;
+  assert.equal(await page.locator('#rnMapSearch').count(),1,'tablet keeps one search surface');
+  assert.equal(await page.locator('#search').count(),1,'tablet keeps one real search input');
+  assert.equal(await page.locator('#badge').isVisible(),false,'the technical WebGL badge is removed');
+  assert.ok(Math.abs(h.header.height-70)<1,'tablet header remains 70px tall');
+  assert.ok(h.search.left>=h.brand.right+4,'search sits to the right of the mall name');
+  assert.ok(h.search.top>=h.header.top&&h.search.bottom<=h.header.bottom,
+   'the complete search box fits in the header');
+  assert.ok(h.search.width>=200,'tablet search retains practical typing space');
+  const language=await page.locator('#rnLanguageSelect').boundingBox();
+  assert.ok(language&&language.height>=44&&language.width>=44,'header language selection remains a 44px target');
+  for(const [i,control] of h.controls.entries()){
+   const r=control.rect;
+   assert.ok(r.left>=h.header.left&&r.right<=h.header.right+1&&r.top>=h.header.top&&r.bottom<=h.header.bottom+1,
+    control.id+' must fit in the header');
+   assert.ok(r.width>=44&&r.height>=44,control.id+' remains a 44px touch target');
+   assert.equal(overlap(r,h.search),false,control.id+' must not overlap the search');
+   assert.equal(overlap(r,h.brand),false,control.id+' must not overlap the mall name');
+   for(const other of h.controls.slice(i+1))assert.equal(overlap(r,other.rect),false,
+    control.id+' must not overlap '+other.id);
+  }
+ };
  const markerLayout=async()=>{
   const layout=await page.evaluate(()=>{
    const box=el=>{const r=el.getBoundingClientRect();return {
@@ -152,6 +188,11 @@ try{
  await native();
  assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
   'connector icons must be absent in the ordinary all-floor map, independently of wayfinding CSS');
+ await tabletHeader();
+ await page.locator('#rnHeaderMoreToggle').tap();
+ assert.equal(await page.locator('#helpBtn').isVisible(),true,'help remains available through the header menu');
+ assert.equal(await page.locator('#downloadBtn').isVisible(),true,'export remains available through the header menu');
+ await page.locator('#rnHeaderMoreToggle').tap();
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  await page.locator('#search').fill('Coffee');
  await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
@@ -281,7 +322,7 @@ try{
  await page.setViewportSize({width:768,height:1024});
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().cameraFlying);
  await settle();
- await markerLayout();await native();
+ await markerLayout();await native();await tabletHeader();
  for(const id of ['rnWayfindingOriginFloor','rnWayfindingLocate','rnWayfindingReframe','rnWayfindingClose']){
   const box=await page.locator('#'+id).boundingBox();
   assert.ok(box&&box.width>=44&&box.height>=44,id+' must provide a 44px tablet touch target');

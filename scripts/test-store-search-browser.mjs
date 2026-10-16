@@ -36,9 +36,26 @@ try{
   assert.equal(s.errors.length,0);
   return s;
  };
+ const assertSearchPlacement=async tablet=>{
+  await page.waitForFunction(tablet=>{
+   const search=document.querySelector('#rnMapSearch');
+   return search?.parentElement===document.querySelector(tablet?'.topbar':'.stage');
+  },tablet);
+  assert.equal(await page.locator('#search').count(),1,'responsive placement never duplicates the input');
+  assert.equal(await page.locator('#badge').isVisible(),false);
+  if(tablet){
+   const layout=await page.evaluate(()=>({
+    brand:document.querySelector('.rnMallBrand').getBoundingClientRect().right,
+    search:document.querySelector('#rnMapSearch .searchbox').getBoundingClientRect().left,
+    height:document.querySelector('.topbar').getBoundingClientRect().height
+   }));
+   assert.ok(layout.search>=layout.brand+4);assert.ok(Math.abs(layout.height-70)<1);
+  }
+ };
 
  await page.goto(base+'?mall=new-world-city-shanghai',{waitUntil:'domcontentloaded',timeout:50000});
  let state=await wait('new-world-city-shanghai');
+ await assertSearchPlacement(false);
  assert.equal(state.referenceFloor,'L1');
  assert.deepEqual(state.visible,['L1'],'the initial reference floor is ground/1, not all floors');
  const indoor=await page.evaluate(()=>window.RetailNavIndoor.getState());
@@ -235,7 +252,14 @@ try{
  assert.ok(firstStoreId);
  assert.equal(await page.locator('#rnUnitInfo').isVisible(),false,
   'selection is kept inside panel rather than a floating tooltip');
+ await input.focus();
+ await input.evaluate(el=>{window.__searchBeforeTablet=el;el.setSelectionRange(1,3);});
  await page.setViewportSize({width:900,height:900});
+ await assertSearchPlacement(true);
+ assert.deepEqual(await input.evaluate(el=>({same:el===window.__searchBeforeTablet,
+  focused:document.activeElement===el,start:el.selectionStart,end:el.selectionEnd})),
+  {same:true,focused:true,start:1,end:3},
+  'moving the search into the tablet header preserves the actual input, focus and text selection');
  await input.fill('Japanese cuisine');
  await page.locator('.rnResultTag[data-concept-id="cuisine.japanese"]').click();
  const tabletPanel=await page.locator('#rnTagResultPanel').evaluate(el=>({
@@ -320,6 +344,7 @@ try{
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),false,
   'the tag carousel has a direct close control');
  await page.setViewportSize({width:390,height:844});
+ await assertSearchPlacement(false);
  await page.locator('#rnExpandView').click();
  assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnExpandedView')),true);
  await page.locator('#rnExitExpandedView').click();

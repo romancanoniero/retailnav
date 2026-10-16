@@ -1350,6 +1350,62 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  .stage.rnWayfindingActive .rnWayfinding{top:76px}
 }
 .stage.rnWayfindingActive>.statusbar{display:none}
+
+/* Tablet: the same search field sits beside the mall, leaving the map free.
+   Secondary actions retain their actual buttons inside an accessible menu. */
+#badge{display:none!important}
+body.rnTabletHeaderSearch .topbar{position:relative;z-index:30;height:70px;min-height:70px;
+ padding:10px 16px;gap:8px;flex-wrap:nowrap;overflow:visible}
+body.rnTabletHeaderSearch .app{height:calc(100dvh - 70px);min-height:0}
+body.rnTabletHeaderSearch .topbar>.spacer{display:none}
+body.rnTabletHeaderSearch .topbar>.rnMallBrand{flex:0 1 auto;max-width:clamp(150px,23vw,265px);min-width:0;gap:8px}
+body.rnTabletHeaderSearch .topbar>.rnMallBrand img{height:32px;max-width:48px}
+body.rnTabletHeaderSearch .topbar>.rnMallBrand strong{font-size:clamp(15px,1.4vw,20px);line-height:1.15;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch{position:relative;display:block;flex:1 1 260px;
+ min-width:180px;width:auto;max-width:none;inset:auto;transform:none;padding:0;margin:0;z-index:31}
+body.rnTabletHeaderSearch .topbar .rnMapSearch .searchbox input{height:48px;min-height:48px;
+ padding-left:39px;border-radius:13px;box-shadow:0 2px 9px #061d3015;font-size:15px}
+body.rnTabletHeaderSearch .topbar .rnMapSearch .searchbox>.icon{left:12px;top:13px;width:20px;height:20px}
+body.rnTabletHeaderSearch .topbar .rnMapSearch .rnLanguageSelect{height:44px;min-height:44px;top:2px;font-size:12px;
+ appearance:none;-webkit-appearance:none;padding-right:19px;
+ background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+ background-position:calc(100% - 12px) 50%,calc(100% - 8px) 50%;background-size:4px 4px;background-repeat:no-repeat}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch>.caption{display:none}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .resultlist,
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .rnSearchSuggestions{
+ position:absolute;left:0;right:0;top:calc(100% + 7px);z-index:32;
+ max-height:min(60dvh,480px);overflow-y:auto;overscroll-behavior:contain;
+ margin:0;padding:7px;border:1px solid var(--rn-theme-border,#6c9ab4);border-radius:13px;
+ background:var(--rn-theme-surface,#0c2133);color:var(--rn-theme-text,#edf5fa);
+ box-shadow:0 12px 32px #06192d40;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .resultlist{display:none}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch.finding .resultlist{display:block}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .resultlist .result{min-height:44px;font-size:12px;margin:0 0 2px;background:transparent}
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .resultlist .result:hover,
+body.rnTabletHeaderSearch .topbar>.rnMapSearch .resultlist .result:focus-visible{background:var(--rn-theme-border,#1a4359)}
+body.rnTabletHeaderSearch .topbar>:is(#rnIndoorBtn,#mallSettingsBtn){flex:none;width:44px;min-width:44px;height:44px;min-height:44px;padding:7px}
+body.rnTabletHeaderSearch .topbar>#friendsBtn{flex:none;min-width:54px;height:44px;min-height:44px;padding:7px 9px;gap:5px}
+.rnHeaderMore{position:relative;flex:none;width:44px;margin:0;z-index:33}
+.rnHeaderMore>summary{display:grid;place-items:center;list-style:none;width:44px;height:44px;min-height:44px;
+ padding:0;border:1px solid var(--rn-theme-border,#486579);border-radius:12px;
+ background:var(--rn-theme-surface,#142d40);color:var(--rn-theme-text,#eaf6fc);cursor:pointer;
+ font-size:17px;letter-spacing:2px;line-height:1;touch-action:manipulation;user-select:none}
+.rnHeaderMore>summary::-webkit-details-marker{display:none}
+.rnHeaderMore>summary:focus-visible{outline:3px solid var(--rn-theme-accent,#8edce9);outline-offset:2px}
+.rnHeaderMore[open]>summary{background:var(--rn-theme-border,#284e63)}
+.rnHeaderMoreActions{position:absolute;right:0;top:calc(100% + 9px);width:225px;max-width:calc(100vw - 28px);
+ display:flex;flex-direction:column;gap:4px;padding:7px;border:1px solid var(--rn-theme-border,#6a8a9d);
+ border-radius:14px;background:var(--rn-theme-surface,#112b3d);color:var(--rn-theme-text,#eef9ff);
+ box-shadow:0 10px 30px #071b303d}
+.rnHeaderMoreActions>button{display:flex;align-items:center;justify-content:flex-start;gap:11px;
+ width:100%;height:44px;min-height:44px;margin:0;padding:8px 11px;border:0;border-radius:9px;
+ background:transparent;color:inherit;text-align:left;font-size:16px;white-space:nowrap}
+.rnHeaderMoreActions>button::after{content:attr(data-header-label);font-size:13px;font-weight:600;letter-spacing:0}
+.rnHeaderMoreActions>button:hover,.rnHeaderMoreActions>button:focus-visible{background:var(--rn-theme-border,#2b4e63)}
+body.rnTabletHeaderSearch .stage.rnWayfindingActive .rnWayfinding{top:16px}
+body.rnTabletHeaderSearch.rnTagResultsOpen .stage>.rnTagResultPanel{padding-top:16px}
+body.rnTabletHeaderSearch .stage>.note{top:85px}
 /* Safari's native select can ignore min-height; preserve the full touch area. */
 .rnWayfinding #rnWayfindingOriginFloor{height:44px;min-height:44px;
  appearance:none;-webkit-appearance:none;padding-right:30px;
@@ -1479,7 +1535,7 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
 <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7M12 7h.01"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 20v-2c0-3 2.3-5 5.5-5s5.5 2 5.5 5v2M16 5a3 3 0 0 1 0 6m2 3c2.2.5 3 2 3 4v2"/></symbol></defs></svg>
-<header class="topbar"><div class="rnMallBrand" aria-label="Centro comercial actual"><img id="mallHeaderLogo" alt="" hidden><strong id="mallHeaderName">Aventura Mall</strong></div><div class="spacer"></div><div class="pill" id="badge"><span class="dot"></span><span id="status">Vista previa de archivo</span></div><button id="rnIndoorBtn" type="button" title="Mi ubicación y orientación" aria-label="GPS, brújula y calibración interior">◎</button><button id="mallSettingsBtn" type="button" aria-label="Configuración y selector de shopping" title="Configurar shopping"><svg class="icon"><use href="#i-settings"/></svg></button><button id="friendsBtn" class="socialTopBtn" type="button" aria-expanded="false" aria-controls="peopleDialog" aria-haspopup="true" title="Amigos y contactos" aria-label="Abrir amigos y contactos"><svg class="icon"><use href="#i-users"/></svg><span id="friendsCount">0</span><span id="rnPendingBadge" class="rnPendingBadge" hidden>!</span></button><button id="helpBtn" data-runtime disabled title="Como usar la demo" aria-label="Ayuda"><svg class="icon"><use href="#i-info"/></svg></button><button id="rnExpandView" type="button" title="Expandir el mapa al área disponible" aria-label="Expandir el mapa">⛶</button><button id="rnExitExpandedView" type="button" title="Volver a la vista normal" aria-label="Salir de la vista ampliada" hidden>×</button><button id="downloadBtn" data-runtime disabled title="Exportar mapas" aria-label="Exportar mapas"><svg class="icon"><use href="#i-download"/></svg></button></header>
+<header class="topbar"><div class="rnMallBrand" aria-label="Centro comercial actual"><img id="mallHeaderLogo" alt="" hidden><strong id="mallHeaderName">Aventura Mall</strong></div><div class="spacer"></div><div class="pill" id="badge" hidden><span class="dot"></span><span id="status">Vista previa de archivo</span></div><button id="rnIndoorBtn" type="button" title="Mi ubicación y orientación" aria-label="GPS, brújula y calibración interior">◎</button><button id="mallSettingsBtn" type="button" aria-label="Configuración y selector de shopping" title="Configurar shopping"><svg class="icon"><use href="#i-settings"/></svg></button><button id="friendsBtn" class="socialTopBtn" type="button" aria-expanded="false" aria-controls="peopleDialog" aria-haspopup="true" title="Amigos y contactos" aria-label="Abrir amigos y contactos"><svg class="icon"><use href="#i-users"/></svg><span id="friendsCount">0</span><span id="rnPendingBadge" class="rnPendingBadge" hidden>!</span></button><button id="helpBtn" data-runtime disabled title="Como usar la demo" aria-label="Ayuda"><svg class="icon"><use href="#i-info"/></svg></button><button id="rnExpandView" type="button" title="Expandir el mapa al área disponible" aria-label="Expandir el mapa">⛶</button><button id="rnExitExpandedView" type="button" title="Volver a la vista normal" aria-label="Salir de la vista ampliada" hidden>×</button><button id="downloadBtn" data-runtime disabled title="Exportar mapas" aria-label="Exportar mapas"><svg class="icon"><use href="#i-download"/></svg></button><details id="rnHeaderMore" class="rnHeaderMore" hidden><summary id="rnHeaderMoreToggle" aria-label="Más opciones" title="Más opciones"><span aria-hidden="true">•••</span></summary><div id="rnHeaderMoreActions" class="rnHeaderMoreActions" role="group" aria-label="Más opciones del mapa"></div></details></header>
 <main class="app"><aside class="sidebar" id="sidebar"><section class="intro"><div class="eyebrow">TU PLANO. EN TRES DIMENSIONES.</div><h1 id="mallSidebarTitle">Aventura Mall</h1><p id="mallSourceMessage">Reconstrucción vectorial a partir de las tres imágenes que aportaste.</p><div class="summary"><div class="metric"><b>3</b><span id="mallFloorCountLabel">plantas diferentes</span></div><div class="metric"><b id="unitCount">131</b><span>polígonos comerciales*</span></div></div></section><section class="sidebarfooter"><div class="eyebrow">TRAZABILIDAD, NO GEOMETRÍA INVENTADA</div><p class="caption">LL: IMG_6307 · UL: IMG_6308 · L3: IMG_6309. Planos registrados sobre una misma referencia. Los nombres pequeños y las conexiones no legibles quedan sin verificar.</p><p class="caption">*El trazado puede agrupar locales donde la imagen no permite distinguir sus divisiones. Escala y alturas de demostración. No apto para orientación física.</p></section></aside>
 <section class="stage" aria-label="Visor tridimensional interactivo"><section class="searchsection rnMapSearch" id="rnMapSearch" role="search" aria-label="Buscar comercios, zonas y servicios"><div class="searchbox"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" autocomplete="off" enterkeyhint="search" placeholder="Buscar tiendas, zonas o servicios…" aria-label="Buscar tienda, stand, zona o servicio" aria-controls="results rnSearchSuggestions"><label class="rnLangVisuallyHidden" for="rnLanguageSelect">Search language</label><select id="rnLanguageSelect" class="rnLanguageSelect" title="Language" aria-label="Search language"><option value="auto">Auto</option><option value="en">EN</option><option value="es">ES</option><option value="es-AR">ES-AR</option><option value="pt">PT</option><option value="pt-BR">PT-BR</option><option value="zh-CN">中文</option><option value="fr">FR</option></select></div><div id="rnSearchSuggestions" class="rnSearchSuggestions" role="listbox" aria-label="Sugerencias de etiquetas existentes" hidden></div><p class="caption" id="resultCount">Tiendas identificadas en el plano</p><div class="resultlist" id="results" role="group" aria-label="Resultados de búsqueda"></div></section><section class="rnTagResultPanel" id="rnTagResultPanel" aria-label="Comercios de la etiqueta seleccionada" aria-live="polite" hidden><header><h4 id="rnTagResultTitle"></h4><button id="rnTagResultClose" type="button" aria-label="Cerrar comercios de esta etiqueta">×</button></header><div id="rnTagResultCards" class="rnStoreCarousel"></div></section><section class="detail" id="detail" hidden><button class="detailclose" id="closeDetail" aria-label="Cerrar selección"><svg class="icon"><use href="#i-close"/></svg></button><div class="eyebrow" id="detailLevel"></div><h3 id="detailName"></h3><div class="caption" id="detailId"></div><div class="actions"><button id="focusShop">Acercar al local</button><button id="routeBtn" class="secondary">Recorrido de prueba</button></div><div class="routeinfo" id="routeInfo" aria-live="polite"></div></section><div class="mobiletitle"><strong id="mallMobileTitle">Aventura Mall</strong> <span id="mallMobileMeta">3 planos aportados · MOCK</span></div><div class="viewport"><canvas id="canvas" tabindex="0" aria-label="Mapa 3D. Desplazá con un dedo; dos dedos hacen zoom, rotan e inclinan como en Mapas de iPhone. Doble toque y arrastre vertical para zoom. Botón 3D permite giro libre en los tres ejes."></canvas><div class="labels" id="labels"></div><div id="rnDistrictOverlay" class="rnAreaOverlay" aria-label="Rótulos legibles de zonas comerciales"></div><canvas id="peoplePinCanvas" class="rnPinCanvas" aria-hidden="true"></canvas>
 <div id="rnPOIOverlay" class="rnPOIOverlay" aria-label="Servicios y puntos de interés del plano"></div><div id="rnUnitOverlay" class="rnUnitOverlay" aria-label="Códigos de tiendas identificados en el plano"></div><div id="rnSearchMarkers" class="rnSearchMarkers" aria-label="Locales coincidentes sobre las plantas abiertas"></div><div id="rnMyPositionMarker" class="rnMyPositionMarker" hidden aria-label="Referencia de posición interior"><span class="rnIndoorArrow">▲</span><span class="rnIndoorDot"></span></div>
@@ -3908,6 +3964,7 @@ function reframeAfterResize(){
   if(wayfinding&&!wayfinding.placing)focusCatalogStore(wayfinding.storeId,wayfinding.floor);
  },100);
 }
+window.addEventListener('retailnav:header-layout',reframeAfterResize);
 function bindWayfinding(){
  $('rnWayfindingLocate').onclick=beginWayfindingLocation;
  $('rnWayfindingOriginFloor').onchange=()=>{
@@ -5476,7 +5533,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
   wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
-  searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
+  searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
   showSearchMatches:applySearchFloors,clearSearchMatches:clearSearchFloors,
@@ -19070,6 +19127,66 @@ setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
 window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status}))}),
  refresh,selectStore,showStoreDetails};
+})();
+</script>
+<script>/* One search control, moved between the tablet header and the phone map.
+ * Moving the existing nodes preserves their values, handlers and ARIA IDs. */
+(()=>{
+ 'use strict';
+ const search=document.getElementById('rnMapSearch'),header=document.querySelector('.topbar');
+ const brand=header?.querySelector('.rnMallBrand'),more=document.getElementById('rnHeaderMore');
+ const actions=document.getElementById('rnHeaderMoreActions'),toggle=document.getElementById('rnHeaderMoreToggle');
+ if(!search||!header||!brand||!more||!actions||!toggle)return;
+ const searchHome=document.createComment('Shared search: original map position');
+ search.before(searchHome);
+ const homes=new Map(),labels={helpBtn:['Ayuda','Help'],rnExpandView:['Ampliar mapa','Expand map'],
+  downloadBtn:['Exportar planos','Export maps'],rnMeetupInboxButton:['Encuentros','Meetups']};
+ const media=window.matchMedia('(min-width: 761px)');
+ let active=false;
+ function language(){
+  const en=window.RetailNavI18n?.locale?.().startsWith('en');
+  const title=en?'More options':'Más opciones';
+  toggle.setAttribute('aria-label',title);toggle.title=title;actions.setAttribute('aria-label',title);
+  for(const [id,text] of Object.entries(labels)){
+   const button=document.getElementById(id);if(!button)continue;
+   button.dataset.headerLabel=text[en?1:0];
+  }
+ }
+ function moveActions(){
+  for(const id of Object.keys(labels)){
+   const button=document.getElementById(id);if(!button||button.parentElement===actions)continue;
+   if(!homes.has(id)){const home=document.createComment('Header action: '+id);button.before(home);homes.set(id,home);}
+   actions.append(button);
+  }
+  language();
+ }
+ function sync(){
+  const wanted=media.matches&&!document.body.classList.contains('rnExpandedView');
+  if(wanted===active){if(active)moveActions();return;}
+  const focused=search.contains(document.activeElement)?document.activeElement:null;
+  const selection=focused?.tagName==='INPUT'?[focused.selectionStart,focused.selectionEnd,focused.selectionDirection]:null;
+  active=wanted;more.open=false;
+  document.body.classList.toggle('rnTabletHeaderSearch',active);
+  if(active){brand.after(search);moveActions();more.hidden=false;}
+  else{
+   searchHome.after(search);
+   for(const [id,home] of homes){const button=document.getElementById(id);if(button&&home.isConnected)home.after(button);}
+   more.hidden=true;
+  }
+  if(focused){
+   focused.focus({preventScroll:true});
+   if(selection&&selection[0]!==null)try{focused.setSelectionRange(...selection);}catch{}
+  }
+  window.dispatchEvent(new Event('retailnav:header-layout'));
+ }
+ more.addEventListener('click',event=>{if(event.target.closest('button'))more.open=false;});
+ document.addEventListener('pointerdown',event=>{if(more.open&&!more.contains(event.target))more.open=false;});
+ more.addEventListener('keydown',event=>{if(event.key==='Escape'){more.open=false;toggle.focus();event.stopPropagation();}});
+ window.addEventListener('retailnav:localechange',language);
+ if(media.addEventListener)media.addEventListener('change',sync);else media.addListener(sync);
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});
+ new MutationObserver(()=>{if(active)moveActions();}).observe(header,{childList:true});
+ language();sync();
 })();
 </script>
 </body></html>

@@ -96,6 +96,10 @@ def aventura_vector_references(mall, repo):
                 "serviceTerms": item.get("serviceTerms", []),
                 "officialDescription": item.get("description", ""),
                 "officialMapLocationId": item.get("officialMapLocationId"),
+                "officialMapEmbedVenueId": item.get("officialMapEmbedVenueId"),
+                "officialMapSourceUrl": item.get("officialMapSourceUrl"),
+                "officialMapEvidence": item.get("officialMapEvidence"),
+                "officialLocationSourceUrl": item.get("officialLocationSourceUrl"),
                 "directorySection": item.get("directorySection", "dining" if item.get("recordStatus") == "listed-on-official-dining-directory" else "shops"),
                 "diningSource": item.get("diningSource"),
                 "source": "aventura-official-directory",
@@ -211,6 +215,8 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     unused = set(hints) - seen
     if unused:
         raise ValueError(f"{mall_id}: orphan product annotations {sorted(unused)}")
+    from source_map import attach_source_geometry
+    attach_source_geometry(repo, mall_id, records)
     document = {
         "schema": SCHEMA,
         "mallId": mall_id,

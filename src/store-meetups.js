@@ -93,7 +93,7 @@ function showSelectionStatus(u,focus){
  selectionStatus.hidden=false;
  const label=u.name||u.code;
  selectionStatus.textContent=focus?.located
-  ?tr('Seleccionado: ','Selected: ')+label+' · '+tr('Enfoque en el mapa','Focused on map')
+  ?tr('Seleccionado: ','Selected: ')+label+' · '+(focus.source?tr('Ubicación en geometría de fuente oficial','Location in official-source geometry'):tr('Enfoque provisional en el plano','Provisional plan focus'))
   :tr('Seleccionado: ','Selected: ')+label+' · '+
    (u.locationLabel||u.documentedFloors?.length
     ?tr('Ubicación indicada por el directorio; falta vincularla con el plano.',
@@ -113,8 +113,10 @@ function selectStore(id,showDetails=false){
  // Never center on an unknown directory position. Only the photographed
  // store point and its existing same-floor vector may drive the camera.
  const located=Number.isFinite(u.x)&&Number.isFinite(u.y)&&Boolean(u.floor);
- const focus=window.__RETAILNAV__?.focusCatalogStore?.(
+ let focus=window.__RETAILNAV__?.focusCatalogStore?.(
   id,located?u.floor:null,located?[u.x,u.y]:null,located?u.polygonId:null);
+ if(mall.id==='aventura'&&u.source==='aventura-official-directory')focus=window.RetailNavSourceMap?.show(u)||focus;
+ else window.RetailNavSourceMap?.hide();
  window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;
@@ -266,10 +268,10 @@ const observer=new MutationObserver(()=>{
   card.addEventListener('click',event=>{
    // Safari touch sometimes dispatches two independent clicks with detail=1.
    const id=card.dataset.storeId,now=performance.now();
-   const secondTap=id===priorTap.id&&now-priorTap.time<430;
+   const secondTap=id===priorTap.id&&(now-priorTap.time<430||event.detail>=2);
    priorTap={id,time:now};
    event.stopImmediatePropagation();
-   selectStore(id,event.detail>=2||secondTap);
+   selectStore(id,secondTap);
   },true);
   card.addEventListener('keydown',event=>{
    if(event.key==='Enter'&&selectedId===card.dataset.storeId){event.preventDefault();selectStore(card.dataset.storeId,true);}

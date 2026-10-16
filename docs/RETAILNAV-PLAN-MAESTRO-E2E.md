@@ -827,3 +827,7 @@ python3 scripts/verify.py public
 - Invitaciones a amigos reales, respuesta individual y contrapropuestas, con consentimiento y vencimiento. No se comparte posición automática ni se inventan lugares georreferenciados.
 - AR peatonal real [F], bloqueada hasta calibración física y soporte compatible de dispositivo. Los mapas actuales no son aptos para guiar movimientos físicos.
 - Detalles técnicos, amenazas, criterios de QA y pasos siguientes: [`docs/STORE-MEETUPS-E2E.md`](STORE-MEETUPS-E2E.md).
+
+## 2026-10-16 · Selección vectorial de fuente oficial en tablet
+
+Implementación: [Contrato, evidencia y verificación de Aventura](SOURCE-MAP-AVENTURA.md). Se aísla el iframe del PR #47 (sin fusionarlo); se incorpora una vista SVG propia con 607 polígonos de la fuente oficial y asociación estricta para 294 comercios, incluidos 11 resultados Coffee. La maqueta fotográfica 3D se conserva separada. Cámara animada, plantas destino/referencia en paneles distintos, rechazo de polígonos compartidos del plano fotográfico y limpieza de selección desconocida. No hay rutas seguras publicables: 1.224 segmentos y 17 conectores disponibles, sin origen de visitante calibrado y con dirección/accesibilidad pendientes de validación. La publicación queda condicionada a pruebas de tablet Chromium y WebKit. El estado de despliegue se verifica en Actions, no se infiere de esta implementación.

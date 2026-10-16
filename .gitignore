@@ -1,0 +1,6 @@
+node_modules/
+scripts/__pycache__/
+artifacts/
+public/catalog/
+public/maps/malls/
+public/reference/

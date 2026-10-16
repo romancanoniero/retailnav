@@ -1232,3 +1232,16 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreSelectionStatus{margin:6px 0 10px;padding:10px 12px;border:1px solid var(--rn-theme-border,#47657b);border-radius:10px;background:var(--rn-theme-surface,#163045);color:var(--rn-theme-text,#e6f5fa);font-size:12px;line-height:1.45}
 .rnStoreSelectionStatus[hidden]{display:none!important}
 .rnTagResultPanel .rnStoreSelected{border:2px solid var(--rn-theme-map-selected,#ffae4a)!important;box-shadow:inset 4px 0 var(--rn-theme-map-selected,#ffae4a),0 0 0 2px #ffae4a44!important}
+
+/* The official retail locator is rendered within the genuine map viewport.
+   Only source-linked official vendor IDs are shown; no fabricated 3D coordinates. */
+.rnOfficialLocationMap{position:absolute;inset:0;z-index:16;display:flex;flex-direction:column;
+ background:var(--rn-theme-surface,#f4f5f8);overflow:hidden}
+.rnOfficialLocationMap[hidden]{display:none!important}
+.rnOfficialLocationMap iframe{display:block;flex:1 1 auto;min-height:0;width:100%;
+ border:0;background:#eef2f5}
+.rnOfficialCaption{display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:10px 14px;background:var(--rn-theme-surface,#172939);color:var(--rn-theme-text,#fff);
+ min-height:54px;font-size:12px;line-height:1.4}
+.rnOfficialReturn{background:var(--rn-theme-accent,#2279ad);color:var(--rn-theme-accent-text,#fff);
+ border:0;border-radius:10px;padding:9px 12px;font:inherit;cursor:pointer;min-height:40px}

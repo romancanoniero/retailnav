@@ -272,6 +272,25 @@ try{
  await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
  assert.equal(await page.locator('#rnTagResultCards .rnStoreCard').count(),15,
   'Coffee must list all 15 documented establishments, not just the first few');
+ const officialCoffee=await page.evaluate(()=>window.RetailNavUnits.getUnits().filter(u=>
+  u.conceptIds?.includes('food.coffee')&&u.officialMapEmbedVenueId===107));
+ assert.equal(officialCoffee.length,11,
+  '11 source-attributed coffee businesses have official vendor marker IDs');
+ const joe=page.locator('#rnTagResultCards .rnStoreCard').filter({hasText:'Joe & The Juice'});
+ assert.equal(await joe.count(),1);
+ await joe.click();
+ assert.equal(await page.locator('#rnOfficialLocationMap').isVisible(),true,
+  'tapping official-store Coffee result loads a location-focused official map in the existing viewport');
+ assert.match(await page.locator('#rnOfficialLocationMap iframe').getAttribute('src'),
+  /embed\\.roveiq\\.com\\/venues\\/107\\/locations\\/20680\\?disableInteraction=1/);
+ assert.equal(await joe.getAttribute('aria-selected'),'true');
+ const other=page.locator('#rnTagResultCards .rnStoreCard').filter({hasText:'Starbucks'}).first();
+ await other.click();
+ assert.equal(await page.locator('#rnOfficialLocationMap').isVisible(),false,
+  'a store without a reliable location must not inherit the previous vendor marker');
+ assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),
+  /map position|ubicaci[oó]n/i);
+
  const coffeeLayout=await page.evaluate(()=>({
   mapRight:document.querySelector('.stage>.viewport').getBoundingClientRect().right,
   panelLeft:document.querySelector('#rnTagResultPanel').getBoundingClientRect().left

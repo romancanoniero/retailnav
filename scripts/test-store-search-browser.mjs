@@ -198,6 +198,8 @@ try{
  const carousel=page.locator('#rnTagResultCards');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
   'selecting a semantic tag opens a dedicated panel outside the autocomplete dropdown');
+ assert.equal(await page.locator('#rnMapSearch.finding').count(),0,
+  'the autocomplete dropdown closes after a tag is selected');
  assert.equal(await page.locator('#results .rnStoreCard').count(),0,
   'selected-tag cards do not remain inside the dropdown');
  assert.equal(await carousel.getAttribute('data-concept-id'),'cuisine.japanese',
@@ -216,6 +218,11 @@ try{
   bottom:getComputedStyle(el).bottom,top:getComputedStyle(el).top
  }));
  assert.equal(mobilePanelPosition.top,'auto','phone carousel sits at the bottom edge of the map');
+ await page.locator('#rnLanguageSelect').selectOption('es-AR');
+ assert.equal(await carousel.getAttribute('data-concept-id'),'cuisine.japanese',
+  'changing device language keeps the selected tag group attached to its canonical ID');
+ assert.ok(await carousel.locator('.rnStoreCard').count()>1,
+  'changing language preserves the active store carousel');
  await firstCard.click();
  assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
   'selecting a local opens its map focus/details');
@@ -229,6 +236,8 @@ try{
  }));
  assert.equal(tabletPanel.left,'auto','tablet carousel is docked on the map right side');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
+ assert.equal(await page.locator('#sidebar').isVisible(),false,
+  'tablet tag results close the former left information panel');
  await page.locator('#rnTagResultClose').click();
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),false,
   'the tag carousel has a direct close control');

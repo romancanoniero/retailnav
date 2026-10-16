@@ -22,7 +22,7 @@ const server=createServer((req,res)=>{
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const base='http://127.0.0.1:'+server.address().port+'/retailnav/index.html';
 const browser=await (process.env.BROWSER==='webkit'?webkit:chromium).launch({headless:true,
- args:['--use-gl=angle','--use-angle=swiftshader']});
+ args:process.env.BROWSER==='webkit'?[]:['--use-gl=angle','--use-angle=swiftshader']});
 try{
  const context=await browser.newContext({viewport:{width:1024,height:768},hasTouch:true});
  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));

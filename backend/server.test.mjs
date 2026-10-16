@@ -203,6 +203,8 @@ test('meetup offers: friends-only, counterproposals, reconfirmation and erasure'
  const id=created.data.meeting.id;
  assert.equal((await req('GET','/meetups',undefined,stranger.cookie)).data.meetings.length,0);
  assert.equal((await req('POST','/meetups/decision',{id,action:'accept'},stranger.cookie)).status,404);
+ assert.equal((await req('POST','/meetups/decision',{id,action:'cancel'},b.cookie)).status,403,
+  'invitee must never cancel organizer meetup on behalf of everyone');
  assert.equal((await req('POST','/meetups/decision',{id,action:'accept'},b.cookie)).data.meeting.status,'pending');
  const counter=await req('POST','/meetups/decision',{id,action:'counter',destination:coffee},c.cookie);
  assert.equal(counter.status,200);

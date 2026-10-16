@@ -1223,3 +1223,5 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnMeetupInbox::backdrop{background:#0009}.rnMeetupInboxContent{max-height:78dvh;overflow:auto}
 .rnMeetupInbox .rnMeetingRow select{max-width:100%;min-height:40px;background:#142a3e;color:#eef6fa;border:1px solid #52728d;border-radius:8px}
 .rnMeetupInbox .rnMeetingRow a{display:block;margin-bottom:8px;color:#8bdceb}
+
+.rnSearchMarker.rnSearchMarkerChosen{border-color:#f9dd78!important;outline:3px solid #ffffffa3!important;outline-offset:3px;z-index:10!important;box-shadow:0 0 0 7px #f6ba4d3f,0 0 22px #ffd273!important}

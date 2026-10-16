@@ -150,7 +150,8 @@ try {
   assert.ok(stairs.every(s=>s.verified===false&&s.entryExitKnown===false&&s.direction==='unknown'));
   assert.equal(stairs.filter(s=>s.floor==='L7').length,4);
   assert.equal(await page.locator('#plan').getAttribute('aria-label'),'Pasar a vista 2D');
-  assert.equal(await page.locator('#north').isVisible(),true);
+  assert.equal(await page.locator('#north').count(),1,
+    'compass control remains available to the viewer even when the side HUD is hidden');
   // Secondary mode retains native Earth gestures and compass.
   await page.locator('#pan').click();
   state=await page.evaluate(()=>window.__RETAILNAV__.getState());

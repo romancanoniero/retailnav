@@ -110,7 +110,10 @@ export function createMeetupService({db,save,send,reject,parse,validId,validMall
    if(['cancelled','declined','confirmed'].includes(m.status)&&p.action!=='cancel')
      {reject(res,409,'El encuentro ya se resolvió');return true;}
    const organizer=me.id===m.ownerId;
-   if(p.action==='cancel'){m.status='cancelled';m.counter=null;}
+   if(p.action==='cancel'){
+    if(!organizer){reject(res,403,'Solo quien organizó el encuentro puede cancelarlo');return true;}
+    m.status='cancelled';m.counter=null;
+   }
    else if(p.action==='accept'){
     if(organizer||m.counter||m.status!=='pending')
      {reject(res,409,'Hay que resolver primero la propuesta alternativa');return true;}

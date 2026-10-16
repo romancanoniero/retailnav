@@ -40,6 +40,17 @@ const state={get selectedId(){return selectedId},get detailOpen(){return detailO
 const details=document.createElement('section');
 details.id='rnStoreDetails';details.className='rnStoreDetails';details.hidden=true;
 panel.append(details);
+const inboxButton=button('☕ · 0',()=>openInbox());
+inboxButton.id='rnMeetupInboxButton';inboxButton.className='rnMeetupInboxButton';
+inboxButton.title=tr('Propuestas de encuentro','Meetup invitations');
+$('friendsBtn')?.before(inboxButton);
+const inbox=document.createElement('dialog');inbox.id='rnMeetupInbox';inbox.className='rnMeetupInbox';
+inbox.setAttribute('aria-label',tr('Invitaciones para encontrarnos','Meetup invitations'));
+document.body.append(inbox);
+const inboxContent=document.createElement('div');inboxContent.className='rnMeetupInboxContent';inbox.append(inboxContent);
+async function openInbox(){
+ inbox.showModal();await refresh().catch(e=>{inboxContent.textContent=e.message;});
+}
 const meetingBox=document.createElement('section');
 meetingBox.id='rnMeetingBox';meetingBox.className='rnMeetingBox';meetingBox.hidden=true;
 panel.append(meetingBox);
@@ -135,9 +146,13 @@ function showNavigation(u){
 }
 async function refresh(){
  const [list,people]=await Promise.all([get('meetups'),get('state')]);
- meetings=(list.meetings||[]).filter(m=>m.mallId===mall.id);
+ meetings=list.meetings||[];
  friends=people.friends||[];
- renderMeetingList();
+ const unread=meetings.filter(m=>!m.isOrganizer&&((m.status==='pending'&&m.myResponse==='pending')||m.status==='counter')).length;
+ inboxButton.textContent='☕ · '+unread;
+ inboxButton.setAttribute('aria-label',unread+' '+tr('invitaciones de encuentro','meetup invitations'));
+ renderMeetingList(panel);
+ if(inbox.open)renderMeetingList(inboxContent);
 }
 function openInvitation(){
  meetingBox.hidden=false;meetingBox.replaceChildren();
@@ -166,13 +181,16 @@ function openInvitation(){
  send.disabled=!friends.length;meetingBox.append(send);
  meetingBox.append(button(tr('Cerrar','Close'),()=>meetingBox.hidden=true));
 }
-function renderMeetingList(){
- const old=$('rnMeetingsList');if(old)old.remove();
- if(!meetings.length)return;
- const host=document.createElement('section');host.id='rnMeetingsList';host.className='rnMeetingsList';
+function renderMeetingList(container){
+ container.querySelector('.rnMeetingsList')?.remove();
+ if(container===inboxContent)inboxContent.replaceChildren(button('× '+tr('Cerrar','Close'),()=>inbox.close()));
+ if(!meetings.length){if(container===inboxContent)container.append(text('p',tr('Sin encuentros pendientes','No meetups pending')));return;}
+ const host=document.createElement('section');host.className='rnMeetingsList';
  host.append(text('h4',tr('Mis encuentros','My meetups')));
  for(const m of meetings.slice(0,15)){
   const row=document.createElement('div');row.className='rnMeetingRow';
+  if(m.mallId!==mall.id){const link=text('a',tr('Abrir el shopping del encuentro','Open meetup mall'));
+   const dest=new URL(location.href);dest.searchParams.set('mall',m.mallId);link.href=dest.href;row.append(link);}
   const status={pending:tr('Pendiente','Pending'),confirmed:tr('Confirmado','Confirmed'),
    counter:tr('Alternativa propuesta','Alternative suggested'),
    declined:tr('Rechazado','Declined'),cancelled:tr('Cancelado','Cancelled')}[m.status]||m.status;
@@ -186,13 +204,18 @@ function renderMeetingList(){
   if(!m.isOrganizer&&m.myResponse==='pending'&&m.status==='pending'){
    actions.append(button(tr('Aceptar','Accept'),()=>decide('accept')),
     button(tr('Rechazar','Decline'),()=>decide('decline')));
-   const alternative=button(tr('Proponer otro local','Suggest another store'),()=>{
-    if(!selectedId||selectedId===m.destination.storeId){
-     row.append(text('p',tr('Seleccioná otro local de la lista primero','Select another store from the list first')));return;
+   const alt=document.createElement('select');alt.setAttribute('aria-label',tr('Otro local','Alternative store'));
+   const empty=document.createElement('option');empty.value='';empty.textContent=tr('Elegir otro local…','Choose another store…');alt.append(empty);
+   if(m.mallId===mall.id){
+    for(const u of (window.RetailNavUnits?.getUnits?.()||[]).filter(u=>u.name&&u.storeId!==m.destination.storeId).slice(0,650)){
+     const option=document.createElement('option');option.value=u.storeId;option.textContent=u.name+' · '+(u.floor||'?');alt.append(option);
     }
-    const u=store();
+   }
+   const alternative=button(tr('Proponer este local','Suggest this store'),()=>{
+    const u=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===alt.value);
+    if(!u||m.mallId!==mall.id)return;
     decide('counter',{storeId:u.storeId,name:u.name||u.code,floor:u.floor||null});
-   });actions.append(alternative);
+   });actions.append(alt,alternative);
   }
   if(m.isOrganizer&&m.status==='counter'&&m.counter){
    row.append(text('p',tr('Propuesta alternativa: ','Alternative: ')+m.counter.destination.name));
@@ -204,7 +227,7 @@ function renderMeetingList(){
   if(m.status==='confirmed')row.append(text('p',tr('Destino acordado. Navegación AR pendiente de validación del mapa.','Destination agreed. AR navigation requires verified mapping.'),'rnMeetingStatus'));
   row.append(actions);host.append(row);
  }
- panel.append(host);
+ container.append(host);
 }
 const observer=new MutationObserver(()=>{
  if(panel.hidden||!panel.isConnected)return;
@@ -228,6 +251,9 @@ const open=()=>{
  refresh().catch(()=>{});
 };
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
+setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
+window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
 window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status}))}),
  refresh,selectStore,showStoreDetails};
 })();

@@ -816,7 +816,8 @@ for(const unit of shopIds){
   const info=document.createElement('span');info.textContent=unit.code+(unit.name?' · '+unit.name:'');
   const note=document.createElement('span');note.className='small';
   const lang=window.RetailNavI18n;
-  const concepts=lang?.summary(unit,5);
+  const related=(unit.conceptIds||[]).filter(id=>lang?.matchConcept(id,q));
+  const concepts=related.length?related.map(id=>lang.label(id)).join(', '):lang?.summary(unit,5);
   note.textContent=[concepts||unit.category||lang?.ui('unknown')||'Categoría pendiente',
    (unit.conceptIds||[]).length?(lang?.ui('provisional')||'Clasificación provisional'):null,
    unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar')

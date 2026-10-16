@@ -24,7 +24,7 @@ if(toggle){toggle.hidden=!all.length;toggle.disabled=!all.length;toggle.setAttri
 const canPlace=p=>Number.isFinite(p.x)&&Number.isFinite(p.y);
 const lookup=id=>all.find(p=>p.id===id);
 function describe(p){
-  const status=p.confidence==='cartel'?'Identificado en el cartel; coordenada aproximada.'
+  const status=p.source==='official-map-connector'?'Conector indicado por el mapa oficial. Sentido y continuidad sin verificar.':p.confidence==='cartel'?'Identificado en el cartel; coordenada aproximada.'
     :p.confidence==='por-revisar'?'Símbolo o tipo de acceso pendiente de confirmación.'
     :'Se indica en la leyenda; no hay punto preciso verificado.';
   return status+

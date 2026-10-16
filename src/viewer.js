@@ -1,5 +1,5 @@
 'use strict';
-/* RetailNav: dependency-free WebGL geometry viewer. All floor outlines come from the supplied raster plans. */
+/* RetailNav: dependency-free WebGL geometry viewer. Source geometry and photo references share the original 3D renderer. */
 (()=>{
 const $=id=>document.getElementById(id), K=['anchor','unit','zone','corridor','void','slab'];
 let data, floors=[], gl, ctx2d=null, program, loc, canvas=$('canvas'), frame=0, lastTime=0, mvp, invMvp, toastTimer, ready=false;
@@ -8,6 +8,7 @@ let active='ALL', searchFloorSet=null,searchCommitted='',selectedSearchTagKey=nu
 let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 // A store focus is a temporary single-floor view of a multi-floor search.
 // Search matches and the visitor's original floor remain stored unchanged.
+let focusedStoreVectors=new Set();
 let focusedStoreId=null,focusedStoreVector=null,focusFloorId=null,cameraFlight=null,lastStoreFocus=null;
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
 let lastEarth3DPitch=-.70,earth2D=false;
@@ -252,9 +253,9 @@ function palette(f,i,line){
                  f.k==='slab'||f.k==='corridor'?.32:.23;
  return blendColors(base,floorTone,influence).map(x=>Math.max(0,Math.min(1,x)));
 }
-function geometry(floor){let faces=[],edges=[],points=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
+function geometry(floor){let faces=[],edges=[],points=[],contextEdges=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
  const vectorKey=f.floor+':'+f.id;
- const selectedShop=focusedStoreVector===vectorKey;
+ const selectedShop=focusedStoreVectors.has(vectorKey);
  const match=searchMatchedVectors.has(vectorKey);
  if(selectedShop){
   const chosen=mapRgb('mapSelected',[1,.68,.29]);
@@ -268,7 +269,10 @@ if(f.k!=='void'){for(let i=0;i<f.t.length;i+=3){let a=pos(f.p[f.t[i]],h),b=pos(f
 for(const ring of f.r){for(let j=0;j<ring.length;j++){let a=pos(ring[j],h),b=pos(ring[(j+1)%ring.length],h);emit(edges,a,[0,0,0],edgeCol,f.gid);emit(edges,b,[0,0,0],edgeCol,f.gid);emit(points,a,[0,0,0],edgeCol,f.gid);if(['anchor','unit','amenity','zone','slab'].includes(f.k)){let bottom=f.k==='slab'?-.55:0,aa=[a[0],bottom,a[2]],bb=[b[0],bottom,b[2]],normal=norm([b[2]-a[2],0,a[0]-b[0]]);tri(aa,bb,b,normal);tri(aa,b,a,normal);if(Math.hypot(a[0]-b[0],a[2]-b[2])>1.1){emit(edges,aa,[0,0,0],vmul(edgeCol,.65),f.gid);emit(edges,a,[0,0,0],vmul(edgeCol,.65),f.gid);}}}}
 f.flat=new Float32Array(f.flat);}
 function buffer(arr){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW);return {b,n:arr.length/10};}if(gl){
- floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points)};
+ for(const f of floor.features.filter(f=>f.k==='slab'))for(const ring of f.r)for(let i=0;i<ring.length;i++){
+  for(const p of [ring[i],ring[(i+1)%ring.length]])contextEdges.push(...pos(p,-.12),0,0,0,.28,.58,.65,f.gid);
+ }
+ floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points),context:buffer(contextEdges)};
  // Raised letters share world-space coordinates with the roof's geometry.
  floor.roofGpu={};
  for(const key of ['codes','names','services']){
@@ -282,8 +286,9 @@ function bind(g){gl.bindBuffer(gl.ARRAY_BUFFER,g.b);let names=['aPos','aNormal',
 let grid;
 function makeGrid(){if(!gl)return;let a=[];const tone=mapRgb('mapGrid',[.065,.13,.19]);for(let n=-85;n<=85;n+=5){for(let p of [[n,-.9,-70],[n,-.9,70],[-85,-.9,n],[85,-.9,n]])a.push(...p,0,0,0,...tone,-2);}if(grid?.b)gl.deleteBuffer(grid.b);let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(a),gl.STATIC_DRAW);grid={b,n:a.length/10};}
 function resize(){let r=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;if(gl)gl.viewport(0,0,w,h);} }
-function visible(){return floors.filter(f=>focusFloorId&&searchFloorSet
- ?f.id===focusFloorId
+function referenceContext(floor){return Boolean(focusFloorId&&floor.id!==focusFloorId);}
+function visible(){return floors.filter(f=>focusFloorId
+ ?f.id===focusFloorId||f.id===visitorFloorReference()
  :(searchFloorSet?searchFloorSet.has(f.id):active==='ALL'||f.id===active));}
 function groundReferenceFloor(){
  const preferred=selectedMall.defaultVisitorReference?.floor;
@@ -302,12 +307,12 @@ function showFloorReference(){
  const floor=visitorFloorReference();
  const actual=Boolean(pos?.anchor&&pos?.referenceSource!=='fallback-entry'&&pos?.referenceSource!=='fallback-floor');
  label.textContent=(actual?'Planta indicada ':'Referencia provisional ')+floor+
-  (searchFloorSet?' · '+searchFloorSet.size+' plantas abiertas':'');
+  (focusFloorId?' · Destino '+focusFloorId+(floor!==focusFloorId?' · Tu planta en contornos':''):(searchFloorSet?' · '+searchFloorSet.size+' plantas abiertas':''));
  label.title=actual?'Referencia del usuario; la precisión depende de su fuente':
   'Sin piso interior verificado: planta baja/1 o primera planta disponible. No equivale a posición GPS.';
 }
 function applySearchFloors(query){
- focusFloorId=null;cameraFlight=null;focusedStoreId=null;focusedStoreVector=null;
+ focusFloorId=null;cameraFlight=null;focusedStoreId=null;focusedStoreVector=null;focusedStoreVectors.clear();
  const term=String(query||'').trim();
  if(!term){clearSearchFloors();return {floors:[],matches:0};}
  window.RetailNavUnits?.setQuery?.(term);
@@ -352,7 +357,7 @@ function applySearchFloors(query){
   vectors:searchMatchedVectors.size,stores:matches.length,services:services.length};
 }
 function clearSearchFloors(){
- cameraFlight=null;focusFloorId=null;focusedStoreId=null;focusedStoreVector=null;
+ cameraFlight=null;focusFloorId=null;focusedStoreId=null;focusedStoreVector=null;focusedStoreVectors.clear();
  searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
  window.RetailNavUnits?.clearQuery?.();
  const picker=$('floorSelect');
@@ -373,6 +378,7 @@ function drawSearchMarkers(){
  for(const store of matching){
   const id=store.storeId||(mallId+':'+store.floor+':'+store.code);
   const floor=floors.find(f=>f.id===store.floor);
+  if(focusFloorId&&id!==focusedStoreId)continue;
   if(!floor||!searchFloorSet.has(store.floor)||(focusFloorId&&store.floor!==focusFloorId)||
    !Number.isFinite(store.x)||!Number.isFinite(store.y))continue;
   const point=screen(pos([store.x,store.y],floor.y+3));
@@ -392,9 +398,9 @@ function drawSearchMarkers(){
    });
    host.append(marker);searchMarkerElements.set(id,marker);
   }
-  marker.textContent=store.code;
+  marker.textContent=store.sourceGeometry?store.name:store.code;
   marker.title=store.floor+' · '+(store.name||store.code)+
-   (store.vectorVerified?' · vector validado':' · posición aproximada, vector provisional');
+   (store.sourceGeometry?' · geometría de fuente oficial':store.vectorVerified?' · vector validado':' · posición aproximada, vector provisional');
   marker.hidden=false;
   marker.classList.toggle('rnSearchMarkerChosen',window.RetailNavUnits?.getState?.()?.selected===id);
   marker.style.left=point.x.toFixed(1)+'px';
@@ -414,76 +420,68 @@ function rebuildSearchGeometry(floorIds=null){
 }
 // The selected source polygon is highlighted using this mall's configured
 // mapSelected color; other tag matches stay visible in a weaker accent.
-function setFocusedStoreVector(storeId,floorId,polygonId){
+function setFocusedStoreVector(storeId,floorId,polygonIds){
  const floor=floors.find(f=>f.id===floorId);
- const next=polygonId&&floor?.features.some(feature=>feature.id===polygonId)
-  ?floorId+':'+polygonId:null;
- const old=focusedStoreVector;
- focusedStoreId=storeId||null;focusedStoreVector=next;
- if(old!==next){
-  const affected=new Set([old,next].filter(Boolean).map(value=>value.split(':')[0]));
-  rebuildSearchGeometry(affected);
- }
- dirty=true;
+ const ids=Array.isArray(polygonIds)?polygonIds:[polygonIds];
+ const next=new Set(ids.filter(id=>id&&floor?.features.some(f=>f.id===id)).map(id=>floorId+':'+id));
+ const affected=new Set([...focusedStoreVectors,...next].map(v=>v.split(':')[0]));
+ focusedStoreId=storeId||null;focusedStoreVectors=next;focusedStoreVector=[...next][0]||null;
+ rebuildSearchGeometry(affected);dirty=true;
 }
-// Animates a selected shop within the resized map area (never underneath the
-// tablet side rail). A floor with no photographic point is NOT assigned a fake
-// location, and retains no stale highlight from an earlier store.
-function focusCatalogStore(storeId,floorId,p,polygonId){
+function focusCatalogStore(storeId,requestedFloor){
  if(!ready)return {located:false,reason:'map-not-ready'};
  const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===storeId&&u.mallId===mallId);
- floorId=unit?.floor;p=unit&&Number.isFinite(unit.x)&&Number.isFinite(unit.y)?[unit.x,unit.y]:null;
- polygonId=unit?.vectorRelation==='one-photo-region-unverified'?unit.polygonId:null;
- selected=null;route=null;routeRunning=false;
+ const binding=unit?.sourceGeometry;
+ const source=Boolean(binding&&binding.mallId===mallId&&binding.storeId===storeId&&
+  binding.sourceSha256===selectedMall.sourceMapSha256&&binding.evidence==='official-location-suite-and-polygon-id');
+ const allowed=source?binding.polygons:[];
+ const floorId=requestedFloor||allowed[0]?.floor||unit?.floor;
  const floor=floors.find(f=>f.id===floorId);
- const canFocus=Boolean(floor&&Array.isArray(p)&&p.length===2&&p.every(Number.isFinite));
- // Switching an existing search to one floor avoids other opaque slabs hiding
- // the chosen local; the original searchFloorSet is not modified or forgotten.
- if(!canFocus){
-  cameraFlight=null;
-  if(focusFloorId){focusFloorId=null;resetCamera();}
-  setFocusedStoreVector(storeId,null,null);
-  lastStoreFocus={storeId,located:false,reason:'unplaced-directory'};
-  dirty=true;
-  return lastStoreFocus;
+ const ids=source?allowed.filter(p=>p.floor===floorId).map(p=>p.polygonId):
+  (!selectedMall.coordinateSpace&&unit?.vectorRelation==='one-photo-region-unverified'?[unit.polygonId]:[]);
+ const features=(floor?.features||[]).filter(f=>ids.includes(f.id));
+ const p=source?features[0]?.c:(!selectedMall.coordinateSpace&&unit?.floor===floorId&&Number.isFinite(unit.x)&&Number.isFinite(unit.y)?[unit.x,unit.y]:null);
+ selected=null;route=null;routeRunning=false;cameraFlight=null;
+ setFocusedStoreVector(storeId,floorId,features.map(f=>f.id));
+ const en=window.RetailNavI18n?.locale?.().startsWith('en');
+ $('mapTitle').textContent=unit?(unit.name||unit.code)+' · '+(floorId||''):(en?'Select a store':'Seleccioná un comercio');
+ $('mapSubtitle').textContent=(en?'Your floor: ':'Tu planta: ')+visitorFloorReference()+' · '+(en?'No verified walking route':'Sin ruta peatonal verificada');
+ if(!floor||!p){
+  focusFloorId=unit&&floor?floorId:null;
+  if(focusFloorId){active=floorId;searchFloorSet?.add(floorId);}
+  resetCamera();showFloorReference();
+  lastStoreFocus={storeId,located:false,source:false,floor:focusFloorId,reason:'unplaced-directory'};
+  dirty=true;return lastStoreFocus;
  }
- if(!searchFloorSet&&active!==floorId){
-  active=floorId;
-  const picker=$('floorSelect');
-  if(picker&&[...picker.options].some(x=>x.value===floorId))picker.value=floorId;
-  document.querySelector('.stage')?.classList.add('focused');
- }
- if(searchFloorSet){
-  searchFloorSet.add(floorId);
-  focusFloorId=floorId;
-  $('showAllFloors').hidden=false;
-  $('showAllFloors').textContent='← Ver todas las plantas con coincidencias';
- }
+ focusFloorId=floorId;
+ searchFloorSet?.add(floorId);
+ if(!searchFloorSet){active=floorId;if($('floorSelect'))$('floorSelect').value=floorId;}
+ $('showAllFloors').hidden=false;
+ $('showAllFloors').textContent='← Ver todas las plantas';
  stopAuto();
- setFocusedStoreVector(storeId,floorId,polygonId);
- const selectedFeature=floor.features.find(f=>f.id===polygonId);
- const footprint=selectedFeature?.r?.[0]||[];
- const width=footprint.length?Math.max(...footprint.map(point=>point[0]))-Math.min(...footprint.map(point=>point[0])):0;
- const heightPx=footprint.length?Math.max(...footprint.map(point=>point[1]))-Math.min(...footprint.map(point=>point[1])):0;
- const radius=Math.max(width,heightPx)*cfg.scale;
- const aimDistance=clamp(Math.max(42,radius*3.6),36,112);
- const finalTarget=pos(p,floor.y);
- const up=dot(qr(q,[0,1,0]),[0,1,0]);
- const viewingHeight=qr(q,[0,0,1])[1];
- const needsRotate=up<.40||viewingHeight<.27; // underside / steep edge-on view
- const endQ=needsRotate?norm(qm(quat([0,1,0],-.30),quat([1,0,0],-.96))):q.slice();
+ const points=features.flatMap(f=>f.p);
+ const width=points.length?Math.max(...points.map(p=>p[0]))-Math.min(...points.map(p=>p[0])):0;
+ const depth=points.length?Math.max(...points.map(p=>p[1]))-Math.min(...points.map(p=>p[1])):0;
+ // Frame the full selected footprint and, on another level, the user's floor.
+ const centre=points.length?[0,1].map(k=>(Math.min(...points.map(p=>p[k]))+Math.max(...points.map(p=>p[k])))/2):p;
+ const reference=floors.find(f=>f.id===visitorFloorReference());
+ const gap=reference?Math.abs(reference.y-floor.y):0;
+ const aimDistance=clamp(Math.max(42,Math.max(width,depth)*cfg.scale*3.6,gap*3.5),36,320);
+ const finalTarget=pos(centre,gap?(floor.y+reference.y)/2:floor.y);
+ // Stable upright oblique view, interpolated with zoom and translation.
+ const endQ=norm(qm(quat([0,1,0],-.30),quat([1,0,0],-.96)));
+ const needsRotate=Math.abs(dot(q,endQ))<.9999;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
- const moving=Math.hypot(...vsub(target,finalTarget))>.3||
-  Math.abs(distance-aimDistance)>1||needsRotate;
- lastStoreFocus={storeId,located:true,floor:floorId,vectorHighlighted:Boolean(focusedStoreVector),
+ const moving=Math.hypot(...vsub(target,finalTarget))>.3||Math.abs(distance-aimDistance)>1||needsRotate;
+ lastStoreFocus={storeId,located:true,source,floor:floorId,referenceFloor:visitorFloorReference(),vectorHighlighted:focusedStoreVectors.size>0,
   rotated:needsRotate,animated:Boolean(moving&&!reduced),durationMs:moving&&!reduced?860:0};
  if(!moving||reduced){target=finalTarget;distance=aimDistance;q=endQ;cameraFlight=null;}
  else cameraFlight={since:performance.now(),duration:860,fromTarget:target.slice(),
-  toTarget:finalTarget,fromDistance:distance,toDistance:aimDistance,
-  fromQ:q.slice(),toQ:endQ};
- dirty=true;
- return lastStoreFocus;
+  toTarget:finalTarget,fromDistance:distance,toDistance:aimDistance,fromQ:q.slice(),toQ:endQ};
+ earth2D=false;orbitYaw=-.30;orbitPitch=-.96;orbitRoll=0;
+ showFloorReference();dirty=true;return lastStoreFocus;
 }
+
 function screen(p){let v=mp(mvp,[...p,1]);let r=canvas.getBoundingClientRect();return {x:(v[0]/v[3]*.5+.5)*r.width,y:(.5-v[1]/v[3]*.5)*r.height,z:v[2]/v[3],w:v[3]};}
 let labelElems=[];let placingPosition=false;
 function makeLabels(){
@@ -746,6 +744,7 @@ function drawRoofTextWebGL(){
  gl.uniform1f(loc.uWire,0);
  gl.uniform1f(loc.uLine,0);
  for(const floor of visible()){
+  if(referenceContext(floor))continue;
   gl.uniform1f(loc.uY,floor.y);
   const groups=floor.roofGpu||{};
   for(const key of ['services',...(showCode?['codes']:[]),...(showName?['names']:[])]){
@@ -761,6 +760,7 @@ function drawRoofTextCanvas(){
  if(!ctx2d||!labelsOn||scan||distance>180)return;
  const ctx=ctx2d,limit=active==='ALL'?24000:90000;
  for(const floor of visible()){
+  if(referenceContext(floor))continue;
   for(const key of ['services','codes',...(active==='ALL'?[]:['names'])]){
    const vertices=floor.roofText?.[key];
    if(!vertices)continue;
@@ -779,7 +779,7 @@ function drawRoofTextCanvas(){
 }
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!cameraFlight&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();advanceStoreCameraFlight(time);let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
- else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();drawSearchMarkers();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);gl.uniform1f(loc.uLine,1);bind(floor.gpu.edges);gl.drawArrays(gl.LINES,0,floor.gpu.edges.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+ else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();drawSearchMarkers();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);if(!referenceContext(floor)){gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);}gl.uniform1f(loc.uLine,1);const outlines=referenceContext(floor)?floor.gpu.context:floor.gpu.edges;bind(outlines);gl.drawArrays(gl.LINES,0,outlines.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
 drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawLiftShaftsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();window.RetailNavPins?.draw3D?.(gl,mvp);
 window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();drawSearchMarkers();requestAnimationFrame(render);}
@@ -803,6 +803,7 @@ function renderCanvas(dt){
  const candidates=[];
  for(const floor of visible()){
   for(const f of floor.features){
+   if(referenceContext(floor)&&f.k!=='slab')continue;
    const cp=xyz(pos(f.c,floor.y+height(f)));
    if(cp)candidates.push({floor,f,z:cp.z});
   }
@@ -812,7 +813,7 @@ function renderCanvas(dt){
  for(const {floor,f} of candidates){
   const fh=height(f),fy=floor.y,top=fy+fh,isSelected=selected&&selected.gid===f.gid;
   if(scan){c.fillStyle=isSelected?'#ffc977':'#6ce2e2';c.globalAlpha=.8;for(const r of f.r)for(let j=0;j<r.length;j+=2){let pt=xyz(pos(r[j],top));if(!pt)continue;c.beginPath();c.arc(pt.x,pt.y,Math.max(.7,1.3*(215/distance)),0,Math.PI*2);c.fill();}c.globalAlpha=1;continue;}
-  const selectedShop=focusedStoreVector===f.floor+':'+f.id;
+  const selectedShop=focusedStoreVectors.has(f.floor+':'+f.id);
   const searchMatch=searchMatchedVectors.has(f.floor+':'+f.id);
   const selectTone=mapRgb('mapSelected',[1,.68,.29]);
   const underlying=themed?palette(f,floor.index,false):legacyPalette(f,floor.index,false);
@@ -822,7 +823,7 @@ function renderCanvas(dt){
   let line=isSelected||selectedShop?mapColor('mapSelected','#ffae4a'):
    searchMatch?rgbHex(blendColors(palette(f,floor.index,true),selectTone,.52)):
    (themed?rgbHex(palette(f,floor.index,true)):lines[f.k]);
-  if(['anchor','unit','amenity','zone','slab'].includes(f.k)){
+  if(!referenceContext(floor)&&['anchor','unit','amenity','zone','slab'].includes(f.k)){
    c.fillStyle=isSelected||selectedShop?mapColor('mapSelected','#ffae4a'):
     themed?rgbHex(blendColors(palette(f,floor.index,false),mapRgb('mapOutline',[.25,.3,.35]),.22)):'rgba(25,65,85,.67)';
    for(const r of f.r)for(let i=0;i<r.length;i++){
@@ -833,8 +834,8 @@ function renderCanvas(dt){
   }
   c.beginPath();let any=false;for(const r of f.r)any=pth(r,top)||any;
   if(!any)continue;
-  c.fillStyle=color;c.globalAlpha=f.k==='slab'?.92:f.k==='corridor'?.60:wire?.16:f.k==='void'?.42:.87;c.fill('evenodd');c.globalAlpha=1;
-  c.strokeStyle=line;c.lineWidth=isSelected||selectedShop?2.8:searchMatch?1.8:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
+  c.fillStyle=color;c.globalAlpha=f.k==='slab'?.92:f.k==='corridor'?.60:wire?.16:f.k==='void'?.42:.87;if(!referenceContext(floor))c.fill('evenodd');c.globalAlpha=1;
+  c.strokeStyle=referenceContext(floor)?'#478f9f':line;c.lineWidth=isSelected||selectedShop?2.8:searchMatch?1.8:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
   if(isSelected||selectedShop){c.shadowColor=mapColor('mapSelected','#ffae4a');c.shadowBlur=14;}
   else if(searchMatch){c.shadowColor=mapColor('mapSelected','#ffae4a');c.shadowBlur=4;}
   else if(f.k==='corridor'){c.shadowColor='#25c6c9';c.shadowBlur=2;}
@@ -871,7 +872,8 @@ function resetCamera(plan=false){
 }
 function setFloor(id){
  if(!ready)return;
- cameraFlight=null;focusFloorId=null;focusedStoreId=null;focusedStoreVector=null;
+ const hadFocus=focusedStoreVectors.size>0;
+ cameraFlight=null;focusFloorId=null;focusedStoreId=null;focusedStoreVector=null;focusedStoreVectors.clear();
  if(floors.length===1)id=floors[0].id;
  if(id!=='ALL'&&!floors.some(f=>f.id===id))return;
  if(searchFloorSet){
@@ -879,6 +881,7 @@ function setFloor(id){
   $('floorSelect')?.querySelector('option[value="MATCHES"]')?.remove();
   window.RetailNavUnits?.clearQuery?.();rebuildSearchGeometry();
  }
+ if(hadFocus)rebuildSearchGeometry();
  active=id;showFloorReference();
  $('showAllFloors').hidden=floors.length<=1||id==='ALL';
  document.querySelector('.stage')?.classList.toggle('focused',id!=='ALL');
@@ -894,13 +897,14 @@ function setFloor(id){
  $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
   ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
   :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
+  :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
   :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
     'Contornos y pasillos trazados sobre tus imágenes.');
  resetCamera();results();
 }
 function contains(p,ring){let v=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){let a=ring[i],b=ring[j];if(((a[1]>p[1])!==(b[1]>p[1]))&&(p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]))v=!v;}return v;}
-function pick(x,y){if(!invMvp)return;let r=canvas.getBoundingClientRect(),nx=(x-r.left)/r.width*2-1,ny=1-(y-r.top)/r.height*2;let un=z=>{let v=mp(invMvp,[nx,ny,z,1]);return v.slice(0,3).map(x=>x/v[3]);};let a=un(-1),b=un(1),dir=norm(vsub(b,a)),best=null,dist=Infinity;for(let floor of visible()){for(let f of floor.features.filter(f=>['unit','anchor','zone','amenity'].includes(f.k))){let t=(floor.y+height(f)-a[1])/dir[1];if(!Number.isFinite(t)||t<0||t>dist)continue;let pt=vadd(a,vmul(dir,t)),p=[pt[0]/cfg.scale+cfg.origin[0],pt[2]/cfg.scale+cfg.origin[1]];if(contains(p,f.r[0])&&!f.r.slice(1).some(h=>contains(p,h))){best=f;dist=t;}}}if(best)select(best);}
-function select(f){selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;$('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Local comercial provisional','amenity':'Servicio dibujado según plano','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.storeName?(f.storeCode+' · '+f.storeName):(f.n||f.id);$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();}
+function pick(x,y){if(!invMvp)return;let r=canvas.getBoundingClientRect(),nx=(x-r.left)/r.width*2-1,ny=1-(y-r.top)/r.height*2;let un=z=>{let v=mp(invMvp,[nx,ny,z,1]);return v.slice(0,3).map(x=>x/v[3]);};let a=un(-1),b=un(1),dir=norm(vsub(b,a)),best=null,dist=Infinity;for(let floor of visible()){if(referenceContext(floor))continue;for(let f of floor.features.filter(f=>['unit','anchor','zone','amenity'].includes(f.k))){let t=(floor.y+height(f)-a[1])/dir[1];if(!Number.isFinite(t)||t<0||t>dist)continue;let pt=vadd(a,vmul(dir,t)),p=[pt[0]/cfg.scale+cfg.origin[0],pt[2]/cfg.scale+cfg.origin[1]];if(contains(p,f.r[0])&&!f.r.slice(1).some(h=>contains(p,h))){best=f;dist=t;}}}if(best)select(best);}
+function select(f){setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;$('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Local comercial provisional','amenity':'Servicio dibujado según plano','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.storeName?(f.storeCode+' · '+f.storeName):(f.n||f.id);$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();}
 function clearSelection(){selected=null;route=null;routeRunning=false;$('detail').hidden=true;results();}
 function matchTypeLabel(type){const key={name:'nameMatch',product:'productMatch',service:'serviceMatch',category:'categoryMatch'}[type];return window.RetailNavI18n?.ui(key)||type;}
 function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
@@ -1237,7 +1241,7 @@ function endPointer(e){
    if(placingPosition){
     const at=manualMapPoint(e.clientX,e.clientY);
     if(at){placingPosition=false;canvas.classList.remove('placing');
-     window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:at}));
+     window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:{...at,mallId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels'}}));
      notify('Posición aproximada marcada en '+at.floor+'.');
     }else notify('Tocá un punto dentro de la planta para indicar tu ubicación.');
    }else pick(e.clientX,e.clientY);
@@ -1307,19 +1311,28 @@ canvas.addEventListener('keydown',e=>{
  dirty=true;
 });
 // Same-floor demo pathfinding. Gray corridors only; no unverified vertical connectors or shop entrances.
-function findRoute(){if(!selected)return;if(mallId!=='aventura'){notify('Rutas deshabilitadas: los pasillos de este plano fotográfico no están verificados.');return;}let f=floors.find(f=>f.id===selected.floor),w=f.walk,N=w.w*w.h;const open=i=>i>=0&&i<N&&((w.bytes[i>>3]>>(i&7))&1),coord=i=>[w.x+(i%w.w)*w.step,w.y+Math.floor(i/w.w)*w.step];let cells=[];for(let i=0;i<N;i++)if(open(i))cells.push(i);if(!cells.length)return notify('Este sector no contiene un pasillo legible para trazar una ruta.');let origin=[624,401],goal=selected.c;let nearest=p=>cells.reduce((a,b)=>Math.hypot(...vsub(coord(b),p))<Math.hypot(...vsub(coord(a),p))?b:a,cells[0]);let start=nearest(origin),end=nearest(goal),queue=[start],prev=new Int32Array(N).fill(-1);prev[start]=start;for(let h=0;h<queue.length&&prev[end]<0;h++){let i=queue[h];for(let j of [i-1,i+1,i-w.w,i+w.w])if(open(j)&&prev[j]<0&&(Math.abs(j-i)!==1||Math.floor(j/w.w)===Math.floor(i/w.w))){prev[j]=i;queue.push(j);}}if(prev[end]<0){$('routeInfo').textContent='No hay continuidad demostrable entre estos sectores en el trazado. No se dibuja una ruta a traves de locales.';return;}let path=[end];while(path.at(-1)!==start)path.push(prev[path.at(-1)]);path.reverse();if(path.length<2){$('routeInfo').textContent='El punto de demostracion ya esta junto a este sector.';return;}let pts=path.map(coord).filter((p,i,a)=>i===0||i===a.length-1||(a[i-1][0]!==a[i+1][0]&&a[i-1][1]!==a[i+1][1]));if(active!==selected.floor){let saved=selected;setFloor(saved.floor);selected=saved;}route={floor:f.id,points:pts};routeRunning=true;routeT=0;$('routeInfo').textContent='Recorrido de prueba sobre pasillos trazados. Origen ficticio; termina cerca del local, no en una puerta verificada. Sin instrucciones para uso real.';notify('La animacion recorre exclusivamente la circulacion del plano.');}
+function findRoute(){if(!selected)return;if(!selectedMall.navigable){notify('Rutas deshabilitadas: los pasillos de este plano fotográfico no están verificados.');return;}let f=floors.find(f=>f.id===selected.floor),w=f.walk,N=w.w*w.h;const open=i=>i>=0&&i<N&&((w.bytes[i>>3]>>(i&7))&1),coord=i=>[w.x+(i%w.w)*w.step,w.y+Math.floor(i/w.w)*w.step];let cells=[];for(let i=0;i<N;i++)if(open(i))cells.push(i);if(!cells.length)return notify('Este sector no contiene un pasillo legible para trazar una ruta.');let origin=[624,401],goal=selected.c;let nearest=p=>cells.reduce((a,b)=>Math.hypot(...vsub(coord(b),p))<Math.hypot(...vsub(coord(a),p))?b:a,cells[0]);let start=nearest(origin),end=nearest(goal),queue=[start],prev=new Int32Array(N).fill(-1);prev[start]=start;for(let h=0;h<queue.length&&prev[end]<0;h++){let i=queue[h];for(let j of [i-1,i+1,i-w.w,i+w.w])if(open(j)&&prev[j]<0&&(Math.abs(j-i)!==1||Math.floor(j/w.w)===Math.floor(i/w.w))){prev[j]=i;queue.push(j);}}if(prev[end]<0){$('routeInfo').textContent='No hay continuidad demostrable entre estos sectores en el trazado. No se dibuja una ruta a traves de locales.';return;}let path=[end];while(path.at(-1)!==start)path.push(prev[path.at(-1)]);path.reverse();if(path.length<2){$('routeInfo').textContent='El punto de demostracion ya esta junto a este sector.';return;}let pts=path.map(coord).filter((p,i,a)=>i===0||i===a.length-1||(a[i-1][0]!==a[i+1][0]&&a[i-1][1]!==a[i+1][1]));if(active!==selected.floor){let saved=selected;setFloor(saved.floor);selected=saved;}route={floor:f.id,points:pts};routeRunning=true;routeT=0;$('routeInfo').textContent='Recorrido de prueba sobre pasillos trazados. Origen ficticio; termina cerca del local, no en una puerta verificada. Sin instrucciones para uso real.';notify('La animacion recorre exclusivamente la circulacion del plano.');}
 // Per-floor source-photo QA: do not treat the traced SVG as the original image.
 let referenceObjectUrl=null;
 function referenceFor(level){
  const entry=selectedMall.floorReferences?.[level];
  return entry?.url||(mallId==='aventura'?(window.RETAILNAV_REFERENCES||{})[level]:null);
 }
-function comparison(){
+let photoFloors=null;
+function comparisonFloors(){return photoFloors||floors;}
+async function comparison(){
+ if(selectedMall.photoMapAsset&&!photoFloors){
+  try{const res=await fetch(selectedMall.photoMapAsset.url+'?v='+selectedMall.photoMapAsset.sha256);if(!res.ok)throw Error("HTTP "+res.status);
+   const bytes=await res.arrayBuffer(),hash=[...new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))].map(n=>n.toString(16).padStart(2,"0")).join("");
+   if(hash!==selectedMall.photoMapAsset.sha256)throw Error("Referencia desactualizada");
+   photoFloors=unpack(JSON.parse(new TextDecoder().decode(bytes)));
+  }catch(e){notify("No se pudo cargar el plano original: "+e.message);return;}
+ }
  stopAuto();
- originalLevel=active==='ALL'?(mallId==='aventura'?'UL':floors[0].id):active;
+ originalLevel=active==='ALL'?(mallId==='aventura'?'UL':comparisonFloors()[0].id):active;
  const combo=$('compareLevel');
  combo.replaceChildren();
- for(const floor of floors){
+ for(const floor of comparisonFloors()){
   const option=document.createElement('option');
   option.value=floor.id;option.textContent=floor.id+' · '+floor.name;
   combo.append(option);
@@ -1355,7 +1368,7 @@ function geometryIdentity(floor){
  return h.toString(16).padStart(8,'0');
 }
 function issueKey(level){
- const f=floors.find(f=>f.id===level);
+ const f=comparisonFloors().find(f=>f.id===level);
  const photo=selectedMall.floorReferences?.[level]?.sha256||'unregistered';
  return 'retailnav:photo-audit:v1:'+mallId+':'+level+':'+photo+':'+geometryIdentity(f);
 }
@@ -1391,7 +1404,7 @@ function drawUnitComparison(level){
  const group=$('compareUnitLabels');
  group.replaceChildren();
  group.style.display=$('showUnitCodes').checked?'':'none';
- const records=(selectedMall.units||[]).filter(u=>u.floor===level);
+ const records=(selectedMall.units||[]).filter(u=>!selectedMall.photoMapAsset||u.photoReference).map(u=>u.photoReference?{...u,...u.photoReference}:u).filter(u=>u.floor===level);
  for(const u of records){
   if(!Number.isFinite(u.x)||!Number.isFinite(u.y))continue;
   const t=document.createElementNS(RN_SVG,'text');
@@ -1457,7 +1470,7 @@ function compareMapClick(event){
  const bounds=svg.viewBox.baseVal;
  if(p.x<bounds.x||p.y<bounds.y||
     p.x>bounds.x+bounds.width||p.y>bounds.y+bounds.height)return;
- const floor=floors.find(f=>f.id===$('compareLevel').value);
+ const floor=comparisonFloors().find(f=>f.id===$('compareLevel').value);
  if(!floor)return;
  const candidates=floor.features.filter(f=>f.k!=='slab'&&f.r.length&&
   contains([p.x,p.y],f.r[0])&&
@@ -1496,7 +1509,7 @@ function exportAuditIssues(){
  const level=$('compareLevel').value;
  const payload={schema:'retailnav.floor-anomalies.v1',
   mallId,level,referenceSha256:selectedMall.floorReferences?.[level]?.sha256||null,
-  geometryFingerprint:geometryIdentity(floors.find(f=>f.id===level)),
+  geometryFingerprint:geometryIdentity(comparisonFloors().find(f=>f.id===level)),
   generatedAt:new Date().toISOString(),
   reviewStatus:'open-needs-manual-validation',
   automaticCertification:false,
@@ -1617,7 +1630,7 @@ window.visualViewport?.addEventListener('resize',()=>{
 
 function drawComparison(){
  const level=$('compareLevel').value;
- const floor=floors.find(f=>f.id===level);
+ const floor=comparisonFloors().find(f=>f.id===level);
  if(!floor)return;
  const entry=selectedMall.floorReferences?.[level];
  const size=entry?.imageSize||
@@ -1694,8 +1707,14 @@ window.RetailNavComparison={
  })
 };
 function download(name,bytes,type){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),30000);}
-function exportSVG(){let fs=visible(),f=fs.length===1?fs[0]:floors[Math.min(1,floors.length-1)];let reference=selectedMall.floorReferences?.[f.id],isAP=mallId==='ap-plaza',box=reference?.viewBox||(isAP?'0 0 1440 620':'290 110 800 600'),size=reference?.imageSize||(isAP?[1440,620]:[800,600]);let s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+box+'"><rect x="0" y="0" width="'+size[0]+'" height="'+size[1]+'" fill="#f3f7f9"/>'+svgPaths(f)+'</svg>';download('RetailNav-'+mallId+'-'+f.id+'.svg',s,'image/svg+xml');}
-function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',source:selectedMall.source||'Planos aportados',mallId,calibration:'Escala no medida. Coordenadas originales en pixeles registrados.',levels:visible().map(f=>({id:f.id,source:f.source,elevation:f.index*4.5,elevationStatus:'simulada',features:f.features.map(o=>({id:o.id,kind:o.k,label:o.n,geometry:{outer:o.r[0],holes:o.r.slice(1)},status:'trazado-provisional'}))}))};download('RetailNav-'+mallId+'-'+active+'.json',JSON.stringify(out,null,2),'application/json');}
+function exportSVG(){
+ const fs=visible(),f=fs.find(f=>f.id===focusFloorId)|| (fs.length===1?fs[0]:floors[Math.min(1,floors.length-1)]);
+ const points=f.features.flatMap(p=>p.p),min=[0,1].map(k=>Math.min(...points.map(p=>p[k]))-5),max=[0,1].map(k=>Math.max(...points.map(p=>p[k]))+5);
+ const bounds=[...min,max[0]-min[0],max[1]-min[1]];
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+bounds.join(' ')+'"><rect x="'+min[0]+'" y="'+min[1]+'" width="'+bounds[2]+'" height="'+bounds[3]+'" fill="#f3f7f9"/>'+svgPaths(f)+'</svg>';
+ download('RetailNav-'+mallId+'-'+f.id+'.svg',svg,'image/svg+xml');
+}
+function exportJSON(){let out={schema:'retailnav.vector.v1',product:'RetailNav',source:selectedMall.source||'Planos aportados',mallId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',calibration:selectedMall.coordinateSpace?'Proyección local de fuente WGS84 en decímetros; no calibrada para navegación interior.':'Escala no medida. Coordenadas originales en pixeles registrados.',levels:visible().map(f=>({id:f.id,source:f.source,elevation:f.elevationMetres,elevationStatus:'simulada',features:f.features.map(o=>({id:o.id,kind:o.k,label:o.n,geometry:{outer:o.r[0],holes:o.r.slice(1)},status:'trazado-provisional'}))}))};download('RetailNav-'+mallId+'-'+active+'.json',JSON.stringify(out,null,2),'application/json');}
 // GLB 2.0: real triangle meshes with normals, one group per floor, Y up.
 function exportGLB(){let parts=[],views=[],accessors=[],meshes=[],nodes=[],materials=[],len=0;let mat={};for(let floor of visible()){let children=[];for(let f of floor.features){if(!f.flat.length)continue;let bytes=new Uint8Array(f.flat.buffer);parts.push(bytes);let view=views.length;views.push({buffer:0,byteOffset:len,byteLength:bytes.length,byteStride:24,target:34962});let min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];for(let i=0;i<f.flat.length;i+=6)for(let j=0;j<3;j++){min[j]=Math.min(min[j],f.flat[i+j]);max[j]=Math.max(max[j],f.flat[i+j]);}let a=accessors.length;accessors.push({bufferView:view,byteOffset:0,componentType:5126,count:f.flat.length/6,type:'VEC3',min,max},{bufferView:view,byteOffset:12,componentType:5126,count:f.flat.length/6,type:'VEC3'});let key=f.k+'-'+floor.index;if(mat[key]===undefined){mat[key]=materials.length;materials.push({name:key,pbrMetallicRoughness:{baseColorFactor:[...palette(f,floor.index,false),1],metallicFactor:.1,roughnessFactor:.8},doubleSided:true});}let m=meshes.length;meshes.push({name:f.id,primitives:[{attributes:{POSITION:a,NORMAL:a+1},material:mat[key],mode:4}]});children.push(nodes.length);nodes.push({name:f.n||f.id,mesh:m,extras:{id:f.id,level:floor.id,status:'trazado-provisional'}});len+=bytes.length;}let group=nodes.length;nodes.push({name:floor.id,children,translation:[0,floor.index*4.5,0],extras:{source:floor.source,elevationStatus:'simulada'}});floor.exportGroup=group;}let doc={asset:{version:'2.0',generator:'RetailNav vector-to-mesh',extras:{realSurvey:false,scale:'unidades de modelo, no metros medidos'}},scene:0,scenes:[{nodes:visible().map(f=>f.exportGroup)}],nodes,meshes,materials,buffers:[{byteLength:len}],bufferViews:views,accessors};let text=new TextEncoder().encode(JSON.stringify(doc));let jlen=(text.length+3)&~3,total=12+8+jlen+8+len,buff=new ArrayBuffer(total),v=new DataView(buff),u=new Uint8Array(buff);v.setUint32(0,0x46546c67,true);v.setUint32(4,2,true);v.setUint32(8,total,true);v.setUint32(12,jlen,true);v.setUint32(16,0x4e4f534a,true);u.fill(32,20,20+jlen);u.set(text,20);v.setUint32(20+jlen,len,true);v.setUint32(24+jlen,0x004e4942,true);let off=28+jlen;parts.forEach(p=>{u.set(p,off);off+=p.length;});download('RetailNav-'+mallId+'-'+active+'.glb',buff,'model/gltf-binary');return buff;}
 function bindUI(){$('showAllFloors').onclick=()=>{
@@ -1824,7 +1843,10 @@ $('compareLocalPhoto').onchange=changeComparePhoto;$('downloadBtn').onclick=()=>
  const last=lastIndoorReferenceSource;
  lastIndoorReferenceSource=source;
  const nextFloor=visitorFloorReference();
- if(searchFloorSet&&searchCommitted){
+ if(focusFloorId&&focusedStoreId){
+  const id=focusedStoreId,dest=focusFloorId;
+  if(lastStoreFocus?.referenceFloor!==nextFloor){focusCatalogStore(id,dest);lastStoreFocus.referenceFloor=nextFloor;}
+ }else if(searchFloorSet&&searchCommitted){
   const before=JSON.stringify([...searchFloorSet]);
   if(!searchFloorSet.has(nextFloor)||active!==nextFloor){
    const report=applySearchFloors(searchCommitted);
@@ -1848,14 +1870,14 @@ function applyMallUi(){
   $('mallSidebarTitle').textContent=selectedMall.name;
   $('mallMobileTitle').textContent=selectedMall.name;
   $('mallMobileMeta').textContent=floors.length+' planta(s) · '+
-    (mallId==='aventura'?'MOCK':'TRAZADO PROVISIONAL');
+    (selectedMall.coordinateSpace?'FUENTE OFICIAL · SIN RUTAS':'TRAZADO PROVISIONAL');
   $('mallSourceMessage').textContent=mallId==='new-world-city-shanghai'
     ?'九个楼层 L1–L9: '+(selectedMall.vectorRegionCount||0)+' regiones fotográficas candidatas y '+
        (selectedMall.commercialDirectoryRecords||0)+' registros históricos del directorio L1–L7. '+
        'Contornos y comunicaciones verticales sin validar; rutas desactivadas.'
     :mallId==='ap-plaza'
      ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
-     :'Reconstrucción vectorial a partir de los tres planos de Aventura Mall.';
+     :'Geometría del mapa oficial en el visor 3D. Alturas estimadas; sin ruta peatonal verificada.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
   const single=floors.length<=1;
@@ -1878,7 +1900,7 @@ function applyMallUi(){
   $('showAllFloors').textContent='← Todas las plantas';
   $('original').disabled=false;
   $('original').title='Comparar foto y vectorizado de cada planta';
-  $('routeBtn').disabled=mallId!=='aventura';
+  $('routeBtn').disabled=!selectedMall.navigable;
   const connectorButton=$('rnConnectorsToggle');
   connectorButton.hidden=!verticalHypotheses.length;
   connectorButton.setAttribute('aria-pressed',String(verticalConnectionsOn));
@@ -1936,7 +1958,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  liftShaftCandidateCount:(selectedMall.verticalShaftCandidates||[]).length,
  searchFloorIDs:searchFloorSet?[...searchFloorSet]:null,
   committedSearch:searchCommitted,highlightedVectorCount:searchMatchedVectors.size,
-  focusedStoreId,focusedStoreVector,focusFloorId,
+  focusedStoreId,focusedStoreVector,focusedStoreVectors:[...focusedStoreVectors],focusFloorId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
   searchPlacement:'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,

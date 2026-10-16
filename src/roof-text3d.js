@@ -206,6 +206,7 @@ function summarize(floors,units,pois,origin,scale){
    if(f.k!=='unit')continue;
    summary.commercialRoofs++;
    const u=match.get(key);
+   if(window.RETAILNAV_ACTIVE_MALL?.coordinateSpace&&!f.n&&!u)continue;
    const code=String(f.n||u?.code||f.id).trim();
    f.storeCode=code;
    // Historical tenant names are displayed only when associated with a

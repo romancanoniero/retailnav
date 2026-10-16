@@ -1,7 +1,7 @@
 /* RetailNav deterministic seed data. No fake GPS, fake sessions, or real users.
- * Coordinates are in the EXACT provisional Aventura vector-map plan space.
- * Replacing source:'mock' with server-reported positions does not change
- * floor projection, renderer geometry, contact list, or navigation behavior.
+ * Photo fixtures retain their original frame. Source-map demos require
+ * recorded anchors in the active map frame; photo pixels are never migrated
+ * by relabeling their coordinates. All positions remain explicitly fictional.
  */
 (()=>{
 'use strict';
@@ -19,7 +19,15 @@ const seeds=[
 ];
 // CC0 synthetic photographic portraits shipped locally, never private user photos.
 const photoFiles=Object.freeze(['elena','mateo','valentina','sofia','marcos','lucia','nico','camila','tomas']);
-const list=seeds.map((seed,index)=>Object.freeze({
+const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const sourceFrame=mall.id==='aventura'&&mall.coordinateSpace==='roveiq:107:local-decimeters-v1';
+const sourceAnchors=mall.demoCorridorAnchors||[];
+const activeSeeds=sourceFrame?seeds.flatMap((seed,index)=>{
+  const p=sourceAnchors[index];
+  return p&&p.floor===seed.floor&&Number.isFinite(p.x)&&Number.isFinite(p.y)
+    ?[{...seed,x:p.x,y:p.y}]:[];
+}):seeds;
+const list=activeSeeds.map((seed,index)=>Object.freeze({
   id:seed.id,
   name:seed.name,
   demo:true,
@@ -27,14 +35,13 @@ const list=seeds.map((seed,index)=>Object.freeze({
   visual:Object.freeze({bodyColor:seed.bodyColor,shadowColor:seed.shadowColor,
     rimColor:seed.rimColor}),
   position:Object.freeze({
-    mallId:'aventura-mall-reference',
+    mallId:sourceFrame?'aventura':'aventura-mall-reference',
     floor:seed.floor,
     x:seed.x,
     y:seed.y,
     source:'mock',
-    coordinateSpace:'provisional-plan-pixels',
-    // Later a calibrated indoor reference frame will map plan pixels to meters
-    // and world geodetic coordinates without changing identity or renderer.
+    coordinateSpace:sourceFrame?mall.coordinateSpace:'provisional-plan-pixels',
+    // Display coordinates do not assert actual presence or surveyed accuracy.
     verified:false
   })
 }));

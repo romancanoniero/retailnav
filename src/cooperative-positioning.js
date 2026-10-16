@@ -6,6 +6,7 @@
 'use strict';
 const $=id=>document.getElementById(id);
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const coordinateSpace=mall.coordinateSpace||'mall-photo-pixels';
 const engine=window.RetailNavPositioningCore;
 const indoor=()=>window.RetailNavIndoor?.getState?.()||null;
 const panel=$('rnIndoorDialog'),consent=$('rnCoopConsent'),colocated=$('rnCoopColocated');
@@ -66,7 +67,7 @@ function refresh(){
   ' · no se presupone Bluetooth/UWB ni medición acústica en Safari.';
  const canOffer=consented&&a?.source==='manual'&&
   Number.isFinite(a.timestampMs)&&time()-a.timestampMs<=120000&&
-  floorIds().includes(a.floor);
+  floorIds().includes(a.floor)&&a.coordinateSpace===coordinateSpace;
  offer.disabled=busy||!canOffer;
  join.disabled=busy||!consented||!colocated.checked||!input.value.trim();
  revoke.disabled=busy||!activeOffer;
@@ -88,7 +89,7 @@ async function publishOffer(){
   await ensureSession();
   const p=indoor().anchor;
   const response=await request('positioning/offer',{
-   mallId:mall.id,source:'manual-anchor',
+   mallId:mall.id,coordinateSpace,source:'manual-anchor',
    floor:p.floor,x:p.x,y:p.y,observedAtMs:p.timestampMs,
    explicitConsent:true
   });
@@ -127,9 +128,9 @@ async function acceptReference(){
  try{
   await ensureSession();
   const result=await request('positioning/claim',{
-   code,mallId:mall.id,explicitConsent:true,confirmColocated:true
+   code,mallId:mall.id,coordinateSpace,explicitConsent:true,confirmColocated:true
   });
-  if(result.mallId!==mall.id||result.physicalProximityVerified!==false||
+  if(result.mallId!==mall.id||result.coordinateSpace!==coordinateSpace||result.physicalProximityVerified!==false||
       !floorIds().includes(result.floor)||
       !window.RetailNavIndoor?.adoptPeerAnchor?.(result))
    throw Error('Referencia no aplicable: verificá el shopping y la planta');

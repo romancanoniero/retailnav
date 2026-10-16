@@ -126,21 +126,35 @@ async function parse(req,maxBytes=8192){
     throw Object.assign(Error('Datos inválidos'),{status:400});
   return p;
 }
-function publicFriend(user){
-  const loc=user.location,visible=loc?.sharing===true&&loc.updated+LOCATION_AGE>Date.now();
-  return {id:user.id,name:user.name,avatarVersion:user.avatarVersion||null,sharing:Boolean(visible),
-    ...(visible?{position:{floor:loc.floor,x:loc.x,y:loc.y,updated:loc.updated,source:'manual'}}:{})};
+// Older open tabs do not understand source coordinates: no headers means
+// the original photo frame. Never send them an incompatible numeric position.
+function responsePositionMatches(loc,req){
+  return (loc.mallId||'aventura')===(req.headers['x-retailnav-mall']||'aventura')&&
+    (loc.coordinateSpace||'mall-photo-pixels')===
+      (req.headers['x-retailnav-coordinate-space']||'mall-photo-pixels');
 }
-function state(me){
+function publicFriend(user,req){
+  const loc=user.location,shared=loc?.sharing===true&&loc.updated+LOCATION_AGE>Date.now();
+  const visible=shared&&responsePositionMatches(loc,req);
+  return {id:user.id,name:user.name,avatarVersion:user.avatarVersion||null,sharing:Boolean(visible),
+    positionFrameMismatch:Boolean(shared&&!visible),
+    ...(visible?{position:{floor:loc.floor,x:loc.x,y:loc.y,updated:loc.updated,source:'manual',
+      mallId:loc.mallId||'aventura',coordinateSpace:loc.coordinateSpace||'mall-photo-pixels'}}:{})};
+}
+function state(me,req){
+  const shared=Boolean(me.location?.sharing&&me.location.updated+LOCATION_AGE>Date.now());
+  const visible=shared&&responsePositionMatches(me.location,req);
   return {me:{id:me.id,name:me.name,avatarVersion:me.avatarVersion||null,anonymous:true,hasRecovery:Boolean(me.recovery)},
-    friends:me.friends.map(id=>db.users[id]).filter(Boolean).map(publicFriend),
+    friends:me.friends.map(id=>db.users[id]).filter(Boolean).map(user=>publicFriend(user,req)),
     incoming:Object.values(db.requests).filter(r=>r.ownerId===me.id&&r.expires>Date.now())
       .map(r=>({id:r.id,name:db.users[r.guestId]?.name||'Visitante',created:r.created})),
     outgoing:Object.values(db.requests).filter(r=>r.guestId===me.id&&r.expires>Date.now())
       .map(r=>({id:r.id,name:db.users[r.ownerId]?.name||'Visitante',created:r.created})),
-    myPosition:me.location?.sharing&&me.location.updated+LOCATION_AGE>Date.now()
+    hasSharedPosition:shared,positionFrameMismatch:shared&&!visible,
+    myPosition:visible
       ?{floor:me.location.floor,x:me.location.x,y:me.location.y,
-        updated:me.location.updated,source:'manual'}:null,
+        updated:me.location.updated,source:'manual',mallId:me.location.mallId||'aventura',
+        coordinateSpace:me.location.coordinateSpace||'mall-photo-pixels'}:null,
     locationExpiresAfterMs:LOCATION_AGE};
 }
 // Positioning cooperation is a separate, ephemeral consent-based channel.
@@ -149,6 +163,16 @@ function state(me){
 const OFFER_TTL_MS=90_000,positionOffers=new Map();
 const validMallId=id=>typeof id==='string'&&/^[a-z0-9-]{2,80}$/.test(id);
 const validFloorLabel=floor=>typeof floor==='string'&&/^[A-Z0-9-]{1,12}$/.test(floor);
+const PHOTO_SPACE='mall-photo-pixels',AVENTURA_SOURCE_SPACE='roveiq:107:local-decimeters-v1';
+function positionFrame(p,defaultMall=null){
+  const mallId=p.mallId??defaultMall,coordinateSpace=p.coordinateSpace??PHOTO_SPACE;
+  if(!validMallId(mallId))return null;
+  const source=mallId==='aventura'&&coordinateSpace===AVENTURA_SOURCE_SPACE;
+  if(!source&&coordinateSpace!==PHOTO_SPACE)return null;
+  const min=source?-10000:0,max=source?10000:2000;
+  if(![p.x,p.y].every(v=>Number.isFinite(v)&&v>=min&&v<=max))return null;
+  return {mallId,coordinateSpace};
+}
 function pruneOffers(){
  const t=Date.now();
  for(const [key,offer] of positionOffers)
@@ -175,24 +199,23 @@ const app=http.createServer(async(req,res)=>{
     if(req.method==='POST'&&url.pathname==='/session'){
       if(auth){
         auth.entry.lastSeen=Date.now();save();
-        return send(res,200,state(auth.user),cookie(auth.credential));
+        return send(res,200,state(auth.user,req),cookie(auth.credential));
       }
       const user=newUser();
-      return send(res,201,state(user),newSession(user));
+      return send(res,201,state(user,req),newSession(user));
     }
     if(!auth)return reject(res,401,'Sesión anónima no disponible. Recargá la página.');
     const me=auth.user;
     if(await meetups.handle(req,res,url.pathname,me))return;
-    if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me));
+    if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me,req));
     // Web fallback: a human explicitly shows an in-person QR to another
     // visitor. It is NOT a verified ranging method, Bluetooth or GPS transfer.
     if(req.method==='POST'&&url.pathname==='/positioning/offer'){
       const p=await parse(req);
       const stamp=Date.now();
-      if(!validMallId(p.mallId)||!validFloorLabel(p.floor)||
+      const frame=positionFrame(p);
+      if(!frame||!validFloorLabel(p.floor)||
         p.source!=='manual-anchor'||
-        !Number.isFinite(p.x)||!Number.isFinite(p.y)||
-        p.x<0||p.x>2000||p.y<0||p.y>2000||
         p.explicitConsent!==true||
         !Number.isFinite(p.observedAtMs)||
         stamp-p.observedAtMs<0||stamp-p.observedAtMs>120000)
@@ -202,7 +225,7 @@ const app=http.createServer(async(req,res)=>{
       if(positionOffers.size>=3000)return reject(res,503,'Capacidad temporal agotada');
       const code=token(),expiresAt=Date.now()+OFFER_TTL_MS;
       positionOffers.set(hash(code),{
-        ownerId:me.id,mallId:p.mallId,floor:p.floor,
+        ownerId:me.id,...frame,floor:p.floor,
         x:Math.round(p.x*10)/10,y:Math.round(p.y*10)/10,
         issuedAt:stamp,expiresAt
       });
@@ -224,6 +247,8 @@ const app=http.createServer(async(req,res)=>{
       const key=hash(p.code),offer=positionOffers.get(key);
       if(!offer)return reject(res,410,'Referencia vencida, utilizada o cancelada');
       if(offer.mallId!==p.mallId)return reject(res,409,'Este código pertenece a otro shopping');
+      if(offer.coordinateSpace!==(p.coordinateSpace??PHOTO_SPACE))
+        return reject(res,409,'Esta referencia pertenece a otra versión del plano');
       if(offer.ownerId===me.id)return reject(res,400,'No podés usar tu propia referencia');
       // The token can be relayed over the Internet: QR is an assertion of
       // co-location by users, NEVER independently verified physical range.
@@ -231,7 +256,7 @@ const app=http.createServer(async(req,res)=>{
       return send(res,200,{
         mallId:offer.mallId,floor:offer.floor,x:offer.x,y:offer.y,
         source:'peer-qr-colocation-asserted',
-        coordinateSpace:'mall-photo-pixels',
+        coordinateSpace:offer.coordinateSpace,
         expiresAt:Date.now()+120000,
         observedAtMs:offer.issuedAt,
         physicalProximityVerified:false,
@@ -273,7 +298,7 @@ const app=http.createServer(async(req,res)=>{
       me.avatarVersion=Date.now();
       me.avatarUpdatedAt=Date.now();
       save();
-      return send(res,200,state(me));
+      return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/avatar/delete'){
       if(me.avatarVersion){
@@ -283,7 +308,7 @@ const app=http.createServer(async(req,res)=>{
       me.avatarVersion=null;
       me.avatarUpdatedAt=Date.now();
       save();
-      return send(res,200,state(me));
+      return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/invite/preview'){
       const payload=await parse(req);
@@ -299,7 +324,7 @@ const app=http.createServer(async(req,res)=>{
     if(req.method==='POST'&&url.pathname==='/me'){
       const p=await parse(req);
       if(!validName(p.name))return reject(res,400,'Ingresá un nombre de 1 a 36 caracteres');
-      me.name=p.name.trim();save();return send(res,200,state(me));
+      me.name=p.name.trim();save();return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/invite'){
       for(const [key,invite] of Object.entries(db.invites))
@@ -349,13 +374,13 @@ const app=http.createServer(async(req,res)=>{
         if(!me.friends.includes(friend.id))me.friends.push(friend.id);
         if(!friend.friends.includes(me.id))friend.friends.push(me.id);
       }
-      save();return send(res,200,state(me));
+      save();return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/request/cancel'){
       const p=await parse(req);
       if(!validId(p.id)||db.requests[p.id]?.guestId!==me.id)
         return reject(res,404,'Solicitud no disponible');
-      delete db.requests[p.id];save();return send(res,200,state(me));
+      delete db.requests[p.id];save();return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/contact/remove'){
       const p=await parse(req);
@@ -365,7 +390,7 @@ const app=http.createServer(async(req,res)=>{
       const other=db.users[p.id];
       if(other)other.friends=other.friends.filter(id=>id!==me.id);
       meetups.unlink(me.id,p.id);
-      save();return send(res,200,state(me));
+      save();return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/account/delete'){
       removeOwnOffers(me.id);
@@ -388,13 +413,13 @@ const app=http.createServer(async(req,res)=>{
     }
     if(req.method==='POST'&&url.pathname==='/location'){
       const p=await parse(req);
-      if(p.sharing===false){me.location=null;save();return send(res,200,state(me));}
-      if(p.sharing!==true||!allowedFloor(p.floor)||!Number.isFinite(p.x)||
-        !Number.isFinite(p.y)||p.x<0||p.x>2000||p.y<0||p.y>2000)
+      if(p.sharing===false){me.location=null;save();return send(res,200,state(me,req));}
+      const frame=positionFrame(p,'aventura');
+      if(p.sharing!==true||!frame||frame.mallId!=='aventura'||!allowedFloor(p.floor))
         return reject(res,400,'Marcá una posición válida en el plano');
-      me.location={floor:p.floor,x:Math.round(p.x*10)/10,y:Math.round(p.y*10)/10,
+      me.location={...frame,floor:p.floor,x:Math.round(p.x*10)/10,y:Math.round(p.y*10)/10,
         sharing:true,updated:Date.now(),source:'manual'};
-      save();return send(res,200,state(me));
+      save();return send(res,200,state(me,req));
     }
     if(req.method==='POST'&&url.pathname==='/recovery/create'){
       const code=token()+'-'+token().slice(0,11);
@@ -416,7 +441,7 @@ const app=http.createServer(async(req,res)=>{
       }
       owner.recovery=null;
       const newCookie=newSession(owner);
-      return send(res,200,state(owner),newCookie);
+      return send(res,200,state(owner,req),newCookie);
     }
     return reject(res,404,'Ruta no disponible');
   }catch(e){

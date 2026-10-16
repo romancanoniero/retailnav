@@ -64,3 +64,27 @@ test('AP Plaza generates six completely independent demo contacts on B1 only',()
   assert.ok(ap.every(p=>!friends.some(a=>a.id===p.id)));
   assert.ok(ap.every(p=>p.avatarUrl.startsWith('demo-avatars/')));
 });
+
+
+test('Aventura source geometry uses only explicit anchors in its own frame',()=>{
+ const coordinateSpace='roveiq:107:local-decimeters-v1';
+ const anchors=friends.map((p,i)=>({floor:p.position.floor,x:-500+i*250,y:2400+i*125}));
+ const context={window:{RETAILNAV_ACTIVE_MALL_ID:'aventura',RETAILNAV_ACTIVE_MALL:{
+  id:'aventura',coordinateSpace,demoCorridorAnchors:anchors}}};
+ runInNewContext(script,context);
+ const source=context.window.RETAILNAV_DEMO_CONTACTS;
+ assert.equal(source.length,9);
+ source.forEach((p,i)=>{
+  assert.equal(p.position.mallId,'aventura');
+  assert.equal(p.position.coordinateSpace,coordinateSpace);
+  assert.deepEqual([p.position.floor,p.position.x,p.position.y],
+   [anchors[i].floor,anchors[i].x,anchors[i].y]);
+  assert.equal(p.position.source,'mock');
+  assert.equal(p.position.verified,false);
+ });
+ const empty={window:{RETAILNAV_ACTIVE_MALL_ID:'aventura',RETAILNAV_ACTIVE_MALL:{
+  id:'aventura',coordinateSpace}}};
+ runInNewContext(script,empty);
+ assert.equal(empty.window.RETAILNAV_DEMO_CONTACTS.length,0,
+  'Photo fixtures are never silently reused in the source frame');
+});

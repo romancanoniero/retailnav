@@ -25,6 +25,8 @@ const server=createServer(async(req,res)=>{
    if(req.headers.origin)headers.origin=req.headers.origin;
    if(req.headers.cookie)headers.cookie=req.headers.cookie;
    if(req.headers['content-type'])headers['content-type']=req.headers['content-type'];
+   for(const key of ['x-retailnav-mall','x-retailnav-coordinate-space'])
+    if(req.headers[key])headers[key]=req.headers[key];
    const response=await fetch(backendUrl,{method:req.method,headers,
     body:req.method==='POST'?Buffer.concat(chunks):undefined});
    const body=Buffer.from(await response.arrayBuffer());
@@ -68,7 +70,7 @@ async function instance(mall='new-world-city-shanghai',hash=''){
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready,{timeout:45000});
  return {context,page};
 }
-let one,two,three;
+let one,two,three,sourceOne,sourceTwo;
 try{
  one=await instance();
  // User marks their current indoor point explicitly, not from invented GPS.
@@ -122,10 +124,64 @@ try{
  await one.page.locator('#rnCoopRevoke').click();
  await one.page.waitForFunction(()=>
   !window.RetailNavCooperativePositioning.getState().offerActive);
+ // Aventura now has a different coordinate frame, in the same 3D renderer.
+ sourceOne=await instance('aventura');
+ const frame='roveiq:107:local-decimeters-v1';
+ await sourceOne.page.waitForFunction(()=>window.RetailNavSocial?.getState().ready);
+ const isolated=await sourceOne.page.evaluate(frame=>{
+  const mall=window.RETAILNAV_ACTIVE_MALL;
+  if(mall.coordinateSpace!==frame)throw Error('Aventura source frame missing from build');
+  window.dispatchEvent(new CustomEvent('retailnav:map-point',{
+   detail:{floor:'LL',x:650,y:380}}));
+  const oldManual=window.RetailNavIndoor.getState().anchor;
+  const oldPeer=window.RetailNavIndoor.adoptPeerAnchor({
+   mallId:'aventura',coordinateSpace:'mall-photo-pixels',source:'peer-qr-colocation-asserted',
+   floor:'LL',x:650,y:380});
+  const people=window.RetailNavPins.getPeople();
+  window.RetailNavPins.setPeople([{id:'legacy',position:{floor:'LL',x:650,y:380,
+   mallId:'aventura',coordinateSpace:'mall-photo-pixels'}}]);
+  const oldPins=window.RetailNavPins.getState().registered;
+  window.RetailNavPins.setPeople(people);
+  return {oldManual,oldPeer,oldPins,people:people.map(p=>p.position)};
+ },frame);
+ assert.equal(isolated.oldManual,null,'Untyped old events cannot become source positions');
+ assert.equal(isolated.oldPeer,false);
+ assert.equal(isolated.oldPins,0);
+ assert.equal(isolated.people.length,9);
+ assert.ok(isolated.people.every(p=>p.coordinateSpace===frame&&p.mallId==='aventura'));
+ await sourceOne.page.evaluate(frame=>window.dispatchEvent(new CustomEvent('retailnav:map-point',{
+  detail:{mallId:'aventura',coordinateSpace:frame,floor:'UL',x:-568.2,y:2480.4}
+ })),frame);
+ await sourceOne.page.waitForFunction(()=>window.RetailNavSocial.getState().myPosition?.x===-568.2);
+ await sourceOne.page.locator('#rnIndoorBtn').click();
+ await sourceOne.page.locator('#rnCoopConsent').check();
+ await sourceOne.page.locator('#rnCoopOffer').click();
+ await sourceOne.page.waitForFunction(()=>document.querySelector('#rnCoopLink').value.includes('#rnp='));
+ const sourceLink=new URL(await sourceOne.page.locator('#rnCoopLink').inputValue());
+ sourceTwo=await instance('aventura',sourceLink.hash);
+ await sourceTwo.page.locator('#rnCoopConsent').check();
+ await sourceTwo.page.locator('#rnCoopColocated').check();
+ await sourceTwo.page.locator('#rnCoopJoin').click();
+ await sourceTwo.page.waitForFunction(()=>window.RetailNavIndoor.getState().anchor?.source==='peer-qr-colocation-asserted');
+ const sourceAnchor=await sourceTwo.page.evaluate(()=>window.RetailNavIndoor.getState().anchor);
+ assert.equal(sourceAnchor.coordinateSpace,frame);
+ assert.deepEqual([sourceAnchor.floor,sourceAnchor.x,sourceAnchor.y],['UL',-568.2,2480.4]);
+ // A legacy browser may still publish photo coordinates; the updated browser hides them.
+ await sourceOne.page.evaluate(async()=>{
+  const response=await fetch('api/location',{method:'POST',credentials:'same-origin',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({sharing:true,floor:'LL',x:650,y:380})});
+  if(!response.ok)throw Error('Legacy fixture could not be stored');
+ });
+ await sourceOne.page.reload();
+ await sourceOne.page.waitForFunction(()=>window.RetailNavSocial?.getState().ready);
+ assert.equal(await sourceOne.page.evaluate(()=>window.RetailNavSocial.getState().myPosition),null);
+ assert.match(await sourceOne.page.locator('#rnStatusPosition').textContent(),/otro plano/);
+ assert.equal(await sourceOne.page.locator('#rnStopLocation').isDisabled(),false,
+  'A hidden legacy position can still be revoked');
  assert.equal(bad.length,0,'Uncaught script errors: '+bad.join('\n'));
- console.log('PASS '+engine+': anonymous two-browser opt-in QR reference, provisional accuracy, one-use token and revocation');
+ console.log('PASS '+engine+': anonymous two-browser opt-in QR reference, provisional accuracy, one-use token, revocation and source/photo coordinate isolation');
 } finally{
- await Promise.allSettled([one?.context.close(),two?.context.close(),three?.context.close()]);
+ await Promise.allSettled([one?.context.close(),two?.context.close(),three?.context.close(),sourceOne?.context.close(),sourceTwo?.context.close()]);
  await browser.close();
  await new Promise(resolve=>backend.close(resolve));
  await new Promise(resolve=>server.close(resolve));

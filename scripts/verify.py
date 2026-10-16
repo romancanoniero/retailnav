@@ -66,6 +66,29 @@ for slug, mall in catalog.items():
     bundles[slug] = bundle
 assert len(bundles["aventura"]["floors"]) == 3
 assert [f[0] for f in bundles["aventura"]["floors"]] == ["LL","UL","L3"]
+aventura = catalog["aventura"]
+source_path = Path("data/official-maps/aventura.json")
+source_mesh = json.loads(Path("data/official-maps/aventura-3d.json").read_text())
+assert source_mesh["sourceSha256"] == hashlib.sha256(source_path.read_bytes()).hexdigest()
+assert aventura["sourceMapSha256"] == source_mesh["sourceSha256"]
+assert aventura["coordinateSpace"] == source_mesh["coordinateSpace"] == "roveiq:107:local-decimeters-v1"
+assert aventura["origin"] == source_mesh["origin"] == [0, 0]
+assert aventura["scale"] == source_mesh["scale"] == .025
+assert bundles["aventura"]["floors"] == source_mesh["floors"]
+assert sum(len(f[3]) for f in source_mesh["floors"]) == 616
+assert sum(p[1] == 1 for f in source_mesh["floors"] for p in f[3]) == 607
+assert sum(p[1] == 5 for f in source_mesh["floors"] for p in f[3]) == 9
+assert not aventura["navigable"] and not aventura["indoorPositionCalibrated"]
+photo_asset = aventura["photoMapAsset"]
+assert photo_asset["url"] == "maps/aventura-photo-reference.json"
+photo_bytes = (root / photo_asset["url"]).read_bytes()
+assert hashlib.sha256(photo_bytes).hexdigest() == photo_asset["sha256"]
+photo_floors = json.loads(photo_bytes)
+assert [f[0] for f in photo_floors] == ["LL", "UL", "L3"]
+assert sum(len(f[3]) for f in photo_floors) == 235
+assert html.count('id="canvas"') == 1, "Reuse the existing 3D viewport"
+assert 'rnSourceVectorMap' not in html and 'RetailNavSourceMap' not in html
+assert not re.search(r'<iframe\b', html, re.I), "No external viewer may replace native selection"
 ap = catalog["ap-plaza"]
 assert ap["id"] == "ap-plaza" and ap["navigable"] is False
 assert "id=\"floorPicker\"" in html and "id=\"floorSpacing\"" in html
@@ -281,6 +304,8 @@ for floor in manifest["floors"]:
     assert data["id"] == floor["id"]
     assert data["geometry"], floor["id"]
     assert len(data["geometry"]) == floor["featureCount"]
+    archived = next(f for f in photo_floors if f[0] == floor["id"])
+    assert archived == [data["id"], data["name"], data["source"], data["geometry"], data["walkGrid"]]
     ids = set()
     for entry in data["geometry"]:
         fid, kind, name, deltas, rings, indices, centroid = entry
@@ -309,4 +334,4 @@ for label in ("LL", "UL", "L3", "ALL"):
         assert j["asset"]["version"] == "2.0"
         assert len(j["meshes"]) > 20
         assert j["scene"] == 0
-print("PASS RetailNav", json.dumps(totals))
+print("PASS RetailNav photo references", json.dumps(totals), "and 616 native source meshes")

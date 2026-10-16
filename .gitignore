@@ -4,3 +4,5 @@ artifacts/
 public/catalog/
 public/maps/malls/
 public/reference/
+
+public/maps/aventura-photo-reference.json

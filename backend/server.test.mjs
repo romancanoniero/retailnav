@@ -15,8 +15,9 @@ await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));
 const base='http://127.0.0.1:'+app.address().port;
 const origin='https://improvingyourreality.com';
 
-async function req(method,url,body,session,customOrigin=origin){
+async function req(method,url,body,session,customOrigin=origin,requestedFrame=body?.coordinateSpace){
   const headers={};
+  if(requestedFrame){headers['X-RetailNav-Coordinate-Space']=requestedFrame;headers['X-RetailNav-Mall']=body?.mallId||'aventura';}
   if(method==='POST'){headers['Origin']=customOrigin;headers['Content-Type']='application/json';}
   if(session)headers.Cookie=session;
   const res=await fetch(base+url,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});
@@ -77,6 +78,16 @@ test('anonymous people survive browser sessions; QR linking requires mutual acce
   const visible=(await req('GET','/state',undefined,b.cookie)).data.friends[0];
   assert.equal(visible.sharing,true);assert.deepEqual([visible.position.x,visible.position.y],[650,380]);
   assert.equal(visible.position.source,'manual');
+  const sourceFrame='roveiq:107:local-decimeters-v1';
+  const sourceShare=await req('POST','/location',{sharing:true,mallId:'aventura',
+    coordinateSpace:sourceFrame,floor:'UL',x:-568.2,y:2480.4},a.cookie);
+  assert.equal(sourceShare.status,200);
+  const legacyFriend=(await req('GET','/state',undefined,b.cookie)).data.friends[0];
+  assert.equal(legacyFriend.position,undefined,'Clients without a frame receive only photo positions');
+  assert.equal(legacyFriend.positionFrameMismatch,true);
+  const sourceFriend=(await req('GET','/state',undefined,b.cookie,origin,sourceFrame)).data.friends[0];
+  assert.deepEqual([sourceFriend.position.mallId,sourceFriend.position.coordinateSpace,
+    sourceFriend.position.x,sourceFriend.position.y],['aventura',sourceFrame,-568.2,2480.4]);
   const stop=await req('POST','/location',{sharing:false},a.cookie);
   assert.equal(stop.data.myPosition,null);
   assert.equal((await req('GET','/state',undefined,b.cookie)).data.friends[0].position,undefined);
@@ -222,6 +233,42 @@ test('meetup offers: friends-only, counterproposals, reconfirmation and erasure'
  assert.equal((await req('GET','/meetups',undefined,b.cookie)).data.meetings.length,0);
  const saved=readFileSync(path.join(dir,'presence.json'),'utf8');
  assert.equal(saved.includes(id),false);
+});
+
+test('source-map manual and QR positions preserve their frame and cannot cross photo frames',async()=>{
+ const sender=await req('POST','/session',{}),receiver=await req('POST','/session',{});
+ const frame={mallId:'aventura',coordinateSpace:'roveiq:107:local-decimeters-v1'};
+ const point={...frame,floor:'UL',x:-568.2,y:5800.4};
+ const shared=await req('POST','/location',{...point,sharing:true},sender.cookie);
+ assert.equal(shared.status,200);
+ assert.equal(shared.data.myPosition.coordinateSpace,frame.coordinateSpace);
+ assert.equal(shared.data.myPosition.mallId,'aventura');
+ assert.equal(shared.data.myPosition.x,point.x);
+ assert.equal(shared.data.myPosition.y,point.y);
+ const oldClient=(await req('GET','/state',undefined,sender.cookie)).data;
+ assert.equal(oldClient.myPosition,null);
+ assert.equal(oldClient.positionFrameMismatch,true);
+ assert.equal(oldClient.hasSharedPosition,true,'Frame filtering keeps the revoke capability');
+ assert.equal((await req('POST','/location',{...point,x:10001,sharing:true},sender.cookie)).status,400);
+ assert.equal((await req('POST','/location',{...point,mallId:'ap-plaza',sharing:true},sender.cookie)).status,400);
+ assert.equal((await req('POST','/location',{...point,coordinateSpace:'mall-photo-pixels',sharing:true},sender.cookie)).status,400);
+ const offer=await req('POST','/positioning/offer',{
+  ...point,source:'manual-anchor',observedAtMs:Date.now(),explicitConsent:true},sender.cookie);
+ assert.equal(offer.status,201);
+ const claim={code:offer.data.code,mallId:'aventura',explicitConsent:true,confirmColocated:true};
+ assert.equal((await req('POST','/positioning/claim',claim,receiver.cookie)).status,409,
+  'Old photo clients cannot claim a source-frame anchor');
+ const accepted=await req('POST','/positioning/claim',{...claim,coordinateSpace:frame.coordinateSpace},receiver.cookie);
+ assert.equal(accepted.status,200,'A frame mismatch does not consume the offer');
+ assert.equal(accepted.data.coordinateSpace,frame.coordinateSpace);
+ assert.deepEqual([accepted.data.x,accepted.data.y],[point.x,point.y]);
+ const legacy=await req('POST','/location',{sharing:true,floor:'LL',x:650,y:380},sender.cookie);
+ assert.equal(legacy.status,200);
+ assert.equal(legacy.data.myPosition.coordinateSpace,'mall-photo-pixels',
+  'Legacy positions retain their old frame; never relabel them as source coordinates');
+ const sourceClient=(await req('GET','/state',undefined,sender.cookie,origin,frame.coordinateSpace)).data;
+ assert.equal(sourceClient.myPosition,null,'Photo positions are not returned to source clients');
+ assert.equal(sourceClient.hasSharedPosition,true);
 });
 
 test.after(async()=>{await new Promise(resolve=>app.close(resolve));rmSync(dir,{recursive:true,force:true});});

@@ -162,6 +162,8 @@ try{
  assert.ok(await luggageSuggestion.count()>=1);
  await luggageSuggestion.click();
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='valijas');
+ assert.equal(await page.locator('#results').isVisible(),true,
+  'confirmed search results must remain visible and clickable');
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['LL','UL','L3']);
  assert.ok(state.highlightedVectorCount>=4);

@@ -32,6 +32,17 @@ try{
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready&&window.RetailNavMeetups,
   null,{timeout:85000});
  const state=()=>page.evaluate(()=>window.__RETAILNAV__.getState());
+ await page.waitForFunction(()=>document.querySelector('#rnMapSearch')?.parentElement===
+  document.querySelector('.topbar'));
+ const header=await page.evaluate(()=>({
+  height:document.querySelector('.topbar').getBoundingClientRect().height,
+  brandRight:document.querySelector('.rnMallBrand').getBoundingClientRect().right,
+  searchLeft:document.querySelector('#rnMapSearch .searchbox').getBoundingClientRect().left,
+  count:document.querySelectorAll('#search').length
+ }));
+ assert.ok(Math.abs(header.height-70)<1);
+ assert.ok(header.searchLeft>=header.brandRight+4,'tablet search sits beside the mall name');
+ assert.equal(header.count,1);assert.equal(await page.locator('#badge').isVisible(),false);
  const settle=async()=>{
   await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
   await page.evaluate(()=>new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok))));
@@ -97,8 +108,8 @@ try{
  assert.ok(Math.abs(s.distance-before.distance)>1,'selection animates a meaningful zoom');
  assert.ok(s.q.some((v,i)=>Math.abs(v-before.q[i])>.1),'selection rotates the native camera');
  assert.ok(s.cameraUp[1]>.3,'the selected store is viewed upright');
- assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/official.source geometry/i);
- assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/No verified walking route|ruta.*verificad|recorrido.*verificad/i);
+ assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/Destination location.*Joe.*Floor LL/i);
+ assert.equal(s.wayfinding.mode,'no-origin');
  assert.equal(s.route,0,'source linework is not automatically a verified pedestrian route');
  await assertNative();
  console.log('PASS native 3D canvas, source-bound highlight, camera rotation/zoom and tablet viewport');
@@ -180,6 +191,7 @@ try{
  },joe);
  assert.equal(legacy.located,false);assert.deepEqual((await state()).focusedStoreVectors,[]);
  await page.locator('#rnTagResultClose').tap();
+ await page.locator('#rnWayfindingClose').tap();
  await page.locator('#floorSelect').selectOption('UL');
  assert.deepEqual((await state()).visible,['UL'],'original floor selector still controls the native scene');
  await assertNative();

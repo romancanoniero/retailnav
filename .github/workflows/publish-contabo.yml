@@ -30,6 +30,8 @@ jobs:
       - name: Verify anonymous identity, QR consent and source syntax
         run: |
           node --check src/viewer.js
+          node --check src/wayfinding-route.js
+          node --check src/tablet-header.js
           node --check src/units.js
           node --check src/search-i18n.js
           node --check src/area-labels.js
@@ -42,6 +44,7 @@ jobs:
           node --check src/cooperative-positioning.js
           node --check src/indoor-location.js
           node --test scripts/test-positioning-core.mjs
+          node --test scripts/test-wayfinding-route.mjs
           node --check backend/server.mjs
           node --test backend/server.test.mjs
           node --test scripts/test-demo-model.mjs
@@ -69,6 +72,8 @@ jobs:
       - run: node scripts/test-source-map-comparison.mjs
       - run: BROWSER=webkit node scripts/test-source-map-comparison.mjs
       - run: BROWSER=webkit node scripts/test-source-map-browser.mjs
+      - run: node scripts/test-wayfinding-browser.mjs
+      - run: BROWSER=webkit node scripts/test-wayfinding-browser.mjs
       - run: node scripts/test-positioning-web-e2e.mjs chromium
       - run: node scripts/test-positioning-web-e2e.mjs webkit
   publish:

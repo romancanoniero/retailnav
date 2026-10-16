@@ -510,6 +510,7 @@ async function scan(){
 }
 function onMapPoint(event){
   const detail=event.detail;
+  if(detail?.localOnly===true)return;
   if(!SHOW_REAL_POSITIONS||!detail||!['LL','UL','L3'].includes(detail.floor)||
     !positionMatchesMap(detail))return;
   request('location','POST',{sharing:true,mallId:MALL_ID,coordinateSpace:COORDINATE_SPACE,

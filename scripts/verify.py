@@ -155,7 +155,8 @@ assert 'RetailNav<small>SPATIAL EXPERIENCE</small>' not in html
 assert html.index('id="rnMapSearch"') > html.index('class="stage"')
 assert html.index('id="rnMapSearch"') < html.index('id="canvas"')
 assert 'class="rnMallBrand"' in html
-assert "searchPlacement:'map-top'" in html
+assert "searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top'" in html
+assert 'rnTabletHeaderSearch' in html and 'rnHeaderMoreActions' in html
 
 assert 'id="rnAreasButton"' in html and 'id="rnDistrictOverlay"' in html
 

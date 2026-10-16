@@ -227,7 +227,8 @@ try{
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
   'one tap keeps the mobile store selection in its results panel');
  assert.ok(firstStoreId);
- await page.locator('#rnUnitClose').click();
+ assert.equal(await page.locator('#rnUnitInfo').isVisible(),false,
+  'selection is kept inside panel rather than a floating tooltip');
  await page.setViewportSize({width:900,height:900});
  await input.fill('Japanese cuisine');
  await page.locator('.rnResultTag[data-concept-id="cuisine.japanese"]').click();

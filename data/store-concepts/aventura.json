@@ -1,0 +1,251 @@
+{
+  "schema": "retailnav.store-concepts.v1",
+  "mallId": "aventura",
+  "sourceDescription": "Demo-only brand-assortment hypotheses for map-NAMED anchors (not verified mall tenants, storefronts, stock, or onsite services). Never infer merchandise for unidentified polygons.",
+  "annotations": [
+    {
+      "floor": "LL",
+      "code": "LL-001",
+      "expectedMapName": "JCPenney",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "LL",
+      "code": "LL-002",
+      "expectedMapName": "Apple",
+      "conceptIds": [
+        "category.electronics",
+        "product.smartphone",
+        "product.tablet",
+        "product.computer",
+        "product.headphones",
+        "service.device-support"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "LL",
+      "code": "LL-003",
+      "expectedMapName": "Nordstrom",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "LL",
+      "code": "LL-004",
+      "expectedMapName": "Macy's oeste",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "LL",
+      "code": "LL-005",
+      "expectedMapName": "Macy's este",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "LL",
+      "code": "LL-006",
+      "expectedMapName": "Bloomingdale's",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "UL",
+      "code": "UL-001",
+      "expectedMapName": "JCPenney",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "UL",
+      "code": "UL-003",
+      "expectedMapName": "Nordstrom",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "UL",
+      "code": "UL-004",
+      "expectedMapName": "Macy's oeste",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "UL",
+      "code": "UL-005",
+      "expectedMapName": "Macy's este",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "UL",
+      "code": "UL-006",
+      "expectedMapName": "Bloomingdale's",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "L3",
+      "code": "L3-002",
+      "expectedMapName": "Macy's oeste",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "L3",
+      "code": "L3-003",
+      "expectedMapName": "Macy's este",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    },
+    {
+      "floor": "L3",
+      "code": "L3-004",
+      "expectedMapName": "Bloomingdale's",
+      "conceptIds": [
+        "category.department-store",
+        "category.fashion",
+        "product.clothing",
+        "product.shoes",
+        "product.handbags",
+        "product.beauty",
+        "product.home-goods",
+        "product.luggage"
+      ],
+      "evidence": "brand-category-inference-not-inventory",
+      "source": "Aventura photographed vector-map name plus common retail category, unverified for this location",
+      "note": "Search discovery only. Stock, tenant status, service availability and official unit code require mall review."
+    }
+  ]
+}

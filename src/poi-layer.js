@@ -4,6 +4,8 @@
 (()=>{
 'use strict';
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const i18n=window.RetailNavI18n;
+const semanticService={toilet:'service.restroom',elevator:'service.elevator',exit:'service.exit',information:'service.information',parking:'service.parking'};
 const all=Array.isArray(mall.pois)?mall.pois:[];
 const overlay=document.getElementById('rnPOIOverlay');
 const toggle=document.getElementById('rnServicesToggle');
@@ -33,7 +35,7 @@ function show(id){
   const p=lookup(id);
   if(!p||!drawer)return false;
   selected=p.id;
-  title.textContent=p.name;
+  title.textContent=semanticService[p.category]&&i18n?.label?.(semanticService[p.category])||p.name;
   description.textContent=describe(p);
   drawer.hidden=false;
   const view=window.__RETAILNAV__;
@@ -103,9 +105,11 @@ if(toggle)toggle.addEventListener('click',()=>{
 });
 document.getElementById('rnPoiClose')?.addEventListener('click',()=>{drawer.hidden=true;selected=null;});
 window.RetailNavPOI={draw,show,find:query=>{
-  const words=query.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const text=String(query||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  if(!text)return[];
   return all.filter(p=>(p.name+' '+(aliases[p.category]||'')).normalize('NFD')
-    .replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(words));
+    .replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(text)||
+    Boolean(semanticService[p.category]&&i18n?.matchConcept(semanticService[p.category],query)));
 },getState:()=>({count:all.length,shown:shown.slice(),enabled,selected,frames,
   verified:all.filter(p=>p.confidence==='cartel').length})};
 })();

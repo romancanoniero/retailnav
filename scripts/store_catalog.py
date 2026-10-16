@@ -66,6 +66,28 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
                 raise ValueError(f"{mall_id}: invalid products for {key}")
             hints[key] = item
 
+    # Concept tags are stable language-neutral IDs. Never auto-attach a
+    # business category to anonymous rooms, or mistake a brand's typical
+    # assortment for a verified stocked product or available service.
+    concept_file = repo / "data" / "store-concepts" / (mall_id + ".json")
+    concepts = {}
+    if concept_file.exists():
+        source = json.loads(concept_file.read_text(encoding="utf-8"))
+        if source.get("schema") != "retailnav.store-concepts.v1" or source.get("mallId") != mall_id:
+            raise ValueError(f"{mall_id}: invalid concept source namespace")
+        vocabulary = json.loads((repo / "data/search-taxonomy.json").read_text(encoding="utf-8"))
+        allowed = vocabulary["concepts"]
+        for item in source.get("annotations", []):
+            key = (item["floor"], item["code"])
+            concept_ids = item.get("conceptIds")
+            if key in concepts or not item.get("expectedMapName") or not isinstance(concept_ids, list) or not concept_ids:
+                raise ValueError(f"{mall_id}: duplicate or incomplete concept annotation {key}")
+            if len(set(concept_ids)) != len(concept_ids) or any(cid not in allowed for cid in concept_ids):
+                raise ValueError(f"{mall_id}: unknown or duplicate concept ID {key}")
+            if item.get("evidence") != "brand-category-inference-not-inventory":
+                raise ValueError(f"{mall_id}: unapproved concept evidence {key}")
+            concepts[key] = item
+
     floors = {f[0]: {v[0]: v for v in f[3]} for f in mall["floors"]}
     owners = Counter((u.get("floor"), u.get("polygonId")) for u in mall.get("units", [])
                      if u.get("polygonId"))
@@ -107,7 +129,19 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
         else:
             u["productTerms"] = []
             u["productsVerified"] = False
+        concept_annotation = concepts.get((floor, code))
+        u["conceptIds"] = []
+        if concept_annotation:
+            if not u.get("name") or u.get("name") != concept_annotation["expectedMapName"] or not identifier:
+                raise ValueError(f"{mall_id}: concept tags require the exact named anchor and source vector {key}")
+            u["conceptIds"] = concept_annotation["conceptIds"]
+            u["conceptEvidence"] = concept_annotation["evidence"]
+            u["conceptSource"] = concept_annotation["source"]
+            u["conceptsVerified"] = False
         records.append(u)
+    missing_concepts = set(concepts) - seen
+    if missing_concepts:
+        raise ValueError(f"{mall_id}: orphan concept annotations {sorted(missing_concepts)}")
     unused = set(hints) - seen
     if unused:
         raise ValueError(f"{mall_id}: orphan product annotations {sorted(unused)}")
@@ -121,7 +155,8 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             "linkedProvisional": sum(bool(r["polygonId"]) for r in records),
             "sharedVectors": sum(r["vectorRelation"] == "shared-vector-unverified" for r in records),
             "withoutVector": sum(not r["polygonId"] for r in records),
-            "withProductEvidence": sum(bool(r["productTerms"]) for r in records)
+            "withProductEvidence": sum(bool(r["productTerms"]) for r in records),
+            "withConceptSuggestions": sum(bool(r["conceptIds"]) for r in records)
         }
     }
     return document

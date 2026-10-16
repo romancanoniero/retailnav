@@ -6,6 +6,7 @@
 'use strict';
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const units=Array.isArray(mall.units)?mall.units:[];
+const i18n=window.RetailNavI18n;
 const host=document.getElementById('rnUnitOverlay');
 const detail=document.getElementById('rnUnitInfo');
 const title=document.getElementById('rnUnitName');
@@ -20,9 +21,13 @@ const buttons=new Map();
 function find(query){
  const text=normalized(query);
  if(!text)return[];
- return units.filter(u=>normalized([
-  u.code,u.name,u.aliases,u.category,u.tags,...(u.productTerms||[])
- ].filter(Boolean).join(' ')).includes(text));
+ return units.filter(u=>{
+  const legacy=[u.code,u.name,u.aliases,u.category,u.tags,...(u.productTerms||[])]
+   .filter(Boolean).join(' ');
+  return normalized(legacy).includes(text)||
+   Boolean(i18n?.termsMatch(legacy,query))||
+   Boolean((u.conceptIds||[]).some(id=>i18n?.matchConcept(id,query)));
+ });
 }
 function tagVocabulary(){
  const known=new Map();
@@ -45,12 +50,24 @@ const tags=tagVocabulary();
 function suggestions(query,limit=8){
  const q=normalized(query);
  if(!q)return[];
- return [...tags.entries()]
+ // Preserve legacy photographed-directory suggestions. Combine them with
+ // language-neutral concepts actually linked to shops in THIS mall only.
+ const legacy=[...tags.entries()]
   .filter(([key])=>key.includes(q))
   .sort((a,b)=>Number(b[0].startsWith(q))-Number(a[0].startsWith(q))||
    b[1].count-a[1].count||a[1].label.localeCompare(b[1].label))
-  .slice(0,Math.max(0,Math.min(15,limit)))
   .map(([key,data])=>({key,term:data.label,count:data.count,verified:data.verified}));
+ const semantic=i18n?.searchSuggestions(query,units,20)||[];
+ const unique=new Map();
+ for(const entry of [...legacy,...semantic]){
+  const id=normalized(entry.term);
+  if(!unique.has(id))unique.set(id,entry);
+ }
+ return [...unique.values()].sort((a,b)=>{
+  const aPrefix=Number(normalized(a.term).startsWith(q));
+  const bPrefix=Number(normalized(b.term).startsWith(q));
+  return bPrefix-aPrefix||b.count-a.count||a.term.localeCompare(b.term);
+ }).slice(0,Math.max(0,Math.min(15,limit)));
 }
 function setQuery(text){
  const query=String(text||'').trim();
@@ -76,8 +93,9 @@ function focus(code,floor){
  if(!u)return false;
  selected=storeKey(u);
  title.textContent=(u.name?u.name+' · ':'')+u.code;
- const brand=u.name?' · '+u.name:'';
- const activity=u.category?' · '+u.category:'';
+ const activity=u.conceptIds?.length
+  ?' · '+(i18n?.ui('category')||'Tipo de local')+': '+i18n.summary(u,8)
+  :(u.category?' · '+u.category:'');
  sub.textContent=(u.polygonId
   ?'Sector cromático provisional '+u.polygonId+
    '. Puede incluir varios locales y no es la puerta de la tienda.'
@@ -85,8 +103,8 @@ function focus(code,floor){
    ?'Código de directorio con ubicación aproximada del texto, sin pared atribuida.'
    :'Comercio identificado en el directorio; ubicación exacta sin verificar.')+
    activity+(u.tags?' · Etiquetas del directorio: '+u.tags.replaceAll(',',', '):'')+
-   (u.productTerms?.length?' · Productos asociados (por verificar): '+u.productTerms.join(', '):'')+
-   '. Directorio fotográfico; la presencia comercial puede cambiar.';
+   (u.productTerms?.length?' · '+(i18n?.ui('products')||'Productos asociados')+': '+u.productTerms.join(', '):'')+
+   '. '+(i18n?.ui('mapWarning')||'La presencia comercial puede cambiar.');
  if(u.enrichmentURL){
   try{
    const url=new URL(u.enrichmentURL);
@@ -164,6 +182,8 @@ window.RetailNavUnits={draw:paint,focus,find,suggestions,setQuery,clearQuery,
  withTags:units.filter(u=>u.tags).length,
  withNames:units.filter(u=>u.name).length,
  facadeCount:units.filter(u=>u.facade).length,
+ withConcepts:units.filter(u=>(u.conceptIds||[]).length).length,
+ language:i18n?.locale?.()||'es',
  unmatched:units.filter(u=>!u.polygonId).length
 })};
 })();

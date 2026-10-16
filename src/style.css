@@ -1214,3 +1214,6 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnMeetingRow small{display:block;margin:4px 0;opacity:.8}.rnMeetingActions{display:flex;gap:5px;flex-wrap:wrap}
 .rnMeetingActions button{min-height:39px;padding:8px 10px}.rnMeetingStatus{font-size:12px;line-height:1.4}
 @media(max-width:760px){.rnStoreDetails{max-height:29dvh}.rnMeetingBox,.rnMeetingsList{max-height:22dvh;overflow:auto}}
+
+.rnTagResultPanel #rnTagResultCards[hidden]{display:none!important}
+.rnStoreDetails .rnDetailActions button,.rnMeetingsList button{font:inherit}

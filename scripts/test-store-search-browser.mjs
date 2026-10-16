@@ -234,7 +234,7 @@ try{
  const tabletPanel=await page.locator('#rnTagResultPanel').evaluate(el=>({
   right:getComputedStyle(el).right,left:getComputedStyle(el).left
  }));
- assert.equal(tabletPanel.left,'auto','tablet carousel is docked on the map right side');
+ assert.equal(tabletPanel.right,'16px','tablet carousel is docked on the map right side');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
  assert.equal(await page.locator('#sidebar').isVisible(),false,
   'tablet tag results close the former left information panel');

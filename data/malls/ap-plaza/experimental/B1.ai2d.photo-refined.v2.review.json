@@ -1,0 +1,161 @@
+{
+  "schema": "retailnav.ai2d-photo-division-review.v2",
+  "status": "PROVISIONAL-NOT-APPROVED-FOR-NAVIGATION",
+  "photoSHA256": "8053ccfa86129533d693a05271efbe2b3bfcd3d7674fb8753bd54f914ce9e063",
+  "legacyExperimentalCandidates": 191,
+  "refinedCandidates": 197,
+  "newPolygons": 6,
+  "splitOperations": 6,
+  "assignedCodesBefore": 22,
+  "assignedCodesAfter": 31,
+  "uniqueAssignedCodes": 31,
+  "tentativeSingleCodeCandidates": 0,
+  "sourceAnchorsBefore": 44,
+  "sourceAnchorsAfter": 44,
+  "geometricallyValid": true,
+  "polygonOverlapPx2": 0.0,
+  "geometryReviewApproved": false,
+  "publishedToContabo": false,
+  "photoSupportedSplits": [
+    {
+      "parentID": "AI2D-B1-0009",
+      "orientation": "h",
+      "position": 113,
+      "photoInkSupport": {
+        "support": 0.7647,
+        "longestRun": 9,
+        "lineLength": 17,
+        "medianBlackHat": 40.0
+      },
+      "anchorGroups": [
+        [
+          "K1-60"
+        ],
+        [
+          "K1-59",
+          "K1-56",
+          "K1-57"
+        ]
+      ]
+    },
+    {
+      "parentID": "AI2D-B1-0009",
+      "orientation": "h",
+      "position": 137,
+      "photoInkSupport": {
+        "support": 0.75,
+        "longestRun": 6,
+        "lineLength": 16,
+        "medianBlackHat": 36.5
+      },
+      "anchorGroups": [
+        [
+          "K1-59"
+        ],
+        [
+          "K1-56",
+          "K1-57"
+        ]
+      ]
+    },
+    {
+      "parentID": "AI2D-B1-0013",
+      "orientation": "h",
+      "position": 139,
+      "photoInkSupport": {
+        "support": 0.75,
+        "longestRun": 6,
+        "lineLength": 16,
+        "medianBlackHat": 41.5
+      },
+      "anchorGroups": [
+        [
+          "K1-39",
+          "K1-38",
+          "K1-52",
+          "K1-53"
+        ],
+        [
+          "K1-55"
+        ]
+      ]
+    },
+    {
+      "parentID": "AI2D-B1-0038",
+      "orientation": "h",
+      "position": 180,
+      "photoInkSupport": {
+        "support": 1.0,
+        "longestRun": 37,
+        "lineLength": 37,
+        "medianBlackHat": 66.0
+      },
+      "anchorGroups": [
+        [
+          "A-07"
+        ],
+        [
+          "A-08"
+        ]
+      ]
+    },
+    {
+      "parentID": "AI2D-B1-0042",
+      "orientation": "h",
+      "position": 188,
+      "photoInkSupport": {
+        "support": 0.6667,
+        "longestRun": 5,
+        "lineLength": 15,
+        "medianBlackHat": 43.0
+      },
+      "anchorGroups": [
+        [
+          "K1-29"
+        ],
+        [
+          "K2-03"
+        ]
+      ]
+    },
+    {
+      "parentID": "AI2D-B1-0043",
+      "orientation": "h",
+      "position": 189,
+      "photoInkSupport": {
+        "support": 0.6486,
+        "longestRun": 10,
+        "lineLength": 37,
+        "medianBlackHat": 44.0
+      },
+      "anchorGroups": [
+        [
+          "K1-36"
+        ],
+        [
+          "K2-07"
+        ]
+      ]
+    }
+  ],
+  "unresolvedMergedCandidates": [
+    {
+      "id": "AI2D-B1-0003",
+      "codes": [
+        "K1-02",
+        "K1-03",
+        "K1-05"
+      ],
+      "reason": "no photo-backed complete wall passes threshold"
+    },
+    {
+      "id": "AI2D-B1-0012",
+      "codes": [
+        "K1-27",
+        "K1-28"
+      ],
+      "reason": "no photo-backed complete wall passes threshold"
+    }
+  ],
+  "warning": "Ink support confirms photo evidence, not architectural accuracy or complete shop attribution."
+}

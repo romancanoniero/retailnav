@@ -1,0 +1,604 @@
+{
+  "schema": "retailnav.search.taxonomy.v1",
+  "description": "Shared semantic IDs and searchable translations; a concept link is not verified stock.",
+  "languages": [
+    "en",
+    "es",
+    "pt",
+    "zh",
+    "fr"
+  ],
+  "concepts": {
+    "category.department-store": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "department stores",
+          "department store",
+          "shopping mall department"
+        ],
+        "es": [
+          "tiendas departamentales",
+          "grandes almacenes",
+          "tienda por departamentos"
+        ],
+        "pt": [
+          "loja de departamentos",
+          "magazine"
+        ],
+        "zh": [
+          "百货商店",
+          "百货"
+        ],
+        "fr": [
+          "grands magasins",
+          "grand magasin"
+        ]
+      }
+    },
+    "category.electronics": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "electronics",
+          "electronic devices",
+          "technology"
+        ],
+        "es": [
+          "electrónica",
+          "tecnología",
+          "dispositivos electrónicos"
+        ],
+        "pt": [
+          "eletrônicos",
+          "tecnologia"
+        ],
+        "zh": [
+          "电子产品",
+          "数码产品"
+        ],
+        "fr": [
+          "électronique",
+          "technologie"
+        ]
+      }
+    },
+    "category.fashion": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "fashion",
+          "clothing stores"
+        ],
+        "es": [
+          "moda",
+          "indumentaria"
+        ],
+        "pt": [
+          "moda",
+          "vestuário"
+        ],
+        "zh": [
+          "时尚",
+          "服饰"
+        ],
+        "fr": [
+          "mode",
+          "vêtements"
+        ]
+      }
+    },
+    "product.clothing": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "clothing",
+          "clothes",
+          "apparel",
+          "women's clothing",
+          "men's clothing"
+        ],
+        "es": [
+          "ropa",
+          "indumentaria",
+          "vestimenta",
+          "ropa de mujer",
+          "ropa de hombre"
+        ],
+        "pt": [
+          "roupas",
+          "vestuário",
+          "roupa feminina"
+        ],
+        "zh": [
+          "服装",
+          "衣服",
+          "女装"
+        ],
+        "fr": [
+          "vêtements",
+          "habillement"
+        ]
+      }
+    },
+    "product.shoes": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "shoes",
+          "footwear",
+          "sneakers",
+          "running shoes",
+          "trainers"
+        ],
+        "es": [
+          "zapatos",
+          "calzado",
+          "zapatillas",
+          "zapatillas para correr"
+        ],
+        "pt": [
+          "sapatos",
+          "calçados",
+          "tênis"
+        ],
+        "zh": [
+          "鞋子",
+          "运动鞋"
+        ],
+        "fr": [
+          "chaussures",
+          "baskets"
+        ]
+      }
+    },
+    "product.handbags": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "handbags",
+          "bags",
+          "purses",
+          "handbags for women"
+        ],
+        "es": [
+          "carteras",
+          "bolsos",
+          "bolsas",
+          "carteras para mujer"
+        ],
+        "pt": [
+          "bolsas",
+          "bolsas femininas"
+        ],
+        "zh": [
+          "手提包",
+          "包袋"
+        ],
+        "fr": [
+          "sacs à main",
+          "sacs"
+        ]
+      }
+    },
+    "product.beauty": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "beauty",
+          "cosmetics",
+          "makeup",
+          "perfume",
+          "skincare"
+        ],
+        "es": [
+          "cosméticos",
+          "maquillaje",
+          "perfumes",
+          "belleza",
+          "cuidado de la piel"
+        ],
+        "pt": [
+          "cosméticos",
+          "maquiagem",
+          "perfumes"
+        ],
+        "zh": [
+          "化妆品",
+          "护肤品",
+          "香水"
+        ],
+        "fr": [
+          "cosmétiques",
+          "maquillage",
+          "parfums"
+        ]
+      }
+    },
+    "product.luggage": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "luggage",
+          "suitcases",
+          "travel bags",
+          "travel cases"
+        ],
+        "es": [
+          "equipaje",
+          "maletas",
+          "valijas",
+          "bolsos de viaje"
+        ],
+        "pt": [
+          "bagagem",
+          "malas",
+          "malas de viagem"
+        ],
+        "zh": [
+          "行李箱",
+          "旅行箱",
+          "行李"
+        ],
+        "fr": [
+          "bagages",
+          "valises"
+        ],
+        "es-AR": [
+          "valijas",
+          "equipaje",
+          "maletas",
+          "bolsos de viaje"
+        ],
+        "pt-BR": [
+          "malas",
+          "bagagem",
+          "malas de viagem"
+        ]
+      }
+    },
+    "product.home-goods": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "home goods",
+          "bedding",
+          "housewares",
+          "home decor"
+        ],
+        "es": [
+          "artículos para el hogar",
+          "ropa de cama",
+          "hogar",
+          "decoración"
+        ],
+        "pt": [
+          "artigos para casa",
+          "roupa de cama"
+        ],
+        "zh": [
+          "家居用品",
+          "床上用品"
+        ],
+        "fr": [
+          "articles de maison",
+          "linge de maison"
+        ]
+      }
+    },
+    "product.smartphone": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "smartphones",
+          "phones",
+          "mobile phones",
+          "iphone",
+          "cell phones"
+        ],
+        "es": [
+          "celulares",
+          "teléfonos",
+          "smartphones",
+          "teléfonos móviles",
+          "iphone"
+        ],
+        "pt": [
+          "celulares",
+          "smartphones",
+          "telefones"
+        ],
+        "zh": [
+          "智能手机",
+          "手机"
+        ],
+        "fr": [
+          "téléphones",
+          "smartphones",
+          "portables"
+        ]
+      }
+    },
+    "product.tablet": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "tablets",
+          "ipad",
+          "tablet computers"
+        ],
+        "es": [
+          "tablets",
+          "ipad",
+          "tabletas"
+        ],
+        "pt": [
+          "tablets",
+          "ipad"
+        ],
+        "zh": [
+          "平板电脑",
+          "平板"
+        ],
+        "fr": [
+          "tablettes",
+          "ipad"
+        ]
+      }
+    },
+    "product.computer": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "computers",
+          "laptops",
+          "macbook",
+          "desktop computers",
+          "notebooks"
+        ],
+        "es": [
+          "computadoras",
+          "ordenadores",
+          "notebooks",
+          "laptops",
+          "macbook"
+        ],
+        "pt": [
+          "computadores",
+          "notebooks",
+          "laptops"
+        ],
+        "zh": [
+          "电脑",
+          "笔记本电脑"
+        ],
+        "fr": [
+          "ordinateurs",
+          "portables",
+          "macbook"
+        ]
+      }
+    },
+    "product.headphones": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "headphones",
+          "earbuds",
+          "airpods",
+          "wireless headphones"
+        ],
+        "es": [
+          "auriculares",
+          "audífonos",
+          "airpods",
+          "auriculares inalámbricos"
+        ],
+        "pt": [
+          "fones de ouvido",
+          "airpods"
+        ],
+        "zh": [
+          "耳机",
+          "无线耳机"
+        ],
+        "fr": [
+          "écouteurs",
+          "casques audio"
+        ]
+      }
+    },
+    "service.device-support": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "tech support",
+          "device support",
+          "phone assistance",
+          "phone repair",
+          "support appointments"
+        ],
+        "es": [
+          "soporte técnico",
+          "asistencia técnica",
+          "reparar celular",
+          "reparación de teléfono",
+          "ayuda con el celular"
+        ],
+        "pt": [
+          "suporte técnico",
+          "conserto de celular"
+        ],
+        "zh": [
+          "技术支持",
+          "手机维修"
+        ],
+        "fr": [
+          "assistance technique",
+          "réparation téléphone"
+        ]
+      }
+    },
+    "service.restroom": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "restrooms",
+          "toilets",
+          "bathrooms",
+          "wc"
+        ],
+        "es": [
+          "baños",
+          "baño",
+          "sanitarios",
+          "servicios higiénicos"
+        ],
+        "pt": [
+          "banheiros",
+          "toaletes"
+        ],
+        "zh": [
+          "洗手间",
+          "卫生间",
+          "厕所"
+        ],
+        "fr": [
+          "toilettes",
+          "wc"
+        ]
+      }
+    },
+    "service.elevator": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "elevators",
+          "lifts",
+          "lift"
+        ],
+        "es": [
+          "ascensores",
+          "ascensor",
+          "elevador"
+        ],
+        "pt": [
+          "elevadores",
+          "elevador"
+        ],
+        "zh": [
+          "电梯",
+          "升降机"
+        ],
+        "fr": [
+          "ascenseurs",
+          "ascenseur"
+        ]
+      }
+    },
+    "service.information": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "information desk",
+          "information",
+          "visitor services"
+        ],
+        "es": [
+          "información",
+          "atención al visitante",
+          "informes"
+        ],
+        "pt": [
+          "informações",
+          "atendimento"
+        ],
+        "zh": [
+          "服务台",
+          "问讯处"
+        ],
+        "fr": [
+          "informations",
+          "accueil"
+        ]
+      }
+    },
+    "service.exit": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "exits",
+          "exit"
+        ],
+        "es": [
+          "salidas",
+          "salida"
+        ],
+        "pt": [
+          "saídas",
+          "saída"
+        ],
+        "zh": [
+          "出口"
+        ],
+        "fr": [
+          "sorties",
+          "sortie"
+        ]
+      }
+    },
+    "service.parking": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "parking",
+          "parking garage",
+          "car park"
+        ],
+        "es": [
+          "estacionamiento",
+          "cochera",
+          "parking"
+        ],
+        "pt": [
+          "estacionamento",
+          "garagem"
+        ],
+        "zh": [
+          "停车场",
+          "停车"
+        ],
+        "fr": [
+          "parking",
+          "stationnement"
+        ]
+      }
+    },
+    "service.escalator": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "escalators",
+          "escalator",
+          "moving stairs"
+        ],
+        "es": [
+          "escaleras mecánicas",
+          "escalera mecánica"
+        ],
+        "pt": [
+          "escadas rolantes",
+          "escada rolante"
+        ],
+        "zh": [
+          "自动扶梯",
+          "扶梯"
+        ],
+        "fr": [
+          "escaliers mécaniques",
+          "escalator"
+        ]
+      }
+    }
+  }
+}

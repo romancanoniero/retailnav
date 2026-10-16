@@ -82,6 +82,41 @@ function external(host,u,key,label){
   host.append(a);
  }catch{}
 }
+// The official Aventura map owns its own calibrated markers. Never project
+// its 3rd-party location IDs onto unrelated provisional photo polygons.
+const officialView=document.createElement('section');
+officialView.id='rnOfficialLocationMap';
+officialView.className='rnOfficialLocationMap';
+officialView.hidden=true;
+officialView.setAttribute('aria-label','Mapa oficial de ubicación del comercio');
+const officialCaption=document.createElement('div');officialCaption.className='rnOfficialCaption';
+const officialFrame=document.createElement('iframe');
+officialFrame.title='Mapa oficial de Aventura Mall — RoveIQ';
+officialFrame.loading='lazy';
+officialFrame.referrerPolicy='strict-origin-when-cross-origin';
+officialFrame.setAttribute('allow','fullscreen');
+officialView.append(officialCaption,officialFrame);
+document.querySelector('.stage>.viewport')?.append(officialView);
+function showOfficialLocation(unit){
+ const id=unit.officialMapLocationId;
+ const valid=mall.id==='aventura'&&unit.officialMapEmbedVenueId===107&&
+  /^(?:[0-9]{4,7})$/.test(String(id||''))&&
+  /^https:\/\/aventuramall\.com\//.test(unit.officialMapSourceUrl||'');
+ if(!valid){
+  officialView.hidden=true;officialFrame.removeAttribute('src');return false;
+ }
+ const link='https://embed.roveiq.com/venues/107?location='+encodeURIComponent(id);
+ const heading=tr('Mapa oficial · ','Official mall map · ')+(unit.name||unit.code);
+ const caption=text('strong',heading);
+ officialCaption.replaceChildren(caption);
+ const switchBack=button(tr('Volver al mapa 3D','Return to 3D map'),()=>{
+  officialView.hidden=true;officialFrame.removeAttribute('src');
+ });
+ switchBack.className='rnOfficialReturn';officialCaption.append(switchBack);
+ if(officialFrame.src!==link)officialFrame.src=link;
+ officialView.hidden=false;
+ return true;
+}
 const selectionStatus=document.createElement('p');
 selectionStatus.id='rnStoreSelectionStatus';
 selectionStatus.className='rnStoreSelectionStatus';
@@ -92,7 +127,9 @@ cards.before(selectionStatus);
 function showSelectionStatus(u,focus){
  selectionStatus.hidden=false;
  const label=u.name||u.code;
- selectionStatus.textContent=focus?.located
+ selectionStatus.textContent=focus?.official
+  ?tr('Seleccionado: ','Selected: ')+label+' · '+tr('Ubicación en mapa oficial de Aventura Mall','Location in official Aventura Mall map')
+  :focus?.located
   ?tr('Seleccionado: ','Selected: ')+label+' · '+tr('Enfoque en el mapa','Focused on map')
   :tr('Seleccionado: ','Selected: ')+label+' · '+
    (u.locationLabel||u.documentedFloors?.length
@@ -115,15 +152,16 @@ function selectStore(id,showDetails=false){
  const located=Number.isFinite(u.x)&&Number.isFinite(u.y)&&Boolean(u.floor);
  const focus=window.__RETAILNAV__?.focusCatalogStore?.(
   id,located?u.floor:null,located?[u.x,u.y]:null,located?u.polygonId:null);
+ const officialLocated=showOfficialLocation(u);
  window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;
  panel.dataset.selectedStore=id;
- panel.dataset.locationKnown=String(Boolean(focus?.located));
+ panel.dataset.locationKnown=String(Boolean(focus?.located||officialLocated));
  // A directory-only result must still give visible confirmation of selection.
  // Never suggest that the map has highlighted a polygon that is not linked.
- showSelectionStatus(u,focus);
- if(!focus?.located)panel.setAttribute('data-location-note',
+ showSelectionStatus(u,officialLocated?{located:true,official:true}:focus);
+ if(!focus?.located&&!officialLocated)panel.setAttribute('data-location-note',
   tr('Ubicación exacta no identificada en el plano','Exact map location unknown'));
  else panel.removeAttribute('data-location-note');
  if(showDetails)showStoreDetails();

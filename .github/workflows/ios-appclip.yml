@@ -1,0 +1,39 @@
+name: Build RetailNav iOS and App Clip
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/RetailNav/**"
+      - ".github/workflows/ios-appclip.yml"
+  pull_request:
+    paths:
+      - "ios/RetailNav/**"
+      - ".github/workflows/ios-appclip.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios-build-and-test:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: ios/RetailNav
+        run: xcodegen generate
+      - name: Build the parent app and App Clip
+        working-directory: ios/RetailNav
+        run: >-
+          xcodebuild build -project RetailNav.xcodeproj -scheme RetailNav
+          -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
+      - name: Run App Clip invocation URL tests
+        working-directory: ios/RetailNav
+        run: >-
+          xcodebuild test -project RetailNav.xcodeproj -scheme RetailNavClip
+          -destination 'platform=iOS Simulator,name=iPhone 16'
+          CODE_SIGNING_ALLOWED=NO

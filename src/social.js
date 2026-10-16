@@ -6,7 +6,7 @@ const $=id=>document.getElementById(id);
 const API=new URL('api/',location.href);
 let me=null, friends=[], incoming=[], outgoing=[], myPosition=null;
 let inviteCode='', currentLink='', directLink='', joinCode='', joinMode='qr', ready=false, lastIncoming='', scannerStream=null;
-let scannerTimer=0, demoVisible=true, socialStatus='', contactsRenderKey='';
+let scannerTimer=0, demoVisible=true, socialStatus='', contactsRenderKey='', pendingAppClipName=null;
 const DEMO=window.RETAILNAV_DEMO_CONTACTS||[];
 const MALL_ID=window.RETAILNAV_ACTIVE_MALL_ID||'aventura';
 const SHOW_REAL_POSITIONS=MALL_ID==='aventura';
@@ -114,6 +114,26 @@ function merge(snapshot){
   }
   renderMarkers();
 }
+// App Clip sends the visitor name through a WebKit event rather than the URL,
+// keeping personal data out of browser history, referrers and request paths.
+async function applyPendingAppClipName(){
+  if(!ready||pendingAppClipName===null)return;
+  const name=pendingAppClipName;
+  pendingAppClipName=null;
+  try{
+    merge(await request('me','POST',{name}));
+    status('Nombre guardado. Ya podés usar el mapa.');
+  }catch(e){
+    pendingAppClipName=name;
+    status('No se pudo guardar el nombre: '+e.message,true);
+  }
+}
+window.addEventListener('retailnav:appclip-profile',event=>{
+  const name=typeof event.detail?.name==='string'?event.detail.name.trim():'';
+  if(!name||name.length>36)return;
+  pendingAppClipName=name;
+  void applyPendingAppClipName();
+});
 function button(text,callback,variant=''){
   const el=element('button',variant,text);el.type='button';el.addEventListener('click',callback);return el;
 }
@@ -294,6 +314,7 @@ async function boot(){
     const s=await request('session','POST',{});
     merge(s);
     status('Identidad anónima activa. Tu navegador conserva los vínculos.');
+    await applyPendingAppClipName();
     await handleHashInvite();
   }catch(e){
     status('Contactos reales no disponibles: '+e.message+'. La simulación sigue funcionando.',true);

@@ -1,0 +1,62 @@
+name: RetailNav
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  bundleIdPrefix: com.improvingyourreality
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    GENERATE_INFOPLIST_FILE: YES
+targets:
+  RetailNav:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    dependencies:
+      - target: RetailNavClip
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.improvingyourreality.retailnav
+        INFOPLIST_KEY_CFBundleDisplayName: RetailNav
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGN_ENTITLEMENTS: RetailNav.entitlements
+  RetailNavClip:
+    type: application.on-demand-install-capable
+    platform: iOS
+    sources:
+      - path: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.improvingyourreality.retailnav.clip
+        INFOPLIST_KEY_CFBundleDisplayName: RetailNav
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGN_ENTITLEMENTS: RetailNavClip.entitlements
+        APPLICATION_EXTENSION_API_ONLY: YES
+  RetailNavTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: RetailNavClip
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.improvingyourreality.retailnav.tests
+schemes:
+  RetailNav:
+    build:
+      targets:
+        RetailNav: all
+        RetailNavClip: all
+    run:
+      config: Debug
+  RetailNavClip:
+    build:
+      targets:
+        RetailNavClip: all
+    run:
+      config: Debug
+    test:
+      targets: [RetailNavTests]

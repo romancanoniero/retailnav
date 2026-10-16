@@ -281,9 +281,14 @@ function applySearchFloors(query){
  window.RetailNavUnits?.setQuery?.(term);
  searchCommitted=term;
  const matches=window.RetailNavUnits?.find?.(term)||[];
+ const services=window.RetailNavPOI?.find?.(term)||[];
+ const districts=window.RetailNavDistricts?.find?.(term)||[];
+ const total=matches.length+services.length+districts.length;
+ const lang=window.RetailNavI18n;
  const ref=visitorFloorReference();
  if(ref)active=ref;
- searchFloorSet=new Set([ref,...matches.map(u=>u.floor)].filter(id=>floors.some(f=>f.id===id)));
+ searchFloorSet=new Set([ref,...matches.map(u=>u.floor),...services.map(p=>p.floor),
+  ...districts.map(d=>d.floor)].filter(id=>floors.some(f=>f.id===id)));
  // Frame the vertical range of the open shop floors without moving any
  // actual slabs, recalculating their height or altering escalator landings.
  const openedY=floors.filter(f=>searchFloorSet.has(f.id)).map(f=>f.y);
@@ -298,19 +303,21 @@ function applySearchFloors(query){
    group=document.createElement('option');group.value='MATCHES';
    picker.prepend(group);
   }
-  group.textContent='Mi planta + '+matches.length+' coincidencias ('+searchFloorSet.size+' pisos)';
+  group.textContent=(lang?.ui('myFloor')||'Mi planta')+' + '+total+' '+
+   (lang?.ui('results')||'coincidencias')+' ('+searchFloorSet.size+' '+(lang?.ui('floors')||'pisos')+')';
   picker.value='MATCHES';
  }
  $('showAllFloors').hidden=floors.length<2;
  $('showAllFloors').textContent='← Todas las plantas';
  $('floorSpacing').hidden=floors.length<2;
  $('spread').disabled=floors.length<2;
- $('mapTitle').textContent='Tu planta '+ref+' y '+matches.length+' locales coincidentes';
- $('mapSubtitle').textContent='Plantas visibles: '+[...searchFloorSet].join(', ')+
-  '. Geometría y productos asociados según directorio provisional.';
+ $('mapTitle').textContent=(lang?.ui('myFloor')||'Mi planta')+' '+ref+' · '+total+' '+
+  (lang?.ui('results')||'coincidencias');
+ $('mapSubtitle').textContent=(lang?.ui('floors')||'Plantas')+': '+[...searchFloorSet].join(', ')+
+  '. '+(lang?.ui('mapWarning')||'Información provisional.');
  showFloorReference();dirty=true;
- return {floors:[...searchFloorSet],userFloor:ref,matches:matches.length,
-  vectors:searchMatchedVectors.size};
+ return {floors:[...searchFloorSet],userFloor:ref,matches:total,
+  vectors:searchMatchedVectors.size,stores:matches.length,services:services.length};
 }
 function clearSearchFloors(){
  searchFloorSet=null;searchCommitted='';searchMatchedVectors.clear();
@@ -783,7 +790,9 @@ else pois=pois.filter(p=>['toilet','elevator','information','metro','exit'].incl
 for(const p of pois.slice(0,22)){
   const b=document.createElement('button');b.className='result rnPoiResult';
   const badge=document.createElement('span');badge.className='levelbadge';badge.textContent=p.floor;
-  const info=document.createElement('span');info.textContent=p.name;
+  const info=document.createElement('span');
+  const serviceCode={toilet:'service.restroom',elevator:'service.elevator',exit:'service.exit',information:'service.information',parking:'service.parking'}[p.category];
+  info.textContent=serviceCode&&window.RetailNavI18n?.label(serviceCode)||p.name;
   const sub=document.createElement('span');sub.className='small';
   sub.textContent=p.confidence==='cartel'?'Servicio indicado en el cartel':'Posición o tipo sin verificar';
   info.append(sub);b.append(badge,info);b.onclick=()=>window.RetailNavPOI?.show?.(p.id);
@@ -806,16 +815,19 @@ for(const unit of shopIds){
   const badge=document.createElement('span');badge.className='levelbadge';badge.textContent=unit.floor;
   const info=document.createElement('span');info.textContent=unit.code+(unit.name?' · '+unit.name:'');
   const note=document.createElement('span');note.className='small';
-  note.textContent=[unit.category||'Categoría pendiente',
-   unit.polygonId?'Región provisional':'Ubicación por verificar'
-  ].join(' · ');
+  const lang=window.RetailNavI18n;
+  const concepts=lang?.summary(unit,5);
+  note.textContent=[concepts||unit.category||lang?.ui('unknown')||'Categoría pendiente',
+   (unit.conceptIds||[]).length?(lang?.ui('provisional')||'Clasificación provisional'):null,
+   unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar')
+  ].filter(Boolean).join(' · ');
   b.title=[unit.code,unit.name,unit.category,unit.tags].filter(Boolean).join(' · ');
   info.append(note);b.append(badge,info);
   b.onclick=()=>window.RetailNavUnits?.focus?.(unit.code,unit.floor);
   host.append(b);
 }
-if(!host.children.length){let p=document.createElement('p');p.textContent='Sin coincidencias en el shopping para esta búsqueda.';host.append(p);}
-$('resultCount').textContent=q?(list.length+pois.length+shopIds.length+districtMatches.length)+' coincidencias':
+if(!host.children.length){let p=document.createElement('p');p.textContent=window.RetailNavI18n?.ui('none')||'Sin coincidencias en el shopping para esta búsqueda.';host.append(p);}
+$('resultCount').textContent=q?(list.length+pois.length+shopIds.length+districtMatches.length)+' '+(window.RetailNavI18n?.ui('results')||'coincidencias'):
   (mallId==='ap-plaza'||mallId==='new-world-city-shanghai'
     ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
     :'Tiendas ancla legibles en las imágenes');}
@@ -1520,7 +1532,10 @@ $('rnConnectorsToggle').onclick=()=>{
   b.dataset.tag=option.term;
   const label=document.createElement('span');label.textContent=option.term;
   const count=document.createElement('small');
-  count.textContent=option.count+' locales · '+(option.verified?'algunas etiquetas revisadas':'etiqueta provisional');
+  const lang=window.RetailNavI18n;
+  count.textContent=option.count+' '+(lang?.ui('stores')||'locales')+' · '+
+   (option.verified?(lang?.ui('reviewed')||'algunas etiquetas revisadas'):
+    (lang?.ui('provisional')||'etiqueta provisional'));
   b.append(label,count);
   b.addEventListener('click',event=>{event.preventDefault();confirmSearch(option.term);});
   host.append(b);
@@ -1534,8 +1549,9 @@ const confirmSearch=value=>{
  $('rnMapSearch').classList.remove('finding');
  $('rnSearchSuggestions').hidden=true;
  $('search').blur();results();drawSearchMarkers();
- notify(report.matches+' locales para «'+query+'» · plantas '+report.floors.join(', ')+
-  '. Productos y ubicaciones según directorio provisional.');
+ notify(report.matches+' '+(window.RetailNavI18n?.ui('results')||'coincidencias')+
+  ' · '+query+' · '+report.floors.join(', ')+'. '+
+  (window.RetailNavI18n?.ui('mapWarning')||'Datos provisionales.'));
 };
 const updateSearchPanel=()=>{
  const query=$('search').value.trim();
@@ -1560,6 +1576,11 @@ $('search').addEventListener('keydown',event=>{
    $('results').querySelector('button:not([disabled])');
   if(first){event.preventDefault();first.focus();}
  }
+});
+window.addEventListener('retailnav:localechange',()=>{
+ if(!ready)return;
+ if(searchFloorSet&&searchCommitted)applySearchFloors(searchCommitted);
+ results();renderSuggestions();dirty=true;
 });
 $('results').addEventListener('click',()=>{
  $('rnMapSearch').classList.remove('finding');$('rnSearchSuggestions').hidden=true;

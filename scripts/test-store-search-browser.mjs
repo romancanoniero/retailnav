@@ -249,6 +249,9 @@ try{
  assert.ok(tabletLayout.cardCount>1);
  const firstTabletCard=page.locator('#rnTagResultCards .rnStoreCard').first();
  await firstTabletCard.click();
+ const unmappedFocus=await page.evaluate(()=>window.__RETAILNAV__.getState().lastStoreFocus);
+ assert.equal(unmappedFocus?.located,false,
+  'directory-only merchant must never receive a fabricated map position');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
   'one tap highlights a store without closing the vertical list');
  assert.equal((await page.evaluate(()=>window.RetailNavMeetups.getState())).detailOpen,false);
@@ -274,6 +277,30 @@ try{
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
  assert.equal(await page.locator('#sidebar').isVisible(),false,
   'tablet tag results close the former left information panel');
+ // Source-mapped anchor gets an animated camera flight and a selected vector.
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await input.fill('Apple');
+ await input.press('Enter');
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Apple');
+ const appleUnit=await page.evaluate(()=>window.RetailNavUnits.getUnits().find(u=>u.code==='LL-002'));
+ assert.ok(appleUnit&&Number.isFinite(appleUnit.x)&&appleUnit.polygonId);
+ const focus=await page.evaluate((u)=>window.__RETAILNAV__.focusCatalogStore(
+  u.storeId,u.floor,[u.x,u.y],u.polygonId),appleUnit);
+ assert.equal(focus.located,true);
+ assert.equal(focus.vectorHighlighted,true);
+ await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
+ const arrival=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.equal(arrival.focusedStoreVector,'LL:'+appleUnit.polygonId);
+ assert.equal(arrival.focusFloorId,'LL');
+ assert.deepEqual(arrival.visible,['LL']);
+ await page.locator('#showAllFloors').click();
+ const restored=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.equal(restored.focusFloorId,null);
+ assert.ok(restored.searchFloorIDs?.includes('LL'));
+ assert.equal(restored.committedSearch,'Apple');
+ await input.fill('Coffee');
+ await page.waitForFunction(()=>document.querySelector('.rnResultTag[data-concept-id="food.coffee"]'));
+ await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
  await page.locator('#rnTagResultClose').click();
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),false,
   'the tag carousel has a direct close control');

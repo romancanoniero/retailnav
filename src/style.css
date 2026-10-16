@@ -1177,3 +1177,40 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 
 /* Hide the right-side map icon toolbar; touch gestures and keyboard controls remain available. */
 .hudright{display:none!important}
+
+/* Tablet: reserve genuine map viewport width, rather than overlaying the map. */
+@media(min-width:761px){
+ body.rnTagResultsOpen .stage>.rnTagResultPanel{right:0;top:0;bottom:0;
+  height:100%;max-height:none;width:clamp(300px,34vw,420px);border-radius:0;
+  overflow-y:auto;overscroll-behavior-y:contain;padding:120px 16px 64px;
+  background:var(--rn-theme-surface,#102536);}
+ body.rnTagResultsOpen .stage>.viewport{right:clamp(300px,34vw,420px);}
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCarousel{display:flex;flex-direction:column;
+  overflow-x:hidden;overflow-y:auto;flex:1 1 auto;scroll-snap-type:y proximity;touch-action:pan-y;}
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard{flex:0 0 auto;min-height:92px;
+  width:100%;display:grid;grid-template-columns:50px 1fr;gap:5px 9px;
+  align-items:start;padding:12px;}
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard .rnStoreCardLogo{grid-row:1 / span 2;}
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard .levelbadge{grid-column:2;order:initial;}
+ body.rnTagResultsOpen .stage>.rnMapSearch{left:calc((100% - clamp(300px,34vw,420px))/2);width:min(480px,calc(100% - clamp(300px,34vw,420px) - 35px));}
+ body.rnTagResultsOpen .stagebar{right:calc(clamp(300px,34vw,420px) + 16px);}
+ body.rnTagResultsOpen .hudright{right:calc(clamp(300px,34vw,420px) + 16px);}
+ body.rnTagResultsOpen .statusbar{right:clamp(300px,34vw,420px);}
+ body.rnTagResultsOpen .rnTagResultPanel header{position:sticky;top:0;z-index:1;}
+}
+.rnTagResultPanel .rnStoreSelected{border-color:var(--rn-theme-accent,#64d6e4);box-shadow:inset 3px 0 var(--rn-theme-accent,#64d6e4)}
+.rnStoreDetails{display:flex;flex-direction:column;gap:11px;overflow-y:auto;max-height:100%;min-height:0;flex:1}
+.rnStoreDetails[hidden],.rnMeetingBox[hidden]{display:none!important}
+.rnDetailHeading{display:flex;gap:12px;align-items:center}.rnDetailHeading h3{font-size:18px;margin:0 0 5px}
+.rnDetailLogo{width:72px;height:72px;border-radius:15px;background:#f1f5f9;color:#132b38;display:grid;place-items:center;flex:none;overflow:hidden}
+.rnDetailLogo img{max-width:100%;max-height:100%;object-fit:contain}.rnDetailLogoFallback{font-weight:700}
+.rnDetailFloor{font-size:12px;opacity:.8}.rnDetailDescription,.rnDetailSpecialties{font-size:13px;line-height:1.5}
+.rnStoreUncertainty{font-size:11px;line-height:1.45;opacity:.75}
+.rnDetailLinks{display:flex;flex-wrap:wrap;gap:10px}.rnDetailLinks a{color:var(--rn-theme-accent,#68d8ea);font-size:12px}
+.rnDetailActions{display:grid;gap:9px}.rnDetailActions button{min-height:43px}.rnDetailActions button:disabled{opacity:.5}
+.rnBackToStores{min-height:42px;align-self:flex-start}.rnMeetingBox,.rnMeetingsList{border-top:1px solid #496577;padding-top:10px;margin-top:8px}
+.rnMeetFriends{display:flex;flex-direction:column;gap:7px;max-height:180px;overflow:auto}.rnMeetFriends label{font-size:13px}
+.rnMeetFriends input{width:16px;height:16px}.rnMeetingRow{border:1px solid #456073;border-radius:11px;padding:9px;margin:7px 0;font-size:12px}
+.rnMeetingRow small{display:block;margin:4px 0;opacity:.8}.rnMeetingActions{display:flex;gap:5px;flex-wrap:wrap}
+.rnMeetingActions button{min-height:39px;padding:8px 10px}.rnMeetingStatus{font-size:12px;line-height:1.4}
+@media(max-width:760px){.rnStoreDetails{max-height:29dvh}.rnMeetingBox,.rnMeetingsList{max-height:22dvh;overflow:auto}}

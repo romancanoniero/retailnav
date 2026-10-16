@@ -115,7 +115,7 @@ function selectStore(id,showDetails=false){
  const located=Number.isFinite(u.x)&&Number.isFinite(u.y)&&Boolean(u.floor);
  const focus=window.__RETAILNAV__?.focusCatalogStore?.(
   id,located?u.floor:null,located?[u.x,u.y]:null,located?u.polygonId:null);
- if(located)window.RetailNavUnits?.selectStoreOnly?.(id);
+ window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;
  panel.dataset.selectedStore=id;

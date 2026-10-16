@@ -93,14 +93,13 @@ function showSelectionStatus(u,focus){
  selectionStatus.hidden=false;
  const label=u.name||u.code;
  selectionStatus.textContent=focus?.located
-  ?tr('Seleccionado: ','Selected: ')+label+' · '+(focus.source?tr('Ubicación en geometría de fuente oficial','Location in official-source geometry'):tr('Enfoque provisional en el plano','Provisional plan focus'))
+  ?tr('Ubicación del destino: ','Destination location: ')+label+' · '+tr('Planta ','Floor ')+focus.floor
   :tr('Seleccionado: ','Selected: ')+label+' · '+
    (u.locationLabel||u.documentedFloors?.length
     ?tr('Ubicación indicada por el directorio; falta vincularla con el plano.',
       'Directory location is available, but not yet linked to the map.')
     :tr('Ubicación pendiente de identificar en el plano; no se puede enfocar ni resaltar.',
       'Map position is unknown; focus and map highlight are not available.'));
- if(mall.coordinateSpace)selectionStatus.textContent+=' · '+tr('Sin ruta peatonal verificada. Alturas provisionales.','No verified walking route. Floor heights are provisional.');
  const levels=[...new Set((u.sourceGeometry?.polygons||[]).map(p=>p.floor))];
  if(levels.length>1){
   const choices=document.createElement('span');choices.className='rnStoreFloorChoices';

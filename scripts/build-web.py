@@ -167,6 +167,22 @@ for slug, mall in catalog.items():
 # showing any 3D floor. No mall geometry is embedded in the HTML anymore.
 map_dir = repo / "public" / "maps" / "malls"
 map_dir.mkdir(parents=True, exist_ok=True)
+preview_bytes = (repo / 'data/official-maps/aventura-routing-preview.json').read_bytes()
+preview = json.loads(preview_bytes)
+assert preview['routingVerified'] is False
+assert preview['coordinateSpace'] == catalog['aventura']['coordinateSpace']
+source_snapshot = json.loads((repo / 'data/official-maps/aventura.json').read_bytes())
+assert preview['source'] == source_snapshot['sources']['map']
+preview_sha = hashlib.sha256(preview_bytes).hexdigest()
+preview_name = 'aventura-routing-preview-'+preview_sha+'.json'
+(repo / 'public/maps/malls' / preview_name).write_bytes(preview_bytes)
+catalog['aventura']['routingPreviewAsset'] = {
+    'url': 'maps/malls/'+preview_name, 'sha256': preview_sha,
+    'sourceSha256': preview['source']['sha256'],
+    'sourceSnapshotSha256': catalog['aventura']['sourceMapSha256'],
+}
+
+
 for slug, mall in catalog.items():
     floor_data = mall["floors"]
     assert floor_data and len({item[0] for item in floor_data}) == len(floor_data)
@@ -221,6 +237,7 @@ search_payload = (search_payload.replace("<", r"\u003c")
                   .replace("\u2028", r"\u2028")
                   .replace("\u2029", r"\u2029"))
 
+
 components = {
     "__SEARCH_TAXONOMY__": search_payload,
     "__SEARCH_I18N__": (repo / "src/search-i18n.js").read_text(encoding="utf-8"),
@@ -238,7 +255,7 @@ components = {
     "__SERVICE_ICONS_3D__": (repo / "src/service-icons3d.js").read_text(encoding="utf-8"),
     "__LIFT_SHAFTS_3D__": (repo / "src/vertical-shafts3d.js").read_text(encoding="utf-8"),
     "__ROOF_TEXT_3D__": (repo / "src/roof-text3d.js").read_text(encoding="utf-8"),
-    "__JS__": (repo / "src/viewer.js").read_text(encoding="utf-8"),
+    "__JS__": (repo / "src/wayfinding-route.js").read_text(encoding="utf-8") + '\n' + (repo / "src/viewer.js").read_text(encoding="utf-8"),
     "__PIN_RENDERER__": (repo / "src/pins3d.js").read_text(encoding="utf-8"),
     "__PIN_WEBGL_RENDERER__": (repo / "src/pins-webgl.js").read_text(encoding="utf-8"),
     "__POI_RENDERER__": (repo / "src/poi-layer.js").read_text(encoding="utf-8"),

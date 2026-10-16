@@ -8,11 +8,16 @@ on:
       - "scripts/import-source-map-3d.mjs"
       - "scripts/verify.py"
       - "scripts/test-source-map*"
+      - "scripts/test-wayfinding-browser.mjs"
+      - "src/wayfinding-route.js"
+      - "scripts/import-routing-preview.py"
+      - "scripts/test-wayfinding-route.mjs"
       - "data/official-maps/**"
       - "src/viewer.js"
       - "src/units.js"
       - "src/unit-signs-webgl.js"
       - "src/indoor-location.js"
+      - "src/social.js"
       - "src/page.template.html"
       - "src/style.css"
       - "scripts/build-web.py"
@@ -34,11 +39,16 @@ on:
       - "scripts/import-source-map-3d.mjs"
       - "scripts/verify.py"
       - "scripts/test-source-map*"
+      - "scripts/test-wayfinding-browser.mjs"
+      - "src/wayfinding-route.js"
+      - "scripts/import-routing-preview.py"
+      - "scripts/test-wayfinding-route.mjs"
       - "data/official-maps/**"
       - "src/viewer.js"
       - "src/units.js"
       - "src/unit-signs-webgl.js"
       - "src/indoor-location.js"
+      - "src/social.js"
       - "src/page.template.html"
       - "src/style.css"
       - "scripts/build-web.py"
@@ -74,6 +84,7 @@ jobs:
         run: |
           python3 -m py_compile scripts/build-web.py scripts/store_catalog.py scripts/visitor_reference.py
           node --check src/viewer.js
+          node --check src/wayfinding-route.js
           node --check src/units.js
           node --check src/search-i18n.js
           node --check src/poi-layer.js
@@ -85,6 +96,7 @@ jobs:
           python3 scripts/verify.py public
           python3 scripts/test-source-map.py
           node --test scripts/test-map-cache.mjs scripts/test-positioning-core.mjs scripts/test-multilingual-search.mjs
+          node --test scripts/test-wayfinding-route.mjs
       - name: Verify every shop code references its own mall and real polygon only
         run: |
           python3 - <<'PY'
@@ -190,5 +202,9 @@ jobs:
           node scripts/test-source-map-comparison.mjs
           BROWSER=webkit node scripts/test-source-map-comparison.mjs
           BROWSER=webkit node scripts/test-source-map-browser.mjs
+      - name: Native 3D wayfinding, manual origin and tablet framing
+        run: |
+          node scripts/test-wayfinding-browser.mjs
+          BROWSER=webkit node scripts/test-wayfinding-browser.mjs
       - name: Preserve map versioning, loader and Aventura logo
         run: node scripts/test-map-cache-browser.mjs

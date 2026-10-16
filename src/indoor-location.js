@@ -371,7 +371,8 @@ function adoptPeerAnchor(reference){
  ui.scale.value='';
  ui.point.hidden=false;
  updateMessage();window.__RETAILNAV__?.invalidate?.();
- window.__RETAILNAV__?.focusAt?.(anchor.floor,[anchor.x,anchor.y],100);
+ if(!window.__RETAILNAV__?.getState?.().wayfinding)
+  window.__RETAILNAV__?.focusAt?.(anchor.floor,[anchor.x,anchor.y],100);
  window.dispatchEvent(new Event('retailnav:indoor-observation'));
  return true;
 }

@@ -338,8 +338,8 @@ try{
  const italian=page.locator('.rnResultGroup[data-concept-id="cuisine.italian"] .rnUnitResult').first();
  if(await italian.count()){
   await italian.click();
-  assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
-   'each matched establishment remains selectable for map focus/details');
+  assert.equal(await page.locator('#rnWayfinding').isVisible(),true,
+   'each matched establishment remains selectable for native-map orientation');
  }
  await page.locator('#rnLanguageSelect').selectOption('en');
  await input.fill('Apple');

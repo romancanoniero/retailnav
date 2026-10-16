@@ -65,6 +65,9 @@ function draw(){
   const state=view.getState();
  const visible=new Set(state.visible);
   for(const p of all){
+    // The source lists connectors, but does not establish their direction or
+    // traversability. Keep the evidence searchable without floating icons.
+    if(p.source==='official-map-connector'||['elevator','escalator','stairs','vertical-uncertain'].includes(p.category))continue;
     if(!canPlace(p))continue;
     let button=markers.get(p.id);
     if(!button){button=make(p);markers.set(p.id,button);}

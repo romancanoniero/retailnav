@@ -1237,3 +1237,121 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreFloorChoices{display:flex;gap:8px;margin-top:10px}
 .rnStoreFloorChoices button{min-width:64px;min-height:44px;border:1px solid var(--rn-theme-border,#47657b);border-radius:8px;background:var(--rn-theme-surface,#163045);color:inherit}
 .rnStoreFloorChoices button[aria-pressed="true"]{outline:2px solid var(--rn-theme-accent,#12617b)}
+
+/* Destination orientation lives over the existing 3D viewport. Its projected
+   markers share the camera; the card never creates another map surface. */
+.rnWayfinding{position:absolute;top:130px;left:16px;right:16px;z-index:10;
+ max-width:600px;margin-inline:auto;padding:15px 16px 13px;
+ border:1px solid #698793;border-radius:18px;
+ background:linear-gradient(125deg,#102b3cf5,#0c202ff5);color:#f3fbff;
+ box-shadow:0 8px 30px #020e1d50,0 1px 0 #e1faff13 inset;
+ backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ touch-action:pan-y;overscroll-behavior:contain;user-select:text;-webkit-user-select:text}
+.rnWayfindingHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.rnWayfindingHeading{min-width:0;flex:1}
+.rnWayfindingRelation{display:block;color:#89e4f5;font-size:15px;line-height:1.3;font-weight:750;letter-spacing:.01em}
+.rnWayfinding h2{margin:3px 0 0;color:#f3fbff;font-size:22px;line-height:1.22;
+ font-weight:650;letter-spacing:-.45px;overflow-wrap:anywhere}
+.rnWayfinding button,.rnWayfinding select{min-height:44px;touch-action:manipulation;font:inherit}
+.rnWayfinding #rnWayfindingClose{flex:none;width:44px;min-width:44px;padding:0;
+ border:1px solid #8aa7b133;border-radius:12px;background:#173448;color:#e0f1f8;font-size:26px;line-height:1}
+.rnWayfinding #rnWayfindingClose:hover{background:#274b5f;border-color:#a1c5d2}
+.rnWayfinding p{margin:0;color:#cbdee7}
+.rnWayfinding .rnWayfindingDetail{margin-top:8px;font-size:12px;line-height:1.4}
+.rnWayfinding .rnWayfindingDetail:empty,.rnWayfinding .rnWayfindingStatus:empty{display:none}
+.rnWayfinding .rnWayfindingStatus{margin-top:8px;font-size:11px;line-height:1.45;color:#b7ced9}
+.rnWayfindingStatus[data-state="provisional"]{border-left:2px solid #84c9da;padding-left:8px}
+.rnWayfindingLevels{display:flex;align-items:stretch;gap:5px;margin-top:10px;min-width:0}
+.rnWayfindingLevels>*{position:relative;display:flex;flex:1;flex-direction:column;align-items:center;
+ justify-content:center;gap:3px;min-width:0;padding:7px 8px;border:1px solid #7899ab40;border-radius:9px;
+ background:#173449;color:#a8c2d0;font-size:11px;line-height:1.25;text-align:center}
+.rnWayfindingLevels strong,.rnWayfindingLevels b{font-size:12px;font-weight:750;color:inherit}
+.rnWayfindingLevels small{display:block;font-size:10px;line-height:1.2;color:inherit}
+.rnWayfindingLevels .is-origin,.rnWayfindingLevels [data-role="origin"]{
+ background:#133f56;border-color:#71d8ee;color:#d7f6ff;box-shadow:inset 0 -2px #53bfdf}
+.rnWayfindingLevels .is-destination,.rnWayfindingLevels [data-role="destination"]{
+ background:#29464f;border-color:#d7e9e9;color:#fff;box-shadow:inset 0 -2px #e0f5f7}
+.rnWayfindingActions{display:flex;align-items:flex-end;gap:8px;margin-top:12px}
+.rnWayfindingFloorField{display:flex;flex:none;flex-direction:column;gap:4px;min-width:68px;
+ color:#c2dce7;font-size:10px;line-height:1.2}
+.rnWayfindingFloorField select{max-width:110px;padding:8px 25px 8px 10px;
+ border:1px solid #6a91a3;border-radius:11px;background:#153449;color:#f1fbff;font-size:13px;font-weight:650}
+.rnWayfinding #rnWayfindingLocate{flex:1;min-width:0;padding:9px 12px;border:1px solid #91dbe9;
+ border-radius:11px;background:#bcebf1;color:#092b3b;font-size:12px;line-height:1.25;font-weight:750}
+.rnWayfinding #rnWayfindingLocate:hover{background:#d7f7fa;border-color:#e8ffff}
+.rnWayfinding #rnWayfindingReframe{flex:1;min-width:0;padding:9px 12px;border:1px solid #7294a5;
+ border-radius:11px;background:#18394e;color:#edfaff;font-size:12px;line-height:1.25;font-weight:650}
+.rnWayfinding #rnWayfindingReframe:hover{background:#284e62;border-color:#b1d5e2}
+.rnWayfinding :is(button,select):focus-visible{outline:3px solid #b1f0ff;outline-offset:3px}
+.rnWayfindingOverlay,.rnWayfindingDots{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.rnWayfindingOverlay{z-index:8}
+.rnWayfindingDots{z-index:0}
+.rnWayfindingDot{position:absolute;width:9px;height:9px;transform:translate(-50%,-50%);
+ border:2px solid #e8fbff;border-radius:50%;background:#1386ad;box-shadow:0 1px 3px #09344070}
+.rnWayfindingOverlay[data-status="provisional"] .rnWayfindingDot,
+.rnWayfindingOverlay[data-route-status="provisional"] .rnWayfindingDot,
+.rnWayfindingDot.is-provisional{background:#153f5080;border-color:#68c9e0;box-shadow:0 0 0 1px #e6fbff99}
+.rnWayfindingMarker{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);
+ z-index:2;pointer-events:none;text-align:center}
+.rnWayfindingMarker::before{content:"";position:absolute;inset:1px;border:3px solid #fff;
+ border-radius:50%;background:#169bca;box-shadow:0 0 0 5px #159cc440,0 2px 8px #072f435c}
+.rnWayfindingMarkerLabel{position:absolute;left:50%;top:32px;transform:translateX(-50%);
+ width:max-content;max-width:190px;padding:6px 9px;border:1px solid #b5dce8;
+ border-radius:9px;background:#103349f5;color:#f5fcff;box-shadow:0 2px 9px #062b3d30;
+ font-size:12px;font-weight:750;line-height:1.3;text-align:center;overflow-wrap:anywhere}
+.rnWayfindingTarget::before{inset:0;border:3px solid #fbffff;background:#08475d;
+ box-shadow:0 0 0 3px #1e7392,0 0 0 7px #ffffff3d,0 2px 8px #072f435c}
+.rnWayfindingTarget::after{content:"";position:absolute;inset:8px;border-radius:50%;background:#f4ffff}
+.rnWayfindingTarget .rnWayfindingMarkerLabel{top:auto;bottom:34px;border-color:#0d607b;
+ background:#effdfff5;color:#123444;box-shadow:0 2px 12px #072f4345}
+.stage.rnWayfindingActive>.note,.stage.rnWayfindingActive>.stagebar,
+.stage.rnWayfindingActive>.legend,.stage.rnWayfindingActive>.bottombar,
+.stage.rnWayfindingActive>.rnAreaDirectory,.stage.rnWayfindingActive>#showAllFloors,
+.stage.rnWayfindingActive>.rnPoiInfo,.stage.rnWayfindingActive>.rnUnitInfo,
+.stage.rnWayfindingActive .viewport>.labels,.stage.rnWayfindingActive .viewport>.rnAreaOverlay,
+.stage.rnWayfindingActive .viewport>.rnPeopleOverlay,.stage.rnWayfindingActive .viewport>.rnPinCanvas,
+.stage.rnWayfindingActive .viewport>.rnPOIOverlay,.stage.rnWayfindingActive .viewport>.rnUnitOverlay,
+.stage.rnWayfindingActive .viewport>.rnSearchMarkers,.stage.rnWayfindingActive .viewport>.rnMyPositionMarker{
+ display:none!important}
+.stage.rnWayfindingPlacing .rnWayfinding{border-color:#93e6f5;box-shadow:0 0 0 2px #47b7d32e,0 8px 30px #020e1d50}
+.stage.rnWayfindingPlacing #canvas{cursor:crosshair}
+@media(max-width:760px){
+ .rnWayfinding{top:66px;left:10px;right:10px;padding:11px 12px;border-radius:15px}
+ .rnWayfindingRelation{font-size:13px}
+ .rnWayfinding h2{font-size:19px;letter-spacing:-.3px}
+ .rnWayfinding .rnWayfindingDetail{margin-top:6px;font-size:11px}
+ .rnWayfinding .rnWayfindingStatus{margin-top:6px;font-size:10px}
+ .rnWayfindingActions{gap:6px;margin-top:9px}
+ .rnWayfindingLevels{margin-top:8px;gap:4px}
+ .rnWayfindingLevels>*{padding:5px 6px}
+ .rnWayfindingMarkerLabel{max-width:150px;font-size:11px}
+}
+@media(max-height:530px) and (orientation:landscape){
+ .rnWayfinding{top:55px;left:10px;right:10px;padding:9px 11px;max-width:600px}
+ .rnWayfinding h2{font-size:17px}
+ .rnWayfindingRelation{font-size:12px}
+ .rnWayfinding .rnWayfindingDetail,.rnWayfinding .rnWayfindingStatus{margin-top:4px;font-size:10px}
+ .rnWayfindingLevels{margin-top:6px}
+ .rnWayfindingLevels>*{padding:4px 6px}
+ .rnWayfindingActions{margin-top:7px}
+}
+@media(prefers-reduced-motion:reduce){
+ .rnWayfinding *,.rnWayfindingOverlay *{animation:none!important;transition:none!important}
+}
+.rnWayfindingStart{position:absolute;z-index:3;width:44px;height:44px;padding:0;
+ transform:translate(-50%,-50%);border:0;border-radius:50%;background:transparent;pointer-events:auto;touch-action:manipulation}
+.rnWayfindingStart::before{content:"";position:absolute;inset:14px;border:3px solid #147c9c;
+ border-radius:50%;background:#e6faff;box-shadow:0 0 0 4px #55c3e54d}
+.rnWayfindingStart:focus-visible{outline:3px solid #147c9c;outline-offset:0;background:#e6faff80}
+.rnWayfindingStart:hover::before{background:#79e1f6}
+@media(min-width:761px){
+ .stage.rnWayfindingActive>.rnMapSearch{top:16px}
+ .stage.rnWayfindingActive .rnWayfinding{top:76px}
+}
+.stage.rnWayfindingActive>.statusbar{display:none}
+/* Safari's native select can ignore min-height; preserve the full touch area. */
+.rnWayfinding #rnWayfindingOriginFloor{height:44px;min-height:44px;
+ appearance:none;-webkit-appearance:none;padding-right:30px;
+ background-image:linear-gradient(45deg,transparent 50%,#d7f6ff 50%),linear-gradient(135deg,#d7f6ff 50%,transparent 50%);
+ background-position:calc(100% - 15px) 19px,calc(100% - 10px) 19px;
+ background-size:5px 5px;background-repeat:no-repeat}

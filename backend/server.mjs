@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {createMallBrandRegistry} from './mall-brands.mjs';
+import {createMeetupService} from './meetups.mjs';
 
 const PORT = Number(process.env.PORT || 3181);
 const DATA_DIR = process.env.RETAILNAV_DATA_DIR || '/data';
@@ -156,6 +157,7 @@ function pruneOffers(){
 function removeOwnOffers(userId){
  for(const [key,offer] of positionOffers)if(offer.ownerId===userId)positionOffers.delete(key);
 }
+const meetups=createMeetupService({db,save,send,reject,parse,validId,validMallId,validFloorLabel});
 const app=http.createServer(async(req,res)=>{
   try{
     const url=new URL(req.url||'/','http://localhost');
@@ -180,6 +182,7 @@ const app=http.createServer(async(req,res)=>{
     }
     if(!auth)return reject(res,401,'Sesión anónima no disponible. Recargá la página.');
     const me=auth.user;
+    if(await meetups.handle(req,res,url.pathname,me))return;
     if(req.method==='GET'&&url.pathname==='/state')return send(res,200,state(me));
     // Web fallback: a human explicitly shows an in-person QR to another
     // visitor. It is NOT a verified ranging method, Bluetooth or GPS transfer.
@@ -361,6 +364,7 @@ const app=http.createServer(async(req,res)=>{
       me.friends=me.friends.filter(id=>id!==p.id);
       const other=db.users[p.id];
       if(other)other.friends=other.friends.filter(id=>id!==me.id);
+      meetups.unlink(me.id,p.id);
       save();return send(res,200,state(me));
     }
     if(req.method==='POST'&&url.pathname==='/account/delete'){
@@ -375,6 +379,7 @@ const app=http.createServer(async(req,res)=>{
         const friend=db.users[id];
         if(friend)friend.friends=friend.friends.filter(x=>x!==me.id);
       }
+      meetups.forget(me.id);
       delete db.users[me.id];
       try{fs.unlinkSync(avatarFile(me.id));}catch(e){if(e.code!=='ENOENT')throw e;}
       save();

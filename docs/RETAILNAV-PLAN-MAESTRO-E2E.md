@@ -818,3 +818,12 @@ python3 scripts/verify.py public
 **Antes de ejecutar pruebas que generan archivos**, comprobar la rama activa y no sobrescribir recursos de otro shopping. Añadir tests específicos para las nuevas APIs y rol/tenant a medida que se implementan.
 
 **Regla final para continuidad:** si una instrucción futura contradice este plan, registrar la nueva decisión, identificar qué dato o prueba cambia, y actualizar la documentación. No modificar silenciosamente el comportamiento ni presentar un alcance pendiente como terminado.
+
+
+## Actualización 2026-10-16 — Comercios en tablet y encuentros entre amigos
+
+**Estado [D] / PR #44; aún no validado ni publicado.**
+- Etiqueta comercial seleccionada: columna derecha de resultados verticales en tablet; el mapa ocupa el espacio restante y conserva su geometría. Primer toque selecciona/enfoca; segundo toque abre ficha en esa columna con información existente (logo, descripción, menú HTTPS cuando esté registrado).
+- Invitaciones a amigos reales, respuesta individual y contrapropuestas, con consentimiento y vencimiento. No se comparte posición automática ni se inventan lugares georreferenciados.
+- AR peatonal real [F], bloqueada hasta calibración física y soporte compatible de dispositivo. Los mapas actuales no son aptos para guiar movimientos físicos.
+- Detalles técnicos, amenazas, criterios de QA y pasos siguientes: [`docs/STORE-MEETUPS-E2E.md`](STORE-MEETUPS-E2E.md).

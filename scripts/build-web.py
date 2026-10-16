@@ -251,6 +251,7 @@ components = {
     "__COOPERATIVE_POSITIONING__": (repo / "src/cooperative-positioning.js").read_text(encoding="utf-8"),
     "__QRCODE__": (repo / "src/qrcode.min.js").read_text(encoding="utf-8"),
     "__SOCIAL__": (repo / "src/social.js").read_text(encoding="utf-8"),
+    "__STORE_MEETUPS__": (repo / "src/store-meetups.js").read_text(encoding="utf-8"),
     "__QRSCANNER__": (repo / "src/jsqr.js").read_text(encoding="utf-8"),
     "__FALLBACK__": (repo / "src/fallback.svg").read_text(encoding="utf-8"),
 }

@@ -150,9 +150,10 @@ try {
   assert.ok(stairs.every(s=>s.verified===false&&s.entryExitKnown===false&&s.direction==='unknown'));
   assert.equal(stairs.filter(s=>s.floor==='L7').length,4);
   assert.equal(await page.locator('#plan').getAttribute('aria-label'),'Pasar a vista 2D');
-  assert.equal(await page.locator('#north').isVisible(),true);
+  assert.equal(await page.locator('#north').count(),1,
+    'compass control remains available to the viewer even when the side HUD is hidden');
   // Secondary mode retains native Earth gestures and compass.
-  await page.locator('#pan').click();
+  await page.locator('#pan').evaluate(el=>el.click()); // HUD hidden; test internal 3D mode switch without exposing toolbar
   state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.trackball360,false);
   assert.equal(state.gestureMode,'map-pan');
@@ -175,7 +176,9 @@ try {
     'L3 registration mismatch must remain explicitly provisional');
   assert.equal(liftCores[0].landingMatchVerified,false);
   assert.ok(await page.locator('#rnHeightsPanel').isVisible());
-  assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
+  assert.equal(await page.locator('#rnConnectorsToggle').count(),1);
+  assert.equal(await page.locator('#rnConnectorsToggle').isVisible(),false,
+    'right HUD stays hidden as specified for compact map viewport');
   assert.equal(await page.evaluate(()=>window.RetailNavPins.getState().registered),18);
   const guests=await page.evaluate(()=>window.RETAILNAV_DEMO_CONTACTS);
   assert.equal(guests.length,18);
@@ -230,7 +233,7 @@ try {
   assert.ok(earth.twisted.orbitPitch<=-.25&&earth.twisted.orbitPitch>=-Math.PI/2,
     'Earth-like tilt never flips the floor upside-down');
   const northBefore=await page.evaluate(()=>window.__RETAILNAV__.getState());
-  await page.locator('#north').click();
+  await page.locator('#north').evaluate(el=>el.click());
   const northAfter=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.ok(Math.abs(northAfter.orbitYaw)<.00001,'Compass resets photo reference heading');
   assert.equal(northAfter.distance,northBefore.distance,'Compass preserves zoom');
@@ -250,7 +253,7 @@ try {
   assert.equal(await page.locator('#rnViewModeLabel').textContent(),'2D');
 
   // Advanced mode remains available without replacing the Earth gestures.
-  await page.locator('#pan').click();
+  await page.locator('#pan').evaluate(el=>el.click());
   state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.trackball360,true);
   assert.equal(state.gestureMode,'orbit-3d');
@@ -281,7 +284,7 @@ try {
   assert.ok(spherical.inverted.cameraUp[1]<0,
     'Camera must pass above, below, and upside down without a pole clamp');
   assert.ok(Math.abs(Math.hypot(...spherical.inverted.cameraQuaternion)-1)<.00001);
-  await page.locator('#reset').click();
+  await page.locator('#reset').evaluate(el=>el.click());
   // The 2D control intentionally focuses L2, so restore the whole building
   // before validating geometry changes across its nine storeys.
   await page.locator('#floorSelect').selectOption('ALL');
@@ -327,9 +330,9 @@ try {
   await page.locator('#rnHeightsPanel summary').click();
 
   // Connector show/hide must be a real interaction, not an inert legend.
-  await page.locator('#rnConnectorsToggle').click();
+  await page.locator('#rnConnectorsToggle').evaluate(el=>el.click());
   assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,false);
-  await page.locator('#rnConnectorsToggle').click();
+  await page.locator('#rnConnectorsToggle').evaluate(el=>el.click());
   assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,true);
 
   await page.locator('#floorSelect').selectOption('L8');

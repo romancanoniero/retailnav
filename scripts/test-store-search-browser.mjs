@@ -250,6 +250,10 @@ try{
  const firstTabletCard=page.locator('#rnTagResultCards .rnStoreCard').first();
  await firstTabletCard.click();
  const unmappedFocus=await page.evaluate(()=>window.__RETAILNAV__.getState().lastStoreFocus);
+ assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),true,
+  'a tablet directory-only result must provide user-visible feedback');
+ assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/ubicaci[oó]n|location/i);
+ assert.equal(await firstTabletCard.getAttribute('aria-selected'),'true');
  assert.equal(unmappedFocus?.located,false,
   'directory-only merchant must never receive a fabricated map position');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,

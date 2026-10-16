@@ -1,7 +1,7 @@
 name: Verify per-mall shop indexes and indoor multi-floor search
 on:
   push:
-    branches: [feature/store-search-floor-follow-orientation-20261015]
+    branches: [main, feature/store-search-floor-follow-orientation-20261015]
     paths:
       - "src/viewer.js"
       - "src/units.js"

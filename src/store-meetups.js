@@ -212,8 +212,8 @@ const observer=new MutationObserver(()=>{
   if(card.dataset.rnMeetingBound)continue;
   card.dataset.rnMeetingBound='1';
   card.addEventListener('click',event=>{
-   if(event.detail>=2){event.stopPropagation();selectStore(card.dataset.storeId,true);}
-   else{event.stopPropagation();selectStore(card.dataset.storeId,false);}
+   if(event.detail>=2){event.stopImmediatePropagation();selectStore(card.dataset.storeId,true);}
+   else{event.stopImmediatePropagation();selectStore(card.dataset.storeId,false);}
   },true);
   card.addEventListener('keydown',event=>{
    if(event.key==='Enter'&&selectedId===card.dataset.storeId){event.preventDefault();selectStore(card.dataset.storeId,true);}

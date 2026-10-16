@@ -302,8 +302,10 @@ try{
  assert.ok(await luggageSuggestion.count()>=1);
  await luggageSuggestion.click();
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='valijas');
- assert.equal(await page.locator('#results').isVisible(),true,
-  'confirmed search results must remain visible and clickable');
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
+  'confirmed semantic tag results remain visible in the carousel');
+ assert.ok(await page.locator('#rnTagResultCards .rnStoreCard').count()>0,
+  'confirmed semantic tag results remain clickable outside autocomplete');
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['LL','UL','L3']);
  assert.ok(state.highlightedVectorCount>=4);
@@ -316,7 +318,7 @@ try{
  await page.locator('#rnLanguageSelect').selectOption('en');
  await page.waitForFunction(()=>document.documentElement.lang==='en');
  assert.match(await input.getAttribute('placeholder'),/Search/);
- assert.ok((await page.locator('.rnUnitResult').allTextContents()).some(x=>x.includes('luggage')));
+ assert.ok((await page.locator('#rnTagResultCards .rnUnitResult').allTextContents()).some(x=>x.toLowerCase().includes('luggage')));
  await input.fill('reparar celular');
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='reparar celular');

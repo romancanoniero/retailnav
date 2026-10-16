@@ -1547,7 +1547,9 @@ const confirmSearch=value=>{
  if(!query)return;
  $('search').value=query;
  const report=applySearchFloors(query);
- $('rnMapSearch').classList.remove('finding');
+ // Keep matched stores selectable after Enter or an autocomplete tap;
+ // touching the map or a result closes this compact overlay.
+ $('rnMapSearch').classList.add('finding');
  $('rnSearchSuggestions').hidden=true;
  $('search').blur();results();drawSearchMarkers();
  notify(report.matches+' '+(window.RetailNavI18n?.ui('results')||'coincidencias')+

@@ -85,16 +85,16 @@ function show(unit,preferredFloor){
  const indoor=window.RetailNavIndoor?.getState?.();const reference=window.__RETAILNAV__?.getState?.().referenceFloor||'LL';
  const destination=known.includes(preferredFloor)?preferredFloor:known[0];
  state.destinationFloor=destination||null;state.referenceFloor=reference;state.located=links.length>0;
- root.hidden=false;document.body.classList.add('rnSourceMapOpen');title.textContent=state.storeName+' · '+tr('Mapa vectorial RetailNav','RetailNav vector map');
+ root.hidden=false;document.body.classList.add('rnSourceMapOpen');back.textContent=tr('Plano fotográfico 3D','Photo plan 3D');title.textContent=state.storeName+' · '+tr('Mapa vectorial RetailNav','RetailNav vector map');
  body.replaceChildren();tabs.replaceChildren();panes=[];
- for(const f of known){const b=el('button',tr('Destino ','Destination ')+f);b.type='button';b.setAttribute('aria-pressed',String(f===destination));b.onclick=()=>show(unit,f);tabs.append(b);}
- const selectedIds=links.filter(l=>l.floor===destination).map(l=>l.polygonId);state.highlighted=selectedIds;
+ for(const f of known){const b=el('button',tr('Destino ','Destination ')+f+(links.some(p=>p.floor===f)?'':tr(' · sin polígono',' · no polygon')));b.type='button';b.setAttribute('aria-pressed',String(f===destination));b.onclick=()=>show(unit,f);tabs.append(b);}
+ const selectedIds=links.filter(l=>l.floor===destination).map(l=>l.polygonId);state.highlighted=selectedIds;state.located=selectedIds.length>0;
  const provisional=!indoor?.anchor||['fallback-entry','fallback-floor'].includes(indoor?.referenceSource);
  const refLabel=provisional?tr('Planta de referencia provisional','Provisional reference floor'):tr('Tu planta indicada','Your indicated floor');
  if(destination)panes.push(pane(destination,selectedIds,tr('Destino','Destination'),true));
  if(reference!==destination||!destination)panes.push(pane(reference,[],refLabel,!destination));
  else tabs.append(el('span',refLabel+' · '+reference));
- status.textContent=(links.length?tr('Polígono vinculado a la fuente oficial. ','Polygon linked to the official source. '):tr('Ubicación exacta sin vincular; vista de planta provisional. ','Exact position not linked; provisional floor view. '))+
+ status.textContent=(selectedIds.length?tr('Polígono vinculado a la fuente oficial. ','Polygon linked to the official source. '):tr('Ubicación exacta sin vincular; vista de planta provisional. ','Exact position not linked; provisional floor view. '))+
   tr('Sin ruta peatonal validada: tu posición no está calibrada en este mapa. Líneas grises: red de circulación fuente; círculos: conectores, incluidas escaleras. No son indicaciones de recorrido.',
   'No verified walking route: your position is not calibrated in this map. Grey lines: source circulation network; circles: connectors, including escalators. These are not walking directions.');
  return {...state,source:true};

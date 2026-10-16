@@ -70,6 +70,10 @@ try{
  await page.setViewportSize({width:820,height:1180});await page.screenshot({path:'artifacts/source-map-tablet-portrait.png'});
  assert.equal(await page.locator('#rnSourceVectorMap').isVisible(),true);
  await page.locator('#rnSourceVectorMap>header button').tap();assert.equal(await page.locator('#rnSourceVectorMap').isVisible(),false);
+ const directoryFloor=await page.evaluate(()=>{const u=window.RetailNavUnits.getUnits().find(u=>u.storeId==='aventura:directory:jcpenney');return window.RetailNavSourceMap.show(u,'UL');});
+ assert.equal(directoryFloor.destinationFloor,'UL');assert.equal(directoryFloor.located,false);
+ assert.equal(await page.locator('.rnSourceSelected').count(),0);
+ assert.match(await page.locator('.rnSourceRouteStatus').textContent(),/Exact position not linked/);
  // Reject a foreign mall even when the caller supplies a valid Aventura ID.
  const invalid=await page.evaluate(()=>window.RetailNavSourceMap.show({mallId:'ap-plaza',storeId:'aventura:directory:joe-and-the-juice'}));
  assert.equal(invalid.located,false);assert.equal(await page.locator('#rnSourceVectorMap').isVisible(),false);

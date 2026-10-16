@@ -153,7 +153,7 @@ try {
   assert.equal(await page.locator('#north').count(),1,
     'compass control remains available to the viewer even when the side HUD is hidden');
   // Secondary mode retains native Earth gestures and compass.
-  await page.locator('#pan').click();
+  await page.locator('#pan').evaluate(el=>el.click()); // HUD hidden; test internal 3D mode switch without exposing toolbar
   state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.trackball360,false);
   assert.equal(state.gestureMode,'map-pan');

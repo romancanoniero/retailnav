@@ -934,7 +934,8 @@ try {
   await apPage.locator('#search').fill('K1-31');
   assert.ok(await apPage.locator('#results .rnUnitResult').count()>=1);
   await apPage.locator('#results .rnUnitResult').first().click();
-  assert.equal((await apPage.evaluate(()=>window.RetailNavUnits.getState())).selected,'K1-31');
+  assert.ok((await apPage.evaluate(()=>window.RetailNavUnits.getState())).selected.endsWith(':K1-31'),
+    'Unit selection keeps the mall/floor-qualified identifier');
   await apPage.locator('#rnUnitClose').click();
   await apPage.locator('#search').fill('');
   if(apStatus.viewer.renderer==='WebGL'){

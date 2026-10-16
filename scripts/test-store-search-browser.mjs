@@ -217,7 +217,7 @@ try{
  const mobilePanelPosition=await page.locator('#rnTagResultPanel').evaluate(el=>({
   bottom:getComputedStyle(el).bottom,top:getComputedStyle(el).top
  }));
- assert.equal(mobilePanelPosition.top,'auto','phone carousel sits at the bottom edge of the map');
+ assert.equal(mobilePanelPosition.bottom,'44px','phone carousel sits at the bottom edge of the map');
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  assert.equal(await carousel.getAttribute('data-concept-id'),'cuisine.japanese',
   'changing device language keeps the selected tag group attached to its canonical ID');

@@ -1,0 +1,277 @@
+{
+  "schema": "retailnav.store-map-audit.v1",
+  "mallId": "aventura",
+  "checkedAt": "2026-10-16",
+  "source": "https://aventuramall.com/shops/",
+  "vectorReferences": [
+    {
+      "floor": "LL",
+      "vectorCode": "LL-001",
+      "mapLabel": "JCPenney",
+      "officialMatches": [
+        "JCPenney"
+      ],
+      "officialSource": "https://aventuramall.com/shops/jcpenney/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20882"
+    },
+    {
+      "floor": "LL",
+      "vectorCode": "LL-002",
+      "mapLabel": "Apple",
+      "officialMatches": [
+        "Apple"
+      ],
+      "officialSource": "https://aventuramall.com/shops/apple/",
+      "officialLocationLabel": "Outdoor Courtyard",
+      "officialDocumentedFloors": [],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-location-does-not-name-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official directory says Outdoor Courtyard; its two-level description does not identify the prototype LL vector. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20946"
+    },
+    {
+      "floor": "LL",
+      "vectorCode": "LL-003",
+      "mapLabel": "Nordstrom",
+      "officialMatches": [
+        "Nordstrom"
+      ],
+      "officialSource": "https://aventuramall.com/shops/nordstrom/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20856"
+    },
+    {
+      "floor": "LL",
+      "vectorCode": "LL-004",
+      "mapLabel": "Macy's oeste",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "LL",
+      "vectorCode": "LL-005",
+      "mapLabel": "Macy's este",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "LL",
+      "vectorCode": "LL-006",
+      "mapLabel": "Bloomingdale's",
+      "officialMatches": [
+        "Bloomingdale’s"
+      ],
+      "officialSource": "https://aventuramall.com/shops/bloomingdales-4/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20920"
+    },
+    {
+      "floor": "UL",
+      "vectorCode": "UL-001",
+      "mapLabel": "JCPenney",
+      "officialMatches": [
+        "JCPenney"
+      ],
+      "officialSource": "https://aventuramall.com/shops/jcpenney/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20882"
+    },
+    {
+      "floor": "UL",
+      "vectorCode": "UL-003",
+      "mapLabel": "Nordstrom",
+      "officialMatches": [
+        "Nordstrom"
+      ],
+      "officialSource": "https://aventuramall.com/shops/nordstrom/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20856"
+    },
+    {
+      "floor": "UL",
+      "vectorCode": "UL-004",
+      "mapLabel": "Macy's oeste",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "UL",
+      "vectorCode": "UL-005",
+      "mapLabel": "Macy's este",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "UL",
+      "vectorCode": "UL-006",
+      "mapLabel": "Bloomingdale's",
+      "officialMatches": [
+        "Bloomingdale’s"
+      ],
+      "officialSource": "https://aventuramall.com/shops/bloomingdales-4/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-level-includes-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "Official level listing supports this floor label, but does not establish that the prototype polygon is the store boundary. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20920"
+    },
+    {
+      "floor": "L3",
+      "vectorCode": "L3-002",
+      "mapLabel": "Macy's oeste",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-location-does-not-name-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "The official directory lists the brand, but does not confirm this prototype floor/vector association. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "L3",
+      "vectorCode": "L3-003",
+      "mapLabel": "Macy's este",
+      "officialMatches": [
+        "Macy’s",
+        "Macy’s Men’s Home Furniture"
+      ],
+      "officialSource": "https://aventuramall.com/shops/macys-womens/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-location-does-not-name-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "The official directory lists the brand, but does not confirm this prototype floor/vector association. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20863"
+    },
+    {
+      "floor": "L3",
+      "vectorCode": "L3-004",
+      "mapLabel": "Bloomingdale's",
+      "officialMatches": [
+        "Bloomingdale’s"
+      ],
+      "officialSource": "https://aventuramall.com/shops/bloomingdales-4/",
+      "officialLocationLabel": "Lower and Upper Level",
+      "officialDocumentedFloors": [
+        "LL",
+        "UL"
+      ],
+      "nameCrossCheck": "official-name-found",
+      "floorCrossCheck": "official-location-does-not-name-map-floor",
+      "geometryStatus": "provisional-photo-region-not-verified-as-this-storefront",
+      "note": "The official directory lists the brand, but does not confirm this prototype floor/vector association. This is the official interactive-map location ID, not a RetailNav vector ID.",
+      "officialMapLocationId": "20920"
+    }
+  ]
+}

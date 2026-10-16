@@ -151,7 +151,55 @@ try{
  // Locale is read from the browser and may be overridden without changing
  // canonical concept IDs, losing search matches or redownloading geometry.
  assert.ok(await page.evaluate(()=>window.RetailNavI18n.getState().conceptCount>=15));
- assert.equal((await page.evaluate(()=>window.RetailNavUnits.getState())).withConcepts,14);
+ const aventuraIndex=await page.evaluate(()=>({
+  units:window.RetailNavUnits.getUnits(),
+  state:window.RetailNavUnits.getState()
+ }));
+ assert.equal(aventuraIndex.units.filter(u=>u.codeKind==='map-vector-reference-not-lease-number'&&u.conceptIds.length).length,14);
+ const appleDirectory=aventuraIndex.units.find(u=>u.source==='aventura-official-directory'&&u.name==='Apple');
+ assert.ok(appleDirectory);
+ assert.equal(appleDirectory.floor,null);
+ assert.equal(appleDirectory.locationLabel,'Outdoor Courtyard');
+ assert.equal(appleDirectory.polygonId,null);
+ const jcpenneyDirectory=aventuraIndex.units.find(u=>u.source==='aventura-official-directory'&&u.name==='JCPenney');
+ assert.deepEqual(jcpenneyDirectory.documentedFloors,['LL','UL']);
+ assert.equal(jcpenneyDirectory.floor,null);
+ assert.equal(jcpenneyDirectory.polygonId,null);
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await input.fill('Japanese cuisine');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnSuggestedTag')]
+  .some(el=>el.dataset.tag==='Japanese cuisine'));
+ const diningPanel=await page.evaluate(()=>({
+  heading:document.querySelector('#rnSearchSuggestions .rnSuggestionHeading')?.textContent,
+  firstTag:document.querySelector('#rnSearchSuggestions .rnSuggestedTag')?.dataset.tag,
+  firstGroup:document.querySelector('#rnSearchSuggestions .rnSuggestionGroup h5')?.textContent,
+  count:document.querySelector('.rnSuggestedTag[data-tag="Japanese cuisine"] small')?.textContent,
+  shops:[...document.querySelectorAll('.rnSuggestedStores .rnSuggestedStore')].map(e=>e.textContent)
+ }));
+ assert.equal(diningPanel.heading,'Matching tags');
+ assert.equal(diningPanel.firstTag,'Japanese cuisine');
+ assert.match(diningPanel.count,/in this mall/);
+ assert.ok(diningPanel.firstGroup.startsWith('Japanese cuisine'));
+ assert.ok(await page.locator('.rnSuggestionGroup .rnSuggestedStore').filter({hasText:'Toku'}).count());
+ assert.ok(await page.locator('.rnSuggestionGroup .rnSuggestedStore').filter({hasText:'Norimoto'}).count());
+ assert.ok(await page.evaluate(()=>window.RetailNavUnits.getUnits()
+  .filter(u=>u.name==='Toku'||u.name==='Norimoto').every(u=>u.polygonId===null&&u.floor===null)));
+ await input.fill('JCPenney');
+ await input.press('Enter');
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='JCPenney');
+ state=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.deepEqual(state.visible,['LL','UL'],
+  'an official multi-level listing opens its documented levels without claiming a vector boundary');
+ await input.fill('Apple');
+ await input.press('Enter');
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Apple');
+ const appleSearch=await page.evaluate(()=>({
+  directory:window.RetailNavUnits.find('Apple').find(u=>u.source==='aventura-official-directory'),
+  vectors:window.RetailNavUnits.getMatchedVectors()
+ }));
+ assert.equal(appleSearch.directory.polygonId,null);
+ assert.ok(appleSearch.vectors.some(v=>v.floor==='LL'&&v.polygonId==='LL-002'),
+  'retain the separate map-labeled Apple anchor as provisional');
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  await page.waitForFunction(()=>document.documentElement.lang==='es-AR');
  assert.match(await input.getAttribute('placeholder'),/Buscar/);
@@ -180,8 +228,10 @@ try{
  await input.fill('reparar celular');
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='reparar celular');
- const repairs=await page.evaluate(()=>window.RetailNavUnits.find('reparar celular').map(u=>u.name));
- assert.deepEqual(repairs,['Apple']);
+ const repairs=await page.evaluate(()=>window.RetailNavUnits.find('reparar celular'));
+ assert.ok(repairs.some(u=>u.name==='Apple'&&u.source==='aventura-official-directory'));
+ assert.ok(repairs.some(u=>u.name==='Apple'&&u.code==='LL-002'),
+  'the old Apple map association remains separately marked as provisional');
  const unknown=await page.evaluate(()=>window.RetailNavUnits.getUnits().filter(u=>!u.name));
  assert.ok(unknown.length>100&&unknown.every(u=>u.conceptIds.length===0),
   'never invent product categories for unidentified photographed rooms');

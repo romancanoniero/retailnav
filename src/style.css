@@ -1053,18 +1053,26 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 /* Product-tag discovery uses only the current shopping's recorded tags.
  * Buttons remain keyboard-operable and never imply verified shop inventory. */
 .stage>.rnMapSearch .rnSearchSuggestions{
- display:grid;gap:3px;max-height:min(26dvh,205px);overflow-y:auto;
+ display:block;max-height:min(44dvh,390px);overflow-y:auto;
  margin:5px 0 0;padding:5px;border:1px solid var(--line);
  border-radius:12px;background:var(--rn-theme-surface,#11283b);
  color:var(--rn-theme-text,#edf5fa);box-shadow:0 8px 24px #0005;
 }
 .stage>.rnMapSearch .rnSearchSuggestions[hidden]{display:none!important}
+.rnSuggestionHeading{margin:4px 7px 5px;font-size:12px;letter-spacing:.02em;color:var(--rn-theme-muted,#a6c2d4)}
+.rnSuggestedTags{display:grid;gap:3px}
 .rnSuggestedTag{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
  gap:6px;width:100%;min-height:36px;padding:7px 11px;border:0;border-radius:9px;
  background:transparent;color:inherit;text-align:left;font-size:13px}
 .rnSuggestedTag:hover,.rnSuggestedTag:focus-visible{
  background:var(--rn-theme-border,#2b4b61);outline-offset:-2px}
 .rnSuggestedTag small{font-size:10px;color:var(--rn-theme-muted,#a6c2d4)}
+.rnSuggestionGroup{margin:7px 3px 0;padding:5px 3px 0;border-top:1px solid var(--rn-theme-border,#2b4b61)}
+.rnSuggestionGroup h5{margin:2px 5px 4px;font-size:11px;font-weight:700;color:var(--rn-theme-text,#edf5fa)}
+.rnSuggestedStores{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:2px}
+.rnSuggestedStore{min-width:0;padding:6px 8px;border:0;border-radius:7px;background:transparent;
+ color:var(--rn-theme-text,#edf5fa);text-align:left;font-size:11px;line-height:1.25;overflow-wrap:anywhere}
+.rnSuggestedStore:hover,.rnSuggestedStore:focus-visible{background:var(--rn-theme-border,#2b4b61);outline-offset:-2px}
 .rnSearchMarkers{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
 .rnSearchMarker{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;
  min-width:39px;min-height:28px;padding:5px 7px;border:2px solid #fff3af;
@@ -1087,7 +1095,7 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  box-shadow:0 0 0 8px #f2bf5833,0 2px 9px #40301d}
 .rnIndoorArrow[hidden]{display:none!important}
 @media(max-width:760px){
- .stage>.rnMapSearch .rnSearchSuggestions{max-height:min(24dvh,160px)}
+ .stage>.rnMapSearch .rnSearchSuggestions{max-height:min(42dvh,300px)}
  .rnSuggestedTag{min-height:34px;padding:5px 8px}
  .rnFloorReference{font-size:9px;max-width:100px;line-height:1.25}
  .rnSearchMarker{min-width:34px;min-height:25px;padding:4px 6px;font-size:10px}
@@ -1113,7 +1121,6 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 @media(max-height:530px) and (orientation:landscape){
  .rnMapSearch .searchbox .rnLanguageSelect{top:4px;height:31px;min-height:31px}
 }
-
 
 /* Hide the right-side map icon toolbar; touch gestures and keyboard controls remain available. */
 .hudright{display:none!important}

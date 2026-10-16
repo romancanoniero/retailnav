@@ -15,6 +15,7 @@ on:
       - "scripts/test-store-search-browser.mjs"
       - "data/store-products/**"
       - "data/store-concepts/**"
+      - "data/store-directory/**"
       - "data/search-taxonomy.json"
       - "src/search-i18n.js"
       - "src/poi-layer.js"
@@ -34,6 +35,7 @@ on:
       - "scripts/test-store-search-browser.mjs"
       - "data/store-products/**"
       - "data/store-concepts/**"
+      - "data/store-directory/**"
       - "data/search-taxonomy.json"
       - "src/search-i18n.js"
       - "src/poi-layer.js"
@@ -89,9 +91,14 @@ jobs:
                   key=(u["floor"],u["code"])
                   assert key not in ids,key
                   ids.add(key)
-                  assert u["storeId"]==slug+":"+u["floor"]+":"+u["code"]
+                  if u.get("source")=="aventura-official-directory":
+                      assert u["storeId"]==slug+":directory:"+u["code"].removeprefix("directory-")
+                      assert u["polygonId"] is None
+                      assert all(f in floors for f in u.get("documentedFloors",[]))
+                  else:
+                      assert u["storeId"]==slug+":"+u["floor"]+":"+u["code"]
+                      assert u["floor"] in floors
                   assert u["mallId"]==slug
-                  assert u["floor"] in floors
                   assert u["productsVerified"] is False
                   assert u["vectorVerified"] is False
                   if u.get("polygonId"):
@@ -111,9 +118,17 @@ jobs:
           assert travel[0]["productsVerified"] is False
           assert nwc["stats"]["total"]>380
           aventura=json.loads(Path("public/catalog/malls/aventura/stores.json").read_text())
-          assert aventura["stats"]["total"]>=100
-          assert any("JCPenney" in u.get("name","") for u in aventura["records"])
-          assert all(u.get("codeKind")=="map-vector-reference-not-lease-number" for u in aventura["records"])
+          vectors=[u for u in aventura["records"] if u.get("codeKind")=="map-vector-reference-not-lease-number"]
+          directory=[u for u in aventura["records"] if u.get("source")=="aventura-official-directory"]
+          assert len(vectors)==131
+          assert len(directory)==272
+          assert all(u.get("polygonId") is None for u in directory)
+          assert len([u for u in vectors if u.get("conceptIds")])==14
+          audit=json.loads(Path("data/store-directory/aventura-map-audit.json").read_text())
+          assert len(audit["vectorReferences"])==14
+          apple=next(a for a in audit["vectorReferences"] if a["vectorCode"]=="LL-002")
+          assert apple["officialLocationLabel"]=="Outdoor Courtyard"
+          assert apple["officialDocumentedFloors"]==[]
           assert malls["new-world-city-shanghai"]["defaultVisitorReference"]["entry"] is None
           print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
           PY

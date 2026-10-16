@@ -287,7 +287,7 @@ function applySearchFloors(query){
  const lang=window.RetailNavI18n;
  const ref=visitorFloorReference();
  if(ref)active=ref;
- searchFloorSet=new Set([ref,...matches.map(u=>u.floor),...services.map(p=>p.floor),
+ searchFloorSet=new Set([ref,...matches.flatMap(u=>u.documentedFloors?.length?u.documentedFloors:[u.floor]),...services.map(p=>p.floor),
   ...districts.map(d=>d.floor)].filter(id=>floors.some(f=>f.id===id)));
  // Frame the vertical range of the open shop floors without moving any
  // actual slabs, recalculating their height or altering escalator landings.
@@ -812,17 +812,18 @@ for(const district of districtMatches.slice(0,12)){
 const shopIds=q?window.RetailNavUnits?.find?.(q)||[]:[];
 for(const unit of shopIds){
   const b=document.createElement('button');b.className='result rnUnitResult';
-  const badge=document.createElement('span');badge.className='levelbadge';badge.textContent=unit.floor;
-  const info=document.createElement('span');info.textContent=unit.code+(unit.name?' · '+unit.name:'');
+  const badge=document.createElement('span');badge.className='levelbadge';badge.textContent=unit.floor||unit.documentedFloors?.join('/')||window.RetailNavI18n?.ui('floorUnknown')||'?';
+  const info=document.createElement('span');info.textContent=unit.nameStatus==='official-directory'?unit.name:(unit.code+(unit.name?' · '+unit.name:''));
   const note=document.createElement('span');note.className='small';
   const lang=window.RetailNavI18n;
   const related=(unit.conceptIds||[]).filter(id=>lang?.matchConcept(id,q));
   const concepts=related.length?related.map(id=>lang.label(id)).join(', '):lang?.summary(unit,5);
   note.textContent=[concepts||unit.category||lang?.ui('unknown')||'Categoría pendiente',
    (unit.conceptIds||[]).length?(lang?.ui('provisional')||'Clasificación provisional'):null,
+   unit.locationLabel?(lang?.ui('publishedLocation')||'Ubicación del directorio')+': '+unit.locationLabel:null,
    unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar')
   ].filter(Boolean).join(' · ');
-  b.title=[unit.code,unit.name,unit.category,unit.tags].filter(Boolean).join(' · ');
+  b.title=[unit.code,unit.name,unit.category,unit.locationLabel,unit.tags].filter(Boolean).join(' · ');
   info.append(note);b.append(badge,info);
   b.onclick=()=>window.RetailNavUnits?.focus?.(unit.code,unit.floor);
   host.append(b);
@@ -1527,19 +1528,37 @@ $('rnConnectorsToggle').onclick=()=>{
  host.replaceChildren();
  const options=window.RetailNavUnits?.suggestions?.(query,10)||[];
  host.hidden=!query||!options.length;
+ if(!query||!options.length)return;
+ const lang=window.RetailNavI18n;
+ const title=document.createElement('h4');title.className='rnSuggestionHeading';
+ title.textContent=lang?.ui('tagsFound')||'Matching tags';host.append(title);
+ const tagList=document.createElement('div');tagList.className='rnSuggestedTags';
  for(const option of options){
   const b=document.createElement('button');
-  b.type='button';b.className='rnSuggestedTag';b.setAttribute('role','option');
+  b.type='button';b.className='rnSuggestedTag';
   b.dataset.tag=option.term;
   const label=document.createElement('span');label.textContent=option.term;
   const count=document.createElement('small');
-  const lang=window.RetailNavI18n;
-  count.textContent=option.count+' '+(lang?.ui('stores')||'locales')+' · '+
-   (option.verified?(lang?.ui('reviewed')||'algunas etiquetas revisadas'):
-    (lang?.ui('provisional')||'etiqueta provisional'));
+  count.textContent=option.count+' '+(lang?.ui('stores')||'stores')+' '+(lang?.ui('inMall')||'in this mall');
   b.append(label,count);
   b.addEventListener('click',event=>{event.preventDefault();confirmSearch(option.term);});
-  host.append(b);
+  tagList.append(b);
+ }
+ host.append(tagList);
+ for(const option of options){
+  const group=document.createElement('section');group.className='rnSuggestionGroup';
+  const heading=document.createElement('h5');heading.textContent=option.term+' · '+
+   (lang?.ui('storesWithTag')||'Stores with this tag');group.append(heading);
+  const list=document.createElement('div');list.className='rnSuggestedStores';
+  for(const store of option.stores||[]){
+   const b=document.createElement('button');b.type='button';b.className='rnSuggestedStore';
+   b.dataset.storeId=store.storeId;b.textContent=store.name;
+   b.addEventListener('click',event=>{
+    event.preventDefault();window.RetailNavUnits?.focusStore?.(store.storeId);
+   });
+   list.append(b);
+  }
+  group.append(list);host.append(group);
  }
 };
 const confirmSearch=value=>{

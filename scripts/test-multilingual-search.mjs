@@ -7,6 +7,7 @@ const readJSON=path=>JSON.parse(readFileSync(path,'utf8'));
 const taxonomy=readJSON('data/search-taxonomy.json');
 const aventura=readJSON('public/catalog/malls/aventura/stores.json');
 const shanghai=readJSON('public/catalog/malls/new-world-city-shanghai/stores.json');
+const aventuraMapAudit=readJSON('data/store-directory/aventura-map-audit.json');
 const langScript=readFileSync('src/search-i18n.js','utf8');
 const unitScript=readFileSync('src/units.js','utf8');
 
@@ -45,9 +46,11 @@ function setup(mallId,records,deviceLanguages=['es-AR','en-US']){
 test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
  assert.equal(aventura.mallId,'aventura');
  assert.ok(aventura.records.length>=100);
- const linked=aventura.records.filter(u=>u.conceptIds?.length);
+ const vectorRecords=aventura.records.filter(u=>u.codeKind==='map-vector-reference-not-lease-number');
+ const linked=vectorRecords.filter(u=>u.conceptIds?.length);
+ assert.equal(vectorRecords.length,131);
  assert.equal(linked.length,14);
- for(const unit of aventura.records){
+ for(const unit of vectorRecords){
   assert.ok(unit.storeId.startsWith('aventura:'));
   if(unit.conceptIds?.length){
    assert.ok(unit.name);
@@ -59,6 +62,39 @@ test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
    assert.equal(unit.conceptIds.length,0);
   }
  }
+ const directory=aventura.records.filter(u=>u.source==='aventura-official-directory');
+ assert.equal(directory.length,338);
+ assert.equal(directory.filter(u=>u.directorySection==='shops').length,270);
+ assert.equal(directory.filter(u=>u.directorySection==='dining').length,68);
+ assert.ok(directory.every(u=>u.polygonId===null));
+ const auntie=directory.find(u=>u.name==='Auntie Anne’s');
+ assert.equal(auntie.floor,null);
+ assert.deepEqual(auntie.documentedFloors,['LL','UL']);
+ assert.match(auntie.locationLabel,/Upper Level.*Lower Level/);
+ assert.ok(directory.every(u=>u.storeId.startsWith('aventura:directory:')));
+ assert.equal(new Set(directory.map(u=>u.storeId)).size,directory.length);
+ assert.equal(directory.filter(u=>u.officialDescription).length,316);
+ assert.ok(!directory.some(u=>['Bubbice','Cha Cha Matcha'].includes(u.name)),
+  'officially announced Coming Soon concepts must not be searchable as open dining venues');
+ assert.ok(directory.every(u=>u.conceptsVerified===false&&u.productsVerified===false));
+ assert.ok(directory.some(u=>u.floor===null&&u.locationLabel==='Outdoor Courtyard'));
+ const jcpenney=directory.find(u=>u.name==='JCPenney');
+ assert.deepEqual(jcpenney.documentedFloors,['LL','UL']);
+ assert.equal(jcpenney.floor,null);
+ assert.ok(jcpenney.conceptIds.includes('service.optical'));
+ const apple=directory.find(u=>u.name==='Apple');
+ assert.equal(apple.floor,null);
+ assert.equal(apple.polygonId,null);
+ assert.equal(apple.locationLabel,'Outdoor Courtyard');
+ assert.ok(apple.conceptIds.includes('product.smartphone'));
+ assert.equal(directory.find(u=>u.name==='Nike')?.floor,null);
+ assert.deepEqual(aventuraMapAudit.vectorReferences.length,14);
+ assert.ok(aventuraMapAudit.vectorReferences.every(r=>r.nameCrossCheck==='official-name-found'));
+ assert.ok(aventuraMapAudit.vectorReferences.every(r=>r.geometryStatus==='provisional-photo-region-not-verified-as-this-storefront'));
+ const appleAudit=aventuraMapAudit.vectorReferences.find(r=>r.vectorCode==='LL-002');
+ assert.equal(appleAudit.floorCrossCheck,'official-location-does-not-name-map-floor');
+ assert.deepEqual(appleAudit.officialDocumentedFloors,[]);
+ assert.equal(appleAudit.officialMapLocationId,'20946');
 });
 
 test('Device locale, user override, reset, and fallback leave semantic IDs stable',()=>{
@@ -92,18 +128,51 @@ test('Device locale, user override, reset, and fallback leave semantic IDs stabl
 test('Names, brands, products, services, natural phrases and localized autocomplete',()=>{
  const app=setup('aventura',aventura.records,['en-US']);
  const apple=app.units.find('Apple');
- assert.equal(apple.length,1);
- assert.equal(apple[0].name,'Apple');
- assert.deepEqual(app.units.find('reparar celular').map(u=>u.storeId),apple.map(u=>u.storeId));
- assert.deepEqual(app.units.find('where can I buy an iPhone').map(u=>u.storeId),apple.map(u=>u.storeId));
- assert.deepEqual(app.units.find('smartphones').map(u=>u.storeId),apple.map(u=>u.storeId));
+ assert.ok(apple.some(u=>u.name==='Apple'&&u.source==='aventura-official-directory'));
+ assert.ok(apple.some(u=>u.name==='Apple'&&u.code==='LL-002')); // preserve the named, provisional map association
+ const appleDirectory=apple.find(u=>u.source==='aventura-official-directory');
+ assert.equal(appleDirectory.polygonId,null);
+ assert.ok(app.units.find('where can I buy an iPhone').some(u=>u.storeId===appleDirectory.storeId));
+ assert.ok(app.units.find('smartphones').some(u=>u.storeId===appleDirectory.storeId));
+ assert.ok(app.units.find('智能手机').some(u=>u.storeId===appleDirectory.storeId));
+ assert.ok(app.units.find('reparar celular').some(u=>u.storeId===appleDirectory.storeId));
+ assert.ok(app.units.find('phone repair').some(u=>u.storeId===appleDirectory.storeId));
+ assert.ok(app.units.find('手机维修').some(u=>u.storeId===appleDirectory.storeId));
+ const optical=app.units.find('optical');
+ assert.ok(optical.some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
+ assert.ok(app.units.find('óptica').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
+ assert.ok(app.units.find('视力检查').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
+ assert.ok(app.units.find('olive oil').some(u=>u.name==='Eataly'));
+ assert.ok(app.units.find('groceries').some(u=>u.name==='Eataly'));
+ assert.ok(app.units.find('食品').some(u=>u.name==='Eataly'));
+ assert.ok(app.units.find('Italian cuisine').some(u=>u.name==='Eataly'));
+ assert.ok(app.units.find('cocina italiana').some(u=>u.name==='Eataly'));
+ const cooking=app.units.suggestions('Cocina');
+ assert.ok(cooking.some(o=>o.conceptId==='cuisine.italian'&&o.term==='Italian cuisine'),
+  'generic cuisine searches must show localized cuisine tags during incremental search');
+ assert.ok(cooking.find(o=>o.conceptId==='cuisine.italian').stores.some(s=>s.name==='Eataly'));
+ assert.ok(app.units.find('Cocina').some(u=>u.name==='Eataly'),
+  'generic cuisine searches must find mall dining listings');
+ assert.ok(app.units.find('日本料理').some(u=>u.name==='Toku'||u.name==='Norimoto'));
+ assert.ok(app.units.find('steak').some(u=>u.name==='STK Steakhouse'));
+ assert.ok(app.units.find('helado').some(u=>u.name==='Sakura'||u.name==='Venchi'));
+ assert.ok(app.units.find('restaurantes').some(u=>u.name==='Jacinta'));
+ assert.ok(app.units.find('clothing').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
+ assert.ok(app.units.find('服装').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
  assert.ok(app.units.find('sneakers').length>=4);
  assert.ok(app.units.find('quiero comprar valijas').length>=4);
  assert.ok(app.units.find('something utterly unrelated').length===0);
  assert.ok(app.units.find('LL-002').some(u=>u.name==='Apple'));
  let options=app.units.suggestions('lugg');
  assert.ok(options.some(o=>o.conceptId==='product.luggage'&&o.term==='luggage'));
+ options=app.units.suggestions('restaurant');
+ const restaurants=options.find(o=>o.conceptId==='category.restaurant');
+ assert.ok(restaurants);
+ assert.ok(restaurants.count>=60);
+ assert.ok(restaurants.stores.some(s=>s.name==='CVI.CHE 105'));
+ assert.equal(new Set(restaurants.stores.map(s=>s.storeId)).size,restaurants.count);
  app.i18n.setLocale('es-AR');
+ assert.ok(app.units.suggestions('Cocina').some(o=>o.conceptId==='cuisine.italian'&&o.term==='cocina italiana'));
  options=app.units.suggestions('lugg');
  assert.ok(options.some(o=>o.conceptId==='product.luggage'&&o.term==='valijas'));
  assert.equal(app.units.getState().language,'es-AR');
@@ -115,4 +184,6 @@ test('Photographed Shanghai product terms and legacy autocomplete remain support
  assert.ok(app.units.suggestions('equi').some(o=>o.term==='equipaje'));
  assert.ok(app.units.find('ropa').length>4);
  assert.equal(app.units.getState().withConcepts,0);
+ assert.deepEqual(app.units.find('Apple'),[],'Aventura directory concepts and brands must not cross mall boundaries');
+ assert.deepEqual(app.units.find('optical'),[],'Aventura services must remain tenant-isolated');
 });

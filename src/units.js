@@ -17,12 +17,14 @@ let committedQuery='';
 const normalized=text=>String(text||'').trim().normalize('NFD')
  .replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const storeKey=u=>u.storeId||(mall.id+':'+u.floor+':'+u.code);
+const suggestionKey=u=>u.name?normalized(u.name):storeKey(u);
 const buttons=new Map();
 function find(query){
  const text=normalized(query);
  if(!text)return[];
  return units.filter(u=>{
-  const legacy=[u.code,u.name,u.aliases,u.category,u.tags,...(u.productTerms||[])]
+  const legacy=[u.code,u.name,u.aliases,u.category,u.tags,u.locationLabel,
+   u.officialDescription,...(u.productTerms||[]),...(u.serviceTerms||[])]
    .filter(Boolean).join(' ');
   return normalized(legacy).includes(text)||
    Boolean(i18n?.termsMatch(legacy,query))||
@@ -39,11 +41,12 @@ function tagVocabulary(){
   for(const raw of terms){
    const label=raw.trim(),id=normalized(label);
    if(!id||id.length<2)continue;
-   const item=known.get(id)||{label,count:0,verified:0};
-   item.count++;item.verified+=Number(Boolean(u.productsVerified));
+   const item=known.get(id)||{label,members:new Map(),verified:0};
+   item.members.set(suggestionKey(u),u);item.verified+=Number(Boolean(u.productsVerified));
    known.set(id,item);
   }
  }
+ for(const item of known.values())item.count=item.members.size;
  return known;
 }
 const tags=tagVocabulary();
@@ -56,7 +59,8 @@ function suggestions(query,limit=8){
   .filter(([key])=>key.includes(q))
   .sort((a,b)=>Number(b[0].startsWith(q))-Number(a[0].startsWith(q))||
    b[1].count-a[1].count||a[1].label.localeCompare(b[1].label))
-  .map(([key,data])=>({key,term:data.label,count:data.count,verified:data.verified}));
+  .map(([key,data])=>({key,term:data.label,count:data.count,verified:data.verified,
+   stores:[...data.members.values()].map(u=>({storeId:storeKey(u),name:u.name||u.code,code:u.code,floor:u.floor}))}));
  const semantic=i18n?.searchSuggestions(query,units,20)||[];
  const unique=new Map();
  for(const entry of [...legacy,...semantic]){
@@ -92,7 +96,7 @@ function focus(code,floor){
  const u=units.find(x=>x.code===code&&(floor===undefined||x.floor===floor));
  if(!u)return false;
  selected=storeKey(u);
- title.textContent=(u.name?u.name+' · ':'')+u.code;
+ title.textContent=u.nameStatus==='official-directory'?u.name:(u.name?u.name+' · ':'')+u.code;
  const activity=u.conceptIds?.length
   ?' · '+(i18n?.ui('category')||'Tipo de local')+': '+i18n.summary(u,8)
   :(u.category?' · '+u.category:'');
@@ -102,6 +106,7 @@ function focus(code,floor){
   :Number.isFinite(u.x)&&Number.isFinite(u.y)
    ?'Código de directorio con ubicación aproximada del texto, sin pared atribuida.'
    :'Comercio identificado en el directorio; ubicación exacta sin verificar.')+
+   (u.locationLabel?' Ubicación publicada: '+u.locationLabel+'.':'')+
    activity+(u.tags?' · Etiquetas del directorio: '+u.tags.replaceAll(',',', '):'')+
    (u.productTerms?.length?' · '+(i18n?.ui('products')||'Productos asociados')+': '+u.productTerms.join(', '):'')+
    '. '+(i18n?.ui('mapWarning')||'La presencia comercial puede cambiar.');
@@ -120,9 +125,13 @@ function focus(code,floor){
  detail.hidden=false;
  if(Number.isFinite(u.x)&&Number.isFinite(u.y))
    window.__RETAILNAV__?.focusAt?.(u.floor,[u.x,u.y],67);
- else window.__RETAILNAV__?.setFloor?.(u.floor);
+ else if(u.floor)window.__RETAILNAV__?.setFloor?.(u.floor);
  window.__RETAILNAV__?.invalidate?.();
  return true;
+}
+function focusStore(storeId){
+ const u=units.find(x=>storeKey(x)===storeId);
+ return u?focus(u.code,u.floor):false;
 }
 function paint(){
  if(!host)return;
@@ -171,7 +180,7 @@ function paint(){
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,find,suggestions,setQuery,clearQuery,
+window.RetailNavUnits={draw:paint,focus,focusStore,find,suggestions,setQuery,clearQuery,
  getHighlightedCodes,getHighlightedStoreIds:()=>searchHighlights.slice(),
  getMatchedVectors,
  getUnits:()=>units.slice(),getState:()=>({

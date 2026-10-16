@@ -15,35 +15,90 @@ SCHEMA = "retailnav.mall.stores.v1"
 EVIDENCE = {"photo-store-name-unverified", "mall-reviewed-products"}
 
 
-def aventura_vector_references(mall):
+def aventura_vector_references(mall, repo):
     """Publish already identified Aventura units/anchors with VECTOR IDs only.
 
     The input photographs have no verified lease/store numbers. A vector
     reference such as LL-008 must NEVER be misrepresented as a tenant code.
     This is deliberately not an inventory of operating businesses.
     """
-    if mall.get("id") != "aventura" or mall.get("units"):
+    if mall.get("id") != "aventura":
         return
-    units = []
-    for fid, _name, _source, features, _walk in mall["floors"]:
-        for record in features:
-            identifier, kind, label = record[0], record[1], record[2]
-            if kind not in (0, 1):
+    units = list(mall.get("units", []))
+    if not units:
+        for fid, _name, _source, features, _walk in mall["floors"]:
+            for record in features:
+                identifier, kind, label = record[0], record[1], record[2]
+                if kind not in (0, 1):
+                    continue
+                coordinates = record[6]
+                named = (kind == 0 and bool(label) and
+                         label not in ("Ancla sin identificar",))
+                units.append({
+                    "floor": fid, "code": identifier,
+                    "codeKind": "map-vector-reference-not-lease-number",
+                    "name": label if named else "",
+                    "category": "ancla indicada en plano" if kind == 0 else "local sin identificar",
+                    "aliases": "", "tags": "",
+                    "polygonId": identifier,
+                    "x": coordinates[0], "y": coordinates[1],
+                    "source": "original-aventura-mall-photographed-guide",
+                    "nameStatus": "photo-named-not-tenant-verified" if named else "unidentified",
+                    "positionStatus": "vector-centroid-photo-provisional-not-entrance"
+                })
+    # Directory merchants are real, searchable businesses with no assumed
+    # match to one of the photographed regions. Keep them as independent rows.
+    units = [u for u in units if u.get("source") != "aventura-official-directory"]
+    directory_file = repo / "data" / "store-directory" / "aventura.json"
+    if directory_file.exists():
+        directory = json.loads(directory_file.read_text(encoding="utf-8"))
+        if directory.get("schema") != "retailnav.store-directory.v1" or directory.get("mallId") != "aventura":
+            raise ValueError("aventura: invalid official directory namespace")
+        seen_slugs = set()
+        map_floors = {f[0] for f in mall["floors"]}
+        for item in directory.get("stores", []):
+            if item.get("recordStatus") == "announced-coming-soon":
                 continue
-            coordinates = record[6]
-            named = (kind == 0 and bool(label) and
-                     label not in ("Ancla sin identificar",))
+            slug = item.get("slug")
+            if (not isinstance(slug, str) or not slug.strip() or slug in seen_slugs or
+                    not isinstance(item.get("name"), str) or not item["name"].strip() or
+                    not str(item.get("source", "")).startswith("https://aventuramall.com/")):
+                raise ValueError("aventura: invalid or duplicate official directory store")
+            seen_slugs.add(slug)
+            if item.get("floor") is not None and item["floor"] not in map_floors:
+                raise ValueError(f"aventura: official directory floor is not in this mall map: {slug}")
+            documented_floors = item.get("documentedFloors", [])
+            if not isinstance(documented_floors, list) or any(f not in map_floors for f in documented_floors):
+                raise ValueError(f"aventura: invalid documented floor set for {slug}")
+            if item.get("polygonId") is not None:
+                raise ValueError(f"aventura: directory record cannot claim a vector link: {slug}")
             units.append({
-                "floor": fid, "code": identifier,
-                "codeKind": "map-vector-reference-not-lease-number",
-                "name": label if named else "",
-                "category": "ancla indicada en plano" if kind == 0 else "local sin identificar",
-                "aliases": "", "tags": "",
-                "polygonId": identifier,
-                "x": coordinates[0], "y": coordinates[1],
-                "source": "original-aventura-mall-photographed-guide",
-                "nameStatus": "photo-named-not-tenant-verified" if named else "unidentified",
-                "positionStatus": "vector-centroid-photo-provisional-not-entrance"
+                "floor": item.get("floor"),
+                "documentedFloors": documented_floors,
+                "floorStatus": item.get("floorStatus", "unknown"),
+                "locationLabel": item.get("locationLabel"),
+                "code": "directory-" + item["slug"],
+                "codeKind": "official-directory-slug-not-lease-number",
+                "name": item["name"],
+                "nameStatus": "official-directory",
+                "category": "",
+                "aliases": item.get("aliases", ""),
+                "tags": "",
+                "polygonId": None,
+                "x": None,
+                "y": None,
+                "conceptIds": item.get("conceptIds", []),
+                "conceptEvidence": item.get("conceptEvidence", "official-name-only"),
+                "conceptSource": item.get("diningSource") or item.get("source", "https://aventuramall.com/shops/"),
+                "conceptsVerified": False,
+                "productsVerified": False,
+                "productTerms": item.get("productTerms", []),
+                "serviceTerms": item.get("serviceTerms", []),
+                "officialDescription": item.get("description", ""),
+                "officialMapLocationId": item.get("officialMapLocationId"),
+                "directorySection": item.get("directorySection", "dining" if item.get("recordStatus") == "listed-on-official-dining-directory" else "shops"),
+                "diningSource": item.get("diningSource"),
+                "source": "aventura-official-directory",
             })
     mall["units"] = units
 
@@ -96,7 +151,7 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     for original in mall.get("units", []):
         u = dict(original)
         floor, code = u.get("floor"), u.get("code")
-        if not isinstance(floor, str) or floor not in floors or not isinstance(code, str) or not code.strip():
+        if (floor is not None and (not isinstance(floor, str) or floor not in floors)) or not isinstance(code, str) or not code.strip():
             raise ValueError(f"{mall_id}: unidentifiable shop row")
         key = (floor, code)
         if key in seen:
@@ -107,7 +162,7 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
         # Only an existing polygon on that SAME floor can be referenced. A
         # multi-store merged photo-colour region is not a verified storefront.
         if identifier is not None:
-            if identifier not in floors[floor]:
+            if floor is None or identifier not in floors[floor]:
                 u["candidatePolygonId"] = identifier
                 identifier = None
                 relation = "missing-vector-requires-review"
@@ -116,7 +171,10 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             else:
                 relation = "one-photo-region-unverified"
         u["mallId"] = mall_id
-        u["storeId"] = f"{mall_id}:{floor}:{code}"
+        u["storeId"] = (f"{mall_id}:directory:{code.removeprefix('directory-')}"
+                         if u.get("source") == "aventura-official-directory"
+                         else f"{mall_id}:{floor}:{code}" if floor is not None
+                         else f"{mall_id}:directory:{code.removeprefix('directory-')}")
         u["polygonId"] = identifier
         u["vectorRelation"] = relation
         u["vectorVerified"] = False
@@ -127,16 +185,24 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             u["productSource"] = hint["source"]
             u["productsVerified"] = hint["evidence"] == "mall-reviewed-products"
         else:
-            u["productTerms"] = []
+            u["productTerms"] = list(u.get("productTerms", [])) if u.get("source") == "aventura-official-directory" else []
             u["productsVerified"] = False
+            if u["productTerms"]:
+                u["productEvidence"] = "official-description-not-current-inventory"
         concept_annotation = concepts.get((floor, code))
-        u["conceptIds"] = []
+        declared_concepts = list(u.get("conceptIds", [])) if u.get("source") == "aventura-official-directory" else []
+        if len(set(declared_concepts)) != len(declared_concepts) or any(cid not in allowed for cid in declared_concepts):
+            raise ValueError(f"{mall_id}: unknown or duplicate directory concept ID {key}")
+        u["conceptIds"] = declared_concepts
         if concept_annotation:
             if not u.get("name") or u.get("name") != concept_annotation["expectedMapName"] or not identifier:
                 raise ValueError(f"{mall_id}: concept tags require the exact named anchor and source vector {key}")
             u["conceptIds"] = concept_annotation["conceptIds"]
             u["conceptEvidence"] = concept_annotation["evidence"]
             u["conceptSource"] = concept_annotation["source"]
+            u["conceptsVerified"] = False
+        if declared_concepts:
+            u["conceptEvidence"] = u.get("conceptEvidence") or "official-directory-description"
             u["conceptsVerified"] = False
         records.append(u)
     missing_concepts = set(concepts) - seen
@@ -156,14 +222,16 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             "sharedVectors": sum(r["vectorRelation"] == "shared-vector-unverified" for r in records),
             "withoutVector": sum(not r["polygonId"] for r in records),
             "withProductEvidence": sum(bool(r["productTerms"]) for r in records),
-            "withConceptSuggestions": sum(bool(r["conceptIds"]) for r in records)
+            "withConceptSuggestions": sum(bool(r["conceptIds"]) for r in records),
+            "withOfficialDescriptions": sum(bool(r.get("officialDescription")) for r in records),
+            "withUnknownFloor": sum(r.get("floor") is None for r in records)
         }
     }
     return document
 
 
 def publish_table(repo: Path, mall_id: str, mall: dict) -> dict:
-    aventura_vector_references(mall)
+    aventura_vector_references(mall, repo)
     doc = build_table(repo, mall_id, mall)
     raw = (json.dumps(doc, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf8")
     relative = "catalog/malls/" + mall_id + "/stores.json"

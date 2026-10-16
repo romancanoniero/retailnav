@@ -416,26 +416,36 @@
           "device support",
           "phone assistance",
           "phone repair",
-          "support appointments"
+          "cell phone repairs",
+          "device repairs",
+          "setup assistance"
         ],
         "es": [
           "soporte técnico",
-          "asistencia técnica",
+          "asistencia para dispositivos",
+          "reparaciones",
           "reparar celular",
-          "reparación de teléfono",
-          "ayuda con el celular"
+          "reparación de celular",
+          "arreglar teléfono",
+          "reparación de dispositivos"
         ],
         "pt": [
           "suporte técnico",
-          "conserto de celular"
+          "assistência técnica",
+          "conserto de celular",
+          "reparo de telefone"
         ],
         "zh": [
           "技术支持",
-          "手机维修"
+          "设备维修",
+          "手机维修",
+          "手机修理"
         ],
         "fr": [
           "assistance technique",
-          "réparation téléphone"
+          "réparation",
+          "réparation de téléphone",
+          "réparation mobile"
         ]
       }
     },
@@ -597,6 +607,1959 @@
         "fr": [
           "escaliers mécaniques",
           "escalator"
+        ]
+      }
+    },
+    "category.jewelry": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "jewelry",
+          "jewellery",
+          "jewelry stores"
+        ],
+        "es": [
+          "joyería",
+          "joyas"
+        ],
+        "pt": [
+          "joalheria",
+          "joias"
+        ],
+        "zh": [
+          "珠宝",
+          "首饰"
+        ],
+        "fr": [
+          "bijouterie",
+          "joaillerie"
+        ]
+      }
+    },
+    "category.food": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "food",
+          "food shops",
+          "specialty food"
+        ],
+        "es": [
+          "alimentos",
+          "comida",
+          "productos gourmet"
+        ],
+        "pt": [
+          "alimentos",
+          "comida"
+        ],
+        "zh": [
+          "食品",
+          "美食"
+        ],
+        "fr": [
+          "alimentation",
+          "produits alimentaires"
+        ]
+      }
+    },
+    "category.restaurant": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "restaurants",
+          "restaurant",
+          "dining"
+        ],
+        "es": [
+          "restaurantes",
+          "comida"
+        ],
+        "pt": [
+          "restaurantes",
+          "refeições"
+        ],
+        "zh": [
+          "餐厅",
+          "用餐"
+        ],
+        "fr": [
+          "restaurants",
+          "restauration"
+        ]
+      }
+    },
+    "category.sports": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "sports",
+          "sporting goods",
+          "athletic wear"
+        ],
+        "es": [
+          "deportes",
+          "artículos deportivos",
+          "ropa deportiva"
+        ],
+        "pt": [
+          "esportes",
+          "artigos esportivos"
+        ],
+        "zh": [
+          "运动",
+          "体育用品"
+        ],
+        "fr": [
+          "sport",
+          "articles de sport"
+        ]
+      }
+    },
+    "category.home": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "home furnishings",
+          "home goods",
+          "housewares"
+        ],
+        "es": [
+          "hogar",
+          "artículos para el hogar"
+        ],
+        "pt": [
+          "casa",
+          "artigos para casa"
+        ],
+        "zh": [
+          "家居用品"
+        ],
+        "fr": [
+          "maison",
+          "ameublement"
+        ]
+      }
+    },
+    "category.books": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "books",
+          "bookstore"
+        ],
+        "es": [
+          "libros",
+          "librería"
+        ],
+        "pt": [
+          "livros",
+          "livraria"
+        ],
+        "zh": [
+          "书籍",
+          "书店"
+        ],
+        "fr": [
+          "livres",
+          "librairie"
+        ]
+      }
+    },
+    "category.toys": {
+      "kind": "category",
+      "labels": {
+        "en": [
+          "toys",
+          "toy store"
+        ],
+        "es": [
+          "juguetes",
+          "juguetería"
+        ],
+        "pt": [
+          "brinquedos"
+        ],
+        "zh": [
+          "玩具"
+        ],
+        "fr": [
+          "jouets",
+          "magasin de jouets"
+        ]
+      }
+    },
+    "product.jewelry": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "jewelry",
+          "jewellery",
+          "watches"
+        ],
+        "es": [
+          "joyas",
+          "relojes"
+        ],
+        "pt": [
+          "joias",
+          "relógios"
+        ],
+        "zh": [
+          "珠宝",
+          "手表"
+        ],
+        "fr": [
+          "bijoux",
+          "montres"
+        ]
+      }
+    },
+    "product.food": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "food",
+          "snacks",
+          "groceries"
+        ],
+        "es": [
+          "alimentos",
+          "comida",
+          "golosinas"
+        ],
+        "pt": [
+          "alimentos",
+          "comida"
+        ],
+        "zh": [
+          "食品",
+          "零食"
+        ],
+        "fr": [
+          "aliments",
+          "épicerie"
+        ]
+      }
+    },
+    "product.eyewear": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "eyeglasses",
+          "eyewear",
+          "sunglasses"
+        ],
+        "es": [
+          "anteojos",
+          "gafas",
+          "lentes de sol"
+        ],
+        "pt": [
+          "óculos",
+          "óculos de sol"
+        ],
+        "zh": [
+          "眼镜",
+          "太阳镜"
+        ],
+        "fr": [
+          "lunettes",
+          "lunettes de soleil"
+        ]
+      }
+    },
+    "product.sportswear": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "sportswear",
+          "athletic apparel",
+          "activewear"
+        ],
+        "es": [
+          "ropa deportiva",
+          "indumentaria deportiva"
+        ],
+        "pt": [
+          "roupas esportivas"
+        ],
+        "zh": [
+          "运动服"
+        ],
+        "fr": [
+          "vêtements de sport"
+        ]
+      }
+    },
+    "product.furniture": {
+      "kind": "product",
+      "labels": {
+        "en": [
+          "furniture",
+          "home furnishings"
+        ],
+        "es": [
+          "muebles",
+          "mobiliario"
+        ],
+        "pt": [
+          "móveis"
+        ],
+        "zh": [
+          "家具"
+        ],
+        "fr": [
+          "meubles",
+          "mobilier"
+        ]
+      }
+    },
+    "service.hair-salon": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "hair salon",
+          "hair styling",
+          "haircut"
+        ],
+        "es": [
+          "peluquería",
+          "salón de peluquería",
+          "corte de pelo"
+        ],
+        "pt": [
+          "salão de beleza",
+          "cabeleireiro"
+        ],
+        "zh": [
+          "美发沙龙",
+          "理发"
+        ],
+        "fr": [
+          "salon de coiffure",
+          "coiffure"
+        ]
+      }
+    },
+    "service.optical": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "optical services",
+          "eye exams",
+          "optician"
+        ],
+        "es": [
+          "óptica",
+          "servicios ópticos",
+          "examen de la vista"
+        ],
+        "pt": [
+          "ótica",
+          "exame de vista"
+        ],
+        "zh": [
+          "眼镜服务",
+          "视力检查"
+        ],
+        "fr": [
+          "optique",
+          "examen de la vue"
+        ]
+      }
+    },
+    "service.portrait-studio": {
+      "kind": "service",
+      "labels": {
+        "en": [
+          "portrait studio",
+          "portrait photography"
+        ],
+        "es": [
+          "estudio de retratos",
+          "fotografía de retrato"
+        ],
+        "pt": [
+          "estúdio de retratos"
+        ],
+        "zh": [
+          "肖像摄影"
+        ],
+        "fr": [
+          "studio de portrait"
+        ]
+      }
+    },
+    "cuisine.italian": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Italian cuisine"
+        ],
+        "es": [
+          "cocina italiana"
+        ],
+        "es-AR": [
+          "cocina italiana"
+        ],
+        "pt": [
+          "culinária italiana"
+        ],
+        "pt-BR": [
+          "culinária italiana"
+        ],
+        "zh": [
+          "意大利菜"
+        ],
+        "zh-CN": [
+          "意大利菜"
+        ],
+        "fr": [
+          "cuisine italienne"
+        ]
+      }
+    },
+    "cuisine.japanese": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Japanese cuisine"
+        ],
+        "es": [
+          "cocina japonesa"
+        ],
+        "es-AR": [
+          "cocina japonesa"
+        ],
+        "pt": [
+          "culinária japonesa"
+        ],
+        "pt-BR": [
+          "culinária japonesa"
+        ],
+        "zh": [
+          "日本料理"
+        ],
+        "zh-CN": [
+          "日本料理"
+        ],
+        "fr": [
+          "cuisine japonaise"
+        ]
+      }
+    },
+    "cuisine.chinese": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Chinese cuisine"
+        ],
+        "es": [
+          "cocina china"
+        ],
+        "es-AR": [
+          "cocina china"
+        ],
+        "pt": [
+          "culinária chinesa"
+        ],
+        "pt-BR": [
+          "culinária chinesa"
+        ],
+        "zh": [
+          "中国菜"
+        ],
+        "zh-CN": [
+          "中国菜"
+        ],
+        "fr": [
+          "cuisine chinoise"
+        ]
+      }
+    },
+    "cuisine.thai": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Thai cuisine"
+        ],
+        "es": [
+          "cocina tailandesa"
+        ],
+        "es-AR": [
+          "cocina tailandesa"
+        ],
+        "pt": [
+          "culinária tailandesa"
+        ],
+        "pt-BR": [
+          "culinária tailandesa"
+        ],
+        "zh": [
+          "泰国菜"
+        ],
+        "zh-CN": [
+          "泰国菜"
+        ],
+        "fr": [
+          "cuisine thaïlandaise"
+        ]
+      }
+    },
+    "cuisine.mediterranean": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Mediterranean cuisine"
+        ],
+        "es": [
+          "cocina mediterránea"
+        ],
+        "es-AR": [
+          "cocina mediterránea"
+        ],
+        "pt": [
+          "culinária mediterrânea"
+        ],
+        "pt-BR": [
+          "culinária mediterrânea"
+        ],
+        "zh": [
+          "地中海菜"
+        ],
+        "zh-CN": [
+          "地中海菜"
+        ],
+        "fr": [
+          "cuisine méditerranéenne"
+        ]
+      }
+    },
+    "cuisine.israeli": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Israeli cuisine"
+        ],
+        "es": [
+          "cocina israelí"
+        ],
+        "es-AR": [
+          "cocina israelí"
+        ],
+        "pt": [
+          "culinária israelense"
+        ],
+        "pt-BR": [
+          "culinária israelense"
+        ],
+        "zh": [
+          "以色列菜"
+        ],
+        "zh-CN": [
+          "以色列菜"
+        ],
+        "fr": [
+          "cuisine israélienne"
+        ]
+      }
+    },
+    "cuisine.peruvian": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Peruvian cuisine"
+        ],
+        "es": [
+          "cocina peruana"
+        ],
+        "es-AR": [
+          "cocina peruana"
+        ],
+        "pt": [
+          "culinária peruana"
+        ],
+        "pt-BR": [
+          "culinária peruana"
+        ],
+        "zh": [
+          "秘鲁菜"
+        ],
+        "zh-CN": [
+          "秘鲁菜"
+        ],
+        "fr": [
+          "cuisine péruvienne"
+        ]
+      }
+    },
+    "cuisine.american": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "American cuisine"
+        ],
+        "es": [
+          "cocina estadounidense"
+        ],
+        "es-AR": [
+          "cocina estadounidense"
+        ],
+        "pt": [
+          "culinária americana"
+        ],
+        "pt-BR": [
+          "culinária americana"
+        ],
+        "zh": [
+          "美式料理"
+        ],
+        "zh-CN": [
+          "美式料理"
+        ],
+        "fr": [
+          "cuisine américaine"
+        ]
+      }
+    },
+    "cuisine.mexican": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Mexican cuisine"
+        ],
+        "es": [
+          "cocina mexicana"
+        ],
+        "es-AR": [
+          "cocina mexicana"
+        ],
+        "pt": [
+          "culinária mexicana"
+        ],
+        "pt-BR": [
+          "culinária mexicana"
+        ],
+        "zh": [
+          "墨西哥菜"
+        ],
+        "zh-CN": [
+          "墨西哥菜"
+        ],
+        "fr": [
+          "cuisine mexicaine"
+        ]
+      }
+    },
+    "cuisine.french": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "French cuisine"
+        ],
+        "es": [
+          "cocina francesa"
+        ],
+        "es-AR": [
+          "cocina francesa"
+        ],
+        "pt": [
+          "culinária francesa"
+        ],
+        "pt-BR": [
+          "culinária francesa"
+        ],
+        "zh": [
+          "法国菜"
+        ],
+        "zh-CN": [
+          "法国菜"
+        ],
+        "fr": [
+          "cuisine française"
+        ]
+      }
+    },
+    "cuisine.venezuelan": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Venezuelan cuisine"
+        ],
+        "es": [
+          "cocina venezolana"
+        ],
+        "es-AR": [
+          "cocina venezolana"
+        ],
+        "pt": [
+          "culinária venezuelana"
+        ],
+        "pt-BR": [
+          "culinária venezuelana"
+        ],
+        "zh": [
+          "委内瑞拉菜"
+        ],
+        "zh-CN": [
+          "委内瑞拉菜"
+        ],
+        "fr": [
+          "cuisine vénézuélienne"
+        ]
+      }
+    },
+    "cuisine.jamaican": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Jamaican cuisine"
+        ],
+        "es": [
+          "cocina jamaicana"
+        ],
+        "es-AR": [
+          "cocina jamaicana"
+        ],
+        "pt": [
+          "culinária jamaicana"
+        ],
+        "pt-BR": [
+          "culinária jamaicana"
+        ],
+        "zh": [
+          "牙买加菜"
+        ],
+        "zh-CN": [
+          "牙买加菜"
+        ],
+        "fr": [
+          "cuisine jamaïcaine"
+        ]
+      }
+    },
+    "cuisine.turkish": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Turkish cuisine"
+        ],
+        "es": [
+          "cocina turca"
+        ],
+        "es-AR": [
+          "cocina turca"
+        ],
+        "pt": [
+          "culinária turca"
+        ],
+        "pt-BR": [
+          "culinária turca"
+        ],
+        "zh": [
+          "土耳其菜"
+        ],
+        "zh-CN": [
+          "土耳其菜"
+        ],
+        "fr": [
+          "cuisine turque"
+        ]
+      }
+    },
+    "cuisine.brazilian": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Brazilian cuisine"
+        ],
+        "es": [
+          "cocina brasileña"
+        ],
+        "es-AR": [
+          "cocina brasileña"
+        ],
+        "pt": [
+          "culinária brasileira"
+        ],
+        "pt-BR": [
+          "culinária brasileira"
+        ],
+        "zh": [
+          "巴西菜"
+        ],
+        "zh-CN": [
+          "巴西菜"
+        ],
+        "fr": [
+          "cuisine brésilienne"
+        ]
+      }
+    },
+    "cuisine.asian": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Asian cuisine"
+        ],
+        "es": [
+          "cocina asiática"
+        ],
+        "es-AR": [
+          "cocina asiática"
+        ],
+        "pt": [
+          "culinária asiática"
+        ],
+        "pt-BR": [
+          "culinária asiática"
+        ],
+        "zh": [
+          "亚洲菜"
+        ],
+        "zh-CN": [
+          "亚洲菜"
+        ],
+        "fr": [
+          "cuisine asiatique"
+        ]
+      }
+    },
+    "cuisine.latin-american": {
+      "kind": "cuisine",
+      "labels": {
+        "en": [
+          "Latin American cuisine"
+        ],
+        "es": [
+          "cocina latinoamericana"
+        ],
+        "es-AR": [
+          "cocina latinoamericana"
+        ],
+        "pt": [
+          "culinária latino-americana"
+        ],
+        "pt-BR": [
+          "culinária latino-americana"
+        ],
+        "zh": [
+          "拉丁美洲菜"
+        ],
+        "zh-CN": [
+          "拉丁美洲菜"
+        ],
+        "fr": [
+          "cuisine latino-américaine"
+        ]
+      }
+    },
+    "food.pasta": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "pasta"
+        ],
+        "es": [
+          "pastas"
+        ],
+        "es-AR": [
+          "pastas"
+        ],
+        "pt": [
+          "massas"
+        ],
+        "pt-BR": [
+          "massas"
+        ],
+        "zh": [
+          "意大利面"
+        ],
+        "zh-CN": [
+          "意大利面"
+        ],
+        "fr": [
+          "pâtes"
+        ]
+      }
+    },
+    "food.pizza": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "pizza"
+        ],
+        "es": [
+          "pizza"
+        ],
+        "es-AR": [
+          "pizza"
+        ],
+        "pt": [
+          "pizza"
+        ],
+        "pt-BR": [
+          "pizza"
+        ],
+        "zh": [
+          "披萨"
+        ],
+        "zh-CN": [
+          "披萨"
+        ],
+        "fr": [
+          "pizza"
+        ]
+      }
+    },
+    "food.sushi": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "sushi"
+        ],
+        "es": [
+          "sushi"
+        ],
+        "es-AR": [
+          "sushi"
+        ],
+        "pt": [
+          "sushi"
+        ],
+        "pt-BR": [
+          "sushi"
+        ],
+        "zh": [
+          "寿司"
+        ],
+        "zh-CN": [
+          "寿司"
+        ],
+        "fr": [
+          "sushi"
+        ]
+      }
+    },
+    "food.steak": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "steak"
+        ],
+        "es": [
+          "bife"
+        ],
+        "es-AR": [
+          "bife"
+        ],
+        "pt": [
+          "bife"
+        ],
+        "pt-BR": [
+          "bife"
+        ],
+        "zh": [
+          "牛排"
+        ],
+        "zh-CN": [
+          "牛排"
+        ],
+        "fr": [
+          "steak"
+        ]
+      }
+    },
+    "food.burgers": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "burgers"
+        ],
+        "es": [
+          "hamburguesas"
+        ],
+        "es-AR": [
+          "hamburguesas"
+        ],
+        "pt": [
+          "hambúrgueres"
+        ],
+        "pt-BR": [
+          "hambúrgueres"
+        ],
+        "zh": [
+          "汉堡"
+        ],
+        "zh-CN": [
+          "汉堡"
+        ],
+        "fr": [
+          "burgers"
+        ]
+      }
+    },
+    "food.salads": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "salads"
+        ],
+        "es": [
+          "ensaladas"
+        ],
+        "es-AR": [
+          "ensaladas"
+        ],
+        "pt": [
+          "saladas"
+        ],
+        "pt-BR": [
+          "saladas"
+        ],
+        "zh": [
+          "沙拉"
+        ],
+        "zh-CN": [
+          "沙拉"
+        ],
+        "fr": [
+          "salades"
+        ]
+      }
+    },
+    "food.sandwiches": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "sandwiches"
+        ],
+        "es": [
+          "sándwiches"
+        ],
+        "es-AR": [
+          "sándwiches"
+        ],
+        "pt": [
+          "sanduíches"
+        ],
+        "pt-BR": [
+          "sanduíches"
+        ],
+        "zh": [
+          "三明治"
+        ],
+        "zh-CN": [
+          "三明治"
+        ],
+        "fr": [
+          "sandwichs"
+        ]
+      }
+    },
+    "food.seafood": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "seafood"
+        ],
+        "es": [
+          "mariscos"
+        ],
+        "es-AR": [
+          "mariscos"
+        ],
+        "pt": [
+          "frutos do mar"
+        ],
+        "pt-BR": [
+          "frutos do mar"
+        ],
+        "zh": [
+          "海鲜"
+        ],
+        "zh-CN": [
+          "海鲜"
+        ],
+        "fr": [
+          "fruits de mer"
+        ]
+      }
+    },
+    "food.chicken": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "chicken"
+        ],
+        "es": [
+          "pollo"
+        ],
+        "es-AR": [
+          "pollo"
+        ],
+        "pt": [
+          "frango"
+        ],
+        "pt-BR": [
+          "frango"
+        ],
+        "zh": [
+          "鸡肉"
+        ],
+        "zh-CN": [
+          "鸡肉"
+        ],
+        "fr": [
+          "poulet"
+        ]
+      }
+    },
+    "food.coffee": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "coffee"
+        ],
+        "es": [
+          "café"
+        ],
+        "es-AR": [
+          "café"
+        ],
+        "pt": [
+          "café"
+        ],
+        "pt-BR": [
+          "café"
+        ],
+        "zh": [
+          "咖啡"
+        ],
+        "zh-CN": [
+          "咖啡"
+        ],
+        "fr": [
+          "café"
+        ]
+      }
+    },
+    "food.tea": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "tea"
+        ],
+        "es": [
+          "té"
+        ],
+        "es-AR": [
+          "té"
+        ],
+        "pt": [
+          "chá"
+        ],
+        "pt-BR": [
+          "chá"
+        ],
+        "zh": [
+          "茶"
+        ],
+        "zh-CN": [
+          "茶"
+        ],
+        "fr": [
+          "thé"
+        ]
+      }
+    },
+    "food.smoothies": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "smoothies"
+        ],
+        "es": [
+          "licuados"
+        ],
+        "es-AR": [
+          "licuados"
+        ],
+        "pt": [
+          "vitaminas"
+        ],
+        "pt-BR": [
+          "vitaminas"
+        ],
+        "zh": [
+          "冰沙"
+        ],
+        "zh-CN": [
+          "冰沙"
+        ],
+        "fr": [
+          "smoothies"
+        ]
+      }
+    },
+    "food.acai": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "açaí bowls"
+        ],
+        "es": [
+          "bowls de açaí"
+        ],
+        "es-AR": [
+          "bowls de açaí"
+        ],
+        "pt": [
+          "tigelas de açaí"
+        ],
+        "pt-BR": [
+          "tigelas de açaí"
+        ],
+        "zh": [
+          "巴西莓碗"
+        ],
+        "zh-CN": [
+          "巴西莓碗"
+        ],
+        "fr": [
+          "bols d’açaï"
+        ]
+      }
+    },
+    "food.bakery": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "bakery"
+        ],
+        "es": [
+          "panadería"
+        ],
+        "es-AR": [
+          "panadería"
+        ],
+        "pt": [
+          "padaria"
+        ],
+        "pt-BR": [
+          "padaria"
+        ],
+        "zh": [
+          "面包店"
+        ],
+        "zh-CN": [
+          "面包店"
+        ],
+        "fr": [
+          "boulangerie"
+        ]
+      }
+    },
+    "food.pastries": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "pastries"
+        ],
+        "es": [
+          "pastelería"
+        ],
+        "es-AR": [
+          "pastelería"
+        ],
+        "pt": [
+          "doces de confeitaria"
+        ],
+        "pt-BR": [
+          "doces de confeitaria"
+        ],
+        "zh": [
+          "糕点"
+        ],
+        "zh-CN": [
+          "糕点"
+        ],
+        "fr": [
+          "pâtisseries"
+        ]
+      }
+    },
+    "food.desserts": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "desserts"
+        ],
+        "es": [
+          "postres"
+        ],
+        "es-AR": [
+          "postres"
+        ],
+        "pt": [
+          "sobremesas"
+        ],
+        "pt-BR": [
+          "sobremesas"
+        ],
+        "zh": [
+          "甜点"
+        ],
+        "zh-CN": [
+          "甜点"
+        ],
+        "fr": [
+          "desserts"
+        ]
+      }
+    },
+    "food.chocolate": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "chocolate"
+        ],
+        "es": [
+          "chocolate"
+        ],
+        "es-AR": [
+          "chocolate"
+        ],
+        "pt": [
+          "chocolate"
+        ],
+        "pt-BR": [
+          "chocolate"
+        ],
+        "zh": [
+          "巧克力"
+        ],
+        "zh-CN": [
+          "巧克力"
+        ],
+        "fr": [
+          "chocolat"
+        ]
+      }
+    },
+    "food.ice-cream": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "ice cream"
+        ],
+        "es": [
+          "helado"
+        ],
+        "es-AR": [
+          "helado"
+        ],
+        "pt": [
+          "sorvete"
+        ],
+        "pt-BR": [
+          "sorvete"
+        ],
+        "zh": [
+          "冰淇淋"
+        ],
+        "zh-CN": [
+          "冰淇淋"
+        ],
+        "fr": [
+          "glace"
+        ]
+      }
+    },
+    "food.gelato": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "gelato"
+        ],
+        "es": [
+          "gelato"
+        ],
+        "es-AR": [
+          "gelato"
+        ],
+        "pt": [
+          "gelato"
+        ],
+        "pt-BR": [
+          "gelato"
+        ],
+        "zh": [
+          "意式冰淇淋"
+        ],
+        "zh-CN": [
+          "意式冰淇淋"
+        ],
+        "fr": [
+          "gelato"
+        ]
+      }
+    },
+    "food.cookies": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "cookies"
+        ],
+        "es": [
+          "galletitas"
+        ],
+        "es-AR": [
+          "galletitas"
+        ],
+        "pt": [
+          "biscoitos"
+        ],
+        "pt-BR": [
+          "biscoitos"
+        ],
+        "zh": [
+          "曲奇"
+        ],
+        "zh-CN": [
+          "曲奇"
+        ],
+        "fr": [
+          "cookies"
+        ]
+      }
+    },
+    "food.donuts": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "donuts"
+        ],
+        "es": [
+          "donas"
+        ],
+        "es-AR": [
+          "donas"
+        ],
+        "pt": [
+          "rosquinhas"
+        ],
+        "pt-BR": [
+          "rosquinhas"
+        ],
+        "zh": [
+          "甜甜圈"
+        ],
+        "zh-CN": [
+          "甜甜圈"
+        ],
+        "fr": [
+          "beignets"
+        ]
+      }
+    },
+    "food.crepes": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "crepes"
+        ],
+        "es": [
+          "crepes"
+        ],
+        "es-AR": [
+          "crepes"
+        ],
+        "pt": [
+          "crepes"
+        ],
+        "pt-BR": [
+          "crepes"
+        ],
+        "zh": [
+          "可丽饼"
+        ],
+        "zh-CN": [
+          "可丽饼"
+        ],
+        "fr": [
+          "crêpes"
+        ]
+      }
+    },
+    "food.tacos": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "tacos"
+        ],
+        "es": [
+          "tacos"
+        ],
+        "es-AR": [
+          "tacos"
+        ],
+        "pt": [
+          "tacos"
+        ],
+        "pt-BR": [
+          "tacos"
+        ],
+        "zh": [
+          "塔可"
+        ],
+        "zh-CN": [
+          "塔可"
+        ],
+        "fr": [
+          "tacos"
+        ]
+      }
+    },
+    "food.dumplings": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "dumplings"
+        ],
+        "es": [
+          "empanadillas chinas"
+        ],
+        "es-AR": [
+          "empanadillas chinas"
+        ],
+        "pt": [
+          "dumplings"
+        ],
+        "pt-BR": [
+          "dumplings"
+        ],
+        "zh": [
+          "饺子"
+        ],
+        "zh-CN": [
+          "饺子"
+        ],
+        "fr": [
+          "raviolis chinois"
+        ]
+      }
+    },
+    "food.noodles": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "noodles"
+        ],
+        "es": [
+          "fideos"
+        ],
+        "es-AR": [
+          "fideos"
+        ],
+        "pt": [
+          "macarrão"
+        ],
+        "pt-BR": [
+          "macarrão"
+        ],
+        "zh": [
+          "面条"
+        ],
+        "zh-CN": [
+          "面条"
+        ],
+        "fr": [
+          "nouilles"
+        ]
+      }
+    },
+    "food.pretzels": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "pretzels"
+        ],
+        "es": [
+          "pretzels"
+        ],
+        "es-AR": [
+          "pretzels"
+        ],
+        "pt": [
+          "pretzels"
+        ],
+        "pt-BR": [
+          "pretzels"
+        ],
+        "zh": [
+          "椒盐卷饼"
+        ],
+        "zh-CN": [
+          "椒盐卷饼"
+        ],
+        "fr": [
+          "bretzels"
+        ]
+      }
+    },
+    "food.arepas": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "arepas"
+        ],
+        "es": [
+          "arepas"
+        ],
+        "es-AR": [
+          "arepas"
+        ],
+        "pt": [
+          "arepas"
+        ],
+        "pt-BR": [
+          "arepas"
+        ],
+        "zh": [
+          "玉米饼"
+        ],
+        "zh-CN": [
+          "玉米饼"
+        ],
+        "fr": [
+          "arepas"
+        ]
+      }
+    },
+    "food.empanadas": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "empanadas"
+        ],
+        "es": [
+          "empanadas"
+        ],
+        "es-AR": [
+          "empanadas"
+        ],
+        "pt": [
+          "empanadas"
+        ],
+        "pt-BR": [
+          "empanadas"
+        ],
+        "zh": [
+          "馅饼"
+        ],
+        "zh-CN": [
+          "馅饼"
+        ],
+        "fr": [
+          "chaussons salés"
+        ]
+      }
+    },
+    "food.burritos": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "burritos"
+        ],
+        "es": [
+          "burritos"
+        ],
+        "es-AR": [
+          "burritos"
+        ],
+        "pt": [
+          "burritos"
+        ],
+        "pt-BR": [
+          "burritos"
+        ],
+        "zh": [
+          "墨西哥卷饼"
+        ],
+        "zh-CN": [
+          "墨西哥卷饼"
+        ],
+        "fr": [
+          "burritos"
+        ]
+      }
+    },
+    "food.bowls": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "bowls"
+        ],
+        "es": [
+          "bowls"
+        ],
+        "es-AR": [
+          "bowls"
+        ],
+        "pt": [
+          "bowls"
+        ],
+        "pt-BR": [
+          "bowls"
+        ],
+        "zh": [
+          "碗餐"
+        ],
+        "zh-CN": [
+          "碗餐"
+        ],
+        "fr": [
+          "bols repas"
+        ]
+      }
+    },
+    "food.juice": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "fresh juice"
+        ],
+        "es": [
+          "jugos frescos"
+        ],
+        "es-AR": [
+          "jugos frescos"
+        ],
+        "pt": [
+          "sucos naturais"
+        ],
+        "pt-BR": [
+          "sucos naturais"
+        ],
+        "zh": [
+          "鲜榨果汁"
+        ],
+        "zh-CN": [
+          "鲜榨果汁"
+        ],
+        "fr": [
+          "jus frais"
+        ]
+      }
+    },
+    "food.matcha": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "matcha"
+        ],
+        "es": [
+          "matcha"
+        ],
+        "es-AR": [
+          "matcha"
+        ],
+        "pt": [
+          "matcha"
+        ],
+        "pt-BR": [
+          "matcha"
+        ],
+        "zh": [
+          "抹茶"
+        ],
+        "zh-CN": [
+          "抹茶"
+        ],
+        "fr": [
+          "matcha"
+        ]
+      }
+    },
+    "food.beer": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "beer"
+        ],
+        "es": [
+          "cerveza"
+        ],
+        "es-AR": [
+          "cerveza"
+        ],
+        "pt": [
+          "cerveja"
+        ],
+        "pt-BR": [
+          "cerveja"
+        ],
+        "zh": [
+          "啤酒"
+        ],
+        "zh-CN": [
+          "啤酒"
+        ],
+        "fr": [
+          "bière"
+        ]
+      }
+    },
+    "food.cocktails": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "cocktails"
+        ],
+        "es": [
+          "cócteles"
+        ],
+        "es-AR": [
+          "cócteles"
+        ],
+        "pt": [
+          "coquetéis"
+        ],
+        "pt-BR": [
+          "coquetéis"
+        ],
+        "zh": [
+          "鸡尾酒"
+        ],
+        "zh-CN": [
+          "鸡尾酒"
+        ],
+        "fr": [
+          "cocktails"
+        ]
+      }
+    },
+    "food.wine": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "wine"
+        ],
+        "es": [
+          "vino"
+        ],
+        "es-AR": [
+          "vino"
+        ],
+        "pt": [
+          "vinho"
+        ],
+        "pt-BR": [
+          "vinho"
+        ],
+        "zh": [
+          "葡萄酒"
+        ],
+        "zh-CN": [
+          "葡萄酒"
+        ],
+        "fr": [
+          "vin"
+        ]
+      }
+    },
+    "food.caviar": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "caviar"
+        ],
+        "es": [
+          "caviar"
+        ],
+        "es-AR": [
+          "caviar"
+        ],
+        "pt": [
+          "caviar"
+        ],
+        "pt-BR": [
+          "caviar"
+        ],
+        "zh": [
+          "鱼子酱"
+        ],
+        "zh-CN": [
+          "鱼子酱"
+        ],
+        "fr": [
+          "caviar"
+        ]
+      }
+    },
+    "food.cakes": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "cakes"
+        ],
+        "es": [
+          "tortas"
+        ],
+        "es-AR": [
+          "tortas"
+        ],
+        "pt": [
+          "bolos"
+        ],
+        "pt-BR": [
+          "bolos"
+        ],
+        "zh": [
+          "蛋糕"
+        ],
+        "zh-CN": [
+          "蛋糕"
+        ],
+        "fr": [
+          "gâteaux"
+        ]
+      }
+    },
+    "food.meat": {
+      "kind": "food-type",
+      "labels": {
+        "en": [
+          "meat",
+          "meats"
+        ],
+        "es": [
+          "carne",
+          "carnes"
+        ],
+        "es-AR": [
+          "carne",
+          "carnes"
+        ],
+        "pt": [
+          "carne",
+          "carnes"
+        ],
+        "pt-BR": [
+          "carne",
+          "carnes"
+        ],
+        "zh": [
+          "肉类"
+        ],
+        "zh-CN": [
+          "肉类"
+        ],
+        "fr": [
+          "viande",
+          "viandes"
         ]
       }
     }

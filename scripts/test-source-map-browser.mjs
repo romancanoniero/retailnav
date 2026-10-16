@@ -52,6 +52,10 @@ try{
  assert.equal(await page.locator('.rnSourceMain[data-floor="LL"]').count(),1);
  assert.equal(await page.locator('.rnSourceReference[data-floor="UL"]').count(),1);
  assert.match(await page.locator('.rnSourceRouteStatus').textContent(),/No verified walking route/);
+ await page.waitForFunction(()=>!window.RetailNavSourceMap.getState().cameraFlying);
+ assert.equal(await page.evaluate(()=>{const svg=document.querySelector('.rnSourceMain svg'),transform=svg.firstChild.getAttribute('transform');
+  window.dispatchEvent(new Event('retailnav:indoor-observation'));
+  return svg===document.querySelector('.rnSourceMain svg')&&transform===svg.firstChild.getAttribute('transform');}),true,'same-floor GPS/step observations preserve camera and pointer targets');
  assert.deepEqual((await page.evaluate(()=>window.RetailNavSourceMap.getState())).route,[]);
  assert.ok(await page.locator('[data-connector-id]').count()>0);
  mkdirSync('artifacts',{recursive:true});await page.screenshot({path:'artifacts/source-map-tablet.png'});

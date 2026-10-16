@@ -18315,7 +18315,7 @@ function show(unit,preferredFloor){
  body.replaceChildren();tabs.replaceChildren();panes=[];
  for(const f of known){const b=el('button',tr('Destino ','Destination ')+f+(links.some(p=>p.floor===f)?'':tr(' · sin polígono',' · no polygon')));b.type='button';b.setAttribute('aria-pressed',String(f===destination));b.onclick=()=>show(unit,f);tabs.append(b);}
  const selectedIds=links.filter(l=>l.floor===destination).map(l=>l.polygonId);state.highlighted=selectedIds;state.located=selectedIds.length>0;
- const provisional=!indoor?.anchor||['fallback-entry','fallback-floor'].includes(indoor?.referenceSource);
+ const provisional=!indoor?.anchor||['fallback-entry','fallback-floor'].includes(indoor?.referenceSource);state.referenceProvisional=provisional;
  const refLabel=provisional?tr('Planta de referencia provisional','Provisional reference floor'):tr('Tu planta indicada','Your indicated floor');
  if(destination)panes.push(pane(destination,selectedIds,tr('Destino','Destination'),true));
  if(reference!==destination||!destination)panes.push(pane(reference,[],refLabel,!destination));
@@ -18327,7 +18327,15 @@ function show(unit,preferredFloor){
 }
 for(const id of ['rnTagResultClose','showAllFloors','floorSelect','mallSelect'])document.getElementById(id)?.addEventListener('click',hide);
 document.getElementById('search')?.addEventListener('input',hide);
-window.addEventListener('retailnav:indoor-observation',()=>{if(state.visible){const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===state.selectedStore);if(unit)show(unit,state.destinationFloor);}});
+window.addEventListener('retailnav:indoor-observation',()=>{
+ if(!state.visible)return;
+ const indoor=window.RetailNavIndoor?.getState?.(),reference=window.__RETAILNAV__?.getState?.().referenceFloor||'LL';
+ const provisional=!indoor?.anchor||['fallback-entry','fallback-floor'].includes(indoor?.referenceSource);
+ // GPS/step updates do not change the source-map origin. Preserve ongoing gestures.
+ if(reference===state.referenceFloor&&provisional===state.referenceProvisional)return;
+ const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===state.selectedStore);
+ if(unit)show(unit,state.destinationFloor);
+});
 window.RetailNavSourceMap={show,hide,getState:()=>({...state}),binding};
 })();
 </script>

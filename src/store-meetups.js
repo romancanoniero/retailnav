@@ -229,14 +229,19 @@ function renderMeetingList(container){
  }
  container.append(host);
 }
+let priorTap={id:'',time:0};
 const observer=new MutationObserver(()=>{
  if(panel.hidden||!panel.isConnected)return;
  for(const card of cards.querySelectorAll('.rnStoreCard')){
   if(card.dataset.rnMeetingBound)continue;
   card.dataset.rnMeetingBound='1';
   card.addEventListener('click',event=>{
-   if(event.detail>=2){event.stopImmediatePropagation();selectStore(card.dataset.storeId,true);}
-   else{event.stopImmediatePropagation();selectStore(card.dataset.storeId,false);}
+   // Safari touch sometimes dispatches two independent clicks with detail=1.
+   const id=card.dataset.storeId,now=performance.now();
+   const secondTap=id===priorTap.id&&now-priorTap.time<430;
+   priorTap={id,time:now};
+   event.stopImmediatePropagation();
+   selectStore(id,event.detail>=2||secondTap);
   },true);
   card.addEventListener('keydown',event=>{
    if(event.key==='Enter'&&selectedId===card.dataset.storeId){event.preventDefault();selectStore(card.dataset.storeId,true);}

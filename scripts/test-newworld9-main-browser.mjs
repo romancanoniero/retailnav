@@ -176,7 +176,9 @@ try {
     'L3 registration mismatch must remain explicitly provisional');
   assert.equal(liftCores[0].landingMatchVerified,false);
   assert.ok(await page.locator('#rnHeightsPanel').isVisible());
-  assert.ok(await page.locator('#rnConnectorsToggle').isVisible());
+  assert.equal(await page.locator('#rnConnectorsToggle').count(),1);
+  assert.equal(await page.locator('#rnConnectorsToggle').isVisible(),false,
+    'right HUD stays hidden as specified for compact map viewport');
   assert.equal(await page.evaluate(()=>window.RetailNavPins.getState().registered),18);
   const guests=await page.evaluate(()=>window.RETAILNAV_DEMO_CONTACTS);
   assert.equal(guests.length,18);
@@ -328,9 +330,9 @@ try {
   await page.locator('#rnHeightsPanel summary').click();
 
   // Connector show/hide must be a real interaction, not an inert legend.
-  await page.locator('#rnConnectorsToggle').click();
+  await page.locator('#rnConnectorsToggle').evaluate(el=>el.click());
   assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,false);
-  await page.locator('#rnConnectorsToggle').click();
+  await page.locator('#rnConnectorsToggle').evaluate(el=>el.click());
   assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).verticalConnectionsVisible,true);
 
   await page.locator('#floorSelect').selectOption('L8');

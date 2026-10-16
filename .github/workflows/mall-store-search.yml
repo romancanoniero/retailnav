@@ -121,7 +121,7 @@ jobs:
           vectors=[u for u in aventura["records"] if u.get("codeKind")=="map-vector-reference-not-lease-number"]
           directory=[u for u in aventura["records"] if u.get("source")=="aventura-official-directory"]
           assert len(vectors)==131
-          assert len(directory)==272
+          assert len(directory)==338
           assert all(u.get("polygonId") is None for u in directory)
           assert len([u for u in vectors if u.get("conceptIds")])==14
           audit=json.loads(Path("data/store-directory/aventura-map-audit.json").read_text())

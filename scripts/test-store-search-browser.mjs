@@ -259,6 +259,18 @@ try{
  assert.ok(await page.locator('#rnStoreDetails button[disabled]').count(),
   'unverified AR guidance remains unavailable');
  await page.locator('#rnStoreDetails .rnBackToStores').click();
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await input.fill('Coffee');
+ await page.waitForFunction(()=>Boolean(document.querySelector('.rnResultTag[data-concept-id="food.coffee"]')));
+ await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
+ assert.equal(await page.locator('#rnTagResultCards .rnStoreCard').count(),15,
+  'Coffee must list all 15 documented establishments, not just the first few');
+ const coffeeLayout=await page.evaluate(()=>({
+  mapRight:document.querySelector('.stage>.viewport').getBoundingClientRect().right,
+  panelLeft:document.querySelector('#rnTagResultPanel').getBoundingClientRect().left
+ }));
+ assert.ok(coffeeLayout.mapRight<=coffeeLayout.panelLeft+2,
+  'Coffee search should shrink the actual map instead of obscuring its shops');
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
  assert.equal(await page.locator('#sidebar').isVisible(),false,
   'tablet tag results close the former left information panel');

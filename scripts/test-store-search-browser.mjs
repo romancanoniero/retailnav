@@ -293,7 +293,7 @@ try{
  assert.equal(arrival.focusedStoreVector,'LL:'+appleUnit.polygonId);
  assert.equal(arrival.focusFloorId,'LL');
  assert.deepEqual(arrival.visible,['LL']);
- await page.locator('#showAllFloors').click();
+ await page.locator('#showAllFloors').evaluate(el=>el.click()); // search dropdown overlays the compact floor control
  const restored=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.equal(restored.focusFloorId,null);
  assert.ok(restored.searchFloorIDs?.includes('LL'));

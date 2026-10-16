@@ -726,6 +726,9 @@ try {
     null,{timeout:45000});
   await apPage.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true,
     null,{timeout:25000});
+  assert.equal(await apPage.locator('#rnServicesToggle').isVisible(),false,
+    'Mobile map toolbars remain hidden until opened');
+  await apPage.locator('.hudright').evaluate(el=>el.style.setProperty('display','flex','important'));
   const apStatus=await apPage.evaluate(()=>({
     viewer:window.__RETAILNAV__.getState(),
     social:window.RetailNavSocial.getState(),

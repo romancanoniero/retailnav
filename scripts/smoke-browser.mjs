@@ -1044,8 +1044,9 @@ try {
     headers:{'Content-Type':'application/json'},body:'{}'
   }));
 
-  // Independent new mall test: source photos L1-L7, no duplicate signage
-  // index, 380 tagged directory rows (not 380 surveyed unit polygons).
+  // Independent new mall test: nine photographed levels L1-L9.
+  // The original L1-L7 directory has 380 tagged merchants; additional
+  // photo-only code candidates must not be treated as verified stores.
   const nwContext=await makeContext(),nwPage=await nwContext.newPage();
   await nwPage.goto(URL+'?mall=new-world-city-shanghai',{
     waitUntil:'domcontentloaded',timeout:45000
@@ -1082,10 +1083,12 @@ try {
   assert.deepEqual(nw.floorLabels,['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
   assert.deepEqual(nw.viewer.visible,['L1'],
    'New World City should start on first/ground floor');
-  assert.equal(nw.geometryRegions,195,'195 colour-island REGIONS, not stores');
+  assert.equal(nw.geometryRegions,737,'737 nine-floor photo REGIONS, not certified stores');
   assert.equal(nw.directoryRecords,380);
-  assert.equal(nw.units.count,380);
-  assert.equal(nw.units.withTags,380);
+  assert.ok(nw.units.count>=nw.directoryRecords,
+    'New photo-only floor labels may extend the original 380-row directory');
+  assert.equal(nw.units.withTags,nw.directoryRecords,
+    'Unverified code-only photo candidates must not acquire invented product tags');
   assert.ok(nw.units.withNames>=360);
   assert.equal(nw.navigable,false);
   assert.equal(nw.demoPeople,0,'No Aventura demo people may bleed into new mall');
@@ -1115,9 +1118,9 @@ try {
     }));
     return await Promise.all(files);
   });
-  assert.equal(photoStatus.length,7);
+  assert.equal(photoStatus.length,9,'all nine photographed floor references must be published');
   assert.ok(photoStatus.every(x=>x.status===200),
-    'The exact seven user-photograph reference crops must be published');
+    'Every L1-L9 user-photograph reference crop must be published');
   log('NEW_WORLD_CITY',{floors:nw.floorLabels,regions:nw.geometryRegions,
     codes:nw.units.count,categories:nw.units.withTags,sampleWebMatches:nw.onlineSources,
     photoStatus});

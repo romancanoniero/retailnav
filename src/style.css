@@ -1225,3 +1225,5 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnMeetupInbox .rnMeetingRow a{display:block;margin-bottom:8px;color:#8bdceb}
 
 .rnSearchMarker.rnSearchMarkerChosen{border-color:#f9dd78!important;outline:3px solid #ffffffa3!important;outline-offset:3px;z-index:10!important;box-shadow:0 0 0 7px #f6ba4d3f,0 0 22px #ffd273!important}
+
+.rnTagResultPanel .rnStoreCard{touch-action:manipulation}

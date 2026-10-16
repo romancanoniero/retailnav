@@ -1113,3 +1113,7 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 @media(max-height:530px) and (orientation:landscape){
  .rnMapSearch .searchbox .rnLanguageSelect{top:4px;height:31px;min-height:31px}
 }
+
+
+/* Hide the right-side map icon toolbar; touch gestures and keyboard controls remain available. */
+.hudright{display:none!important}

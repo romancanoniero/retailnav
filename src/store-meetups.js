@@ -100,8 +100,16 @@ function showSelectionStatus(u,focus){
       'Directory location is available, but not yet linked to the map.')
     :tr('Ubicación pendiente de identificar en el plano; no se puede enfocar ni resaltar.',
       'Map position is unknown; focus and map highlight are not available.'));
+ if(mall.coordinateSpace)selectionStatus.textContent+=' · '+tr('Sin ruta peatonal verificada. Alturas provisionales.','No verified walking route. Floor heights are provisional.');
+ const levels=[...new Set((u.sourceGeometry?.polygons||[]).map(p=>p.floor))];
+ if(levels.length>1){
+  const choices=document.createElement('span');choices.className='rnStoreFloorChoices';
+  for(const floor of levels){const b=button(tr('Planta ','Floor ')+floor,()=>selectStore(u.storeId,false,floor));
+   b.dataset.storeFloor=floor;b.setAttribute('aria-pressed',String(focus?.floor===floor));choices.append(b);}
+  selectionStatus.append(choices);
+ }
 }
-function selectStore(id,showDetails=false){
+function selectStore(id,showDetails=false,requestedFloor=null){
  const u=window.RetailNavUnits?.getUnits()?.find(s=>s.storeId===id);
  if(!u)return;
  selectedId=id;
@@ -114,9 +122,7 @@ function selectStore(id,showDetails=false){
  // store point and its existing same-floor vector may drive the camera.
  const located=Number.isFinite(u.x)&&Number.isFinite(u.y)&&Boolean(u.floor);
  let focus=window.__RETAILNAV__?.focusCatalogStore?.(
-  id,located?u.floor:null,located?[u.x,u.y]:null,located?u.polygonId:null);
- if(mall.id==='aventura'&&u.source==='aventura-official-directory')focus=window.RetailNavSourceMap?.show(u)||focus;
- else window.RetailNavSourceMap?.hide();
+  id,requestedFloor||(located?u.floor:null),located?[u.x,u.y]:null,located?u.polygonId:null);
  window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;

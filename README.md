@@ -4,17 +4,17 @@
 
 > **Desarrollo futuro y continuidad E2E:** [Plan Maestro de RetailNav — módulos SaaS, administradores de shoppings, comercios, web y apps móviles](docs/RETAILNAV-PLAN-MAESTRO-E2E.md). Este documento registra funcionalidades, roles, seguridad, contratos de datos, flujos E2E, pruebas, riesgos, decisiones pendientes y el estado real de implementación. **Leer y actualizar antes de comenzar cualquier módulo nuevo**; las capacidades propuestas no deben confundirse con funciones ya desplegadas.
 
-Visor 3D web de un centro comercial, con tres plantas vectorizadas desde planos aportados y experiencia social de visita en grupo. Funciona en Safari y navegadores modernos, sin instalar una app.
+Visor 3D web de un centro comercial, con tres plantas vectoriales y experiencia social de visita en grupo. Aventura usa los polígonos de la fuente oficial en el mismo motor 3D; los planos aportados permanecen en «Tu plano» como referencia histórica. Funciona en Safari y navegadores modernos, sin instalar una app.
 
 ## Visor 3D
 
 - Plantas **LL, UL y L3**. Tocá un indicador en el modelo para enfocar esa planta y ocultar las demás.
 - Botón **Mostrar las 3 plantas** o pestaña **Todas** para restablecer la vista conjunta.
 - Un dedo orbita; dos dedos desplazan, amplían y **giran mediante torsión**, incluso dejando un dedo fijo.
-- Etiquetas, búsqueda de tiendas ancla, ruta ilustrativa sobre pasillos trazados, comparación con fuente y exportación GLB.
+- Búsqueda y selección de comercios con enfoque animado, comparación con fuente y exportación GLB. Sin rutas peatonales hasta verificar pasillos, puertas y conectores.
 - **Nueve amigos DEMO (tres por planta)**, con retratos sintéticos, nombre, cuerpo 3D y sombra de colores independientes. Los pines se dibujan en coordenadas espaciales y acompañan la rotación del mapa. Aparecen también en el pulldown «Mis amigos», con un botón 📍 para enfocar cada persona. Se pueden ocultar sin alterar contactos reales.
 - Renderizado WebGL con alternativa 3D Canvas. Generación y lectura de códigos QR locales, **sin dependencia de CDN**, incluso en Safari sin BarcodeDetector.
-- Los perfiles DEMO están en `src/demo-friends.js`. Sus ubicaciones son **centros de pasillos vectorizados** de LL, UL y L3 en unidades del plano provisional; no se inventan coordenadas GPS ni posiciones medidas. Su modelo de posición `{mallId,floor,x,y,source,coordinateSpace}` permite reemplazarlos por contactos reales en el mismo renderizador. Cuerpo, borde y sombra se configuran por persona o por paleta general en `window.RETAILNAV_MARKER_PALETTE`; ningún pin usa PNG estáticos.
+- Los perfiles DEMO están en `src/demo-friends.js`. En Aventura sus ubicaciones ilustrativas se toman de puntos de la circulación de la fuente oficial, dentro del marco local del modelo; no se inventan coordenadas GPS ni posiciones medidas. Su modelo de posición `{mallId,floor,x,y,source,coordinateSpace}` permite reemplazarlos por contactos reales en el mismo renderizador. Cuerpo, borde y sombra se configuran por persona o por paleta general en `window.RETAILNAV_MARKER_PALETTE`; ningún pin usa PNG estáticos.
 - El renderizador `src/pins3d.js` traza cada pin y su sombra mediante geometría proyectada 3D en un lienzo transparente compartido; los avatares son texturas separadas. Las fotos reales, cuando se comparten, se cargan de manera privada desde el backend. El modelo mantiene el anclaje por planta al rotar, trasladar o acercar el mapa.
 
 ## Visitantes sin registro obligatorio

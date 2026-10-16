@@ -111,7 +111,8 @@ try{
  // Explicit user selection overrides the provisional reference, without
  // pretending the GNSS system measured the floor.
  await page.evaluate(()=>window.dispatchEvent(new CustomEvent('retailnav:map-point',{
-  detail:{floor:'L3',x:450,y:300}})));
+  detail:{floor:'L3',x:450,y:300,mallId:window.RETAILNAV_ACTIVE_MALL.id,
+   coordinateSpace:window.RETAILNAV_ACTIVE_MALL.coordinateSpace}})));
  await page.waitForFunction(()=>window.RetailNavIndoor.getState().anchor?.floor==='L3');
  await input.fill('equipaje');
  await input.press('Enter');
@@ -147,7 +148,7 @@ try{
  assert.ok(aventura.named>0);
  assert.equal(aventura.inside.entryReferenceAvailable,false);
  assert.equal(await page.locator('#rnMyPositionMarker').isVisible(),false);
- console.log('PASS Aventura original vector references included, never invented shop codes or entrances');
+ console.log('PASS Aventura source-bound directory, no invented shop codes or entrances');
 
  // Locale is read from the browser and may be overridden without changing
  // canonical concept IDs, losing search matches or redownloading geometry.
@@ -156,15 +157,20 @@ try{
   units:window.RetailNavUnits.getUnits(),
   state:window.RetailNavUnits.getState()
  }));
- assert.equal(aventuraIndex.units.filter(u=>u.codeKind==='map-vector-reference-not-lease-number'&&u.conceptIds.length).length,14);
+ assert.equal(aventuraIndex.units.filter(u=>u.codeKind==='map-vector-reference-not-lease-number').length,0,
+  'legacy photo-coordinate references must not enter the active official-source map catalog');
+ assert.equal(aventuraIndex.units.filter(u=>u.sourceGeometry).length,294);
  const appleDirectory=aventuraIndex.units.find(u=>u.source==='aventura-official-directory'&&u.name==='Apple');
  assert.ok(appleDirectory);
- assert.equal(appleDirectory.floor,null);
+ assert.equal(appleDirectory.floor,'LL');
+ assert.equal(appleDirectory.sourceGeometry.polygons[0].floor,'LL');
  assert.equal(appleDirectory.locationLabel,'Outdoor Courtyard');
  assert.equal(appleDirectory.polygonId,null);
  const jcpenneyDirectory=aventuraIndex.units.find(u=>u.source==='aventura-official-directory'&&u.name==='JCPenney');
  assert.deepEqual(jcpenneyDirectory.documentedFloors,['LL','UL']);
- assert.equal(jcpenneyDirectory.floor,null);
+ assert.equal(jcpenneyDirectory.floor,'LL');
+ assert.deepEqual(jcpenneyDirectory.sourceGeometry.polygons.map(p=>p.floor),['LL'],
+  'directory floors and linked geometry floors remain distinct evidence');
  assert.equal(jcpenneyDirectory.polygonId,null);
  await page.locator('#rnLanguageSelect').selectOption('en');
  await input.fill('Japanese cuisine');
@@ -249,13 +255,16 @@ try{
  assert.ok(tabletLayout.cardCount>1);
  const firstTabletCard=page.locator('#rnTagResultCards .rnStoreCard').first();
  await firstTabletCard.click();
- const unmappedFocus=await page.evaluate(()=>window.__RETAILNAV__.getState().lastStoreFocus);
+ const tabletFocus=await page.evaluate(()=>window.__RETAILNAV__.getState().lastStoreFocus);
+ const tabletUnit=await page.evaluate(id=>window.RetailNavUnits.getUnits().find(u=>u.storeId===id),
+  await firstTabletCard.getAttribute('data-store-id'));
  assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),true,
-  'a tablet directory-only result must provide user-visible feedback');
+  'a selected tablet result must provide user-visible feedback');
  assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/ubicaci[oó]n|location/i);
  assert.equal(await firstTabletCard.getAttribute('aria-selected'),'true');
- assert.equal(unmappedFocus?.located,false,
-  'directory-only merchant must never receive a fabricated map position');
+ assert.equal(tabletFocus?.located,Boolean(tabletUnit.sourceGeometry),
+  'directory selection may focus only when its source geometry is linked');
+ if(tabletFocus.located)assert.equal(tabletFocus.source,true);
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
   'one tap highlights a store without closing the vertical list');
  assert.equal((await page.evaluate(()=>window.RetailNavMeetups.getState())).detailOpen,false);
@@ -286,15 +295,17 @@ try{
  await input.fill('Apple');
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Apple');
- const appleUnit=await page.evaluate(()=>window.RetailNavUnits.getUnits().find(u=>u.code==='LL-002'));
- assert.ok(appleUnit&&Number.isFinite(appleUnit.x)&&appleUnit.polygonId);
+ const appleUnit=await page.evaluate(()=>window.RetailNavUnits.getUnits()
+  .find(u=>u.storeId==='aventura:directory:apple'));
+ assert.ok(appleUnit&&Number.isFinite(appleUnit.x)&&appleUnit.sourceGeometry);
+ const applePolygon=appleUnit.sourceGeometry.polygons[0];
  const focus=await page.evaluate((u)=>window.__RETAILNAV__.focusCatalogStore(
   u.storeId,u.floor,[u.x,u.y],u.polygonId),appleUnit);
  assert.equal(focus.located,true);
  assert.equal(focus.vectorHighlighted,true);
  await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
  const arrival=await page.evaluate(()=>window.__RETAILNAV__.getState());
- assert.equal(arrival.focusedStoreVector,'LL:'+appleUnit.polygonId);
+ assert.equal(arrival.focusedStoreVector,applePolygon.floor+':'+applePolygon.polygonId);
  assert.equal(arrival.focusFloorId,'LL');
  assert.deepEqual(arrival.visible,['LL']);
  await page.locator('#showAllFloors').evaluate(el=>el.click()); // search dropdown overlays the compact floor control
@@ -357,8 +368,9 @@ try{
   vectors:window.RetailNavUnits.getMatchedVectors()
  }));
  assert.equal(appleSearch.directory.polygonId,null);
- assert.ok(appleSearch.vectors.some(v=>v.floor==='LL'&&v.polygonId==='LL-002'),
-  'retain the separate map-labeled Apple anchor as provisional');
+ assert.ok(appleSearch.vectors.some(v=>v.floor===applePolygon.floor&&v.polygonId===applePolygon.polygonId),
+  'Apple highlights the source-owned geometry, not the old photo-coordinate region');
+ assert.ok(!appleSearch.vectors.some(v=>v.polygonId==='LL-002'));
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  await page.waitForFunction(()=>document.documentElement.lang==='es-AR');
  assert.match(await input.getAttribute('placeholder'),/Buscar/);
@@ -374,10 +386,12 @@ try{
  assert.ok(await page.locator('#rnTagResultCards .rnStoreCard').count()>0,
   'confirmed semantic tag results remain clickable outside autocomplete');
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
- assert.deepEqual(state.visible,['LL','UL','L3']);
- assert.ok(state.highlightedVectorCount>=4);
+ assert.deepEqual(state.visible,['LL','UL'],
+  'luggage opens the floors in the current directory without adding legacy photo-only L3 references');
+ assert.equal(state.highlightedVectorCount,2,
+  'only the source-bound Longchamp and Porsche Design polygons match the current luggage catalog');
  const matchingIds=await page.evaluate(()=>window.RetailNavUnits.find('valijas').map(u=>u.storeId).sort());
- assert.ok(matchingIds.length>4);
+ assert.deepEqual(matchingIds,['aventura:directory:longchamp-2','aventura:directory:porsche-design']);
  assert.deepEqual(matchingIds,await page.evaluate(()=>window.RetailNavUnits.find('luggage')
   .map(u=>u.storeId).sort()));
  assert.deepEqual(matchingIds,await page.evaluate(()=>window.RetailNavUnits.find('行李箱')
@@ -391,11 +405,14 @@ try{
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='reparar celular');
  const repairs=await page.evaluate(()=>window.RetailNavUnits.find('reparar celular'));
  assert.ok(repairs.some(u=>u.name==='Apple'&&u.source==='aventura-official-directory'));
- assert.ok(repairs.some(u=>u.name==='Apple'&&u.code==='LL-002'),
-  'the old Apple map association remains separately marked as provisional');
- const unknown=await page.evaluate(()=>window.RetailNavUnits.getUnits().filter(u=>!u.name));
- assert.ok(unknown.length>100&&unknown.every(u=>u.conceptIds.length===0),
-  'never invent product categories for unidentified photographed rooms');
+ assert.ok(!repairs.some(u=>u.code==='LL-002'),
+  'the old photo-coordinate Apple reference cannot act as a current shop location');
+ const unknownOwners=await page.evaluate(()=>{
+  const ids=new Set(window.RetailNavUnits.getUnits().flatMap(u=>u.sourceGeometry?.polygons?.map(p=>p.polygonId)||[]));
+  return window.__RETAILNAV__.floors.flatMap(f=>f.features).filter(f=>!ids.has(f.id));
+ });
+ assert.ok(unknownOwners.length>100,
+  'source polygons without a qualified merchant association remain unowned');
  console.log('PASS Aventura locale switching, product/service synonyms, mapped floors and safe unknown stores');
  assert.deepEqual(errors,[]);
 }finally{

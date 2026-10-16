@@ -5,7 +5,7 @@
 (()=>{
 'use strict';
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
-const units=Array.isArray(mall.units)?mall.units:[];
+const units=Array.isArray(mall.units)?mall.units.filter(u=>u.activeMap!==false):[];
 const i18n=window.RetailNavI18n;
 const host=document.getElementById('rnUnitOverlay');
 const detail=document.getElementById('rnUnitInfo');
@@ -126,9 +126,10 @@ function getHighlightedCodes(){
 }
 function getMatchedVectors(){
  const active=new Set(searchHighlights);
- return [...new Map(units.filter(u=>active.has(storeKey(u))&&u.polygonId&&u.vectorRelation!=='shared-vector-unverified')
-  .map(u=>[u.floor+':'+u.polygonId,{floor:u.floor,polygonId:u.polygonId,
-   vectorVerified:Boolean(u.vectorVerified)}])).values()];
+ return [...new Map(units.filter(u=>active.has(storeKey(u))).flatMap(u=>{
+  if(u.sourceGeometry&&mall.sourceMapSha256&&u.sourceGeometry.sourceSha256===mall.sourceMapSha256)return u.sourceGeometry.polygons;
+  return u.polygonId&&u.vectorRelation!=='shared-vector-unverified'?[{floor:u.floor,polygonId:u.polygonId}]:[];
+ }).map(p=>[p.floor+':'+p.polygonId,{...p,vectorVerified:false}])).values()];
 }
 function focus(code,floor){
  const u=units.find(x=>x.code===code&&(floor===undefined||x.floor===floor));
@@ -163,8 +164,7 @@ function focus(code,floor){
   }catch{}
  }
  detail.hidden=false;
- if(mall.id==='aventura'&&u.source==='aventura-official-directory')window.RetailNavSourceMap?.show(u);
- else {window.RetailNavSourceMap?.hide();window.__RETAILNAV__?.focusCatalogStore?.(u.storeId,u.floor,[u.x,u.y],u.polygonId);}
+ window.__RETAILNAV__?.focusCatalogStore?.(u.storeId,u.floor,[u.x,u.y],u.polygonId);
  window.__RETAILNAV__?.invalidate?.();
  return true;
 }
@@ -200,14 +200,14 @@ function paint(){
   if(!el){
    el=document.createElement('button');
    el.type='button';el.className='rnUnitCode';
-   el.textContent=u.code;
+   el.textContent=u.sourceGeometry?u.name:u.code;
    el.dataset.unitCode=u.code;el.dataset.storeId=key;
    el.title=u.name?u.code+' · '+u.name:u.code+' · código del plano';
    el.setAttribute('aria-label','Local '+el.title);
    el.addEventListener('click',e=>{e.stopPropagation();focus(u.code,u.floor)});
    host.appendChild(el);buttons.set(key,el);
   }
-  if(!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
+  if((state.focusFloorId&&u.storeId!==state.focusedStoreId)||!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
     !floors.has(u.floor)||(selected&&key!==selected&&state.distance>=145&&!searchHighlights.includes(key))){
    el.hidden=true;continue;
   }

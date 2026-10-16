@@ -572,16 +572,23 @@ try {
   // Explicit opt-in manually placed location; no real geolocation permission used.
   const shared=await page.evaluate(async()=>{
     const floor=window.__RETAILNAV__.floors[1];
-    const center=floor.features.find(f=>f.k==='corridor').c;
+    const center=floor.features.find(f=>f.k==='corridor'||f.k==='unit'||f.k==='anchor').c;
     const res=await fetch('api/location',{method:'POST',credentials:'same-origin',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({sharing:true,floor:'UL',x:center[0],y:center[1]})});
+      headers:{'Content-Type':'application/json',
+        'X-RetailNav-Mall':window.RETAILNAV_ACTIVE_MALL.id,
+        'X-RetailNav-Coordinate-Space':window.RETAILNAV_ACTIVE_MALL.coordinateSpace||'mall-photo-pixels'},
+      body:JSON.stringify({sharing:true,mallId:window.RETAILNAV_ACTIVE_MALL.id,
+        coordinateSpace:window.RETAILNAV_ACTIVE_MALL.coordinateSpace||'mall-photo-pixels',
+        floor:'UL',x:center[0],y:center[1]})});
     return {code:res.status,body:await res.json()};
   });
   assert.equal(shared.code,200);assert.equal(shared.body.myPosition.floor,'UL');
   await guest.reload({waitUntil:'domcontentloaded'});
   await guest.waitForFunction(()=>window.RetailNavSocial?.getState().ready===true);
-  const contact=await guest.evaluate(async()=>(await(await fetch('api/state')).json()).friends[0]);
+  const contact=await guest.evaluate(async()=>(await(await fetch('api/state',{headers:{
+    'X-RetailNav-Mall':window.RETAILNAV_ACTIVE_MALL.id,
+    'X-RetailNav-Coordinate-Space':window.RETAILNAV_ACTIVE_MALL.coordinateSpace||'mall-photo-pixels'
+  }})).json()).friends[0]);
   assert.equal(contact.position.source,'manual');
   assert.equal(contact.position.floor,'UL');
   await guest.waitForFunction(()=>window.RetailNavPins.getState().registered>=10);

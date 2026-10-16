@@ -7,6 +7,10 @@
 (()=>{
 'use strict';
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const coordinateSpace=mall.coordinateSpace||'mall-photo-pixels';
+const matchesFrame=p=>p&&(p.mallId===undefined||p.mallId===mall.id)&&
+ (p.coordinateSpace||'mall-photo-pixels')===coordinateSpace;
+const validPoint=p=>matchesFrame(p)&&[p.x,p.y].every(Number.isFinite);
 const $=id=>document.getElementById(id);
 const ui={open:$('rnIndoorBtn'),panel:$('rnIndoorDialog'),
  close:$('rnIndoorClose'),gps:$('rnGPSBtn'),anchor:$('rnAnchorBtn'),
@@ -25,9 +29,9 @@ let compassOffset=null,stepEnabled=false,steps=0,lastMotion=0,gravitational=9.81
 let uncertaintyMetres=null,motionScale=null,compassListener=false,motionListener=false;
 const reference=mall.defaultVisitorReference||{};
 const entry=reference.entry;
-const fallbackAnchor=entry&&Number.isFinite(entry.x)&&Number.isFinite(entry.y)&&
+const fallbackAnchor=validPoint(entry)&&
  typeof entry.floor==='string'?{
-  floor:entry.floor,x:entry.x,y:entry.y,source:'fallback-entry',
+  floor:entry.floor,x:entry.x,y:entry.y,source:'fallback-entry',mallId:mall.id,coordinateSpace,
   name:entry.name,entryVerified:Boolean(entry.entryVerified),timestampMs:null
  }:null;
 function effectiveReference(){
@@ -170,10 +174,10 @@ function startGeolocation(automatic=false){
   // surveyed mall may: no BLE, infrastructure or guessed floor required.
   const registered=window.RetailNavPositioningCore?.registeredGpsToPhoto(
     observed,mall.geodeticFloorCalibration||null)?.anchor;
-  if(registered&&(anchor===null||
+  if(validPoint(registered)&&(anchor===null||
       ['peer-qr-colocation-asserted','gps-survey-registered'].includes(anchor.source))&&
       window.__RETAILNAV__?.floors?.some(f=>f.id===registered.floor)){
-    anchor=registered;uncertaintyMetres=registered.uncertaintyM;
+    anchor={...registered,mallId:mall.id,coordinateSpace};uncertaintyMetres=registered.uncertaintyM;
     stepEnabled=false;ui.point.hidden=false;
     window.__RETAILNAV__?.invalidate?.();
   }
@@ -211,9 +215,9 @@ ui.anchor?.addEventListener('click',()=>{
 });
 window.addEventListener('retailnav:map-point',event=>{
  const p=event.detail;
- if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)||
+ if(!validPoint(p)||
   !window.__RETAILNAV__?.floors.some(f=>f.id===p.floor))return;
- anchor={floor:p.floor,x:p.x,y:p.y,source:'manual',
+ anchor={floor:p.floor,x:p.x,y:p.y,source:'manual',mallId:mall.id,coordinateSpace,
   timestampMs:Date.now()};
  uncertaintyMetres=motionScale?.5:null;
  steps=0;ui.point.hidden=false;
@@ -357,10 +361,11 @@ function adoptPeerAnchor(reference){
  if(!reference||reference.source!=='peer-qr-colocation-asserted'||
   reference.mallId!==mall.id||
   !floors.some(f=>f.id===reference.floor)||
-  ![reference.x,reference.y].every(x=>Number.isFinite(x)&&x>=0&&x<=2000))return false;
+  !validPoint(reference)||![reference.x,reference.y].every(v=>
+   coordinateSpace==='roveiq:107:local-decimeters-v1'?Math.abs(v)<=10000:v>=0&&v<=2000))return false;
  if(Number.isFinite(reference.expiresAt)&&Date.now()>=reference.expiresAt)return false;
  anchor={floor:reference.floor,x:reference.x,y:reference.y,
-  source:'peer-qr-colocation-asserted',timestampMs:Date.now()};
+  source:'peer-qr-colocation-asserted',mallId:mall.id,coordinateSpace,timestampMs:Date.now()};
  // Without an independently surveyed scale there is NO credible metric error.
  uncertaintyMetres=null;motionScale=null;steps=0;stepEnabled=false;
  ui.scale.value='';

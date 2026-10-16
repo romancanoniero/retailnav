@@ -43,7 +43,7 @@ function setup(mallId,records,deviceLanguages=['es-AR','en-US']){
  return {i18n:window.RetailNavI18n,units:window.RetailNavUnits,document,store,selection,field};
 }
 
-test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
+test('Aventura historical photo references remain archived and official identities stay separate',()=>{
  assert.equal(aventura.mallId,'aventura');
  assert.ok(aventura.records.length>=100);
  const vectorRecords=aventura.records.filter(u=>u.codeKind==='map-vector-reference-not-lease-number');
@@ -54,7 +54,8 @@ test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
   assert.ok(unit.storeId.startsWith('aventura:'));
   if(unit.conceptIds?.length){
    assert.ok(unit.name);
-   assert.equal(unit.polygonId,unit.code);
+   assert.equal(unit.photoReference.polygonId,unit.code);
+   assert.equal(unit.polygonId,null);assert.equal(unit.activeMap,false);
    assert.equal(unit.conceptEvidence,'brand-category-inference-not-inventory');
    assert.equal(unit.conceptsVerified,false);
    assert.equal(unit.productsVerified,false);
@@ -68,7 +69,8 @@ test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
  assert.equal(directory.filter(u=>u.directorySection==='dining').length,68);
  assert.ok(directory.every(u=>u.polygonId===null));
  const auntie=directory.find(u=>u.name==='Auntie Anne’s');
- assert.equal(auntie.floor,null);
+ assert.equal(auntie.floor,'LL');
+ assert.ok(auntie.sourceGeometry.polygons.some(p=>p.floor===auntie.floor));
  assert.deepEqual(auntie.documentedFloors,['LL','UL']);
  assert.match(auntie.locationLabel,/Upper Level.*Lower Level/);
  assert.ok(directory.every(u=>u.storeId.startsWith('aventura:directory:')));
@@ -77,17 +79,19 @@ test('Aventura tags belong ONLY to photograph-named anchor references',()=>{
  assert.ok(!directory.some(u=>['Bubbice','Cha Cha Matcha'].includes(u.name)),
   'officially announced Coming Soon concepts must not be searchable as open dining venues');
  assert.ok(directory.every(u=>u.conceptsVerified===false&&u.productsVerified===false));
- assert.ok(directory.some(u=>u.floor===null&&u.locationLabel==='Outdoor Courtyard'));
+ assert.ok(directory.some(u=>u.sourceGeometry&&u.locationLabel==='Outdoor Courtyard')); // physical courtyard is represented on source LL
  const jcpenney=directory.find(u=>u.name==='JCPenney');
  assert.deepEqual(jcpenney.documentedFloors,['LL','UL']);
- assert.equal(jcpenney.floor,null);
+ assert.equal(jcpenney.floor,'LL');
+ assert.ok(jcpenney.sourceGeometry.polygons.some(p=>p.floor===jcpenney.floor));
  assert.ok(jcpenney.conceptIds.includes('service.optical'));
  const apple=directory.find(u=>u.name==='Apple');
- assert.equal(apple.floor,null);
+ assert.equal(apple.floor,'LL');
+ assert.ok(apple.sourceGeometry.polygons.some(p=>p.floor===apple.floor));
  assert.equal(apple.polygonId,null);
  assert.equal(apple.locationLabel,'Outdoor Courtyard');
  assert.ok(apple.conceptIds.includes('product.smartphone'));
- assert.equal(directory.find(u=>u.name==='Nike')?.floor,null);
+ assert.ok(directory.find(u=>u.name==='Nike')?.sourceGeometry);
  assert.deepEqual(aventuraMapAudit.vectorReferences.length,14);
  assert.ok(aventuraMapAudit.vectorReferences.every(r=>r.nameCrossCheck==='official-name-found'));
  assert.ok(aventuraMapAudit.vectorReferences.every(r=>r.geometryStatus==='provisional-photo-region-not-verified-as-this-storefront'));
@@ -129,7 +133,7 @@ test('Names, brands, products, services, natural phrases and localized autocompl
  const app=setup('aventura',aventura.records,['en-US']);
  const apple=app.units.find('Apple');
  assert.ok(apple.some(u=>u.name==='Apple'&&u.source==='aventura-official-directory'));
- assert.ok(apple.some(u=>u.name==='Apple'&&u.code==='LL-002')); // preserve the named, provisional map association
+ assert.ok(!apple.some(u=>u.code==='LL-002')); // historical photo aliases cannot claim current map ownership
  const detailedName=app.units.findDetailed('Apple').find(r=>r.unit.source==='aventura-official-directory');
  assert.ok(detailedName.matchTypes.includes('name'));
  assert.ok(app.units.findDetailed('smartphone').some(r=>r.matchTypes.includes('product')));
@@ -165,9 +169,9 @@ test('Names, brands, products, services, natural phrases and localized autocompl
  assert.ok(app.units.find('clothing').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
  assert.ok(app.units.find('服装').some(u=>u.name==='JCPenney'&&u.source==='aventura-official-directory'));
  assert.ok(app.units.find('sneakers').length>=4);
- assert.ok(app.units.find('quiero comprar valijas').length>=4);
+ assert.ok(['Longchamp','Porsche Design'].every(name=>app.units.find('quiero comprar valijas').some(u=>u.name===name)));
  assert.ok(app.units.find('something utterly unrelated').length===0);
- assert.ok(app.units.find('LL-002').some(u=>u.name==='Apple'));
+ assert.equal(app.units.find('LL-002').length,0);
  let options=app.units.suggestions('lugg');
  assert.ok(options.some(o=>o.conceptId==='product.luggage'&&o.term==='luggage'));
  options=app.units.suggestions('restaurant');

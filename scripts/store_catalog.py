@@ -215,8 +215,9 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     unused = set(hints) - seen
     if unused:
         raise ValueError(f"{mall_id}: orphan product annotations {sorted(unused)}")
-    from source_map import attach_source_geometry
+    from source_map import attach_source_geometry, activate_native_mesh
     attach_source_geometry(repo, mall_id, records)
+    activate_native_mesh(repo, mall_id, mall, records)
     document = {
         "schema": SCHEMA,
         "mallId": mall_id,

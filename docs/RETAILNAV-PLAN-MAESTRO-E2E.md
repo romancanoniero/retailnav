@@ -831,3 +831,10 @@ python3 scripts/verify.py public
 ## 2026-10-16 · Selección vectorial de fuente oficial en tablet
 
 Implementación: [Contrato, evidencia y verificación de Aventura](SOURCE-MAP-AVENTURA.md). Se aísla el iframe del PR #47 (sin fusionarlo); se incorpora una vista SVG propia con 607 polígonos de la fuente oficial y asociación estricta para 294 comercios, incluidos 11 resultados Coffee. La maqueta fotográfica 3D se conserva separada. Cámara animada, plantas destino/referencia en paneles distintos, rechazo de polígonos compartidos del plano fotográfico y limpieza de selección desconocida. No hay rutas seguras publicables: 1.224 segmentos y 17 conectores disponibles, sin origen de visitante calibrado y con dirección/accesibilidad pendientes de validación. La publicación queda condicionada a pruebas de tablet Chromium y WebKit. El estado de despliegue se verifica en Actions, no se infiere de esta implementación.
+
+
+## 2026-10-16 · Corrección: un único visor 3D
+
+La vista SVG separada incorporada en PR #48 se retira por indicación del usuario. Los polígonos oficiales pasan al formato del motor 3D existente: mismo canvas, controles, transición de cámara, plantas LL/UL/L3 y exportación. Los planos fotográficos originales permanecen en «Tu plano»; no se inventa una transformación entre sus píxeles y las coordenadas oficiales. El destino se resalta por identidad de fuente y la planta del visitante se conserva en contornos. Se aíslan los marcos de posición de personas/QR para evitar reutilizar posiciones antiguas. PR #47 continúa sin fusionarse; no se adopta su mapa externo.
+
+Estado de esta corrección: implementación verificada localmente con validación offline, búsqueda/caché y E2E de selección y posicionamiento en Chromium/WebKit. La publicación queda condicionada a repetir las verificaciones en CI y comprobar luego la versión pública de Contabo. El contrato actualizado está en [SOURCE-MAP-AVENTURA.md](SOURCE-MAP-AVENTURA.md). No se habilitan rutas peatonales ni AR sin verificar las conexiones.

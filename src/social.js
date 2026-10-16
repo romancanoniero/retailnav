@@ -10,6 +10,12 @@ let scannerTimer=0, demoVisible=true, socialStatus='', contactsRenderKey='', pen
 const DEMO=window.RETAILNAV_DEMO_CONTACTS||[];
 const MALL_ID=window.RETAILNAV_ACTIVE_MALL_ID||'aventura';
 const SHOW_REAL_POSITIONS=MALL_ID==='aventura';
+const COORDINATE_SPACE=window.RETAILNAV_ACTIVE_MALL?.coordinateSpace||'mall-photo-pixels';
+function positionMatchesMap(position){
+  return position&&(position.mallId||'aventura')===MALL_ID&&
+    (position.coordinateSpace||'mall-photo-pixels')===COORDINATE_SPACE&&
+    Number.isFinite(position.x)&&Number.isFinite(position.y);
+}
 function element(tag,className,text){
   const el=document.createElement(tag);
   if(className)el.className=className;
@@ -25,7 +31,8 @@ async function request(route,method='GET',payload){
   const url=new URL(route,API);
   const response=await fetch(url.toString(),{
     method,credentials:'same-origin',cache:'no-store',
-    headers:method==='POST'?{'Content-Type':'application/json'}:{},
+    headers:{'X-RetailNav-Mall':MALL_ID,'X-RetailNav-Coordinate-Space':COORDINATE_SPACE,
+      ...(method==='POST'?{'Content-Type':'application/json'}:{})},
     ...(method==='POST'?{body:JSON.stringify(payload||{})}:{})
   });
   let data;
@@ -83,10 +90,13 @@ async function photoFromFile(file){
 function merge(snapshot){
   if(!snapshot||!snapshot.me)return;
   me=snapshot.me;
-  friends=snapshot.friends||[];
+  friends=(snapshot.friends||[]).map(friend=>({...friend,
+    position:positionMatchesMap(friend.position)?friend.position:undefined,
+    positionFrameMismatch:Boolean(friend.positionFrameMismatch||
+      (friend.position&&!positionMatchesMap(friend.position)))}));
   incoming=snapshot.incoming||[];
   outgoing=snapshot.outgoing||[];
-  myPosition=snapshot.myPosition||null;
+  myPosition=positionMatchesMap(snapshot.myPosition)?snapshot.myPosition:null;
   ready=true;
   if(document.activeElement!==$('rnName'))$('rnName').value=me.name;
   $('rnMeCode').textContent='ID interno · '+me.id.slice(0,8).toUpperCase();
@@ -96,8 +106,9 @@ function merge(snapshot){
   $('rnAvatarRemove').hidden=!me.avatarVersion;
   $('rnStatusPosition').textContent=myPosition
     ? 'Compartiendo una marca manual en '+myPosition.floor+' · vence 10 min después de marcarla.'
-    : 'Tu ubicación está oculta. No se utiliza GPS.';
-  $('rnStopLocation').disabled=!myPosition;
+    : (snapshot.positionFrameMismatch||snapshot.myPosition)?'Tu marca pertenece a otro plano. Volvé a indicar tu ubicación.':
+      'Tu ubicación está oculta. No se utiliza GPS.';
+  $('rnStopLocation').disabled=!(snapshot.hasSharedPosition||snapshot.myPosition);
   $('rnCreateRecovery').textContent=me.hasRecovery?'Reemplazar clave de recuperación':'Crear clave de recuperación';
   const badge=$('friendsCount');
   badge.textContent=String(friends.length+(demoVisible?DEMO.length:0));
@@ -150,7 +161,8 @@ function friendRow(friend){
   info.append(element('strong','',friend.name));
   const detail=SHOW_REAL_POSITIONS&&friend.position
     ?friend.position.floor+' · posición que compartió hace '+Math.max(0,Math.ceil((Date.now()-friend.position.updated)/60000))+' min'
-    :(SHOW_REAL_POSITIONS?'No está compartiendo su ubicación':'Ubicación en otro shopping: oculta por privacidad');
+    :(friend.positionFrameMismatch?'Ubicación marcada en otro plano; hace falta una marca nueva':
+      SHOW_REAL_POSITIONS?'No está compartiendo su ubicación':'Ubicación en otro shopping: oculta por privacidad');
   info.append(element('small','',detail));
   const actions=element('div','rnRowActions');
   const locate=button('📍',()=>{
@@ -251,13 +263,13 @@ function renderDemoContacts(){
 function allPeople(){
   const actual=(SHOW_REAL_POSITIONS?friends.filter(f=>f.position):[]).map(f=>({
     id:f.id,name:f.name,demo:false,
-    position:{...f.position,source:'manual',mallId:'aventura-mall-reference'},
+    position:{...f.position,source:'manual',mallId:MALL_ID,coordinateSpace:COORDINATE_SPACE},
     avatarUrl:avatarUrl(f.id,f.avatarVersion),
     visual:{bodyColor:'#65e6e0',shadowColor:'#23647a',rimColor:'#f2ffff'}
   }));
   if(SHOW_REAL_POSITIONS&&myPosition)actual.push({
     id:'self',name:'Yo',demo:false,self:true,
-    position:{...myPosition,source:'manual',mallId:'aventura-mall-reference'},
+    position:{...myPosition,source:'manual',mallId:MALL_ID,coordinateSpace:COORDINATE_SPACE},
     avatarUrl:me?avatarUrl(me.id,me.avatarVersion):'',
     visual:{bodyColor:'#73f1b3',shadowColor:'#3c9279',rimColor:'#ffffff'}
   });
@@ -498,8 +510,10 @@ async function scan(){
 }
 function onMapPoint(event){
   const detail=event.detail;
-  if(!detail||!['LL','UL','L3'].includes(detail.floor))return;
-  request('location','POST',{sharing:true,floor:detail.floor,x:detail.x,y:detail.y})
+  if(!SHOW_REAL_POSITIONS||!detail||!['LL','UL','L3'].includes(detail.floor)||
+    !positionMatchesMap(detail))return;
+  request('location','POST',{sharing:true,mallId:MALL_ID,coordinateSpace:COORDINATE_SPACE,
+    floor:detail.floor,x:detail.x,y:detail.y})
     .then(s=>{merge(s);status('Ubicación manual compartida durante un máximo de 10 minutos.');show();})
     .catch(e=>{status(e.message,true);show();});
 }

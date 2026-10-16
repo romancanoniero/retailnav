@@ -1122,10 +1122,12 @@
       "slug": "bianco-gelato",
       "name": "Bianco Gelato",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -1137,13 +1139,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "25539",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/bianco-gelato/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "blended",
@@ -2412,9 +2417,11 @@
       "slug": "eataly",
       "name": "Eataly",
       "source": "https://aventuramall.com/shops/eataly/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "official-location-label-level-unmapped",
+      "floor": "L3",
+      "documentedFloors": [
+        "L3"
+      ],
+      "floorStatus": "official-source-location-level",
       "locationLabel": "Third Level",
       "description": "Eataly is a two-level store located on the Third Level near Nordstrom. Focused on providing high-quality, sustainable products for all, Eataly is the largest Italian retail and dining experience in the world, transforming the way consumers experience food, beverage, and culture. At Eataly, guests have the unique opportunity to experience Italian culture through markets, counters, cafés, restaurants, and educational offerings that explore the best food and beverage options Italy’s 20 regions and the world has to offer. The Restaurants La Pizza & La Pasta is one of Eataly’s signature dining concepts, centered on two of the most beloved dishes in Italian cuisine: Neapolitan-style pizza and artisanal pasta. With nearly 300 seats across the restaurant and bar, the menu explores the uniqueness of Italy from the North to the South, focusing on high-quality ingredients and regional recipes. Il Pastaio is an outlet dedicated to the art of fresh pasta. Guests can watch master pastai craft different shapes and variations of pasta in front of them daily, with nearly 90 seats available near the live production space. The Market The Eataly marketplace is a resource for best-in-class products – from pantry staples such as extra virgin olive oils, canned tomatoes, sauces, and bronze-extruded pastas to sweets, a diversity of salumi and formaggi, and special occasion picks like gift boxes, caviar, and panettoni. Alongside the hundreds of Italian imports, customers can also find high-quality produce, meats, and grab-and-go meals from the made-in-Eataly line. Served from counter to restaurant, a selection of housemade fresh pasta (produced onsite daily) is available for cooking at-home. To complete any shopping trip, the Eataly wine store provides a robust array of Italian wines spanning all 20 different regions of Italy, including a temperature-controlled Riserva room with a curated selection of the finest and rarest Italian wines and spirits. The Counters For those in need of a coffee break or bite on-the-go, Eataly’s quick-service counters include a number of authentic Italian favorites, including: Lavazza, a caffè featuring Lavazza coffee drinks La Pasticceria, the pastry counter with cakes, croissants, and other baked goods Il Gelato, with gelato and sorbetto creations Pizza alla Pala, offering a variety of Roman-style pizza Panini, a counter dedicated to focaccia, panini, and farcita The Cooking School In line with Eataly’s philosophy of “eat, shop, and learn,” the cooking school will provide a regular cadence of educational classes.",
       "conceptIds": [
@@ -2454,7 +2461,10 @@
       "detailStatus": "official-shops-and-dining-descriptions-captured",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/eataly/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "edikted",
@@ -3794,10 +3804,12 @@
       "slug": "joe-and-the-juice",
       "name": "Joe & The Juice",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -3807,13 +3819,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "20680",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/joe-the-juice/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "joey-aventura",
@@ -4680,10 +4695,12 @@
       "slug": "masse-by-bachour",
       "name": "Masse by Bachour",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -4698,13 +4715,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "25872",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/masse-by-bachour/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "massimo-dutti",
@@ -4950,7 +4970,7 @@
       "floor": null,
       "documentedFloors": [],
       "floorStatus": "unknown",
-      "locationLabel": null,
+      "locationLabel": "Outdoor Courtyard",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -4962,13 +4982,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "20645",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/motek/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "mrs-fields",
@@ -4998,10 +5021,12 @@
       "slug": "naughty-coffee",
       "name": "Naughty Coffee",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -5012,13 +5037,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "20659",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/naughty-coffee-3/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "neko",
@@ -5289,10 +5317,12 @@
       "slug": "nordstrom-ebar",
       "name": "Nordstrom eBar",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level, Nordstrom",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -5301,13 +5331,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "21507",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/nordstrom-ebar/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "norimoto",
@@ -5859,10 +5892,12 @@
       "slug": "ralphs-coffee",
       "name": "Ralph’s Coffee",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -5872,13 +5907,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "20638",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/ralphs-coffee/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "ray-ban",
@@ -6079,10 +6117,12 @@
       "slug": "rosetta-bakery",
       "name": "Rosetta Bakery",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -6102,7 +6142,8 @@
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialLocationSourceUrl": "https://aventuramall.com/dining/rosetta-bakery/"
     },
     {
       "slug": "runner-depot",
@@ -6310,10 +6351,12 @@
       "slug": "sens-coffee",
       "name": "Sens Coffee",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "L3",
+      "documentedFloors": [
+        "L3"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Third Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -6329,7 +6372,8 @@
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialLocationSourceUrl": "https://aventuramall.com/dining/sens-coffee/"
     },
     {
       "slug": "sephora",
@@ -7021,7 +7065,7 @@
       "floor": null,
       "documentedFloors": [],
       "floorStatus": "unknown",
-      "locationLabel": null,
+      "locationLabel": "The Abbey (fuera del edificio principal)",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -7031,13 +7075,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "41350",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/the-salty/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "the-shade-store",
@@ -7422,10 +7469,12 @@
       "slug": "venchi",
       "name": "Venchi",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -7438,13 +7487,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "25456",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/venchi/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "victorias-secret",
@@ -7753,10 +7805,12 @@
       "slug": "yann-couvreur",
       "name": "Yann Couvreur",
       "source": "https://aventuramall.com/dining/",
-      "floor": null,
-      "documentedFloors": [],
-      "floorStatus": "unknown",
-      "locationLabel": null,
+      "floor": "LL",
+      "documentedFloors": [
+        "LL"
+      ],
+      "floorStatus": "official-source-location-level",
+      "locationLabel": "Lower Level",
       "description": "Listed in the official Aventura Mall Dining directory. Category reflects directory placement and does not certify current inventory.",
       "conceptIds": [
         "category.restaurant",
@@ -7767,13 +7821,16 @@
       "conceptEvidence": "official-dining-description",
       "productTerms": [],
       "serviceTerms": [],
-      "officialMapLocationId": null,
+      "officialMapLocationId": "28589",
       "recordStatus": "listed-on-official-dining-directory",
       "note": "Directory category only; no polygon or floor inferred.",
       "detailStatus": "name-and-directory-category",
       "diningSource": "https://aventuramall.com/dining/",
       "directorySection": "dining",
-      "conceptSource": "https://aventuramall.com/dining/"
+      "conceptSource": "https://aventuramall.com/dining/",
+      "officialMapEmbedVenueId": 107,
+      "officialMapSourceUrl": "https://aventuramall.com/dining/yann-couvreur/",
+      "officialMapEvidence": "official-Aventura-Mall-dining-page-RoveIQ-embedded-location-link"
     },
     {
       "slug": "yip",

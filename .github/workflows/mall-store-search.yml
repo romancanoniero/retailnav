@@ -3,6 +3,11 @@ on:
   push:
     branches: [main, feature/store-search-floor-follow-orientation-20261015]
     paths:
+      - "src/source-vector-map.js"
+      - "src/store-meetups.js"
+      - "scripts/source_map.py"
+      - "scripts/test-source-map*"
+      - "data/official-maps/**"
       - "src/viewer.js"
       - "src/units.js"
       - "src/unit-signs-webgl.js"
@@ -23,6 +28,11 @@ on:
       - ".github/workflows/mall-store-search.yml"
   pull_request:
     paths:
+      - "src/source-vector-map.js"
+      - "src/store-meetups.js"
+      - "scripts/source_map.py"
+      - "scripts/test-source-map*"
+      - "data/official-maps/**"
       - "src/viewer.js"
       - "src/units.js"
       - "src/unit-signs-webgl.js"
@@ -145,8 +155,13 @@ jobs:
       - name: Install browser
         run: |
           npm install --no-save --ignore-scripts playwright@1.56.1
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
       - name: All-floor autocomplete and provisional entry reference iPhone smoke
         run: node scripts/test-store-search-browser.mjs
+      - name: Official source joins and tablet selection in Chromium and WebKit
+        run: |
+          python3 scripts/test-source-map.py
+          node scripts/test-source-map-browser.mjs
+          BROWSER=webkit node scripts/test-source-map-browser.mjs
       - name: Preserve map versioning, loader and Aventura logo
         run: node scripts/test-map-cache-browser.mjs

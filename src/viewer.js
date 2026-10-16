@@ -431,6 +431,10 @@ function setFocusedStoreVector(storeId,floorId,polygonId){
 // location, and retains no stale highlight from an earlier store.
 function focusCatalogStore(storeId,floorId,p,polygonId){
  if(!ready)return {located:false,reason:'map-not-ready'};
+ const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===storeId&&u.mallId===mallId);
+ floorId=unit?.floor;p=unit&&Number.isFinite(unit.x)&&Number.isFinite(unit.y)?[unit.x,unit.y]:null;
+ polygonId=unit?.vectorRelation==='one-photo-region-unverified'?unit.polygonId:null;
+ selected=null;route=null;routeRunning=false;
  const floor=floors.find(f=>f.id===floorId);
  const canFocus=Boolean(floor&&Array.isArray(p)&&p.length===2&&p.every(Number.isFinite));
  // Switching an existing search to one floor avoids other opaque slabs hiding

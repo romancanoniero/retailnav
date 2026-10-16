@@ -126,7 +126,7 @@ function getHighlightedCodes(){
 }
 function getMatchedVectors(){
  const active=new Set(searchHighlights);
- return [...new Map(units.filter(u=>active.has(storeKey(u))&&u.polygonId)
+ return [...new Map(units.filter(u=>active.has(storeKey(u))&&u.polygonId&&u.vectorRelation!=='shared-vector-unverified')
   .map(u=>[u.floor+':'+u.polygonId,{floor:u.floor,polygonId:u.polygonId,
    vectorVerified:Boolean(u.vectorVerified)}])).values()];
 }
@@ -163,9 +163,8 @@ function focus(code,floor){
   }catch{}
  }
  detail.hidden=false;
- if(Number.isFinite(u.x)&&Number.isFinite(u.y))
-   window.__RETAILNAV__?.focusAt?.(u.floor,[u.x,u.y],67);
- else if(u.floor)window.__RETAILNAV__?.setFloor?.(u.floor);
+ if(mall.id==='aventura'&&u.source==='aventura-official-directory')window.RetailNavSourceMap?.show(u);
+ else {window.RetailNavSourceMap?.hide();window.__RETAILNAV__?.focusCatalogStore?.(u.storeId,u.floor,[u.x,u.y],u.polygonId);}
  window.__RETAILNAV__?.invalidate?.();
  return true;
 }

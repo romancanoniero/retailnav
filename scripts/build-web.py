@@ -211,7 +211,19 @@ loader_brand_payload = (loader_brand_payload.replace("<", r"\u003c")
                         .replace("\u2028", r"\u2028")
                         .replace("\u2029", r"\u2029"))
 
+search_taxonomy = json.loads((repo / "data/search-taxonomy.json").read_text(encoding="utf-8"))
+assert search_taxonomy["schema"] == "retailnav.search.taxonomy.v1"
+search_payload = json.dumps(search_taxonomy, ensure_ascii=False, separators=(",", ":"))
+# Escape markup separators and JavaScript line terminators inside a JSON script element.
+search_payload = (search_payload.replace("<", r"\u003c")
+                  .replace(">", r"\u003e")
+                  .replace("&", r"\u0026")
+                  .replace("\u2028", r"\u2028")
+                  .replace("\u2029", r"\u2029"))
+
 components = {
+    "__SEARCH_TAXONOMY__": search_payload,
+    "__SEARCH_I18N__": (repo / "src/search-i18n.js").read_text(encoding="utf-8"),
     "__LOADER_BRAND_CATALOG__": loader_brand_payload,
     "__LOADER_BRAND_JS__": (repo / "src/loader-brand.js").read_text(encoding="utf-8"),
     "__MALL_CATALOG__": json.dumps(catalog, ensure_ascii=False, separators=(",", ":")),

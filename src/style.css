@@ -1092,3 +1092,24 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  .rnFloorReference{font-size:9px;max-width:100px;line-height:1.25}
  .rnSearchMarker{min-width:34px;min-height:25px;padding:4px 6px;font-size:10px}
 }
+
+
+/* Accessible locale picker inside the single shared map search input. */
+.rnLangVisuallyHidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+ overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.rnMapSearch .searchbox input{padding-right:105px}
+.rnMapSearch .searchbox .rnLanguageSelect{
+ position:absolute;top:6px;right:7px;z-index:2;width:89px;max-width:27%;
+ height:37px;min-height:34px;padding:3px 7px;border:1px solid #557b8d;
+ border-radius:10px;color:var(--rn-theme-text,#edf5fa);
+ background:var(--rn-theme-surface,#193448);
+ font-size:12px;font-weight:650;cursor:pointer}
+.rnMapSearch .searchbox .rnLanguageSelect:focus-visible{
+ outline:2px solid #89e5ee;outline-offset:1px}
+@media(max-width:760px){
+ .rnMapSearch .searchbox input{padding-right:100px}
+ .rnMapSearch .searchbox .rnLanguageSelect{height:34px;min-height:34px;top:6px;right:6px;width:87px}
+}
+@media(max-height:530px) and (orientation:landscape){
+ .rnMapSearch .searchbox .rnLanguageSelect{top:4px;height:31px;min-height:31px}
+}

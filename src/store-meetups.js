@@ -105,7 +105,7 @@ function showOfficialLocation(unit){
  if(!valid){
   officialView.hidden=true;officialFrame.removeAttribute('src');return false;
  }
- const link='https://embed.roveiq.com/venues/107?location='+encodeURIComponent(id);
+ const link='https://embed.roveiq.com/venues/107/locations/'+encodeURIComponent(id)+'?disableInteraction=1&hidecontrols=1';
  const heading=tr('Mapa oficial · ','Official mall map · ')+(unit.name||unit.code);
  const caption=text('strong',heading);
  officialCaption.replaceChildren(caption);

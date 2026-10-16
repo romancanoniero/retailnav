@@ -147,6 +147,43 @@ try{
  assert.equal(aventura.inside.entryReferenceAvailable,false);
  assert.equal(await page.locator('#rnMyPositionMarker').isVisible(),false);
  console.log('PASS Aventura original vector references included, never invented shop codes or entrances');
+
+ // Locale is read from the browser and may be overridden without changing
+ // canonical concept IDs, losing search matches or redownloading geometry.
+ assert.ok(await page.evaluate(()=>window.RetailNavI18n.getState().conceptCount>=15));
+ assert.equal((await page.evaluate(()=>window.RetailNavUnits.getState())).withConcepts,14);
+ await page.locator('#rnLanguageSelect').selectOption('es-AR');
+ await page.waitForFunction(()=>document.documentElement.lang==='es-AR');
+ assert.match(await input.getAttribute('placeholder'),/Buscar/);
+ await input.fill('lugg');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnSuggestedTag')]
+  .some(el=>el.dataset.tag==='valijas'));
+ const luggageSuggestion=page.locator('.rnSuggestedTag[data-tag="valijas"]');
+ assert.ok(await luggageSuggestion.count()>=1);
+ await luggageSuggestion.click();
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='valijas');
+ state=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.deepEqual(state.visible,['LL','UL','L3']);
+ assert.ok(state.highlightedVectorCount>=4);
+ const matchingIds=await page.evaluate(()=>window.RetailNavUnits.find('valijas').map(u=>u.storeId).sort());
+ assert.ok(matchingIds.length>4);
+ assert.deepEqual(matchingIds,await page.evaluate(()=>window.RetailNavUnits.find('luggage')
+  .map(u=>u.storeId).sort()));
+ assert.deepEqual(matchingIds,await page.evaluate(()=>window.RetailNavUnits.find('行李箱')
+  .map(u=>u.storeId).sort()));
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await page.waitForFunction(()=>document.documentElement.lang==='en');
+ assert.match(await input.getAttribute('placeholder'),/Search/);
+ assert.ok((await page.locator('.rnUnitResult').allTextContents()).some(x=>x.includes('luggage')));
+ await input.fill('reparar celular');
+ await input.press('Enter');
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='reparar celular');
+ const repairs=await page.evaluate(()=>window.RetailNavUnits.find('reparar celular').map(u=>u.name));
+ assert.deepEqual(repairs,['Apple']);
+ const unknown=await page.evaluate(()=>window.RetailNavUnits.getUnits().filter(u=>!u.name));
+ assert.ok(unknown.length>100&&unknown.every(u=>u.conceptIds.length===0),
+  'never invent product categories for unidentified photographed rooms');
+ console.log('PASS Aventura locale switching, product/service synonyms, mapped floors and safe unknown stores');
  assert.deepEqual(errors,[]);
 }finally{
  await browser.close();

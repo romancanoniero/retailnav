@@ -363,6 +363,7 @@ function drawSearchMarkers(){
   marker.title=store.floor+' · '+(store.name||store.code)+
    (store.vectorVerified?' · vector validado':' · posición aproximada, vector provisional');
   marker.hidden=false;
+  marker.classList.toggle('rnSearchMarkerChosen',window.RetailNavUnits?.getState?.()?.selected===id);
   marker.style.left=point.x.toFixed(1)+'px';
   marker.style.top=point.y.toFixed(1)+'px';
   showing.add(id);

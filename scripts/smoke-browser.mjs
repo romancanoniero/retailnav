@@ -1079,7 +1079,7 @@ try {
   assert.equal(nw.viewer.searchPlacement,'map-top');
   assert.equal(await nwPage.locator('#mallHeaderName').innerText(),
     '新世界城 · Shanghai New World City');
-  assert.deepEqual(nw.floorLabels,['L1','L2','L3','L4','L5','L6','L7']);
+  assert.deepEqual(nw.floorLabels,['L1','L2','L3','L4','L5','L6','L7','L8','L9']);
   assert.deepEqual(nw.viewer.visible,['L1'],
    'New World City should start on first/ground floor');
   assert.equal(nw.geometryRegions,195,'195 colour-island REGIONS, not stores');

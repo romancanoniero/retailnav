@@ -224,8 +224,8 @@ try{
  assert.ok(await carousel.locator('.rnStoreCard').count()>1,
   'changing language preserves the active store carousel');
  await firstCard.click();
- assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
-  'selecting a local opens its map focus/details');
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
+  'one tap keeps the mobile store selection in its results panel');
  assert.ok(firstStoreId);
  await page.locator('#rnUnitClose').click();
  await page.setViewportSize({width:900,height:900});
@@ -234,7 +234,30 @@ try{
  const tabletPanel=await page.locator('#rnTagResultPanel').evaluate(el=>({
   right:getComputedStyle(el).right,left:getComputedStyle(el).left
  }));
- assert.equal(tabletPanel.right,'16px','tablet carousel is docked on the map right side');
+ assert.equal(tabletPanel.right,'0px','tablet list uses a dedicated right-side panel');
+ const tabletLayout=await page.evaluate(()=>({
+  panel:document.querySelector('#rnTagResultPanel').getBoundingClientRect().toJSON(),
+  viewport:document.querySelector('.stage>.viewport').getBoundingClientRect().toJSON(),
+  cards:document.querySelector('#rnTagResultCards').getBoundingClientRect().toJSON(),
+  cardCount:document.querySelectorAll('#rnTagResultCards .rnStoreCard').length,
+  meetupReady:Boolean(window.RetailNavMeetups)
+ }));
+ assert.ok(tabletLayout.viewport.right<=tabletLayout.panel.left+2,
+  'map rendering must not hide underneath the tablet side rail');
+ assert.ok(tabletLayout.meetupReady);
+ assert.ok(tabletLayout.cardCount>1);
+ const firstTabletCard=page.locator('#rnTagResultCards .rnStoreCard').first();
+ await firstTabletCard.click();
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
+  'one tap highlights a store without closing the vertical list');
+ assert.equal((await page.evaluate(()=>window.RetailNavMeetups.getState())).detailOpen,false);
+ await firstTabletCard.dblclick();
+ assert.equal(await page.locator('#rnStoreDetails').isVisible(),true,
+  'second tap or double-click opens store details in the same side panel');
+ assert.equal((await page.evaluate(()=>window.RetailNavMeetups.getState())).detailOpen,true);
+ assert.ok(await page.locator('#rnStoreDetails button[disabled]').count(),
+  'unverified AR guidance remains unavailable');
+ await page.locator('#rnStoreDetails .rnBackToStores').click();
  assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
  assert.equal(await page.locator('#sidebar').isVisible(),false,
   'tablet tag results close the former left information panel');

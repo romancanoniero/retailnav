@@ -40,7 +40,12 @@ try {
   assert.equal(viewer.referenceFloor,'LL');
   // Product default is full spherical 360° rotation. Switch to Earth-like
   // panning explicitly for the map-pan, two-finger tilt and pinch checks below.
+  // The right toolbar is intentionally hidden on mobile to preserve map space;
+  // reveal it only in this harness so its interaction handlers remain covered.
   assert.equal(viewer.gestureMode,'orbit-3d','Spherical 360 rotation is the default');
+  assert.equal(await page.locator('#pan').isVisible(),false,
+    'Mobile map controls stay hidden to preserve the map viewport');
+  await page.locator('.hudright').evaluate(el=>el.style.setProperty('display','flex','important'));
   await page.locator('#pan').click();
   assert.equal((await page.evaluate(()=>window.__RETAILNAV__.getState())).gestureMode,'map-pan');
   assert.ok(social.anonymous);

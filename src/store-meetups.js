@@ -82,6 +82,25 @@ function external(host,u,key,label){
   host.append(a);
  }catch{}
 }
+const selectionStatus=document.createElement('p');
+selectionStatus.id='rnStoreSelectionStatus';
+selectionStatus.className='rnStoreSelectionStatus';
+selectionStatus.setAttribute('role','status');
+selectionStatus.setAttribute('aria-live','polite');
+selectionStatus.hidden=true;
+cards.before(selectionStatus);
+function showSelectionStatus(u,focus){
+ selectionStatus.hidden=false;
+ const label=u.name||u.code;
+ selectionStatus.textContent=focus?.located
+  ?tr('Seleccionado: ','Selected: ')+label+' · '+tr('Enfoque en el mapa','Focused on map')
+  :tr('Seleccionado: ','Selected: ')+label+' · '+
+   (u.locationLabel||u.documentedFloors?.length
+    ?tr('Ubicación indicada por el directorio; falta vincularla con el plano.',
+      'Directory location is available, but not yet linked to the map.')
+    :tr('Ubicación pendiente de identificar en el plano; no se puede enfocar ni resaltar.',
+      'Map position is unknown; focus and map highlight are not available.'));
+}
 function selectStore(id,showDetails=false){
  const u=window.RetailNavUnits?.getUnits()?.find(s=>s.storeId===id);
  if(!u)return;
@@ -99,9 +118,11 @@ function selectStore(id,showDetails=false){
  if(located)window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;
- const reason=!u.polygonId&&!Number.isFinite(u.x);
  panel.dataset.selectedStore=id;
  panel.dataset.locationKnown=String(Boolean(focus?.located));
+ // A directory-only result must still give visible confirmation of selection.
+ // Never suggest that the map has highlighted a polygon that is not linked.
+ showSelectionStatus(u,focus);
  if(!focus?.located)panel.setAttribute('data-location-note',
   tr('Ubicación exacta no identificada en el plano','Exact map location unknown'));
  else panel.removeAttribute('data-location-note');
@@ -259,7 +280,7 @@ const observer=new MutationObserver(()=>{
 observer.observe(cards,{childList:true,subtree:false});
 window.addEventListener('retailnav:ready',()=>{});
 const open=()=>{
- if(panel.hidden){selectedId='';details.hidden=true;cards.hidden=false;meetingBox.hidden=true;return;}
+ if(panel.hidden){selectedId='';selectionStatus.hidden=true;details.hidden=true;cards.hidden=false;meetingBox.hidden=true;return;}
  refresh().catch(()=>{});
 };
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});

@@ -133,6 +133,8 @@ function getMatchedVectors(){
 function focus(code,floor){
  const u=units.find(x=>x.code===code&&(floor===undefined||x.floor===floor));
  if(!u)return false;
+ document.getElementById('rnMapSearch')?.classList.remove('finding');
+ document.getElementById('search')?.blur();
  selected=storeKey(u);
  title.textContent=u.nameStatus==='official-directory'?u.name:(u.name?u.name+' · ':'')+u.code;
  const activity=u.conceptIds?.length

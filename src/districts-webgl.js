@@ -22,6 +22,8 @@ const find=q=>districts.filter(d=>normalizeText(d.name+' '+(d.detail||''))
 function focus(id){
  const district=districts.find(item=>item.id===id);
  if(!district)return false;
+ document.getElementById('rnMapSearch')?.classList.remove('finding');
+ document.getElementById('search')?.blur();
  focused=id;
  window.__RETAILNAV__?.focusAt?.(district.floor,[district.x,district.y],100);
  window.__RETAILNAV__?.invalidate?.();

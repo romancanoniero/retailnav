@@ -782,14 +782,14 @@ function setFloor(id){
 }
 function contains(p,ring){let v=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){let a=ring[i],b=ring[j];if(((a[1]>p[1])!==(b[1]>p[1]))&&(p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]))v=!v;}return v;}
 function pick(x,y){if(!invMvp)return;let r=canvas.getBoundingClientRect(),nx=(x-r.left)/r.width*2-1,ny=1-(y-r.top)/r.height*2;let un=z=>{let v=mp(invMvp,[nx,ny,z,1]);return v.slice(0,3).map(x=>x/v[3]);};let a=un(-1),b=un(1),dir=norm(vsub(b,a)),best=null,dist=Infinity;for(let floor of visible()){for(let f of floor.features.filter(f=>['unit','anchor','zone','amenity'].includes(f.k))){let t=(floor.y+height(f)-a[1])/dir[1];if(!Number.isFinite(t)||t<0||t>dist)continue;let pt=vadd(a,vmul(dir,t)),p=[pt[0]/cfg.scale+cfg.origin[0],pt[2]/cfg.scale+cfg.origin[1]];if(contains(p,f.r[0])&&!f.r.slice(1).some(h=>contains(p,h))){best=f;dist=t;}}}if(best)select(best);}
-function select(f){selected=f;route=null;routeRunning=false;$('rnMapSearch').classList.remove('finding');$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Local comercial provisional','amenity':'Servicio dibujado según plano','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.storeName?(f.storeCode+' · '+f.storeName):(f.n||f.id);$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();}
+function select(f){selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;$('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Local comercial provisional','amenity':'Servicio dibujado según plano','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.storeName?(f.storeCode+' · '+f.storeName):(f.n||f.id);$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();}
 function clearSelection(){selected=null;route=null;routeRunning=false;$('detail').hidden=true;results();}
 function matchTypeLabel(type){const key={name:'nameMatch',product:'productMatch',service:'serviceMatch',category:'categoryMatch'}[type];return window.RetailNavI18n?.ui(key)||type;}
 function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
  const unit=record.unit,lang=window.RetailNavI18n;
  const b=document.createElement('button');b.type='button';b.className='result rnUnitResult'+(horizontal?' rnStoreCard':'');
  b.dataset.storeId=record.storeId;b.dataset.matchTypes=matchTypes.join(',');
- const logo=unit.logoURL||unit.logo||unit.brandLogoURL;
+ const logo=unit.logoURL||unit.logoUrl||unit.logo||unit.brandLogoURL||unit.brandLogoUrl;
  if(horizontal){
   const media=document.createElement('span');media.className='rnStoreCardLogo';
   const initials=(unit.name||unit.code||'?').trim().split(/\s+/).slice(0,2).map(part=>part[0]).join('').toUpperCase();
@@ -798,7 +798,7 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
    const url=new URL(logo,location.href);
    if(url.protocol==='https:'||url.origin===location.origin){
     const img=document.createElement('img');img.src=url.href;img.alt='';img.loading='lazy';
-    img.onerror=()=>img.remove();media.replaceChildren(img);
+    img.onerror=()=>media.replaceChildren(fallback);media.replaceChildren(img);
    }
   }catch{}
   b.append(media);
@@ -817,13 +817,32 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
  notes.push(unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar'));
  const note=document.createElement('span');note.className='small';note.textContent=notes.join(' · ');
  info.append(note);b.title=[unit.code,unit.name,unit.category,unit.locationLabel,unit.tags].filter(Boolean).join(' · ');
- b.append(badge,info);b.onclick=()=>window.RetailNavUnits?.focusStore?.(record.storeId);host.append(b);
+ b.append(badge,info);b.onclick=()=>{
+  const focused=window.RetailNavUnits?.focusStore?.(record.storeId);
+  if(focused&&horizontal){
+   selectedSearchTagKey=null;document.body.classList.remove('rnTagResultsOpen');
+   $('rnTagResultPanel').hidden=true;results();
+  }
+ };host.append(b);
 }
 function renderGroupedShopResults(host,query){
  if(!query)return{storeIds:new Set(),options:[]};
  const lang=window.RetailNavI18n,records=window.RetailNavUnits?.findDetailed?.(query)||[];
  const byStore=new Map(records.map(record=>[record.storeId,record]));
  const options=window.RetailNavUnits?.suggestions?.(query,15)||[];
+ const panel=$('rnTagResultPanel'),panelTitle=$('rnTagResultTitle'),panelCards=$('rnTagResultCards');
+ panelCards.replaceChildren();panelCards.dataset.conceptId='';panelCards.dataset.tagKey='';
+ const selectedOption=options.find(option=>{
+  const key=option.conceptId?'concept:'+option.conceptId:'legacy:'+lang.normalize(option.term);
+  return key===selectedSearchTagKey;
+ });
+ document.body.classList.toggle('rnTagResultsOpen',Boolean(selectedOption));
+ panel.hidden=!selectedOption;
+ if(selectedOption){
+  const key=selectedOption.conceptId?'concept:'+selectedOption.conceptId:'legacy:'+lang.normalize(selectedOption.term);
+  panelCards.dataset.conceptId=selectedOption.conceptId||'';panelCards.dataset.tagKey=key;
+  panelTitle.textContent=selectedOption.term+' · '+selectedOption.count+' '+(lang?.ui('stores')||'locales');
+ }
  if(options.length){
   const title=document.createElement('h4');title.className='rnResultHeading';
   title.textContent=lang?.ui('tagsFound')||'Etiquetas coincidentes';host.append(title);
@@ -850,16 +869,14 @@ function renderGroupedShopResults(host,query){
    members.set(record.storeId,record);
   }
   if(!members.size)continue;
-  const group=document.createElement('section');group.className='rnResultGroup'+(selectedSearchTagKey?' rnStoreCards':'');
-  group.dataset.conceptId=option.conceptId||'';
-  group.dataset.tagKey=tagKey;
+  const group=document.createElement('section');group.className='rnResultGroup';
+  group.dataset.conceptId=option.conceptId||'';group.dataset.tagKey=tagKey;
   const heading=document.createElement('h5');heading.textContent=option.term+' · '+(lang?.ui('storesWithTag')||'Comercios con esta etiqueta');group.append(heading);
-  const storeList=selectedSearchTagKey?document.createElement('div'):group;
-  if(selectedSearchTagKey){storeList.className='rnStoreCarousel';group.append(storeList);}
+  const storeList=selectedSearchTagKey?panelCards:group;
   for(const record of members.values()){
    appendUnitResult(storeList,record,record.matchTypes,{horizontal:Boolean(selectedSearchTagKey)});grouped.add(record.storeId);
   }
-  host.append(group);
+  if(!selectedSearchTagKey)host.append(group);
  }
  // Direct commercial-name matches and matches without a suggested tag remain
  // discoverable and are explicitly separated by the field that matched.
@@ -1602,9 +1619,9 @@ const confirmSearch=(value,tagKey=null)=>{
  selectedSearchTagKey=tagKey;
  $('search').value=query;
  const report=applySearchFloors(query);
- // Keep matched stores selectable after Enter or an autocomplete tap;
- // touching the map or a result closes this compact overlay.
- $('rnMapSearch').classList.add('finding');
+ // A selected semantic tag gets a dedicated map-adjacent carousel. Keep the
+ // dropdown for ordinary incremental results and close the left information rail.
+ $('rnMapSearch').classList.toggle('finding',!tagKey);
  $('rnSearchSuggestions').hidden=true;
  $('search').blur();results();drawSearchMarkers();
  notify(report.matches+' '+(window.RetailNavI18n?.ui('results')||'coincidencias')+
@@ -1624,6 +1641,7 @@ window.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.body
 const updateSearchPanel=()=>{
  const query=$('search').value.trim();
  selectedSearchTagKey=null;
+ document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;
  $('rnMapSearch').classList.toggle('finding',Boolean(query));
  $('detail').hidden=true;
  if(searchFloorSet&&query!==searchCommitted)clearSearchFloors();
@@ -1631,8 +1649,13 @@ const updateSearchPanel=()=>{
 };
 $('search').oninput=updateSearchPanel;
 $('search').onfocus=updateSearchPanel;
+$('rnTagResultClose').onclick=()=>{
+ selectedSearchTagKey=null;document.body.classList.remove('rnTagResultsOpen');
+ $('rnTagResultPanel').hidden=true;results();
+};
 $('search').addEventListener('keydown',event=>{
  if(event.key==='Escape'){
+  if(selectedSearchTagKey){selectedSearchTagKey=null;document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;results();}
   $('rnMapSearch').classList.remove('finding');
   $('rnSearchSuggestions').hidden=true;$('search').blur();
   event.stopPropagation();return;

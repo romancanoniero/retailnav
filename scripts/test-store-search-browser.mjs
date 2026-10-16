@@ -195,22 +195,49 @@ try{
   'the grouped result list is the single incremental search surface');
  await page.locator('.rnResultTag[data-concept-id="cuisine.japanese"]').click();
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Japanese cuisine');
- const carousel=page.locator('.rnResultGroup[data-concept-id="cuisine.japanese"] .rnStoreCarousel');
- assert.ok(await carousel.count());
+ const carousel=page.locator('#rnTagResultCards');
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true,
+  'selecting a semantic tag opens a dedicated panel outside the autocomplete dropdown');
+ assert.equal(await page.locator('#results .rnStoreCard').count(),0,
+  'selected-tag cards do not remain inside the dropdown');
+ assert.equal(await carousel.getAttribute('data-concept-id'),'cuisine.japanese',
+  'the carousel keeps its canonical tag identity');
+ assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnTagResultsOpen')),true,
+  'the former left information panel is closed while tag results are open');
  assert.ok(await carousel.locator('.rnStoreCard').count()>1,
   'selecting a category presents its matching establishments horizontally');
  assert.ok((await carousel.locator('.rnStoreCard').first().textContent()).length>0,
   'cards show the local name and its available specialties');
- await carousel.locator('.rnStoreCard').first().click();
+ const firstCard=carousel.locator('.rnStoreCard').first();
+ const firstStoreId=await firstCard.getAttribute('data-store-id');
+ assert.ok(await firstCard.locator('.rnStoreCardLogo').count(),
+  'each card reserves space for the store logo or initials fallback');
+ const mobilePanelPosition=await page.locator('#rnTagResultPanel').evaluate(el=>({
+  bottom:getComputedStyle(el).bottom,top:getComputedStyle(el).top
+ }));
+ assert.equal(mobilePanelPosition.top,'auto','phone carousel sits at the bottom edge of the map');
+ await firstCard.click();
  assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
   'selecting a local opens its map focus/details');
- assert.ok((await carousel.locator('.rnStoreCard').first().getAttribute('data-store-id')));
+ assert.ok(firstStoreId);
+ await page.locator('#rnUnitClose').click();
+ await page.setViewportSize({width:900,height:900});
+ await input.fill('Japanese cuisine');
+ await page.locator('.rnResultTag[data-concept-id="cuisine.japanese"]').click();
+ const tabletPanel=await page.locator('#rnTagResultPanel').evaluate(el=>({
+  right:getComputedStyle(el).right,left:getComputedStyle(el).left
+ }));
+ assert.equal(tabletPanel.left,'auto','tablet carousel is docked on the map right side');
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),true);
+ await page.locator('#rnTagResultClose').click();
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),false,
+  'the tag carousel has a direct close control');
+ await page.setViewportSize({width:390,height:844});
  await page.locator('#rnExpandView').click();
  assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnExpandedView')),true);
  await page.locator('#rnExitExpandedView').click();
  assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnExpandedView')),false,
   'expanded viewport has a one-tap exit control');
- await page.locator('#rnUnitClose').click();
  await page.locator('#rnLanguageSelect').selectOption('es-AR');
  await input.fill('cocina');
  const translated=await page.evaluate(()=>({

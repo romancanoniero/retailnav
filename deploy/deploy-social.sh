@@ -29,6 +29,7 @@ tar -xzf "$TEMP/retailnav.tgz" -C "$TEMP/source" --strip-components=1
 test -s "$TEMP/source/backend/server.mjs"
 test -s "$TEMP/source/backend/server.test.mjs"
 test -s "$TEMP/source/backend/mall-brands.mjs"
+test -s "$TEMP/source/backend/meetups.mjs"
 test -s "$TEMP/source/public/branding/aventura-mark.svg"
 
 # Mall marks are a persistent asset database, separate from release files,
@@ -70,8 +71,13 @@ fi
 if [[ -f "$BASE/api/mall-brands.mjs" ]]; then
   cp "$BASE/api/mall-brands.mjs" "$TEMP/mall-brands.previous.mjs"
 fi
+if [[ -f "$BASE/api/meetups.mjs" ]]; then
+  cp "$BASE/api/meetups.mjs" "$TEMP/meetups.previous.mjs"
+fi
 cp "$TEMP/source/backend/mall-brands.mjs" "$BASE/api/.mall-brands.next"
 mv -f "$BASE/api/.mall-brands.next" "$BASE/api/mall-brands.mjs"
+cp "$TEMP/source/backend/meetups.mjs" "$BASE/api/.meetups.next"
+mv -f "$BASE/api/.meetups.next" "$BASE/api/meetups.mjs"
 cp "$TEMP/source/backend/server.mjs" "$BASE/api/.server.next"
 mv -f "$BASE/api/.server.next" "$BASE/api/server.mjs"
 
@@ -176,6 +182,12 @@ if [[ "$READY" != true ]]; then
   if [[ -f "$TEMP/mall-brands.previous.mjs" ]]; then
     cp "$TEMP/mall-brands.previous.mjs" "$BASE/api/.mall-brands.rollback"
     mv -f "$BASE/api/.mall-brands.rollback" "$BASE/api/mall-brands.mjs"
+  fi
+  if [[ -f "$TEMP/meetups.previous.mjs" ]]; then
+    cp "$TEMP/meetups.previous.mjs" "$BASE/api/.meetups.rollback"
+    mv -f "$BASE/api/.meetups.rollback" "$BASE/api/meetups.mjs"
+  else
+    rm -f "$BASE/api/meetups.mjs"
   fi
   if [[ -f "$TEMP/server.previous.mjs" ]]; then
     cp "$TEMP/server.previous.mjs" "$BASE/api/.server.rollback"

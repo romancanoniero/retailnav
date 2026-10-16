@@ -185,4 +185,41 @@ test('adaptive positioning: anonymous transient QR reference, consent and replay
  assert.equal((await req('POST','/positioning/offer',anchor,sender.cookie,
   'https://evil.example')).status,403);
 });
+test('meetup offers: friends-only, counterproposals, reconfirmation and erasure',async()=>{
+ const a=await req('POST','/session',{});
+ const b=await req('POST','/session',{});
+ const c=await req('POST','/session',{});
+ const stranger=await req('POST','/session',{});
+ for(const guest of [b,c]){
+  const invite=await req('POST','/invite/link',{},a.cookie);
+  assert.equal((await req('POST','/invite/claim',{code:invite.data.code},guest.cookie)).status,200);
+ }
+ const apple={storeId:'aventura:directory:apple',name:'Apple',floor:null};
+ const coffee={storeId:'aventura:directory:starbucks',name:'Starbucks',floor:'LL'};
+ assert.equal((await req('POST','/meetups/create',{mallId:'aventura',inviteeIds:[stranger.data.me.id],destination:apple},a.cookie)).status,400);
+ assert.equal((await req('POST','/meetups/create',{mallId:'aventura',inviteeIds:[b.data.me.id],destination:{...apple,storeId:'ap-plaza:B1:123'}},a.cookie)).status,400);
+ const created=await req('POST','/meetups/create',{mallId:'aventura',inviteeIds:[b.data.me.id,c.data.me.id],destination:apple},a.cookie);
+ assert.equal(created.status,201);
+ const id=created.data.meeting.id;
+ assert.equal((await req('GET','/meetups',undefined,stranger.cookie)).data.meetings.length,0);
+ assert.equal((await req('POST','/meetups/decision',{id,action:'accept'},stranger.cookie)).status,404);
+ assert.equal((await req('POST','/meetups/decision',{id,action:'accept'},b.cookie)).data.meeting.status,'pending');
+ const counter=await req('POST','/meetups/decision',{id,action:'counter',destination:coffee},c.cookie);
+ assert.equal(counter.status,200);
+ assert.equal(counter.data.meeting.status,'counter');
+ assert.equal((await req('POST','/meetups/decision',{id,action:'accept'},b.cookie)).status,409);
+ assert.equal((await req('POST','/meetups/decision',{id,action:'approve'},c.cookie)).status,403);
+ const approved=await req('POST','/meetups/decision',{id,action:'approve'},a.cookie);
+ assert.equal(approved.data.meeting.destination.name,'Starbucks');
+ assert.equal(approved.data.meeting.status,'pending');
+ assert.equal(approved.data.meeting.acceptedCount,1);
+ const final=await req('POST','/meetups/decision',{id,action:'accept'},b.cookie);
+ assert.equal(final.data.meeting.status,'confirmed');
+ assert.equal(final.data.meeting.navigationApproved,false);
+ assert.equal((await req('POST','/contact/remove',{id:c.data.me.id},a.cookie)).status,200);
+ assert.equal((await req('GET','/meetups',undefined,b.cookie)).data.meetings.length,0);
+ const saved=readFileSync(path.join(dir,'presence.json'),'utf8');
+ assert.equal(saved.includes(id),false);
+});
+
 test.after(async()=>{await new Promise(resolve=>app.close(resolve));rmSync(dir,{recursive:true,force:true});});

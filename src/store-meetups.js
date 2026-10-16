@@ -91,13 +91,20 @@ function selectStore(id,showDetails=false){
   el.classList.toggle('rnStoreSelected',current);
   el.setAttribute('aria-selected',String(current));
  });
- if(u.floor||u.documentedFloors?.length)
-  window.RetailNavUnits?.focusStore?.(id);
+ // Never center on an unknown directory position. Only the photographed
+ // store point and its existing same-floor vector may drive the camera.
+ const located=Number.isFinite(u.x)&&Number.isFinite(u.y)&&Boolean(u.floor);
+ const focus=window.__RETAILNAV__?.focusCatalogStore?.(
+  id,located?u.floor:null,located?[u.x,u.y]:null,located?u.polygonId:null);
+ if(located)window.RetailNavUnits?.selectStoreOnly?.(id);
  $('rnUnitInfo').hidden=true;
  $('detail').hidden=true;
  const reason=!u.polygonId&&!Number.isFinite(u.x);
  panel.dataset.selectedStore=id;
- panel.dataset.locationKnown=String(!reason);
+ panel.dataset.locationKnown=String(Boolean(focus?.located));
+ if(!focus?.located)panel.setAttribute('data-location-note',
+  tr('Ubicación exacta no identificada en el plano','Exact map location unknown'));
+ else panel.removeAttribute('data-location-note');
  if(showDetails)showStoreDetails();
  else{details.hidden=true;detailOpen=false;meetingBox.hidden=true;}
  window.__RETAILNAV__?.invalidate?.();

@@ -169,6 +169,13 @@ function focus(code,floor){
  window.__RETAILNAV__?.invalidate?.();
  return true;
 }
+function selectStoreOnly(storeId){
+ const unit=units.find(u=>storeKey(u)===storeId);
+ if(!unit)return false;
+ selected=storeId;
+ window.__RETAILNAV__?.invalidate?.();
+ return true;
+}
 function focusStore(storeId){
  const matches=units.filter(x=>storeKey(x)===storeId);
  const u=matches.find(x=>x.polygonId||Number.isFinite(x.x)&&Number.isFinite(x.y))||matches[0];
@@ -221,7 +228,7 @@ function paint(){
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,focusStore,find,findDetailed,suggestions,setQuery,clearQuery,
+window.RetailNavUnits={draw:paint,focus,focusStore,selectStoreOnly,find,findDetailed,suggestions,setQuery,clearQuery,
  getHighlightedCodes,getHighlightedStoreIds:()=>searchHighlights.slice(),
  getMatchedVectors,
  getUnits:()=>units.slice(),getState:()=>({

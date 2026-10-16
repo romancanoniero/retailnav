@@ -779,6 +779,15 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 
 ---
 
+### 2026-10-16 — BUS-04 — resultados de búsqueda por etiquetas semánticas
+
+- **Alcance:** mostrar etiquetas coincidentes y conteos únicos por comercio, agrupar resultados con sus locales, separar coincidencias por nombre/producto/servicio/categoría y permitir enfocar locales con ubicación identificada. Una etiqueta seleccionada presenta tarjetas horizontales con logo disponible, nombre y especialidades; sin logo se usan iniciales.
+- **Idioma:** las relaciones se conservan por `conceptId` y `storeId`; el idioma sólo cambia las etiquetas visibles. Una misma sucursal no se cuenta dos veces por aparecer en varias plantas, y puede pertenecer a más de un grupo pertinente.
+- **Interfaz:** una sola lista incremental evita repetir el panel de sugerencias. El control de expansión ocupa el área del viewport y ofrece salida con botón o Escape; Safari/iOS puede conservar su interfaz propia del navegador.
+- **Catálogo:** no se ampliaron los datos comerciales ni las asociaciones provisionales de Aventura Mall. Los locales sin ubicación siguen identificados como pendientes y no se enfocan en una ubicación inventada.
+- **AR/navegación:** no se habilita guiado AR ni instrucciones reales. La ruta actual usa origen simulado y coordenadas de imagen; MAP-14, NAV-02/03/05 y USR-J04 siguen siendo bloqueos hasta disponer de geometría calibrada, grafo de recorridos/entradas/conectores, posicionamiento validado y pruebas presenciales. Próximo hito: relevamiento autorizado de un shopping piloto y elección de la estrategia nativa ARKit/ARCore con alternativa de mapa para navegadores incompatibles.
+- **Verificación:** `scripts/test-multilingual-search.mjs`, `scripts/test-store-search-browser.mjs`, build web y verificador del sitio; el estado de publicación se anota al completar el workflow de Contabo.
+
 ## 19. Rutas y comandos para retomar (sin suponer despliegue)
 
 **Repositorio:** https://github.com/romancanoniero/retailnav  

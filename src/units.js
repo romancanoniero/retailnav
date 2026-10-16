@@ -17,7 +17,8 @@ let committedQuery='';
 const normalized=text=>String(text||'').trim().normalize('NFD')
  .replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const storeKey=u=>u.storeId||(mall.id+':'+u.floor+':'+u.code);
-const suggestionKey=u=>u.name?normalized(u.name):storeKey(u);
+// Display names may repeat; storeId is the stable tenant identity across floors.
+const suggestionKey=u=>storeKey(u);
 const buttons=new Map();
 function find(query){
  const text=normalized(query);
@@ -30,6 +31,42 @@ function find(query){
    Boolean(i18n?.termsMatch(legacy,query))||
    Boolean((u.conceptIds||[]).some(id=>i18n?.matchConcept(id,query)));
  });
+}
+function matchesText(values,query){
+ return values.filter(Boolean).some(value=>normalized(value).includes(normalized(query))||
+  Boolean(i18n?.termsMatch(value,query,{prefix:true})));
+}
+function findDetailed(query){
+ const text=String(query||'').trim();
+ if(!text)return[];
+ const matched=units.flatMap(unit=>{
+  const ids=[...new Set(unit.conceptIds||[])];
+  const matchedConceptIds=ids.filter(id=>i18n?.matchConcept(id,text,{prefix:true}));
+  const kinds=new Set();
+  if(matchesText([unit.name,unit.aliases,unit.code],text))kinds.add('name');
+  if(matchesText(unit.productTerms||[],text))kinds.add('product');
+  if(matchesText(unit.serviceTerms||[],text))kinds.add('service');
+  if(matchesText([unit.category,unit.tags,unit.locationLabel],text))kinds.add('category');
+  for(const id of matchedConceptIds){
+   const kind=i18n?.concepts?.[id]?.kind;
+   if(kind==='product')kinds.add('product');
+   else if(kind==='service')kinds.add('service');
+   else if(kind==='category'||kind==='cuisine'||kind==='food-type')kinds.add('category');
+  }
+  if(!kinds.size)return[];
+  return[{unit,storeId:storeKey(unit),matchTypes:[...kinds],matchedConceptIds}];
+ });
+ const unique=new Map();
+ for(const record of matched){
+  const current=unique.get(record.storeId);
+  if(!current){record.floors=[record.unit.floor].filter(Boolean);unique.set(record.storeId,record);continue;}
+  current.matchTypes=[...new Set([...current.matchTypes,...record.matchTypes])];
+  current.matchedConceptIds=[...new Set([...current.matchedConceptIds,...record.matchedConceptIds])];
+  if(record.unit.floor&&!current.floors.includes(record.unit.floor))current.floors.push(record.unit.floor);
+  const hasLocation=u=>Boolean(u.polygonId||Number.isFinite(u.x)&&Number.isFinite(u.y));
+  if(!hasLocation(current.unit)&&hasLocation(record.unit))current.unit=record.unit;
+ }
+ return[...unique.values()];
 }
 function tagVocabulary(){
  const known=new Map();
@@ -64,7 +101,8 @@ function suggestions(query,limit=8){
  const semantic=i18n?.searchSuggestions(query,units,20)||[];
  const unique=new Map();
  for(const entry of [...legacy,...semantic]){
-  const id=normalized(entry.term);
+  // Semantic suggestions are keyed by canonical IDs, never by translated text.
+  const id=entry.conceptId?'concept:'+entry.conceptId:'legacy:'+normalized(entry.term);
   if(!unique.has(id))unique.set(id,entry);
  }
  return [...unique.values()].sort((a,b)=>{
@@ -130,7 +168,8 @@ function focus(code,floor){
  return true;
 }
 function focusStore(storeId){
- const u=units.find(x=>storeKey(x)===storeId);
+ const matches=units.filter(x=>storeKey(x)===storeId);
+ const u=matches.find(x=>x.polygonId||Number.isFinite(x.x)&&Number.isFinite(x.y))||matches[0];
  return u?focus(u.code,u.floor):false;
 }
 function paint(){
@@ -180,7 +219,7 @@ function paint(){
  }
 }
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
-window.RetailNavUnits={draw:paint,focus,focusStore,find,suggestions,setQuery,clearQuery,
+window.RetailNavUnits={draw:paint,focus,focusStore,find,findDetailed,suggestions,setQuery,clearQuery,
  getHighlightedCodes,getHighlightedStoreIds:()=>searchHighlights.slice(),
  getMatchedVectors,
  getUnits:()=>units.slice(),getState:()=>({

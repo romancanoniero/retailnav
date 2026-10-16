@@ -51,11 +51,12 @@ try{
 
  const input=page.locator('#search');
  await input.fill('equi');
- await page.waitForFunction(()=>[...document.querySelectorAll('.rnSuggestedTag')]
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnResultTag')]
   .some(e=>e.dataset.tag==='equipaje'),null,{timeout:7000});
- assert.equal(await page.locator('#rnSearchSuggestions').isVisible(),true);
- assert.equal(await page.locator('.rnSuggestedTag[data-tag="equipaje"]').count(),1);
- await page.locator('.rnSuggestedTag[data-tag="equipaje"]').click();
+ assert.equal(await page.locator('#rnSearchSuggestions').isVisible(),false,
+  'incremental tags and grouped results are rendered in one results list');
+ assert.equal(await page.locator('.rnResultTag[data-tag="equipaje"]').count(),1);
+ await page.locator('.rnResultTag[data-tag="equipaje"]').click();
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='equipaje',null,{timeout:8000});
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
  assert.deepEqual(state.visible,['L1','L5'],
@@ -167,23 +168,78 @@ try{
  assert.equal(jcpenneyDirectory.polygonId,null);
  await page.locator('#rnLanguageSelect').selectOption('en');
  await input.fill('Japanese cuisine');
- await page.waitForFunction(()=>[...document.querySelectorAll('.rnSuggestedTag')]
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnResultTag')]
   .some(el=>el.dataset.tag==='Japanese cuisine'));
  const diningPanel=await page.evaluate(()=>({
-  heading:document.querySelector('#rnSearchSuggestions .rnSuggestionHeading')?.textContent,
-  firstTag:document.querySelector('#rnSearchSuggestions .rnSuggestedTag')?.dataset.tag,
-  firstGroup:document.querySelector('#rnSearchSuggestions .rnSuggestionGroup h5')?.textContent,
-  count:document.querySelector('.rnSuggestedTag[data-tag="Japanese cuisine"] small')?.textContent,
-  shops:[...document.querySelectorAll('.rnSuggestedStores .rnSuggestedStore')].map(e=>e.textContent)
+  heading:document.querySelector('#results .rnResultHeading')?.textContent,
+  firstTag:document.querySelector('#results .rnResultTag')?.dataset.tag,
+  firstGroup:document.querySelector('#results .rnResultGroup h5')?.textContent,
+  groupId:document.querySelector('#results .rnResultGroup')?.dataset.conceptId,
+  count:document.querySelector('.rnResultTag[data-tag="Japanese cuisine"] small')?.textContent,
+  stores:[...document.querySelectorAll('#results .rnResultGroup[data-concept-id="cuisine.japanese"] .rnUnitResult')]
+   .map(e=>e.dataset.storeId),
+  firstResult:document.querySelector('#results').firstElementChild?.className
  }));
  assert.equal(diningPanel.heading,'Matching tags');
  assert.equal(diningPanel.firstTag,'Japanese cuisine');
  assert.match(diningPanel.count,/in this mall/);
+ assert.equal(diningPanel.groupId,'cuisine.japanese');
  assert.ok(diningPanel.firstGroup.startsWith('Japanese cuisine'));
- assert.ok(await page.locator('.rnSuggestionGroup .rnSuggestedStore').filter({hasText:'Toku'}).count());
- assert.ok(await page.locator('.rnSuggestionGroup .rnSuggestedStore').filter({hasText:'Norimoto'}).count());
- assert.ok(await page.evaluate(()=>window.RetailNavUnits.getUnits()
-  .filter(u=>u.name==='Toku'||u.name==='Norimoto').every(u=>u.polygonId===null&&u.floor===null)));
+ assert.equal(diningPanel.firstResult,'rnResultHeading','tag summaries appear before grouped stores');
+ assert.ok(diningPanel.stores.some(id=>id.startsWith('aventura:directory:')));
+ assert.equal(Number(diningPanel.count.match(/^(\d+)/)?.[1]),diningPanel.stores.length,
+  'tag count equals unique shop IDs, not floor appearances');
+ assert.equal(new Set(diningPanel.stores).size,diningPanel.stores.length,
+  'one directory store appears only once under a semantic tag');
+ assert.equal(await page.locator('#rnSearchSuggestions').isVisible(),false,
+  'the grouped result list is the single incremental search surface');
+ await page.locator('.rnResultTag[data-concept-id="cuisine.japanese"]').click();
+ await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Japanese cuisine');
+ const carousel=page.locator('.rnResultGroup[data-concept-id="cuisine.japanese"] .rnStoreCarousel');
+ assert.ok(await carousel.count());
+ assert.ok(await carousel.locator('.rnStoreCard').count()>1,
+  'selecting a category presents its matching establishments horizontally');
+ assert.ok((await carousel.locator('.rnStoreCard').first().textContent()).length>0,
+  'cards show the local name and its available specialties');
+ await carousel.locator('.rnStoreCard').first().click();
+ assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
+  'selecting a local opens its map focus/details');
+ assert.ok((await carousel.locator('.rnStoreCard').first().getAttribute('data-store-id')));
+ await page.locator('#rnExpandView').click();
+ assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnExpandedView')),true);
+ await page.locator('#rnExitExpandedView').click();
+ assert.equal(await page.locator('body').evaluate(e=>e.classList.contains('rnExpandedView')),false,
+  'expanded viewport has a one-tap exit control');
+ await page.locator('#rnUnitClose').click();
+ await page.locator('#rnLanguageSelect').selectOption('es-AR');
+ await input.fill('cocina');
+ const translated=await page.evaluate(()=>({
+  label:document.querySelector('.rnResultTag[data-concept-id="cuisine.japanese"]')?.dataset.tag,
+  group:document.querySelector('.rnResultGroup[data-concept-id="cuisine.japanese"]')?.dataset.conceptId,
+  count:document.querySelector('.rnResultTag[data-concept-id="cuisine.japanese"] small')?.textContent
+ }));
+ assert.equal(translated.label,'cocina japonesa');
+ assert.equal(translated.group,'cuisine.japanese','group identity remains semantic across locale changes');
+ assert.match(translated.count,/locales en este mall/);
+ const italian=page.locator('.rnResultGroup[data-concept-id="cuisine.italian"] .rnUnitResult').first();
+ if(await italian.count()){
+  await italian.click();
+  assert.equal(await page.locator('#rnUnitInfo').isVisible(),true,
+   'each matched establishment remains selectable for map focus/details');
+ }
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await input.fill('Apple');
+ assert.ok(await page.locator('.rnUnitResult').filter({hasText:'Apple'}).first().getAttribute('data-match-types')
+  .then(value=>value.includes('name')),'commercial-name matches retain their match type');
+ await input.fill('smartphone');
+ assert.ok(await page.locator('.rnUnitResult[data-match-types*="product"]').count()>0,
+  'product matches remain distinguishable');
+ await input.fill('optical');
+ assert.ok(await page.locator('.rnUnitResult[data-match-types*="service"]').count()>0,
+  'service matches remain distinguishable');
+ await input.fill('restaurant');
+ assert.ok(await page.locator('.rnUnitResult[data-match-types*="category"]').count()>0,
+  'category matches remain distinguishable');
  await input.fill('JCPenney');
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='JCPenney');
@@ -204,9 +260,9 @@ try{
  await page.waitForFunction(()=>document.documentElement.lang==='es-AR');
  assert.match(await input.getAttribute('placeholder'),/Buscar/);
  await input.fill('lugg');
- await page.waitForFunction(()=>[...document.querySelectorAll('.rnSuggestedTag')]
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnResultTag')]
   .some(el=>el.dataset.tag==='valijas'));
- const luggageSuggestion=page.locator('.rnSuggestedTag[data-tag="valijas"]');
+ const luggageSuggestion=page.locator('.rnResultTag[data-tag="valijas"]');
  assert.ok(await luggageSuggestion.count()>=1);
  await luggageSuggestion.click();
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='valijas');

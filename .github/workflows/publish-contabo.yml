@@ -30,6 +30,8 @@ jobs:
       - name: Verify anonymous identity, QR consent and source syntax
         run: |
           node --check src/viewer.js
+          node --check src/units.js
+          node --check src/search-i18n.js
           node --check src/area-labels.js
           node --check src/districts-webgl.js
           node --check src/social.js
@@ -49,6 +51,7 @@ jobs:
         run: |
           python3 scripts/build-web.py
           python3 scripts/verify.py public
+          node --test scripts/test-multilingual-search.mjs
   publish:
     needs: validate
     runs-on: ubuntu-latest

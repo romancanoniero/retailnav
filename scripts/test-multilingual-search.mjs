@@ -130,6 +130,11 @@ test('Names, brands, products, services, natural phrases and localized autocompl
  const apple=app.units.find('Apple');
  assert.ok(apple.some(u=>u.name==='Apple'&&u.source==='aventura-official-directory'));
  assert.ok(apple.some(u=>u.name==='Apple'&&u.code==='LL-002')); // preserve the named, provisional map association
+ const detailedName=app.units.findDetailed('Apple').find(r=>r.unit.source==='aventura-official-directory');
+ assert.ok(detailedName.matchTypes.includes('name'));
+ assert.ok(app.units.findDetailed('smartphone').some(r=>r.matchTypes.includes('product')));
+ assert.ok(app.units.findDetailed('optical').some(r=>r.matchTypes.includes('service')));
+ assert.ok(app.units.findDetailed('restaurant').some(r=>r.matchTypes.includes('category')));
  const appleDirectory=apple.find(u=>u.source==='aventura-official-directory');
  assert.equal(appleDirectory.polygonId,null);
  assert.ok(app.units.find('where can I buy an iPhone').some(u=>u.storeId===appleDirectory.storeId));
@@ -176,6 +181,21 @@ test('Names, brands, products, services, natural phrases and localized autocompl
  options=app.units.suggestions('lugg');
  assert.ok(options.some(o=>o.conceptId==='product.luggage'&&o.term==='valijas'));
  assert.equal(app.units.getState().language,'es-AR');
+});
+
+test('Canonical store IDs deduplicate cross-floor counts and result rows',()=>{
+ const shared=[
+  {mallId:'aventura',storeId:'aventura:directory:shared',floor:'LL',code:'S-1',name:'Shared Shop',conceptIds:['product.luggage'],productsVerified:false},
+  {mallId:'aventura',storeId:'aventura:directory:shared',floor:'UL',code:'S-1',name:'Shared Shop',conceptIds:['product.luggage'],productsVerified:false}
+ ];
+ const app=setup('aventura',shared,['en-US']);
+ const tag=app.units.suggestions('luggage').find(item=>item.conceptId==='product.luggage');
+ assert.equal(tag.count,1);
+ assert.equal(tag.stores.length,1);
+ const rows=app.units.findDetailed('luggage');
+ assert.equal(rows.length,1);
+ assert.deepEqual(Array.from(rows[0].floors),['LL','UL']);
+ assert.ok(rows[0].matchTypes.includes('product'));
 });
 
 test('Photographed Shanghai product terms and legacy autocomplete remain supported',()=>{

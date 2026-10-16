@@ -662,6 +662,35 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnMapSearch .resultlist .result:hover,.rnMapSearch .resultlist .result:focus-visible{
  background:#1a4359;color:#efffff
 }
+.rnResultHeading{margin:7px 7px 5px;font-size:12px;color:var(--rn-theme-muted,#a6c2d4)}
+.rnResultTags{display:grid;gap:3px;padding-bottom:5px;border-bottom:1px solid var(--rn-theme-border,#2b4b61)}
+.rnResultTag{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+ min-height:35px;padding:6px 9px;border:0;border-radius:8px;background:transparent;text-align:left;font-size:12px}
+.rnResultTag small{font-size:10px;color:var(--rn-theme-muted,#a6c2d4)}
+.rnResultTag:hover,.rnResultTag:focus-visible{background:#1a4359}
+.rnResultGroup{margin:5px 2px 0;padding:5px 3px 0;border-top:1px solid var(--rn-theme-border,#2b4b61)}
+.rnResultGroup h5{margin:2px 5px 4px;font-size:11px;font-weight:700;color:var(--rn-theme-text,#edf5fa)}
+.rnResultGroup .result{margin:0 0 2px}
+.rnResultGroup .small{line-height:1.35}
+.rnResultTag[aria-pressed="true"]{background:#224653;color:var(--rn-theme-text,#edf5fa);box-shadow:inset 3px 0 var(--rn-theme-accent,#65e6e0)}
+.rnStoreCarousel{display:flex;gap:9px;overflow-x:auto;overscroll-behavior-x:contain;padding:3px 2px 9px;
+ scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.rnStoreCard{display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:0 0 176px;min-height:150px;
+ padding:11px;border:1px solid var(--rn-theme-border,#2b4b61);border-radius:12px;background:var(--rn-theme-surface,#11283b);
+ text-align:left;scroll-snap-align:start;white-space:normal}
+.rnStoreCard .rnStoreCardLogo{display:grid;place-items:center;width:42px;height:42px;overflow:hidden;border-radius:10px;
+ background:#244253;color:#d9f7fa;font-size:15px;font-weight:700}
+.rnStoreCardLogo img{width:100%;height:100%;object-fit:contain;background:white}
+.rnStoreCard .levelbadge{order:3}
+.rnStoreCard>span:last-child{min-width:0;line-height:1.4}
+.rnStoreCard:hover,.rnStoreCard:focus-visible{background:#1a4359}
+.rnExpandedView{overflow:hidden}
+.rnExpandedView .topbar{position:fixed;inset:0 0 auto;height:0;min-height:0;padding:0;border:0;background:transparent;z-index:1002;pointer-events:none}
+.rnExpandedView .topbar>*{display:none!important}
+.rnExpandedView #rnExitExpandedView{display:grid!important;place-items:center;position:fixed;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));
+ width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:26px;background:#0d1e30eF;pointer-events:auto;box-shadow:0 3px 14px #0008}
+.rnExpandedView .app{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;min-height:0;z-index:1001}
+.rnExpandedView .stage{min-height:0}
 /* Selected shop/stand panels remain within the map, even on iPhone.
  * The empty former lower search sidebar is no longer needed on mobile. */
 .stage>.detail{position:absolute;z-index:10;left:17px;right:auto;

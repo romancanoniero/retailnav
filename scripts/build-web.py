@@ -340,3 +340,20 @@ assert "<canvas" in template and '"modelData"' in template
 out = repo / "public/index.html"
 out.write_text(template, encoding="utf-8")
 print("Built", out, out.stat().st_size, "bytes; 3 levels")
+
+# Independent, read-only review fixture: never replaces published 3D vectors.
+# Files are intentionally disjoint from /maps, /catalog and visitor index.html.
+import subprocess as _subprocess
+import tempfile as _tempfile
+import shutil as _shutil
+with _tempfile.TemporaryDirectory(prefix="retailnav-admin-review-") as _admin_tmp:
+    _admin_dest = Path(_admin_tmp) / "generated"
+    _subprocess.run(["python3", str(repo / "scripts/build-admin-web.py"), "--out",
+                     str(_admin_dest)], check=True)
+    _demo = repo / "public" / "map-studio" / "demo"
+    _demo.mkdir(parents=True, exist_ok=True)
+    _shutil.copyfile(_admin_dest / "map-studio" / "demo" / "index.html", _demo / "index.html")
+    _shutil.copytree(_admin_dest / "demo", repo / "public" / "demo", dirs_exist_ok=True)
+    # The original photographed floor images are already generated and verified
+    # by the source-specific mall build above; do not overwrite those assets.
+print("Built isolated nonpublishing 2D review demo at map-studio/demo/")

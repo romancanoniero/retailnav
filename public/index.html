@@ -685,6 +685,16 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnStoreCard .levelbadge{order:3}
 .rnStoreCard>span:last-child{min-width:0;line-height:1.4}
 .rnStoreCard:hover,.rnStoreCard:focus-visible{background:#1a4359}
+.rnStoreResultShell,.rnStoreCardShell{position:relative;min-width:0}
+.rnStoreResultShell>.result{width:100%;padding-right:55px}
+.rnStoreCardShell{flex:0 0 176px;scroll-snap-align:start}
+.rnStoreCardShell>.rnStoreCard{width:100%;height:100%;min-height:150px;flex:none;scroll-snap-align:none;padding-right:52px}
+.rnStoreVisitAction{position:absolute;z-index:2;right:5px;top:50%;transform:translateY(-50%);display:grid;place-items:center;
+ width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;background:color-mix(in srgb,var(--rn-theme-bg,#081522) 76%,transparent);
+ color:var(--rn-theme-text,#edf5fa);box-shadow:0 5px 13px #06152135}
+.rnStoreCardShell>.rnStoreVisitAction{top:8px;right:8px;transform:none}
+.rnStoreVisitAction .icon{width:20px;height:20px}.rnStoreVisitAction[aria-pressed="true"]{background:var(--rn-theme-accent,#65e6e0);
+ color:#08232b;border-color:#edffff;box-shadow:0 6px 16px #06152145,0 0 0 2px color-mix(in srgb,var(--rn-theme-accent,#65e6e0) 24%,transparent)}
 
 /* A chosen semantic tag moves its stores out of autocomplete and beside the map. */
 .rnTagResultsOpen .app{grid-template-columns:minmax(0,1fr)}
@@ -699,6 +709,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnTagResultPanel h4{margin:0;min-width:0;font-size:13px;line-height:1.35}
 .rnTagResultPanel header button{flex:none;width:32px;min-height:32px;padding:0;border-radius:50%;font-size:22px;line-height:1}
 .rnTagResultPanel .rnStoreCarousel{min-height:0;flex:none;align-items:stretch;overscroll-behavior-x:contain;overscroll-behavior-y:contain;touch-action:pan-x;scrollbar-width:thin}
+.rnTagResultPanel .rnStoreCardShell{flex-basis:205px}
 .rnTagResultPanel .rnStoreCard{flex-basis:205px;min-height:146px}
 .rnTagResultPanel .rnStoreCard .small{font-size:11px;color:var(--rn-theme-muted,#a6c2d4)}
 .rnTagResultPanel .rnStoreCard .small{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
@@ -707,7 +718,8 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
   max-height:min(29dvh,235px);padding:9px 10px;border-radius:14px}
  .rnTagResultPanel h4{font-size:12px}
  .rnTagResultPanel .rnStoreCarousel{flex:none;min-height:0;max-height:176px;padding-bottom:5px}
- .rnTagResultPanel .rnStoreCard{flex-basis:min(68vw,205px);min-height:132px;padding:9px;gap:6px}
+ .rnTagResultPanel .rnStoreCardShell{flex-basis:min(68vw,205px)}
+ .rnTagResultPanel .rnStoreCard{min-height:132px;padding:9px 52px 9px 9px;gap:6px}
 }
 .rnExpandedView{overflow:hidden}
 .rnExpandedView .topbar{position:fixed;inset:0 0 auto;height:0;min-height:0;padding:0;border:0;background:transparent;z-index:1002;pointer-events:none}
@@ -1188,9 +1200,10 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  body.rnTagResultsOpen .stage>.viewport{right:clamp(300px,34vw,420px);}
  body.rnTagResultsOpen .rnTagResultPanel .rnStoreCarousel{display:flex;flex-direction:column;
   overflow-x:hidden;overflow-y:auto;flex:1 1 auto;scroll-snap-type:y proximity;touch-action:pan-y;}
- body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard{flex:0 0 auto;min-height:92px;
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCardShell{flex:0 0 auto;width:100%;}
+ body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard{min-height:92px;
   width:100%;display:grid;grid-template-columns:50px 1fr;gap:5px 9px;
-  align-items:start;padding:12px;}
+  align-items:start;padding:12px 58px 12px 12px;}
  body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard .rnStoreCardLogo{grid-row:1 / span 2;}
  body.rnTagResultsOpen .rnTagResultPanel .rnStoreCard .levelbadge{grid-column:2;order:initial;}
  body.rnTagResultsOpen .stage>.rnMapSearch{left:calc((100% - clamp(300px,34vw,420px))/2);width:min(480px,calc(100% - clamp(300px,34vw,420px) - 35px));}
@@ -1240,10 +1253,10 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreFloorChoices button{min-width:64px;min-height:44px;border:1px solid var(--rn-theme-border,#47657b);border-radius:8px;background:var(--rn-theme-surface,#163045);color:inherit}
 .rnStoreFloorChoices button[aria-pressed="true"]{outline:2px solid var(--rn-theme-accent,#12617b)}
 
-/* The selected-store menu has no tray or panel. Its three 48 px action
-   centres lie on one imaginary circumference, 120 degrees apart, while the
+/* The selected-store menu has no tray or panel. Its four 48 px action
+   centres lie on one imaginary circumference, 90 degrees apart, while the
    close control occupies the exact centre. */
-.rnStoreActions{position:absolute;z-index:11;left:50%;bottom:190px;width:164px;height:164px;
+.rnStoreActions{position:absolute;z-index:11;left:50%;bottom:190px;width:176px;height:176px;
  transform:translate(-50%,10px) scale(.84);opacity:0;pointer-events:none;
  transition:opacity .18s ease,transform .32s cubic-bezier(.2,.9,.25,1.18)}
 .rnStoreActions[hidden]{display:none!important}
@@ -1256,9 +1269,10 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreActions .rnStoreAction{left:50%;top:50%;width:48px;min-width:48px;height:48px;min-height:48px;
  margin:-24px 0 0 -24px;opacity:0;transform:translate(0,0) scale(.4);
  transition:opacity .16s ease,transform .34s cubic-bezier(.16,1.1,.3,1)}
-.rnStoreActions #rnStoreAssist{--rn-radial-x:0px;--rn-radial-y:-58px;transition-delay:.03s}
-.rnStoreActions #rnStoreInvite{--rn-radial-x:50.23px;--rn-radial-y:29px;transition-delay:.075s}
-.rnStoreActions #rnStoreInfoAction{--rn-radial-x:-50.23px;--rn-radial-y:29px;transition-delay:.12s}
+.rnStoreActions #rnStoreAssist{--rn-radial-x:0px;--rn-radial-y:-62px;transition-delay:.03s}
+.rnStoreActions #rnStoreAddToPlan{--rn-radial-x:62px;--rn-radial-y:0px;transition-delay:.06s}
+.rnStoreActions #rnStoreInvite{--rn-radial-x:0px;--rn-radial-y:62px;transition-delay:.09s}
+.rnStoreActions #rnStoreInfoAction{--rn-radial-x:-62px;--rn-radial-y:0px;transition-delay:.12s}
 .rnStoreActions.is-visible .rnStoreAction{opacity:1;transform:translate(var(--rn-radial-x),var(--rn-radial-y)) scale(1)}
 .rnStoreActions .rnStoreActionClose{left:50%;top:50%;width:44px;min-width:44px;height:44px;min-height:44px;
  margin:-22px 0 0 -22px;background:color-mix(in srgb,var(--rn-theme-surface,#123247) 76%,#07141e);
@@ -1274,6 +1288,8 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreActions #rnStoreAssist.is-route-ready{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
  border-color:#efffff;box-shadow:0 13px 28px #06152170,0 0 0 3px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 26%,transparent),inset 0 1px #fff9}
 .rnStoreActions #rnStoreAssist.is-route-open{box-shadow:0 13px 28px #06152170,0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 38%,transparent),inset 0 1px #fff9}
+.rnStoreActions #rnStoreAddToPlan[aria-pressed="true"]{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
+ border-color:#efffff;box-shadow:0 13px 28px #06152170,0 0 0 3px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 28%,transparent),inset 0 1px #fff9}
 .rnStoreActions button:disabled{background:color-mix(in srgb,#7f8992 72%,var(--rn-theme-surface,#123247));
  color:#d4d8dc;border-color:#9aa1a7;filter:grayscale(1);opacity:.62;cursor:default;box-shadow:0 8px 17px #0615213d,inset 0 1px #fff5}
 body.rnGeometryContextOpen .toast{bottom:370px}
@@ -1284,6 +1300,47 @@ body.rnGeometryContextOpen .toast{bottom:370px}
  body.rnGeometryContextOpen .toast{bottom:388px}
 }
 @media(prefers-reduced-motion:reduce){.rnStoreActions,.rnStoreActions button{transition:none!important}}
+
+/* A visit plan stays a light map tool: a compact counter and one responsive
+   sheet. It never replaces the map, search, radial actions, or store card. */
+.rnVisitPlanToggle{margin-left:auto;display:flex;align-items:center;gap:7px;min-width:52px;height:48px;padding:0 13px;
+ border-radius:24px;background:var(--rn-theme-surface,#0d1c2d);border-color:var(--rn-theme-border,#355065);
+ color:var(--rn-theme-text,#eef5fb);box-shadow:0 9px 22px #07131f35;pointer-events:auto}
+.rnVisitPlanToggle .icon{width:21px;height:21px}.rnVisitPlanToggle span{display:grid;place-items:center;min-width:22px;height:22px;
+ padding:0 6px;border-radius:12px;background:var(--rn-theme-accent,#65e6e0);color:#08232b;font-size:12px;font-weight:800}
+.rnVisitPlanToggle[aria-expanded="true"]{background:var(--rn-theme-accent,#65e6e0);color:#08232b}
+.rnVisitPlanToggle[aria-expanded="true"] span{background:#08232b;color:#fff}
+.rnVisitPlan{position:absolute;z-index:13;right:18px;bottom:108px;width:min(360px,calc(100% - 36px));max-height:min(520px,62dvh);
+ display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--rn-theme-border,#42677a);border-radius:20px;
+ background:color-mix(in srgb,var(--rn-theme-surface,#102436) 96%,transparent);color:var(--rn-theme-text,#eef5fb);
+ box-shadow:0 24px 60px #06111d55,0 4px 14px #06111d35;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.rnVisitPlan[hidden]{display:none!important}.rnVisitPlan header{display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:16px 16px 10px}.rnVisitPlan header h2{margin:3px 0 0;font-size:19px}.rnVisitPlanEyebrow{font-size:10px;font-weight:800;
+ letter-spacing:1.7px;color:var(--rn-theme-accent,#65e6e0)}.rnVisitPlan header button{width:44px;min-width:44px;height:44px;padding:0;
+ border-radius:50%;display:grid;place-items:center;background:transparent}.rnVisitPlanSummary{margin:0;padding:0 16px 12px;font-size:12px}
+.rnVisitPlanStops{list-style:none;counter-reset:stop;margin:0;padding:0 10px 6px;overflow:auto}.rnVisitPlanStop{counter-increment:stop;
+ display:grid;grid-template-columns:34px minmax(0,1fr) 44px;align-items:center;gap:9px;margin:0 0 8px;padding:8px;
+ border:1px solid color-mix(in srgb,var(--rn-theme-border,#42677a) 72%,transparent);border-radius:14px;
+ background:color-mix(in srgb,var(--rn-theme-bg,#081522) 55%,transparent)}
+.rnVisitPlanStop::before{content:counter(stop);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;
+ background:var(--rn-theme-accent,#65e6e0);color:#08232b;font-size:12px;font-weight:800}
+.rnVisitPlanFocus{min-width:0;min-height:44px;padding:3px 2px;text-align:left;border:0;background:transparent;color:inherit}
+.rnVisitPlanFocus:hover,.rnVisitPlanFocus:focus-visible{background:transparent;color:var(--rn-theme-accent,#65e6e0)}
+.rnVisitPlanFocus strong,.rnVisitPlanFocus small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rnVisitPlanFocus strong{font-size:14px}.rnVisitPlanFocus small{margin-top:3px;color:var(--rn-theme-muted,#9db1c4);font-size:11px}
+.rnVisitPlanRemove{width:44px;min-width:44px;height:44px;padding:0;border-radius:50%;display:grid;place-items:center;background:transparent}
+.rnVisitPlanRemove .icon{width:18px;height:18px}.rnVisitPlan footer{display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:10px 16px 14px;border-top:1px solid color-mix(in srgb,var(--rn-theme-border,#42677a) 65%,transparent)}
+.rnVisitPlan footer span{font-size:11px;color:var(--rn-theme-muted,#9db1c4)}.rnVisitPlan footer button{min-height:40px;background:transparent}
+.rnVisitPlanToast{position:absolute;z-index:14;right:18px;bottom:168px;max-width:min(330px,calc(100% - 36px));padding:10px 14px;
+ border:1px solid var(--rn-theme-border,#42677a);border-radius:14px;background:var(--rn-theme-surface,#102436);color:var(--rn-theme-text,#eef5fb);
+ box-shadow:0 12px 30px #06111d50;font-size:12px;font-weight:650;pointer-events:none}
+body.rnVisitPlanOpen .rnStoreActions{pointer-events:none;opacity:0}
+@media(max-width:760px){
+ .rnVisitPlan{left:10px;right:10px;bottom:76px;width:auto;max-height:min(440px,48dvh);border-radius:20px 20px 16px 16px}
+ .rnVisitPlanToast{left:50%;right:auto;bottom:140px;transform:translateX(-50%);width:max-content}
+}
+@media(prefers-reduced-motion:reduce){.rnVisitPlanToggle,.rnVisitPlan{transition:none!important}}
 
 /* Destination orientation lives over the existing 3D viewport. Its projected
    markers share the camera; the card never creates another map surface. */
@@ -1595,6 +1652,8 @@ body.rnThemeEnabled[data-rn-font=alto-inter]{font-family:"RetailNav Alto Inter",
 <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
 <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7M12 7h.01"/></symbol>
 <symbol id="i-guide" viewBox="0 0 24 24"><path d="M4 19.5 9 4l3.2 7.8L20 15l-16 4.5Z"/><path d="m9 4 3.2 7.8L4 19.5"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4m0 1h11l-2 3 2 3H6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
 <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 20v-2c0-3 2.3-5 5.5-5s5.5 2 5.5 5v2M16 5a3 3 0 0 1 0 6m2 3c2.2.5 3 2 3 4v2"/></symbol></defs></svg>
 <header class="topbar"><div class="rnMallBrand" aria-label="Centro comercial actual"><img id="mallHeaderLogo" alt="" hidden><strong id="mallHeaderName">Aventura Mall</strong></div><div class="spacer"></div><div class="pill" id="badge" hidden><span class="dot"></span><span id="status">Vista previa de archivo</span></div><button id="rnIndoorBtn" type="button" title="Mi ubicación y orientación" aria-label="GPS, brújula y calibración interior">◎</button><button id="mallSettingsBtn" type="button" aria-label="Configuración y selector de shopping" title="Configurar shopping"><svg class="icon"><use href="#i-settings"/></svg></button><button id="friendsBtn" class="socialTopBtn" type="button" aria-expanded="false" aria-controls="peopleDialog" aria-haspopup="true" title="Amigos y contactos" aria-label="Abrir amigos y contactos"><svg class="icon"><use href="#i-users"/></svg><span id="friendsCount">0</span><span id="rnPendingBadge" class="rnPendingBadge" hidden>!</span></button><button id="helpBtn" data-runtime disabled title="Como usar la demo" aria-label="Ayuda"><svg class="icon"><use href="#i-info"/></svg></button><button id="rnExpandView" type="button" title="Expandir el mapa al área disponible" aria-label="Expandir el mapa">⛶</button><button id="rnExitExpandedView" type="button" title="Volver a la vista normal" aria-label="Salir de la vista ampliada" hidden>×</button><button id="downloadBtn" data-runtime disabled title="Exportar mapas" aria-label="Exportar mapas"><svg class="icon"><use href="#i-download"/></svg></button><details id="rnHeaderMore" class="rnHeaderMore" hidden><summary id="rnHeaderMoreToggle" aria-label="Más opciones" title="Más opciones"><span aria-hidden="true">•••</span></summary><div id="rnHeaderMoreActions" class="rnHeaderMoreActions" role="group" aria-label="Más opciones del mapa"></div></details></header>
 <main class="app"><aside class="sidebar" id="sidebar"><section class="intro"><div class="eyebrow">TU PLANO. EN TRES DIMENSIONES.</div><h1 id="mallSidebarTitle">Aventura Mall</h1><p id="mallSourceMessage">Reconstrucción vectorial a partir de las tres imágenes que aportaste.</p><div class="summary"><div class="metric"><b>3</b><span id="mallFloorCountLabel">plantas diferentes</span></div><div class="metric"><b id="unitCount">131</b><span id="mallUnitCountLabel">polígonos comerciales*</span></div></div></section><section class="sidebarfooter"><div class="eyebrow">TRAZABILIDAD, NO GEOMETRÍA INVENTADA</div><p class="caption">LL: IMG_6307 · UL: IMG_6308 · L3: IMG_6309. Planos registrados sobre una misma referencia. Los nombres pequeños y las conexiones no legibles quedan sin verificar.</p><p class="caption">*El trazado puede agrupar locales donde la imagen no permite distinguir sus divisiones. Escala y alturas de demostración. No apto para orientación física.</p></section></aside>
@@ -1602,6 +1661,7 @@ body.rnThemeEnabled[data-rn-font=alto-inter]{font-family:"RetailNav Alto Inter",
 <div id="rnPOIOverlay" class="rnPOIOverlay" aria-label="Servicios y puntos de interés del plano"></div><div id="rnUnitOverlay" class="rnUnitOverlay" aria-label="Códigos de tiendas identificados en el plano"></div><div id="rnSearchMarkers" class="rnSearchMarkers" aria-label="Locales coincidentes sobre las plantas abiertas"></div><div id="rnMyPositionMarker" class="rnMyPositionMarker" hidden aria-label="Referencia de posición interior"><span class="rnIndoorArrow">▲</span><span class="rnIndoorDot"></span></div>
 <nav id="rnStoreActions" class="rnStoreActions" hidden aria-label="Acciones para el local seleccionado">
   <button id="rnStoreAssist" class="rnStoreAction" type="button" aria-label="Orientarme hacia este local" title="Orientarme"><svg class="icon" aria-hidden="true"><use href="#i-guide"/></svg></button>
+  <button id="rnStoreAddToPlan" class="rnStoreAction" type="button" aria-label="Agregar este local al recorrido" title="Agregar al recorrido" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-flag"/></svg></button>
   <button id="rnStoreInvite" class="rnStoreAction" type="button" aria-label="Invitar personas a encontrarnos aquí" title="Invitar"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></button>
   <button id="rnStoreInfoAction" class="rnStoreAction" type="button" aria-label="Ver información del local" title="Información"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></button>
   <button id="rnStoreActionClose" class="rnStoreActionClose" type="button" aria-label="Cerrar acciones del local" title="Cerrar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
@@ -1659,7 +1719,14 @@ body.rnThemeEnabled[data-rn-font=alto-inter]{font-family:"RetailNav Alto Inter",
 <div class="rnAreaDirectory"><button id="rnAreasButton" type="button" aria-expanded="false" aria-controls="rnAreasMenu" hidden>Zonas</button><div id="rnAreasMenu" class="rnAreasMenu" role="group" aria-label="Todas las zonas comerciales" hidden></div></div><div class="hudright"><button id="zoomIn" data-runtime disabled title="Acercar" aria-label="Acercar"><svg class="icon"><use href="#i-plus"/></svg></button><button id="zoomOut" data-runtime disabled title="Alejar" aria-label="Alejar"><svg class="icon"><use href="#i-minus"/></svg></button><button id="north" data-runtime disabled title="Orientar el mapa hacia el norte, como en Google Earth" aria-label="Orientar hacia el norte"><span class="rnCompassNeedle" id="rnCompassNeedle" aria-hidden="true">↑</span><span class="rnNorthN" aria-hidden="true">N</span></button><button id="pan" data-runtime disabled title="Girar modelo 360° como una esfera" aria-label="Activar rotación esférica 3D 360 grados" aria-pressed="true"><span class="rnSphereIcon" aria-hidden="true">360°</span></button><button id="rnConnectorsToggle" type="button" hidden aria-pressed="true" title="Mostrar u ocultar ascensores y escaleras mecánicas 3D no verificadas" aria-label="Conexiones verticales 3D provisionales">⇅</button><div id="rnRollControls" class="rnRollControls" hidden aria-label="Alabeo: rotación sobre tercer eje"><button id="rollLeft" type="button" aria-label="Rotar 3D sobre eje Z hacia la izquierda" title="Alabeo izquierda (Q)">↶</button><button id="rollRight" type="button" aria-label="Rotar 3D sobre eje Z hacia la derecha" title="Alabeo derecha (E)">↷</button></div><button id="reset" data-runtime disabled title="Restablecer vista" aria-label="Restablecer vista"><svg class="icon"><use href="#i-reset"/></svg></button><button id="rnServicesToggle" type="button" title="Mostrar u ocultar baños, ascensores y otros servicios" aria-label="Mostrar u ocultar servicios y accesos" aria-pressed="true" hidden>WC</button><button id="labelsToggle" data-runtime disabled title="Etiquetas" aria-label="Etiquetas" aria-pressed="true"><svg class="icon"><use href="#i-info"/></svg></button></div>
 <aside id="rnPoiInfo" class="rnPoiInfo" role="region" aria-live="polite" hidden><button id="rnPoiClose" type="button" aria-label="Cerrar detalle de servicio">×</button><strong id="rnPoiTitle"></strong><p id="rnPoiDescription"></p></aside>
 <aside id="rnUnitInfo" class="rnUnitInfo" role="status" hidden><button type="button" id="rnUnitClose" aria-label="Cerrar identificador de tienda">×</button><strong id="rnUnitName"></strong><p id="rnUnitDescription"></p></aside>
-<div class="legend"><span>Pasillos</span><span>Volúmenes trazados</span><span>Selección</span></div><div class="bottombar"><div class="tools"><button id="wire" data-runtime disabled aria-pressed="false" title="Contornos holográficos"><svg class="icon"><use href="#i-box"/></svg><span class="longtext"> Malla</span></button><button id="points" data-runtime disabled aria-pressed="false" title="Muestreo sintético de vértices"><svg class="icon"><use href="#i-points"/></svg></button><button id="auto" data-runtime disabled aria-pressed="false" title="Rotación automática"><svg class="icon"><use href="#i-rotate"/></svg><span class="longtext"> Orbitar</span></button></div></div>
+<div class="legend"><span>Pasillos</span><span>Volúmenes trazados</span><span>Selección</span></div><div class="bottombar"><div class="tools"><button id="wire" data-runtime disabled aria-pressed="false" title="Contornos holográficos"><svg class="icon"><use href="#i-box"/></svg><span class="longtext"> Malla</span></button><button id="points" data-runtime disabled aria-pressed="false" title="Muestreo sintético de vértices"><svg class="icon"><use href="#i-points"/></svg></button><button id="auto" data-runtime disabled aria-pressed="false" title="Rotación automática"><svg class="icon"><use href="#i-rotate"/></svg><span class="longtext"> Orbitar</span></button></div><button id="rnVisitPlanToggle" class="rnVisitPlanToggle" type="button" hidden aria-expanded="false" aria-controls="rnVisitPlan" aria-label="Abrir recorrido"><svg class="icon" aria-hidden="true"><use href="#i-guide"/></svg><span id="rnVisitPlanCount">0</span></button></div>
+<section id="rnVisitPlan" class="rnVisitPlan" hidden aria-labelledby="rnVisitPlanTitle">
+  <header><div><span id="rnVisitPlanEyebrow" class="rnVisitPlanEyebrow">TU RECORRIDO</span><h2 id="rnVisitPlanTitle">Paradas elegidas</h2></div><button id="rnVisitPlanClose" type="button" aria-label="Cerrar recorrido"><svg class="icon"><use href="#i-close"/></svg></button></header>
+  <p id="rnVisitPlanSummary" class="rnVisitPlanSummary" aria-live="polite"></p>
+  <ol id="rnVisitPlanStops" class="rnVisitPlanStops"></ol>
+  <footer><span id="rnVisitPlanOrder">El orden es el que elegiste.</span><button id="rnVisitPlanClear" type="button">Vaciar</button></footer>
+</section>
+<div id="rnVisitPlanToast" class="rnVisitPlanToast" role="status" aria-live="polite" hidden></div>
 <div class="statusbar"><span id="renderStatus">Geometría incluida · sin dependencias externas</span><span id="rnGestureHelp">Gestos del mapa disponibles</span></div>
 <div class="loading" id="loading" hidden><p id="loadText"></p><progress id="progress" value="0" max="100" aria-label="Preparación del mapa"></progress></div><div class="toast" id="toast" role="status" hidden></div></section></main>
 <dialog id="rnIndoorDialog" class="rnIndoorDialog" aria-labelledby="rnIndoorTitle">
@@ -5270,7 +5337,18 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
    selectedSearchTagKey=null;document.body.classList.remove('rnTagResultsOpen');
    $('rnTagResultPanel').hidden=true;results();
   }
- };host.append(b);
+ };
+ const shell=document.createElement('div');
+ shell.className=horizontal?'rnStoreCardShell':'rnStoreResultShell';
+ const visit=document.createElement('button');visit.type='button';visit.className='rnStoreVisitAction';
+ visit.dataset.rnVisitStore=record.storeId;visit.dataset.floor=(mappedFloors[0]||unit.floor||'');
+ visit.title=en?'Add to route':'Agregar al recorrido';
+ visit.setAttribute('aria-label',(en?'Add ':'Agregar ')+(unit.name||unit.code)+(en?' to route':' al recorrido'));
+ visit.setAttribute('aria-pressed','false');
+ visit.innerHTML='<svg class="icon" aria-hidden="true"><use href="#i-flag"/></svg>';
+ visit.onclick=event=>{event.preventDefault();event.stopPropagation();
+  window.RetailNavVisitPlanner?.toggleStore?.(record.storeId,visit.dataset.floor);};
+ shell.append(b,visit);host.append(shell);
 }
 function renderGroupedShopResults(host,query){
  if(!query)return{storeIds:new Set(),options:[]};
@@ -20138,6 +20216,181 @@ window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m
  geometryContext:geometryContext?{...geometryContext}:null,
  actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
  refresh,selectStore,clearSelection:clearStoreSelection,showGeometryContext,showStoreDetails,openInvitation,openStoreInfo};
+})();
+</script>
+<script>/* Local, mall-scoped visit plan. This first step only preserves the visitor's
+ * chosen order; route optimization, duration estimates and offers are separate
+ * features and must not be inferred here. */
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const mall=window.RETAILNAV_ACTIVE_MALL||{};
+const mallId=mall.id||window.RETAILNAV_ACTIVE_MALL_ID||'';
+const storageKey='retailnav:visit-plan:v1:'+mallId;
+const action=$('rnStoreAddToPlan'),dock=$('rnStoreActions');
+const toggle=$('rnVisitPlanToggle'),count=$('rnVisitPlanCount'),panel=$('rnVisitPlan');
+const close=$('rnVisitPlanClose'),list=$('rnVisitPlanStops'),summary=$('rnVisitPlanSummary');
+const clear=$('rnVisitPlanClear'),toast=$('rnVisitPlanToast');
+if(!mallId||!action||!toggle||!panel||!list)return;
+const en=()=>String(document.documentElement.lang||navigator.language||'es').startsWith('en');
+const tr=(es,english)=>en()?english:es;
+const safe=value=>String(value||'').replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,120);
+let stops=[],toastTimer=0;
+
+function load(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(storageKey)||'null');
+  if(!raw||raw.schema!=='retailnav.visit-plan.v1'||raw.mallId!==mallId||!Array.isArray(raw.stops))return[];
+  const unique=new Map();
+  for(const item of raw.stops.slice(0,24)){
+   const id=safe(item?.id),floor=safe(item?.floor);
+   if(!id.startsWith(mallId+':')||!floor||unique.has(id))continue;
+   unique.set(id,{id,storeId:safe(item.storeId)||null,spaceId:safe(item.spaceId)||null,
+    floor,polygonId:safe(item.polygonId)||null,label:safe(item.label)||tr('Local sin identificar','Unidentified store space'),
+    commercial:Boolean(item.storeId),addedAt:Number.isFinite(item.addedAt)?item.addedAt:Date.now()});
+  }
+  return [...unique.values()];
+ }catch{return[];}
+}
+function persist(){
+ try{localStorage.setItem(storageKey,JSON.stringify({schema:'retailnav.visit-plan.v1',mallId,
+  mapVersion:mall.mapAsset?.version||null,updatedAt:Date.now(),stops}));}catch{}
+}
+function destinationForStore(storeId,preferredFloor=null){
+  const unit=window.RetailNavUnits?.getUnits?.().find(item=>item.storeId===storeId);
+  if(!unit)return null;
+  const focus=window.__RETAILNAV__?.getState?.()||{};
+  const bindings=window.RetailNavUnits?.getMapBindings?.(unit)||[];
+  const binding=bindings.find(item=>item.floor===(preferredFloor||focus.focusFloorId))||bindings[0]||null;
+  const floor=safe(binding?.floor||unit.floor||focus.focusFloorId);
+  const polygonId=safe(binding?.polygonId||unit.polygonId);
+  const spaceId=floor&&polygonId?mallId+':space:'+floor+':'+polygonId:null;
+  return {id:unit.storeId,storeId:unit.storeId,spaceId,polygonId:polygonId||null,
+   floor:floor||tr('Sin planta','No floor'),label:safe(unit.name||unit.code||tr('Local','Store')),
+   commercial:true,addedAt:Date.now()};
+}
+function currentDestination(){
+ const context=window.RetailNavMeetups?.getState?.()||{};
+ if(context.selectedStoreId)return destinationForStore(context.selectedStoreId);
+ const geometry=context.geometryContext;
+ if(geometry?.spaceId&&geometry.floor)return{id:safe(geometry.spaceId),storeId:null,
+  spaceId:safe(geometry.spaceId),polygonId:safe(geometry.featureId)||null,floor:safe(geometry.floor),
+  label:tr('Local sin identificar','Unidentified store space'),commercial:false,addedAt:Date.now()};
+ return null;
+}
+const contains=id=>Boolean(id&&stops.some(stop=>stop.id===id));
+function syncAction(){
+ const destination=currentDestination(),included=contains(destination?.id);
+ action.disabled=!destination;
+ action.setAttribute('aria-pressed',String(included));
+ action.title=included?tr('Quitar del recorrido','Remove from route'):tr('Agregar al recorrido','Add to route');
+ action.setAttribute('aria-label',destination
+  ?(included?tr('Quitar este local del recorrido','Remove this store from the route'):
+    tr('Agregar este local al recorrido','Add this store to the route'))
+  :tr('Seleccioná un local para agregarlo','Select a store to add it'));
+ const use=action.querySelector('use');if(use)use.setAttribute('href',included?'#i-check':'#i-flag');
+ syncSearchActions();
+}
+function syncSearchActions(){
+ for(const button of document.querySelectorAll('.rnStoreVisitAction')){
+  const included=stops.some(stop=>stop.storeId===button.dataset.rnVisitStore);
+  button.setAttribute('aria-pressed',String(included));
+  button.title=included?tr('Quitar del recorrido','Remove from route'):tr('Agregar al recorrido','Add to route');
+  const use=button.querySelector('use');if(use)use.setAttribute('href',included?'#i-check':'#i-flag');
+ }
+}
+function announce(message){
+ clearTimeout(toastTimer);toast.textContent=message;toast.hidden=false;
+ toastTimer=setTimeout(()=>{toast.hidden=true;},1800);
+}
+function closePanel(){panel.hidden=true;toggle.setAttribute('aria-expanded','false');
+ document.body.classList.remove('rnVisitPlanOpen');}
+function openPanel(){if(!stops.length)return;panel.hidden=false;toggle.setAttribute('aria-expanded','true');
+ document.body.classList.add('rnVisitPlanOpen');}
+function focus(stop){
+ closePanel();
+ if(stop.storeId){window.RetailNavMeetups?.selectStore?.(stop.storeId,false,stop.floor);return;}
+ const result=window.__RETAILNAV__?.focusGeometrySpace?.(stop.spaceId,stop.floor);
+ window.RetailNavMeetups?.showGeometryContext?.({spaceId:stop.spaceId,featureId:stop.polygonId,
+  floor:stop.floor,matchCount:0,located:Boolean(result?.located),originKnown:Boolean(result?.originKnown),
+  assistanceOpen:Boolean(result?.assistanceOpen),message:tr(
+   'Destino físico guardado. Sus datos comerciales todavía no fueron identificados.',
+   'Saved physical destination. Its commercial details are not identified yet.')});
+}
+function remove(id,{quiet=false}={}){
+ const removed=stops.find(stop=>stop.id===id);if(!removed)return;
+ stops=stops.filter(stop=>stop.id!==id);persist();render();
+ if(!quiet)announce(tr('Se quitó '+removed.label+' del recorrido.','Removed '+removed.label+' from the route.'));
+}
+function row(stop){
+ const item=document.createElement('li');item.className='rnVisitPlanStop';item.dataset.destinationId=stop.id;
+ const open=document.createElement('button');open.type='button';open.className='rnVisitPlanFocus';
+ open.setAttribute('aria-label',tr('Ver ','View ')+stop.label+' · '+stop.floor);
+ const name=document.createElement('strong');name.textContent=stop.label;
+ const meta=document.createElement('small');meta.textContent=tr('Planta ','Floor ')+stop.floor+
+  (stop.commercial?'':tr(' · identidad pendiente',' · identity pending'));
+ open.append(name,meta);open.onclick=()=>focus(stop);
+ const del=document.createElement('button');del.type='button';del.className='rnVisitPlanRemove';
+ del.title=tr('Quitar parada','Remove stop');del.setAttribute('aria-label',tr('Quitar ','Remove ')+stop.label);
+ del.innerHTML='<svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>';
+ del.onclick=()=>remove(stop.id);item.append(open,del);return item;
+}
+function render(){
+ const size=stops.length;count.textContent=String(size);toggle.hidden=size===0;
+ toggle.setAttribute('aria-label',tr('Abrir recorrido · ','Open route · ')+size+' '+
+  (size===1?tr('parada','stop'):tr('paradas','stops')));
+ summary.textContent=size===1?tr('1 parada guardada en este dispositivo.','1 stop saved on this device.'):
+  tr(size+' paradas guardadas en este dispositivo.',size+' stops saved on this device.');
+ list.replaceChildren(...stops.map(row));clear.disabled=size===0;
+ if(!size)closePanel();syncAction();
+ window.dispatchEvent(new CustomEvent('retailnav:visit-plan-change',{detail:{mallId,count:size}}));
+}
+function updateLanguage(){
+ $('rnVisitPlanEyebrow').textContent=tr('TU RECORRIDO','YOUR ROUTE');
+ $('rnVisitPlanTitle').textContent=tr('Paradas elegidas','Chosen stops');
+ $('rnVisitPlanOrder').textContent=tr('El orden es el que elegiste.','Stops remain in your chosen order.');
+ clear.textContent=tr('Vaciar','Clear');
+ close.setAttribute('aria-label',tr('Cerrar recorrido','Close route'));
+ render();
+}
+function toggleCurrent(){
+ const destination=currentDestination();if(!destination)return;
+ if(contains(destination.id)){remove(destination.id);return;}
+ if(stops.length>=24){announce(tr('El recorrido admite hasta 24 paradas.','A route can contain up to 24 stops.'));return;}
+ stops.push(destination);persist();render();announce(tr(destination.label+' se agregó al recorrido.',
+  destination.label+' was added to the route.'));
+}
+function toggleStore(storeId,floor=null){
+ const existing=stops.find(stop=>stop.storeId===storeId);
+ if(existing){remove(existing.id);return;}
+ const destination=destinationForStore(storeId,floor);if(!destination)return;
+ if(stops.length>=24){announce(tr('El recorrido admite hasta 24 paradas.','A route can contain up to 24 stops.'));return;}
+ stops.push(destination);persist();render();announce(tr(destination.label+' se agregó al recorrido.',
+  destination.label+' was added to the route.'));
+}
+action.addEventListener('click',toggleCurrent);
+toggle.addEventListener('click',()=>panel.hidden?openPanel():closePanel());
+close.addEventListener('click',closePanel);
+clear.addEventListener('click',()=>{if(!stops.length)return;stops=[];persist();render();
+ announce(tr('Se vació el recorrido.','The route was cleared.'));});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden)closePanel();});
+document.getElementById('rnLanguageSelect')?.addEventListener('change',()=>requestAnimationFrame(updateLanguage));
+document.addEventListener('pointerdown',event=>{
+ if(panel.hidden||panel.contains(event.target)||toggle.contains(event.target))return;closePanel();
+},{capture:true});
+window.addEventListener('retailnav:store-focus-start',()=>requestAnimationFrame(syncAction));
+window.addEventListener('retailnav:store-focus-settled',syncAction);
+new MutationObserver(()=>requestAnimationFrame(syncAction)).observe(dock,{attributes:true,
+ attributeFilter:['hidden','class','data-context']});
+new MutationObserver(()=>requestAnimationFrame(syncSearchActions)).observe(document.getElementById('results')||document.body,
+ {childList:true,subtree:true});
+new MutationObserver(()=>requestAnimationFrame(syncSearchActions)).observe(document.getElementById('rnTagResultCards')||document.body,
+ {childList:true,subtree:true});
+stops=load();updateLanguage();
+window.RetailNavVisitPlanner={getState:()=>({mallId,storageKey,open:!panel.hidden,
+ stops:stops.map(stop=>({...stop}))}),open:openPanel,close:closePanel,toggleCurrent,toggleStore,
+ containsStore:storeId=>stops.some(stop=>stop.storeId===storeId),
+ clear:()=>{stops=[];persist();render();}};
 })();
 </script>
 <script>/* One search control, moved between the tablet header and the phone map.

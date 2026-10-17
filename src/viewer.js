@@ -1350,7 +1350,18 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
    selectedSearchTagKey=null;document.body.classList.remove('rnTagResultsOpen');
    $('rnTagResultPanel').hidden=true;results();
   }
- };host.append(b);
+ };
+ const shell=document.createElement('div');
+ shell.className=horizontal?'rnStoreCardShell':'rnStoreResultShell';
+ const visit=document.createElement('button');visit.type='button';visit.className='rnStoreVisitAction';
+ visit.dataset.rnVisitStore=record.storeId;visit.dataset.floor=(mappedFloors[0]||unit.floor||'');
+ visit.title=en?'Add to route':'Agregar al recorrido';
+ visit.setAttribute('aria-label',(en?'Add ':'Agregar ')+(unit.name||unit.code)+(en?' to route':' al recorrido'));
+ visit.setAttribute('aria-pressed','false');
+ visit.innerHTML='<svg class="icon" aria-hidden="true"><use href="#i-flag"/></svg>';
+ visit.onclick=event=>{event.preventDefault();event.stopPropagation();
+  window.RetailNavVisitPlanner?.toggleStore?.(record.storeId,visit.dataset.floor);};
+ shell.append(b,visit);host.append(shell);
 }
 function renderGroupedShopResults(host,query){
  if(!query)return{storeIds:new Set(),options:[]};

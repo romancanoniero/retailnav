@@ -184,7 +184,8 @@ try{
  assert.equal(radialSelection.selected,'alto-palermo:EP:L04');
  assert.equal(radialSelection.legacyCardVisible,false);
  assert.equal(radialSelection.actionDockVisible,true);
- assert.equal(radialSelection.buttons.length,4);
+ assert.equal(radialSelection.buttons.length,5,
+  'navigation, visit, invite, information and the central close action remain available');
  assert.ok(radialSelection.buttons.every(button=>button.width>=44&&button.height>=44&&
   button.radius==='50%'),'every selected-store action, including X, remains circular');
  assert.equal(await page.locator('#rnUnitOverlay .rnUnitCode:visible').count(),0,

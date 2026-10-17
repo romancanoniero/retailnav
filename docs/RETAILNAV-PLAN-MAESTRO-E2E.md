@@ -862,6 +862,14 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Protección de perspectiva:** el ajuste usa la caja real de los glifos y la orientación del local, reserva margen derecho e inferior, expande una zona de seguridad y rechaza posiciones que crucen el perímetro o un hueco. En plantas irregulares busca la posición válida más próxima a la esquina y reduce el rótulo antes de dejarlo fuera.
 - **Barrera:** los 55 códigos vinculados de Alto Palermo deben informar `bottom-right`, permanecer dentro de su superficie y conservar al menos 0,095 unidades de margen derecho e inferior y 0,05 de separación geométrica. La prueba se ejecuta en Chromium y WebKit e incluye el traslado a fachada por imagen de techo.
 
+### 2026-10-17 — VISIT-PLAN-01 — locales para visitar
+
+- **Estado único:** “Visitar” es una propiedad del mismo destino tanto en cada resultado de búsqueda como en el menú contextual del mapa. Agregar o quitar en cualquiera de los dos accesos actualiza inmediatamente el otro; un comercio identificado sólo puede aparecer una vez aunque tenga más de una geometría o planta.
+- **Interfaz:** el contextual conserva la X central y distribuye orientación, visitar, invitación e información como cuatro controles circulares de 48 px sobre una misma circunferencia. Un contador compacto abre una hoja dentro del visor con el orden elegido, planta, enfoque y eliminación individual.
+- **Identidad física:** los comercios usan `storeId` como identidad estable. Un contorno comercial todavía no identificado usa su `spaceId` interno y sigue siendo seleccionable, guardable y enfocable sin inventar nombre ni relación comercial; sus datos podrán completarse después.
+- **Persistencia y privacidad:** el recorrido se guarda sólo en el dispositivo, separado por shopping, con un máximo de 24 paradas. Esta primera entrega conserva el orden de selección; no presume optimización, tiempos, ofertas ni favoritos.
+- **Barrera:** probar alta desde búsqueda, reflejo en contextual, alta desde mapa, dos comercios identificados, un espacio sin identificar, recarga, enfoque, eliminación, hoja dentro del viewport, círculos de 44 px o más y ausencia de errores en Chromium y WebKit/Safari. Las regresiones de búsqueda, navegación y Alto Palermo deben seguir pasando.
+
 ## 19. Rutas y comandos para retomar (sin suponer despliegue)
 
 **Repositorio:** https://github.com/romancanoniero/retailnav  

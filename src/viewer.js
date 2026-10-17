@@ -2177,6 +2177,8 @@ function applyMallUi(){
        'Contornos y comunicaciones verticales sin validar; rutas desactivadas.'
     :mallId==='ap-plaza'
      ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
+    :mallId==='alto-palermo'
+     ?'Seis planos SVG oficiales y 158 registros del mapa interactivo. Marcadores importados sin atribuir límites, entradas ni rutas.'
      :'Geometría del mapa oficial en el visor 3D. Alturas estimadas; sin ruta peatonal verificada.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
@@ -2212,15 +2214,23 @@ function applyMallUi(){
      'servicios de circulación separados y directorio histórico L1–L7 conservado. '+
      'No hay verificación de fachadas, escala ni conexión entre plantas. '+
      'NO APTO PARA NAVEGACIÓN REAL.';
+  }else if(footer&&mallId==='alto-palermo'){
+    footer.textContent='Alto Palermo: seis planos SVG oficiales y 158 registros del mapa interactivo. '+
+     'Los códigos y centros de marcador se conservan tal como fueron publicados. '+
+     'Límites de locales, entradas, escala y rutas permanecen sin verificar. '+
+     'NO APTO PARA NAVEGACIÓN REAL.';
   }
   $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
     ?''+(selectedMall.vectorRegionCount||0)+' regiones candidatas entre L1–L9 · límites pendientes de revisión. NO NAVEGABLE.'
     :mallId==='ap-plaza'
      ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
+    :mallId==='alto-palermo'
+     ?'Marcadores del directorio oficial · límites de locales y rutas pendientes de validación.'
      :'Contornos y pasillos trazados sobre tus imágenes.';
   $('mapTitle').textContent=mallId==='new-world-city-shanghai'
     ?'L1–L9 · geometrías provisionales sin escala calibrada'
-    :mallId==='ap-plaza'?'B1 · calco IA v2':'Las tres plantas, en su posición relativa';
+    :mallId==='ap-plaza'?'B1 · calco IA v2'
+    :mallId==='alto-palermo'?'Las '+floors.length+' plantas oficiales':'Las tres plantas, en su posición relativa';
 }
 async function init(){try{
  // Full 360-degree spherical rotation is the default (including underside).
@@ -2243,7 +2253,7 @@ async function init(){try{
  $('showAllFloors').hidden=floors.length<=1;
  document.querySelector('.stage')?.classList.toggle('focused',active!=='ALL');
  if($('floorSelect'))$('floorSelect').value=active;
- resetCamera();results();$('unitCount').textContent=floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
+ resetCamera();results();$('unitCount').textContent=mallId==='alto-palermo'?(selectedMall.officialDirectoryRecords||0):floors.flatMap(f=>f.features).filter(f=>['unit','anchor'].includes(f.k)).length;$('mallUnitCountLabel').textContent=mallId==='alto-palermo'?'registros oficiales*':'polígonos comerciales*';$('polygonCount').textContent=floors.reduce((n,f)=>n+f.features.length,0);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=false);
 $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;$('loading').hidden=true;$('badge').classList.add('ready');$('status').textContent=gl?'WebGL listo':'3D compatible listo';$('renderStatus').textContent=floors.length+' plantas cargadas ('+selectedMall.name+') - render '+(gl?'WebGL':'Canvas 3D')+' - sin CDN';requestAnimationFrame((time)=>{try{render(time);requestAnimationFrame(()=>window.RetailNavMapCache?.ready?.());}catch(e){fail('Error al dibujar el mapa: '+e.message);}});window.__RETAILNAV__={getState:()=>({ready,mallId,mapCache:window.RetailNavMapCache?.getState?.(),mapTheme:window.RetailNavThemes?.getState?.(),renderer:gl?'WebGL':'Canvas 3D',active,visible:visible().map(f=>f.id),target:target.slice(),distance,q:q.slice(),spread,wire,scan,auto,placingPosition,selected:selected?.id,route:route?.points.length||0,frames:frame,errors:errors.slice(),features:floors.map(f=>[f.id,f.features.length]),
  floorHeightsMetres:{...floorHeightMetres},
  floorElevationsMetres:Object.fromEntries(floors.map(f=>[f.id,f.elevationMetres])),

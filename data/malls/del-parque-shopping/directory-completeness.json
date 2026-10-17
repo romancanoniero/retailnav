@@ -1,0 +1,65 @@
+{
+  "schema": "retailnav.mall.directory-completeness.v1",
+  "mallId": "del-parque-shopping",
+  "sourceKind": "user-photographed-evacuation-posters-not-commercial-directory",
+  "officialDirectoryUrl": null,
+  "officialDirectoryRecordCount": "unknown",
+  "catalogState": "physical-spaces-loaded-tenant-directory-not-available",
+  "inventory": {
+    "printedRoomLabel": {
+      "published": 41,
+      "imported": 41,
+      "missing": 0,
+      "invalid": 0,
+      "reason": null
+    },
+    "printedStoreNumbers": {
+      "published": 0,
+      "imported": 0,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "No printed store codes in source photos"
+    },
+    "retailerNames": {
+      "published": 0,
+      "imported": 0,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "Every room labeled LOCAL, without tenant name"
+    },
+    "commercialCategories": {
+      "published": 0,
+      "imported": 0,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "No category by retailer published in source"
+    },
+    "logos": {
+      "published": 0,
+      "imported": 0,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "No retailer or shopping logo in sources"
+    },
+    "retailerContactDetails": {
+      "published": 0,
+      "imported": 0,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "None printed on evacuation maps"
+    },
+    "poiLabels": {
+      "published": 34,
+      "imported": 34,
+      "missing": 0,
+      "invalid": 0,
+      "reason": "Other emergency symbols retained in separate photo-review data"
+    }
+  },
+  "limitations": [
+    "Not a replacement for a current official retailer directory.",
+    "All shop occupancy unknown; never infer brand/store mapping by nearest polygon.",
+    "No official stock, tags, commercial phone numbers or logos available."
+  ],
+  "publishableAsVerifiedTenantCatalog": false
+}

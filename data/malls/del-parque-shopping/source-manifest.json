@@ -1,0 +1,219 @@
+{
+  "schema": "retailnav.mall.photo-source-manifest.v1",
+  "mallId": "del-parque-shopping",
+  "photoDate": "2026-10-17",
+  "rights": "User-supplied photographs; redistribution rights not independently verified",
+  "origin": "User-provided three evacuation sign photographs",
+  "floorSource": {
+    "PB": {
+      "originalImageSha256": "207165939b7ee577228024d05b9e67d7c124a8005e1e62b954494efd7486a7fa",
+      "originalImageBytes": 149732,
+      "encodedWebpSha256": "5ba86100b2736fd3dc9279bd66c7b69a41387d4d51a983e528ee2f035a096bd8",
+      "webpBytes": 74910,
+      "georeferencing": {
+        "units": "arbitrary_registered_image_pixels",
+        "width": 1130,
+        "height": 830,
+        "metricScaleKnown": false,
+        "referenceFloor": "PB",
+        "sourceControlPoints": [
+          [
+            335,
+            128
+          ],
+          [
+            254,
+            742
+          ],
+          [
+            1098,
+            749
+          ]
+        ],
+        "targetControlPointsPB": [
+          [
+            335,
+            128
+          ],
+          [
+            254,
+            742
+          ],
+          [
+            1098,
+            749
+          ]
+        ],
+        "affineTransformSourceToRegistered": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "count": {
+        "rooms": 18,
+        "features": 21,
+        "areas": 3,
+        "pois": 21
+      },
+      "omissions": [
+        {
+          "id": "PB-circulation-01",
+          "reason": "invalid unverified source geometry: Self-intersection[410.156382477626 311.742816768724]"
+        }
+      ]
+    },
+    "P1": {
+      "originalImageSha256": "cad6c4722cdd844c2e06876623b43d35b2b29c48cc1c426dda9334121e728519",
+      "originalImageBytes": 136848,
+      "encodedWebpSha256": "ba03aa22c64b4ebe17361ca9545b532d74a0c78fa889bdb343440c32d86f0799",
+      "webpBytes": 63242,
+      "georeferencing": {
+        "units": "arbitrary_registered_image_pixels",
+        "width": 1130,
+        "height": 830,
+        "metricScaleKnown": false,
+        "referenceFloor": "PB",
+        "sourceControlPoints": [
+          [
+            246,
+            145
+          ],
+          [
+            185,
+            667
+          ],
+          [
+            903,
+            673
+          ]
+        ],
+        "targetControlPointsPB": [
+          [
+            335,
+            128
+          ],
+          [
+            254,
+            742
+          ],
+          [
+            1098,
+            749
+          ]
+        ],
+        "affineTransformSourceToRegistered": [
+          [
+            1.1756361252,
+            -0.0177896482,
+            48.3730121921
+          ],
+          [
+            -7.99655e-05,
+            1.1762358661,
+            -42.5345290834
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "count": {
+        "rooms": 16,
+        "features": 19,
+        "areas": 2,
+        "pois": 15
+      },
+      "omissions": []
+    },
+    "P2": {
+      "originalImageSha256": "4e5427860d40b940508fd0f6643ba20f062c14262080b71ee4f2895a55999a1c",
+      "originalImageBytes": 144519,
+      "encodedWebpSha256": "2c9d80577ff81b0090cf90775fc055f949a10bc6e100427ef039f30db51edc6a",
+      "webpBytes": 68324,
+      "georeferencing": {
+        "units": "arbitrary_registered_image_pixels",
+        "width": 1130,
+        "height": 830,
+        "metricScaleKnown": false,
+        "referenceFloor": "PB",
+        "sourceControlPoints": [
+          [
+            393,
+            253
+          ],
+          [
+            351,
+            745
+          ],
+          [
+            1029,
+            779
+          ]
+        ],
+        "targetControlPointsPB": [
+          [
+            335,
+            128
+          ],
+          [
+            254,
+            742
+          ],
+          [
+            1098,
+            749
+          ]
+        ],
+        "affineTransformSourceToRegistered": [
+          [
+            1.2477522656,
+            -0.058118709,
+            -140.6626070136
+          ],
+          [
+            -0.0520351996,
+            1.2435254504,
+            -166.1621055271
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "count": {
+        "rooms": 7,
+        "features": 15,
+        "areas": 7,
+        "pois": 19
+      },
+      "omissions": []
+    }
+  },
+  "mallBrand": {
+    "logo": "not-present-in-photo",
+    "font": "not-provided",
+    "palette": "not-verified"
+  },
+  "sourceWarnings": [
+    "No official directory or identifiable store-number rows appear on evacuation posters.",
+    "No georeferenced entrances, metres-per-pixel, or usable routing graph were supplied.",
+    "Three-point affine registration is provisional, not a physical survey."
+  ]
+}

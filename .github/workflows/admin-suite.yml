@@ -1,0 +1,44 @@
+name: Admin suite checks
+on:
+  pull_request:
+    paths:
+      - 'admin-api/**'
+      - 'admin/**'
+      - '.github/workflows/admin-suite.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'admin-api/**'
+      - 'admin/**'
+      - '.github/workflows/admin-suite.yml'
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      RETAILNAV_ADMIN_DATA_DIR: /tmp/retailnav-admin-test-default
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check admin-api/server.mjs
+      - run: node --test admin-api/server.test.mjs
+      - run: node --test backend/server.test.mjs
+      - name: Check frontend embedded JS syntax
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser):
+              def __init__(self): super().__init__();self.script=False;self.js=''
+              def handle_starttag(self, tag, attrs):
+                  if tag=='script':self.script=True
+              def handle_data(self, data):
+                  if self.script:self.js+=data
+              def handle_endtag(self,tag):
+                  if tag=='script':self.script=False
+          p=P();p.feed(Path('admin/map-studio/index.html').read_text())
+          Path('/tmp/map-studio.js').write_text(p.js)
+          PY
+          node --check /tmp/map-studio.js

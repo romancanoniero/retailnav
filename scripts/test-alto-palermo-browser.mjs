@@ -52,7 +52,34 @@ try{
  assert.equal(audit.units.unmatched,103);
  assert.equal(audit.viewer.roofTextSummary.codeLabels,55);
  assert.equal(audit.viewer.roofTextSummary.commercialRoofs,192);
+ assert.equal(audit.viewer.roofTextSummary.textGeometry,'vector-outline-extruded');
+ assert.equal(audit.viewer.roofTextSummary.rasterGlyphLabels,0);
+ assert.equal(audit.viewer.roofTextSummary.vectorGlyphLabels,
+  audit.viewer.roofTextSummary.codeLabels+audit.viewer.roofTextSummary.knownNameLabels);
+ assert.equal(audit.viewer.roofTextSummary.vectorFontSourceSha256,
+  '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63');
+ assert.equal(audit.viewer.roofTextSummary.vectorCurveSegments,24);
+ assert.ok(audit.viewer.roofTextSummary.knownNameLabels>0);
  assert.deepEqual(audit.viewer.errors,[]);
+ await page.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.raisedVectorTriangles>0);
+ const raisedSign=await page.evaluate(()=>window.RetailNavUnits.getRoofState());
+ assert.equal(raisedSign.renderMode,'world-space-vector-outline-extruded-signs');
+ assert.equal(raisedSign.raisedTextGeometry,'vector-outline-double-sided-extruded');
+ assert.equal(raisedSign.raisedRasterAtlasCreated,false);
+ assert.ok(raisedSign.raisedVectorTriangles>100);
+ assert.equal(await page.locator('#mallHeaderLogo').isVisible(),true);
+ assert.match(await page.locator('#mallHeaderLogo').getAttribute('src'),
+  /branding\/malls\/alto-palermo\/mall-mark\.png$/);
+ await page.locator('#search').fill('Adidas');
+ await page.waitForFunction(()=>document.querySelector('.rnUnitResult .rnStoreResultLogo img')?.complete===true);
+ const adidasLogo=await page.locator('.rnUnitResult .rnStoreResultLogo img').first().evaluate(img=>({
+  src:img.getAttribute('src'),width:img.naturalWidth,height:img.naturalHeight
+ }));
+ assert.match(adidasLogo.src,/branding\/malls\/alto-palermo\/stores\/adidas-[a-f0-9]{8}\.png$/);
+ assert.ok(adidasLogo.width>0&&adidasLogo.height>0);
+ const fashion=await page.evaluate(()=>window.RetailNavUnits.suggestions('moda',15));
+ assert.ok(fashion.some(item=>item.count>=40));
+ await page.locator('#search').fill('');
  await page.locator('#floorSelect').selectOption('PB');
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().visible.length===1&&
   window.__RETAILNAV__.getState().visible[0]==='PB');

@@ -1,5 +1,6 @@
 {
   "id": "alto-palermo",
+  "brandAssetsManifest": "brand-assets.json",
   "name": "Alto Palermo",
   "city": "Buenos Aires, Argentina",
   "source": "https://www.altopalermo.com.ar/maps_ap/index.html",

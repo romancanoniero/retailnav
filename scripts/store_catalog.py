@@ -216,9 +216,13 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             if u["productTerms"]:
                 u["productEvidence"] = "official-description-not-current-inventory"
         concept_annotation = concepts.get((floor, code))
-        declared_concepts = list(u.get("conceptIds", [])) if u.get("source") == "aventura-official-directory" else []
+        declared_concepts = list(u.get("conceptIds", []))
         if len(set(declared_concepts)) != len(declared_concepts) or any(cid not in allowed for cid in declared_concepts):
             raise ValueError(f"{mall_id}: unknown or duplicate directory concept ID {key}")
+        if declared_concepts and u.get("source") != "aventura-official-directory":
+            if (u.get("conceptEvidence") != "official-directory-category-normalization" or
+                    not str(u.get("conceptSource", "")).startswith("https://www.altopalermo.com.ar/")):
+                raise ValueError(f"{mall_id}: category concepts lack official source evidence {key}")
         u["conceptIds"] = declared_concepts
         if concept_annotation:
             if not u.get("name") or u.get("name") != concept_annotation["expectedMapName"] or not identifier:

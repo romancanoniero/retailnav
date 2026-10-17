@@ -1170,8 +1170,8 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
  const b=document.createElement('button');b.type='button';b.className='result rnUnitResult'+(horizontal?' rnStoreCard':'');
  b.dataset.storeId=record.storeId;b.dataset.matchTypes=matchTypes.join(',');
  const logo=unit.logoURL||unit.logoUrl||unit.logo||unit.brandLogoURL||unit.brandLogoUrl;
- if(horizontal){
-  const media=document.createElement('span');media.className='rnStoreCardLogo';
+ {
+  const media=document.createElement('span');media.className=horizontal?'rnStoreCardLogo':'rnStoreResultLogo';
   const initials=(unit.name||unit.code||'?').trim().split(/\s+/).slice(0,2).map(part=>part[0]).join('').toUpperCase();
   const fallback=document.createElement('span');fallback.textContent=initials;media.append(fallback);
   if(typeof logo==='string')try{
@@ -2313,8 +2313,8 @@ function onThemeChange(){
     }
     const currentRoofFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
     if(currentRoofFont!==lastRoofFont){
-     // The glyph geometry itself is generated from Canvas text masks. A font
-     // preset switch must re-rasterize those glyphs, not only recolor them.
+     // Rebuild roof lettering when its preview preset changes. Alto Palermo
+     // always keeps its licensed vector-outline mesh; it never rasterizes.
      window.RetailNavRoofText?.prepare?.(floors,selectedMall.units||[],
       selectedMall.pois||[],cfg.origin,cfg.scale);
      lastRoofFont=currentRoofFont;

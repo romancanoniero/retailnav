@@ -8,11 +8,12 @@
 (()=>{
 'use strict';
 const HEX=/^#[0-9a-fA-F]{6}$/;
-const FONT=['editorial','modern','rounded'];
+const FONT=['editorial','modern','rounded','alto-inter'];
 const FONT_STACKS=Object.freeze({
  editorial:'"Helvetica Neue","Avenir Next",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif',
  modern:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Noto Sans CJK SC",sans-serif',
- rounded:'"Trebuchet MS","Avenir Next Rounded","Arial Rounded MT Bold",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif'
+ rounded:'"Trebuchet MS","Avenir Next Rounded","Arial Rounded MT Bold",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif',
+ 'alto-inter':'"RetailNav Alto Inter","Inter","Segoe UI",Arial,sans-serif'
 });
 const CORNERS=['soft','square'];
 const COLOR_KEYS={

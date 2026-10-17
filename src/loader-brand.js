@@ -24,11 +24,12 @@
  const fontStacks={
   editorial:'"Helvetica Neue","Avenir Next",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif',
   modern:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Noto Sans CJK SC",sans-serif',
-  rounded:'"Trebuchet MS","Avenir Next Rounded","Arial Rounded MT Bold",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif'
+  rounded:'"Trebuchet MS","Avenir Next Rounded","Arial Rounded MT Bold",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif',
+  'alto-inter':'"RetailNav Alto Inter","Inter","Segoe UI",Arial,sans-serif'
  };
  document.documentElement.style.setProperty('--rn-font-family',
   fontStacks[mall.font]||fontStacks.modern);
- const allowedFile=/^branding\/[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:svg|png|webp|jpe?g)$/;
+ const allowedFile=/^branding\/(?:[a-zA-Z0-9][a-zA-Z0-9._-]*\/)*[a-zA-Z0-9][a-zA-Z0-9._-]*\.(?:svg|png|webp|jpe?g)$/;
  const allowedApi='api/mall-brands/'+selected+'/logo.svg';
  let seq=0,visible=false,activeSource='none',urlString='';
  function canonical(raw){

@@ -12,6 +12,9 @@ const entries=unitsApi.getUnits?.()||[];
 let resource=null,frames=0,drawnRoof=0,drawnRaised=0,visibleCodes=[],lastError='';
 const roofEntries=entries.filter(u=>u.roof&&u.polygonId);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const approvedVectorFont=()=>window.RETAILNAV_ACTIVE_MALL?.id==='alto-palermo'&&
+ window.RetailNavVectorFont?.schema==='retailnav.vector-font-mesh.v1'
+ ?window.RetailNavVectorFont:null;
 function shader(gl,type,src){
  const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);
  if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
@@ -38,6 +41,12 @@ function program(gl){
 }
 function create(gl){
  const shaderProgram=program(gl);
+ const vectorFont=approvedVectorFont();
+ if(vectorFont){
+  return {gl,...shaderProgram,tex:null,cells:new Map(roofEntries.map(item=>[
+   item.storeId||(item.floor+':'+item.code),true])),items:roofEntries,
+   vectorFont,vectorSigns:true,buffer:gl.createBuffer()};
+ }
  const cw=192,ch=85;
  const maxTexture=gl.getParameter(gl.MAX_TEXTURE_SIZE)||4096;
  const cols=Math.max(1,Math.min(8,Math.floor(maxTexture/cw)));
@@ -119,6 +128,55 @@ function rectangle(data,a,b,c,d,cell){
  triangle(data,a,b,d,[uv.u0,uv.v1],[uv.u1,uv.v1],[uv.u0,uv.v0]);
  triangle(data,b,c,d,[uv.u1,uv.v1],[uv.u1,uv.v0],[uv.u0,uv.v0]);
 }
+function vectorTextWidth(text,font){
+ let width=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  if(!glyph)throw Error('Missing raised-sign vector glyph '+JSON.stringify(char));
+  width+=glyph.a;
+ }
+ return width;
+}
+function vectorLine(data,text,centre,axis,side,availableWidth,lineCentre,maxHeight,front,font){
+ if(!text)return 0;
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ const scale=Math.min(availableWidth/width,maxHeight/height);
+ if(!Number.isFinite(scale)||scale<=0)return 0;
+ const direction=front?1:-1;
+ const baseOffset=direction*.257,topOffset=direction*.292;
+ const centerY=(font.ascender+font.descender)/2;
+ let cursor=-width/2,triangles=0;
+ const point=(x,y,offset)=>[
+  centre[0]+axis[0]*(cursor+x)*scale*direction+side[0]*offset,
+  centre[1]+lineCentre+(y-centerY)*scale,
+  centre[2]+axis[2]*(cursor+x)*scale*direction+side[2]*offset
+ ];
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  for(let index=0;index<glyph.t.length;index+=3){
+   const corners=[];
+   for(let corner=0;corner<3;corner++){
+    const vertex=glyph.t[index+corner]*2;
+    corners.push(point(glyph.v[vertex],glyph.v[vertex+1],topOffset));
+   }
+   if(front)triangle(data,corners[0],corners[1],corners[2]);
+   else triangle(data,corners[2],corners[1],corners[0]);
+   triangles++;
+  }
+  for(const [start,count] of glyph.c){
+   for(let index=0;index<count;index++){
+    const a=(start+index)*2,b=(start+(index+1)%count)*2;
+    const lowA=point(glyph.v[a],glyph.v[a+1],baseOffset);
+    const lowB=point(glyph.v[b],glyph.v[b+1],baseOffset);
+    const highB=point(glyph.v[b],glyph.v[b+1],topOffset);
+    const highA=point(glyph.v[a],glyph.v[a+1],topOffset);
+    rectangle(data,lowA,lowB,highB,highA);triangles+=2;
+   }
+  }
+  cursor+=glyph.a;
+ }
+ return triangles;
+}
 function vec(p,a,b,c){return [p[0]+a[0]*b+c[0],p[1]+a[1]*b+c[1],p[2]+a[2]*b+c[2]];}
 function planar(center,axis,side,halfW,halfD){
  const corner=(a,b)=>[
@@ -143,7 +201,7 @@ function box(data,center,axis,side,halfW,halfH,halfT){
   rectangle(data,front[i],front[j],back[j],back[i]);
  }
 }
-function spotlight(data,roof,axis,side,width,cell){
+function spotlight(data,roof,axis,side,width,cell,item,vectorFont){
  const hw=width/2,hh=width*.26;
  // Panel bottom is always flush with the single, centered support stem.
  // The stem starts at the roof (no floating, unattached sign).
@@ -157,10 +215,20 @@ function spotlight(data,roof,axis,side,width,cell){
  const back=upright(centre,axis,side,hw+.025,hh+.025,-.240);
  rectangle(data.trim,...front);
  rectangle(data.trim,back[1],back[0],back[3],back[2]);
- const f=upright(centre,axis,side,hw,hh,.256);
- const b=upright(centre,axis,side,hw,hh,-.256);
- rectangle(data.text,...f,cell);
- rectangle(data.text,b[1],b[0],b[3],b[2],cell);
+ if(vectorFont){
+  const name=(item.name||'').trim(),code=String(item.code||'').trim();
+  for(const front of [true,false]){
+   if(name)data.vectorTriangles+=vectorLine(data.vectorName,name,centre,axis,side,
+    width*.86,hh*.34,hh*.72,front,vectorFont);
+   data.vectorTriangles+=vectorLine(data.vectorCode,code,centre,axis,side,
+    width*.78,-hh*.48,name?hh*.46:hh*1.28,front,vectorFont);
+  }
+ }else{
+  const f=upright(centre,axis,side,hw,hh,.256);
+  const b=upright(centre,axis,side,hw,hh,-.256);
+  rectangle(data.text,...f,cell);
+  rectangle(data.text,b[1],b[0],b[3],b[2],cell);
+ }
  // Short base plate visually seats the posts on the roof surface.
  const baseCenter=[roof[0],roof[1]+.08,roof[2]];
  box(data.posts,baseCenter,axis,side,hw*.64,.09,.18);
@@ -191,7 +259,7 @@ function render(gl,mvp){
  const visibleFloors=new Set(state.visible);
  const highlights=new Set(unitsApi.getHighlightedStoreIds?.()||[]);
  const selected=state.selectedCode??unitsApi.getState().selected;
- const regular=[],special={posts:[],body:[],trim:[],text:[]};
+ const regular=[],special={posts:[],body:[],trim:[],text:[],vectorName:[],vectorCode:[],vectorTriangles:0};
  drawnRoof=0;drawnRaised=0;frames++;visibleCodes=[];
  let autoFeatured=0,raisedCount=0;
  for(const u of resource.items){
@@ -212,7 +280,7 @@ function render(gl,mvp){
   const pxToWorld=window.RETAILNAV_ACTIVE_MALL?.scale||.12;
   const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
   const surface=planar(top,axis,side,halfW,halfW*.43);
-  if(state.distance<=230||key===selected||highlights.has(key)){
+  if(!resource.vectorSigns&&(state.distance<=230||key===selected||highlights.has(key))){
    rectangle(regular,surface[0],surface[1],surface[2],surface[3],cell);
    drawnRoof++;visibleCodes.push(u.code);
   }
@@ -223,7 +291,7 @@ function render(gl,mvp){
    const mappedWidth=(roof.widthPixels||10)*pxToWorld;
    const panelWidth=clamp(Math.min(state.distance*.018,mappedWidth*.96),1.35,3.5);
    // Use the same physical roof midpoint as the ordinary lettering.
-   spotlight(special,top,axis,side,panelWidth,cell);
+   spotlight(special,top,axis,side,panelWidth,cell,u,resource.vectorFont);
    raisedCount++;drawnRaised++;
    if(feature&&!requested)autoFeatured++;
   }
@@ -238,16 +306,22 @@ function render(gl,mvp){
  gpuDraw(gl,r,mvp,r.buffer,special.trim,1,[.40,.82,.97,1]);
  gpuDraw(gl,r,mvp,r.buffer,regular,0,[1,1,1,1]);
  gpuDraw(gl,r,mvp,r.buffer,special.text,0,[1,1,1,1]);
+ gpuDraw(gl,r,mvp,r.buffer,special.vectorName,1,[.97,.99,1,1]);
+ gpuDraw(gl,r,mvp,r.buffer,special.vectorCode,1,[1,.79,.50,1]);
+ r.lastVectorTriangles=special.vectorTriangles;
  gl.disable(gl.BLEND);
 }
 unitsApi.draw3D=render;
 unitsApi.getRoofState=()=>({
- renderMode:resource?'world-space-textured-roof-and-raised-3d':'pending',
+ renderMode:resource?(resource.vectorSigns?'world-space-vector-outline-extruded-signs':'world-space-textured-roof-and-raised-3d'):'pending',
  roofLabels:drawnRoof,raised:drawnRaised,
  labelledRoofs:roofEntries.length,
  unmatched:entries.length-roofEntries.length,
  visibleCodes:visibleCodes.slice(),frames,
  raisedHasPhysicalPosts:true,raisedHasExtrudedBody:true,
+ raisedTextGeometry:resource?.vectorSigns?'vector-outline-double-sided-extruded':'texture-atlas',
+ raisedVectorTriangles:resource?.lastVectorTriangles||0,
+ raisedRasterAtlasCreated:resource?Boolean(!resource.vectorSigns):null,
  followsMapCamera:true,cameraFacing:false,lastError
 });
 unitsApi.getWallState=unitsApi.getRoofState;

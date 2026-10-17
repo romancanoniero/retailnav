@@ -5,6 +5,7 @@ import {runInNewContext} from 'node:vm';
 
 const source=readFileSync('src/mall-theme.js','utf8');
 const aventuraConfig=JSON.parse(readFileSync('data/mall-themes/aventura.json','utf8'));
+const altoConfig=JSON.parse(readFileSync('data/mall-themes/alto-palermo.json','utf8'));
 function environment(sharedStorage=new Map()){
  const els=new Map();
  const css=new Map();
@@ -63,6 +64,19 @@ test('brand color is applied to every map layer and light presentation',()=>{
  assert.equal(e.instance.rgb('mapUnit',null).length,3);
  assert.equal(e.classes.has('rnThemeEnabled'),true);
  assert.ok(e.events.includes('retailnav:themechange'));
+});
+
+test('Alto Palermo uses its archived official mark and open vector font preset',()=>{
+ assert.equal(altoConfig.mallId,'alto-palermo');
+ assert.equal(altoConfig.logoSymbolUrl,'branding/malls/alto-palermo/mall-mark.png');
+ assert.equal(altoConfig.theme.font,'alto-inter');
+ assert.equal(altoConfig.source.fontSha256,
+  '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63');
+ const env=environment();
+ const state=env.instance.apply({id:'alto-palermo',name:'Alto Palermo',theme:altoConfig.theme});
+ assert.equal(state.theme.font,'alto-inter');
+ assert.match(env.instance.fontFamily(),/RetailNav Alto Inter/);
+ assert.match(env.css.get('--rn-font-family'),/RetailNav Alto Inter/);
 });
 
 test('other malls retain classic renderer if their own palette is missing',()=>{

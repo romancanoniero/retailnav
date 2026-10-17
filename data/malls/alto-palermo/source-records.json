@@ -16,7 +16,25 @@
       "local_number": "L02",
       "x": 490,
       "y": 208,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/galpon_de_ropa.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/galpon_de_ropa.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/galpon_de_ropa-a4d7aab4.png",
+      "logo_sha256": "78a83607690467c085558f164fbc0d1d8a3f38efc7504409b7db2e508ce7ea65",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 2,
@@ -27,7 +45,21 @@
       "local_number": "L08",
       "x": 865,
       "y": 470,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/gift_stationery.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/gift_stationery.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/gift_stationery-80edd1e0.png",
+      "logo_sha256": "b52d1ded4e52fffe98730b9b71329b1ab7bdba2b8db209423c765b6f7c707fb1",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "regalería",
+        "regalos"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 3,
@@ -38,7 +70,25 @@
       "local_number": "L06",
       "x": 895,
       "y": 390,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/haulster.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/haulster.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/haulster-91444c8b.png",
+      "logo_sha256": "2ec773e7394b07db9d0b6f6bedfd707f93e75a73e0274d1c612a716fbb8dfa2f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 4,
@@ -49,7 +99,21 @@
       "local_number": "L04",
       "x": 590,
       "y": 200,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/healthy.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/healthy.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/healthy-4cc00672.png",
+      "logo_sha256": "d4304682c5f154b9722dfd9e4b70a574ef0a45956a332389fc9b01031d0065af",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "centro médico",
+        "salud"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 5,
@@ -60,7 +124,20 @@
       "local_number": null,
       "x": 0,
       "y": 0,
-      "position_valid": false
+      "position_valid": false,
+      "logo": "/maps_ap/img/logo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/logo.png",
+      "logo_local_url": "branding/malls/alto-palermo/mall-mark.png",
+      "logo_sha256": "5cc966d92517b5942fab25c431db1fb0434e10d803e38ceba6a2eb01b3cda183",
+      "logo_width": 94,
+      "logo_height": 94,
+      "logo_status": "archived",
+      "tags": [
+        "servicios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 7,
@@ -71,7 +148,24 @@
       "local_number": null,
       "x": 0,
       "y": 0,
-      "position_valid": false
+      "position_valid": false,
+      "logo": "/maps_ap/img/logo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/logo.png",
+      "logo_local_url": "branding/malls/alto-palermo/mall-mark.png",
+      "logo_sha256": "5cc966d92517b5942fab25c431db1fb0434e10d803e38ceba6a2eb01b3cda183",
+      "logo_width": 94,
+      "logo_height": 94,
+      "logo_status": "archived",
+      "tags": [
+        "estacionamiento",
+        "cochera",
+        "parking"
+      ],
+      "concept_ids": [
+        "service.parking"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 8,
@@ -82,7 +176,22 @@
       "local_number": null,
       "x": 814,
       "y": 416,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/hop.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/hop.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/hop-8d7ddf18.png",
+      "logo_sha256": "699be72e8a66b0349b6223205d1fa0e3fa75886c95bb6c40a944c901ae73916c",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "envíos",
+        "correo",
+        "paquetería"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 9,
@@ -93,7 +202,21 @@
       "local_number": null,
       "x": 0,
       "y": 0,
-      "position_valid": false
+      "position_valid": false,
+      "logo": "/maps_ap/img/kinto_toyota.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/kinto_toyota.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/kinto_toyota-24572dd5.png",
+      "logo_sha256": "0fbd296689895797c9dfe90e650547cc65ee6c3cd05f86c742219e403433c4fe",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "alquiler de automóviles",
+        "autos"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 10,
@@ -104,7 +227,25 @@
       "local_number": "L02",
       "x": 380,
       "y": 90,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/adidas.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/adidas.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/adidas-c6684d9b.png",
+      "logo_sha256": "538953cb458da7696c50a40e4679e692d2bc18553a0c937924e132d7fe2cf1ff",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "deportes",
+        "artículos deportivos",
+        "ropa deportiva"
+      ],
+      "concept_ids": [
+        "category.sports",
+        "product.sportswear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 11,
@@ -115,7 +256,24 @@
       "local_number": "L04",
       "x": 490,
       "y": 115,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rouge.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rouge.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rouge-d89377e2.png",
+      "logo_sha256": "f07c3f394796587cb3efa458a66a49d643c7063766c56b1b16e04c343d170aba",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 12,
@@ -126,7 +284,25 @@
       "local_number": "L06",
       "x": 502,
       "y": 201,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/key_biscayne.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/key_biscayne.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/key_biscayne-8940a90b.png",
+      "logo_sha256": "503760531897b76492dd14a56dd806dd496399434c68159d0f6d702910d07c73",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 13,
@@ -137,7 +313,25 @@
       "local_number": "L07",
       "x": 540,
       "y": 195,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/47_street.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/47_street.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/47_street-d3bbda2c.png",
+      "logo_sha256": "f02941b9e2d9e17b545efad70db7075af06d85ddefd7e9a04d0a06bc05686b04",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 14,
@@ -148,7 +342,25 @@
       "local_number": "L08",
       "x": 460,
       "y": 290,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/nike.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/nike.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/nike-ea6bd5ef.png",
+      "logo_sha256": "9147978e8a565ea722ba328a3bb7af193e87eb2c8ec2e3002b36c439e763bc92",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "deportes",
+        "artículos deportivos",
+        "ropa deportiva"
+      ],
+      "concept_ids": [
+        "category.sports",
+        "product.sportswear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 15,
@@ -159,7 +371,25 @@
       "local_number": "L09",
       "x": 540,
       "y": 230,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/markova.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/markova.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/markova-f16c297d.png",
+      "logo_sha256": "2851288282bb714ff2bee1fc15be620cac76ae5c8e9b090b33a986d02b0c3705",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 17,
@@ -170,7 +400,21 @@
       "local_number": "L13",
       "x": 600,
       "y": 280,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cheeky.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cheeky.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cheeky-72a555ee.png",
+      "logo_sha256": "7fc7979039f075fe4cd382cb6fc36ea846a77e7fc90979f9a0d6f54becdd5002",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "infantil",
+        "niños"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 18,
@@ -181,7 +425,25 @@
       "local_number": "L16",
       "x": 615,
       "y": 315,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/king_of_the_kongo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/king_of_the_kongo.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/king_of_the_kongo-457dca42.png",
+      "logo_sha256": "7a8145d29f5f8ba9984fbbd43a5b02e4637abe27f735f63c6518ffb9495917d9",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 19,
@@ -192,7 +454,25 @@
       "local_number": "L17",
       "x": 640,
       "y": 335,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bensimon.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bensimon.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bensimon-8c6962a9.png",
+      "logo_sha256": "a7d2addef7f66571e18273fb1c627ba794f3345306207af24e2320ea1e070a74",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 20,
@@ -203,7 +483,25 @@
       "local_number": "L18",
       "x": 665,
       "y": 320,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/herencia.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/herencia.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/herencia-709fc0af.png",
+      "logo_sha256": "d1de37bf2e261b2e6e5619aa58756e3c0867c741d1e81e4b2acc6388dd1e8c07",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 21,
@@ -214,7 +512,25 @@
       "local_number": "L19",
       "x": 685,
       "y": 345,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/portsaid.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/portsaid.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/portsaid-d2c3f54d.png",
+      "logo_sha256": "cd24d65a5c7181cc10e9ee8052b47784bf7f92c9d0d76a7c575b3858b0413ca4",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 22,
@@ -225,7 +541,25 @@
       "local_number": "L21",
       "x": 710,
       "y": 365,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/tascani.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/tascani.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/tascani-6f271fa6.png",
+      "logo_sha256": "7ae798c79f5497a20d2ecfdea9a2cbd803efeefb5e0f42dc8061ca8a412cf40d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 23,
@@ -236,7 +570,21 @@
       "local_number": "L25",
       "x": 767,
       "y": 365,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/todomoda_beauty.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/todomoda_beauty.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/todomoda_beauty-2fc58fa1.png",
+      "logo_sha256": "6deac345b77142c93590a3655ebdb2b5f07d00269b0f025af9497577c6881796",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 24,
@@ -247,7 +595,25 @@
       "local_number": "L27",
       "x": 815,
       "y": 340,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/sweet.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/sweet.png",
+      "logo_local_url": "",
+      "logo_sha256": "",
+      "logo_width": null,
+      "logo_height": null,
+      "logo_status": "published-reference-unavailable",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 25,
@@ -258,7 +624,24 @@
       "local_number": "L28",
       "x": 835,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/loccitane.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/loccitane.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/loccitane-b8b2b9cb.png",
+      "logo_sha256": "73e89e14724287333675543bf337a84f8f582923bea212b5e77a5330c194c82b",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 26,
@@ -269,7 +652,24 @@
       "local_number": "L30",
       "x": 855,
       "y": 330,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/pandora.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/pandora.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/pandora-6bda0c18.png",
+      "logo_sha256": "77e3527c5d57b74e80c0853bd2e9c18208af59c3f05e5def612b3e40d75f99f6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "joyería",
+        "joyas"
+      ],
+      "concept_ids": [
+        "category.jewelry",
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 27,
@@ -280,7 +680,24 @@
       "local_number": "L31",
       "x": 870,
       "y": 355,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/birkenstock.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/birkenstock.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/birkenstock-44b4f14a.png",
+      "logo_sha256": "69f881f3bea2f43cbf09fea13a0cae7513d18cd77d9b956afe76b54efa00643f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 28,
@@ -291,7 +708,20 @@
       "local_number": "L33",
       "x": 925,
       "y": 375,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/nespresso.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/nespresso.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/nespresso-a3cab03a.png",
+      "logo_sha256": "66d460ac39f045425cc1271f3872390430ecb9f7af6baef9a958538cc82f25aa",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "varios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 29,
@@ -302,7 +732,24 @@
       "local_number": "L35",
       "x": 855,
       "y": 465,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/swarovski.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/swarovski.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/swarovski-9512cf42.png",
+      "logo_sha256": "3914cc5b6162fc7d71866fd3ca161521fdf417037961be4d1fb829e2ba8a7bf5",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "joyería",
+        "joyas"
+      ],
+      "concept_ids": [
+        "category.jewelry",
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 30,
@@ -313,7 +760,25 @@
       "local_number": "L35A",
       "x": 888,
       "y": 466,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/havanna.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/havanna.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/havanna-0e7fef9d.png",
+      "logo_sha256": "280b6698df6eea792333c5e9463c38697b81a072ad8321c86cb716d6e75c2f77",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 31,
@@ -324,7 +789,24 @@
       "local_number": "L36",
       "x": 810,
       "y": 460,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/juleriaque.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/juleriaque.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/juleriaque-afb44904.png",
+      "logo_sha256": "c8991eceaddf223c485bb77185aee4335cdff26575b19ee6f6ea11634e76e555",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 32,
@@ -335,7 +817,21 @@
       "local_number": "L40",
       "x": 735,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/isadora.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/isadora.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/isadora-0d93d183.png",
+      "logo_sha256": "49ee6b5d9c2f65bc6a2242bb8bbf29cdb5cb0b790d981e751059b0635384a7f6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 33,
@@ -346,7 +842,25 @@
       "local_number": "L41",
       "x": 717,
       "y": 470,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/pinguin.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/pinguin.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/pinguin-0c14e450.png",
+      "logo_sha256": "74b25b38c201de25dc748e53d46ae8759bc3a23a8cb0bbadc0e5464b34be66d2",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 34,
@@ -357,7 +871,24 @@
       "local_number": "L42",
       "x": 690,
       "y": 440,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/grimoldi.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/grimoldi.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/grimoldi-b88c2a15.png",
+      "logo_sha256": "ea95870530a4e5d066bed2ef44605a265da60ee8c75e248e6e7adc81b9a9306f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 35,
@@ -368,7 +899,25 @@
       "local_number": "L45",
       "x": 655,
       "y": 445,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/como_quieres.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/como_quieres.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/como_quieres-beffdcd1.png",
+      "logo_sha256": "764fae69fcb1fb93b4dafcf94310db2d9d69bce27625e9748e03fb3de6f42a8e",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 37,
@@ -379,7 +928,25 @@
       "local_number": "L47",
       "x": 600,
       "y": 430,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/levis.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/levis.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/levis-125a5d31.png",
+      "logo_sha256": "eb8bf4e679a6ae9e0fdb8393a7ec96bf02bd4f9c47702033ce632c27a16e9762",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 38,
@@ -390,7 +957,24 @@
       "local_number": "L50",
       "x": 550,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/converse.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/converse.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/converse-afb174c3.png",
+      "logo_sha256": "132a91e872cca902e6477f8b6ea7e8a7db36b0e0c7300ebe294a713dc33bec52",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 39,
@@ -401,7 +985,25 @@
       "local_number": "L52",
       "x": 516,
       "y": 458,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/equus.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/equus.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/equus-5a3b8cbb.png",
+      "logo_sha256": "b8e1433ad7a666c1d670340b7a2ed7a2eed82946b658ad80b8973c62760fc095",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 40,
@@ -412,7 +1014,25 @@
       "local_number": "L54",
       "x": 475,
       "y": 455,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/ver.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/ver.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/ver-ebbea216.png",
+      "logo_sha256": "c4ef2f093c97526db86f9fdc8790cfd962088e0d6a7a6e087354774d3b74ef3b",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 41,
@@ -423,7 +1043,25 @@
       "local_number": "L56",
       "x": 437,
       "y": 458,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/buttman.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/buttman.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/buttman-5d8d06c9.png",
+      "logo_sha256": "23a077d8b23ac561d1dfea589fb44c9d432e9779af259fdc71d148997563aacc",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 43,
@@ -434,7 +1072,25 @@
       "local_number": "L62",
       "x": 470,
       "y": 330,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/carocuore.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/carocuore.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/carocuore-57498943.png",
+      "logo_sha256": "a4d409aa577bfa7a4c9d2badd1001e2d8a3865eff2efeb6119f94c4527ac2b60",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 44,
@@ -445,7 +1101,25 @@
       "local_number": "L63",
       "x": 515,
       "y": 406,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/la_brioche_doree.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/la_brioche_doree.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/la_brioche_doree-86d29e73.png",
+      "logo_sha256": "a2457c61899cbbad260ee41de26d21a7b686c11b665b5ce8fa958d3a9eef6454",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 45,
@@ -456,7 +1130,21 @@
       "local_number": "L10",
       "x": 549,
       "y": 256,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mimo&co.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mimo%26co.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mimo-co-f032573a.png",
+      "logo_sha256": "4971e9cc81ff33b76b1c03fbd30a94a1132967dead310f9d1c8dc72e7767dcfa",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "infantil",
+        "niños"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 46,
@@ -467,7 +1155,25 @@
       "local_number": "L66",
       "x": 550,
       "y": 365,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bowen.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bowen.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bowen-2f05dd7c.png",
+      "logo_sha256": "db6191da0d361c92b4c24c5f15f0dc827d62db5a7483add51f1307182b6a3394",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 47,
@@ -478,7 +1184,25 @@
       "local_number": "L78",
       "x": 406,
       "y": 216,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/xl.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/xl.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/xl-c928c18e.png",
+      "logo_sha256": "c0012db07c028a8cd15f5b17046b99cfccd5dbffc9336ff8d4269cb23260b0a5",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 48,
@@ -489,7 +1213,23 @@
       "local_number": "L79",
       "x": 390,
       "y": 190,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/swatch.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/swatch.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/swatch-2ba31d1e.png",
+      "logo_sha256": "5e6d128e940527657e7b93203a6393dd2c0108c006557e4aa492f65c05d6f86f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "relojería",
+        "relojes"
+      ],
+      "concept_ids": [
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 49,
@@ -500,7 +1240,25 @@
       "local_number": "L82",
       "x": 860,
       "y": 415,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lepain_quotidien.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lepain_quotidien.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lepain_quotidien-cfdd2a94.png",
+      "logo_sha256": "4c7c7ac8ccabb0c6526c291dd127f3e3daae1a477ee0e8b9cfa1f6e8eda585e2",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 50,
@@ -511,7 +1269,24 @@
       "local_number": "G02",
       "x": 337,
       "y": 138,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/biferdil.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/biferdil.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/biferdil-4dafcdd4.png",
+      "logo_sha256": "f0107296704aa1e43a021ea89a8d7ce9060ccbb6980f47707da94dd2da2d432d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 51,
@@ -522,7 +1297,24 @@
       "local_number": "G09",
       "x": 454,
       "y": 150,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rouge.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rouge.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rouge-d89377e2.png",
+      "logo_sha256": "f07c3f394796587cb3efa458a66a49d643c7063766c56b1b16e04c343d170aba",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 52,
@@ -533,7 +1325,24 @@
       "local_number": "G13",
       "x": 460,
       "y": 195,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mac.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mac.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mac-0f135ef5.png",
+      "logo_sha256": "91b430154a762f2d27648fb1af080f450da855d3aa288f9e9a59ef201ed2f27d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 53,
@@ -544,7 +1353,25 @@
       "local_number": "G14",
       "x": 432,
       "y": 197,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cher.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cher.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cher-0db3c5ce.png",
+      "logo_sha256": "555b025f23d04c87f3ed827a82719deed1868198c9b0318042dbea33dbb20ee7",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 54,
@@ -555,7 +1382,25 @@
       "local_number": "G15",
       "x": 483,
       "y": 238,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/logo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/logo.png",
+      "logo_local_url": "branding/malls/alto-palermo/mall-mark.png",
+      "logo_sha256": "5cc966d92517b5942fab25c431db1fb0434e10d803e38ceba6a2eb01b3cda183",
+      "logo_width": 94,
+      "logo_height": 94,
+      "logo_status": "archived",
+      "tags": [
+        "óptica",
+        "anteojos",
+        "lentes"
+      ],
+      "concept_ids": [
+        "service.optical",
+        "product.eyewear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 55,
@@ -566,7 +1411,24 @@
       "local_number": "G16",
       "x": 499,
       "y": 260,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lucatmi.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lucatmi.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lucatmi-fa41f71b.png",
+      "logo_sha256": "f361ad130a669177b706e74d3538cc85e290349acd6f7503cd8d816911043d3d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 56,
@@ -577,7 +1439,24 @@
       "local_number": "G17",
       "x": 512,
       "y": 274,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/icase.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/icase.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/icase-30dabc40.png",
+      "logo_sha256": "098f90fec45e03771102ce2947142e77ee059a5ca80b60278d10eb8535651dca",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 57,
@@ -588,7 +1467,21 @@
       "local_number": "G18",
       "x": 540,
       "y": 300,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/monoblock.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/monoblock.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/monoblock-7e23f3c1.png",
+      "logo_sha256": "39cf137493930a7251a77fdfd6bc2421236cc07b7f8843fb338598ed920048fc",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "papelería",
+        "útiles"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 59,
@@ -599,7 +1492,24 @@
       "local_number": "G20",
       "x": 588,
       "y": 345,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/thonet&vander.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/thonet%26vander.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/thonet-vander-b3c29c7c.png",
+      "logo_sha256": "0e5e9340c0faffa603f5d1777bd89affdeafd76b0de8061edde696fc81952f63",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 60,
@@ -610,7 +1520,24 @@
       "local_number": "G22",
       "x": 610,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/motorola.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/motorola.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/motorola-17e07ede.png",
+      "logo_sha256": "d699a1085db7f17e32b5b74f1fa8a6ba93fc622e8568f36d4bf6b8fdee753980",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 61,
@@ -621,7 +1548,21 @@
       "local_number": "G23",
       "x": 635,
       "y": 375,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/maria_rivolta.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/maria_rivolta.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/maria_rivolta-c76b10f3.png",
+      "logo_sha256": "04dc2046e4680caf46a7895d130ab41f87a33ffb9dd8bd4ddb805a45a830febe",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 62,
@@ -632,7 +1573,24 @@
       "local_number": "G24",
       "x": 660,
       "y": 380,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/isdin.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/isdin.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/isdin-74673cbe.png",
+      "logo_sha256": "71a814bb4e233e444606ff4f63255f41280e3caf73a0e11aac38ba4ee5439222",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 63,
@@ -643,7 +1601,24 @@
       "local_number": "G25",
       "x": 685,
       "y": 390,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/fix_station.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/fix_station.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/fix_station-263a0023.png",
+      "logo_sha256": "a76bba4f3353ed3c7c46e0fc7e37671a87f330a281a5e3c10f75ff03eeb8d7c6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 64,
@@ -654,7 +1629,24 @@
       "local_number": "G26",
       "x": 720,
       "y": 397,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/samsonite.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/samsonite.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/samsonite-8cf029ba.png",
+      "logo_sha256": "9ee81bbc2b21d6df13a102b5f67038444aeb86a99ed9ea67c379147af2d29e24",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "marroquinería",
+        "carteras",
+        "bolsos"
+      ],
+      "concept_ids": [
+        "product.handbags"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 65,
@@ -665,7 +1657,21 @@
       "local_number": "G27",
       "x": 750,
       "y": 405,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/icon_brands.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/icon_brands.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/icon_brands-eda524d1.png",
+      "logo_sha256": "d8f3a64e69dea39c3cf1cb0d9c64d6a2e42c953dfb48638bf81f3fcb37669766",
+      "logo_width": 61,
+      "logo_height": 61,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 66,
@@ -676,7 +1682,25 @@
       "local_number": "G28",
       "x": 777,
       "y": 410,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bd.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bd.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bd-3044ff4c.png",
+      "logo_sha256": "b021290270da915fef9b09e5f83881234246e71564d93e5810a6b7956c54fb0c",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "óptica",
+        "anteojos",
+        "lentes"
+      ],
+      "concept_ids": [
+        "service.optical",
+        "product.eyewear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 67,
@@ -687,7 +1711,24 @@
       "local_number": "G29",
       "x": 803,
       "y": 420,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/chanel.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/chanel.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/chanel-d6420b62.png",
+      "logo_sha256": "ced7bf686e886a9749931c0ce6b99578a012308cb6e8fd26946af2273e15e3d1",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 68,
@@ -698,7 +1739,20 @@
       "local_number": "G30",
       "x": 815,
       "y": 385,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bigbox.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bigbox.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bigbox-de319f37.png",
+      "logo_sha256": "e515e3df7381dea35220bd0c86c400e2b51b02d9207e7ecedb9072f704bffe5f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "varios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 71,
@@ -709,7 +1763,24 @@
       "local_number": "L39",
       "x": 760,
       "y": 437,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/khiels.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/khiels.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/khiels-042d6062.png",
+      "logo_sha256": "2d13d9fb6a5410ff5697ea1ec211164b08ab3eec9dc4b8b6b08c4609d6e1da53",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 72,
@@ -720,7 +1791,24 @@
       "local_number": "L32",
       "x": 895,
       "y": 355,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/natura.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/natura.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/natura-e16eeeda.png",
+      "logo_sha256": "3000d36e75eb325a0db044586dcee3679929128506f8daf4c647bdfa20f22a88",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 73,
@@ -731,7 +1819,25 @@
       "local_number": "L23",
       "x": 740,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/tucci.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/tucci.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/tucci-ea58ad7b.png",
+      "logo_sha256": "81a573235d88c7ffef4115304db494df70b01406f1349510902fe33be069109a",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 74,
@@ -742,7 +1848,25 @@
       "local_number": "L01",
       "x": 570,
       "y": 240,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mooi.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mooi.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mooi-c8e8c5f8.png",
+      "logo_sha256": "2812d1d0811b80e7c68b686597aa67aa514df6760a4a53a32e6ff66ccc8dbc69",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 77,
@@ -753,7 +1877,25 @@
       "local_number": "L04",
       "x": 705,
       "y": 430,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/starbucks.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/starbucks.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/starbucks-a32e1464.png",
+      "logo_sha256": "961deeb78a9d9917e61182ff3ccb3caba15e1ebc322a5c2b560bb869845afc2c",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cafetería",
+        "café",
+        "gastronomía"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "food.coffee"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 79,
@@ -764,7 +1906,25 @@
       "local_number": "L09",
       "x": 545,
       "y": 375,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/il_quotidiano.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/il_quotidiano.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/il_quotidiano-7c98d28e.png",
+      "logo_sha256": "77f5fd6d7318e98b8c9f37e2f4f1ca345136169677713fd3e07f510d0c9c0ed5",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 81,
@@ -775,7 +1935,25 @@
       "local_number": "L01",
       "x": 390,
       "y": 180,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/tostado.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/tostado.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/tostado-e030a13e.png",
+      "logo_sha256": "5a752c76f671bf787b2b09a7a8a180617680a6fa5f2b12c4321285e203e92b7e",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 82,
@@ -786,7 +1964,25 @@
       "local_number": "L02",
       "x": 385,
       "y": 130,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/puma.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/puma.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/puma-fff715fa.png",
+      "logo_sha256": "c3945fdab04c7597fe9aca08a61ba0c3b31b1fb296d92817e3bc119e230fd29b",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "deportes",
+        "artículos deportivos",
+        "ropa deportiva"
+      ],
+      "concept_ids": [
+        "category.sports",
+        "product.sportswear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 83,
@@ -797,7 +1993,25 @@
       "local_number": "L05",
       "x": 485,
       "y": 125,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lacoste.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lacoste.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lacoste-ed124935.png",
+      "logo_sha256": "c2626a9e10daf5671b010cd96dc952dc3b9670b2d11d5683d14e178ed31c7a27",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 84,
@@ -808,7 +2022,25 @@
       "local_number": "L5A",
       "x": 530,
       "y": 165,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/kosiuko.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/kosiuko.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/kosiuko-3d1d8ca9.png",
+      "logo_sha256": "8efab38ecb10b62606bcf77aa773bc9c43b14aaa523763bb1b021b8f6fbed687",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 85,
@@ -819,7 +2051,25 @@
       "local_number": "L07",
       "x": 570,
       "y": 225,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/prune.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/prune.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/prune-c967c449.png",
+      "logo_sha256": "a33cf47f5baa40a5e3db9f05dc896664baca51f1bfef94d2827857d16ac753c9",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 87,
@@ -830,7 +2080,25 @@
       "local_number": "L13",
       "x": 600,
       "y": 300,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/akibara.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/akibara.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/akibara-3cc87c0e.png",
+      "logo_sha256": "c0696ed40baea75804e5e5895f1a74004234954f3bef5577cdce8b2c1c81ed9d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 88,
@@ -841,7 +2109,25 @@
       "local_number": "L15",
       "x": 620,
       "y": 315,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lovely_denim.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lovely_denim.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lovely_denim-387e6c16.png",
+      "logo_sha256": "9ed5915ee45ad3510d07d910d8b380b3723b83ed798b69ffc87871d9b3aa8b48",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 89,
@@ -852,7 +2138,25 @@
       "local_number": "L16",
       "x": 640,
       "y": 340,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/jazminchebar.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/jazminchebar.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/jazminchebar-a00fd3aa.png",
+      "logo_sha256": "e2304e9aadb3776eea501f61b81abbe3728219da7530c7198abeaec9f00e0e96",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 90,
@@ -863,7 +2167,25 @@
       "local_number": "L19",
       "x": 663,
       "y": 355,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/citripia.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/citripia.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/citripia-67468e71.png",
+      "logo_sha256": "902be4ba2be39af51fb91bbca35396b695ecc3dbf489145724d3b86dc555b2d2",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 92,
@@ -874,7 +2196,24 @@
       "local_number": "L21",
       "x": 715,
       "y": 355,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bath_and_body_work.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bath_and_body_work.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bath_and_body_work-b1a1e3b7.png",
+      "logo_sha256": "d0bd8932d019b89cf9cf4f5c730d885af9b4c712506caabc9e0f44bd58714906",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 93,
@@ -885,7 +2224,25 @@
       "local_number": "L23",
       "x": 740,
       "y": 380,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mishka.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mishka.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mishka-2adc7598.png",
+      "logo_sha256": "eae524edc0b780ba68baa3785bcfb3f3efa2c02e263f53ed62a4f6b775403d53",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 94,
@@ -896,7 +2253,24 @@
       "local_number": "L25",
       "x": 773,
       "y": 377,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/sarkany.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/sarkany.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/sarkany-f5ed72ef.png",
+      "logo_sha256": "67bb50aed0f7e3e19a8133ed5d567923e3dd7df5d232066c2d32aa424cec1046",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 95,
@@ -907,7 +2281,25 @@
       "local_number": "L27",
       "x": 815,
       "y": 365,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rapsodia.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rapsodia.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rapsodia-37613ba0.png",
+      "logo_sha256": "f12bcf6b712ace749f1c9c00e70f3dbc7833cce81ccffb1e2a3064906168f5ff",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 96,
@@ -918,7 +2310,25 @@
       "local_number": "L30",
       "x": 845,
       "y": 380,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/awada.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/awada.png",
+      "logo_local_url": "",
+      "logo_sha256": "",
+      "logo_width": null,
+      "logo_height": null,
+      "logo_status": "published-reference-unavailable",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 97,
@@ -929,7 +2339,25 @@
       "local_number": "L32",
       "x": 880,
       "y": 370,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/perramus.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/perramus.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/perramus-e9a5b29e.png",
+      "logo_sha256": "535e7f1b0f498a4338bc756c9e8c873b4da62baac246ad389c4b66c523253eaf",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 98,
@@ -940,7 +2368,25 @@
       "local_number": "L33",
       "x": 915,
       "y": 410,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/paula_chahen.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/paula_chahen.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/paula_chahen-7fd63778.png",
+      "logo_sha256": "0cd261bfe280997bf67712215d70fc580e10cc34523c176cd9e2cebf932b0e3f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria femenina",
+        "moda femenina",
+        "ropa de mujer"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 99,
@@ -951,7 +2397,24 @@
       "local_number": "L35",
       "x": 835,
       "y": 485,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rochas.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rochas.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rochas-bfa377a1.png",
+      "logo_sha256": "50ecd0d48ec081115ef5061199e67c460d0eefcd989807363b30e18f5494db69",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "perfumería",
+        "perfumes",
+        "belleza"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 100,
@@ -962,7 +2425,25 @@
       "local_number": "L35A",
       "x": 900,
       "y": 480,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/la_martina.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/la_martina.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/la_martina-6d39a510.png",
+      "logo_sha256": "2096a26b7467dc8ee170eecac3eb72117a96e5c244fd55f80f7b0aad41a89fba",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 101,
@@ -973,7 +2454,25 @@
       "local_number": "L37",
       "x": 790,
       "y": 480,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/laspepas.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/laspepas.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/laspepas-2f780641.png",
+      "logo_sha256": "9152d15807bfcd699ec26fda61fd617ab0fc1121a0163f46445bc6f999fbd9dd",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 102,
@@ -984,7 +2483,24 @@
       "local_number": "L39",
       "x": 760,
       "y": 455,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/miller.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/miller.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/miller-22ac920e.png",
+      "logo_sha256": "e7994f80b87a94173944817dac7c820ff5bc4285d944e7ecba3eb0c8820dcc5c",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "joyería",
+        "joyas"
+      ],
+      "concept_ids": [
+        "category.jewelry",
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 103,
@@ -995,7 +2511,24 @@
       "local_number": "L40",
       "x": 740,
       "y": 480,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/paruolo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/paruolo.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/paruolo-e6041d62.png",
+      "logo_sha256": "2bd242e8d525b40ff42d39b5a1b31bb14284fa589da1d0ce708c13df0da9bc36",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 105,
@@ -1006,7 +2539,24 @@
       "local_number": "L43",
       "x": 695,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lazaro.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lazaro.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lazaro-ab024369.png",
+      "logo_sha256": "4cf5677fe42326b961710a65453c620357eb8aae4fa47187fdcef3a1f6a2d329",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "marroquinería",
+        "carteras",
+        "bolsos"
+      ],
+      "concept_ids": [
+        "product.handbags"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 106,
@@ -1017,7 +2567,24 @@
       "local_number": "L44",
       "x": 670,
       "y": 440,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/testorelli_1887.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/testorelli_1887.png",
+      "logo_local_url": "",
+      "logo_sha256": "",
+      "logo_width": null,
+      "logo_height": null,
+      "logo_status": "published-reference-unavailable",
+      "tags": [
+        "joyería",
+        "joyas"
+      ],
+      "concept_ids": [
+        "category.jewelry",
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 107,
@@ -1028,7 +2595,25 @@
       "local_number": "L45",
       "x": 620,
       "y": 420,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/public.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/public.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/public-ac404ae2.png",
+      "logo_sha256": "dbed9325850d71fded33078539684aeb13f139fecfd6024abc1739baf633910f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 108,
@@ -1039,7 +2624,25 @@
       "local_number": "L46",
       "x": 460,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/zara.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/zara.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/zara-55120fbf.png",
+      "logo_sha256": "d4875b51d0802cc0dc9bed5d619bd1cf20cea67c3ae7ee9f1f57411870c053b6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 110,
@@ -1050,7 +2653,21 @@
       "local_number": "L55",
       "x": 426,
       "y": 266,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/baby_cottons.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/baby_cottons.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/baby_cottons-66fba227.png",
+      "logo_sha256": "8ee19cd99b2c06c85f8b49c82b4ef0e827ae10f192857ec584579cf934416d10",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "infantil",
+        "niños"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 112,
@@ -1061,7 +2678,25 @@
       "local_number": "G03",
       "x": 487,
       "y": 234,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/the_candle_shop.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/the_candle_shop.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/the_candle_shop-200e44ea.png",
+      "logo_sha256": "23b1b2bfce1a7f5ac3093750daf602655f34688ed697cf018a72efabbe863c82",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "hogar",
+        "decoración",
+        "artículos para el hogar"
+      ],
+      "concept_ids": [
+        "category.home",
+        "product.home-goods"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 113,
@@ -1072,7 +2707,24 @@
       "local_number": "G04",
       "x": 588,
       "y": 340,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/ugg.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/ugg.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/ugg-c15aa668.png",
+      "logo_sha256": "cefcce57646d728ac62402f36ad8c4a7d95885ec6ccbfb4288ded94ec9d6a730",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 114,
@@ -1083,7 +2735,24 @@
       "local_number": "G07",
       "x": 640,
       "y": 375,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/feraud.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/feraud.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/feraud-b9db0428.png",
+      "logo_sha256": "01fc4b652062022623bb39eade3f7c3aec07ed57c692eec68e7df88e059acbee",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "joyería",
+        "joyas"
+      ],
+      "concept_ids": [
+        "category.jewelry",
+        "product.jewelry"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 115,
@@ -1094,7 +2763,21 @@
       "local_number": "G09",
       "x": 682,
       "y": 393,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/pandora.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/pandora.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/pandora-6bda0c18.png",
+      "logo_sha256": "77e3527c5d57b74e80c0853bd2e9c18208af59c3f05e5def612b3e40d75f99f6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 118,
@@ -1105,7 +2788,20 @@
       "local_number": "G12",
       "x": 883,
       "y": 433,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/garantía_ya.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/garant%C3%ADa_ya.png",
+      "logo_local_url": "",
+      "logo_sha256": "",
+      "logo_width": null,
+      "logo_height": null,
+      "logo_status": "published-reference-unavailable",
+      "tags": [
+        "servicios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 119,
@@ -1116,7 +2812,25 @@
       "local_number": "L49",
       "x": 476,
       "y": 318,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/victoria-secret.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/victoria-secret.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/victoria-secret-88d83f0a.png",
+      "logo_sha256": "345835b60d5a96bf425d2ef6762d1a7c1cbe0370438a1cdff2af7ed582d52bc7",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 120,
@@ -1127,7 +2841,21 @@
       "local_number": "G8",
       "x": 667,
       "y": 405,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/vz.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/vz.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/vz-93dfe7c1.png",
+      "logo_sha256": "e2c6580d85f9f23e55c9d11b9fa777755fca1e0d742561a14a5221c103ba5af5",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "estética corporal",
+        "belleza"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 121,
@@ -1138,7 +2866,24 @@
       "local_number": "L01",
       "x": 405,
       "y": 135,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/personal.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/personal.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/personal-91a68b53.png",
+      "logo_sha256": "05f0d6fee60f1cef209571610b71eeb2d110d33b9873397f3165317f4987c1ef",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 122,
@@ -1149,7 +2894,23 @@
       "local_number": "L03",
       "x": 455,
       "y": 130,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cebra.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cebra.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cebra-9d2ad71f.png",
+      "logo_sha256": "93cde422af441c2cf4540e8f2f459c70d9dba191a1829458123b311e0b48023d",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "juguetería",
+        "juguetes"
+      ],
+      "concept_ids": [
+        "category.toys"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 124,
@@ -1160,7 +2921,24 @@
       "local_number": "L06",
       "x": 560,
       "y": 205,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/vans.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/vans.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/vans-1fd4f525.png",
+      "logo_sha256": "588d393d3fafffd9cd2bd3f12097aa9d8913c6acfb11e4c5d5e7f918ea020936",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "calzado",
+        "zapatos",
+        "zapatillas"
+      ],
+      "concept_ids": [
+        "product.shoes"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 125,
@@ -1171,7 +2949,21 @@
       "local_number": "L07",
       "x": 566,
       "y": 248,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/billabong.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/billabong.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/billabong-31d819c5.png",
+      "logo_sha256": "a4597aeaaacd6b1da0d61a403bf18cea713a98ac870318d7da922f4ff63dcdbb",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 126,
@@ -1182,7 +2974,24 @@
       "local_number": "L09",
       "x": 575,
       "y": 280,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/riiing.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/riiing.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/riiing-19a1e8ce.png",
+      "logo_sha256": "06624f40511d50242328f39338b9506e193aabda409448e6adecda112dbba50b",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 127,
@@ -1193,7 +3002,24 @@
       "local_number": "L10",
       "x": 600,
       "y": 300,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/claro.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/claro.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/claro-90752593.png",
+      "logo_sha256": "b8e7e0457a3050e30868a6bea9cff3ce84ae635f85f2cf0de2d784df900a3453",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 128,
@@ -1204,7 +3030,23 @@
       "local_number": "L11",
       "x": 635,
       "y": 310,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/LIBRERIA SANTA FE.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/LIBRERIA%20SANTA%20FE.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/libreria-santa-fe-fcca990a.png",
+      "logo_sha256": "29096e871ef055858aea600b4e0a01c2babd014710468a09447a0e2a90868fc7",
+      "logo_width": 300,
+      "logo_height": 225,
+      "logo_status": "archived",
+      "tags": [
+        "librería",
+        "libros"
+      ],
+      "concept_ids": [
+        "category.books"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 129,
@@ -1215,7 +3057,25 @@
       "local_number": "L14",
       "x": 655,
       "y": 335,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mas_vision.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mas_vision.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mas_vision-35e11bac.png",
+      "logo_sha256": "b70dbee053606a0aa7e83ceeaf0613d322b880424e3cff44f27a4a58d6a6072e",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "óptica",
+        "anteojos",
+        "lentes"
+      ],
+      "concept_ids": [
+        "service.optical",
+        "product.eyewear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 130,
@@ -1226,7 +3086,24 @@
       "local_number": "L15",
       "x": 695,
       "y": 345,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/i_point.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/i_point.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/i_point-bbf9e86e.png",
+      "logo_sha256": "5c5e178242218386390245ed457138786a11f76aff7d3be10144deead4d7d2a2",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 131,
@@ -1237,7 +3114,21 @@
       "local_number": "L18",
       "x": 740,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rip_curl.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rip_curl.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rip_curl-da1cebc6.png",
+      "logo_sha256": "bc159f4dc1cd29308ce812b9058991b7233b1e7960e58f1b80b7a22eed919811",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 132,
@@ -1248,7 +3139,23 @@
       "local_number": "L21",
       "x": 800,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/yenny.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/yenny.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/yenny-a18fd981.png",
+      "logo_sha256": "c770955662ec36bf9aa5023073f35292549572f424eead6c612f4568f9f0e8e0",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "librería",
+        "libros"
+      ],
+      "concept_ids": [
+        "category.books"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 133,
@@ -1259,7 +3166,23 @@
       "local_number": "L25",
       "x": 875,
       "y": 370,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cerini.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cerini.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cerini-e871fee8.png",
+      "logo_sha256": "e580f1a074c4c961fb286e7050376069d5314e03aa0b761ef6f307ff6dafbed1",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "peluquería",
+        "cabello"
+      ],
+      "concept_ids": [
+        "service.hair-salon"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 134,
@@ -1270,7 +3193,21 @@
       "local_number": "L29",
       "x": 900,
       "y": 470,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/salomon.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/salomon.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/salomon-f8b82e58.png",
+      "logo_sha256": "d058e0b277a4b43d23c7437c556e1de1697225047ee28e1f174d76befc38c2c5",
+      "logo_width": 768,
+      "logo_height": 768,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 135,
@@ -1281,7 +3218,25 @@
       "local_number": "L30",
       "x": 790,
       "y": 470,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/simmons.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/simmons.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/simmons-52d486c5.png",
+      "logo_sha256": "8c96a195446ada34514aced755557e2f8b775bb2b4ed5cd0d73f0c9047ddab71",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "colchonería",
+        "colchones",
+        "hogar"
+      ],
+      "concept_ids": [
+        "category.home",
+        "product.home-goods"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 137,
@@ -1292,7 +3247,21 @@
       "local_number": "L33",
       "x": 710,
       "y": 445,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/dc_store.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/dc_store.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/dc_store-2242769d.png",
+      "logo_sha256": "4ec8b698d7e7115c76641696fc74d5208b270c15dd05177f4300d257021520b5",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 138,
@@ -1303,7 +3272,21 @@
       "local_number": "L37",
       "x": 660,
       "y": 440,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/oakley.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/oakley.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/oakley-8ab3d2e4.png",
+      "logo_sha256": "29de677d8829b9a234230807b8d6dc75d41ab3d47497906d8f24b1fe2f45bafe",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 140,
@@ -1314,7 +3297,20 @@
       "local_number": "L43",
       "x": 575,
       "y": 410,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/miniso.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/miniso.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/miniso-52ce9374.png",
+      "logo_sha256": "077a1fdb24ed4c408977d38fa7234c882fe2a6a487f39452472d783b1cef563e",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "varios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 141,
@@ -1325,7 +3321,25 @@
       "local_number": "L48",
       "x": 440,
       "y": 355,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mostaza.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mostaza.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mostaza-663497e8.png",
+      "logo_sha256": "f5c213787d82efb12b40ee274a964396e80182bebc7dc6f795545c8d525ceec4",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 142,
@@ -1336,7 +3350,21 @@
       "local_number": "L50",
       "x": 475,
       "y": 320,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/boardriders.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/boardriders.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/boardriders-a87fe663.png",
+      "logo_sha256": "6fbdaa643fcd33a770e02deeeb3d55fabdddd4a4b0690e2aa8adaa7754b93323",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 143,
@@ -1347,7 +3375,25 @@
       "local_number": "L29",
       "x": 866,
       "y": 476,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cuk.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cuk.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cuk-4a31a4d6.png",
+      "logo_sha256": "80ed56db7414f65e6eebb3fe61d3012b6ab3f27b7d5fa7be6a0cff514cc24a6a",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "hogar",
+        "decoración",
+        "artículos para el hogar"
+      ],
+      "concept_ids": [
+        "category.home",
+        "product.home-goods"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 144,
@@ -1358,7 +3404,21 @@
       "local_number": "L53",
       "x": 418,
       "y": 270,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/todomoda_beauty.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/todomoda_beauty.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/todomoda_beauty-2fc58fa1.png",
+      "logo_sha256": "6deac345b77142c93590a3655ebdb2b5f07d00269b0f025af9497577c6881796",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 145,
@@ -1369,7 +3429,25 @@
       "local_number": "L44",
       "x": 430,
       "y": 480,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/mc_donals.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/mc_donals.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/mc_donals-eff07dab.png",
+      "logo_sha256": "e25234d9473eef0fff22087697b8a997566d895bb8bd52e76ec225420da2dd30",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 146,
@@ -1380,7 +3458,24 @@
       "local_number": "L55",
       "x": 395,
       "y": 205,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/stanley.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/stanley.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/stanley-3eec7209.png",
+      "logo_sha256": "0f724a4255a04bb550c5def2335a09e040f833218da367f3ba261be35936be40",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "bazar",
+        "regalos",
+        "hogar"
+      ],
+      "concept_ids": [
+        "category.home"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 147,
@@ -1391,7 +3486,21 @@
       "local_number": "L56",
       "x": 350,
       "y": 140,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/cristobal_colon.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/cristobal_colon.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/cristobal_colon-0a14ee90.png",
+      "logo_sha256": "3c93f38cc79bfcee9b6b856eae311c2125db668d702928d655f398d64544d092",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tiempo libre",
+        "entretenimiento"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 150,
@@ -1402,7 +3511,25 @@
       "local_number": "G04",
       "x": 0,
       "y": 0,
-      "position_valid": false
+      "position_valid": false,
+      "logo": "/maps_ap/img/jumbalay.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/jumbalay.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/jumbalay-fee07fd0.png",
+      "logo_sha256": "3b89b5f1e45b734a384a23991b1bf23609a16c93dc42fa3e280ba56b9b10cc0f",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 151,
@@ -1413,7 +3540,21 @@
       "local_number": "G05A",
       "x": 582,
       "y": 347,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/simones.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/simones.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/simones-e514b96c.png",
+      "logo_sha256": "f9414a82aa5339563c398753542a69703c5d2a6f111ca05dbe35e3788f69f4f7",
+      "logo_width": 576,
+      "logo_height": 231,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 152,
@@ -1424,7 +3565,25 @@
       "local_number": "G05B",
       "x": 607,
       "y": 340,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/eyelit.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/eyelit.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/eyelit-62b58d11.png",
+      "logo_sha256": "717b6769f1ee0acb39c4b781029e2dba6bae43adf9ec80f00c065d9f5c45f80e",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 154,
@@ -1435,7 +3594,21 @@
       "local_number": "G08C",
       "x": 645,
       "y": 385,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/ramira.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/ramira.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/ramira-70f31cc2.png",
+      "logo_sha256": "eb1a89626b5dc5ac29567aa7be4c04a4506bc49d73c4b5f8bfa8c8fa72ca8011",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "accesorios",
+        "moda"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 155,
@@ -1446,7 +3619,24 @@
       "local_number": "G09",
       "x": 690,
       "y": 400,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/focu.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/focu.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/focu-f329a594.png",
+      "logo_sha256": "56c7aa075ef675dba4835018a59dcbab11ae8af1ffbafad9ac0d9b7a80023bc9",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 157,
@@ -1457,7 +3647,21 @@
       "local_number": "G11",
       "x": 872,
       "y": 430,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/colonia_express.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/colonia_express.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/colonia_express-9583d532.png",
+      "logo_sha256": "303b57d67601b825fd4df89094871cb6d21ef2ed4fd6bab622d122949f6899ff",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "viajes",
+        "turismo"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 158,
@@ -1468,7 +3672,20 @@
       "local_number": null,
       "x": 0,
       "y": 0,
-      "position_valid": false
+      "position_valid": false,
+      "logo": "/maps_ap/img/logo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/logo.png",
+      "logo_local_url": "branding/malls/alto-palermo/mall-mark.png",
+      "logo_sha256": "5cc966d92517b5942fab25c431db1fb0434e10d803e38ceba6a2eb01b3cda183",
+      "logo_width": 94,
+      "logo_height": 94,
+      "logo_status": "archived",
+      "tags": [
+        "servicios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 159,
@@ -1479,7 +3696,24 @@
       "local_number": "L54",
       "x": 406,
       "y": 240,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/home_collection.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/home_collection.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/home_collection-0e6741b9.png",
+      "logo_sha256": "e766f771b716ea92a4c46fdffed5addcd54c10b80037a12f669add00ec7474f1",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "decoración",
+        "hogar"
+      ],
+      "concept_ids": [
+        "category.home",
+        "product.home-goods"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 160,
@@ -1490,7 +3724,25 @@
       "local_number": "L32",
       "x": 755,
       "y": 451,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/optical_world.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/optical_world.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/optical_world-267e19de.png",
+      "logo_sha256": "027a1d07202b54d93515564b25e9293f1007d0f1afce12c039a720ad3f730c7b",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "óptica",
+        "anteojos",
+        "lentes"
+      ],
+      "concept_ids": [
+        "service.optical",
+        "product.eyewear"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 163,
@@ -1501,7 +3753,25 @@
       "local_number": "L01",
       "x": 565,
       "y": 115,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/kfc.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/kfc.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/kfc-16d34492.png",
+      "logo_sha256": "24290540529b66cf0adbafa36236ea78ca8c4c07cdf12ed2aedb582946210227",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 164,
@@ -1512,7 +3782,25 @@
       "local_number": "L01",
       "x": 565,
       "y": 175,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/wendys.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/wendys.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/wendys-aab40e50.png",
+      "logo_sha256": "45c5ca925c4bde5490d8873e99bb1a1aae7ebc0727fc689531dfc9c01b87a2c0",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 170,
@@ -1523,7 +3811,25 @@
       "local_number": "L16",
       "x": 445,
       "y": 315,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/green_and_sea.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/green_and_sea.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/green_and_sea-a9f77609.png",
+      "logo_sha256": "77edc03e739286e325eb398f42678b471e87884d22290f0f15394896102091a0",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 171,
@@ -1534,7 +3840,25 @@
       "local_number": "L17",
       "x": 437,
       "y": 358,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/patate.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/patate.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/patate-d395f667.png",
+      "logo_sha256": "dd408b669e1ab0e589452a9a5befa4dc7bf5bff759933ba33ed7661e708e3007",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 172,
@@ -1545,7 +3869,25 @@
       "local_number": "L18",
       "x": 461,
       "y": 358,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/arrozales.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/arrozales.png",
+      "logo_local_url": "",
+      "logo_sha256": "",
+      "logo_width": null,
+      "logo_height": null,
+      "logo_status": "published-reference-unavailable",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 173,
@@ -1556,7 +3898,25 @@
       "local_number": "L19",
       "x": 485,
       "y": 358,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/remo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/remo.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/remo-600cba27.png",
+      "logo_sha256": "a1ef1a4e709cf7a0d0cb3fe9b8bba70bfdc39cd678a4abf51d0cd95ed9707a75",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 174,
@@ -1567,7 +3927,25 @@
       "local_number": "L22",
       "x": 495,
       "y": 225,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/grano_santo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/grano_santo.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/grano_santo-f1c770e0.png",
+      "logo_sha256": "7cfb6eec5852bac151dfea6d06f53349201f63db6414938d27941f1b3094dd63",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 175,
@@ -1578,7 +3956,25 @@
       "local_number": "L46",
       "x": 642,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/wanama.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/wanama.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/wanama-16e1173f.png",
+      "logo_sha256": "46b4561dd254bec59faa03a74e513ec24e60a9a16d125f08d3f74b60ce37af62",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 176,
@@ -1589,7 +3985,25 @@
       "local_number": "G03A",
       "x": 352,
       "y": 177,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/logo.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/logo.png",
+      "logo_local_url": "branding/malls/alto-palermo/mall-mark.png",
+      "logo_sha256": "5cc966d92517b5942fab25c431db1fb0434e10d803e38ceba6a2eb01b3cda183",
+      "logo_width": 94,
+      "logo_height": 94,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 177,
@@ -1600,7 +4014,25 @@
       "local_number": "L02",
       "x": 720,
       "y": 350,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/the_north_face (1).png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/the_north_face%20%281%29.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/the_north_face-1-2f20afe8.png",
+      "logo_sha256": "3e2038ffb370c3c221299298456bbec9b0840e1e0a5b02c534aa70e0cde836aa",
+      "logo_width": 1600,
+      "logo_height": 850,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 178,
@@ -1611,7 +4043,20 @@
       "local_number": "G07",
       "x": 445,
       "y": 161,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/carolina_herrera.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/carolina_herrera.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/carolina_herrera-f223122b.png",
+      "logo_sha256": "f017551693fa7a619f52dfd61a9574536e289f508a47b3972c2dc1b1f071276c",
+      "logo_width": 62,
+      "logo_height": 58,
+      "logo_status": "archived",
+      "tags": [
+        "varios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 179,
@@ -1622,7 +4067,24 @@
       "local_number": "L1",
       "x": 334,
       "y": 103,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/helena.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/helena.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/helena-f37a140c.png",
+      "logo_sha256": "ec8312375dd7be988d5b3f8df7406fce27e5238e1411de1a3e1cd9fad4b7b3ac",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 180,
@@ -1633,7 +4095,24 @@
       "local_number": "G19",
       "x": 564,
       "y": 310,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/lidherma.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/lidherma.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/lidherma-048339a5.png",
+      "logo_sha256": "955b4c7ecc68c8eb31bca015fbb4c31f2884a2ee22ca8add7cfba12c5e4a2f0d",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 181,
@@ -1644,7 +4123,25 @@
       "local_number": "L26",
       "x": 787,
       "y": 364,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/rever.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/rever.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/rever-e7f597d9.png",
+      "logo_sha256": "f49a60f1f929569b58421c08940ca6f1a93d7d63e2cf4b09c96645eff0e931aa",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 182,
@@ -1655,7 +4152,24 @@
       "local_number": "G35",
       "x": 906,
       "y": 450,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/vichy.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/vichy.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/vichy-3f862062.png",
+      "logo_sha256": "d7bd6355e699d0051f6de89158aae232cea29752394e99d90f1ec5612baabe48",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 183,
@@ -1666,7 +4180,25 @@
       "local_number": "L56",
       "x": 413,
       "y": 227,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/intimissimi.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/intimissimi.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/intimissimi-fb2645d6.png",
+      "logo_sha256": "54514017ffb74776dd5b05ba5d7683d6cd6d331bc6eab9a7fddd5d80d9ccb5a0",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "indumentaria",
+        "moda",
+        "ropa"
+      ],
+      "concept_ids": [
+        "category.fashion",
+        "product.clothing"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 184,
@@ -1677,7 +4209,24 @@
       "local_number": "G5",
       "x": 590,
       "y": 360,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/natura.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/natura.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/natura-e16eeeda.png",
+      "logo_sha256": "3000d36e75eb325a0db044586dcee3679929128506f8daf4c647bdfa20f22a88",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosmética",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 185,
@@ -1688,7 +4237,21 @@
       "local_number": "G6",
       "x": 598,
       "y": 361,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/despegar.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/despegar.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/despegar-37be1da5.png",
+      "logo_sha256": "fde27bd1d8ef21455ee45df14ffa2544b6a0c6c41b58c64e6db24ecb49683017",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "viajes",
+        "turismo"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 186,
@@ -1699,7 +4262,20 @@
       "local_number": "G2",
       "x": 448,
       "y": 181,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/jbl.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/jbl.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/jbl-5bea4230.png",
+      "logo_sha256": "e60e67e375310b2a43fdaa235ca2d20dda431eccc8c6d3f903e56245e4fc0b31",
+      "logo_width": 64,
+      "logo_height": 64,
+      "logo_status": "archived",
+      "tags": [
+        "varios"
+      ],
+      "concept_ids": [],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 187,
@@ -1710,7 +4286,25 @@
       "local_number": "G2",
       "x": 486,
       "y": 238,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/open_candy.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/open_candy.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/open_candy-6c3c684b.png",
+      "logo_sha256": "a27bea78309d9bb548535cb0c497f7ad140f370ff997dded03a60839b00182c4",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 188,
@@ -1721,7 +4315,24 @@
       "local_number": "G2",
       "x": 546,
       "y": 362,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/skinko.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/skinko.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/skinko-9afded00.png",
+      "logo_sha256": "5e4b1b4093498dca8876acecc5bb095ced5612701d2d30efcac0395346e32437",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "cosméticos",
+        "belleza",
+        "maquillaje"
+      ],
+      "concept_ids": [
+        "product.beauty"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 189,
@@ -1732,7 +4343,24 @@
       "local_number": "L76",
       "x": 441,
       "y": 253,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/samsung.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/samsung.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/samsung-28097a43.png",
+      "logo_sha256": "f7b7c3d325d1771c5b0ce1bdd5b04aed96c018edd1f1fb64006a59f0827b5f9c",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "tecnología",
+        "electrónica",
+        "dispositivos"
+      ],
+      "concept_ids": [
+        "category.electronics"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     },
     {
       "id": 190,
@@ -1743,7 +4371,28 @@
       "local_number": "L06",
       "x": 766,
       "y": 464,
-      "position_valid": true
+      "position_valid": true,
+      "logo": "/maps_ap/img/bagels_&_bagels.png",
+      "logo_source_url": "https://www.altopalermo.com.ar/maps_ap/img/bagels_%26_bagels.png",
+      "logo_local_url": "branding/malls/alto-palermo/stores/bagels_-_bagels-badacb3f.png",
+      "logo_sha256": "03a32a362a3d8914d0918b7ec0c0d47c0ff3c03863b5a283b87a3e8690bb2dc6",
+      "logo_width": 62,
+      "logo_height": 62,
+      "logo_status": "archived",
+      "tags": [
+        "gastronomía",
+        "comida",
+        "restaurantes"
+      ],
+      "concept_ids": [
+        "category.restaurant",
+        "category.food"
+      ],
+      "tag_evidence": "official-directory-category-normalization",
+      "tag_source": "https://www.altopalermo.com.ar/maps_ap/storesData.json"
     }
-  ]
+  ],
+  "branding_source_url": "https://www.altopalermo.com.ar/maps_ap/storesData.json",
+  "branding_source_sha256": "b98da86250a6b05c3bcf0bcd24a102af337314e0d34c4d87f092f0fdae2014ee",
+  "branding_imported_at": "2026-10-17"
 }

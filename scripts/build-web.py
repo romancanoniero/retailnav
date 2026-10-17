@@ -38,6 +38,41 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
     if set(photo_references) != {f["id"] for f in info["floors"]}:
         raise ValueError(slug+": all imported floors MUST have an original-photo reference")
 
+    brand_manifest_name = info.get("brandAssetsManifest")
+    if brand_manifest_name:
+        if brand_manifest_name != "brand-assets.json":
+            raise ValueError(slug+": brand asset manifest must use the canonical filename")
+        manifest_path = mall_path.parent / brand_manifest_name
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if (manifest.get("schema") != "retailnav.mall.brand-assets.v1" or
+                manifest.get("mallId") != slug):
+            raise ValueError(slug+": invalid brand asset manifest")
+        prefix = "branding/malls/"+slug+"/"
+        for asset_record in manifest.get("assets", []):
+            source_file = Path(asset_record["sourceFile"])
+            public_url = asset_record["publicUrl"]
+            if source_file.is_absolute() or ".." in source_file.parts:
+                raise ValueError(slug+": unsafe brand source path")
+            if not public_url.startswith(prefix) or ".." in Path(public_url).parts:
+                raise ValueError(slug+": unsafe brand public path")
+            raw_asset = (mall_path.parent / source_file).read_bytes()
+            if hashlib.sha256(raw_asset).hexdigest() != asset_record["sha256"]:
+                raise ValueError(slug+": brand asset changed without a manifest update")
+            if len(raw_asset) != asset_record["bytes"]:
+                raise ValueError(slug+": brand asset size does not match its manifest")
+            if asset_record["mime"] == "image/png" and raw_asset[:8] != b"\x89PNG\r\n\x1a\n":
+                raise ValueError(slug+": invalid PNG branding asset")
+            destination = repo / "public" / public_url
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(raw_asset)
+        public_manifest = repo / "public" / prefix / "manifest.json"
+        public_manifest.parent.mkdir(parents=True, exist_ok=True)
+        public_manifest.write_bytes(manifest_path.read_bytes())
+        info["brandAssets"] = {
+            "manifestUrl": prefix+"manifest.json", "source": manifest.get("source", ""),
+            "sourceSha256": manifest.get("sourceSha256", ""), **manifest.get("stats", {})
+        }
+
     for item in info["floors"]:
         floor_id = item["id"]
         assert floor_id.replace("-", "").isalnum()
@@ -133,7 +168,7 @@ for slug, mall in catalog.items():
                       "mapUnit","mapAnchor","mapCorridor","mapZone","mapSlab","mapOutline",
                       "mapVoid","mapAmenity","mapRoute","mapSelected","mapGrid","mapText","mapNameText",
                       "mapFloor1","mapFloor2","mapFloor3"}
-    allowed_styles = {"font":{"modern","editorial","rounded"},"corners":{"soft","square"}}
+    allowed_styles = {"font":{"modern","editorial","rounded","alto-inter"},"corners":{"soft","square"}}
     import re
     for key, value in theme.items():
         if key in allowed_colors:
@@ -149,14 +184,17 @@ for slug, mall in catalog.items():
         mall["brandLogoKind"] = config.get("brandLogoKind","wordmark")
     symbol = config.get("logoSymbolUrl")
     if symbol:
-        assert symbol.startswith("branding/") and symbol.endswith(".svg")
+        assert symbol.startswith("branding/") and symbol.lower().endswith((".svg", ".png", ".webp", ".jpg", ".jpeg"))
         symbol_asset=repo/"public"/symbol
         assert symbol_asset.is_file() and symbol_asset.stat().st_size>100
+        if symbol.endswith(".png"):
+            assert symbol_asset.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
         mall["logoSymbolUrl"] = symbol
         mall["logoPlacement"] = config.get("logoPlacement","left-of-name")
         assert mall["logoPlacement"]=="left-of-name"
         mall["publicLogoMetadataUrl"] = config.get("publicLogoMetadataUrl","")
-        assert mall["publicLogoMetadataUrl"] == "api/mall-brands/"+slug
+        if mall["publicLogoMetadataUrl"]:
+            assert mall["publicLogoMetadataUrl"] == "api/mall-brands/"+slug
     mall["theme"] = theme
     mall["themePreset"] = config["preset"]
     mall["brandSource"] = config.get("source",{}).get("site","")
@@ -213,11 +251,11 @@ for slug, mall in catalog.items():
     logo = mall.get("logoSymbolUrl") or mall.get("logoUrl")
     if logo is not None:
         assert isinstance(logo, str) and re.fullmatch(
-            r"branding/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:svg|png|webp|jpe?g)", logo
+            r"branding/(?:[A-Za-z0-9][A-Za-z0-9._-]*/)*[A-Za-z0-9][A-Za-z0-9._-]*\.(?:svg|png|webp|jpe?g)", logo
         ) is not None, (slug, "invalid early logo path")
         assert (repo/"public"/logo).is_file(), (slug, "logo asset missing")
     font = mall.get("theme", {}).get("font", "modern")
-    assert font in ("editorial", "modern", "rounded"), (slug, "invalid font preset")
+    assert font in ("editorial", "modern", "rounded", "alto-inter"), (slug, "invalid font preset")
     loader_brands[slug] = {"name": mall["name"], "logoSymbolUrl": logo, "font": font}
 loader_brand_payload = json.dumps(loader_brands, ensure_ascii=False, separators=(",", ":"))
 # Protect JSON script tags against HTML termination and JS separators.
@@ -254,6 +292,7 @@ components = {
     "__ESCALATORS__": (repo / "src/escalators3d.js").read_text(encoding="utf-8"),
     "__SERVICE_ICONS_3D__": (repo / "src/service-icons3d.js").read_text(encoding="utf-8"),
     "__LIFT_SHAFTS_3D__": (repo / "src/vertical-shafts3d.js").read_text(encoding="utf-8"),
+    "__VECTOR_FONT__": (repo / "src/inter-vector-font.js").read_text(encoding="utf-8"),
     "__ROOF_TEXT_3D__": (repo / "src/roof-text3d.js").read_text(encoding="utf-8"),
     "__JS__": (repo / "src/wayfinding-route.js").read_text(encoding="utf-8") + '\n' + (repo / "src/viewer.js").read_text(encoding="utf-8"),
     "__PIN_RENDERER__": (repo / "src/pins3d.js").read_text(encoding="utf-8"),

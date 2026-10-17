@@ -1,8 +1,9 @@
-/* RetailNav: roof-anchored REAL 3D extruded text, generated locally.
- * Letter masks come from the device's installed Latin/CJK fonts. Contiguous
- * raster pixels are merged into raised 3D prism rectangles, not HTML overlays,
- * DOM billboards, or ungrounded floating icons. No external font/texture/CDN.
- * All labels remain provisional until architectural boundaries are reviewed.
+/* RetailNav: roof-anchored, extruded 3D text.
+ * Alto Palermo labels are real triangulated Inter glyph outlines, generated
+ * from the archived official-map font. They never pass through a canvas,
+ * texture, pixel mask or block reconstruction. The legacy raster path remains
+ * only for malls whose published writing system is not yet in a licensed
+ * vector-font bundle. All labels remain provisional until boundaries are reviewed.
  */
 (()=>{
 'use strict';
@@ -128,7 +129,69 @@ function raisedRectangle(out,at,size,extrusion,shade,color,axis){
   quad(out,p,q,Q,P,[vec[0]/len,0,vec[2]/len],shade);
  }
 }
-function addText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color){
+function vectorFont(){
+ const font=window.RetailNavVectorFont;
+ return window.RETAILNAV_ACTIVE_MALL?.id==='alto-palermo'&&
+  font?.schema==='retailnav.vector-font-mesh.v1'?font:null;
+}
+function vectorTextWidth(text,font){
+ let width=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  if(!glyph)throw new Error('Inter vector glyph missing: '+JSON.stringify(char));
+  width+=glyph.a;
+ }
+ return width;
+}
+function appendVectorGlyph(out,glyph,cursor,longitudinal,vOrigin,factor,at,axis,color){
+ const base=at[2],top=base+.068;
+ const centerY=(window.RetailNavVectorFont.ascender+window.RetailNavVectorFont.descender)/2;
+ const place=(x,y,height)=>{
+  const u=longitudinal+(cursor+x)*factor;
+  const v=vOrigin+(centerY-y)*factor;
+  return axis?[at[0]-v,height,at[1]+u]:[at[0]+u,height,at[1]+v];
+ };
+ for(let index=0;index<glyph.t.length;index+=3){
+  const points=[];
+  for(let corner=0;corner<3;corner++){
+   const vertex=glyph.t[index+corner]*2;
+   points.push(place(glyph.v[vertex],glyph.v[vertex+1],top));
+  }
+  face(out,points[0],points[1],points[2],[0,1,0],color);
+ }
+ for(const [start,count] of glyph.c){
+  for(let index=0;index<count;index++){
+   const a=(start+index)*2,b=(start+(index+1)%count)*2;
+   const lowA=place(glyph.v[a],glyph.v[a+1],base);
+   const lowB=place(glyph.v[b],glyph.v[b+1],base);
+   const highB=place(glyph.v[b],glyph.v[b+1],top);
+   const highA=place(glyph.v[a],glyph.v[a+1],top);
+   const normal=[lowB[2]-lowA[2],0,lowA[0]-lowB[0]];
+   const length=Math.hypot(normal[0],normal[2])||1;
+   quad(out,lowA,lowB,highB,highA,[normal[0]/length,0,normal[2]/length],SIDE);
+  }
+ }
+}
+function addVectorText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color,font){
+ const roofCoords=toRoofCoords(feature,origin,scale);
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ if(!width||!height||!roofCoords.long||!roofCoords.short)return false;
+ const maxLong=roofCoords.long*widthFraction,maxShort=roofCoords.short*depthFraction;
+ const factor=Math.min(.22,maxLong/width,maxShort/height);
+ if(factor<.018)return false;
+ const longitudinal=-width*factor/2;
+ const vOrigin=(position==='center'?0:position==='code'?-1:1)*
+   Math.min(roofCoords.short*.20,height*factor*.55);
+ const at=[...roofCoords.center,roof+.018];
+ let cursor=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  appendVectorGlyph(out,glyph,cursor,longitudinal,vOrigin,factor,at,roofCoords.rotated,color);
+  cursor+=glyph.a;
+ }
+ return true;
+}
+function addRasterText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color){
  if(!text)return false;
  const roofCoords=toRoofCoords(feature,origin,scale);
  const width=textWidth(text),charHeight=20;
@@ -157,6 +220,14 @@ function addText(out,text,feature,roof,position,widthFraction,depthFraction,orig
  }
  return true;
 }
+function addText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color){
+ if(!text)return '';
+ const font=vectorFont();
+ if(font)return addVectorText(out,text,feature,roof,position,widthFraction,depthFraction,
+   origin,scale,color,font)?'vector':'';
+ return addRasterText(out,text,feature,roof,position,widthFraction,depthFraction,
+   origin,scale,color)?'raster':'';
+}
 // Both SVG and 3D meshes are built from the SAME reusable vector paths.
 function addServiceSymbol(out,feature,roof,category,origin,scale){
  const coords=toRoofCoords(feature,origin,scale);
@@ -183,7 +254,11 @@ function summarize(floors,units,pois,origin,scale){
  const attached=new Set();
  const summary={floors:floors.length,commercialRoofs:0,serviceRoofs:0,
    codeLabels:0,knownNameLabels:0,servicePictograms:0,extrudedTriangles:0,
-   unmatchedShopNames:0,roomLabels:[],services:[]};
+   unmatchedShopNames:0,vectorGlyphLabels:0,rasterGlyphLabels:0,
+   textGeometry:vectorFont()?'vector-outline-extruded':'legacy-raster-prisms',
+   vectorFontSourceSha256:vectorFont()?.sourceSha256||null,
+   vectorCurveSegments:vectorFont()?.curveSegmentsPerQuadratic||null,
+   roomLabels:[],services:[]};
  for(const floor of floors){
   const parts={codes:[],names:[],services:[],stats:{}};
   for(const f of floor.features){
@@ -219,12 +294,12 @@ function summarize(floors,units,pois,origin,scale){
    const codeAdded=addText(parts.codes,code,f,1.4,
       name?'code':'center',.87,name?.40:.72,origin,scale,
        window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE);
-   if(codeAdded)summary.codeLabels++;
-   let nameAdded=false;
+   if(codeAdded){summary.codeLabels++;summary[codeAdded+'GlyphLabels']++;}
+   let nameAdded='';
    if(name)nameAdded=addText(parts.names,name,f,1.4,
      'name',.86,.36,origin,scale,
        window.RetailNavThemes?.rgb?.('mapNameText',GOLD)||GOLD);
-   if(nameAdded)summary.knownNameLabels++;
+   if(nameAdded){summary.knownNameLabels++;summary[nameAdded+'GlyphLabels']++;}
    summary.roomLabels.push({floor:floor.id,id:f.id,code,name,
      verified:false,roofY:1.4,
      geometryAttached:true,codeRaised:codeAdded,nameRaised:nameAdded,

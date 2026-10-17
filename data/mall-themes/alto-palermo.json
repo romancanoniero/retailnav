@@ -1,0 +1,27 @@
+{
+  "schema": "retailnav.mall.theme.v1",
+  "mallId": "alto-palermo",
+  "preset": "alto-palermo-official-map",
+  "logoSymbolUrl": "branding/malls/alto-palermo/mall-mark.png",
+  "brandLogoKind": "official-map-logomark",
+  "logoPlacement": "left-of-name",
+  "source": {
+    "site": "https://www.altopalermo.com.ar/maps_ap/index.html",
+    "style": "https://www.altopalermo.com.ar/maps_ap/style.css",
+    "directory": "https://www.altopalermo.com.ar/maps_ap/storesData.json",
+    "font": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
+    "fontSha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63",
+    "fontEvidence": "The official map imports Inter 500. Its proprietary Obviously headline font is not redistributed."
+  },
+  "theme": {
+    "background": "#EEE8E3", "surface": "#FFFFFF", "text": "#111111",
+    "muted": "#5F5A57", "accent": "#BBD74A", "accentText": "#111111",
+    "border": "#C7BDB7", "mapUnit": "#F2D3E2", "mapAnchor": "#E6BED0",
+    "mapCorridor": "#EEE8E3", "mapZone": "#D8CEC7", "mapSlab": "#F8F4F1",
+    "mapOutline": "#5A4A52", "mapVoid": "#C7B9B1", "mapAmenity": "#6F7B35",
+    "mapRoute": "#677C12", "mapSelected": "#A03D73", "mapGrid": "#D8CEC7",
+    "mapText": "#111111", "mapNameText": "#77174C", "mapFloor1": "#F2D3E2",
+    "mapFloor2": "#F1D9E2", "mapFloor3": "#E8C8D6",
+    "font": "alto-inter", "corners": "soft"
+  }
+}

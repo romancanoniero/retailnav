@@ -26,6 +26,29 @@ contorno. **Nunca se asigna por cercanía.** Un código sin contorno conserva su
 nombre, planta y coordenada oficial; un contorno sin código permanece visible
 como región sin identificar.
 
+### Identidad, marcas, tipografía y etiquetas comerciales
+
+Antes de escribir el importador se deben inspeccionar el HTML, CSS, manifiesto
+de red y directorio oficial. El inventario obligatorio incluye el logomark del
+shopping, logos publicados por cada comercio, paleta, familias tipográficas,
+categorías y cualquier vocabulario de búsqueda. Cada asset conserva bytes
+originales, URL, MIME real, dimensiones, SHA-256 y estado de licencia. Una URL
+oficial rota queda registrada como no disponible; no se reemplaza por una marca
+parecida ni se reconstruye.
+
+Las categorías publicadas se normalizan mediante una tabla mall-específica y
+trazable. Cada registro debe conservar la categoría original, sus etiquetas y
+la evidencia. Las etiquetas de categoría sirven para buscar; no prueban stock,
+servicios vigentes ni productos concretos de la marca. Si el directorio publica
+categorías y el CSV termina con `tags` vacías, la importación debe fallar.
+
+Los rótulos 3D se generan desde contornos de una fuente identificada, permitida
+y archivada: se aplanan curvas con resolución declarada, se triangulan caras y
+se extruyen laterales. Queda prohibido convertir letras rasterizadas en bloques,
+agrandar bitmaps o usar una textura plana como si fuera texto 3D vectorial. Si
+la fuente propietaria no puede redistribuirse, se usa otra fuente licenciada que
+la fuente oficial también emplee y se documenta la limitación.
+
 ### Lista mínima antes de publicar
 
 - fuente, URL, fecha, hash, dimensiones y transformación preservados;
@@ -34,6 +57,9 @@ como región sin identificar.
 - ningún contorno nativo sustituido por losas sintéticas;
 - enlaces tienda-polígono con evidencia explícita o contención única;
 - registros no vinculados conservados y cuantificados;
+- logos y fuente con manifiesto de hashes, faltantes oficiales documentados;
+- etiquetas no vacías y conceptos trazables para cada categoría publicada;
+- rótulos 3D verificados como contornos vectoriales extruidos, sin píxeles;
 - mapa abierto en navegador real en vistas 2D, 3D, planta individual y todas;
 - prueba mall-específica y barrera de despliegue contra regresiones;
 - limitaciones, validaciones y despliegue registrados en el plan maestro.

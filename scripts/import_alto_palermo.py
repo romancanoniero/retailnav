@@ -66,6 +66,17 @@ def main():
     source_ids = [str(row["id"]) for row in stores]
     if len(set(source_ids)) != len(source_ids):
         raise ValueError("Official marker IDs must be unique")
+    taxonomy_path = Path(__file__).resolve().parents[1] / "data/mall-category-taxonomy/alto-palermo.json"
+    taxonomy = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+    category_tags = taxonomy["categories"]
+    if {row.get("category") or "" for row in stores} != set(category_tags):
+        raise ValueError("Official category vocabulary changed; review tags before importing")
+    for row in stores:
+        annotation = category_tags[row["category"]]
+        row["tags"] = annotation["tags"]
+        row["concept_ids"] = annotation.get("conceptIds", [])
+        row["tag_evidence"] = taxonomy["evidence"]
+        row["tag_source"] = taxonomy["source"]
 
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "source-records.json").write_text(
@@ -76,7 +87,9 @@ def main():
     fieldnames = [
         "sourceRecordId", "code", "codeKind", "name", "category", "tags",
         "aliases", "floor", "x", "y", "positionStatus", "source",
-        "nameStatus", "enrichmentURL",
+        "nameStatus", "enrichmentURL", "conceptIds", "conceptEvidence",
+        "conceptSource", "tagEvidence", "tagSource", "logoURL",
+        "logoSourceURL", "logoSha256",
     ]
     by_slug = {slug: [row for row in stores if row["floor"] == slug]
                for slug, *_ in FLOORS}
@@ -118,13 +131,14 @@ def main():
             for row in rows:
                 x, y = marker_to_reference(row)
                 code = row.get("local_number") or ""
+                tag_annotation = category_tags[row["category"]]
                 writer.writerow({
                     "sourceRecordId": row["id"],
                     "code": code,
                     "codeKind": "official-local-code" if code else "missing-in-source",
                     "name": row["name"],
                     "category": row.get("category") or "",
-                    "tags": "",
+                    "tags": ",".join(tag_annotation["tags"]),
                     "aliases": "",
                     "floor": floor_id,
                     "x": "" if x is None else x,
@@ -134,6 +148,12 @@ def main():
                     "source": SOURCE_URL,
                     "nameStatus": "official-interactive-map",
                     "enrichmentURL": "",
+                    "conceptIds": "|".join(tag_annotation.get("conceptIds", [])),
+                    "conceptEvidence": taxonomy["evidence"],
+                    "conceptSource": taxonomy["source"],
+                    "tagEvidence": taxonomy["evidence"],
+                    "tagSource": taxonomy["source"],
+                    "logoURL": "", "logoSourceURL": "", "logoSha256": "",
                 })
 
         counts = {

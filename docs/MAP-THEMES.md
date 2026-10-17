@@ -53,7 +53,7 @@ Los colores de cada centro comercial se definen en un **manifiesto de branding p
 }
 ```
 
-**Valores validables:** colores CSS en formato hexadecimal exacto `#RRGGBB`, tipografía `editorial|modern|rounded` y esquinas `soft|square`. No se aceptan hojas de estilo, URLs CSS, imágenes externas ni JavaScript incrustados en la configuración.
+**Valores validables:** colores CSS en formato hexadecimal exacto `#RRGGBB`, tipografías registradas `editorial|modern|rounded|alto-inter` y esquinas `soft|square`. Una fuente mall-específica sólo entra tras archivarse localmente con licencia, hash y lista blanca; no se aceptan hojas de estilo, URLs CSS ni JavaScript incrustados en la configuración.
 
 **Presets:** predeterminado propio del shopping, `retailnav-classic` (estilo oscuro preservado para los otros centros del prototipo) y `high-contrast` para vista previa de contraste. No mezclar el tema de un shopping con el de otro.
 
@@ -69,10 +69,10 @@ El título de la cabecera usa el **acento fuerte** (`theme.accent`) de la paleta
 
 ### Tipografía propia de cada shopping (toda la app)
 
-La identidad publicada de **cada shopping siempre define un preset de letra**, y si todavía no tiene una paleta personalizada se utiliza automáticamente `modern` de RetailNav. El manifiesto de Aventura usa `editorial`. Los únicos valores válidos son `editorial`, `modern` y `rounded` y sus fuentes de respaldo incluyen variantes para caracteres chinos sin descargar archivos de terceros.
+La identidad publicada de **cada shopping siempre define un preset de letra**, y si todavía no tiene una paleta personalizada se utiliza automáticamente `modern` de RetailNav. El manifiesto de Aventura usa `editorial`; Alto Palermo usa `alto-inter`, generado desde el mismo Inter 500 importado por su mapa oficial y distribuido bajo OFL.
 
 - El runtime `src/mall-theme.js` resuelve un stack seguro de fuentes y publica `--rn-font-family`. `src/style.css` lo aplica a **toda la experiencia del visitante**: encabezado, nombre y logotipo de shopping, menús, formularios, controles, búsqueda, listas, etiquetas HTML, diálogos y **pantalla blanca de carga**.
-- Los números y nombres genuinamente tridimensionales sobre los locales se rasterizan con el mismo preset mediante `src/roof-text3d.js`; `src/viewer.js` vuelve a construir sólo la geometría del texto cuando se cambia la tipografía, **nunca los polígonos comerciales ni las coordenadas**.
+- Los números y nombres de Alto Palermo usan mallas de glifos Inter: curvas aplanadas a 24 segmentos, caras trianguladas y laterales extruidos por `src/roof-text3d.js`. `src/unit-signs-webgl.js` reutiliza las mismas mallas para los carteles elevados, con texto extruido en ambas caras y sin crear un atlas Canvas. No se rasterizan ni se convierten en bloques. Malls heredados sin bundle vectorial conservan un respaldo temporal que debe reemplazarse durante su próxima migración.
 - Los carteles WebGL de sectores o zonas (`src/districts-webgl.js`) regeneran su textura de texto cuando cambia la fuente; se mantienen sus anclajes y ubicación.
 - La rueda dentada ofrece **«Tipografía de toda la aplicación»** con una lista de tres presets. Los visitantes pueden **previsualizar** y guardar el ajuste sólo en su propio dispositivo, separado por shopping, o restablecer el preset oficial. Esto **no** autoriza publicar una tipografía global para otros visitantes.
 - Los futuros operadores del shopping publicarán su preset desde el portal autenticado usando el mismo campo `theme.font` y validación de valores autorizados, según `docs/RETAILNAV-PLAN-MAESTRO-E2E.md`.

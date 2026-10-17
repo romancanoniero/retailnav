@@ -145,6 +145,7 @@ try {
   // Reference photography and traces are independently visible, never one
   // pre-rendered composite that cannot be switched off.
   await page.locator('#original').click();
+  await page.locator('#compareDialog').waitFor({state:'visible',timeout:10000});
   assert.equal(await page.locator('#compareDialog').isVisible(),true);
   assert.equal((await page.evaluate(()=>window.RetailNavComparison.getState())).floorCount,3);
 

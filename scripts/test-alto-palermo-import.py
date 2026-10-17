@@ -14,6 +14,7 @@ folder = repo / "data" / "malls" / "alto-palermo"
 source = json.loads((folder / "source-records.json").read_text(encoding="utf-8"))
 manifest = json.loads((folder / "mall.json").read_text(encoding="utf-8"))
 source_rows = source["stores"]
+brand_assets = json.loads((folder / "brand-assets.json").read_text(encoding="utf-8"))
 
 assert source["source_url"] == "https://www.altopalermo.com.ar/maps_ap/index.html"
 assert len(source_rows) == manifest["officialDirectoryRecords"] == 158
@@ -22,6 +23,17 @@ assert [floor["id"] for floor in manifest["floors"]] == ["SS", "PB", "EP", "P1",
 assert manifest["officialCodedRecords"] == 153
 assert manifest["officialPositionedRecords"] == 153
 assert manifest["officialPositionedAndCodedRecords"] == 152
+assert manifest["brandAssetsManifest"] == "brand-assets.json"
+assert brand_assets["stats"] == {
+    "directoryRecords": 158, "recordsWithArchivedLogo": 153,
+    "recordsWithUnavailablePublishedLogo": 5,
+    "uniqueArchivedStoreLogoFiles": 145, "uniqueUnavailableStoreLogoFiles": 5,
+}
+assert len(brand_assets["storeBindings"]) == 158
+assert sum(bool(row["publicUrl"]) for row in brand_assets["storeBindings"]) == 153
+assert all(row["status"] == "published-reference-unavailable" or
+           row["status"] == "published-reference-invalid-png"
+           for row in brand_assets["unavailableAssets"])
 
 imported = []
 geometry_counts = {}
@@ -64,6 +76,10 @@ for source_id, row in imported_by_id.items():
     assert row["code"] == (original["local_number"] or "")
     assert row["name"] == original["name"]
     assert row["category"] == original["category"]
+    assert row["tags"] and row["tagEvidence"] == "official-directory-category-normalization"
+    assert original["tags"] and row["tags"].split(",") == original["tags"]
+    assert row["logoSourceURL"] == original["logo_source_url"]
+    assert row["logoURL"] == original["logo_local_url"]
     if original["position_valid"]:
         assert row["x"] and row["y"]
     else:
@@ -89,6 +105,16 @@ assert len(linked) == len({(row["floor"], row["polygonId"]) for row in linked}) 
 assert all(row["polygonMatchStatus"] ==
            "official-marker-inside-svg-region-provisional" for row in linked)
 assert not any("nearest" in str(row) for row in catalog_doc["records"])
+assert all(row["tags"] and row["tagEvidence"] ==
+           "official-directory-category-normalization" for row in catalog_doc["records"])
+assert sum(bool(row["logoURL"]) for row in catalog_doc["records"]) == 153
+assert catalog_doc["stats"]["withConceptSuggestions"] == 124
+
+vector_font = (repo / "src/inter-vector-font.js").read_text(encoding="utf-8")
+assert "retailnav.vector-font-mesh.v1" in vector_font
+assert "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63" in vector_font
+assert '"curveSegmentsPerQuadratic":24' in vector_font
+assert "getImageData" not in vector_font and '"rects"' not in vector_font
 
 html = (repo / "public" / "index.html").read_text(encoding="utf-8")
 match = re.search(r'<script id="mallCatalog" type="application/json">([\s\S]+?)</script>', html)
@@ -97,6 +123,9 @@ mall = json.loads(match.group(1))["alto-palermo"]
 assert mall["floorLabels"] == ["SS", "PB", "EP", "P1", "P2", "P3"]
 assert len(mall["units"]) == 158
 assert mall["storeCatalog"]["total"] == 158
+assert mall["theme"]["font"] == "alto-inter"
+assert mall["logoSymbolUrl"] == "branding/malls/alto-palermo/mall-mark.png"
+assert mall["brandAssets"]["recordsWithArchivedLogo"] == 153
 bundle = json.loads((repo / "public" / mall["mapAsset"]["url"]).read_text(encoding="utf-8"))
 assert sum(len(floor[3]) for floor in bundle["floors"]) == 331
 assert sum(feature[1] == 1 for floor in bundle["floors"] for feature in floor[3]) == 192

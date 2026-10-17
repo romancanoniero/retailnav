@@ -1,7 +1,7 @@
 # RetailNav — Documento maestro de producto, arquitectura y ejecución E2E
 
 > **Fuente de verdad funcional para próximos desarrollos y chats.**  
-> Proyecto: `romancanoniero/retailnav` | Fecha inicial: **15 de octubre de 2026** | Versión del documento: **1.0**  
+> Proyecto: `romancanoniero/retailnav` | Fecha inicial: **15 de octubre de 2026** | Versión del documento: **1.1**
 > **Estado:** arquitectura objetivo y backlog vivo. **No significa que las funciones futuras estén implementadas.**  
 > Coordinación: RetailNav SaaS, administradores del shopping, administradores de locales y visitantes web/móvil.
 
@@ -13,6 +13,7 @@
 4. Crear rama y PR por épica, con pruebas unitarias, de integración, permisos, navegador real y despliegue. No modificar infraestructura ajena ni eliminar los datos persistentes de Contabo.
 5. Al terminar una funcionalidad, **actualizar este archivo**: cambiar estado de sus historias, registrar decisión técnica, endpoints/modelos, pruebas realizadas, migraciones, despliegue y el siguiente paso exacto. Este documento debe permitir **retomar sin redescubrir el proyecto**.
 6. Cuando una decisión no está tomada, conservarla en [`17. Decisiones pendientes`](#17-decisiones-pendientes), sin convertir supuestos en requisitos aprobados.
+7. **Toda importación de un mall incluye el directorio comercial completo.** Antes de considerarla terminada, aplicar el gate `MAP-17 / DIR-09`: inventariar todos los campos publicados por la fuente, importar logos, categorías, tags y demás información disponible por local, documentar cada ausencia real y hacer fallar la publicación ante cualquier descarte silencioso. Una geometría correcta con un catálogo incompleto es una importación fallida.
 
 **Interpretación del requerimiento:** «administrador del salas» se entiende aquí como **administrador del SaaS RetailNav y sus colaboradores**. Si se refiere a «salas» físicas, agregar ese dominio como épica independiente tras confirmarlo.
 
@@ -260,6 +261,7 @@ Este es el módulo con mayor trabajo cartográfico. Debe funcionar para un emple
 - **MAP-14** QA antes de navegación: senderos transitables, puertas, escala en metros, conectores verticales, obstáculos, accesibilidad, emergencias, precisión y verificación sobre el terreno. Hasta ese hito, `navigable: false`.
 - **MAP-15** Publicación semántica y atómica `vN`: manifest, hash, esquema, tamaños, assets, cambios/rollback, caché de mapas por mall y estado de validación.
 - **MAP-16** Cuando un mapa se actualiza, mantener compatibles las fichas de tiendas y POI por ID, o exigir una tabla explícita de migración de IDs; nunca eliminar información comercial por dibujar de nuevo.
+- **MAP-17** **Gate de completitud del directorio:** cada importación genera una matriz por campo y local con `published / imported / missing / invalid`, procedencia e IDs afectados. La publicación se bloquea si omite un dato que la fuente oficial ofrece, si no archiva un logo oficial válido, si deja tags vacías para una categoría publicada o si una ausencia carece de motivo verificable. Nunca inventar datos para hacer pasar el gate.
 
 ### B.3 Administración de locales y servicios
 
@@ -271,6 +273,7 @@ Este es el módulo con mayor trabajo cartográfico. Debe funcionar para un emple
 - **DIR-06** Fichas reclamables por un comercio, sujetas a verificación (véase módulo C).
 - **DIR-07** Buscador por nombre, código, categoría, producto/actividad, sinónimos e idioma con ranking trazable; no redirigir a un comercio equivocado por asociación aproximada.
 - **DIR-08** Cambios operativos temporales: escalera cerrada, planta restringida, obras, local cerrado, ruta inaccesible. TTL, fecha y prioridad por seguridad.
+- **DIR-09** Contrato mínimo de importación por local: ID/código, planta, nombre, estado, categoría original, tags/conceptos con evidencia, logo con URL/hash/estado, descripción, contacto, web/redes, horarios, servicios/accesibilidad, marcador/coordenadas, vínculo espacial y procedencia. Se exige cada campo que la fuente publique; lo no publicado o roto queda explícitamente `unavailable`/`invalid` con causa, nunca vacío por omisión.
 
 ### B.4 Equipo humano y control editorial
 
@@ -287,10 +290,12 @@ Este es el módulo con mayor trabajo cartográfico. Debe funcionar para un emple
 3. Importador genera contornos **candidatos 2D**, números y servicios; empleado revisa y corrige.
 4. Supervisor compara foto y contornos, incluye errores, comprueba conexiones entre plantas.
 5. Shopping vincula nombres/categorías de comercios por número/ID sin asociaciones especulativas.
-6. Se ejecutan reglas de QA; si falta escala, puertas o conectores, el mapa se publica **sólo como vista provisional**, sin prometer rutas reales.
-7. Aprobación genera un bundle inmutable y su manifest; web/móvil comprueba caché y descarga nueva versión con pantalla blanca y progreso.
-8. Prueba de regresión: mismos ID, locales, conexiones verificadas, buscador, imágenes, gestos, etiquetas y amigos autorizados.
-9. Si la nueva versión da error, se restaura la versión previa; auditoría conserva ambas.
+6. El importador recorre el directorio oficial completo y preserva por local todos los campos publicados: logos, categoría original, tags/conceptos, descripción, contacto, web/redes, horarios, servicios, accesibilidad y procedencia, además de los datos espaciales.
+7. El gate `MAP-17 / DIR-09` compara fuente y salida por campo; toda omisión bloquea la publicación. Los datos no publicados o assets rotos quedan identificados con causa; no se inventan.
+8. Se ejecutan reglas de QA; si falta escala, puertas o conectores, el mapa se publica **sólo como vista provisional**, sin prometer rutas reales.
+9. Aprobación genera un bundle inmutable y su manifest; web/móvil comprueba caché y descarga nueva versión con pantalla blanca y progreso.
+10. Prueba de regresión: mismos ID, locales, conexiones verificadas, buscador, imágenes, logos, categorías, tags, demás datos comerciales, gestos, etiquetas y amigos autorizados.
+11. Si la nueva versión da error, se restaura la versión previa; auditoría conserva ambas.
 
 **Aceptación E2E:** mismo shopping con dos revisiones, dos usuarios, un cartógrafo y aprobador, conflicto de edición, un archivo inválido, una descarga interrumpida, cierre de aplicación y vuelta sin redescargar la versión vigente. Tenant ajeno no puede abrir borradores.
 

@@ -4,7 +4,7 @@
 
 Este documento es el procedimiento canónico de toda alta o migración de mapas.
 Antes de tocar datos hay que leer también `docs/RETAILNAV-PLAN-MAESTRO-E2E.md`
-(sección 0 y MAP-01..MAP-16) y `docs/STORE-SEARCH-POSITIONING-E2E.md`.
+(sección 0 y MAP-01..MAP-17) y `docs/STORE-SEARCH-POSITIONING-E2E.md`.
 El archivo `AGENTS.md` de la raíz del repositorio convierte esta lectura y los
 controles siguientes en requisitos de cada tarea futura.
 
@@ -42,6 +42,35 @@ la evidencia. Las etiquetas de categoría sirven para buscar; no prueban stock,
 servicios vigentes ni productos concretos de la marca. Si el directorio publica
 categorías y el CSV termina con `tags` vacías, la importación debe fallar.
 
+### Contrato obligatorio de datos por local
+
+Importar un mapa incluye importar su directorio comercial completo. Antes de
+programar la extracción se arma una matriz con **todos los campos que publica la
+fuente oficial**, aunque alguno todavía no tenga equivalente visual. Por cada
+local se deben conservar, cuando existan:
+
+- ID y código oficial, nombre, planta y estado del local;
+- categoría original, tags normalizadas, sinónimos y conceptos semánticos con evidencia;
+- URL y archivo del logo oficial, MIME, dimensiones, SHA-256, licencia/estado;
+- descripción, teléfonos, web, redes, horarios, servicios y accesibilidad;
+- coordenadas o marcador oficial, `polygonId` sólo con evidencia válida y estado de enlace;
+- URL/archivo fuente, fecha de extracción y motivo explícito de cualquier dato ausente o inválido.
+
+No encontrar un dato en la fuente se representa como ausencia trazable; no se
+rellena por intuición. Encontrarlo y no importarlo es un error de importación.
+Un asset oficial roto conserva su URL, el error observado y el estado
+`invalid`/`unavailable`; nunca se reemplaza por otro logo inventado.
+
+Cada mall debe generar o incorporar a su prueba específica un informe de
+completitud por campo con los conteos `published`, `imported`, `missing` e
+`invalid`, más los IDs afectados. El build/publicación se rechaza si:
+
+- `missing > 0` para un campo disponible en la fuente oficial;
+- una categoría publicada produce `tags` vacías o conceptos sin evidencia;
+- un logo válido y disponible no fue archivado o no coincide con su hash;
+- una ausencia o referencia rota carece de motivo y procedencia;
+- el catálogo perdió datos que estaban presentes en una importación anterior.
+
 Los rótulos 3D se generan desde contornos de una fuente identificada, permitida
 y archivada: se aplanan curvas con resolución declarada, se triangulan caras y
 se extruyen laterales. Queda prohibido convertir letras rasterizadas en bloques,
@@ -57,8 +86,11 @@ la fuente oficial también emplee y se documenta la limitación.
 - ningún contorno nativo sustituido por losas sintéticas;
 - enlaces tienda-polígono con evidencia explícita o contención única;
 - registros no vinculados conservados y cuantificados;
+- matriz completa de campos oficiales revisada por local, sin descarte silencioso;
 - logos y fuente con manifiesto de hashes, faltantes oficiales documentados;
-- etiquetas no vacías y conceptos trazables para cada categoría publicada;
+- categorías originales, etiquetas no vacías y conceptos trazables para cada categoría publicada;
+- descripción, contacto, web/redes, horarios, servicios y accesibilidad preservados cuando la fuente los publique;
+- informe `published/imported/missing/invalid` aprobado y regresión contra pérdida de datos;
 - rótulos 3D verificados como contornos vectoriales extruidos, sin píxeles;
 - mapa abierto en navegador real en vistas 2D, 3D, planta individual y todas;
 - prueba mall-específica y barrera de despliegue contra regresiones;

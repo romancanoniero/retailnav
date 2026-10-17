@@ -1275,10 +1275,12 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreActions #rnStoreAssist.is-route-open{box-shadow:0 13px 28px #06152170,0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 38%,transparent),inset 0 1px #fff9}
 .rnStoreActions button:disabled{background:color-mix(in srgb,#7f8992 72%,var(--rn-theme-surface,#123247));
  color:#d4d8dc;border-color:#9aa1a7;filter:grayscale(1);opacity:.62;cursor:default;box-shadow:0 8px 17px #0615213d,inset 0 1px #fff5}
+body.rnGeometryContextOpen .toast{bottom:370px}
 .rnQuickInvite{z-index:40}
 @media(max-width:760px){
  .rnStoreActions{bottom:208px}
  body.rnTagResultsOpen .rnStoreActions{bottom:calc(min(29dvh,235px) + 58px)}
+ body.rnGeometryContextOpen .toast{bottom:388px}
 }
 @media(prefers-reduced-motion:reduce){.rnStoreActions,.rnStoreActions button{transition:none!important}}
 

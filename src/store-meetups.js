@@ -9,7 +9,7 @@ const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const panel=$('rnTagResultPanel'),cards=$('rnTagResultCards');
 if(!panel||!cards)return;
 const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction'),closeAction=$('rnStoreActionClose');
-let selectedId='',detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
+let selectedId='',geometryContext=null,detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
 const i18n=()=>document.documentElement.lang||navigator.language||'es';
 const en=()=>i18n().startsWith('en');
 const tr=(es,english)=>en()?english:es;
@@ -122,6 +122,15 @@ function showSelectionStatus(u,focus){
 function selectStore(id,showDetails=false,requestedFloor=null){
  const u=window.RetailNavUnits?.getUnits()?.find(s=>s.storeId===id);
  if(!u)return;
+ geometryContext=null;
+ document.body.classList.remove('rnGeometryContextOpen');
+ if(actionDock)delete actionDock.dataset.context;
+ if(inviteAction)inviteAction.disabled=false;
+ if(infoAction)infoAction.disabled=false;
+ inviteAction.title=tr('Invitar','Invite');
+ infoAction.title=tr('Información','Information');
+ inviteAction?.setAttribute('aria-label',tr('Invitar personas a encontrarnos aquí','Invite people to meet here'));
+ infoAction?.setAttribute('aria-label',tr('Ver información del local','View store information'));
  selectedId=id;
  $('rnMapSearch')?.classList.remove('finding');$('search')?.blur();
  cards.querySelectorAll('[data-store-id]').forEach(el=>{
@@ -326,21 +335,50 @@ const open=()=>{
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
 function hideActionMenu(){
  if(!actionDock)return;
+ document.body.classList.remove('rnGeometryContextOpen');
  actionDock.classList.remove('is-visible');actionDock.hidden=true;
 }
 function clearStoreSelection(){
- selectedId=null;detailOpen=false;
+ selectedId=null;geometryContext=null;detailOpen=false;
  cards.querySelectorAll('[data-store-id]').forEach(card=>{
   card.classList.remove('rnStoreSelected');card.setAttribute('aria-selected','false');
  });
  delete panel.dataset.selectedStore;delete panel.dataset.locationKnown;
  delete panel.dataset.locationNote;
  details.hidden=true;meetingBox.hidden=true;hideActionMenu();
+ if(actionDock)delete actionDock.dataset.context;
+ if(inviteAction)inviteAction.disabled=false;
+ if(infoAction)infoAction.disabled=false;
  assistAction?.classList.remove('is-route-ready','is-route-open');
  assistAction?.setAttribute('aria-pressed','false');
  window.__RETAILNAV__?.closeStoreAssistance?.();
 }
-window.addEventListener('retailnav:store-focus-start',hideActionMenu);
+function showGeometryContext(context={}){
+ clearStoreSelection();
+ if(!actionDock)return;
+ geometryContext={
+  featureId:String(context.featureId||''),floor:String(context.floor||''),
+  matchCount:Number(context.matchCount)||0,
+  message:String(context.message||tr('Este contorno todavía no está vinculado de forma unívoca con un comercio.',
+   'This outline is not yet uniquely linked to a store.'))
+ };
+ actionDock.dataset.context='geometry';
+ assistAction.disabled=true;inviteAction.disabled=true;infoAction.disabled=false;
+ assistAction.classList.remove('is-route-ready','is-route-open');
+ assistAction.setAttribute('aria-pressed','false');
+ assistAction.title=tr('Orientación no disponible hasta vincular el comercio','Directions unavailable until the store is linked');
+ inviteAction.title=tr('Invitación no disponible hasta vincular el comercio','Invitation unavailable until the store is linked');
+ infoAction.title=tr('Ver por qué este contorno no tiene acciones comerciales','See why this outline has no store actions');
+ assistAction.setAttribute('aria-label',assistAction.title);
+ inviteAction.setAttribute('aria-label',inviteAction.title);
+ infoAction.setAttribute('aria-label',infoAction.title);
+ document.body.classList.add('rnGeometryContextOpen');
+ actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
+}
+window.addEventListener('retailnav:store-focus-start',event=>{
+ hideActionMenu();
+ if(!event.detail?.storeId){geometryContext=null;if(actionDock)delete actionDock.dataset.context;}
+});
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
  if(!actionDock||!selectedId||focus.storeId!==selectedId)return;
@@ -364,8 +402,18 @@ assistAction?.addEventListener('click',()=>{
  assistAction.setAttribute('aria-pressed',String(Boolean(result?.opened)));
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
-infoAction?.addEventListener('click',openStoreInfo);
-closeAction?.addEventListener('click',()=>{window.__RETAILNAV__?.closeStoreAssistance?.();hideActionMenu();});
+infoAction?.addEventListener('click',()=>{
+ if(geometryContext){
+  window.dispatchEvent(new CustomEvent('retailnav:geometry-context-info',{detail:{...geometryContext}}));
+  return;
+ }
+ openStoreInfo();
+});
+closeAction?.addEventListener('click',()=>{
+ window.__RETAILNAV__?.closeStoreAssistance?.();
+ if(geometryContext){geometryContext=null;if(actionDock)delete actionDock.dataset.context;}
+ hideActionMenu();
+});
 window.addEventListener('retailnav:store-route-state',event=>{
  if(event.detail?.storeId!==selectedId)return;
  const open=Boolean(event.detail.open);
@@ -376,6 +424,8 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
 window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status})),
- selectedStoreId:selectedId,actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
- refresh,selectStore,clearSelection:clearStoreSelection,showStoreDetails,openInvitation,openStoreInfo};
+ selectedStoreId:selectedId,actionContext:selectedId?'store':geometryContext?'geometry':null,
+ geometryContext:geometryContext?{...geometryContext}:null,
+ actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
+ refresh,selectStore,clearSelection:clearStoreSelection,showGeometryContext,showStoreDetails,openInvitation,openStoreInfo};
 })();

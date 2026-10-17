@@ -1179,6 +1179,19 @@ function resetCamera(plan=false){
  distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);
  updateEarthButtons();dirty=true;
 }
+function showMapFloorHeading(id){
+ const floor=floors.find(item=>item.id===id);
+ $('mapTitle').textContent=id==='ALL'
+  ?'Las '+floors.length+' plantas, en su posición relativa'
+  :(floor?.name||id)+' / '+id;
+ $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
+  ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
+  :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
+  :mallId==='alto-palermo'?'Contornos extraídos de los SVG oficiales; asociaciones comerciales, entradas y rutas aún provisionales.'
+  :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
+  :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
+    'Contornos y pasillos trazados sobre tus imágenes.');
+}
 function setFloor(id){
  if(!ready)return;
  clearWayfinding();
@@ -1201,16 +1214,7 @@ function setFloor(id){
  $('floorSpacing').hidden=floors.length<=1||id!=='ALL';
  if(id!=='ALL')$('floorSpacing').open=false;
  $('spread').disabled=id!=='ALL'||floors.length<=1;
- $('mapTitle').textContent=id==='ALL'
-  ?'Las '+floors.length+' plantas, en su posición relativa'
-  :floors.find(f=>f.id===id).name+' / '+id;
- $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
-  ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
-  :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
-  :mallId==='alto-palermo'?'Contornos extraídos de los SVG oficiales; asociaciones comerciales, entradas y rutas aún provisionales.'
-  :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
-  :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
-    'Contornos y pasillos trazados sobre tus imágenes.');
+ showMapFloorHeading(id);
  resetCamera();results();
 }
 function contains(p,ring){let v=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){let a=ring[i],b=ring[j];if(((a[1]>p[1])!==(b[1]>p[1]))&&(p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]))v=!v;}return v;}
@@ -1221,17 +1225,21 @@ function select(f){
    .some(binding=>binding.floor===f.floor&&binding.polygonId===f.id));
   if(matches.length===1&&window.RetailNavMeetups?.selectStore?.(matches[0].storeId,false,f.floor))return;
   // A traced polygon can be shared by several directory records or have no
-  // verified store binding. It must never reopen the obsolete rectangular
-  // action card: radial actions belong only to one identified catalog store.
+  // verified store binding. Keep the same radial interaction and the central
+  // close control, but do not fabricate store-dependent actions.
   window.RetailNavMeetups?.clearSelection?.();
   storeFocusEvent('retailnav:store-focus-start',{storeId:null});
   clearWayfinding();setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;
+  showFloorReference();showMapFloorHeading(f.floor);
   selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;
   $('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');
   $('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=true;
-  notify(matches.length>1
+  const message=matches.length>1
    ?'Este volumen corresponde a varios comercios. Elegí uno en la lista para ver sus acciones.'
-   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.';
+  notify(message);
+  window.RetailNavMeetups?.showGeometryContext?.({featureId:f.id,floor:f.floor,
+   matchCount:matches.length,message});
   results();dirty=true;return;
  }
  storeFocusEvent('retailnav:store-focus-start',{storeId:null});
@@ -1395,6 +1403,9 @@ $('resultCount').textContent=q?(list.length+pois.length+shopSearch.storeIds.size
     ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
     :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
+window.addEventListener('retailnav:geometry-context-info',event=>{
+ notify(event.detail?.message||'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+});
 function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;window.RetailNavMapCache?.showError?.(message);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
 function progress(n,message){$('loading').hidden=true;window.RetailNavMapCache?.prepare?.(message,Math.min(99,Math.round(78+Math.max(0,n)*.2)));}
 // Map-first touch controls: one finger pans; two fingers zoom, twist and tilt.

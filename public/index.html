@@ -1276,10 +1276,12 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreActions #rnStoreAssist.is-route-open{box-shadow:0 13px 28px #06152170,0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 38%,transparent),inset 0 1px #fff9}
 .rnStoreActions button:disabled{background:color-mix(in srgb,#7f8992 72%,var(--rn-theme-surface,#123247));
  color:#d4d8dc;border-color:#9aa1a7;filter:grayscale(1);opacity:.62;cursor:default;box-shadow:0 8px 17px #0615213d,inset 0 1px #fff5}
+body.rnGeometryContextOpen .toast{bottom:370px}
 .rnQuickInvite{z-index:40}
 @media(max-width:760px){
  .rnStoreActions{bottom:208px}
  body.rnTagResultsOpen .rnStoreActions{bottom:calc(min(29dvh,235px) + 58px)}
+ body.rnGeometryContextOpen .toast{bottom:388px}
 }
 @media(prefers-reduced-motion:reduce){.rnStoreActions,.rnStoreActions button{transition:none!important}}
 
@@ -4885,6 +4887,19 @@ function resetCamera(plan=false){
  distance=clamp(distance*Math.max(mx/.86,my/.65),90,550);
  updateEarthButtons();dirty=true;
 }
+function showMapFloorHeading(id){
+ const floor=floors.find(item=>item.id===id);
+ $('mapTitle').textContent=id==='ALL'
+  ?'Las '+floors.length+' plantas, en su posición relativa'
+  :(floor?.name||id)+' / '+id;
+ $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
+  ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
+  :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
+  :mallId==='alto-palermo'?'Contornos extraídos de los SVG oficiales; asociaciones comerciales, entradas y rutas aún provisionales.'
+  :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
+  :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
+    'Contornos y pasillos trazados sobre tus imágenes.');
+}
 function setFloor(id){
  if(!ready)return;
  clearWayfinding();
@@ -4907,16 +4922,7 @@ function setFloor(id){
  $('floorSpacing').hidden=floors.length<=1||id!=='ALL';
  if(id!=='ALL')$('floorSpacing').open=false;
  $('spread').disabled=id!=='ALL'||floors.length<=1;
- $('mapTitle').textContent=id==='ALL'
-  ?'Las '+floors.length+' plantas, en su posición relativa'
-  :floors.find(f=>f.id===id).name+' / '+id;
- $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
-  ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
-  :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
-  :mallId==='alto-palermo'?'Contornos extraídos de los SVG oficiales; asociaciones comerciales, entradas y rutas aún provisionales.'
-  :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
-  :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
-    'Contornos y pasillos trazados sobre tus imágenes.');
+ showMapFloorHeading(id);
  resetCamera();results();
 }
 function contains(p,ring){let v=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){let a=ring[i],b=ring[j];if(((a[1]>p[1])!==(b[1]>p[1]))&&(p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0]))v=!v;}return v;}
@@ -4927,17 +4933,21 @@ function select(f){
    .some(binding=>binding.floor===f.floor&&binding.polygonId===f.id));
   if(matches.length===1&&window.RetailNavMeetups?.selectStore?.(matches[0].storeId,false,f.floor))return;
   // A traced polygon can be shared by several directory records or have no
-  // verified store binding. It must never reopen the obsolete rectangular
-  // action card: radial actions belong only to one identified catalog store.
+  // verified store binding. Keep the same radial interaction and the central
+  // close control, but do not fabricate store-dependent actions.
   window.RetailNavMeetups?.clearSelection?.();
   storeFocusEvent('retailnav:store-focus-start',{storeId:null});
   clearWayfinding();setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;
+  showFloorReference();showMapFloorHeading(f.floor);
   selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;
   $('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');
   $('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=true;
-  notify(matches.length>1
+  const message=matches.length>1
    ?'Este volumen corresponde a varios comercios. Elegí uno en la lista para ver sus acciones.'
-   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.';
+  notify(message);
+  window.RetailNavMeetups?.showGeometryContext?.({featureId:f.id,floor:f.floor,
+   matchCount:matches.length,message});
   results();dirty=true;return;
  }
  storeFocusEvent('retailnav:store-focus-start',{storeId:null});
@@ -5101,6 +5111,9 @@ $('resultCount').textContent=q?(list.length+pois.length+shopSearch.storeIds.size
     ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
     :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
+window.addEventListener('retailnav:geometry-context-info',event=>{
+ notify(event.detail?.message||'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+});
 function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;window.RetailNavMapCache?.showError?.(message);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
 function progress(n,message){$('loading').hidden=true;window.RetailNavMapCache?.prepare?.(message,Math.min(99,Math.round(78+Math.max(0,n)*.2)));}
 // Map-first touch controls: one finger pans; two fingers zoom, twist and tilt.
@@ -19422,7 +19435,7 @@ const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const panel=$('rnTagResultPanel'),cards=$('rnTagResultCards');
 if(!panel||!cards)return;
 const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction'),closeAction=$('rnStoreActionClose');
-let selectedId='',detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
+let selectedId='',geometryContext=null,detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
 const i18n=()=>document.documentElement.lang||navigator.language||'es';
 const en=()=>i18n().startsWith('en');
 const tr=(es,english)=>en()?english:es;
@@ -19535,6 +19548,15 @@ function showSelectionStatus(u,focus){
 function selectStore(id,showDetails=false,requestedFloor=null){
  const u=window.RetailNavUnits?.getUnits()?.find(s=>s.storeId===id);
  if(!u)return;
+ geometryContext=null;
+ document.body.classList.remove('rnGeometryContextOpen');
+ if(actionDock)delete actionDock.dataset.context;
+ if(inviteAction)inviteAction.disabled=false;
+ if(infoAction)infoAction.disabled=false;
+ inviteAction.title=tr('Invitar','Invite');
+ infoAction.title=tr('Información','Information');
+ inviteAction?.setAttribute('aria-label',tr('Invitar personas a encontrarnos aquí','Invite people to meet here'));
+ infoAction?.setAttribute('aria-label',tr('Ver información del local','View store information'));
  selectedId=id;
  $('rnMapSearch')?.classList.remove('finding');$('search')?.blur();
  cards.querySelectorAll('[data-store-id]').forEach(el=>{
@@ -19739,21 +19761,50 @@ const open=()=>{
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
 function hideActionMenu(){
  if(!actionDock)return;
+ document.body.classList.remove('rnGeometryContextOpen');
  actionDock.classList.remove('is-visible');actionDock.hidden=true;
 }
 function clearStoreSelection(){
- selectedId=null;detailOpen=false;
+ selectedId=null;geometryContext=null;detailOpen=false;
  cards.querySelectorAll('[data-store-id]').forEach(card=>{
   card.classList.remove('rnStoreSelected');card.setAttribute('aria-selected','false');
  });
  delete panel.dataset.selectedStore;delete panel.dataset.locationKnown;
  delete panel.dataset.locationNote;
  details.hidden=true;meetingBox.hidden=true;hideActionMenu();
+ if(actionDock)delete actionDock.dataset.context;
+ if(inviteAction)inviteAction.disabled=false;
+ if(infoAction)infoAction.disabled=false;
  assistAction?.classList.remove('is-route-ready','is-route-open');
  assistAction?.setAttribute('aria-pressed','false');
  window.__RETAILNAV__?.closeStoreAssistance?.();
 }
-window.addEventListener('retailnav:store-focus-start',hideActionMenu);
+function showGeometryContext(context={}){
+ clearStoreSelection();
+ if(!actionDock)return;
+ geometryContext={
+  featureId:String(context.featureId||''),floor:String(context.floor||''),
+  matchCount:Number(context.matchCount)||0,
+  message:String(context.message||tr('Este contorno todavía no está vinculado de forma unívoca con un comercio.',
+   'This outline is not yet uniquely linked to a store.'))
+ };
+ actionDock.dataset.context='geometry';
+ assistAction.disabled=true;inviteAction.disabled=true;infoAction.disabled=false;
+ assistAction.classList.remove('is-route-ready','is-route-open');
+ assistAction.setAttribute('aria-pressed','false');
+ assistAction.title=tr('Orientación no disponible hasta vincular el comercio','Directions unavailable until the store is linked');
+ inviteAction.title=tr('Invitación no disponible hasta vincular el comercio','Invitation unavailable until the store is linked');
+ infoAction.title=tr('Ver por qué este contorno no tiene acciones comerciales','See why this outline has no store actions');
+ assistAction.setAttribute('aria-label',assistAction.title);
+ inviteAction.setAttribute('aria-label',inviteAction.title);
+ infoAction.setAttribute('aria-label',infoAction.title);
+ document.body.classList.add('rnGeometryContextOpen');
+ actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
+}
+window.addEventListener('retailnav:store-focus-start',event=>{
+ hideActionMenu();
+ if(!event.detail?.storeId){geometryContext=null;if(actionDock)delete actionDock.dataset.context;}
+});
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
  if(!actionDock||!selectedId||focus.storeId!==selectedId)return;
@@ -19777,8 +19828,18 @@ assistAction?.addEventListener('click',()=>{
  assistAction.setAttribute('aria-pressed',String(Boolean(result?.opened)));
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
-infoAction?.addEventListener('click',openStoreInfo);
-closeAction?.addEventListener('click',()=>{window.__RETAILNAV__?.closeStoreAssistance?.();hideActionMenu();});
+infoAction?.addEventListener('click',()=>{
+ if(geometryContext){
+  window.dispatchEvent(new CustomEvent('retailnav:geometry-context-info',{detail:{...geometryContext}}));
+  return;
+ }
+ openStoreInfo();
+});
+closeAction?.addEventListener('click',()=>{
+ window.__RETAILNAV__?.closeStoreAssistance?.();
+ if(geometryContext){geometryContext=null;if(actionDock)delete actionDock.dataset.context;}
+ hideActionMenu();
+});
 window.addEventListener('retailnav:store-route-state',event=>{
  if(event.detail?.storeId!==selectedId)return;
  const open=Boolean(event.detail.open);
@@ -19789,8 +19850,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
 window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status})),
- selectedStoreId:selectedId,actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
- refresh,selectStore,clearSelection:clearStoreSelection,showStoreDetails,openInvitation,openStoreInfo};
+ selectedStoreId:selectedId,actionContext:selectedId?'store':geometryContext?'geometry':null,
+ geometryContext:geometryContext?{...geometryContext}:null,
+ actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
+ refresh,selectStore,clearSelection:clearStoreSelection,showGeometryContext,showStoreDetails,openInvitation,openStoreInfo};
 })();
 </script>
 <script>/* One search control, moved between the tablet header and the phone map.

@@ -183,20 +183,52 @@ try{
  const unboundSelection=await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
   const feature=view.floors.flatMap(f=>f.features).find(candidate=>candidate.k==='unit'&&
+   candidate.floor==='EP'&&
    units.filter(unit=>window.RetailNavUnits.getMapBindings(unit).some(binding=>
     binding.floor===candidate.floor&&binding.polygonId===candidate.id)).length!==1);
   view.select(feature);
   return {featureId:feature?.id,legacyCardVisible:!document.querySelector('#detail').hidden,
    actionDockVisible:window.RetailNavMeetups.getState().actionDockVisible,
+   actionContext:window.RetailNavMeetups.getState().actionContext,
    selectedStoreId:window.RetailNavMeetups.getState().selectedStoreId,
+   geometryContext:window.RetailNavMeetups.getState().geometryContext,
+   assistDisabled:document.querySelector('#rnStoreAssist').disabled,
+   inviteDisabled:document.querySelector('#rnStoreInvite').disabled,
+   infoDisabled:document.querySelector('#rnStoreInfoAction').disabled,
+   mapTitle:document.querySelector('#mapTitle').textContent,
+   floorReference:document.querySelector('#rnFloorReference').textContent,
    notice:document.querySelector('#toast').textContent};
  });
  assert.ok(unboundSelection.featureId);
  assert.equal(unboundSelection.legacyCardVisible,false,
   'unlinked geometry must not resurrect the obsolete rectangular store actions');
- assert.equal(unboundSelection.actionDockVisible,false);
+ assert.equal(unboundSelection.actionDockVisible,true,
+  'unlinked geometry must retain the radial contextual menu and central close control');
+ assert.equal(unboundSelection.actionContext,'geometry');
  assert.equal(unboundSelection.selectedStoreId,null);
+ assert.equal(unboundSelection.geometryContext.featureId,unboundSelection.featureId);
+ assert.equal(unboundSelection.assistDisabled,true);
+ assert.equal(unboundSelection.inviteDisabled,true);
+ assert.equal(unboundSelection.infoDisabled,false);
+ assert.match(unboundSelection.mapTitle,/EP/);
+ assert.doesNotMatch(unboundSelection.mapTitle,/Starbucks/);
+ assert.doesNotMatch(unboundSelection.floorReference,/Destino/);
  assert.match(unboundSelection.notice,/no está vinculado|varios comercios/);
+ await page.waitForFunction(()=>document.querySelector('#rnStoreActions')?.classList.contains('is-visible'));
+ const unboundLayout=await page.evaluate(()=>{
+  const menu=document.querySelector('#rnStoreActions').getBoundingClientRect();
+  const toast=document.querySelector('#toast').getBoundingClientRect();
+  return {menu:{top:menu.top,bottom:menu.bottom},toast:{top:toast.top,bottom:toast.bottom}};
+ });
+ assert.ok(unboundLayout.toast.bottom<=unboundLayout.menu.top||
+  unboundLayout.toast.top>=unboundLayout.menu.bottom,
+ 'the unlinked-geometry explanation must not cover the radial controls');
+ await page.screenshot({path:'/tmp/retailnav-alto-palermo-unbound-contextual'+
+  (process.env.RETAILNAV_BROWSER==='webkit'?'-webkit':'')+'.png',fullPage:true});
+ await page.locator('#rnStoreInfoAction').click();
+ assert.match(await page.locator('#toast').textContent(),/no está vinculado|varios comercios/);
+ await page.locator('#rnStoreActionClose').click();
+ await page.waitForFunction(()=>!window.RetailNavMeetups.getState().actionDockVisible);
 
  const unlinkedMarker=await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits();

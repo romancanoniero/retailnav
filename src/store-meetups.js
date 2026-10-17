@@ -8,6 +8,7 @@ const $=id=>document.getElementById(id);
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const panel=$('rnTagResultPanel'),cards=$('rnTagResultCards');
 if(!panel||!cards)return;
+const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction');
 let selectedId='',detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
 const i18n=()=>document.documentElement.lang||navigator.language||'es';
 const en=()=>i18n().startsWith('en');
@@ -48,6 +49,9 @@ const inbox=document.createElement('dialog');inbox.id='rnMeetupInbox';inbox.clas
 inbox.setAttribute('aria-label',tr('Invitaciones para encontrarnos','Meetup invitations'));
 document.body.append(inbox);
 const inboxContent=document.createElement('div');inboxContent.className='rnMeetupInboxContent';inbox.append(inboxContent);
+const quickInvite=document.createElement('dialog');quickInvite.id='rnQuickInvite';quickInvite.className='rnMeetupInbox rnQuickInvite';
+quickInvite.setAttribute('aria-label',tr('Invitar a encontrarnos','Invite people to meet'));
+const quickInviteContent=document.createElement('div');quickInviteContent.className='rnMeetupInboxContent';quickInvite.append(quickInviteContent);document.body.append(quickInvite);
 async function openInbox(){
  inbox.showModal();await refresh().catch(e=>{inboxContent.textContent=e.message;});
 }
@@ -106,6 +110,8 @@ function showSelectionStatus(u,focus){
     :tr('Ubicación pendiente de identificar en el plano; no se puede enfocar ni resaltar.',
       'Map position is unknown; focus and map highlight are not available.'));
  const levels=window.RetailNavUnits?.getMappedFloors?.(u)||[];
+ selectionStatus.classList.toggle('rnStoreFloorPrompt',levels.length>1);
+ selectionStatus.hidden=levels.length<=1;
  if(levels.length>1){
   const choices=document.createElement('span');choices.className='rnStoreFloorChoices';
   for(const floor of levels){const b=button(tr('Planta ','Floor ')+floor,()=>selectStore(u.storeId,false,floor));
@@ -117,6 +123,7 @@ function selectStore(id,showDetails=false,requestedFloor=null){
  const u=window.RetailNavUnits?.getUnits()?.find(s=>s.storeId===id);
  if(!u)return;
  selectedId=id;
+ $('rnMapSearch')?.classList.remove('finding');$('search')?.blur();
  cards.querySelectorAll('[data-store-id]').forEach(el=>{
   const current=el.dataset.storeId===id;
   el.classList.toggle('rnStoreSelected',current);
@@ -141,11 +148,26 @@ function selectStore(id,showDetails=false,requestedFloor=null){
  if(showDetails)showStoreDetails();
  else{details.hidden=true;detailOpen=false;meetingBox.hidden=true;}
  window.__RETAILNAV__?.invalidate?.();
+ return focus||{located:false,storeId:id};
+}
+function openStoreInfo(){
+ const u=store();if(!u)return;
+ const standalone=panel.hidden;
+ if(standalone){
+  panel.dataset.quickInfo='true';panel.hidden=false;document.body.classList.add('rnTagResultsOpen');
+  $('rnTagResultTitle').textContent=u.name||u.code||tr('Local seleccionado','Selected store');
+ }
+ selectionStatus.hidden=true;cards.hidden=true;showStoreDetails();
 }
 function showStoreDetails(){
  const u=store();if(!u)return;
  details.replaceChildren();details.hidden=false;detailOpen=true;meetingBox.hidden=true;
- const back=button('← '+tr('Volver a la lista','Back to list'),()=>{details.hidden=true;detailOpen=false;cards.hidden=false;meetingBox.hidden=true;});
+ const back=button('← '+tr(panel.dataset.quickInfo==='true'?'Volver al mapa':'Volver a la lista',panel.dataset.quickInfo==='true'?'Back to map':'Back to list'),()=>{
+  details.hidden=true;detailOpen=false;meetingBox.hidden=true;
+  if(panel.dataset.quickInfo==='true'){
+   delete panel.dataset.quickInfo;panel.hidden=true;document.body.classList.remove('rnTagResultsOpen');
+  }else cards.hidden=false;
+ });
  back.className='rnBackToStores';details.append(back);
  const head=document.createElement('div');head.className='rnDetailHeading';
  const logo=document.createElement('div');logo.className='rnDetailLogo';safeLogo(logo,u);
@@ -195,11 +217,15 @@ async function refresh(){
  if(inbox.open)renderMeetingList(inboxContent);
 }
 function openInvitation(){
- meetingBox.hidden=false;meetingBox.replaceChildren();
+ const standalone=panel.hidden;
+ const host=standalone?quickInviteContent:meetingBox;
+ host.hidden=false;host.replaceChildren();
+ if(standalone){if(!quickInvite.open)quickInvite.showModal();}
+ else{cards.hidden=true;details.hidden=true;detailOpen=false;}
  const u=store();if(!u)return;
- meetingBox.append(text('h4',tr('Proponer encuentro','Suggest a meetup')));
+ host.append(text('h4',tr('Proponer encuentro','Suggest a meetup')));
  const hint=text('p',tr('Elegí amigos reales vinculados. Se les enviará solo el destino, nunca tu posición.','Choose linked friends. Only the destination is shared, never your position.'));
- meetingBox.append(hint);
+ host.append(hint);
  const row=document.createElement('div');row.className='rnMeetFriends';
  const selected=new Set();
  for(const f of friends){
@@ -209,8 +235,8 @@ function openInvitation(){
   label.append(input,document.createTextNode(' '+f.name));row.append(label);
  }
  if(!friends.length)row.append(text('p',tr('Todavía no hay amigos reales vinculados por QR.','No real linked friends yet.')));
- meetingBox.append(row);
- const status=text('p','','rnMeetingStatus');meetingBox.append(status);
+ host.append(row);
+ const status=text('p','','rnMeetingStatus');host.append(status);
  const send=button(tr('Enviar propuesta','Send invitation'),async()=>{
   if(!selected.size){status.textContent=tr('Elegí por lo menos un amigo','Select at least one friend');return;}
   try{await post('meetups/create',{mallId:mall.id,inviteeIds:[...selected],
@@ -218,8 +244,10 @@ function openInvitation(){
    status.textContent=tr('Propuesta enviada','Invitation sent');await refresh();
   }catch(e){status.textContent=e.message;}
  });
- send.disabled=!friends.length;meetingBox.append(send);
- meetingBox.append(button(tr('Cerrar','Close'),()=>meetingBox.hidden=true));
+ send.disabled=!friends.length;host.append(send);
+ host.append(button(tr('Cerrar','Close'),()=>{
+  if(standalone)quickInvite.close();else{meetingBox.hidden=true;cards.hidden=false;}
+ }));
 }
 function renderMeetingList(container){
  container.querySelector('.rnMeetingsList')?.remove();
@@ -292,13 +320,32 @@ const observer=new MutationObserver(()=>{
 observer.observe(cards,{childList:true,subtree:false});
 window.addEventListener('retailnav:ready',()=>{});
 const open=()=>{
- if(panel.hidden){selectedId='';selectionStatus.hidden=true;details.hidden=true;cards.hidden=false;meetingBox.hidden=true;return;}
+ if(panel.hidden){selectionStatus.hidden=true;details.hidden=true;cards.hidden=false;meetingBox.hidden=true;delete panel.dataset.quickInfo;return;}
  refresh().catch(()=>{});
 };
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
+window.addEventListener('retailnav:store-focus-start',()=>{
+ if(actionDock){actionDock.classList.remove('is-visible');actionDock.hidden=true;}
+});
+window.addEventListener('retailnav:store-focus-settled',event=>{
+ const focus=event.detail||{};
+ if(!actionDock||!selectedId||focus.storeId!==selectedId||focus.assistanceOpen)return;
+ assistAction.disabled=!focus.located;
+ assistAction.title=focus.located?tr('Orientarme','Guide me'):tr('Ubicación sin vincular','Location not mapped');
+ assistAction.setAttribute('aria-label',assistAction.title);
+ actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
+});
+assistAction?.addEventListener('click',()=>{
+ if(!selectedId||assistAction.disabled)return;
+ actionDock.classList.remove('is-visible');actionDock.hidden=true;
+ window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+});
+inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
+infoAction?.addEventListener('click',openStoreInfo);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
-window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status}))}),
- refresh,selectStore,showStoreDetails};
+window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status})),
+ actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
+ refresh,selectStore,showStoreDetails,openInvitation,openStoreInfo};
 })();

@@ -812,6 +812,14 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **AR/navegación:** no se habilita guiado AR ni instrucciones reales. La ruta actual usa origen simulado y coordenadas de imagen; MAP-14, NAV-02/03/05 y USR-J04 siguen siendo bloqueos hasta disponer de geometría calibrada, grafo de recorridos/entradas/conectores, posicionamiento validado y pruebas presenciales. Próximo hito: relevamiento autorizado de un shopping piloto y elección de la estrategia nativa ARKit/ARCore con alternativa de mapa para navegadores incompatibles.
 - **Verificación:** 5 pruebas unitarias, E2E de navegador, build web y `scripts/verify.py` pasaron localmente; GitHub Actions `38877195474` pasó build/verify y publicación Contabo `38877195587` completó las comprobaciones públicas. Commit desplegado: `7056c281148b4d12d9a3f825db15a31171e1023e`.
 
+### 2026-10-17 — STORE-ACTIONS-02 — acciones compactas después del enfoque
+
+- **Decisión de experiencia:** la selección de un local desde el mapa o desde cualquier lista comparte un solo flujo. Primero termina el giro/enfoque del visor; recién entonces aparece una bandeja animada de tres controles circulares: orientación, invitación e información.
+- **Uso del espacio:** seleccionar ya no abre automáticamente la tarjeta grande de origen/destino. Esa tarjeta se reserva para una petición explícita de orientación. La confirmación textual de una sola planta deja de ocupar la columna; el selector visible se conserva cuando hay varias geometrías de planta reales entre las que elegir.
+- **Reutilización:** invitación usa encuentros privados ya existentes e información usa la ficha oficial con logo, descripción, categorías y enlaces disponibles. En una selección directa del mapa ambas funcionan sin exigir que la lista lateral permanezca abierta.
+- **Datos y seguridad:** si un local carece de geometría vinculada, orientación se deshabilita; no se inventa una posición. Invitación transmite el destino canónico, no la posición del usuario. Las limitaciones de rutas no verificadas se mantienen.
+- **Regresión obligatoria:** probar selección por tarjeta y por polígono, acción oculta durante la cámara y visible al finalizar, controles táctiles redondos de al menos 44 px, ficha independiente, invitación independiente, orientación bajo demanda, cierre/colocación manual y comercio sin vector.
+
 ## 19. Rutas y comandos para retomar (sin suponer despliegue)
 
 **Repositorio:** https://github.com/romancanoniero/retailnav  

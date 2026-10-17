@@ -52,6 +52,8 @@ try{
  const select=async(id,floor=null)=>{
   await page.evaluate(({id,floor})=>window.RetailNavMeetups.selectStore(id,false,floor),{id,floor});
   await settle();
+  const assist=page.locator('#rnStoreAssist');
+  if(await assist.isEnabled()){await assist.tap();await settle();}
  };
  await page.evaluate(()=>{
   window.__originalWayfindingCanvas=document.querySelector('#canvas');
@@ -199,6 +201,31 @@ try{
  await page.locator('#rnTagResultCards .rnStoreCard[data-store-id="'+joe+'"]').tap();
  await settle();
  let s=await state();
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
+  'selecting a store keeps the large orientation card closed');
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
+  'compact actions appear only after the camera settles');
+ await page.waitForTimeout(420);
+ const actions=await page.locator('#rnStoreActions button').evaluateAll(nodes=>nodes.map(node=>{
+  const box=node.getBoundingClientRect();return{width:box.width,height:box.height,radius:getComputedStyle(node).borderRadius};
+ }));
+ assert.equal(actions.length,3);assert.ok(actions.every(a=>a.width>=54&&a.height>=54&&
+  (a.radius==='50%'||Math.abs(parseFloat(a.radius)-a.width/2)<1)),
+  'assistance, invitation and information use round touch targets: '+JSON.stringify(actions));
+ mkdirSync('artifacts',{recursive:true});
+ await page.screenshot({path:'artifacts/store-actions-tablet-'+engine+'.png'});
+ await page.locator('#rnTagResultClose').tap();
+ await page.locator('#rnStoreInfoAction').tap();
+ assert.equal(await page.locator('#rnStoreDetails').isVisible(),true,
+  'the information action reuses the selected store profile without requiring the list');
+ await page.locator('#rnStoreDetails .rnBackToStores').tap();
+ assert.equal(await page.locator('#rnTagResultPanel').isVisible(),false,
+  'closing standalone information returns directly to the map');
+ await page.locator('#rnStoreInvite').tap();
+ assert.equal(await page.locator('#rnQuickInvite').isVisible(),true,
+  'the invitation action opens the existing private meetup flow directly from the map');
+ await page.locator('#rnQuickInvite button').filter({hasText:/Cerrar|Close/}).tap();
+ await page.locator('#rnStoreAssist').tap();await settle();s=await state();
  assert.equal(s.wayfinding.mode,'no-origin');
  assert.equal(s.wayfinding.origin,null,'a default floor must not masquerade as the visitor position');
  assert.equal(await page.locator('#rnWayfindingOrigin').isVisible(),false);
@@ -331,6 +358,8 @@ try{
  await page.screenshot({path:'artifacts/wayfinding-tablet-portrait-'+engine+'.png'});
  await select(fixtures['Sens Coffee']);s=await state();
  assert.equal(s.wayfinding.mode,'unplaced');assert.deepEqual(s.focusedStoreVectors,[]);
+ assert.equal(await page.locator('#rnStoreAssist').isDisabled(),true,
+  'assistance is unavailable when the store has no source-map position');
  assert.equal(await page.locator('#rnWayfindingTarget').isVisible(),false,
   'unmapped stores must not acquire a made-up destination marker');
  assert.equal(await page.locator('#rnWayfindingDots .rnWayfindingDot:visible').count(),0);

@@ -279,12 +279,17 @@ try{
  assert.ok(tabletLayout.cardCount>1);
  const firstTabletCard=page.locator('#rnTagResultCards .rnStoreCard').first();
  await firstTabletCard.click();
+ await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
  const tabletFocus=await page.evaluate(()=>window.__RETAILNAV__.getState().lastStoreFocus);
- const tabletUnit=await page.evaluate(id=>window.RetailNavUnits.getUnits().find(u=>u.storeId===id),
-  await firstTabletCard.getAttribute('data-store-id'));
- assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),true,
-  'a selected tablet result must provide user-visible feedback');
+ const tabletUnit=await page.evaluate(id=>{const u=window.RetailNavUnits.getUnits().find(u=>u.storeId===id);
+  return {...u,mappedFloors:window.RetailNavUnits.getMappedFloors(u)};},await firstTabletCard.getAttribute('data-store-id'));
+ assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),tabletUnit.mappedFloors.length>1,
+  'only a real multi-floor choice may consume space in the result panel');
  assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/ubicaci[oó]n|location/i);
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
+  'selection must not open the large orientation dialog');
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
+  'compact contextual actions appear after the selection flight');
  assert.equal(await firstTabletCard.getAttribute('aria-selected'),'true');
  assert.equal(tabletFocus?.located,Boolean(tabletUnit.sourceGeometry),
   'directory selection may focus only when its source geometry is linked');
@@ -363,8 +368,9 @@ try{
  const italian=page.locator('.rnResultGroup[data-concept-id="cuisine.italian"] .rnUnitResult').first();
  if(await italian.count()){
   await italian.click();
-  assert.equal(await page.locator('#rnWayfinding').isVisible(),true,
-   'each matched establishment remains selectable for native-map orientation');
+  await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
+  assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
+   'each matched establishment exposes the same compact actions');
  }
  await page.locator('#rnLanguageSelect').selectOption('en');
  await input.fill('Apple');

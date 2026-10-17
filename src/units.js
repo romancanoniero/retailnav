@@ -158,6 +158,7 @@ function getMatchedVectors(){
 }
 function focusUnit(u,floor){
  if(!u)return false;
+ if(window.RetailNavMeetups?.selectStore)return window.RetailNavMeetups.selectStore(u.storeId,false,floor||u.floor);
  document.getElementById('rnMapSearch')?.classList.remove('finding');
  document.getElementById('search')?.blur();
  selected=storeKey(u);

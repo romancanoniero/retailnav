@@ -152,6 +152,20 @@ try{
  assert.ok(s.q.some((v,i)=>Math.abs(v-before.q[i])>.1),'selection rotates the native camera');
  assert.ok(s.cameraUp[1]>.3,'the selected store is viewed upright');
  assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/Destination location.*Joe.*Floor LL/i);
+ assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),false,
+  'single-floor destination status stays available to assistive technology without occupying the panel');
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
+  'the compact actions appear after the native camera stops');
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
+  'orientation details remain closed until assistance is requested');
+ await page.evaluate(polygonId=>{
+  const view=window.__RETAILNAV__,floor=view.floors.find(f=>f.features.some(feature=>feature.id===polygonId));
+  view.select(floor.features.find(feature=>feature.id===polygonId));
+ },joe);
+ await settle();
+ assert.equal((await page.evaluate(()=>window.RetailNavMeetups.getState())).selectedId,fixtures['Joe & The Juice'],
+  'selecting the source polygon uses the same store action flow as selecting its card');
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),true);
  assert.equal(s.wayfinding.mode,'no-origin');
  assert.equal(s.route,0,'source linework is not automatically a verified pedestrian route');
  await assertNative();
@@ -205,10 +219,12 @@ try{
   'an unplaced store can show its documented floor and visitor floor without inventing its polygon');
  assert.equal(s.wayfinding.mode,'unplaced');
  assert.equal(await card('Sens Coffee').getAttribute('aria-selected'),'true');
- assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),true);
+ await page.waitForFunction(()=>window.RetailNavMeetups.getState().actionDockVisible);
+ assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),false);
  assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/not yet linked|unknown/i);
  assert.equal(await page.locator('#rnWayfindingTarget').isVisible(),false);
- assert.equal(await page.locator('#rnWayfindingRelation').isVisible(),true);
+ assert.equal(await page.locator('#rnWayfindingRelation').isVisible(),false);
+ assert.equal(await page.locator('#rnStoreAssist').isDisabled(),true);
  await card('Starbucks').tap();s=await state();
  assert.equal(s.lastStoreFocus.located,false);assert.deepEqual(s.focusedStoreVectors,[]);
  assert.equal(s.focusedStoreVector,null);assert.equal(s.route,0);
@@ -317,7 +333,6 @@ try{
  },joe);
  assert.equal(legacy.located,false);assert.deepEqual((await state()).focusedStoreVectors,[]);
  await page.locator('#rnTagResultClose').tap();
- await page.locator('#rnWayfindingClose').tap();
  await page.locator('#floorSelect').selectOption('UL');
  assert.deepEqual((await state()).visible,['UL'],'original floor selector still controls the native scene');
  await assertNative();

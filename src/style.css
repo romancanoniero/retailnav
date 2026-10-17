@@ -1228,7 +1228,8 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 
 .rnTagResultPanel .rnStoreCard{touch-action:manipulation}
 
-/* Explicit status for catalogue entries lacking a mapped storefront. */
+/* Selection confirmation remains available to assistive technology. Only a
+   real multi-floor choice earns visible space in the results rail. */
 .rnStoreSelectionStatus{margin:6px 0 10px;padding:10px 12px;border:1px solid var(--rn-theme-border,#47657b);border-radius:10px;background:var(--rn-theme-surface,#163045);color:var(--rn-theme-text,#e6f5fa);font-size:12px;line-height:1.45}
 .rnStoreSelectionStatus[hidden]{display:none!important}
 .rnTagResultPanel .rnStoreSelected{border:2px solid var(--rn-theme-map-selected,#ffae4a)!important;box-shadow:inset 4px 0 var(--rn-theme-map-selected,#ffae4a),0 0 0 2px #ffae4a44!important}
@@ -1237,6 +1238,28 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreFloorChoices{display:flex;gap:8px;margin-top:10px}
 .rnStoreFloorChoices button{min-width:64px;min-height:44px;border:1px solid var(--rn-theme-border,#47657b);border-radius:8px;background:var(--rn-theme-surface,#163045);color:inherit}
 .rnStoreFloorChoices button[aria-pressed="true"]{outline:2px solid var(--rn-theme-accent,#12617b)}
+
+/* Contextual store actions arrive only after the camera has finished its
+   selection flight. The circular controls keep the map visible and reserve
+   the larger orientation card for an explicit request. */
+.rnStoreActions{position:absolute;z-index:9;left:50%;bottom:78px;display:flex;gap:14px;
+ transform:translate(-50%,14px) scale(.86);opacity:0;pointer-events:none;
+ transition:opacity .2s ease,transform .34s cubic-bezier(.2,.9,.25,1.18)}
+.rnStoreActions[hidden]{display:none!important}
+.rnStoreActions.is-visible{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
+.rnStoreActions button{display:grid;place-items:center;width:58px;min-width:58px;height:58px;min-height:58px;padding:0;
+ border:1px solid color-mix(in srgb,var(--rn-theme-accent,#70dce8) 65%,white 15%);border-radius:50%;
+ background:color-mix(in srgb,var(--rn-theme-surface,#123247) 91%,transparent);color:var(--rn-theme-text,#f3fbff);
+ box-shadow:0 12px 28px #06152166,0 3px 7px #0615214d,inset 0 1px 0 #ffffff42;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);touch-action:manipulation}
+.rnStoreActions button .icon{width:26px;height:26px;stroke-width:1.9}
+.rnStoreActions button:hover,.rnStoreActions button:focus-visible{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
+ border-color:#e8ffff;transform:translateY(-2px);box-shadow:0 15px 30px #06152170,0 4px 9px #0615214d,inset 0 1px #fff8}
+.rnStoreActions button:disabled{filter:grayscale(.55);transform:none}
+.rnQuickInvite{z-index:40}
+@media(max-width:760px){.rnStoreActions{bottom:60px;gap:12px}.rnStoreActions button{width:54px;min-width:54px;height:54px;min-height:54px}}
+@media(min-width:761px){body.rnTagResultsOpen .rnStoreActions{left:56%}}
+@media(prefers-reduced-motion:reduce){.rnStoreActions{transition:none}}
 
 /* Destination orientation lives over the existing 3D viewport. Its projected
    markers share the camera; the card never creates another map surface. */

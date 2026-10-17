@@ -334,7 +334,7 @@ function draw(){
  const view=window.__RETAILNAV__;
  if(!view?.getState().visible.includes(referencePoint.floor)){ui.point.hidden=true;return;}
  const world=view.pinWorld(referencePoint.floor,referencePoint.x,referencePoint.y);
- const p=world&&view.projectWorld([world[0],world[1]+2,world[2]]);
+ const p=world&&view.projectWorld(world);
  if(!p||p.w<=0||p.z<=-1||p.z>=1||p.x<5||p.y<5||
   p.x>ui.point.parentElement.clientWidth-5||
   p.y>ui.point.parentElement.clientHeight-5){ui.point.hidden=true;return;}
@@ -349,7 +349,7 @@ function draw(){
  if(arrow&&heading!==null){
   const r=radians(heading-(compassOffset??0));
   const dist=7;
-  const p2=view.projectWorld([world[0]+Math.sin(r)*dist,world[1]+2,world[2]-Math.cos(r)*dist]);
+  const p2=view.projectWorld([world[0]+Math.sin(r)*dist,world[1],world[2]-Math.cos(r)*dist]);
   if(p2&&p2.w>0)arrow.style.transform='translate(-50%,-90%) rotate('+
     (Math.atan2(p2.x-p.x,-(p2.y-p.y))*180/Math.PI)+'deg)';
  }

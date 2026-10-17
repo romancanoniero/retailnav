@@ -429,7 +429,7 @@ dialog.rnMallSettings{width:min(94vw,440px);max-width:440px;border:1px solid #4b
 .rnIndoorDialog p{line-height:1.4;color:#c9e2eb;font-size:12px;margin:2px 0}
 .rnIndoorDialog p.caption{color:#9db6c6;font-size:11px}
 .rnIndoorDialog input{max-width:100%;padding:10px 12px;background:#132d3d;border:1px solid #528ba1;border-radius:8px;color:#fff}
-.rnMyPositionMarker{position:absolute;z-index:6;pointer-events:none;transform:translate(-50%,-50%)}
+.rnMyPositionMarker{position:absolute;z-index:6;pointer-events:none;transform:translate(-50%,-100%)}
 .rnMyPositionMarker[hidden]{display:none!important}
 .rnIndoorDot{display:block;width:16px;height:16px;border:3px solid white;border-radius:100%;
  background:#219bd9;box-shadow:0 0 0 9px #00e0fe31,0 2px 9px #06243e}
@@ -1344,6 +1344,7 @@ body.rnGeometryContextOpen .toast{bottom:370px}
 .stage.rnWayfindingRouteOnly>.rnWayfinding{display:none!important}
 .rnWayfindingMarker{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);
  z-index:2;pointer-events:none;text-align:center}
+.rnWayfindingOrigin{transform:translate(-50%,-100%)}
 .rnWayfindingMarker::before{content:"";position:absolute;inset:1px;border:3px solid #fff;
  border-radius:50%;background:#169bca;box-shadow:0 0 0 5px #159cc440,0 2px 8px #072f435c}
 .rnWayfindingMarkerLabel{position:absolute;left:50%;top:32px;transform:translateX(-50%);

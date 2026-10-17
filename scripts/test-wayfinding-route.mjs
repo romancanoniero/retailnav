@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {inflateSync} from 'node:zlib';
 import vm from 'node:vm';
 import test from 'node:test';
 
@@ -165,3 +166,39 @@ test('verified escalator landings extend the same graph across floors without an
   assert.equal(planner.configure(unverified), false, 'an unverified landing invalidates the whole route dataset');
   assert.equal(planner.plan(fixtureQuery()).reason, 'source-data-unavailable');
 });
+
+test('Alto Palermo derives a same-floor preview from official free space without enabling vertical travel', () => {
+  const encoded = readFileSync(new URL('../data/malls/alto-palermo/PB.geometry.zlib.b64', import.meta.url), 'utf8');
+  const compact = JSON.parse(inflateSync(Buffer.from(encoded.trim(), 'base64')));
+  const kinds = ['anchor', 'unit', 'zone', 'corridor', 'void', 'slab'];
+  const features = compact.map(item => {
+    let x = 0, y = 0;const points = [];
+    for (let i = 0; i < item[3].length; i += 2) {
+      x += item[3][i];y += item[3][i + 1];points.push([x / 2, y / 2]);
+    }
+    return {id: item[0], k: kinds[item[1]], r: item[4].map(ring => ring.map(index => points[index]))};
+  });
+  const policy = {schema: 'retailnav.same-floor-routing-preview.v1', routingVerified: false,
+    sourceGeometry: 'official-svg-floor-minus-units', gridStepSourceUnits: 18, clearanceSourceUnits: 4};
+  const planner = api(), result = planner.planFloorGeometry({policy, floor: 'PB',
+    origin: {floor: 'PB', x: 3100, y: 1800}, destinationPolygonIds: ['PB-SVG-042'],
+    features, sourceUnitsToMeters: .04});
+  assert.equal(result.status, 'provisional');
+  assert.equal(result.reason, 'official-svg-free-space-preview');
+  assert.equal(result.routingVerified, false);assert.equal(result.directionsVerified, false);
+  assert.equal(result.destinationPolygonId, 'PB-SVG-042');
+  assert.equal(result.routeSegments.length, 1);assert.equal(result.routeSegments[0].floor, 'PB');
+  assert.equal(result.connectorsUsed.length, 0);assert.ok(result.points.length > 3);
+  assert.equal(result.endpoint, 'outside-destination');assert.equal(result.stopsBeforeObstacle, true);
+  const destination = features.find(feature => feature.id === 'PB-SVG-042');
+  assert.equal(pointInFeatureForTest(result.points.at(-1), destination), false,
+    'the provisional line must stop outside the local');
+  const otherFloor = planner.planFloorGeometry({...result, policy, floor: 'EP',
+    origin: {floor: 'PB', x: 3100, y: 1800}, destinationPolygonIds: ['PB-SVG-042'], features});
+  assert.equal(otherFloor.status, 'unavailable');
+  assert.equal(otherFloor.reason, 'vertical-connection-unavailable');
+});
+
+function pointInFeatureForTest(point, feature) {
+  return insideRing(point, feature.r[0]) && !feature.r.slice(1).some(ring => insideRing(point, ring));
+}

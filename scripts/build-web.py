@@ -32,6 +32,19 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
     slug = mall_path.parent.name
     assert info["id"] == slug and slug not in catalog
     assert info.get("navigable") is False, "Only provisional mock photo maps are supported"
+    same_floor_preview = info.get("sameFloorRoutingPreview")
+    if same_floor_preview is not None:
+        assert same_floor_preview == {
+            "schema": "retailnav.same-floor-routing-preview.v1",
+            "routingVerified": False,
+            "sourceGeometry": "official-svg-floor-minus-units",
+            "gridStepSourceUnits": same_floor_preview.get("gridStepSourceUnits"),
+            "clearanceSourceUnits": same_floor_preview.get("clearanceSourceUnits"),
+        }, slug+": invalid same-floor routing preview declaration"
+        assert 8 <= same_floor_preview["gridStepSourceUnits"] <= 40
+        assert 0 <= same_floor_preview["clearanceSourceUnits"] <= same_floor_preview["gridStepSourceUnits"] * .45
+        assert info.get("status") == "vectorizado-provisional", \
+            slug+": a geometry-derived preview requires official vector geometry"
     floor_data = []
     units = []
     photo_references = info.get("floorReferences", {})
@@ -81,6 +94,11 @@ for mall_path in sorted((repo / "data/malls").glob("*/mall.json")):
         geometry = json.loads(zlib.decompress(base64.b64decode(encoded)))
         assert len(geometry) > 2
         assert all(len(f) == 7 and len(f[3]) >= 6 for f in geometry)
+        if same_floor_preview is not None:
+            assert any(feature[1] == 5 for feature in geometry), \
+                slug+"/"+floor_id+": routing preview requires a floor shell"
+            assert any(feature[1] in (0, 1) for feature in geometry), \
+                slug+"/"+floor_id+": routing preview requires unit or anchor obstacles"
         units.extend(attach_unit_codes(mall_path.parent, floor_id, geometry))
 
         reference = photo_references[floor_id]

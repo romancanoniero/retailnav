@@ -549,9 +549,15 @@ function updateWayfindingUI(){
 function updateWayfindingRoute(){
  if(!wayfinding)return;
  const w=wayfinding;
- const result=w.origin&&w.destination?window.RetailNavWayfindingRoute?.plan?.({mallId,
+ let result=w.origin&&w.destination?window.RetailNavWayfindingRoute?.plan?.({mallId,
   coordinateSpace:selectedMall.coordinateSpace,floor:w.floor,origin:w.origin,
   destinationPolygonIds:w.polygonIds}):null;
+ if(result?.status!=='provisional'&&w.mode==='same-floor'&&selectedMall.sameFloorRoutingPreview){
+  const floor=floors.find(item=>item.id===w.floor);
+  result=window.RetailNavWayfindingRoute?.planFloorGeometry?.({policy:selectedMall.sameFloorRoutingPreview,
+   floor:w.floor,origin:w.origin,destinationPolygonIds:w.polygonIds,features:floor?.features,
+   sourceUnitsToMeters:cfg.scale})||result;
+ }
  w.status=result?.status||'unavailable';w.points=result?.points||[];
  w.routeSegments=result?.routeSegments||[];w.connectorsUsed=result?.connectorsUsed||[];
  w.routeReason=result?.reason||'no-continuous-route';
@@ -657,12 +663,12 @@ function drawWayfinding(){
   return;
  }
  const w=wayfinding,rect=canvas.getBoundingClientRect();
- const place=(el,at)=>{
-  const floor=floors.find(f=>f.id===at?.floor),p=floor&&screen(pos([at.x,at.y],floor.y+2));
+ const place=(el,at,elevation=2)=>{
+  const floor=floors.find(f=>f.id===at?.floor),p=floor&&screen(pos([at.x,at.y],floor.y+elevation));
   el.hidden=!p||p.w<=0||p.z<=-1||p.z>=1||p.x<14||p.x>rect.width-14||p.y<14||p.y>rect.height-14;
   if(!el.hidden){el.style.left=p.x+'px';el.style.top=p.y+'px';}
  };
- place($('rnWayfindingOrigin'),w.origin);place($('rnWayfindingTarget'),w.destination);
+ place($('rnWayfindingOrigin'),w.origin,0);place($('rnWayfindingTarget'),w.destination);
  // Fixed screen-size dots follow each projected source segment. Separate floor
  // segments meet only through connectors already accepted by the planner.
  const samples=[];
@@ -778,7 +784,9 @@ function openStoreAssistance(storeId,requestedFloor){
  wayfindingOpen=true;wayfindingCompact=true;updateWayfindingRoute();dirty=true;
  if(wayfinding.status!=='provisional')notify(wayfinding.routeReason==='vertical-connection-unavailable'
   ?'La ruta entre plantas se activará cuando estén verificados los desembarcos de escaleras mecánicas o ascensores.'
-  :'No hay continuidad confirmada desde esta ubicación hasta el local; no se dibuja un atajo.');
+  :wayfinding.mode==='same-floor'
+   ?'Están en la misma planta, pero el plano no permite demostrar un paso continuo por los pasillos.'
+   :'No hay continuidad confirmada desde esta ubicación hasta el local; no se dibuja un atajo.');
  storeFocusEvent('retailnav:store-route-state',{storeId:id,open:true,status:wayfinding.status,
   reason:wayfinding.routeReason,connectorsUsed:wayfinding.connectorsUsed.length});
  return{opened:true,located:Boolean(wayfinding.destination),originKnown:true,status:wayfinding.status,

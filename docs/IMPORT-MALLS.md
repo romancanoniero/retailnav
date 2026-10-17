@@ -152,6 +152,15 @@ El selector GPS sólo se ejecuta tras el clic y sirve para sugerir el mall cerca
 
 Los usuarios ficticios son por mall (9 en Aventura, 6 en AP Plaza). No se transfieren ubicaciones reales de un shopping a otro.
 
+## Vista previa de recorridos en una planta
+
+Que el usuario y el local estén en la misma planta no demuestra por sí solo que exista un camino transitable. Toda importación debe declarar una de estas dos fuentes antes de ofrecer el botón de recorrido:
+
+- una red de pasillos y accesos a locales aportada por la fuente, con segmentos y terminales trazables; o
+- para un SVG oficial que contenga el perímetro completo de la planta y los contornos individuales de los locales, `sameFloorRoutingPreview` con `schema: retailnav.same-floor-routing-preview.v1`, `routingVerified: false` y `sourceGeometry: official-svg-floor-minus-units`.
+
+La segunda opción sólo dibuja una vista previa punteada por el espacio libre del SVG, termina fuera del local y debe seguir presentándose como provisional. No habilita instrucciones verificadas, no cambia `navigable:false` y no puede unir plantas. Escaleras mecánicas, ascensores, escaleras y rampas se incorporan únicamente con sus desembarcos y correspondencias de planta verificados.
+
 Pruebas: `node --test scripts/test-demo-model.mjs`, `python3 scripts/build-web.py`, `python3 scripts/verify.py public`.
 
 Demo AP Plaza: https://improvingyourreality.com/retailnav/?mall=ap-plaza

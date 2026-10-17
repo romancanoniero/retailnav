@@ -11,6 +11,13 @@
   ],
   "scale": 0.04,
   "navigable": false,
+  "sameFloorRoutingPreview": {
+    "schema": "retailnav.same-floor-routing-preview.v1",
+    "routingVerified": false,
+    "sourceGeometry": "official-svg-floor-minus-units",
+    "gridStepSourceUnits": 18,
+    "clearanceSourceUnits": 4
+  },
   "warning": "Contornos extraídos de los SVG oficiales y códigos vinculados a sus marcadores. Las asociaciones marcador-local, entradas, escala métrica y rutas siguen pendientes de validación.",
   "floors": [
     {

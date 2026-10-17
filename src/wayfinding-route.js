@@ -174,5 +174,126 @@
       sourceSha256: data.source.sha256, sourceSegmentIds: [...new Set(sourceSegmentIds)],
       directionsVerified: false};
   }
-  root.RetailNavWayfindingRoute = Object.freeze({configure, plan, getOriginCandidates});
+  function pointInRing(point, ring) {
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if ((a[1] > point[1]) !== (b[1] > point[1]) &&
+          point[0] < (b[0] - a[0]) * (point[1] - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
+    }
+    return inside;
+  }
+  function pointInFeature(point, feature) {
+    const rings = feature?.r;
+    return Array.isArray(rings) && rings[0]?.length >= 3 && pointInRing(point, rings[0]) &&
+      !rings.slice(1).some(ring => ring.length >= 3 && pointInRing(point, ring));
+  }
+  function segmentDistance(point, a, b) {
+    return projection(point, a, b).offset;
+  }
+  function featureDistance(point, feature) {
+    let nearest = Infinity;
+    for (const ring of feature?.r || []) for (let i = 0; i < ring.length; i++)
+      nearest = Math.min(nearest, segmentDistance(point, ring[i], ring[(i + 1) % ring.length]));
+    return nearest;
+  }
+  function simplifyGridPath(points) {
+    if (points.length < 3) return points;
+    const simplified = [points[0]];
+    for (let i = 1; i < points.length - 1; i++) {
+      const a = simplified.at(-1), b = points[i], c = points[i + 1];
+      const ab = [Math.sign(b[0] - a[0]), Math.sign(b[1] - a[1])];
+      const bc = [Math.sign(c[0] - b[0]), Math.sign(c[1] - b[1])];
+      if (ab[0] !== bc[0] || ab[1] !== bc[1]) simplified.push(b);
+    }
+    simplified.push(points.at(-1));
+    return simplified;
+  }
+  /* Some official SVG plans provide the floor shell and every shop boundary,
+   * but no authored corridor centreline. When a mall explicitly opts in, this
+   * derives a same-floor PREVIEW through the unoccupied source geometry. It is
+   * never promoted to verified navigation and never creates a vertical link. */
+  function planFloorGeometry(input) {
+    const policy = input?.policy;
+    if (!policy || policy.schema !== 'retailnav.same-floor-routing-preview.v1' ||
+        policy.routingVerified !== false || policy.sourceGeometry !== 'official-svg-floor-minus-units')
+      return unavailable('floor-geometry-preview-disabled');
+    const origin = input.origin, floor = input.floor;
+    if (!origin || origin.floor !== floor || !finitePoint([origin.x, origin.y]))
+      return unavailable(origin?.floor && origin.floor !== floor ? 'vertical-connection-unavailable' : 'origin-unavailable');
+    const features = Array.isArray(input.features) ? input.features : [];
+    const slabs = features.filter(feature => feature.k === 'slab' && feature.r?.[0]?.length >= 3);
+    const blockers = features.filter(feature => ['unit', 'anchor'].includes(feature.k) && feature.r?.[0]?.length >= 3);
+    const destinationIds = new Set(input.destinationPolygonIds || []);
+    const destinations = blockers.filter(feature => destinationIds.has(feature.id));
+    if (!slabs.length || !destinations.length) return unavailable('destination-access-unavailable', {floor});
+    const step = Math.max(8, Math.min(40, Number(policy.gridStepSourceUnits) || 18));
+    const clearance = Math.max(0, Math.min(step * .45, Number(policy.clearanceSourceUnits) || 0));
+    const all = slabs.flatMap(feature => feature.r[0]);
+    const minX = Math.min(...all.map(p => p[0])), maxX = Math.max(...all.map(p => p[0]));
+    const minY = Math.min(...all.map(p => p[1])), maxY = Math.max(...all.map(p => p[1]));
+    const width = Math.ceil((maxX - minX) / step), height = Math.ceil((maxY - minY) / step);
+    if (!(width > 0 && height > 0) || width * height > 90000) return unavailable('floor-geometry-too-large', {floor});
+    const offsets = clearance ? [[0, 0], [clearance, 0], [-clearance, 0], [0, clearance], [0, -clearance]] : [[0, 0]];
+    const openAt = point => offsets.every(offset => {
+      const sample = [point[0] + offset[0], point[1] + offset[1]];
+      return slabs.some(slab => pointInFeature(sample, slab)) && !blockers.some(blocker => pointInFeature(sample, blocker));
+    });
+    const originPoint = [origin.x, origin.y];
+    if (!openAt(originPoint)) return unavailable('origin-not-in-source-free-space', {floor});
+    const points = Array(width * height), open = new Uint8Array(width * height);
+    const at = index => points[index];
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const index = y * width + x, point = [minX + (x + .5) * step, minY + (y + .5) * step];
+      points[index] = point;open[index] = Number(openAt(point));
+    }
+    const openIndices = [];
+    for (let i = 0; i < open.length; i++) if (open[i]) openIndices.push(i);
+    if (!openIndices.length) return unavailable('source-free-space-empty', {floor});
+    const start = openIndices.reduce((best, index) => distance(at(index), originPoint) < distance(at(best), originPoint) ? index : best);
+    if (distance(at(start), originPoint) > step * 1.6) return unavailable('origin-not-in-source-free-space', {floor});
+    let goal = null, goalDistance = Infinity, destination = null;
+    for (const index of openIndices) for (const feature of destinations) {
+      const d = featureDistance(at(index), feature);
+      if (d < goalDistance) {goalDistance = d;goal = index;destination = feature;}
+    }
+    if (goal === null || goalDistance > step * 2.25)
+      return unavailable('destination-access-unavailable', {floor});
+    const costs = new Float64Array(open.length);costs.fill(Infinity);costs[start] = 0;
+    const previous = new Int32Array(open.length);previous.fill(-1);
+    const queued = new Uint8Array(open.length), pending = [start];queued[start] = 1;
+    const moves = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+    while (pending.length) {
+      let bestAt = 0;
+      for (let i = 1; i < pending.length; i++) {
+        const a = pending[i], b = pending[bestAt];
+        if (costs[a] + distance(at(a), at(goal)) < costs[b] + distance(at(b), at(goal))) bestAt = i;
+      }
+      const current = pending.splice(bestAt, 1)[0];queued[current] = 0;
+      if (current === goal) break;
+      const cx = current % width, cy = Math.floor(current / width);
+      for (const [dx, dy] of moves) {
+        const x = cx + dx, y = cy + dy;if (x < 0 || y < 0 || x >= width || y >= height) continue;
+        const next = y * width + x;if (!open[next]) continue;
+        if (dx && dy && (!open[cy * width + x] || !open[y * width + cx])) continue;
+        const nextCost = costs[current] + (dx && dy ? Math.SQRT2 : 1) * step;
+        if (nextCost + 1e-7 >= costs[next]) continue;
+        costs[next] = nextCost;previous[next] = current;
+        if (!queued[next]) {pending.push(next);queued[next] = 1;}
+      }
+    }
+    if (start !== goal && previous[goal] < 0) return unavailable('disconnected-source-free-space', {floor});
+    const path = [goal];while (path[0] !== start) path.unshift(previous[path[0]]);
+    let routePoints = simplifyGridPath(path.map(at));
+    if (distance(originPoint, routePoints[0]) > 1e-6) routePoints.unshift(originPoint);
+    const previewLength = routePoints.slice(1).reduce((sum, point, i) => sum + distance(routePoints[i], point), 0);
+    return {status: 'provisional', routingVerified: false, directionsVerified: false,
+      reason: 'official-svg-free-space-preview', floor, originFloor: floor,
+      destinationPolygonId: destination.id, points: routePoints,
+      routeSegments: [{floor, points: routePoints.map(point => point.slice())}], connectorsUsed: [],
+      endpoint: 'outside-destination', stopsBeforeObstacle: true,
+      previewLengthMeters: previewLength * (Number(input.sourceUnitsToMeters) || 1),
+      sourceSegmentIds: ['derived:official-svg-free-space:' + floor]};
+  }
+  root.RetailNavWayfindingRoute = Object.freeze({configure, plan, planFloorGeometry, getOriginCandidates});
 })(typeof window === 'undefined' ? globalThis : window);

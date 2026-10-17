@@ -296,6 +296,44 @@ try{
  assert.equal(pb.commercial,72);
  assert.ok(pb.canvas.width>900&&pb.canvas.height>450);
  await page.screenshot({path:'/tmp/retailnav-alto-palermo-vectorized.png',fullPage:true});
+ const grounded=await page.evaluate(async()=>{
+  const mall=window.RETAILNAV_ACTIVE_MALL,view=window.__RETAILNAV__;
+  window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:{floor:'PB',x:3100,y:1800,
+   mallId:mall.id,coordinateSpace:mall.coordinateSpace||'mall-photo-pixels',localOnly:true}}));
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const marker=document.querySelector('#rnMyPositionMarker'),canvas=document.querySelector('#canvas');
+  const box=marker.getBoundingClientRect(),canvasBox=canvas.getBoundingClientRect();
+  const projected=view.projectWorld(view.pinWorld('PB',3100,1800));
+  return {visible:!marker.hidden,bottom:box.bottom,groundY:canvasBox.top+projected.y};
+ });
+ assert.equal(grounded.visible,true,'the manually set visitor location must be visible');
+ assert.ok(Math.abs(grounded.bottom-grounded.groundY)<1.1,
+  'the visitor sphere must touch its projected floor point instead of floating');
+ const buttmanRoute=await page.evaluate(async()=>{
+  const view=window.__RETAILNAV__,unit=window.RetailNavUnits.getUnits()
+   .find(candidate=>candidate.name==='Buttman'&&candidate.floor==='PB');
+  const focus=view.focusCatalogStore(unit.storeId,'PB');
+  while(view.getState().cameraFlying)await new Promise(resolve=>requestAnimationFrame(resolve));
+  const opened=view.openStoreAssistance(unit.storeId,'PB');
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const state=view.getState(),origin=document.querySelector('#rnWayfindingOrigin');
+  const box=origin.getBoundingClientRect(),canvasBox=document.querySelector('#canvas').getBoundingClientRect();
+  const projected=view.projectWorld(view.pinWorld('PB',3100,1800));
+  return {focus,opened,wayfinding:state.wayfinding,bottom:box.bottom,
+   groundY:canvasBox.top+projected.y,dots:document.querySelectorAll('#rnWayfindingDots .rnWayfindingDot:not([hidden])').length};
+ });
+ assert.equal(buttmanRoute.focus.located,true);
+ assert.equal(buttmanRoute.opened.status,'provisional');
+ assert.equal(buttmanRoute.wayfinding.mode,'same-floor');
+ assert.equal(buttmanRoute.wayfinding.routeReason,'official-svg-free-space-preview');
+ assert.ok(buttmanRoute.wayfinding.points.length>3&&buttmanRoute.dots>8,
+  'a same-floor Alto Palermo selection must draw the provisional dotted corridor preview');
+ assert.ok(Math.abs(buttmanRoute.bottom-buttmanRoute.groundY)<1.1,
+  'the navigation origin sphere must remain grounded');
+ assert.deepEqual(buttmanRoute.wayfinding.connectorsUsed,[],
+  'same-floor derivation must not fabricate escalators or other vertical connectors');
+ await page.screenshot({path:'/tmp/retailnav-alto-palermo-wayfinding-grounded'+
+  (process.env.RETAILNAV_BROWSER==='webkit'?'-webkit':'')+'.png',fullPage:true});
  const starbucks=await page.evaluate(()=>window.RetailNavUnits.getUnits()
   .find(unit=>unit.storeId==='alto-palermo:EP:L04'));
  assert.ok(starbucks?.polygonId);

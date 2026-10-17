@@ -1,8 +1,7 @@
-/* RetailNav roof labels + 3D raised signs.
- * Every sign belongs to one uniquely matched shop roof in world space.
- * Regular code/name is printed on the roof. A selected, searched or featured
- * shop has an illuminated, solid double-sided panel physically attached to
- * that same roof by two posts. Nothing is a screen-facing HTML billboard.
+/* RetailNav supplementary roof labels.
+ * Store codes and names stay inscribed in the shop geometry. Selection is
+ * communicated by the polygon highlight and the circular contextual actions;
+ * it must never create a raised or floating store-code placard.
  */
 (()=>{
 'use strict';
@@ -45,7 +44,7 @@ function create(gl){
  if(vectorFont){
   return {gl,...shaderProgram,tex:null,cells:new Map(roofEntries.map(item=>[
    item.storeId||(item.floor+':'+item.code),true])),items:roofEntries,
-   vectorFont,vectorSigns:true,buffer:gl.createBuffer()};
+   surfaceOwned:true,buffer:gl.createBuffer()};
  }
  const cw=192,ch=85;
  const maxTexture=gl.getParameter(gl.MAX_TEXTURE_SIZE)||4096;
@@ -128,110 +127,12 @@ function rectangle(data,a,b,c,d,cell){
  triangle(data,a,b,d,[uv.u0,uv.v1],[uv.u1,uv.v1],[uv.u0,uv.v0]);
  triangle(data,b,c,d,[uv.u1,uv.v1],[uv.u1,uv.v0],[uv.u0,uv.v0]);
 }
-function vectorTextWidth(text,font){
- let width=0;
- for(const char of text){
-  const glyph=font.glyphs[char];
-  if(!glyph)throw Error('Missing raised-sign vector glyph '+JSON.stringify(char));
-  width+=glyph.a;
- }
- return width;
-}
-function vectorLine(data,text,centre,axis,side,availableWidth,lineCentre,maxHeight,front,font){
- if(!text)return 0;
- const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
- const scale=Math.min(availableWidth/width,maxHeight/height);
- if(!Number.isFinite(scale)||scale<=0)return 0;
- const direction=front?1:-1;
- const baseOffset=direction*.257,topOffset=direction*.292;
- const centerY=(font.ascender+font.descender)/2;
- let cursor=-width/2,triangles=0;
- const point=(x,y,offset)=>[
-  centre[0]+axis[0]*(cursor+x)*scale*direction+side[0]*offset,
-  centre[1]+lineCentre+(y-centerY)*scale,
-  centre[2]+axis[2]*(cursor+x)*scale*direction+side[2]*offset
- ];
- for(const char of text){
-  const glyph=font.glyphs[char];
-  for(let index=0;index<glyph.t.length;index+=3){
-   const corners=[];
-   for(let corner=0;corner<3;corner++){
-    const vertex=glyph.t[index+corner]*2;
-    corners.push(point(glyph.v[vertex],glyph.v[vertex+1],topOffset));
-   }
-   if(front)triangle(data,corners[0],corners[1],corners[2]);
-   else triangle(data,corners[2],corners[1],corners[0]);
-   triangles++;
-  }
-  for(const [start,count] of glyph.c){
-   for(let index=0;index<count;index++){
-    const a=(start+index)*2,b=(start+(index+1)%count)*2;
-    const lowA=point(glyph.v[a],glyph.v[a+1],baseOffset);
-    const lowB=point(glyph.v[b],glyph.v[b+1],baseOffset);
-    const highB=point(glyph.v[b],glyph.v[b+1],topOffset);
-    const highA=point(glyph.v[a],glyph.v[a+1],topOffset);
-    rectangle(data,lowA,lowB,highB,highA);triangles+=2;
-   }
-  }
-  cursor+=glyph.a;
- }
- return triangles;
-}
-function vec(p,a,b,c){return [p[0]+a[0]*b+c[0],p[1]+a[1]*b+c[1],p[2]+a[2]*b+c[2]];}
 function planar(center,axis,side,halfW,halfD){
  const corner=(a,b)=>[
   center[0]+axis[0]*a+side[0]*b,center[1],
   center[2]+axis[2]*a+side[2]*b];
  return [corner(-halfW,-halfD),corner(halfW,-halfD),
          corner(halfW,halfD),corner(-halfW,halfD)];
-}
-function upright(center,axis,side,halfW,halfH,offset=0){
- const base=[center[0]+side[0]*offset,center[1],center[2]+side[2]*offset];
- const corner=(h,k)=>[base[0]+axis[0]*h,base[1]+k,base[2]+axis[2]*h];
- return [corner(-halfW,-halfH),corner(halfW,-halfH),
-         corner(halfW,halfH),corner(-halfW,halfH)];
-}
-function box(data,center,axis,side,halfW,halfH,halfT){
- const front=upright(center,axis,side,halfW,halfH,halfT);
- const back=upright(center,axis,side,halfW,halfH,-halfT);
- rectangle(data,...front);
- rectangle(data,back[1],back[0],back[3],back[2]);
- for(let i=0;i<4;i++){
-  const j=(i+1)%4;
-  rectangle(data,front[i],front[j],back[j],back[i]);
- }
-}
-function spotlight(data,roof,axis,side,width,cell,item,vectorFont){
- const hw=width/2,hh=width*.26;
- // Panel bottom is always flush with the single, centered support stem.
- // The stem starts at the roof (no floating, unattached sign).
- const panelBottom=1.57;
- const centre=[roof[0],roof[1]+panelBottom+hh,roof[2]];
- const postCenter=[roof[0],roof[1]+panelBottom/2,roof[2]];
- box(data.posts,postCenter,axis,side,.075,panelBottom/2,.092);
- // Solid deep blue rear shell, with bright cyan trim inset under the text.
- box(data.body,centre,axis,side,hw+.12,hh+.13,.20);
- const front=upright(centre,axis,side,hw+.025,hh+.025,.240);
- const back=upright(centre,axis,side,hw+.025,hh+.025,-.240);
- rectangle(data.trim,...front);
- rectangle(data.trim,back[1],back[0],back[3],back[2]);
- if(vectorFont){
-  const name=(item.name||'').trim(),code=String(item.code||'').trim();
-  for(const front of [true,false]){
-   if(name)data.vectorTriangles+=vectorLine(data.vectorName,name,centre,axis,side,
-    width*.86,hh*.34,hh*.72,front,vectorFont);
-   data.vectorTriangles+=vectorLine(data.vectorCode,code,centre,axis,side,
-    width*.78,-hh*.48,name?hh*.46:hh*1.28,front,vectorFont);
-  }
- }else{
-  const f=upright(centre,axis,side,hw,hh,.256);
-  const b=upright(centre,axis,side,hw,hh,-.256);
-  rectangle(data.text,...f,cell);
-  rectangle(data.text,b[1],b[0],b[3],b[2],cell);
- }
- // Short base plate visually seats the posts on the roof surface.
- const baseCenter=[roof[0],roof[1]+.08,roof[2]];
- box(data.posts,baseCenter,axis,side,hw*.64,.09,.18);
 }
 function gpuDraw(gl,r,mvp,buffer,vertices,material,colour){
  if(!vertices.length)return;
@@ -259,9 +160,8 @@ function render(gl,mvp){
  const visibleFloors=new Set(state.visible);
  const highlights=new Set(unitsApi.getHighlightedStoreIds?.()||[]);
  const selected=state.selectedCode??unitsApi.getState().selected;
- const regular=[],special={posts:[],body:[],trim:[],text:[],vectorName:[],vectorCode:[],vectorTriangles:0};
+ const regular=[];
  drawnRoof=0;drawnRaised=0;frames++;visibleCodes=[];
- let autoFeatured=0,raisedCount=0;
  for(const u of resource.items){
   if(!visibleFloors.has(u.floor))continue;
   const roof=u.roof;
@@ -280,48 +180,32 @@ function render(gl,mvp){
   const pxToWorld=window.RETAILNAV_ACTIVE_MALL?.scale||.12;
   const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
   const surface=planar(top,axis,side,halfW,halfW*.43);
-  if(!resource.vectorSigns&&(state.distance<=230||key===selected||highlights.has(key))){
+  if(!resource.surfaceOwned&&(state.distance<=230||key===selected||highlights.has(key))){
    rectangle(regular,surface[0],surface[1],surface[2],surface[3],cell);
    drawnRoof++;visibleCodes.push(u.code);
   }
-  const requested=highlights.has(key)||key===selected;
-  const feature=Boolean(u.featured||(u.name&&u.name.length>0));
-  if(requested||feature&&autoFeatured<3){
-   if(raisedCount>=7&&!requested)continue;
-   const mappedWidth=(roof.widthPixels||10)*pxToWorld;
-   const panelWidth=clamp(Math.min(state.distance*.018,mappedWidth*.96),1.35,3.5);
-   // Use the same physical roof midpoint as the ordinary lettering.
-   spotlight(special,top,axis,side,panelWidth,cell,u,resource.vectorFont);
-   raisedCount++;drawnRaised++;
-   if(feature&&!requested)autoFeatured++;
-  }
  }
- if(!regular.length&&!raisedCount)return;
+ if(!regular.length)return;
  const r=resource;
  gl.enable(gl.DEPTH_TEST);
  gl.disable(gl.CULL_FACE);
  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
- gpuDraw(gl,r,mvp,r.buffer,special.posts,1,[.21,.46,.62,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.body,1,[.07,.24,.39,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.trim,1,[.40,.82,.97,1]);
  gpuDraw(gl,r,mvp,r.buffer,regular,0,[1,1,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.text,0,[1,1,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.vectorName,1,[.97,.99,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.vectorCode,1,[1,.79,.50,1]);
- r.lastVectorTriangles=special.vectorTriangles;
+ r.lastVectorTriangles=0;
  gl.disable(gl.BLEND);
 }
 unitsApi.draw3D=render;
 unitsApi.getRoofState=()=>({
- renderMode:resource?(resource.vectorSigns?'world-space-vector-outline-extruded-signs':'world-space-textured-roof-and-raised-3d'):'pending',
+ renderMode:resource?(resource.surfaceOwned?'vector-labels-owned-by-shop-surfaces':'world-space-textured-roof-surface'):'pending',
  roofLabels:drawnRoof,raised:drawnRaised,
  labelledRoofs:roofEntries.length,
  unmatched:entries.length-roofEntries.length,
  visibleCodes:visibleCodes.slice(),frames,
- raisedHasPhysicalPosts:true,raisedHasExtrudedBody:true,
- raisedTextGeometry:resource?.vectorSigns?'vector-outline-double-sided-extruded':'texture-atlas',
+ floatingPanels:0,codePlacement:'roof-or-facade-lower-side',
+ raisedHasPhysicalPosts:false,raisedHasExtrudedBody:false,
+ raisedTextGeometry:'none',
  raisedVectorTriangles:resource?.lastVectorTriangles||0,
- raisedRasterAtlasCreated:resource?Boolean(!resource.vectorSigns):null,
+ raisedRasterAtlasCreated:resource?Boolean(!resource.surfaceOwned):null,
  followsMapCamera:true,cameraFacing:false,lastError
 });
 unitsApi.getWallState=unitsApi.getRoofState;

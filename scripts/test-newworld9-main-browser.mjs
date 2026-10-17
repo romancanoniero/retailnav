@@ -118,14 +118,18 @@ try {
   assert.equal(vectorServices.detachedCandidatesVisible,0,
     'Photo-derived services must not leave disconnected emoji on screen');
   assert.ok(roof.summary.commercialRoofs>=550,'3D roofs available for every shop candidate');
-  assert.ok(roof.summary.codeLabels>=200,'Many individual codes must have true raised geometry');
+  assert.ok(roof.summary.codeLabels>=80,
+    'Every uniquely linked published code that fits its roof keeps true raised geometry');
+  assert.equal(roof.summary.roomLabels.filter(label=>label.codeRaised).length,
+    roof.summary.codeLabels,'the summary count must equal the attached code meshes');
   assert.ok(roof.summary.extrudedTriangles>900,'Letters must have top and 3D side triangles');
   assert.ok(roof.bath.id&&roof.bath.poiId&&roof.lift.id);
   assert.ok(roof.raisedLettersOnL7&&roof.raisedHasThickness);
   assert.ok(roof.serviceFaces>100);
   assert.equal(roof.hiddenMarker,true,'Bathroom icon must not float detached from roof');
   assert.ok(roof.attached>=6);
-  assert.ok(roof.visibleCodes>=550);
+  assert.equal(roof.visibleCodes,roof.summary.codeLabels,
+    'only source-associated shop codes may become visible 3D identifiers');
   assert.ok(roof.knownLabel||roof.summary.knownNameLabels===0,
     'Unverified names must never be fabricated');
   const bathUI=await page.evaluate(()=>{
@@ -157,7 +161,7 @@ try {
   state=await page.evaluate(()=>window.__RETAILNAV__.getState());
   assert.equal(state.trackball360,false);
   assert.equal(state.gestureMode,'map-pan');
-  assert.equal(state.gestureProfile,'google-earth-touch-v1');
+  assert.equal(state.gestureProfile,'adaptive-google-earth-v2');
   assert.equal(state.compassReference,'photo-top-only-not-calibrated-true-north');
   assert.equal(state.verticalConnectorCount,39);
   assert.equal(state.liftShaftCandidateCount,3);

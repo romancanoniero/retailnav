@@ -45,7 +45,8 @@ try{
   src:el.getAttribute('src'),hidden:el.hidden,loaded:el.complete&&el.naturalWidth>0}));
  assert.equal(logo.hidden,false);
  assert.equal(logo.loaded,true);
- assert.ok(logo.src.endsWith('/branding/aventura-logo.svg'));
+ assert.ok(logo.src.endsWith('/branding/aventura-mark.svg'),
+  'the compact header uses the configured symbol to the left of the mall name');
  const bg=await page.locator('.stage').evaluate(el=>getComputedStyle(el).backgroundImage);
  assert.ok(bg.includes('radial-gradient'));
  const before=await page.evaluate(()=>({

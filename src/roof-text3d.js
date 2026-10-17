@@ -230,6 +230,28 @@ function addVectorRoofName(out,text,feature,roof,origin,scale,color,font){
  });
  return true;
 }
+function addVectorRoofCode(out,text,feature,roof,origin,scale,color,font){
+ const roofCoords=toRoofCoords(feature,origin,scale);
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ if(!width||!height||!roofCoords.long||!roofCoords.short)return false;
+ // Keep the local code small and physically engraved at one lower side of
+ // the roof. It is an identifier, not a centered placard competing with the
+ // merchant name.
+ const factor=Math.min(.26,roofCoords.long*.42/width,roofCoords.short*.30/height);
+ if(factor<.012)return false;
+ const inset=Math.min(roofCoords.long*.06,.18);
+ const longitudinal=roofCoords.long/2-width*factor-inset;
+ const lowerInset=Math.min(roofCoords.short*.08,.12);
+ const lower=roofCoords.short/2-height*factor/2-lowerInset;
+ const at=[...roofCoords.center,roof+.018];
+ let cursor=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  appendVectorGlyph(out,glyph,cursor,longitudinal,lower,factor,at,roofCoords.rotated,color);
+  cursor+=glyph.a;
+ }
+ return true;
+}
 function explicitAsset(value){
  if(typeof value==='string')return Boolean(value.trim());
  if(!value||typeof value!=='object')return false;
@@ -259,10 +281,10 @@ function facadeFrame(unit,origin,scale){
  return {center:[(A[0]+B[0])/2,(A[1]+B[1])/2],axis:[dx/length,dz/length],
    normal:[nx,nz],length};
 }
-function appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color){
+function appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color,verticalCenter=.76){
  const font=window.RetailNavVectorFont;
  const centerY=(font.ascender+font.descender)/2;
- const back=.014,front=.060,verticalCenter=.76;
+ const back=.014,front=.060;
  const place=(x,y,offset)=>[
   frame.center[0]+frame.axis[0]*(longitudinal+(cursor+x)*factor)+frame.normal[0]*offset,
   verticalCenter+(y-centerY)*factor,
@@ -308,6 +330,26 @@ function addVectorFacadeName(out,text,unit,origin,scale,color,font){
  }
  return true;
 }
+function addVectorFacadeCode(out,text,unit,origin,scale,color,font){
+ const frame=facadeFrame(unit,origin,scale);
+ if(!frame)return false;
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ if(!width||!height)return false;
+ // Put the code on the lower right of the real/estimated shop front. The
+ // name remains the main facade lettering above it.
+ const factor=Math.min(.36,frame.length*.42/width,.42/height);
+ if(factor<.010)return false;
+ const inset=Math.min(frame.length*.055,.12);
+ const longitudinal=frame.length/2-width*factor-inset;
+ const verticalCenter=.36;
+ let cursor=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color,verticalCenter);
+  cursor+=glyph.a;
+ }
+ return true;
+}
 function addRasterText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color){
  if(!text)return false;
  const roofCoords=toRoofCoords(feature,origin,scale);
@@ -316,9 +358,13 @@ function addRasterText(out,text,feature,roof,position,widthFraction,depthFractio
  const maxLong=roofCoords.long*widthFraction,maxShort=roofCoords.short*depthFraction;
  const factor=Math.min(.093,maxLong/width,maxShort/charHeight);
  if(factor<.003)return false;
- const longitudinal=-width*factor/2;
- const vOrigin=(position==='center'?0:position==='code'?-1:1)*
-   Math.min(roofCoords.short*.20,charHeight*factor*.55);
+ const code=position==='code';
+ const longitudinal=code
+  ?roofCoords.long/2-width*factor-Math.min(roofCoords.long*.06,.18)
+  :-width*factor/2;
+ const vOrigin=code
+  ?roofCoords.short/2-charHeight*factor/2-Math.min(roofCoords.short*.08,.12)
+  :(position==='center'?0:Math.min(roofCoords.short*.20,charHeight*factor*.55));
  const base=roof+.018;
  const at=[...roofCoords.center,base];
  let cursor=0;
@@ -370,7 +416,8 @@ function summarize(floors,units,pois,origin,scale){
  }
  const attached=new Set();
  const summary={floors:floors.length,commercialRoofs:0,serviceRoofs:0,
-   codeLabels:0,knownNameLabels:0,frontNameLabels:0,roofImageNameSuppressions:0,
+   codeLabels:0,roofCodeLabels:0,frontCodeLabels:0,
+   knownNameLabels:0,frontNameLabels:0,roofImageNameSuppressions:0,
    servicePictograms:0,extrudedTriangles:0,
    unmatchedShopNames:0,vectorGlyphLabels:0,rasterGlyphLabels:0,
    textGeometry:vectorFont()?'vector-outline-extruded':'legacy-raster-prisms',
@@ -378,7 +425,7 @@ function summarize(floors,units,pois,origin,scale){
    vectorCurveSegments:vectorFont()?.curveSegmentsPerQuadratic||null,
    roomLabels:[],services:[]};
  for(const floor of floors){
-  const parts={codes:[],names:[],frontNames:[],services:[],stats:{}};
+  const parts={codes:[],frontCodes:[],names:[],frontNames:[],services:[],stats:{}};
   for(const f of floor.features){
    const key=floor.id+'/'+f.id;
    const service=amenities.get(key);
@@ -409,12 +456,24 @@ function summarize(floors,units,pois,origin,scale){
    const name=u?.name?String(u.name).trim():'';
    f.storeName=name;
    if(!name)summary.unmatchedShopNames++;
-   const codeAdded=addText(parts.codes,code,f,1.4,
-      name?'code':'center',.80,name?.24:.72,origin,scale,
-       window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE);
+   const font=vectorFont();
+   const roofImageAssigned=hasRoofImage(u);
+   const codeColor=window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE;
+   let codeAdded='',codePlacement='';
+   if(font&&roofImageAssigned&&
+      addVectorFacadeCode(parts.frontCodes,code,u,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='facade-lower-side';summary.frontCodeLabels++;
+   }else if(font&&addVectorRoofCode(parts.codes,code,f,1.4,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='roof-lower-side';summary.roofCodeLabels++;
+   }else if(font&&addVectorFacadeCode(parts.frontCodes,code,u,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='facade-lower-side';summary.frontCodeLabels++;
+   }else{
+    codeAdded=addText(parts.codes,code,f,1.4,
+      name?'code':'center',.80,name?.24:.72,origin,scale,codeColor);
+    if(codeAdded){codePlacement='roof-lower-side';summary.roofCodeLabels++;}
+   }
    if(codeAdded){summary.codeLabels++;summary[codeAdded+'GlyphLabels']++;}
    let nameAdded='';
-   const font=vectorFont(),roofImageAssigned=hasRoofImage(u);
    if(name&&roofImageAssigned)summary.roofImageNameSuppressions++;
    else if(name)nameAdded=font
     ?(addVectorRoofName(parts.names,name,f,1.4,origin,scale,
@@ -428,17 +487,20 @@ function summarize(floors,units,pois,origin,scale){
    if(frontNameAdded){summary.frontNameLabels++;summary[frontNameAdded+'GlyphLabels']++;}
    summary.roomLabels.push({floor:floor.id,id:f.id,code,name,
      verified:false,roofY:1.4,
-     geometryAttached:true,codeRaised:codeAdded,nameRaised:nameAdded,
+     geometryAttached:true,codeRaised:codeAdded,codePlacement,
+     frontCodeRaised:codePlacement==='facade-lower-side'?codeAdded:'',nameRaised:nameAdded,
      frontNameRaised:frontNameAdded,roofImageAssigned,anchor:anchorFor(f)});
   }
   floor.roofText={
    codes:new Float32Array(parts.codes),
+   frontCodes:new Float32Array(parts.frontCodes),
    names:new Float32Array(parts.names),
    frontNames:new Float32Array(parts.frontNames),
    services:new Float32Array(parts.services)
   };
   summary.extrudedTriangles+=
-    (parts.codes.length+parts.names.length+parts.frontNames.length+parts.services.length)/30;
+    (parts.codes.length+parts.frontCodes.length+parts.names.length+
+     parts.frontNames.length+parts.services.length)/30;
  }
  window.RETAILNAV_ROOF_ATTACHMENTS=attached;
  return summary;

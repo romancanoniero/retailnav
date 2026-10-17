@@ -61,6 +61,10 @@ try{
  assert.equal(audit.units.matched,55);
  assert.equal(audit.units.unmatched,103);
  assert.equal(audit.viewer.roofTextSummary.codeLabels,55);
+ assert.equal(audit.viewer.roofTextSummary.frontCodeLabels+
+  audit.viewer.roofTextSummary.roofCodeLabels,55);
+ assert.equal(audit.viewer.roofTextSummary.frontCodeLabels,0);
+ assert.equal(audit.viewer.roofTextSummary.roofCodeLabels,55);
  assert.equal(audit.viewer.roofTextSummary.commercialRoofs,192);
  assert.equal(audit.viewer.roofTextSummary.textGeometry,'vector-outline-extruded');
  assert.equal(audit.viewer.roofTextSummary.rasterGlyphLabels,0);
@@ -75,6 +79,9 @@ try{
  assert.equal(audit.viewer.roofTextSummary.roofImageNameSuppressions,0);
  assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
   !label.name||(label.nameRaised==='vector'&&label.frontNameRaised==='vector')));
+ assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
+  label.codeRaised==='vector'&&label.codePlacement==='roof-lower-side'&&
+  !label.frontCodeRaised));
  assert.ok(audit.frontGeometry.vertices>1000);
  assert.ok(audit.frontGeometry.verticalSpan>.1,'facade lettering must be vertical geometry');
  const roofImagePolicy=await page.evaluate(()=>{
@@ -90,6 +97,7 @@ try{
    explicitIsRoof:window.RetailNavRoofText.hasRoofImage(textured),
    nestedIsRoof:window.RetailNavRoofText.hasRoofImage({roof:{textureURL:'roof.webp'}}),
    names:summary.knownNameLabels,frontNames:summary.frontNameLabels,
+   roofCodes:summary.roofCodeLabels,frontCodes:summary.frontCodeLabels,
    suppressed:summary.roofImageNameSuppressions,
    roofVertices:floor.roofText.names.length,
    frontVertices:floor.roofText.frontNames.length
@@ -100,15 +108,23 @@ try{
  assert.equal(roofImagePolicy.nestedIsRoof,true);
  assert.deepEqual([roofImagePolicy.names,roofImagePolicy.frontNames,roofImagePolicy.suppressed],
   [0,1,1]);
+ assert.deepEqual([roofImagePolicy.roofCodes,roofImagePolicy.frontCodes],[0,1],
+  'a roof image moves the local code to the lower facade instead of floating it');
  assert.equal(roofImagePolicy.roofVertices,0);
  assert.ok(roofImagePolicy.frontVertices>0,'roof imagery must preserve the smaller facade name');
  assert.deepEqual(audit.viewer.errors,[]);
- await page.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.raisedVectorTriangles>0);
- const raisedSign=await page.evaluate(()=>window.RetailNavUnits.getRoofState());
- assert.equal(raisedSign.renderMode,'world-space-vector-outline-extruded-signs');
- assert.equal(raisedSign.raisedTextGeometry,'vector-outline-double-sided-extruded');
- assert.equal(raisedSign.raisedRasterAtlasCreated,false);
- assert.ok(raisedSign.raisedVectorTriangles>100);
+ await page.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.renderMode!=='pending');
+ const surfaceLabels=await page.evaluate(()=>({
+  ...window.RetailNavUnits.getRoofState(),
+  floatingCodes:[...document.querySelectorAll('#rnUnitOverlay .rnUnitCode')]
+   .filter(element=>!element.hidden).length
+ }));
+ assert.equal(surfaceLabels.renderMode,'vector-labels-owned-by-shop-surfaces');
+ assert.equal(surfaceLabels.floatingPanels,0);
+ assert.equal(surfaceLabels.raised,0);
+ assert.equal(surfaceLabels.raisedTextGeometry,'none');
+ assert.equal(surfaceLabels.raisedRasterAtlasCreated,false);
+ assert.equal(surfaceLabels.floatingCodes,0);
  assert.equal(await page.locator('#mallHeaderLogo').isVisible(),true);
  assert.match(await page.locator('#mallHeaderLogo').getAttribute('src'),
   /branding\/malls\/alto-palermo\/mall-mark\.png$/);
@@ -160,6 +176,9 @@ try{
  assert.equal(radialSelection.buttons.length,4);
  assert.ok(radialSelection.buttons.every(button=>button.width>=44&&button.height>=44&&
   button.radius==='50%'),'every selected-store action, including X, remains circular');
+ assert.equal(await page.locator('#rnUnitOverlay .rnUnitCode:visible').count(),0,
+  'selecting a store must not create a floating local-code placard');
+ await page.screenshot({path:'/tmp/retailnav-alto-palermo-contextual.png',fullPage:true});
 
  const unboundSelection=await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
@@ -178,6 +197,29 @@ try{
  assert.equal(unboundSelection.actionDockVisible,false);
  assert.equal(unboundSelection.selectedStoreId,null);
  assert.match(unboundSelection.notice,/no está vinculado|varios comercios/);
+
+ const unlinkedMarker=await page.evaluate(()=>{
+  const units=window.RetailNavUnits.getUnits();
+  const unit=units.find(candidate=>candidate.name&&Number.isFinite(candidate.x)&&
+   Number.isFinite(candidate.y)&&window.RetailNavUnits.getMapBindings(candidate).length===0&&
+   window.RetailNavUnits.findDetailed(candidate.name).length===1);
+  return unit&&{storeId:unit.storeId,name:unit.name,floor:unit.floor,x:unit.x,y:unit.y};
+ });
+ assert.ok(unlinkedMarker,'fixture needs one uniquely searchable unlinked official marker');
+ await page.locator('#search').fill(unlinkedMarker.name);
+ await page.locator('#search').press('Enter');
+ await page.evaluate(unit=>window.__RETAILNAV__.focusAt(unit.floor,[unit.x,unit.y],65),unlinkedMarker);
+ await page.waitForFunction(storeId=>{
+  const marker=document.querySelector('#rnSearchMarkers [data-store-id="'+storeId+'"]');
+  return marker&&!marker.hidden;
+ },unlinkedMarker.storeId);
+ await page.locator('#rnSearchMarkers [data-store-id="'+unlinkedMarker.storeId+'"]').evaluate(marker=>marker.click());
+ await page.waitForFunction(storeId=>window.RetailNavMeetups.getState().selectedStoreId===storeId&&
+  window.RetailNavMeetups.getState().actionDockVisible,unlinkedMarker.storeId);
+ assert.equal(await page.locator('#rnStoreAssist').isDisabled(),true,
+  'an unlinked marker opens the contextual menu but cannot invent a route');
+ assert.equal(await page.locator('#rnStoreInvite').isEnabled(),true);
+ assert.equal(await page.locator('#rnStoreInfoAction').isEnabled(),true);
  await page.locator('#search').fill('');
  await page.locator('#floorSelect').selectOption('PB');
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().visible.length===1&&

@@ -3247,6 +3247,28 @@ function addVectorRoofName(out,text,feature,roof,origin,scale,color,font){
  });
  return true;
 }
+function addVectorRoofCode(out,text,feature,roof,origin,scale,color,font){
+ const roofCoords=toRoofCoords(feature,origin,scale);
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ if(!width||!height||!roofCoords.long||!roofCoords.short)return false;
+ // Keep the local code small and physically engraved at one lower side of
+ // the roof. It is an identifier, not a centered placard competing with the
+ // merchant name.
+ const factor=Math.min(.26,roofCoords.long*.42/width,roofCoords.short*.30/height);
+ if(factor<.012)return false;
+ const inset=Math.min(roofCoords.long*.06,.18);
+ const longitudinal=roofCoords.long/2-width*factor-inset;
+ const lowerInset=Math.min(roofCoords.short*.08,.12);
+ const lower=roofCoords.short/2-height*factor/2-lowerInset;
+ const at=[...roofCoords.center,roof+.018];
+ let cursor=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  appendVectorGlyph(out,glyph,cursor,longitudinal,lower,factor,at,roofCoords.rotated,color);
+  cursor+=glyph.a;
+ }
+ return true;
+}
 function explicitAsset(value){
  if(typeof value==='string')return Boolean(value.trim());
  if(!value||typeof value!=='object')return false;
@@ -3276,10 +3298,10 @@ function facadeFrame(unit,origin,scale){
  return {center:[(A[0]+B[0])/2,(A[1]+B[1])/2],axis:[dx/length,dz/length],
    normal:[nx,nz],length};
 }
-function appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color){
+function appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color,verticalCenter=.76){
  const font=window.RetailNavVectorFont;
  const centerY=(font.ascender+font.descender)/2;
- const back=.014,front=.060,verticalCenter=.76;
+ const back=.014,front=.060;
  const place=(x,y,offset)=>[
   frame.center[0]+frame.axis[0]*(longitudinal+(cursor+x)*factor)+frame.normal[0]*offset,
   verticalCenter+(y-centerY)*factor,
@@ -3325,6 +3347,26 @@ function addVectorFacadeName(out,text,unit,origin,scale,color,font){
  }
  return true;
 }
+function addVectorFacadeCode(out,text,unit,origin,scale,color,font){
+ const frame=facadeFrame(unit,origin,scale);
+ if(!frame)return false;
+ const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
+ if(!width||!height)return false;
+ // Put the code on the lower right of the real/estimated shop front. The
+ // name remains the main facade lettering above it.
+ const factor=Math.min(.36,frame.length*.42/width,.42/height);
+ if(factor<.010)return false;
+ const inset=Math.min(frame.length*.055,.12);
+ const longitudinal=frame.length/2-width*factor-inset;
+ const verticalCenter=.36;
+ let cursor=0;
+ for(const char of text){
+  const glyph=font.glyphs[char];
+  appendFacadeGlyph(out,glyph,cursor,longitudinal,factor,frame,color,verticalCenter);
+  cursor+=glyph.a;
+ }
+ return true;
+}
 function addRasterText(out,text,feature,roof,position,widthFraction,depthFraction,origin,scale,color){
  if(!text)return false;
  const roofCoords=toRoofCoords(feature,origin,scale);
@@ -3333,9 +3375,13 @@ function addRasterText(out,text,feature,roof,position,widthFraction,depthFractio
  const maxLong=roofCoords.long*widthFraction,maxShort=roofCoords.short*depthFraction;
  const factor=Math.min(.093,maxLong/width,maxShort/charHeight);
  if(factor<.003)return false;
- const longitudinal=-width*factor/2;
- const vOrigin=(position==='center'?0:position==='code'?-1:1)*
-   Math.min(roofCoords.short*.20,charHeight*factor*.55);
+ const code=position==='code';
+ const longitudinal=code
+  ?roofCoords.long/2-width*factor-Math.min(roofCoords.long*.06,.18)
+  :-width*factor/2;
+ const vOrigin=code
+  ?roofCoords.short/2-charHeight*factor/2-Math.min(roofCoords.short*.08,.12)
+  :(position==='center'?0:Math.min(roofCoords.short*.20,charHeight*factor*.55));
  const base=roof+.018;
  const at=[...roofCoords.center,base];
  let cursor=0;
@@ -3387,7 +3433,8 @@ function summarize(floors,units,pois,origin,scale){
  }
  const attached=new Set();
  const summary={floors:floors.length,commercialRoofs:0,serviceRoofs:0,
-   codeLabels:0,knownNameLabels:0,frontNameLabels:0,roofImageNameSuppressions:0,
+   codeLabels:0,roofCodeLabels:0,frontCodeLabels:0,
+   knownNameLabels:0,frontNameLabels:0,roofImageNameSuppressions:0,
    servicePictograms:0,extrudedTriangles:0,
    unmatchedShopNames:0,vectorGlyphLabels:0,rasterGlyphLabels:0,
    textGeometry:vectorFont()?'vector-outline-extruded':'legacy-raster-prisms',
@@ -3395,7 +3442,7 @@ function summarize(floors,units,pois,origin,scale){
    vectorCurveSegments:vectorFont()?.curveSegmentsPerQuadratic||null,
    roomLabels:[],services:[]};
  for(const floor of floors){
-  const parts={codes:[],names:[],frontNames:[],services:[],stats:{}};
+  const parts={codes:[],frontCodes:[],names:[],frontNames:[],services:[],stats:{}};
   for(const f of floor.features){
    const key=floor.id+'/'+f.id;
    const service=amenities.get(key);
@@ -3426,12 +3473,24 @@ function summarize(floors,units,pois,origin,scale){
    const name=u?.name?String(u.name).trim():'';
    f.storeName=name;
    if(!name)summary.unmatchedShopNames++;
-   const codeAdded=addText(parts.codes,code,f,1.4,
-      name?'code':'center',.80,name?.24:.72,origin,scale,
-       window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE);
+   const font=vectorFont();
+   const roofImageAssigned=hasRoofImage(u);
+   const codeColor=window.RetailNavThemes?.rgb?.('mapText',WHITE)||WHITE;
+   let codeAdded='',codePlacement='';
+   if(font&&roofImageAssigned&&
+      addVectorFacadeCode(parts.frontCodes,code,u,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='facade-lower-side';summary.frontCodeLabels++;
+   }else if(font&&addVectorRoofCode(parts.codes,code,f,1.4,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='roof-lower-side';summary.roofCodeLabels++;
+   }else if(font&&addVectorFacadeCode(parts.frontCodes,code,u,origin,scale,codeColor,font)){
+    codeAdded='vector';codePlacement='facade-lower-side';summary.frontCodeLabels++;
+   }else{
+    codeAdded=addText(parts.codes,code,f,1.4,
+      name?'code':'center',.80,name?.24:.72,origin,scale,codeColor);
+    if(codeAdded){codePlacement='roof-lower-side';summary.roofCodeLabels++;}
+   }
    if(codeAdded){summary.codeLabels++;summary[codeAdded+'GlyphLabels']++;}
    let nameAdded='';
-   const font=vectorFont(),roofImageAssigned=hasRoofImage(u);
    if(name&&roofImageAssigned)summary.roofImageNameSuppressions++;
    else if(name)nameAdded=font
     ?(addVectorRoofName(parts.names,name,f,1.4,origin,scale,
@@ -3445,17 +3504,20 @@ function summarize(floors,units,pois,origin,scale){
    if(frontNameAdded){summary.frontNameLabels++;summary[frontNameAdded+'GlyphLabels']++;}
    summary.roomLabels.push({floor:floor.id,id:f.id,code,name,
      verified:false,roofY:1.4,
-     geometryAttached:true,codeRaised:codeAdded,nameRaised:nameAdded,
+     geometryAttached:true,codeRaised:codeAdded,codePlacement,
+     frontCodeRaised:codePlacement==='facade-lower-side'?codeAdded:'',nameRaised:nameAdded,
      frontNameRaised:frontNameAdded,roofImageAssigned,anchor:anchorFor(f)});
   }
   floor.roofText={
    codes:new Float32Array(parts.codes),
+   frontCodes:new Float32Array(parts.frontCodes),
    names:new Float32Array(parts.names),
    frontNames:new Float32Array(parts.frontNames),
    services:new Float32Array(parts.services)
   };
   summary.extrudedTriangles+=
-    (parts.codes.length+parts.names.length+parts.frontNames.length+parts.services.length)/30;
+    (parts.codes.length+parts.frontCodes.length+parts.names.length+
+     parts.frontNames.length+parts.services.length)/30;
  }
  window.RETAILNAV_ROOF_ATTACHMENTS=attached;
  return summary;
@@ -3930,7 +3992,7 @@ function buffer(arr){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl
  floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points),context:buffer(contextEdges)};
  // Raised letters share world-space coordinates with the roof's geometry.
  floor.roofGpu={};
- for(const key of ['codes','names','frontNames','services']){
+ for(const key of ['codes','frontCodes','names','frontNames','services']){
   const verts=floor.roofText?.[key];
   floor.roofGpu[key]=verts?.length?buffer(verts):null;
  }
@@ -4073,7 +4135,10 @@ function drawSearchMarkers(){
     ' en planta '+floor.id+(source?' · vinculado al mapa':' · referencia provisional'));
    marker.addEventListener('click',event=>{
     event.stopPropagation();
-    if(source&&window.RetailNavMeetups?.selectStore)window.RetailNavMeetups.selectStore(id,false,floor.id);
+    // Every user-visible store marker enters the same selection contract. An
+    // unlinked marker still gets invite/info actions; orientation stays
+    // disabled because no shop geometry or verified destination was invented.
+    if(window.RetailNavMeetups?.selectStore)window.RetailNavMeetups.selectStore(id,false,floor.id);
     else window.RetailNavUnits?.focusStore?.(id,floor.id);
    });
    host.append(marker);searchMarkerElements.set(key,marker);
@@ -4696,7 +4761,7 @@ function drawRoofTextWebGL(){
   if(referenceContext(floor))continue;
   gl.uniform1f(loc.uY,floor.y);
   const groups=floor.roofGpu||{};
-  for(const key of ['services',...(showCode?['codes']:[]),
+  for(const key of ['services',...(showCode?['codes','frontCodes']:[]),
     ...(showName?['names','frontNames']:[])]){
    if(!groups[key])continue;
    bind(groups[key]);gl.drawArrays(gl.TRIANGLES,0,groups[key].n);
@@ -4711,7 +4776,7 @@ function drawRoofTextCanvas(){
  const ctx=ctx2d,limit=active==='ALL'?24000:90000;
  for(const floor of visible()){
   if(referenceContext(floor))continue;
-  for(const key of ['services','codes',...(active==='ALL'?[]:['names','frontNames'])]){
+  for(const key of ['services','codes','frontCodes',...(active==='ALL'?[]:['names','frontNames'])]){
    const vertices=floor.roofText?.[key];
    if(!vertices)continue;
    const step=30,count=Math.min(vertices.length,limit);
@@ -6071,7 +6136,7 @@ function recolorRoofText(){
  const titles=mapRgb('mapNameText',[1,.88,.56]);
  const edge=[.20,.32,.39];
  for(const floor of floors){
-  for(const [kind,target] of [['codes',ink],['names',titles],['frontNames',titles]]){
+  for(const [kind,target] of [['codes',ink],['frontCodes',ink],['names',titles],['frontNames',titles]]){
    const verts=floor.roofText?.[kind];
    if(!verts)continue;
    for(let i=0;i<verts.length;i+=10){
@@ -7062,12 +7127,14 @@ function paint(){
  if(!state?.ready)return;
  frames++;visibleCount=0;
  const webglSigns=state.renderer==='WebGL'&&window.RetailNavUnits?.draw3D;
- const sourceMarkerOverlay=webglSigns&&mall.id==='alto-palermo';
- if(webglSigns&&!sourceMarkerOverlay){
+ // Codes that own a shop polygon are rendered on its roof/front geometry.
+ // Unmatched directory records remain searchable, but receive no floating
+ // screen badge and no invented roof association.
+ if(state.roofTextSummary){
   for(const el of buttons.values())el.hidden=true;
   return;
  }
- const codesOn=state.distance<(sourceMarkerOverlay?230:145)||Boolean(selected)||Boolean(searchHighlights.length);
+ const codesOn=state.distance<145||Boolean(selected)||Boolean(searchHighlights.length);
  const floors=new Set(state.visible);
  const occupied=[];
  for(const u of units){
@@ -7572,11 +7639,10 @@ window.visualViewport?.addEventListener('resize',()=>window.__RETAILNAV__?.inval
 window.__RETAILNAV__?.invalidate?.();
 })();
 </script>
-<script>/* RetailNav roof labels + 3D raised signs.
- * Every sign belongs to one uniquely matched shop roof in world space.
- * Regular code/name is printed on the roof. A selected, searched or featured
- * shop has an illuminated, solid double-sided panel physically attached to
- * that same roof by two posts. Nothing is a screen-facing HTML billboard.
+<script>/* RetailNav supplementary roof labels.
+ * Store codes and names stay inscribed in the shop geometry. Selection is
+ * communicated by the polygon highlight and the circular contextual actions;
+ * it must never create a raised or floating store-code placard.
  */
 (()=>{
 'use strict';
@@ -7619,7 +7685,7 @@ function create(gl){
  if(vectorFont){
   return {gl,...shaderProgram,tex:null,cells:new Map(roofEntries.map(item=>[
    item.storeId||(item.floor+':'+item.code),true])),items:roofEntries,
-   vectorFont,vectorSigns:true,buffer:gl.createBuffer()};
+   surfaceOwned:true,buffer:gl.createBuffer()};
  }
  const cw=192,ch=85;
  const maxTexture=gl.getParameter(gl.MAX_TEXTURE_SIZE)||4096;
@@ -7702,110 +7768,12 @@ function rectangle(data,a,b,c,d,cell){
  triangle(data,a,b,d,[uv.u0,uv.v1],[uv.u1,uv.v1],[uv.u0,uv.v0]);
  triangle(data,b,c,d,[uv.u1,uv.v1],[uv.u1,uv.v0],[uv.u0,uv.v0]);
 }
-function vectorTextWidth(text,font){
- let width=0;
- for(const char of text){
-  const glyph=font.glyphs[char];
-  if(!glyph)throw Error('Missing raised-sign vector glyph '+JSON.stringify(char));
-  width+=glyph.a;
- }
- return width;
-}
-function vectorLine(data,text,centre,axis,side,availableWidth,lineCentre,maxHeight,front,font){
- if(!text)return 0;
- const width=vectorTextWidth(text,font),height=font.ascender-font.descender;
- const scale=Math.min(availableWidth/width,maxHeight/height);
- if(!Number.isFinite(scale)||scale<=0)return 0;
- const direction=front?1:-1;
- const baseOffset=direction*.257,topOffset=direction*.292;
- const centerY=(font.ascender+font.descender)/2;
- let cursor=-width/2,triangles=0;
- const point=(x,y,offset)=>[
-  centre[0]+axis[0]*(cursor+x)*scale*direction+side[0]*offset,
-  centre[1]+lineCentre+(y-centerY)*scale,
-  centre[2]+axis[2]*(cursor+x)*scale*direction+side[2]*offset
- ];
- for(const char of text){
-  const glyph=font.glyphs[char];
-  for(let index=0;index<glyph.t.length;index+=3){
-   const corners=[];
-   for(let corner=0;corner<3;corner++){
-    const vertex=glyph.t[index+corner]*2;
-    corners.push(point(glyph.v[vertex],glyph.v[vertex+1],topOffset));
-   }
-   if(front)triangle(data,corners[0],corners[1],corners[2]);
-   else triangle(data,corners[2],corners[1],corners[0]);
-   triangles++;
-  }
-  for(const [start,count] of glyph.c){
-   for(let index=0;index<count;index++){
-    const a=(start+index)*2,b=(start+(index+1)%count)*2;
-    const lowA=point(glyph.v[a],glyph.v[a+1],baseOffset);
-    const lowB=point(glyph.v[b],glyph.v[b+1],baseOffset);
-    const highB=point(glyph.v[b],glyph.v[b+1],topOffset);
-    const highA=point(glyph.v[a],glyph.v[a+1],topOffset);
-    rectangle(data,lowA,lowB,highB,highA);triangles+=2;
-   }
-  }
-  cursor+=glyph.a;
- }
- return triangles;
-}
-function vec(p,a,b,c){return [p[0]+a[0]*b+c[0],p[1]+a[1]*b+c[1],p[2]+a[2]*b+c[2]];}
 function planar(center,axis,side,halfW,halfD){
  const corner=(a,b)=>[
   center[0]+axis[0]*a+side[0]*b,center[1],
   center[2]+axis[2]*a+side[2]*b];
  return [corner(-halfW,-halfD),corner(halfW,-halfD),
          corner(halfW,halfD),corner(-halfW,halfD)];
-}
-function upright(center,axis,side,halfW,halfH,offset=0){
- const base=[center[0]+side[0]*offset,center[1],center[2]+side[2]*offset];
- const corner=(h,k)=>[base[0]+axis[0]*h,base[1]+k,base[2]+axis[2]*h];
- return [corner(-halfW,-halfH),corner(halfW,-halfH),
-         corner(halfW,halfH),corner(-halfW,halfH)];
-}
-function box(data,center,axis,side,halfW,halfH,halfT){
- const front=upright(center,axis,side,halfW,halfH,halfT);
- const back=upright(center,axis,side,halfW,halfH,-halfT);
- rectangle(data,...front);
- rectangle(data,back[1],back[0],back[3],back[2]);
- for(let i=0;i<4;i++){
-  const j=(i+1)%4;
-  rectangle(data,front[i],front[j],back[j],back[i]);
- }
-}
-function spotlight(data,roof,axis,side,width,cell,item,vectorFont){
- const hw=width/2,hh=width*.26;
- // Panel bottom is always flush with the single, centered support stem.
- // The stem starts at the roof (no floating, unattached sign).
- const panelBottom=1.57;
- const centre=[roof[0],roof[1]+panelBottom+hh,roof[2]];
- const postCenter=[roof[0],roof[1]+panelBottom/2,roof[2]];
- box(data.posts,postCenter,axis,side,.075,panelBottom/2,.092);
- // Solid deep blue rear shell, with bright cyan trim inset under the text.
- box(data.body,centre,axis,side,hw+.12,hh+.13,.20);
- const front=upright(centre,axis,side,hw+.025,hh+.025,.240);
- const back=upright(centre,axis,side,hw+.025,hh+.025,-.240);
- rectangle(data.trim,...front);
- rectangle(data.trim,back[1],back[0],back[3],back[2]);
- if(vectorFont){
-  const name=(item.name||'').trim(),code=String(item.code||'').trim();
-  for(const front of [true,false]){
-   if(name)data.vectorTriangles+=vectorLine(data.vectorName,name,centre,axis,side,
-    width*.86,hh*.34,hh*.72,front,vectorFont);
-   data.vectorTriangles+=vectorLine(data.vectorCode,code,centre,axis,side,
-    width*.78,-hh*.48,name?hh*.46:hh*1.28,front,vectorFont);
-  }
- }else{
-  const f=upright(centre,axis,side,hw,hh,.256);
-  const b=upright(centre,axis,side,hw,hh,-.256);
-  rectangle(data.text,...f,cell);
-  rectangle(data.text,b[1],b[0],b[3],b[2],cell);
- }
- // Short base plate visually seats the posts on the roof surface.
- const baseCenter=[roof[0],roof[1]+.08,roof[2]];
- box(data.posts,baseCenter,axis,side,hw*.64,.09,.18);
 }
 function gpuDraw(gl,r,mvp,buffer,vertices,material,colour){
  if(!vertices.length)return;
@@ -7833,9 +7801,8 @@ function render(gl,mvp){
  const visibleFloors=new Set(state.visible);
  const highlights=new Set(unitsApi.getHighlightedStoreIds?.()||[]);
  const selected=state.selectedCode??unitsApi.getState().selected;
- const regular=[],special={posts:[],body:[],trim:[],text:[],vectorName:[],vectorCode:[],vectorTriangles:0};
+ const regular=[];
  drawnRoof=0;drawnRaised=0;frames++;visibleCodes=[];
- let autoFeatured=0,raisedCount=0;
  for(const u of resource.items){
   if(!visibleFloors.has(u.floor))continue;
   const roof=u.roof;
@@ -7854,48 +7821,32 @@ function render(gl,mvp){
   const pxToWorld=window.RETAILNAV_ACTIVE_MALL?.scale||.12;
   const halfW=clamp((roof.widthPixels||10)*pxToWorld*.5,.22,1.35);
   const surface=planar(top,axis,side,halfW,halfW*.43);
-  if(!resource.vectorSigns&&(state.distance<=230||key===selected||highlights.has(key))){
+  if(!resource.surfaceOwned&&(state.distance<=230||key===selected||highlights.has(key))){
    rectangle(regular,surface[0],surface[1],surface[2],surface[3],cell);
    drawnRoof++;visibleCodes.push(u.code);
   }
-  const requested=highlights.has(key)||key===selected;
-  const feature=Boolean(u.featured||(u.name&&u.name.length>0));
-  if(requested||feature&&autoFeatured<3){
-   if(raisedCount>=7&&!requested)continue;
-   const mappedWidth=(roof.widthPixels||10)*pxToWorld;
-   const panelWidth=clamp(Math.min(state.distance*.018,mappedWidth*.96),1.35,3.5);
-   // Use the same physical roof midpoint as the ordinary lettering.
-   spotlight(special,top,axis,side,panelWidth,cell,u,resource.vectorFont);
-   raisedCount++;drawnRaised++;
-   if(feature&&!requested)autoFeatured++;
-  }
  }
- if(!regular.length&&!raisedCount)return;
+ if(!regular.length)return;
  const r=resource;
  gl.enable(gl.DEPTH_TEST);
  gl.disable(gl.CULL_FACE);
  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
- gpuDraw(gl,r,mvp,r.buffer,special.posts,1,[.21,.46,.62,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.body,1,[.07,.24,.39,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.trim,1,[.40,.82,.97,1]);
  gpuDraw(gl,r,mvp,r.buffer,regular,0,[1,1,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.text,0,[1,1,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.vectorName,1,[.97,.99,1,1]);
- gpuDraw(gl,r,mvp,r.buffer,special.vectorCode,1,[1,.79,.50,1]);
- r.lastVectorTriangles=special.vectorTriangles;
+ r.lastVectorTriangles=0;
  gl.disable(gl.BLEND);
 }
 unitsApi.draw3D=render;
 unitsApi.getRoofState=()=>({
- renderMode:resource?(resource.vectorSigns?'world-space-vector-outline-extruded-signs':'world-space-textured-roof-and-raised-3d'):'pending',
+ renderMode:resource?(resource.surfaceOwned?'vector-labels-owned-by-shop-surfaces':'world-space-textured-roof-surface'):'pending',
  roofLabels:drawnRoof,raised:drawnRaised,
  labelledRoofs:roofEntries.length,
  unmatched:entries.length-roofEntries.length,
  visibleCodes:visibleCodes.slice(),frames,
- raisedHasPhysicalPosts:true,raisedHasExtrudedBody:true,
- raisedTextGeometry:resource?.vectorSigns?'vector-outline-double-sided-extruded':'texture-atlas',
+ floatingPanels:0,codePlacement:'roof-or-facade-lower-side',
+ raisedHasPhysicalPosts:false,raisedHasExtrudedBody:false,
+ raisedTextGeometry:'none',
  raisedVectorTriangles:resource?.lastVectorTriangles||0,
- raisedRasterAtlasCreated:resource?Boolean(!resource.vectorSigns):null,
+ raisedRasterAtlasCreated:resource?Boolean(!resource.surfaceOwned):null,
  followsMapCamera:true,cameraFacing:false,lastError
 });
 unitsApi.getWallState=unitsApi.getRoofState;

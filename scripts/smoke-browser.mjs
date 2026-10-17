@@ -951,13 +951,15 @@ try {
   await apPage.locator('#search').fill('');
   if(apStatus.viewer.renderer==='WebGL'){
     await apPage.evaluate(()=>window.RetailNavUnits.focus('A-01'));
-    await apPage.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.raised>=1,
+    await apPage.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.renderMode!=='pending',
       null,{timeout:18000});
     const roof=await apPage.evaluate(()=>window.RetailNavUnits.getRoofState());
     assert.equal(roof.cameraFacing,false);
     assert.ok(roof.labelledRoofs>=1);
-    assert.equal(roof.raisedHasExtrudedBody,true);
-    assert.equal(roof.raisedHasPhysicalPosts,true);
+    assert.equal(roof.floatingPanels,0);
+    assert.equal(roof.raised,0);
+    assert.equal(roof.raisedHasExtrudedBody,false);
+    assert.equal(roof.raisedHasPhysicalPosts,false);
     log('ROOF_SIGNS',roof);
   }
   log('STORE_IDS','Shop codes indexed and searchable, including unresolved regions.');

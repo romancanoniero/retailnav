@@ -216,12 +216,14 @@ function paint(){
  if(!state?.ready)return;
  frames++;visibleCount=0;
  const webglSigns=state.renderer==='WebGL'&&window.RetailNavUnits?.draw3D;
- const sourceMarkerOverlay=webglSigns&&mall.id==='alto-palermo';
- if(webglSigns&&!sourceMarkerOverlay){
+ // Codes that own a shop polygon are rendered on its roof/front geometry.
+ // Unmatched directory records remain searchable, but receive no floating
+ // screen badge and no invented roof association.
+ if(state.roofTextSummary){
   for(const el of buttons.values())el.hidden=true;
   return;
  }
- const codesOn=state.distance<(sourceMarkerOverlay?230:145)||Boolean(selected)||Boolean(searchHighlights.length);
+ const codesOn=state.distance<145||Boolean(selected)||Boolean(searchHighlights.length);
  const floors=new Set(state.visible);
  const occupied=[];
  for(const u of units){

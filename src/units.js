@@ -20,15 +20,31 @@ const storeKey=u=>u.storeId||(mall.id+':'+u.floor+':'+u.code);
 const unitByStoreId=new Map(units.map(u=>[storeKey(u),u]));
 const mapEvidence=new Set(['official-location-suite-and-polygon-id',
  'official-directory-location-and-source-polygon-id']);
+const provisionalPolygonEvidence=new Set([
+ 'official-marker-inside-svg-region-provisional'
+]);
 function getMapBindings(store){
  const unit=unitByStoreId.get(typeof store==='string'?store:store?.storeId);
  const binding=unit?.sourceGeometry;
- if(!unit||unit.mallId!==mall.id||!binding||binding.mallId!==mall.id||
-  binding.storeId!==unit.storeId||!mall.sourceMapSha256||
-  binding.sourceSha256!==mall.sourceMapSha256||!mapEvidence.has(binding.evidence)||
-  !Array.isArray(binding.polygons))return[];
+ if(!unit||unit.mallId!==mall.id)return[];
+ let polygons=[];
+ if(binding&&binding.mallId===mall.id&&binding.storeId===unit.storeId&&
+  mall.sourceMapSha256&&binding.sourceSha256===mall.sourceMapSha256&&
+  mapEvidence.has(binding.evidence)&&Array.isArray(binding.polygons)){
+  polygons=binding.polygons;
+ }else if(typeof unit.floor==='string'&&typeof unit.polygonId==='string'&&
+  unit.polygonId&&unit.vectorRelation==='one-photo-region-unverified'&&
+  provisionalPolygonEvidence.has(unit.polygonMatchStatus)){
+  // Some official interactive maps publish marker centres and floor SVGs as
+  // separate assets. The importer records a reviewed same-floor containment
+  // link instead of a sourceGeometry hash binding. Treat that explicit link as
+  // selectable map evidence so labels, focus and direct polygon taps all read
+  // the same relationship.
+  polygons=[{floor:unit.floor,polygonId:unit.polygonId,
+   evidence:unit.polygonMatchStatus,provisional:true}];
+ }else return[];
  const loadedFloors=window.__RETAILNAV__?.floors;
- return [...new Map(binding.polygons.filter(p=>p&&typeof p.floor==='string'&&
+ return [...new Map(polygons.filter(p=>p&&typeof p.floor==='string'&&
   typeof p.polygonId==='string'&&p.polygonId&&(!loadedFloors||loadedFloors.some(f=>
    f.id===p.floor&&f.features.some(feature=>feature.id===p.polygonId))))
   .map(p=>[p.floor+':'+p.polygonId,{...p}])).values()];

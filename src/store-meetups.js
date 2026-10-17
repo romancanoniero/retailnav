@@ -60,10 +60,10 @@ meetingBox.id='rnMeetingBox';meetingBox.className='rnMeetingBox';meetingBox.hidd
 panel.append(meetingBox);
 function store(){return window.RetailNavUnits?.getUnits()?.find(u=>u.storeId===selectedId);}
 function describeLocation(u){
- if(!u.sourceGeometry&&u.source!=='aventura-official-directory')return u.locationLabel||
+ const mapped=window.RetailNavUnits?.getMappedFloors?.(u)||[];
+ if(!mapped.length&&u.source!=='aventura-official-directory')return u.locationLabel||
   [...new Set([u.floor,...(u.documentedFloors||[])].filter(Boolean))].join(' / ')||
   tr('Planta sin confirmar','Floor not confirmed');
- const mapped=window.RetailNavUnits?.getMappedFloors?.(u)||[];
  if(mapped.length)return tr('Vinculado al mapa · ','Linked to map · ')+mapped.join(' / ');
  const published=u.locationLabel||[...new Set([u.floor,...(u.documentedFloors||[])].filter(Boolean))].join(' / ');
  return published?tr('Directorio: ','Directory: ')+published+tr(' · ubicación en mapa pendiente',' · map location pending'):

@@ -191,6 +191,23 @@ try{
   'selecting a store must not create a floating local-code placard');
  await page.screenshot({path:'/tmp/retailnav-alto-palermo-contextual.png',fullPage:true});
 
+ const directMappedPolygonSelection=await page.evaluate(()=>{
+  const unit=window.RetailNavUnits.getUnits().find(candidate=>candidate.name==='Ver'&&
+   candidate.floor==='PB');
+  const binding=window.RetailNavUnits.getMapBindings(unit)[0];
+  const floor=window.__RETAILNAV__.floors.find(candidate=>candidate.id===binding?.floor);
+  const feature=floor?.features.find(candidate=>candidate.id===binding?.polygonId);
+  window.__RETAILNAV__.select(feature);
+  return {storeId:unit?.storeId,binding,selected:window.RetailNavMeetups.getState().selectedStoreId,
+   focused:window.__RETAILNAV__.getState().focusedStoreId,
+   vectors:window.__RETAILNAV__.getState().focusedStoreVectors};
+ });
+ assert.equal(directMappedPolygonSelection.binding?.polygonId,'PB-SVG-035');
+ assert.equal(directMappedPolygonSelection.selected,directMappedPolygonSelection.storeId,
+  'tapping a provisionally linked official SVG region must select its sole store');
+ assert.equal(directMappedPolygonSelection.focused,directMappedPolygonSelection.storeId);
+ assert.deepEqual(directMappedPolygonSelection.vectors,['PB:PB-SVG-035']);
+
  const unboundSelection=await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
   const feature=view.floors.flatMap(f=>f.features).find(candidate=>candidate.k==='unit'&&

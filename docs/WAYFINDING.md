@@ -4,12 +4,12 @@ El plano vectorial 3D sigue siendo la superficie de interacción. La selección 
 
 ## Estados de la interacción
 
-- **Misma planta, origen conocido y conexión fuente disponible:** se pueden mostrar círculos celestes sobre un recorrido provisional de la red fuente, conservando una etiqueta visible de «Vista previa · por confirmar». El recorrido termina antes de la pared o del local; no se prolonga hasta el marcador central del comercio.
-- **Otra planta:** se explica la diferencia de plantas en el mismo visor 3D. El número de plantas no equivale a un número de escaleras ni confirma qué conector está operativo. La red de esta implementación no conecta plantas.
+- **Misma planta, origen conocido y conexión fuente disponible:** el botón de navegación cambia de gris al color primario. Al tocarlo se muestran puntos animados sobre un recorrido provisional de la red fuente, sin abrir la tarjeta grande. El recorrido termina antes de la pared o del local; no se prolonga hasta el marcador central del comercio.
+- **Otra planta:** se explica la diferencia de plantas en el mismo visor 3D. El número de plantas no equivale a un número de escaleras ni confirma qué conector está operativo. El planificador ya admite segmentos por planta unidos por conectores verificados, pero los datos actuales de Aventura no incluyen desembarcos verticales aptos para routing y por eso no dibujan una ruta entre plantas.
 - **Sin posición precisa:** el visitante puede elegir explícitamente un punto de partida sobre los pasillos fuente. Un punto ofrecido por la interfaz no afirma dónde está el visitante. Debe identificarse como «Punto de partida en este pasillo» y tener un área táctil de al menos 44 px.
 - **Sin continuidad comprobable en la geometría:** quedan los marcadores de origen y destino y el mensaje correspondiente; no se dibuja un atajo, una recta entre tiendas ni un enlace al pasillo más cercano.
 
-La vista previa no incluye una flecha presentada como orientación segura, instrucciones de giro, tiempos de llegada, accesibilidad garantizada ni navegación entre plantas. No tenemos una orientación verificada del visitante ni datos suficientes para esas afirmaciones. Los iconos de ascensor o escalera tampoco sustituyen la explicación espacial de la diferencia de plantas.
+La vista previa no incluye una flecha presentada como orientación segura, instrucciones de giro, tiempos de llegada ni accesibilidad garantizada. Los iconos de ascensor o escalera tampoco sustituyen conexiones cartográficas. Para cruzar plantas, cada conector debe declarar tipo, sentido, costo medido, fuente y ambos nodos de desembarco con `verified:true` y `landingMappingsVerified:true`.
 
 ## Cabecera de tablet
 
@@ -61,7 +61,10 @@ python3 scripts/import-routing-preview.py /ruta/al/map.json
 
 - `configure(data)` valida y carga el conjunto de datos; devuelve un booleano. Una configuración inválida descarta los datos previos.
 - `plan({mallId, coordinateSpace, floor, origin: {x, y}, destinationPolygonIds})` devuelve `status: 'provisional'` con `points`, o `status: 'unavailable'` con una razón y `points: []`.
-- `getOriginCandidates({mallId, coordinateSpace, floor, destinationPolygonIds})` devuelve puntos `{id, floor, x, y, previewOnly: true}` que el visitante puede elegir. Sólo incluye nodos de componentes conectados a una alternativa de acceso del destino. No selecciona un origen por el visitante.
+- En un recorrido entre plantas, `origin.floor` identifica la planta inicial y `floor` la planta del destino. La respuesta divide el camino en `routeSegments: [{floor, points}]` y enumera `connectorsUsed`; nunca dibuja una línea vertical entre desembarcos.
+- `getOriginCandidates({mallId, coordinateSpace, floor, destinationFloor, destinationPolygonIds})` devuelve puntos `{id, floor, x, y, previewOnly: true}` que el visitante puede elegir. Sólo incluye nodos de componentes conectados a una alternativa de acceso del destino, incluyendo conectores verificados si existen. No selecciona un origen por el visitante.
+
+El campo opcional `connectors` del dataset acepta exclusivamente `escalator`, `elevator`, `stairs` o `ramp`. Cada registro exige `from` y `to` con planta/nodo existentes, `direction`, `costUnits`, `sourceId`, `verified:true` y `landingMappingsVerified:true`. Un conector incompleto invalida el dataset entero; la ausencia de conectores produce `vertical-connection-unavailable` al pedir otra planta.
 
 El origen de `plan` debe estar sobre un segmento fuente conservado. La tolerancia máxima de 0,15 metros sólo normaliza precisión de coordenadas: no crea un tramo de aproximación visible. Para un toque libre lejos de la red, el resultado es `origin-not-on-source-path`; la interfaz puede ofrecer los puntos de partida explícitos, nunca colocar automáticamente al visitante en el más cercano.
 

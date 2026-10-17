@@ -831,6 +831,12 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Geometría:** las tres acciones conservan centros separados 120° sobre una misma circunferencia imaginaria. No existe bandeja, tarjeta ni aro visible detrás: sólo controles circulares de 48 px con sombra sobre el mapa.
 - **Cierre:** una X circular de 44 px ocupa exactamente el centro de la circunferencia y oculta el menú completo. Una nueva selección vuelve a ejecutar el despliegue radial después de finalizar el movimiento de cámara.
 - **Animación y accesibilidad:** cada opción emerge desde el centro con un breve escalonado; movimiento reducido elimina las transiciones. Los cuatro controles conservan nombre accesible, foco visible y tamaño táctil mínimo de 44 px.
+
+### 2026-10-17 — NAV-07 — navegación contextual y conectores preparados
+
+- **Estado del control:** la acción de navegación permanece gris y deshabilitada mientras falte una ubicación interior compatible o la geometría del destino. Al establecer la ubicación pasa al color primario y comunica su estado con `aria-pressed`.
+- **Camino a demanda:** tocar la acción muestra puntos animados sobre los segmentos de circulación de fuente sin abrir el antiguo diálogo grande. La X central cierra tanto el menú como la superposición. Si no existe continuidad respaldada, no se dibuja un atajo.
+- **Varias plantas:** el planificador acepta `routeSegments` por planta y conectores `escalator / elevator / stairs / ramp` sólo cuando ambos desembarcos, sentido, costo y fuente están verificados. Los datos actuales no habilitan conectores verticales; quedan listos el contrato, algoritmo, render y pruebas para incorporarlos sin reescribir la interacción.
 - **Regresión obligatoria:** medir en navegador el diámetro, redondez y sombra de cada opción, la igualdad de los tres radios, el centrado de la X y el cierre/reapertura del menú.
 - **Regresión obligatoria:** probar selección por tarjeta y por polígono, acción oculta durante la cámara y visible al finalizar, controles táctiles redondos de al menos 44 px, ficha independiente, invitación independiente, orientación bajo demanda, cierre/colocación manual y comercio sin vector.
 

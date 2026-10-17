@@ -1270,7 +1270,11 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  border-color:#e8ffff;box-shadow:0 14px 28px #06152170,0 4px 9px #06152155,inset 0 1px #fff8}
 .rnStoreActions .rnStoreAction:hover,.rnStoreActions .rnStoreAction:focus-visible{transform:translate(var(--rn-radial-x),calc(var(--rn-radial-y) - 2px)) scale(1.05)}
 .rnStoreActions .rnStoreActionClose:hover,.rnStoreActions .rnStoreActionClose:focus-visible{transform:scale(1.06) rotate(0)}
-.rnStoreActions button:disabled{filter:grayscale(.55);opacity:.58}
+.rnStoreActions #rnStoreAssist.is-route-ready{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
+ border-color:#efffff;box-shadow:0 13px 28px #06152170,0 0 0 3px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 26%,transparent),inset 0 1px #fff9}
+.rnStoreActions #rnStoreAssist.is-route-open{box-shadow:0 13px 28px #06152170,0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 38%,transparent),inset 0 1px #fff9}
+.rnStoreActions button:disabled{background:color-mix(in srgb,#7f8992 72%,var(--rn-theme-surface,#123247));
+ color:#d4d8dc;border-color:#9aa1a7;filter:grayscale(1);opacity:.62;cursor:default;box-shadow:0 8px 17px #0615213d,inset 0 1px #fff5}
 .rnQuickInvite{z-index:40}
 @media(max-width:760px){
  .rnStoreActions{bottom:208px}
@@ -1331,6 +1335,11 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnWayfindingOverlay[data-status="provisional"] .rnWayfindingDot,
 .rnWayfindingOverlay[data-route-status="provisional"] .rnWayfindingDot,
 .rnWayfindingDot.is-provisional{background:#153f5080;border-color:#68c9e0;box-shadow:0 0 0 1px #e6fbff99}
+.rnWayfindingOverlay.is-flowing .rnWayfindingDot{background:var(--rn-theme-accent,#5ed8e4);border-color:#efffff;
+ box-shadow:0 0 0 2px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 24%,transparent),0 2px 5px #06152155;
+ animation:rnRouteDotFlow 1.2s ease-in-out infinite;animation-delay:calc(var(--rn-dot-index,0) * 24ms)}
+@keyframes rnRouteDotFlow{0%,100%{opacity:.48;transform:translate(-50%,-50%) scale(.78)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}}
+.stage.rnWayfindingRouteOnly>.rnWayfinding{display:none!important}
 .rnWayfindingMarker{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);
  z-index:2;pointer-events:none;text-align:center}
 .rnWayfindingMarker::before{content:"";position:absolute;inset:1px;border:3px solid #fff;

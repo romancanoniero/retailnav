@@ -1271,7 +1271,11 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  border-color:#e8ffff;box-shadow:0 14px 28px #06152170,0 4px 9px #06152155,inset 0 1px #fff8}
 .rnStoreActions .rnStoreAction:hover,.rnStoreActions .rnStoreAction:focus-visible{transform:translate(var(--rn-radial-x),calc(var(--rn-radial-y) - 2px)) scale(1.05)}
 .rnStoreActions .rnStoreActionClose:hover,.rnStoreActions .rnStoreActionClose:focus-visible{transform:scale(1.06) rotate(0)}
-.rnStoreActions button:disabled{filter:grayscale(.55);opacity:.58}
+.rnStoreActions #rnStoreAssist.is-route-ready{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
+ border-color:#efffff;box-shadow:0 13px 28px #06152170,0 0 0 3px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 26%,transparent),inset 0 1px #fff9}
+.rnStoreActions #rnStoreAssist.is-route-open{box-shadow:0 13px 28px #06152170,0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 38%,transparent),inset 0 1px #fff9}
+.rnStoreActions button:disabled{background:color-mix(in srgb,#7f8992 72%,var(--rn-theme-surface,#123247));
+ color:#d4d8dc;border-color:#9aa1a7;filter:grayscale(1);opacity:.62;cursor:default;box-shadow:0 8px 17px #0615213d,inset 0 1px #fff5}
 .rnQuickInvite{z-index:40}
 @media(max-width:760px){
  .rnStoreActions{bottom:208px}
@@ -1332,6 +1336,11 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnWayfindingOverlay[data-status="provisional"] .rnWayfindingDot,
 .rnWayfindingOverlay[data-route-status="provisional"] .rnWayfindingDot,
 .rnWayfindingDot.is-provisional{background:#153f5080;border-color:#68c9e0;box-shadow:0 0 0 1px #e6fbff99}
+.rnWayfindingOverlay.is-flowing .rnWayfindingDot{background:var(--rn-theme-accent,#5ed8e4);border-color:#efffff;
+ box-shadow:0 0 0 2px color-mix(in srgb,var(--rn-theme-accent,#5ed8e4) 24%,transparent),0 2px 5px #06152155;
+ animation:rnRouteDotFlow 1.2s ease-in-out infinite;animation-delay:calc(var(--rn-dot-index,0) * 24ms)}
+@keyframes rnRouteDotFlow{0%,100%{opacity:.48;transform:translate(-50%,-50%) scale(.78)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}}
+.stage.rnWayfindingRouteOnly>.rnWayfinding{display:none!important}
 .rnWayfindingMarker{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);
  z-index:2;pointer-events:none;text-align:center}
 .rnWayfindingMarker::before{content:"";position:absolute;inset:1px;border:3px solid #fff;
@@ -3454,20 +3463,25 @@ function summarize(floors,units,pois,origin,scale){
 window.RetailNavRoofText=Object.freeze({prepare:summarize,hasRoofImage});
 })();
 </script>
-<script>/* Source-constrained, same-floor route previews. Never navigation instructions. */
+<script>/* Source-constrained route previews. Vertical travel is accepted only through
+ * explicitly verified connector landings; missing evidence never creates a
+ * nearest-point bridge or a straight line between floors. */
 (function (root) {
   'use strict';
   let data = null;
   const finitePoint = p => Array.isArray(p) && p.length === 2 && p.every(Number.isFinite);
   const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  const key = (floor, node) => floor + ':' + node;
+  const connectorTypes = new Set(['escalator', 'elevator', 'stairs', 'ramp']);
   function configure(candidate) {
     data = null;
     if (!candidate || candidate.schema !== 'retailnav.routing-preview.v1' || candidate.routingVerified !== false ||
         !candidate.mallId || !candidate.coordinateSpace || !candidate.source?.sha256 ||
         candidate.projection?.unitsPerMeter !== 10 || !Array.isArray(candidate.floors) ||
         !(candidate.originToleranceMeters > 0 && candidate.originToleranceMeters <= .15)) return false;
+    const floorById = new Map();
     for (const floor of candidate.floors) {
-      if (!floor.id || !Array.isArray(floor.nodes) || !floor.nodes.every(finitePoint) ||
+      if (!floor.id || floorById.has(floor.id) || !Array.isArray(floor.nodes) || !floor.nodes.every(finitePoint) ||
           !Array.isArray(floor.edges) || !floor.edges.every(e => Array.isArray(e) && e.length === 3 &&
             Number.isInteger(e[0]) && Number.isInteger(e[1]) && floor.nodes[e[0]] && floor.nodes[e[1]] &&
             e[0] !== e[1] && typeof e[2] === 'string') ||
@@ -3475,12 +3489,23 @@ window.RetailNavRoofText=Object.freeze({prepare:summarize,hasRoofImage});
             Number.isInteger(t.node) && floor.nodes[t.node] && finitePoint(t.point) && finitePoint(t.entrance) &&
             typeof t.sourceSegmentId === 'string' && t.sourceEntranceOffsetMeters >= 0 &&
             t.sourceEntranceOffsetMeters <= .15)) return false;
+      floorById.set(floor.id, floor);
     }
-    data = candidate;
+    const connectors = candidate.connectors || [];
+    if (!Array.isArray(connectors) || !connectors.every(c => {
+      const from = floorById.get(c?.from?.floor), to = floorById.get(c?.to?.floor);
+      return c && typeof c.id === 'string' && connectorTypes.has(c.type) && c.verified === true &&
+        c.landingMappingsVerified === true && ['both', 'forward', 'reverse'].includes(c.direction) &&
+        from && to && from !== to && Number.isInteger(c.from.node) && from.nodes[c.from.node] &&
+        Number.isInteger(c.to.node) && to.nodes[c.to.node] && Number.isFinite(c.costUnits) && c.costUnits > 0 &&
+        typeof c.sourceId === 'string';
+    })) return false;
+    data = {...candidate, connectors};
     return true;
   }
   function unavailable(reason, extra) {
-    return {status: 'unavailable', routingVerified: false, points: [], reason, ...extra};
+    return {status: 'unavailable', routingVerified: false, points: [], routeSegments: [],
+      connectorsUsed: [], reason, ...extra};
   }
   function projection(point, a, b) {
     const dx = b[0] - a[0], dy = b[1] - a[1], squared = dx * dx + dy * dy;
@@ -3488,94 +3513,130 @@ window.RetailNavRoofText=Object.freeze({prepare:summarize,hasRoofImage});
     const projected = [a[0] + t * dx, a[1] + t * dy];
     return {point: projected, offset: distance(point, projected)};
   }
-  function getOriginCandidates(input) {
-    if (!data || input?.mallId !== data.mallId || input.coordinateSpace !== data.coordinateSpace) return [];
-    const floor = data.floors.find(f => f.id === input.floor);
-    if (!floor) return [];
-    const ids = new Set(input.destinationPolygonIds || []);
-    const terminals = floor.terminals.filter(t => ids.has(t.polygonId));
-    if (!terminals.length) return [];
-    const adjacency = floor.nodes.map(() => []);
-    for (const [a, b] of floor.edges) {adjacency[a].push(b);adjacency[b].push(a);}
-    const connected = new Set(terminals.map(t => t.node)), pending = [...connected];
-    while (pending.length) {
-      for (const next of adjacency[pending.pop()]) {
-        if (!connected.has(next)) {connected.add(next);pending.push(next);}
+  function graph() {
+    const adjacency = new Map();
+    const add = (from, to, weight, edge) => {
+      if (!adjacency.has(from)) adjacency.set(from, []);
+      adjacency.get(from).push({to, weight, edge});
+    };
+    for (const floor of data.floors) {
+      floor.nodes.forEach((_, node) => adjacency.set(key(floor.id, node), []));
+      for (const [a, b, sourceId] of floor.edges) {
+        const weight = distance(floor.nodes[a], floor.nodes[b]);
+        const edge = {kind: 'corridor', floor: floor.id, sourceId};
+        add(key(floor.id, a), key(floor.id, b), weight, edge);
+        add(key(floor.id, b), key(floor.id, a), weight, edge);
       }
     }
-    // These are explicit choices for the visitor, never a nearest-node snap
-    // or an assertion that the visitor is already at one of these positions.
-    return [...connected].sort((a, b) => a - b).map(index => ({
-      id: 'source-start:' + floor.id + ':' + index, floor: floor.id,
-      x: floor.nodes[index][0], y: floor.nodes[index][1], previewOnly: true
-    }));
+    for (const connector of data.connectors) {
+      const a = key(connector.from.floor, connector.from.node);
+      const b = key(connector.to.floor, connector.to.node);
+      const edge = {kind: 'connector', connector};
+      if (connector.direction !== 'reverse') add(a, b, connector.costUnits, edge);
+      if (connector.direction !== 'forward') add(b, a, connector.costUnits, edge);
+    }
+    return adjacency;
+  }
+  function reachableFromTerminals(destinationFloor, terminals) {
+    const adjacency = graph(), reverse = new Map([...adjacency].map(([id]) => [id, []]));
+    for (const [from, links] of adjacency) for (const link of links) reverse.get(link.to).push(from);
+    const connected = new Set(terminals.map(t => key(destinationFloor.id, t.node)));
+    const pending = [...connected];
+    while (pending.length) for (const next of reverse.get(pending.pop()) || [])
+      if (!connected.has(next)) {connected.add(next);pending.push(next);}
+    return connected;
+  }
+  function getOriginCandidates(input) {
+    if (!data || input?.mallId !== data.mallId || input.coordinateSpace !== data.coordinateSpace) return [];
+    const originFloor = data.floors.find(f => f.id === input.floor);
+    const destinationFloor = data.floors.find(f => f.id === (input.destinationFloor || input.floor));
+    if (!originFloor || !destinationFloor) return [];
+    const ids = new Set(input.destinationPolygonIds || []);
+    const terminals = destinationFloor.terminals.filter(t => ids.has(t.polygonId));
+    if (!terminals.length) return [];
+    const connected = reachableFromTerminals(destinationFloor, terminals);
+    return originFloor.nodes.map((point, index) => ({point, index}))
+      .filter(({index}) => connected.has(key(originFloor.id, index)))
+      .map(({point, index}) => ({id: 'source-start:' + originFloor.id + ':' + index,
+        floor: originFloor.id, x: point[0], y: point[1], previewOnly: true}));
   }
   function plan(input) {
     if (!data) return unavailable('source-data-unavailable');
     if (input?.mallId !== data.mallId || input.coordinateSpace !== data.coordinateSpace)
       return unavailable('different-coordinate-space');
-    const floor = data.floors.find(f => f.id === input.floor);
-    if (!floor) return unavailable('floor-unavailable');
+    const destinationFloor = data.floors.find(f => f.id === input.floor);
+    const originFloor = data.floors.find(f => f.id === (input.origin?.floor || input.floor));
+    if (!destinationFloor || !originFloor) return unavailable('floor-unavailable');
     const origin = [input.origin?.x, input.origin?.y];
     if (!finitePoint(origin)) return unavailable('origin-unavailable');
     const ids = new Set(input.destinationPolygonIds || []);
-    const terminals = floor.terminals.filter(t => ids.has(t.polygonId));
-    if (!terminals.length) return unavailable('destination-access-unavailable', {floor: floor.id});
+    const terminals = destinationFloor.terminals.filter(t => ids.has(t.polygonId));
+    if (!terminals.length) return unavailable('destination-access-unavailable', {floor: destinationFloor.id});
     let start = null;
-    for (const edge of floor.edges) {
-      const projected = projection(origin, floor.nodes[edge[0]], floor.nodes[edge[1]]);
+    for (const edge of originFloor.edges) {
+      const projected = projection(origin, originFloor.nodes[edge[0]], originFloor.nodes[edge[1]]);
       if (!start || projected.offset < start.offset) start = {...projected, edge};
     }
     if (!start || start.offset > data.originToleranceMeters * 10 + 1e-7)
-      return unavailable('origin-not-on-source-path', {floor: floor.id});
-    // Only the existing source edge containing the origin is split. A point
-    // within source coordinate precision may be normalized onto that edge;
-    // no visible connector from an arbitrary visitor position is invented.
-    const adjacency = floor.nodes.map(() => []);
-    for (const edge of floor.edges) {
-      const [a, b] = edge, weight = distance(floor.nodes[a], floor.nodes[b]);
-      adjacency[a].push([b, weight, edge[2]]);
-      adjacency[b].push([a, weight, edge[2]]);
-    }
-    const costs = floor.nodes.map(() => Infinity), previous = floor.nodes.map(() => null), visited = new Set();
-    for (const node of start.edge.slice(0, 2)) costs[node] = distance(start.point, floor.nodes[node]);
-    while (visited.size < floor.nodes.length) {
-      let current = -1;
-      for (let i = 0; i < costs.length; i++)
-        if (!visited.has(i) && Number.isFinite(costs[i]) && (current < 0 || costs[i] < costs[current])) current = i;
-      if (current < 0) break;
+      return unavailable('origin-not-on-source-path', {floor: originFloor.id});
+    if (originFloor !== destinationFloor && !data.connectors.length)
+      return unavailable('vertical-connection-unavailable', {floor: destinationFloor.id, originFloor: originFloor.id});
+    const adjacency = graph(), costs = new Map(), previous = new Map(), visited = new Set();
+    for (const id of adjacency.keys()) costs.set(id, Infinity);
+    for (const node of start.edge.slice(0, 2))
+      costs.set(key(originFloor.id, node), distance(start.point, originFloor.nodes[node]));
+    while (visited.size < adjacency.size) {
+      let current = null;
+      for (const [id, cost] of costs) if (!visited.has(id) && Number.isFinite(cost) &&
+          (current === null || cost < costs.get(current))) current = id;
+      if (current === null) break;
       visited.add(current);
-      for (const [next, weight, segmentId] of adjacency[current]) {
-        if (costs[current] + weight < costs[next]) {
-          costs[next] = costs[current] + weight;
-          previous[next] = {node: current, segmentId};
-        }
+      for (const link of adjacency.get(current) || []) if (costs.get(current) + link.weight < costs.get(link.to)) {
+        costs.set(link.to, costs.get(current) + link.weight);
+        previous.set(link.to, {key: current, edge: link.edge});
       }
     }
     let destination = null;
     for (const terminal of terminals) {
-      const cost = costs[terminal.node] + distance(floor.nodes[terminal.node], terminal.point);
-      if (Number.isFinite(cost) && (!destination || cost < destination.cost)) destination = {terminal, cost};
+      const nodeKey = key(destinationFloor.id, terminal.node);
+      const cost = costs.get(nodeKey) + distance(destinationFloor.nodes[terminal.node], terminal.point);
+      if (Number.isFinite(cost) && (!destination || cost < destination.cost)) destination = {terminal, cost, nodeKey};
     }
-    if (!destination) return unavailable('disconnected-source-paths', {floor: floor.id});
-    const chain = [], sourceSegmentIds = [destination.terminal.sourceSegmentId];
-    let cursor = destination.terminal.node;
-    while (true) {
-      chain.push(floor.nodes[cursor]);
-      const parent = previous[cursor];
-      if (!parent) break;
-      sourceSegmentIds.push(parent.segmentId);
-      cursor = parent.node;
+    if (!destination) return unavailable(originFloor === destinationFloor ? 'disconnected-source-paths' :
+      'vertical-connection-unavailable', {floor: destinationFloor.id, originFloor: originFloor.id});
+    const nodeKeys = [destination.nodeKey], pathEdges = [];
+    while (previous.has(nodeKeys[0])) {
+      const parent = previous.get(nodeKeys[0]);pathEdges.unshift(parent.edge);nodeKeys.unshift(parent.key);
     }
-    sourceSegmentIds.push(start.edge[2]);
-    const points = [start.point, ...chain.reverse(), destination.terminal.point]
-      .filter((point, index, all) => !index || distance(point, all[index - 1]) > 1e-6)
-      .map(p => p.slice());
+    const floorMap = new Map(data.floors.map(f => [f.id, f]));
+    const decode = id => {const split = id.lastIndexOf(':');return {floor: id.slice(0, split), node: Number(id.slice(split + 1))};};
+    const first = decode(nodeKeys[0]), routeSegments = [{floor: originFloor.id,
+      points: [start.point.slice(), originFloor.nodes[first.node].slice()]}];
+    const connectorsUsed = [], sourceSegmentIds = [start.edge[2]];
+    for (let i = 0; i < pathEdges.length; i++) {
+      const edge = pathEdges[i], next = decode(nodeKeys[i + 1]);
+      if (edge.kind === 'corridor') {
+        routeSegments.at(-1).points.push(floorMap.get(next.floor).nodes[next.node].slice());
+        sourceSegmentIds.push(edge.sourceId);
+      } else {
+        connectorsUsed.push({id: edge.connector.id, type: edge.connector.type,
+          fromFloor: decode(nodeKeys[i]).floor, toFloor: next.floor,
+          direction: edge.connector.direction, verified: true,
+          landingMappingsVerified: true, sourceId: edge.connector.sourceId});
+        routeSegments.push({floor: next.floor, points: [floorMap.get(next.floor).nodes[next.node].slice()]});
+      }
+    }
+    routeSegments.at(-1).points.push(destination.terminal.point.slice());
+    for (const segment of routeSegments) segment.points = segment.points
+      .filter((point, index, all) => !index || distance(point, all[index - 1]) > 1e-6);
+    sourceSegmentIds.push(destination.terminal.sourceSegmentId);
+    const points = routeSegments.length === 1 ? routeSegments[0].points.map(p => p.slice()) : [];
     return {status: 'provisional', routingVerified: false, reason: 'source-preview-not-verified',
-      floor: floor.id, destinationPolygonId: destination.terminal.polygonId, points,
+      floor: destinationFloor.id, originFloor: originFloor.id,
+      destinationPolygonId: destination.terminal.polygonId, points, routeSegments, connectorsUsed,
       endpoint: 'outside-destination', stopsBeforeObstacle: destination.terminal.stopsBeforeObstacle,
       originOffsetMeters: start.offset / 10, previewLengthMeters: destination.cost / 10,
-      sourceSha256: data.source.sha256, sourceSegmentIds: [...new Set(sourceSegmentIds.reverse())],
+      sourceSha256: data.source.sha256, sourceSegmentIds: [...new Set(sourceSegmentIds)],
       directionsVerified: false};
   }
   root.RetailNavWayfindingRoute = Object.freeze({configure, plan, getOriginCandidates});
@@ -3593,7 +3654,7 @@ let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 // Search matches and the visitor's original floor remain stored unchanged.
 let focusedStoreVectors=new Set();
 let focusedStoreId=null,focusedStoreVector=null,focusFloorId=null,cameraFlight=null,lastStoreFocus=null,pendingStoreFocus=null;
-let wayfinding=null,wayfindingOpen=false,pendingOriginDestination=null,placingLocalOnly=false;
+let wayfinding=null,wayfindingOpen=false,wayfindingCompact=false,pendingOriginDestination=null,placingLocalOnly=false;
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
 let lastEarth3DPitch=-.70,earth2D=false;
 const MIN_PITCH=-Math.PI/2,MAX_PITCH=-.25;
@@ -3876,8 +3937,8 @@ let grid;
 function makeGrid(){if(!gl)return;let a=[];const tone=mapRgb('mapGrid',[.065,.13,.19]);for(let n=-85;n<=85;n+=5){for(let p of [[n,-.9,-70],[n,-.9,70],[-85,-.9,n],[85,-.9,n]])a.push(...p,0,0,0,...tone,-2);}if(grid?.b)gl.deleteBuffer(grid.b);let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(a),gl.STATIC_DRAW);grid={b,n:a.length/10};}
 function resize(){let r=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);let w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;if(gl)gl.viewport(0,0,w,h);} }
 function referenceContext(floor){return Boolean(focusFloorId&&floor.id!==focusFloorId);}
-function visible(){return floors.filter(f=>focusFloorId
- ?f.id===focusFloorId||f.id===wayfindingOrigin()?.floor
+function visible(){const routeFloors=new Set(wayfindingOpen?(wayfinding?.routeSegments||[]).map(s=>s.floor):[]);return floors.filter(f=>focusFloorId
+ ?f.id===focusFloorId||f.id===wayfindingOrigin()?.floor||routeFloors.has(f.id)
  :(searchFloorSet?searchFloorSet.has(f.id):active==='ALL'||f.id===active));}
 function groundReferenceFloor(){
  const preferred=selectedMall.defaultVisitorReference?.floor;
@@ -4062,21 +4123,23 @@ function wayfindingOrigin(){
 }
 function clearWayfinding(){
  pendingOriginDestination=null;placingPosition=false;placingLocalOnly=false;canvas.classList.remove('placing');
- wayfinding=null;wayfindingOpen=false;pendingStoreFocus=null;
+ wayfinding=null;wayfindingOpen=false;wayfindingCompact=false;pendingStoreFocus=null;
  storeFocusEvent('retailnav:store-focus-start',{storeId:null,assistanceOpen:false});
- document.querySelector('.stage')?.classList.remove('rnWayfindingActive','rnWayfindingPlacing');
+ document.querySelector('.stage')?.classList.remove('rnWayfindingActive','rnWayfindingPlacing','rnWayfindingRouteOnly');
  for(const id of ['rnWayfinding','rnWayfindingOverlay'])if($(id))$(id).hidden=true;
 }
 function updateWayfindingUI(){
  if(!wayfinding||!$('rnWayfinding'))return;
  if(!wayfindingOpen){
-  document.querySelector('.stage')?.classList.remove('rnWayfindingActive','rnWayfindingPlacing');
+  document.querySelector('.stage')?.classList.remove('rnWayfindingActive','rnWayfindingPlacing','rnWayfindingRouteOnly');
   $('rnWayfinding').hidden=true;$('rnWayfindingOverlay').hidden=true;return;
  }
  const w=wayfinding,en=window.RetailNavI18n?.locale?.().startsWith('en');
  document.querySelector('.stage')?.classList.add('rnWayfindingActive');
+ document.querySelector('.stage')?.classList.toggle('rnWayfindingRouteOnly',wayfindingCompact);
  document.querySelector('.stage')?.classList.toggle('rnWayfindingPlacing',Boolean(w.placing));
- $('rnWayfinding').hidden=false;$('rnWayfindingOverlay').hidden=false;
+ $('rnWayfinding').hidden=wayfindingCompact;$('rnWayfindingOverlay').hidden=false;
+ $('rnWayfindingOverlay').classList.toggle('is-flowing',wayfindingCompact&&w.status==='provisional');
  $('rnWayfindingDestination').textContent=w.name;
  $('rnWayfindingTargetName').textContent=w.name;
  $('rnWayfindingOriginLabel').textContent=(en?'You':'Vos')+' · '+(w.origin?.floor||'');
@@ -4122,10 +4185,12 @@ function updateWayfindingUI(){
 function updateWayfindingRoute(){
  if(!wayfinding)return;
  const w=wayfinding;
- const result=w.mode==='same-floor'?window.RetailNavWayfindingRoute?.plan?.({mallId,
+ const result=w.origin&&w.destination?window.RetailNavWayfindingRoute?.plan?.({mallId,
   coordinateSpace:selectedMall.coordinateSpace,floor:w.floor,origin:w.origin,
   destinationPolygonIds:w.polygonIds}):null;
- w.status=result?.status||'unavailable';w.points=result?.points||[];w.routeReason=result?.reason||'no-continuous-route';
+ w.status=result?.status||'unavailable';w.points=result?.points||[];
+ w.routeSegments=result?.routeSegments||[];w.connectorsUsed=result?.connectorsUsed||[];
+ w.routeReason=result?.reason||'no-continuous-route';
  updateWayfindingUI();
 }
 let wayfindingEvidenceStarted=false;
@@ -4155,7 +4220,7 @@ function makeWayfinding(unit,floor,point,features,open=wayfindingOpen){
  wayfinding={storeId:unit?.storeId||focusedStoreId,name:unit?.name||unit?.code||'',floor:floorId,
   origin,destination:point?{x:point[0],y:point[1],floor:floorId}:null,
   floorDelta:delta,mode:!point?'unplaced':!origin?'no-origin':delta===0?'same-floor':'different-floor',
-  polygonIds:features.map(f=>f.id),status:'unavailable',points:[],placing:false};
+  polygonIds:features.map(f=>f.id),status:'unavailable',points:[],routeSegments:[],connectorsUsed:[],placing:false};
  updateWayfindingRoute();
 }
 // Fit actual world geometry into the free area below the orientation card.
@@ -4167,12 +4232,13 @@ function wayfindingCamera(features,floor,point){
  const frame=features.flatMap(f=>f.p.map(p=>pos(p,floor.y+height(f))));
  frame.push(pos(point,floor.y+2));
  if(w?.origin){const originFloor=floors.find(f=>f.id===w.origin.floor);frame.push(pos([w.origin.x,w.origin.y],originFloor.y+2));}
- for(const p of w?.points||[])frame.push(pos(p,floor.y+.5));
+ for(const segment of w?.routeSegments||[]){const segmentFloor=floors.find(f=>f.id===segment.floor);
+  if(segmentFloor)for(const p of segment.points)frame.push(pos(p,segmentFloor.y+.5));}
  const centre=[0,1,2].map(k=>(Math.min(...frame.map(p=>p[k]))+Math.max(...frame.map(p=>p[k])))/2);
  const inverseQ=[-rotation[0],-rotation[1],-rotation[2],rotation[3]];
  const local=frame.map(p=>qr(inverseQ,vsub(p,centre)));
- const rect=canvas.getBoundingClientRect(),panel=wayfindingOpen?$('rnWayfinding')?.getBoundingClientRect():null;
- const top=wayfindingOpen?Math.max(110,(panel?.bottom||rect.top+140)-rect.top+64):72;
+ const rect=canvas.getBoundingClientRect(),panel=wayfindingOpen&&!wayfindingCompact?$('rnWayfinding')?.getBoundingClientRect():null;
+ const top=panel?Math.max(110,panel.bottom-rect.top+64):72;
  const bottom=Math.max(top+80,rect.height-96),left=100,right=rect.width-100;
  const focal=rect.height/(2*Math.tan(Math.PI/8));
  const offsetX=(left+right)/2-rect.width/2,offsetY=(top+bottom)/2-rect.height/2;
@@ -4197,8 +4263,8 @@ function drawWayfindingStarts(){
  for(const el of wayfindingStarts)el.hidden=true;
  if(!wayfinding?.placing)return;
  const candidates=window.RetailNavWayfindingRoute?.getOriginCandidates?.({mallId,
-  coordinateSpace:selectedMall.coordinateSpace,floor:active,
-  destinationPolygonIds:active===wayfinding.floor?wayfinding.polygonIds:[]})||[];
+  coordinateSpace:selectedMall.coordinateSpace,floor:active,destinationFloor:wayfinding.floor,
+  destinationPolygonIds:wayfinding.polygonIds})||[];
  const floor=floors.find(f=>f.id===active),rect=canvas.getBoundingClientRect();
  const panel=$('rnWayfinding').getBoundingClientRect(),placed=[];
  const points=candidates.map(at=>({at,p:screen(pos([at.x,at.y],floor.y))}));
@@ -4233,13 +4299,14 @@ function drawWayfinding(){
   if(!el.hidden){el.style.left=p.x+'px';el.style.top=p.y+'px';}
  };
  place($('rnWayfindingOrigin'),w.origin);place($('rnWayfindingTarget'),w.destination);
- // Fixed screen-size circular samples follow the projected source segments.
- // Hollow circles distinguish the only currently available (provisional) paths.
- const floor=floors.find(f=>f.id===w.floor),samples=[];
- if(w.status==='provisional'&&floor){
+ // Fixed screen-size dots follow each projected source segment. Separate floor
+ // segments meet only through connectors already accepted by the planner.
+ const samples=[];
+ if(w.status==='provisional')for(const segment of w.routeSegments||[]){
+  const floor=floors.find(f=>f.id===segment.floor);if(!floor)continue;
   let remainder=0;
-  for(let i=1;i<w.points.length;i++){
-   const a=screen(pos(w.points[i-1],floor.y+.5)),b=screen(pos(w.points[i],floor.y+.5));
+  for(let i=1;i<segment.points.length;i++){
+   const a=screen(pos(segment.points[i-1],floor.y+.5)),b=screen(pos(segment.points[i],floor.y+.5));
    if(a.w<=0||b.w<=0)continue;
    const length=Math.hypot(b.x-a.x,b.y-a.y);
    for(let d=remainder;d<length;d+=17){const t=d/length;samples.push([a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t]);}
@@ -4250,7 +4317,7 @@ function drawWayfinding(){
  while(wayfindingDots.length<samples.length&&wayfindingDots.length<700){const dot=document.createElement('i');dot.className='rnWayfindingDot';host.append(dot);wayfindingDots.push(dot);}
  for(let i=0;i<wayfindingDots.length;i++){
   const dot=wayfindingDots[i],p=samples[i];dot.hidden=!p||p[0]<8||p[0]>rect.width-8||p[1]<8||p[1]>rect.height-8;
-  if(!dot.hidden){dot.style.left=p[0]+'px';dot.style.top=p[1]+'px';}
+  if(!dot.hidden){dot.style.left=p[0]+'px';dot.style.top=p[1]+'px';dot.style.setProperty('--rn-dot-index',i);}
  }
 }
 function beginWayfindingLocation(){
@@ -4282,6 +4349,7 @@ function bindWayfinding(){
  $('rnWayfindingReframe').onclick=()=>{if(wayfinding)focusCatalogStore(wayfinding.storeId,wayfinding.floor);};
  $('rnWayfindingClose').onclick=()=>{
   pendingOriginDestination=null;placingPosition=false;placingLocalOnly=false;canvas.classList.remove('placing');
+  wayfindingOpen=false;wayfindingCompact=false;updateWayfindingUI();dirty=true;
   setFloor(wayfinding?.floor||visitorFloorReference());
  };
 }
@@ -4289,7 +4357,7 @@ function bindWayfinding(){
 function focusCatalogStore(storeId,requestedFloor){
  if(!ready)return {located:false,reason:'map-not-ready'};
  const keepAssistance=Boolean(wayfindingOpen&&wayfinding?.storeId===storeId);
- wayfindingOpen=keepAssistance;pendingStoreFocus=null;
+ wayfindingOpen=keepAssistance;if(!keepAssistance)wayfindingCompact=false;pendingStoreFocus=null;
  storeFocusEvent('retailnav:store-focus-start',{storeId,assistanceOpen:keepAssistance});
  const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===storeId&&u.mallId===mallId);
  const allowed=window.RetailNavUnits?.getMapBindings?.(unit)||[];
@@ -4312,7 +4380,8 @@ function focusCatalogStore(storeId,requestedFloor){
   focusFloorId=unit&&floor?floorId:null;
   if(focusFloorId){active=floorId;searchFloorSet?.add(floorId);}
   resetCamera();showFloorReference();
-  lastStoreFocus={storeId,located:false,source:false,floor:focusFloorId,reason:'unplaced-directory',assistanceOpen:wayfindingOpen};
+  lastStoreFocus={storeId,located:false,source:false,floor:focusFloorId,reason:'unplaced-directory',
+   originKnown:Boolean(wayfinding?.origin),routeStatus:wayfinding?.status,assistanceOpen:wayfindingOpen};
   pendingStoreFocus={...lastStoreFocus};queueMicrotask(settleStoreFocus);
   dirty=true;return lastStoreFocus;
  }
@@ -4328,6 +4397,7 @@ function focusCatalogStore(storeId,requestedFloor){
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
  const moving=Math.hypot(...vsub(target,finalTarget))>.3||Math.abs(distance-aimDistance)>1||needsRotate;
  lastStoreFocus={storeId,located:true,source,floor:floorId,referenceFloor:visitorFloorReference(),vectorHighlighted:focusedStoreVectors.size>0,
+  originKnown:Boolean(wayfinding?.origin),routeStatus:wayfinding?.status,
   rotated:needsRotate,animated:Boolean(moving&&!reduced),durationMs:moving&&!reduced?860:0,assistanceOpen:wayfindingOpen};
  pendingStoreFocus={...lastStoreFocus};
  if(!moving||reduced){target=finalTarget;distance=aimDistance;q=endQ;cameraFlight=null;queueMicrotask(settleStoreFocus);}
@@ -4340,9 +4410,20 @@ function openStoreAssistance(storeId,requestedFloor){
  if(!ready)return{opened:false,reason:'map-not-ready'};
  const id=storeId||focusedStoreId;if(!id)return{opened:false,reason:'no-store'};
  if(!wayfinding||wayfinding.storeId!==id)return{opened:false,reason:'store-not-focused'};
- wayfindingOpen=true;
- const focus=focusCatalogStore(id,requestedFloor||focusFloorId);
- return{opened:true,...focus};
+ if(!wayfinding.origin)return{opened:false,reason:'origin-unavailable'};
+ wayfindingOpen=true;wayfindingCompact=true;updateWayfindingRoute();dirty=true;
+ if(wayfinding.status!=='provisional')notify(wayfinding.routeReason==='vertical-connection-unavailable'
+  ?'La ruta entre plantas se activará cuando estén verificados los desembarcos de escaleras mecánicas o ascensores.'
+  :'No hay continuidad confirmada desde esta ubicación hasta el local; no se dibuja un atajo.');
+ storeFocusEvent('retailnav:store-route-state',{storeId:id,open:true,status:wayfinding.status,
+  reason:wayfinding.routeReason,connectorsUsed:wayfinding.connectorsUsed.length});
+ return{opened:true,located:Boolean(wayfinding.destination),originKnown:true,status:wayfinding.status,
+  reason:wayfinding.routeReason,connectorsUsed:wayfinding.connectorsUsed.length};
+}
+function closeStoreAssistance(){
+ if(!wayfindingOpen)return false;
+ const id=wayfinding?.storeId;wayfindingOpen=false;wayfindingCompact=false;updateWayfindingUI();dirty=true;
+ storeFocusEvent('retailnav:store-route-state',{storeId:id,open:false,status:wayfinding?.status});return true;
 }
 
 function screen(p){let v=mp(mvp,[...p,1]);let r=canvas.getBoundingClientRect();return {x:(v[0]/v[3]*.5+.5)*r.width,y:(.5-v[1]/v[3]*.5)*r.height,z:v[2]/v[3],w:v[3]};}
@@ -5887,18 +5968,18 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  searchFloorIDs:searchFloorSet?[...searchFloorSet]:null,
   committedSearch:searchCommitted,highlightedVectorCount:searchMatchedVectors.size,
   focusedStoreId,focusedStoreVector,focusedStoreVectors:[...focusedStoreVectors],focusFloorId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',
-  wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),wayfindingOpen,
+  wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),wayfindingOpen,wayfindingCompact,
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
   searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
   showSearchMatches:applySearchFloors,clearSearchMatches:clearSearchFloors,
-  focusCatalogStore,openStoreAssistance,
+  focusCatalogStore,openStoreAssistance,closeStoreAssistance,
  getVerticalConnections:verticalConnectionInfo,
  getEscalatorModels:()=>escalatorModel().items.slice(),
  getLiftShaftModels:()=>liftShaftModel().shafts.slice(),
- exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{if(!searchFloorSet||!searchFloorSet.has(id))setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:()=>{if(wayfindingOpen&&wayfinding){beginWayfindingLocation();return;}placingLocalOnly=false;placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+ exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{if(!searchFloorSet||!searchFloorSet.has(id))setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:(localOnly=false)=>{if(wayfindingOpen&&wayfinding&&!wayfindingCompact){beginWayfindingLocation();return;}placingLocalOnly=Boolean(localOnly);placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 // Theme preview re-colors loaded mesh buffers without redownloading geometry.
 let pendingThemeRefresh=false;
 let lastRoofFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
@@ -19629,20 +19710,35 @@ function hideActionMenu(){
 window.addEventListener('retailnav:store-focus-start',hideActionMenu);
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
- if(!actionDock||!selectedId||focus.storeId!==selectedId||focus.assistanceOpen)return;
- assistAction.disabled=!focus.located;
- assistAction.title=focus.located?tr('Orientarme','Guide me'):tr('Ubicación sin vincular','Location not mapped');
+ if(!actionDock||!selectedId||focus.storeId!==selectedId)return;
+ const routeReady=Boolean(focus.located&&focus.originKnown);
+ assistAction.disabled=!routeReady;
+ assistAction.classList.toggle('is-route-ready',routeReady);
+ assistAction.classList.toggle('is-route-open',Boolean(focus.assistanceOpen));
+ assistAction.setAttribute('aria-pressed',String(Boolean(focus.assistanceOpen)));
+ assistAction.title=!focus.located?tr('Ubicación del local sin vincular','Store location not mapped'):
+  !focus.originKnown?tr('Marcá tu ubicación para activar la ruta','Set your location to activate the route'):
+  tr('Mostrar camino al local','Show path to store');
  assistAction.setAttribute('aria-label',assistAction.title);
  actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
 });
 assistAction?.addEventListener('click',()=>{
  if(!selectedId||assistAction.disabled)return;
- hideActionMenu();
- window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+ const open=assistAction.getAttribute('aria-pressed')==='true';
+ if(open)window.__RETAILNAV__?.closeStoreAssistance?.();
+ const result=open?{opened:false}:window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+ assistAction.classList.toggle('is-route-open',Boolean(result?.opened));
+ assistAction.setAttribute('aria-pressed',String(Boolean(result?.opened)));
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
 infoAction?.addEventListener('click',openStoreInfo);
-closeAction?.addEventListener('click',hideActionMenu);
+closeAction?.addEventListener('click',()=>{window.__RETAILNAV__?.closeStoreAssistance?.();hideActionMenu();});
+window.addEventListener('retailnav:store-route-state',event=>{
+ if(event.detail?.storeId!==selectedId)return;
+ const open=Boolean(event.detail.open);
+ assistAction?.classList.toggle('is-route-open',open);
+ assistAction?.setAttribute('aria-pressed',String(open));
+});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));

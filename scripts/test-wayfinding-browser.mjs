@@ -71,6 +71,13 @@ try{
     u.name===name)?.storeId])));
  for(const [name,id] of Object.entries(fixtures))assert.ok(id,'missing fixture '+name);
  const joe=fixtures['Joe & The Juice'];
+ const fixtureOrigin={floor:'LL',x:284.25644526,y:-1364.7832};
+ const setOrigin=async origin=>{
+  await page.evaluate(({origin,coordinateSpace})=>window.dispatchEvent(
+   new CustomEvent('retailnav:map-point',{detail:{...origin,mallId:'aventura',
+    coordinateSpace,localOnly:true}})),{origin,coordinateSpace:routing.coordinateSpace});
+  await settle();
+ };
  const native=async()=>{
   assert.equal(await page.evaluate(()=>window.__originalWayfindingCanvas===
    document.querySelector('#canvas')),true,'wayfinding must reuse the original 3D canvas');
@@ -144,47 +151,6 @@ try{
   assert.equal(overlap(layout.markers[0].rect,layout.markers[1].rect),false,
    'origin and destination labels must remain independently legible');
  };
- const markOrigin=async(floor)=>{
-  const chosenBefore=(await state()).wayfinding.storeId;
-  await page.locator('#rnWayfindingOriginFloor').selectOption(floor);
-  await page.locator('#rnWayfindingLocate').tap();
-  await page.waitForFunction(()=>window.__RETAILNAV__.getState().placingPosition);
-  await settle();
-  const nodes=routing.floors.find(f=>f.id===floor).nodes;
-  const click=await page.evaluate(({floor,nodes})=>{
-   const view=window.__RETAILNAV__,canvas=document.querySelector('#canvas');
-   const r=canvas.getBoundingClientRect();
-   const target=view.floors.find(f=>f.id==='LL')?.features.find(f=>
-    f.id==='1e262d8a02e8023eecf555d59ee77313')?.c;
-   return nodes.map(p=>{
-    const world=view.pinWorld(floor,p[0],p[1]),s=world&&view.projectWorld(world);
-    if(!s||s.w<=0||s.x<55||s.x>r.width-55||s.y<55||s.y>r.height-55)return null;
-    const x=r.left+s.x,y=r.top+s.y;
-    if(document.elementFromPoint(x,y)!==canvas)return null;
-    if(floor==='LL'&&target&&Math.hypot(p[0]-target[0],p[1]-target[1])<600)return null;
-    return {x,y,source:p,score:Math.hypot(s.x-r.width*.5,s.y-r.height*.62)};
-   }).filter(Boolean).sort((a,b)=>a.score-b.score)[0]||null;
-  },{floor,nodes});
-  assert.ok(click,'a real public-floor point must be tappable while marking '+floor);
-  await page.touchscreen.tap(click.x,click.y);
-  await page.waitForFunction(({floor,chosen})=>{
-   const s=window.__RETAILNAV__.getState();return !s.placingPosition&&
-    s.wayfinding?.origin?.floor===floor&&s.wayfinding.storeId===chosen;
-  },{floor,chosen:chosenBefore});
-  await settle();
-  const point=await page.evaluate(()=>window.__wayfindingMapPoints.at(-1));
-  assert.equal(point.localOnly,true,'orientation placement must not opt into location sharing');
-  assert.equal(point.floor,floor);
-  assert.equal(point.mallId,'aventura');
-  assert.equal(point.coordinateSpace,routing.coordinateSpace);
-  const projected=await page.evaluate(()=>window.__wayfindingMapPointProjection);
-  assert.ok(Math.hypot(projected.x-click.x,projected.y-click.y)<1.5,
-   'the point must project back to the actual tap within touch-event pixel rounding: '+
-    JSON.stringify({click,point,projected}));
-  assert.deepEqual(locationRequests,[],'manual orientation must not POST /location');
-  assert.equal(await page.locator('#peopleDialog').isVisible(),false,
-   'marking an origin must not open the contacts drawer');
- };
  await page.locator('#showAllFloors').tap();await settle();
  assert.deepEqual((await state()).visible,['LL','UL','L3']);
  await native();
@@ -250,46 +216,43 @@ try{
  assert.equal(await page.locator('#rnQuickInvite').isVisible(),true,
   'the invitation action opens the existing private meetup flow directly from the map');
  await page.locator('#rnQuickInvite button').filter({hasText:/Cerrar|Close/}).tap();
- await page.locator('#rnStoreAssist').tap();await settle();s=await state();
- assert.equal(s.wayfinding.mode,'no-origin');
+ const disabledStyle=await page.locator('#rnStoreAssist').evaluate(el=>({disabled:el.disabled,
+  grayscale:getComputedStyle(el).filter,background:getComputedStyle(el).backgroundColor}));
+ assert.equal(disabledStyle.disabled,true,'navigation stays disabled until an indoor location exists');
+ assert.match(disabledStyle.grayscale,/grayscale\(1\)/,'the unavailable navigation icon is visibly grey');
  assert.equal(s.wayfinding.origin,null,'a default floor must not masquerade as the visitor position');
- assert.equal(await page.locator('#rnWayfindingOrigin').isVisible(),false);
- assert.equal(await page.locator('#rnWayfindingLocate').isVisible(),true);
- assert.match(await page.locator('#rnWayfindingDestination').textContent(),/Joe & The Juice/);
- assert.equal(await page.locator('#rnWayfindingDots .rnWayfindingDot:visible').count(),0);
- await native();
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false);
 
- await markOrigin('UL');s=await state();
- assert.equal(s.wayfinding.mode,'different-floor');
- assert.equal(s.wayfinding.floorDelta,-1);
- assert.equal(s.wayfinding.floor,'LL');
+ const upperNode=routing.floors.find(f=>f.id==='UL').nodes[0];
+ await setOrigin({floor:'UL',x:upperNode[0],y:upperNode[1]});await settle();s=await state();
+ assert.equal(await page.locator('#rnStoreAssist').isEnabled(),true);
+ assert.equal(await page.locator('#rnStoreAssist').evaluate(el=>el.classList.contains('is-route-ready')),true,
+  'a compatible location changes navigation to the primary state');
+ await page.locator('#rnStoreAssist').tap();await settle();s=await state();
+ assert.equal(s.wayfindingCompact,true,'navigation opens as a compact map path');
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,'the large orientation dialog stays closed');
+ assert.equal(s.wayfinding.mode,'different-floor');assert.equal(s.wayfinding.floorDelta,-1);
+ assert.equal(s.wayfinding.routeReason,'vertical-connection-unavailable');
  assert.deepEqual(s.visible,['LL','UL']);
- assert.equal(s.earth2D,false,'different floors use the existing 3D perspective');
- assert.match(await page.locator('#rnWayfindingRelation').textContent(),/1/);
- const levels=await page.locator('#rnWayfindingLevels').textContent();
- assert.match(levels,/LL/);assert.match(levels,/UL/);
- assert.equal(s.route,0,'unverified vertical connectors cannot create walking instructions');
- assert.equal(await page.locator('#rnWayfindingDots .rnWayfindingDot:visible').count(),0);
+ assert.equal(await page.locator('#rnWayfindingDots .rnWayfindingDot:visible').count(),0,
+  'missing verified landings cannot produce an invented cross-floor shortcut');
  await markerLayout();await native();
  mkdirSync('artifacts',{recursive:true});
  await page.locator('#toast').waitFor({state:'hidden',timeout:7000});
  await page.screenshot({path:'artifacts/wayfinding-floors-tablet-'+engine+'.png'});
- console.log('PASS actual manual placement, preserved destination, local-only origin and one-floor 3D relation');
+ await page.locator('#rnStoreActionClose').tap();
+ assert.equal((await state()).wayfindingOpen,false,'the central X closes the contextual route');
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),false);
+ console.log('PASS location-gated primary navigation and connector-safe cross-floor preparation');
 
- await markOrigin('L3');s=await state();
- assert.equal(s.wayfinding.floorDelta,-2,'floor separation counts real levels, not floor labels or height estimates');
- assert.match(await page.locator('#rnWayfindingRelation').textContent(),/2/);
- assert.deepEqual(s.visible,['LL','L3']);
- await markerLayout();
-
- await markOrigin('LL');s=await state();
+ await setOrigin(fixtureOrigin);
+ await page.evaluate(id=>window.RetailNavMeetups.selectStore(id,false,'LL'),joe);await settle();s=await state();
  assert.equal(s.wayfinding.mode,'same-floor');assert.equal(s.wayfinding.floorDelta,0);
  assert.equal(s.earth2D,true,'same-floor orientation must be viewed from above');
  assert.ok(Math.abs(s.orbitPitch+Math.PI/2)<.025,'camera is genuinely cenital');
  assert.deepEqual(s.visible,['LL']);
- assert.match(await page.locator('#rnWayfindingRelation').textContent(),/misma|same/i);
- assert.equal(s.route,0,'source candidates are not promoted to verified walking routes');
- await markerLayout();await native();
+ assert.equal(s.route,0,'source previews stay separate from the old fictional route layer');
+ await native();
  const unchanged={q:s.q,target:s.target,distance:s.distance};
  await page.evaluate(()=>window.dispatchEvent(new Event('retailnav:indoor-observation')));
  await settle();s=await state();
@@ -300,20 +263,14 @@ try{
  // This independently audited source node has an unbroken source-line path
  // toward Venchi. It is a preview ending outside the storefront, never safe
  // turn-by-turn guidance. Other manual marks may have no connected linework.
- const fixtureOrigin={floor:'LL',x:284.25644526,y:-1364.7832};
- const setOrigin=async origin=>{
-  await page.evaluate(({origin,coordinateSpace})=>window.dispatchEvent(
-   new CustomEvent('retailnav:map-point',{detail:{...origin,mallId:'aventura',
-    coordinateSpace,localOnly:true}})),{origin,coordinateSpace:routing.coordinateSpace});
-  await settle();
- };
  await setOrigin(fixtureOrigin);await select(fixtures.Venchi);
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().wayfinding.status==='provisional');
  await settle();s=await state();
  assert.equal(s.wayfinding.mode,'same-floor');assert.ok(s.wayfinding.points.length>3);
+ assert.equal(s.wayfindingCompact,true);
  assert.equal(s.route,0,'preview circles must remain separate from verified navigation');
- assert.match(await page.locator('#rnWayfindingStatus').textContent(),/provisional/i);
- assert.match(await page.locator('#rnWayfindingStatus').textContent(),/sin verificar|unverified/i);
+ assert.equal(await page.locator('#rnWayfinding').isVisible(),false,
+  'touching navigation draws on the map without restoring the large dialog');
  assert.equal(await page.locator('#rnIndoorArrow').isVisible(),false,
   'uncalibrated phone heading cannot imply a verified walking direction');
  const dots=await page.evaluate(()=>{
@@ -333,7 +290,7 @@ try{
     const b=el.getBoundingClientRect(),style=getComputedStyle(el);
     const p={x:(b.left+b.right)/2-r.left,y:(b.top+b.bottom)/2-r.top};
     return {width:b.width,height:b.height,radius:style.borderRadius,
-     color:style.borderColor,background:style.backgroundColor,
+     color:style.borderColor,background:style.backgroundColor,animation:style.animationName,
      deviation:Math.min(...line.slice(1).map((q,i)=>segmentDistance(p,line[i],q)))};
    });
  });
@@ -341,8 +298,8 @@ try{
  assert.ok(dots.every(d=>Math.abs(d.width-d.height)<.1&&d.radius==='50%'),
   'the path uses actual circular markers');
  assert.ok(dots.every(d=>d.deviation<1.5),'every circle must stay on the projected source path');
- assert.ok(dots.every(d=>/^rgba\(/.test(d.background)),
-  'provisional circles retain a translucent centre distinct from verified routes');
+ assert.ok(dots.every(d=>d.animation==='rnRouteDotFlow'&&d.background!=='rgba(0, 0, 0, 0)'),
+  'the requested path uses animated primary-colour dots');
  await markerLayout();
  await page.locator('#toast').waitFor({state:'hidden',timeout:7000});
  await page.screenshot({path:'artifacts/wayfinding-tablet-'+engine+'.png'});
@@ -353,29 +310,16 @@ try{
  await setOrigin(fixtureOrigin);
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().wayfinding.status==='provisional');
  await settle();
- await page.locator('#rnWayfindingLocate').tap();
- const start=page.locator('.rnWayfindingStart:visible').first();
- await start.waitFor({state:'visible'});
- const chosenStart=await start.evaluate(el=>({...el.sourcePoint}));
- const startBox=await start.boundingBox();
- assert.ok(startBox.width>=44&&startBox.height>=44,'source start choices must be comfortable to tap');
- await start.tap();
- await page.waitForFunction(()=>!window.__RETAILNAV__.getState().placingPosition&&
-  window.__RETAILNAV__.getState().wayfinding.status==='provisional');
- await settle();s=await state();
- assert.equal(s.wayfinding.storeId,fixtures.Venchi);
- assert.deepEqual([s.wayfinding.origin.floor,s.wayfinding.origin.x,s.wayfinding.origin.y],
-  [chosenStart.floor,chosenStart.x,chosenStart.y],
-  'an explicit corridor choice uses exactly the selected source point');
  assert.deepEqual(locationRequests,[]);
- await setOrigin(fixtureOrigin);
- console.log('PASS source-constrained cyan circles, explicit provisional state and no invented off-network route');
+ console.log('PASS source-constrained animated dots, compact route state and no invented off-network route');
 
  await page.setViewportSize({width:768,height:1024});
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().cameraFlying);
  await settle();
  await markerLayout();await native();await tabletHeader();
- for(const id of ['rnWayfindingOriginFloor','rnWayfindingLocate','rnWayfindingReframe','rnWayfindingClose']){
+ await page.locator('#rnStoreActions').waitFor({state:'visible'});
+ await page.waitForTimeout(650);
+ for(const id of ['rnStoreAssist','rnStoreActionClose']){
   const box=await page.locator('#'+id).boundingBox();
   assert.ok(box&&box.width>=44&&box.height>=44,id+' must provide a 44px tablet touch target');
  }
@@ -396,13 +340,12 @@ try{
  await page.emulateMedia({reducedMotion:'reduce'});await select(joe);s=await state();
  assert.equal(s.cameraFlying,false);assert.equal(s.lastStoreFocus.animated,false);
  assert.equal(s.wayfinding.mode,'same-floor');await markerLayout();
- await page.locator('#rnWayfindingClose').tap();
+ await page.locator('#rnStoreAssist').tap();
  assert.equal(await page.locator('#rnWayfinding').isVisible(),false);
  assert.equal(await page.locator('#rnWayfindingOrigin').isVisible(),false);
  assert.equal(await page.locator('#rnWayfindingTarget').isVisible(),false);
  assert.equal(await page.locator('#rnWayfindingDots .rnWayfindingDot:visible').count(),0);
- await select(joe);
- await page.locator('#rnWayfindingLocate').tap();
+ await page.evaluate(()=>window.__RETAILNAV__.beginManualLocation(true));
  assert.equal((await state()).placingPosition,true);
  const manualCount=await page.evaluate(()=>window.__wayfindingMapPoints.length);
  await page.locator('#search').fill('Apple');

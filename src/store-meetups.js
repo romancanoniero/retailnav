@@ -331,20 +331,35 @@ function hideActionMenu(){
 window.addEventListener('retailnav:store-focus-start',hideActionMenu);
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
- if(!actionDock||!selectedId||focus.storeId!==selectedId||focus.assistanceOpen)return;
- assistAction.disabled=!focus.located;
- assistAction.title=focus.located?tr('Orientarme','Guide me'):tr('Ubicación sin vincular','Location not mapped');
+ if(!actionDock||!selectedId||focus.storeId!==selectedId)return;
+ const routeReady=Boolean(focus.located&&focus.originKnown);
+ assistAction.disabled=!routeReady;
+ assistAction.classList.toggle('is-route-ready',routeReady);
+ assistAction.classList.toggle('is-route-open',Boolean(focus.assistanceOpen));
+ assistAction.setAttribute('aria-pressed',String(Boolean(focus.assistanceOpen)));
+ assistAction.title=!focus.located?tr('Ubicación del local sin vincular','Store location not mapped'):
+  !focus.originKnown?tr('Marcá tu ubicación para activar la ruta','Set your location to activate the route'):
+  tr('Mostrar camino al local','Show path to store');
  assistAction.setAttribute('aria-label',assistAction.title);
  actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
 });
 assistAction?.addEventListener('click',()=>{
  if(!selectedId||assistAction.disabled)return;
- hideActionMenu();
- window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+ const open=assistAction.getAttribute('aria-pressed')==='true';
+ if(open)window.__RETAILNAV__?.closeStoreAssistance?.();
+ const result=open?{opened:false}:window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+ assistAction.classList.toggle('is-route-open',Boolean(result?.opened));
+ assistAction.setAttribute('aria-pressed',String(Boolean(result?.opened)));
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
 infoAction?.addEventListener('click',openStoreInfo);
-closeAction?.addEventListener('click',hideActionMenu);
+closeAction?.addEventListener('click',()=>{window.__RETAILNAV__?.closeStoreAssistance?.();hideActionMenu();});
+window.addEventListener('retailnav:store-route-state',event=>{
+ if(event.detail?.storeId!==selectedId)return;
+ const open=Boolean(event.detail.open);
+ assistAction?.classList.toggle('is-route-open',open);
+ assistAction?.setAttribute('aria-pressed',String(open));
+});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));

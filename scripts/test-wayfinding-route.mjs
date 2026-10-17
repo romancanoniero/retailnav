@@ -138,3 +138,30 @@ test('explicit origin choices are source nodes connected to the requested destin
   assert.deepEqual(isolated.map(p => p.x).sort((a, b) => a - b).join(','), '101,201');
   for (const point of isolated) assert.equal(isolatedPlanner.plan(fixtureQuery({origin: point})).status, 'provisional');
 });
+
+test('verified escalator landings extend the same graph across floors without an invented vertical line', () => {
+  const connected = fixture();
+  connected.floors[0].terminals = [];
+  connected.floors.push({id: 'UL', nodes: [[0, 100], [100, 100]], edges: [[0, 1, 'upper']],
+    terminals: [{polygonId: 'upper-target', node: 1, point: [120, 100], entrance: [130, 100],
+      sourceSegmentId: 'upper-access', sourceEntranceOffsetMeters: 0, stopsBeforeObstacle: true}]});
+  connected.connectors = [{id: 'escalator-1', type: 'escalator',
+    from: {floor: 'LL', node: 3}, to: {floor: 'UL', node: 0}, direction: 'both',
+    costUnits: 80, verified: true, landingMappingsVerified: true, sourceId: 'survey:escalator-1'}];
+  const planner = api(connected);
+  const route = planner.plan(fixtureQuery({floor: 'UL', destinationPolygonIds: ['upper-target'],
+    origin: {floor: 'LL', x: 50, y: 0}}));
+  assert.equal(route.status, 'provisional');
+  assert.deepEqual(JSON.parse(JSON.stringify(route.routeSegments.map(s => s.floor))), ['LL', 'UL']);
+  assert.deepEqual(JSON.parse(JSON.stringify(route.routeSegments[0].points.at(-1))), [0, 100]);
+  assert.deepEqual(JSON.parse(JSON.stringify(route.routeSegments[1].points[0])), [0, 100]);
+  assert.equal(route.points.length, 0, 'cross-floor points remain split by floor for rendering');
+  assert.deepEqual(JSON.parse(JSON.stringify(route.connectorsUsed.map(c => [c.id, c.type, c.fromFloor, c.toFloor]))),
+    [['escalator-1', 'escalator', 'LL', 'UL']]);
+  assert.ok(planner.getOriginCandidates({mallId: 'test', coordinateSpace: 'test:decimeters',
+    floor: 'LL', destinationFloor: 'UL', destinationPolygonIds: ['upper-target']}).length > 0);
+
+  const unverified = structuredClone(connected);unverified.connectors[0].landingMappingsVerified = false;
+  assert.equal(planner.configure(unverified), false, 'an unverified landing invalidates the whole route dataset');
+  assert.equal(planner.plan(fixtureQuery()).reason, 'source-data-unavailable');
+});

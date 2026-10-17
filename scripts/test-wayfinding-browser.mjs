@@ -205,13 +205,38 @@ try{
   'selecting a store keeps the large orientation card closed');
  assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
   'compact actions appear only after the camera settles');
- await page.waitForTimeout(420);
- const actions=await page.locator('#rnStoreActions button').evaluateAll(nodes=>nodes.map(node=>{
-  const box=node.getBoundingClientRect();return{width:box.width,height:box.height,radius:getComputedStyle(node).borderRadius};
- }));
- assert.equal(actions.length,3);assert.ok(actions.every(a=>a.width>=54&&a.height>=54&&
-  (a.radius==='50%'||Math.abs(parseFloat(a.radius)-a.width/2)<1)),
-  'assistance, invitation and information use round touch targets: '+JSON.stringify(actions));
+ await page.waitForTimeout(650);
+ const radial=await page.locator('#rnStoreActions').evaluate(menu=>{
+  const box=menu.getBoundingClientRect(),close=menu.querySelector('#rnStoreActionClose').getBoundingClientRect();
+  const centre={x:close.left+close.width/2,y:close.top+close.height/2};
+  const actions=[...menu.querySelectorAll('.rnStoreAction')].map(node=>{
+   const item=node.getBoundingClientRect(),style=getComputedStyle(node);
+   const itemCentre={x:item.left+item.width/2,y:item.top+item.height/2};
+   return {width:item.width,height:item.height,radius:style.borderRadius,shadow:style.boxShadow,
+    orbitRadius:Math.hypot(itemCentre.x-centre.x,itemCentre.y-centre.y)};
+  });
+  return {actions,close:{width:close.width,height:close.height,
+   radius:getComputedStyle(menu.querySelector('#rnStoreActionClose')).borderRadius},
+   centreOffset:Math.hypot(centre.x-(box.left+box.width/2),centre.y-(box.top+box.height/2))};
+ });
+ assert.equal(radial.actions.length,3);
+ assert.ok(radial.actions.every(a=>a.width>=44&&a.width<=50&&Math.abs(a.height-a.width)<.2&&
+  (a.radius==='50%'||Math.abs(parseFloat(a.radius)-a.width/2)<1)&&a.shadow!=='none'),
+  'the three options are small circular touch targets with shadows: '+JSON.stringify(radial));
+ assert.ok(Math.max(...radial.actions.map(a=>a.orbitRadius))-
+  Math.min(...radial.actions.map(a=>a.orbitRadius))<1,
+  'every option centre follows the same imaginary circumference: '+JSON.stringify(radial));
+ assert.ok(radial.centreOffset<1&&radial.close.width>=44&&radial.close.width<=46&&
+  Math.abs(radial.close.width-radial.close.height)<.2,
+  'the circular close button occupies the exact centre: '+JSON.stringify(radial));
+ await page.locator('#rnStoreActionClose').tap();
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),false,
+  'the central X closes the contextual menu');
+ await page.evaluate(id=>window.RetailNavMeetups.selectStore(id,false,'LL'),fixtures['Joe & The Juice']);
+ await settle();
+ assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
+  'selecting the store again restores the radial menu');
+ await page.waitForTimeout(650);
  mkdirSync('artifacts',{recursive:true});
  await page.screenshot({path:'artifacts/store-actions-tablet-'+engine+'.png'});
  await page.locator('#rnTagResultClose').tap();

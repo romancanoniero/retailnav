@@ -1240,27 +1240,44 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
 .rnStoreFloorChoices button{min-width:64px;min-height:44px;border:1px solid var(--rn-theme-border,#47657b);border-radius:8px;background:var(--rn-theme-surface,#163045);color:inherit}
 .rnStoreFloorChoices button[aria-pressed="true"]{outline:2px solid var(--rn-theme-accent,#12617b)}
 
-/* Contextual store actions arrive only after the camera has finished its
-   selection flight. The circular controls keep the map visible and reserve
-   the larger orientation card for an explicit request. */
-.rnStoreActions{position:absolute;z-index:9;left:50%;bottom:78px;display:flex;gap:14px;
- transform:translate(-50%,14px) scale(.86);opacity:0;pointer-events:none;
- transition:opacity .2s ease,transform .34s cubic-bezier(.2,.9,.25,1.18)}
+/* The selected-store menu has no tray or panel. Its three 48 px action
+   centres lie on one imaginary circumference, 120 degrees apart, while the
+   close control occupies the exact centre. */
+.rnStoreActions{position:absolute;z-index:11;left:50%;bottom:190px;width:164px;height:164px;
+ transform:translate(-50%,10px) scale(.84);opacity:0;pointer-events:none;
+ transition:opacity .18s ease,transform .32s cubic-bezier(.2,.9,.25,1.18)}
 .rnStoreActions[hidden]{display:none!important}
 .rnStoreActions.is-visible{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
-.rnStoreActions button{display:grid;place-items:center;width:58px;min-width:58px;height:58px;min-height:58px;padding:0;
+.rnStoreActions button{position:absolute;display:grid;place-items:center;padding:0;border-radius:50%;
  border:1px solid color-mix(in srgb,var(--rn-theme-accent,#70dce8) 65%,white 15%);border-radius:50%;
  background:color-mix(in srgb,var(--rn-theme-surface,#123247) 91%,transparent);color:var(--rn-theme-text,#f3fbff);
- box-shadow:0 12px 28px #06152166,0 3px 7px #0615214d,inset 0 1px 0 #ffffff42;
- backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);touch-action:manipulation}
-.rnStoreActions button .icon{width:26px;height:26px;stroke-width:1.9}
+ box-shadow:0 11px 24px #06152166,0 3px 7px #06152155,inset 0 1px 0 #ffffff4d;
+ backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);touch-action:manipulation}
+.rnStoreActions .rnStoreAction{left:50%;top:50%;width:48px;min-width:48px;height:48px;min-height:48px;
+ margin:-24px 0 0 -24px;opacity:0;transform:translate(0,0) scale(.4);
+ transition:opacity .16s ease,transform .34s cubic-bezier(.16,1.1,.3,1)}
+.rnStoreActions #rnStoreAssist{--rn-radial-x:0px;--rn-radial-y:-58px;transition-delay:.03s}
+.rnStoreActions #rnStoreInvite{--rn-radial-x:50.23px;--rn-radial-y:29px;transition-delay:.075s}
+.rnStoreActions #rnStoreInfoAction{--rn-radial-x:-50.23px;--rn-radial-y:29px;transition-delay:.12s}
+.rnStoreActions.is-visible .rnStoreAction{opacity:1;transform:translate(var(--rn-radial-x),var(--rn-radial-y)) scale(1)}
+.rnStoreActions .rnStoreActionClose{left:50%;top:50%;width:44px;min-width:44px;height:44px;min-height:44px;
+ margin:-22px 0 0 -22px;background:color-mix(in srgb,var(--rn-theme-surface,#123247) 76%,#07141e);
+ border-color:color-mix(in srgb,var(--rn-theme-text,#f3fbff) 45%,transparent);
+ opacity:0;transform:scale(.3) rotate(-70deg);transition:opacity .16s ease .12s,transform .3s cubic-bezier(.2,1.2,.3,1) .12s}
+.rnStoreActions.is-visible .rnStoreActionClose{opacity:1;transform:scale(1) rotate(0)}
+.rnStoreActions button .icon{width:22px;height:22px;stroke-width:2}
+.rnStoreActions .rnStoreActionClose .icon{width:19px;height:19px;stroke-width:2.35}
 .rnStoreActions button:hover,.rnStoreActions button:focus-visible{background:var(--rn-theme-accent,#5ed8e4);color:#092937;
- border-color:#e8ffff;transform:translateY(-2px);box-shadow:0 15px 30px #06152170,0 4px 9px #0615214d,inset 0 1px #fff8}
-.rnStoreActions button:disabled{filter:grayscale(.55);transform:none}
+ border-color:#e8ffff;box-shadow:0 14px 28px #06152170,0 4px 9px #06152155,inset 0 1px #fff8}
+.rnStoreActions .rnStoreAction:hover,.rnStoreActions .rnStoreAction:focus-visible{transform:translate(var(--rn-radial-x),calc(var(--rn-radial-y) - 2px)) scale(1.05)}
+.rnStoreActions .rnStoreActionClose:hover,.rnStoreActions .rnStoreActionClose:focus-visible{transform:scale(1.06) rotate(0)}
+.rnStoreActions button:disabled{filter:grayscale(.55);opacity:.58}
 .rnQuickInvite{z-index:40}
-@media(max-width:760px){.rnStoreActions{bottom:60px;gap:12px}.rnStoreActions button{width:54px;min-width:54px;height:54px;min-height:54px}}
-@media(min-width:761px){body.rnTagResultsOpen .rnStoreActions{left:56%}}
-@media(prefers-reduced-motion:reduce){.rnStoreActions{transition:none}}
+@media(max-width:760px){
+ .rnStoreActions{bottom:208px}
+ body.rnTagResultsOpen .rnStoreActions{bottom:calc(min(29dvh,235px) + 58px)}
+}
+@media(prefers-reduced-motion:reduce){.rnStoreActions,.rnStoreActions button{transition:none!important}}
 
 /* Destination orientation lives over the existing 3D viewport. Its projected
    markers share the camera; the card never creates another map surface. */
@@ -1572,9 +1589,10 @@ body.rnThemeEnabled[data-rn-font=alto-inter]{font-family:"RetailNav Alto Inter",
 <section class="stage" aria-label="Visor tridimensional interactivo"><section class="searchsection rnMapSearch" id="rnMapSearch" role="search" aria-label="Buscar comercios, zonas y servicios"><div class="searchbox"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" autocomplete="off" enterkeyhint="search" placeholder="Buscar tiendas, zonas o servicios…" aria-label="Buscar tienda, stand, zona o servicio" aria-controls="results rnSearchSuggestions"><label class="rnLangVisuallyHidden" for="rnLanguageSelect">Search language</label><select id="rnLanguageSelect" class="rnLanguageSelect" title="Language" aria-label="Search language"><option value="auto">Auto</option><option value="en">EN</option><option value="es">ES</option><option value="es-AR">ES-AR</option><option value="pt">PT</option><option value="pt-BR">PT-BR</option><option value="zh-CN">中文</option><option value="fr">FR</option></select></div><div id="rnSearchSuggestions" class="rnSearchSuggestions" role="listbox" aria-label="Sugerencias de etiquetas existentes" hidden></div><p class="caption" id="resultCount">Tiendas identificadas en el plano</p><div class="resultlist" id="results" role="group" aria-label="Resultados de búsqueda"></div></section><section class="rnTagResultPanel" id="rnTagResultPanel" aria-label="Comercios de la etiqueta seleccionada" aria-live="polite" hidden><header><h4 id="rnTagResultTitle"></h4><button id="rnTagResultClose" type="button" aria-label="Cerrar comercios de esta etiqueta">×</button></header><div id="rnTagResultCards" class="rnStoreCarousel"></div></section><section class="detail" id="detail" hidden><button class="detailclose" id="closeDetail" aria-label="Cerrar selección"><svg class="icon"><use href="#i-close"/></svg></button><div class="eyebrow" id="detailLevel"></div><h3 id="detailName"></h3><div class="caption" id="detailId"></div><div class="actions"><button id="focusShop">Acercar al local</button><button id="routeBtn" class="secondary">Recorrido de prueba</button></div><div class="routeinfo" id="routeInfo" aria-live="polite"></div></section><div class="mobiletitle"><strong id="mallMobileTitle">Aventura Mall</strong> <span id="mallMobileMeta">3 planos aportados · MOCK</span></div><div class="viewport"><canvas id="canvas" tabindex="0" aria-label="Mapa 3D. Desplazá con un dedo; dos dedos hacen zoom, rotan e inclinan como en Mapas de iPhone. Doble toque y arrastre vertical para zoom. Botón 3D permite giro libre en los tres ejes."></canvas><div class="labels" id="labels"></div><div id="rnDistrictOverlay" class="rnAreaOverlay" aria-label="Rótulos legibles de zonas comerciales"></div><canvas id="peoplePinCanvas" class="rnPinCanvas" aria-hidden="true"></canvas>
 <div id="rnPOIOverlay" class="rnPOIOverlay" aria-label="Servicios y puntos de interés del plano"></div><div id="rnUnitOverlay" class="rnUnitOverlay" aria-label="Códigos de tiendas identificados en el plano"></div><div id="rnSearchMarkers" class="rnSearchMarkers" aria-label="Locales coincidentes sobre las plantas abiertas"></div><div id="rnMyPositionMarker" class="rnMyPositionMarker" hidden aria-label="Referencia de posición interior"><span class="rnIndoorArrow">▲</span><span class="rnIndoorDot"></span></div>
 <nav id="rnStoreActions" class="rnStoreActions" hidden aria-label="Acciones para el local seleccionado">
-  <button id="rnStoreAssist" type="button" aria-label="Orientarme hacia este local" title="Orientarme"><svg class="icon" aria-hidden="true"><use href="#i-guide"/></svg></button>
-  <button id="rnStoreInvite" type="button" aria-label="Invitar personas a encontrarnos aquí" title="Invitar"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></button>
-  <button id="rnStoreInfoAction" type="button" aria-label="Ver información del local" title="Información"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></button>
+  <button id="rnStoreAssist" class="rnStoreAction" type="button" aria-label="Orientarme hacia este local" title="Orientarme"><svg class="icon" aria-hidden="true"><use href="#i-guide"/></svg></button>
+  <button id="rnStoreInvite" class="rnStoreAction" type="button" aria-label="Invitar personas a encontrarnos aquí" title="Invitar"><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></button>
+  <button id="rnStoreInfoAction" class="rnStoreAction" type="button" aria-label="Ver información del local" title="Información"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></button>
+  <button id="rnStoreActionClose" class="rnStoreActionClose" type="button" aria-label="Cerrar acciones del local" title="Cerrar"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
 </nav>
 <div id="rnWayfindingOverlay" class="rnWayfindingOverlay" hidden aria-label="Tu ubicación y el destino en el mapa">
   <div id="rnWayfindingDots" class="rnWayfindingDots" aria-hidden="true"></div>
@@ -19288,7 +19306,7 @@ const $=id=>document.getElementById(id);
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const panel=$('rnTagResultPanel'),cards=$('rnTagResultCards');
 if(!panel||!cards)return;
-const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction');
+const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction'),closeAction=$('rnStoreActionClose');
 let selectedId='',detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
 const i18n=()=>document.documentElement.lang||navigator.language||'es';
 const en=()=>i18n().startsWith('en');
@@ -19604,9 +19622,11 @@ const open=()=>{
  refresh().catch(()=>{});
 };
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
-window.addEventListener('retailnav:store-focus-start',()=>{
- if(actionDock){actionDock.classList.remove('is-visible');actionDock.hidden=true;}
-});
+function hideActionMenu(){
+ if(!actionDock)return;
+ actionDock.classList.remove('is-visible');actionDock.hidden=true;
+}
+window.addEventListener('retailnav:store-focus-start',hideActionMenu);
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
  if(!actionDock||!selectedId||focus.storeId!==selectedId||focus.assistanceOpen)return;
@@ -19617,11 +19637,12 @@ window.addEventListener('retailnav:store-focus-settled',event=>{
 });
 assistAction?.addEventListener('click',()=>{
  if(!selectedId||assistAction.disabled)return;
- actionDock.classList.remove('is-visible');actionDock.hidden=true;
+ hideActionMenu();
  window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
 infoAction?.addEventListener('click',openStoreInfo);
+closeAction?.addEventListener('click',hideActionMenu);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));

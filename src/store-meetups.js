@@ -8,7 +8,7 @@ const $=id=>document.getElementById(id);
 const mall=window.RETAILNAV_ACTIVE_MALL||{};
 const panel=$('rnTagResultPanel'),cards=$('rnTagResultCards');
 if(!panel||!cards)return;
-const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction');
+const actionDock=$('rnStoreActions'),assistAction=$('rnStoreAssist'),inviteAction=$('rnStoreInvite'),infoAction=$('rnStoreInfoAction'),closeAction=$('rnStoreActionClose');
 let selectedId='',detailOpen=false,meetings=[],friends=[],currentMeetingId='',revision=0;
 const i18n=()=>document.documentElement.lang||navigator.language||'es';
 const en=()=>i18n().startsWith('en');
@@ -324,9 +324,11 @@ const open=()=>{
  refresh().catch(()=>{});
 };
 new MutationObserver(open).observe(panel,{attributes:true,attributeFilter:['hidden']});
-window.addEventListener('retailnav:store-focus-start',()=>{
- if(actionDock){actionDock.classList.remove('is-visible');actionDock.hidden=true;}
-});
+function hideActionMenu(){
+ if(!actionDock)return;
+ actionDock.classList.remove('is-visible');actionDock.hidden=true;
+}
+window.addEventListener('retailnav:store-focus-start',hideActionMenu);
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
  if(!actionDock||!selectedId||focus.storeId!==selectedId||focus.assistanceOpen)return;
@@ -337,11 +339,12 @@ window.addEventListener('retailnav:store-focus-settled',event=>{
 });
 assistAction?.addEventListener('click',()=>{
  if(!selectedId||assistAction.disabled)return;
- actionDock.classList.remove('is-visible');actionDock.hidden=true;
+ hideActionMenu();
  window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
 });
 inviteAction?.addEventListener('click',()=>{if(selectedId)openInvitation();});
 infoAction?.addEventListener('click',openStoreInfo);
+closeAction?.addEventListener('click',hideActionMenu);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().catch(()=>{});});
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));

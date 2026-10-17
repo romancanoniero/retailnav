@@ -9,7 +9,7 @@ import zlib from 'node:zlib';
 const uid=()=>crypto.randomUUID();
 const sha=s=>crypto.createHash('sha256').update(String(s)).digest('hex');
 const safeId=s=>typeof s==='string' && /^[a-z0-9][a-z0-9-]{1,79}$/.test(s);
-const validEmail=s=>typeof s==='string'&&s.length<=200&&/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(s);
+const validEmail=s=>typeof s==='string'&&s.length<=200&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 const eq=(a,b)=>{const x=Buffer.from(String(a)),y=Buffer.from(String(b));return x.length===y.length&&crypto.timingSafeEqual(x,y);};
 const hashPassword=(password,salt=crypto.randomBytes(16).toString('hex'))=>
   salt+':'+crypto.scryptSync(password,salt,64).toString('hex');
@@ -34,7 +34,7 @@ function totp(secret,now=Date.now()){
   return String((digest.readUInt32BE(offset)&0x7fffffff)%1000000).padStart(6,'0');
 }
 function validTotp(seed,code,now=Date.now()){
-  return typeof code==='string'&&/^\\d{6}$/.test(code)&&[-30000,0,30000].some(delta=>eq(code,totp(seed,now+delta)));
+  return typeof code==='string'&&/^\d{6}$/.test(code)&&[-30000,0,30000].some(delta=>eq(code,totp(seed,now+delta)));
 }
 function response(res,status,payload,cookie){
   const body=JSON.stringify(payload);
@@ -126,7 +126,7 @@ export function createAdminApp(options={}){
     'https://improvingyourreality.com,https://www.improvingyourreality.com').split(',').filter(Boolean));
   const bootstrap=options.bootstrap||{email:process.env.RETAILNAV_ADMIN_OWNER_EMAIL,
     password:process.env.RETAILNAV_ADMIN_OWNER_PASSWORD,totp:process.env.RETAILNAV_ADMIN_OWNER_TOTP};
-  if(!/^\\/[a-zA-Z0-9/_-]*$/.test(apiPath))throw Error('Unsafe cookie path');
+  if(!/^\/[a-zA-Z0-9/_-]*$/.test(apiPath))throw Error('Unsafe cookie path');
   fs.mkdirSync(dataDir,{recursive:true,mode:0o700});
   const file=path.join(dataDir,'admin-state.json');
   let db;
@@ -187,7 +187,7 @@ export function createAdminApp(options={}){
     if(value.expires<Date.now()||!db.users[value.userId]?.active){delete db.sessions[key];changed=true;}
     if(changed)save();};
   function current(req){
-    const c=/(?:^|;\\s*)rn_admin_session=([A-Za-z0-9_-]{30,100})(?:;|$)/.exec(req.headers.cookie||'');
+    const c=/(?:^|;\s*)rn_admin_session=([A-Za-z0-9_-]{30,100})(?:;|$)/.exec(req.headers.cookie||'');
     const s=c&&db.sessions[sha(c[1])];
     return s&&s.expires>Date.now()?{user:db.users[s.userId],session:s,token:c[1]}:null;
   }
@@ -260,7 +260,7 @@ export function createAdminApp(options={}){
           totpSeed:d.totpSeed,roles:[{role,tenantId,merchantId}],active:true};
         log(user,'iam.user.created',null,id);save();return response(res,201,{id,email:d.email,role,tenantId,merchantId});
       }
-      const userMatch=/^\\/v1\\/users\\/([0-9a-f-]{36})$/.exec(p);
+      const userMatch=/^\/v1\/users\/([0-9a-f-]{36})$/.exec(p);
       if(userMatch&&method==='DELETE'){
         if(!has(user,'platform')||userMatch[1]===user.id)return err(res,403,'Forbidden');
         const target=db.users[userMatch[1]];if(!target)return err(res,404,'Not found');
@@ -268,7 +268,7 @@ export function createAdminApp(options={}){
         for(const [sid,s] of Object.entries(db.sessions))if(s.userId===target.id)delete db.sessions[sid];
         log(user,'iam.user.revoked',null,target.id);save();return response(res,200,{ok:true});
       }
-      const mallMatch=/^\\/v1\\/malls\\/([a-z0-9-]{2,80})(?:\\/(.*))?$/.exec(p);
+      const mallMatch=/^\/v1\/malls\/([a-z0-9-]{2,80})(?:\/(.*))?$/.exec(p);
       if(!mallMatch)return err(res,404,'Unknown endpoint');
       const mallId=mallMatch[1],suffix=mallMatch[2]||'';
       const mall=source(mallId);
@@ -292,10 +292,10 @@ export function createAdminApp(options={}){
           revisions:(db.revisions[mallId]||[]).map(r=>({id:r.id,version:r.version,status:r.status,
             createdBy:r.createdBy,approvedBy:r.approvedBy||null,updatedAt:r.updatedAt}))});
       }
-      const sourceMatch=/^source\\/([a-zA-Z0-9-]{1,12})$/.exec(suffix);
+      const sourceMatch=/^source\/([a-zA-Z0-9-]{1,12})$/.exec(suffix);
       if(method==='GET'&&sourceMatch){
         const f=mall.floors.find(x=>x.id===sourceMatch[1]);
-        if(!f||!/^[a-zA-Z0-9.-]+\\.geometry\\.zlib\\.b64$/.test(f.geometry))return err(res,404,'Floor unavailable');
+        if(!f||!/^[a-zA-Z0-9.-]+\.geometry\.zlib\.b64$/.test(f.geometry))return err(res,404,'Floor unavailable');
         const raw=fs.readFileSync(path.join(catalogDir,mallId,f.geometry),'utf8').trim();
         const geometry=JSON.parse(zlib.inflateSync(Buffer.from(raw,'base64')).toString('utf8'));
         const features=geometry.map(item=>{
@@ -319,7 +319,7 @@ export function createAdminApp(options={}){
         rows.push(r);db.revisions[mallId]=rows;log(user,'map.draft.created',mallId,r.id);save();
         return response(res,201,r);
       }
-      const revMatch=/^revisions\\/([0-9a-f-]{36})(?:\\/(validate|submit|approve|publish|reject))?$/.exec(suffix);
+      const revMatch=/^revisions\/([0-9a-f-]{36})(?:\/(validate|submit|approve|publish|reject))?$/.exec(suffix);
       if(revMatch){
         const r=(db.revisions[mallId]||[]).find(x=>x.id===revMatch[1]);
         if(!r)return err(res,404,'Revision not found');

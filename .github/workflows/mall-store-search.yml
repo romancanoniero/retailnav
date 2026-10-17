@@ -120,7 +120,9 @@ jobs:
           src=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]*?)</script>',html)
           assert src
           malls=json.loads(src.group(1))
-          assert set(malls)=={"aventura","ap-plaza","new-world-city-shanghai","alto-palermo"},set(malls)
+          required={"aventura","ap-plaza","new-world-city-shanghai","alto-palermo","del-parque-shopping"}
+          imported={p.parent.name for p in Path("data/malls").glob("*/mall.json")}
+          assert set(malls)==required|imported, (set(malls),required|imported)
           for slug,info in malls.items():
               table=Path("public/catalog/malls")/slug/"stores.json"
               raw=table.read_bytes()
@@ -209,6 +211,20 @@ jobs:
           assert all(u.get("polygonMatchStatus") in (None,"official-marker-inside-svg-region-provisional") for u in alto["records"])
           assert not any("nearest" in json.dumps(u) for u in alto["records"])
           assert malls["alto-palermo"]["floorLabels"]==["SS","PB","EP","P1","P2","P3"]
+          # An unverified evacuation plan is a mall map, not a current retail directory.
+          parque=malls["del-parque-shopping"]
+          assert parque["floorLabels"]==["PB","P1","P2"]
+          assert parque["status"]=="vectorizado-provisional" and parque["navigable"] is False
+          assert parque["vectorRegionCount"]==55
+          assert parque["storeCatalog"]["total"]==0, "Do not invent retailers from LOCAL labels"
+          assert parque["spaceCatalog"]["total"]==41
+          assert parque["spaceCatalog"]["unidentified"]==41
+          package=json.loads((Path("public")/parque["mapAsset"]["url"]).read_text())
+          assert sum(len(f[3]) for f in package["floors"])==55
+          assert sum(f[1] in (0,1) for floor in package["floors"] for f in floor[3])==41
+          assert set(parque["floorReferences"])=={"PB","P1","P2"}
+          assert all(ref["qa"]["status"]=="pending" for ref in parque["floorReferences"].values())
+          print("PASS Del Parque Shopping registered, three source floors, 41 unidentified rooms and safe non-navigation")
           print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
           PY
   browser:

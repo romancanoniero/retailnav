@@ -57,6 +57,27 @@ for slug, mall in catalog.items():
     assert len(bundle["floors"]) == asset["floorCount"]
     assert [f[0] for f in bundle["floors"]] == mall["floorLabels"]
     assert all(isinstance(f[3], list) and f[3] for f in bundle["floors"])
+    space_asset = mall["spaceCatalog"]
+    assert space_asset["schema"] == "retailnav.mall.spaces.v1"
+    assert space_asset["url"] == f"catalog/malls/{slug}/spaces.json"
+    space_path = root / space_asset["url"]
+    assert space_path.is_file(), space_path
+    space_raw = space_path.read_bytes()
+    assert hashlib.sha256(space_raw).hexdigest() == space_asset["sha256"]
+    spaces = json.loads(space_raw)
+    assert spaces["schema"] == space_asset["schema"] and spaces["mallId"] == slug
+    expected_spaces = {(floor[0], feature[0]) for floor in bundle["floors"]
+                       for feature in floor[3] if feature[1] in (0, 1)}
+    actual_spaces = {(record["floor"], record["polygonId"]) for record in spaces["records"]}
+    assert actual_spaces == expected_spaces, slug+": every physical shop polygon needs one space row"
+    assert len({record["spaceId"] for record in spaces["records"]}) == len(expected_spaces)
+    assert all(record["spaceId"] ==
+               f'{slug}:space:{record["floor"]}:{record["polygonId"]}' and
+               record["navigationDestination"] is True and
+               record["identityStatus"] in {"identified-single", "ambiguous", "unidentified"}
+               for record in spaces["records"])
+    assert spaces["stats"] == {key: space_asset[key] for key in spaces["stats"]}
+    assert spaces["stats"]["total"] == spaces["stats"]["navigationDestinations"] == len(expected_spaces)
     original = dict(mall)
     original.pop("mapAsset")
     original["floors"] = bundle["floors"]

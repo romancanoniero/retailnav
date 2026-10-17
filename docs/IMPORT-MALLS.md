@@ -26,6 +26,13 @@ contorno. **Nunca se asigna por cercanía.** Un código sin contorno conserva su
 nombre, planta y coordenada oficial; un contorno sin código permanece visible
 como región sin identificar.
 
+Cada contorno físico de tipo local o ancla también genera una fila independiente
+en `public/catalog/malls/<mallId>/spaces.json`. Su `spaceId` canónico es
+`<mallId>:space:<floor>:<polygonId>` y no depende del nombre, la marca, el código
+comercial ni el ocupante actual. Un recinto sin comercio identificado conserva
+`identityStatus: unidentified` y `navigationDestination: true`; cuando se
+complete su ficha sólo cambia la relación `storeIds`, nunca el `spaceId`.
+
 ### Identidad, marcas, tipografía y etiquetas comerciales
 
 Antes de escribir el importador se deben inspeccionar el HTML, CSS, manifiesto
@@ -94,6 +101,7 @@ supresiones por imagen, y rechazar cualquier local vinculado que pierda ambos.
 
 - fuente, URL, fecha, hash, dimensiones y transformación preservados;
 - IDs estables por planta y contorno, sin regenerarlos por cambios de etiquetas;
+- una fila `spaceId` única por cada local físico, incluidos los no identificados, todos conservados como destinos;
 - comparación 2D de cada planta revisada con contornos y códigos visibles;
 - ningún contorno nativo sustituido por losas sintéticas;
 - enlaces tienda-polígono con evidencia explícita o contención única;

@@ -357,18 +357,24 @@ function showGeometryContext(context={}){
  clearStoreSelection();
  if(!actionDock)return;
  geometryContext={
+  spaceId:String(context.spaceId||''),
   featureId:String(context.featureId||''),floor:String(context.floor||''),
   matchCount:Number(context.matchCount)||0,
+  located:Boolean(context.located),originKnown:Boolean(context.originKnown),
   message:String(context.message||tr('Este contorno todavía no está vinculado de forma unívoca con un comercio.',
    'This outline is not yet uniquely linked to a store.'))
  };
  actionDock.dataset.context='geometry';
- assistAction.disabled=true;inviteAction.disabled=true;infoAction.disabled=false;
- assistAction.classList.remove('is-route-ready','is-route-open');
- assistAction.setAttribute('aria-pressed','false');
- assistAction.title=tr('Orientación no disponible hasta vincular el comercio','Directions unavailable until the store is linked');
+ const routeReady=geometryContext.located&&geometryContext.originKnown;
+ assistAction.disabled=!routeReady;inviteAction.disabled=true;infoAction.disabled=false;
+ assistAction.classList.toggle('is-route-ready',routeReady);
+ assistAction.classList.toggle('is-route-open',Boolean(context.assistanceOpen));
+ assistAction.setAttribute('aria-pressed',String(Boolean(context.assistanceOpen)));
+ assistAction.title=!geometryContext.originKnown
+  ?tr('Marcá tu ubicación para activar la ruta','Set your location to activate the route')
+  :tr('Mostrar camino a este local físico','Show path to this physical store space');
  inviteAction.title=tr('Invitación no disponible hasta vincular el comercio','Invitation unavailable until the store is linked');
- infoAction.title=tr('Ver por qué este contorno no tiene acciones comerciales','See why this outline has no store actions');
+ infoAction.title=tr('Ver el identificador interno y el estado comercial','View internal ID and commercial identity status');
  assistAction.setAttribute('aria-label',assistAction.title);
  inviteAction.setAttribute('aria-label',inviteAction.title);
  infoAction.setAttribute('aria-label',infoAction.title);
@@ -394,10 +400,12 @@ window.addEventListener('retailnav:store-focus-settled',event=>{
  actionDock.hidden=false;requestAnimationFrame(()=>actionDock.classList.add('is-visible'));
 });
 assistAction?.addEventListener('click',()=>{
- if(!selectedId||assistAction.disabled)return;
+ if((!selectedId&&!geometryContext)||assistAction.disabled)return;
  const open=assistAction.getAttribute('aria-pressed')==='true';
  if(open)window.__RETAILNAV__?.closeStoreAssistance?.();
- const result=open?{opened:false}:window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
+ const result=open?{opened:false}:geometryContext
+  ?window.__RETAILNAV__?.openSpaceAssistance?.(geometryContext.spaceId)
+  :window.__RETAILNAV__?.openStoreAssistance?.(selectedId);
  assistAction.classList.toggle('is-route-open',Boolean(result?.opened));
  assistAction.setAttribute('aria-pressed',String(Boolean(result?.opened)));
 });
@@ -415,7 +423,8 @@ closeAction?.addEventListener('click',()=>{
  hideActionMenu();
 });
 window.addEventListener('retailnav:store-route-state',event=>{
- if(event.detail?.storeId!==selectedId)return;
+ if(geometryContext){if(event.detail?.destinationId!==geometryContext.spaceId)return;}
+ else if(event.detail?.storeId!==selectedId)return;
  const open=Boolean(event.detail.open);
  assistAction?.classList.toggle('is-route-open',open);
  assistAction?.setAttribute('aria-pressed',String(open));

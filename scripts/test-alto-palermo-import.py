@@ -110,6 +110,18 @@ assert all(row["tags"] and row["tagEvidence"] ==
 assert sum(bool(row["logoURL"]) for row in catalog_doc["records"]) == 153
 assert catalog_doc["stats"]["withConceptSuggestions"] == 124
 
+spaces_doc = json.loads((repo / "public" / "catalog" / "malls" /
+                         "alto-palermo" / "spaces.json").read_text(encoding="utf-8"))
+assert spaces_doc["schema"] == "retailnav.mall.spaces.v1"
+assert spaces_doc["stats"] == {
+    "total": 192, "identifiedSingle": 55, "ambiguous": 0,
+    "unidentified": 137, "navigationDestinations": 192,
+}
+assert len({row["spaceId"] for row in spaces_doc["records"]}) == 192
+assert all(row["spaceId"] ==
+           f'alto-palermo:space:{row["floor"]}:{row["polygonId"]}' and
+           row["navigationDestination"] for row in spaces_doc["records"])
+
 vector_font = (repo / "src/inter-vector-font.js").read_text(encoding="utf-8")
 assert "retailnav.vector-font-mesh.v1" in vector_font
 assert "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63" in vector_font
@@ -123,6 +135,8 @@ mall = json.loads(match.group(1))["alto-palermo"]
 assert mall["floorLabels"] == ["SS", "PB", "EP", "P1", "P2", "P3"]
 assert len(mall["units"]) == 158
 assert mall["storeCatalog"]["total"] == 158
+assert mall["spaceCatalog"]["total"] == 192
+assert mall["spaceCatalog"]["unidentified"] == 137
 assert mall["theme"]["font"] == "alto-inter"
 assert mall["logoSymbolUrl"] == "branding/malls/alto-palermo/mall-mark.png"
 assert mall["brandAssets"]["recordsWithArchivedLogo"] == 153

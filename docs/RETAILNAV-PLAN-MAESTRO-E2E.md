@@ -751,6 +751,14 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Verificación:** build y verificador general correctos; prueba de importación correcta; navegadores Chromium y WebKit correctos. La copia pública fue auditada después del despliegue: hashes `32c9af72…` para el mapa y `734cd716…` para el catálogo, 331 regiones, 192 contornos comerciales, 55 enlaces por contención, 103 registros sin polígono, cero IDs `*-SLAB-*`, cero evidencia de proximidad y cero polígonos compartidos. PB muestra 73 regiones y 72 contornos comerciales en el visor público. Captura local equivalente: `/tmp/retailnav-alto-palermo-vectorized.png`.
 - **Limitaciones:** las divisiones y sus formas proceden del SVG oficial, pero la correspondencia comercial de 103 marcadores, entradas, escala métrica, conectores y rutas permanece sin validar. `navigable:false` continúa siendo obligatorio.
 
+### 2026-10-17 — MAP-SPACE-01 — identidad física independiente del comercio
+
+- **Estado:** implementado y verificado localmente; despliegue pendiente.
+- **Problema:** un polígono sin relación comercial unívoca abría el menú contextual, pero desactivaba navegación. El modelo confundía el recinto físico con el ocupante comercial, aunque el local existe y debe conservar su destino antes y después de identificar la marca.
+- **Contrato:** cada polígono `anchor` o `unit` genera una fila en `public/catalog/malls/<mallId>/spaces.json` con `spaceId=<mallId>:space:<floor>:<polygonId>`, centroide, tipo, estado de identidad, relaciones `storeIds` y `navigationDestination=true`. El ID no depende de nombre, código, marca ni ocupante.
+- **Alto Palermo:** 192 espacios físicos y 192 destinos; 55 tienen una relación comercial única y 137 permanecen `unidentified`. Un toque sobre cualquiera abre el mismo menú radial. Con ubicación conocida, navegación intraplanta se habilita aunque `storeId` sea nulo; la invitación y la ficha comercial siguen requiriendo identidad comercial.
+- **Barrera:** build y verificador exigen una fila única por cada polígono comercial, hashes del catálogo, igualdad exacta planta/polígono y conservación de todos los destinos. Completar datos comerciales sólo modifica `storeIds` e `identityStatus`.
+
 ### 2026-10-17 — BRAND-ALTO-01 — rótulos vectoriales, logos y tags obligatorios
 
 - **Incidente:** la migración recuperó los contornos de locales, pero dejó `tags` vacías en las 158 filas, no importó las imágenes de marca publicadas y generó letras 3D desde una máscara Canvas de baja resolución convertida en prismas rectangulares. El plan ya exigía rubros/etiquetas, identidad de mall y regresión de buscador; las pruebas de Alto sólo contaban filas, polígonos y enlaces, por lo que no detectaron estas ausencias visuales y funcionales.

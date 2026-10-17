@@ -235,13 +235,16 @@ try{
  assert.equal(unboundSelection.actionContext,'geometry');
  assert.equal(unboundSelection.selectedStoreId,null);
  assert.equal(unboundSelection.geometryContext.featureId,unboundSelection.featureId);
+ assert.match(unboundSelection.geometryContext.spaceId,
+  /^alto-palermo:space:EP:EP-SVG-/,'an unidentified local keeps a stable physical-space ID');
  assert.equal(unboundSelection.assistDisabled,true);
  assert.equal(unboundSelection.inviteDisabled,true);
  assert.equal(unboundSelection.infoDisabled,false);
  assert.match(unboundSelection.mapTitle,/EP/);
  assert.doesNotMatch(unboundSelection.mapTitle,/Starbucks/);
- assert.doesNotMatch(unboundSelection.floorReference,/Destino/);
- assert.match(unboundSelection.notice,/no está vinculado|varios comercios/);
+ assert.match(unboundSelection.floorReference,/Destino EP/,
+  'an unidentified commercial space is still a physical destination');
+ assert.match(unboundSelection.notice,/Destino físico .*datos comerciales|varios comercios/);
  await page.waitForFunction(()=>document.querySelector('#rnStoreActions')?.classList.contains('is-visible'));
  const unboundLayout=await page.evaluate(()=>{
   const menu=document.querySelector('#rnStoreActions').getBoundingClientRect();
@@ -254,7 +257,7 @@ try{
  await page.screenshot({path:'/tmp/retailnav-alto-palermo-unbound-contextual'+
   (process.env.RETAILNAV_BROWSER==='webkit'?'-webkit':'')+'.png',fullPage:true});
  await page.locator('#rnStoreInfoAction').click();
- assert.match(await page.locator('#toast').textContent(),/no está vinculado|varios comercios/);
+ assert.match(await page.locator('#toast').textContent(),/Destino físico .*datos comerciales|varios comercios/);
  await page.locator('#rnStoreActionClose').click();
  await page.waitForFunction(()=>!window.RetailNavMeetups.getState().actionDockVisible);
 
@@ -332,6 +335,31 @@ try{
   'the navigation origin sphere must remain grounded');
  assert.deepEqual(buttmanRoute.wayfinding.connectorsUsed,[],
   'same-floor derivation must not fabricate escalators or other vertical connectors');
+ const anonymousRoute=await page.evaluate(async()=>{
+  const view=window.__RETAILNAV__,floor=view.floors.find(item=>item.id==='PB');
+  const feature=floor.features.find(item=>item.id==='PB-SVG-022');
+  const owners=window.RetailNavUnits.getUnits().filter(unit=>
+   window.RetailNavUnits.getMapBindings(unit).some(binding=>binding.floor==='PB'&&binding.polygonId===feature.id));
+  view.select(feature);
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const menu=window.RetailNavMeetups.getState(),assist=document.querySelector('#rnStoreAssist');
+  const before={menu,disabled:assist.disabled,primary:assist.classList.contains('is-route-ready')};
+  assist.click();await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const state=view.getState();
+  return {owners:owners.length,before,wayfinding:state.wayfinding,open:state.wayfindingOpen,
+   dots:document.querySelectorAll('#rnWayfindingDots .rnWayfindingDot:not([hidden])').length};
+ });
+ assert.equal(anonymousRoute.owners,0,'fixture must remain commercially unidentified');
+ assert.equal(anonymousRoute.before.menu.actionContext,'geometry');
+ assert.equal(anonymousRoute.before.menu.geometryContext.spaceId,
+  'alto-palermo:space:PB:PB-SVG-022');
+ assert.equal(anonymousRoute.before.disabled,false);
+ assert.equal(anonymousRoute.before.primary,true);
+ assert.equal(anonymousRoute.open,true);
+ assert.equal(anonymousRoute.wayfinding.storeId,null);
+ assert.equal(anonymousRoute.wayfinding.destinationId,'alto-palermo:space:PB:PB-SVG-022');
+ assert.equal(anonymousRoute.wayfinding.routeReason,'official-svg-free-space-preview');
+ assert.ok(anonymousRoute.dots>0,'an unidentified physical local must remain a navigable destination');
  await page.screenshot({path:'/tmp/retailnav-alto-palermo-wayfinding-grounded'+
   (process.env.RETAILNAV_BROWSER==='webkit'?'-webkit':'')+'.png',fullPage:true});
  const starbucks=await page.evaluate(()=>window.RetailNavUnits.getUnits()

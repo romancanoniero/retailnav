@@ -244,7 +244,7 @@ function inverse(m){let a=Array.from({length:4},(_,r)=>[m[r],m[4+r],m[8+r],m[12+
 function matrices(){let eye=vadd(target,qr(q,[0,0,distance])),z=norm(vsub(eye,target)),x=norm(cross(qr(q,[0,1,0]),z)),y=cross(z,x);let view=new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1]);let f=1/Math.tan(Math.PI/8),ar=canvas.width/canvas.height,n=.2,far=1800;let p=new Float32Array([f/ar,0,0,0,0,f,0,0,0,0,(far+n)/(n-far),-1,0,0,2*far*n/(n-far),0]);mvp=mm(p,view);invMvp=inverse(mvp);}
 function pos(p,y=0){return [(p[0]-cfg.origin[0])*cfg.scale,y,(p[1]-cfg.origin[1])*cfg.scale];}
 function height(f){return {anchor:2.2,unit:1.4,amenity:1.08,zone:.55,corridor:.08,slab:-.12,void:.03}[f.k];}
-function unpack(raw){let gid=1;return raw.map((v,i)=>{let features=v[3].map(a=>{let x=0,y=0,p=[];for(let j=0;j<a[3].length;j+=2){x+=a[3][j];y+=a[3][j+1];p.push([x/2,y/2]);}return {id:a[0],k:K[a[1]],n:a[2],p,r:a[4].map(r=>r.map(n=>p[n])),t:a[5],c:a[6],gid:gid++,floor:v[0]};});let w=v[4];w.bytes=Uint8Array.from(atob(w.bits),x=>x.charCodeAt(0));return {id:v[0],name:v[1],source:v[2],features,index:i,walk:w,y:i*spread};});}
+function unpack(raw){let gid=1;return raw.map((v,i)=>{let features=v[3].map(a=>{let x=0,y=0,p=[];for(let j=0;j<a[3].length;j+=2){x+=a[3][j];y+=a[3][j+1];p.push([x/2,y/2]);}return {id:a[0],spaceId:mallId+':space:'+v[0]+':'+a[0],k:K[a[1]],n:a[2],p,r:a[4].map(r=>r.map(n=>p[n])),t:a[5],c:a[6],gid:gid++,floor:v[0]};});let w=v[4];w.bytes=Uint8Array.from(atob(w.bits),x=>x.charCodeAt(0));return {id:v[0],name:v[1],source:v[2],features,index:i,walk:w,y:i*spread};});}
 function mapColor(key,fallback){return window.RetailNavThemes?.color?.(key,fallback)||fallback;}
 function mapRgb(key,fallback){return window.RetailNavThemes?.rgb?.(key,fallback)||fallback;}
 function rgbHex(v){return '#'+v.map(x=>Math.max(0,Math.min(255,Math.round(x*255))).toString(16).padStart(2,'0')).join('').toUpperCase();}
@@ -579,7 +579,7 @@ async function loadWayfindingEvidence(){
   if(evidence.source?.sha256!==asset.sourceSha256||evidence.coordinateSpace!==selectedMall.coordinateSpace)return;
   if(window.RetailNavWayfindingRoute?.configure(evidence)){
    dirty=true;
-   if(wayfindingOpen&&wayfinding&&!wayfinding.placing)focusCatalogStore(wayfinding.storeId,wayfinding.floor);
+   if(wayfindingOpen&&wayfinding&&!wayfinding.placing)refocusWayfindingDestination();
   }
  }catch{ /* Evidence unavailable: keep endpoints, never invent a route. */ }
 }
@@ -587,7 +587,8 @@ function makeWayfinding(unit,floor,point,features,open=wayfindingOpen){
  wayfindingOpen=Boolean(open);
  const origin=wayfindingOrigin(),floorId=floor?.id||null;
  const delta=origin&&floor?floors.indexOf(floor)-floors.findIndex(f=>f.id===origin.floor):null;
- wayfinding={storeId:unit?.storeId||focusedStoreId,name:unit?.name||unit?.code||'',floor:floorId,
+ wayfinding={destinationId:unit?.destinationId||unit?.storeId||focusedStoreId,
+  storeId:unit?.storeId||null,name:unit?.name||unit?.code||'',floor:floorId,
   origin,destination:point?{x:point[0],y:point[1],floor:floorId}:null,
   floorDelta:delta,mode:!point?'unplaced':!origin?'no-origin':delta===0?'same-floor':'different-floor',
   polygonIds:features.map(f=>f.id),status:'unavailable',points:[],routeSegments:[],connectorsUsed:[],placing:false};
@@ -704,7 +705,7 @@ function reframeAfterResize(){
  if(!ready)return;
  resize();dirty=true;clearTimeout(wayfindingResizeTimer);
  wayfindingResizeTimer=setTimeout(()=>{
-  if(wayfindingOpen&&wayfinding&&!wayfinding.placing)focusCatalogStore(wayfinding.storeId,wayfinding.floor);
+  if(wayfindingOpen&&wayfinding&&!wayfinding.placing)refocusWayfindingDestination();
  },100);
 }
 window.addEventListener('retailnav:header-layout',reframeAfterResize);
@@ -716,7 +717,7 @@ function bindWayfinding(){
   wayfindingOpen=true;pendingOriginDestination=saved;placingPosition=true;placingLocalOnly=true;canvas.classList.add('placing');
   resetCamera(true);updateWayfindingUI();dirty=true;
  };
- $('rnWayfindingReframe').onclick=()=>{if(wayfinding)focusCatalogStore(wayfinding.storeId,wayfinding.floor);};
+ $('rnWayfindingReframe').onclick=()=>{if(wayfinding)refocusWayfindingDestination();};
  $('rnWayfindingClose').onclick=()=>{
   pendingOriginDestination=null;placingPosition=false;placingLocalOnly=false;canvas.classList.remove('placing');
   wayfindingOpen=false;wayfindingCompact=false;updateWayfindingUI();dirty=true;
@@ -776,10 +777,44 @@ function focusCatalogStore(storeId,requestedFloor){
  earth2D=camera.topDown;orbitYaw=camera.yaw;orbitPitch=camera.pitch;orbitRoll=0;
  showFloorReference();dirty=true;return lastStoreFocus;
 }
-function openStoreAssistance(storeId,requestedFloor){
+function focusGeometrySpace(spaceId,requestedFloor){
+ if(!ready)return{located:false,reason:'map-not-ready'};
+ const floor=floors.find(item=>item.id===requestedFloor)||floors.find(item=>item.features.some(feature=>feature.spaceId===spaceId));
+ const feature=floor?.features.find(item=>item.spaceId===spaceId&&['unit','anchor'].includes(item.k));
+ if(!floor||!feature)return{located:false,reason:'space-not-found'};
+ const keepAssistance=Boolean(wayfindingOpen&&wayfinding?.destinationId===spaceId);
+ wayfindingOpen=keepAssistance;if(!keepAssistance)wayfindingCompact=false;
+ pendingOriginDestination=null;placingPosition=false;placingLocalOnly=false;canvas.classList.remove('placing');
+ cameraFlight=null;route=null;routeRunning=false;selected=feature;focusFloorId=floor.id;
+ setFocusedStoreVector(null,floor.id,[feature.id]);
+ const name=(window.RetailNavI18n?.locale?.().startsWith('en')?'Unidentified store space':'Local sin identificar')+' · '+floor.id;
+ makeWayfinding({destinationId:spaceId,name},floor,feature.c,[feature],keepAssistance);
+ loadWayfindingEvidence();
+ active=floor.id;if($('floorSelect'))$('floorSelect').value=floor.id;
+ $('showAllFloors').hidden=false;$('showAllFloors').textContent='← Ver todas las plantas';stopAuto();
+ $('mapTitle').textContent=name;
+ $('mapSubtitle').textContent='ID interno '+spaceId+' · destino físico independiente de la ficha comercial';
+ const camera=wayfindingCamera([feature],floor,feature.c),needsRotate=Math.abs(dot(q,camera.q))<.9999;
+ const moving=Math.hypot(...vsub(target,camera.target))>.3||Math.abs(distance-camera.distance)>1||needsRotate;
+ const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+ if(!moving||reduced){target=camera.target;distance=camera.distance;q=camera.q;cameraFlight=null;}
+ else cameraFlight={since:performance.now(),duration:860,fromTarget:target.slice(),toTarget:camera.target,
+  fromDistance:distance,toDistance:camera.distance,fromQ:q.slice(),toQ:camera.q.slice()};
+ earth2D=camera.topDown;orbitYaw=camera.yaw;orbitPitch=camera.pitch;orbitRoll=0;
+ showFloorReference();dirty=true;
+ return{destinationId:spaceId,spaceId,located:true,source:true,floor:floor.id,
+  originKnown:Boolean(wayfinding.origin),routeStatus:wayfinding.status,assistanceOpen:wayfindingOpen,
+  vectorHighlighted:true,animated:Boolean(moving&&!reduced),durationMs:moving&&!reduced?860:0};
+}
+function refocusWayfindingDestination(){
+ if(!wayfinding)return null;
+ return wayfinding.storeId?focusCatalogStore(wayfinding.storeId,wayfinding.floor):
+  focusGeometrySpace(wayfinding.destinationId,wayfinding.floor);
+}
+function openDestinationAssistance(destinationId){
  if(!ready)return{opened:false,reason:'map-not-ready'};
- const id=storeId||focusedStoreId;if(!id)return{opened:false,reason:'no-store'};
- if(!wayfinding||wayfinding.storeId!==id)return{opened:false,reason:'store-not-focused'};
+ const id=destinationId||wayfinding?.destinationId;if(!id)return{opened:false,reason:'no-destination'};
+ if(!wayfinding||wayfinding.destinationId!==id)return{opened:false,reason:'destination-not-focused'};
  if(!wayfinding.origin)return{opened:false,reason:'origin-unavailable'};
  wayfindingOpen=true;wayfindingCompact=true;updateWayfindingRoute();dirty=true;
  if(wayfinding.status!=='provisional')notify(wayfinding.routeReason==='vertical-connection-unavailable'
@@ -787,15 +822,18 @@ function openStoreAssistance(storeId,requestedFloor){
   :wayfinding.mode==='same-floor'
    ?'Están en la misma planta, pero el plano no permite demostrar un paso continuo por los pasillos.'
    :'No hay continuidad confirmada desde esta ubicación hasta el local; no se dibuja un atajo.');
- storeFocusEvent('retailnav:store-route-state',{storeId:id,open:true,status:wayfinding.status,
+ storeFocusEvent('retailnav:store-route-state',{storeId:wayfinding.storeId,destinationId:id,open:true,status:wayfinding.status,
   reason:wayfinding.routeReason,connectorsUsed:wayfinding.connectorsUsed.length});
  return{opened:true,located:Boolean(wayfinding.destination),originKnown:true,status:wayfinding.status,
   reason:wayfinding.routeReason,connectorsUsed:wayfinding.connectorsUsed.length};
 }
+function openStoreAssistance(storeId){return openDestinationAssistance(storeId||focusedStoreId);}
+function openSpaceAssistance(spaceId){return openDestinationAssistance(spaceId);}
 function closeStoreAssistance(){
  if(!wayfindingOpen)return false;
- const id=wayfinding?.storeId;wayfindingOpen=false;wayfindingCompact=false;updateWayfindingUI();dirty=true;
- storeFocusEvent('retailnav:store-route-state',{storeId:id,open:false,status:wayfinding?.status});return true;
+ const storeId=wayfinding?.storeId,destinationId=wayfinding?.destinationId;
+ wayfindingOpen=false;wayfindingCompact=false;updateWayfindingUI();dirty=true;
+ storeFocusEvent('retailnav:store-route-state',{storeId,destinationId,open:false,status:wayfinding?.status});return true;
 }
 
 function screen(p){let v=mp(mvp,[...p,1]);let r=canvas.getBoundingClientRect();return {x:(v[0]/v[3]*.5+.5)*r.width,y:(.5-v[1]/v[3]*.5)*r.height,z:v[2]/v[3],w:v[3]};}
@@ -1232,22 +1270,23 @@ function select(f){
   const matches=(window.RetailNavUnits?.getUnits?.()||[]).filter(unit=>(window.RetailNavUnits?.getMapBindings?.(unit)||[])
    .some(binding=>binding.floor===f.floor&&binding.polygonId===f.id));
   if(matches.length===1&&window.RetailNavMeetups?.selectStore?.(matches[0].storeId,false,f.floor))return;
-  // A traced polygon can be shared by several directory records or have no
-  // verified store binding. Keep the same radial interaction and the central
-  // close control, but do not fabricate store-dependent actions.
+  // Physical shop spaces exist independently from tenant records. A stable
+  // internal space ID remains routable while its commercial identity is
+  // absent, ambiguous or completed later.
   window.RetailNavMeetups?.clearSelection?.();
   storeFocusEvent('retailnav:store-focus-start',{storeId:null});
   clearWayfinding();setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;
-  showFloorReference();showMapFloorHeading(f.floor);
-  selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;
+  selectedSearchTagKey=null;
   $('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');
   $('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=true;
+  const focus=focusGeometrySpace(f.spaceId,f.floor);
   const message=matches.length>1
-   ?'Este volumen corresponde a varios comercios. Elegí uno en la lista para ver sus acciones.'
-   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.';
+   ?'Destino físico '+f.spaceId+'. La identidad comercial es ambigua; el local sigue siendo navegable.'
+   :'Destino físico '+f.spaceId+'. Sus datos comerciales todavía no fueron identificados.';
   notify(message);
-  window.RetailNavMeetups?.showGeometryContext?.({featureId:f.id,floor:f.floor,
-   matchCount:matches.length,message});
+  window.RetailNavMeetups?.showGeometryContext?.({spaceId:f.spaceId,featureId:f.id,floor:f.floor,
+   matchCount:matches.length,message,located:focus.located,originKnown:focus.originKnown,
+   assistanceOpen:focus.assistanceOpen});
   results();dirty=true;return;
  }
  storeFocusEvent('retailnav:store-focus-start',{storeId:null});
@@ -1412,7 +1451,7 @@ $('resultCount').textContent=q?(list.length+pois.length+shopSearch.storeIds.size
     :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}
 window.addEventListener('retailnav:geometry-context-info',event=>{
- notify(event.detail?.message||'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+ notify(event.detail?.message||'Este local físico conserva un ID interno aunque todavía no tenga datos comerciales.');
 });
 function fail(message){errors.push(message);$('fallback').hidden=false;$('fallbackMessage').textContent=message;$('loading').hidden=true;$('status').textContent='Vista de respaldo';$('badge').classList.remove('ready');ready=false;window.RetailNavMapCache?.showError?.(message);document.querySelectorAll('[data-runtime]').forEach(b=>b.disabled=true);}
 function progress(n,message){$('loading').hidden=true;window.RetailNavMapCache?.prepare?.(message,Math.min(99,Math.round(78+Math.max(0,n)*.2)));}
@@ -2436,7 +2475,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
   showSearchMatches:applySearchFloors,clearSearchMatches:clearSearchFloors,
-  focusCatalogStore,openStoreAssistance,closeStoreAssistance,
+  focusCatalogStore,focusGeometrySpace,openStoreAssistance,openSpaceAssistance,closeStoreAssistance,
  getVerticalConnections:verticalConnectionInfo,
  getEscalatorModels:()=>escalatorModel().items.slice(),
  getLiftShaftModels:()=>liftShaftModel().shafts.slice(),

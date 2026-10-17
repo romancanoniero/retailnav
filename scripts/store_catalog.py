@@ -12,6 +12,7 @@ from collections import Counter
 from pathlib import Path
 
 SCHEMA = "retailnav.mall.stores.v1"
+SPACE_SCHEMA = "retailnav.mall.spaces.v1"
 EVIDENCE = {"photo-store-name-unverified", "mall-reviewed-products"}
 
 
@@ -280,4 +281,79 @@ def publish_table(repo: Path, mall_id: str, mall: dict) -> dict:
         "schema": SCHEMA,
         **doc["stats"]
     }
+    publish_space_table(repo, mall_id, mall)
     return doc
+
+
+def publish_space_table(repo: Path, mall_id: str, mall: dict) -> dict:
+    """Publish every physical shop polygon independently from tenant data.
+
+    A space keeps the same internal ID while its commercial identity is empty,
+    ambiguous, replaced or completed later. Navigation targets the space; the
+    store table only supplies optional occupancy metadata.
+    """
+    linked = {}
+    for store in mall.get("units", []):
+        bindings = []
+        if store.get("polygonId") and store.get("floor"):
+            bindings.append((store["floor"], store["polygonId"]))
+        source_geometry = store.get("sourceGeometry") or {}
+        if source_geometry.get("mallId") == mall_id:
+            bindings.extend((item.get("floor"), item.get("polygonId"))
+                            for item in source_geometry.get("polygons", []))
+        for key in bindings:
+            if all(isinstance(value, str) and value for value in key):
+                linked.setdefault(key, {})[store["storeId"]] = store
+    kind_names = {0: "anchor-unit", 1: "commercial-unit"}
+    records = []
+    seen = set()
+    for floor_id, _name, _source, features, _walk in mall["floors"]:
+        for feature in features:
+            polygon_id, kind = feature[0], feature[1]
+            if kind not in kind_names:
+                continue
+            space_id = f"{mall_id}:space:{floor_id}:{polygon_id}"
+            if space_id in seen:
+                raise ValueError(f"{mall_id}: duplicate internal space ID: {space_id}")
+            seen.add(space_id)
+            stores = sorted(linked.get((floor_id, polygon_id), {}).values(),
+                            key=lambda item: item["storeId"])
+            identity = ("identified-single" if len(stores) == 1 else
+                        "ambiguous" if stores else "unidentified")
+            records.append({
+                "spaceId": space_id,
+                "mallId": mall_id,
+                "floor": floor_id,
+                "polygonId": polygon_id,
+                "spaceKind": kind_names[kind],
+                "centroid": feature[6],
+                "identityStatus": identity,
+                "storeIds": [store["storeId"] for store in stores],
+                "displayName": (stores[0].get("name") or stores[0].get("code")) if len(stores) == 1 else None,
+                "navigationDestination": True,
+                "geometryStatus": "source-vector-provisional",
+            })
+    document = {
+        "schema": SPACE_SCHEMA,
+        "mallId": mall_id,
+        "records": records,
+        "stats": {
+            "total": len(records),
+            "identifiedSingle": sum(record["identityStatus"] == "identified-single" for record in records),
+            "ambiguous": sum(record["identityStatus"] == "ambiguous" for record in records),
+            "unidentified": sum(record["identityStatus"] == "unidentified" for record in records),
+            "navigationDestinations": sum(record["navigationDestination"] for record in records),
+        },
+    }
+    raw = (json.dumps(document, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf8")
+    relative = "catalog/malls/" + mall_id + "/spaces.json"
+    destination = repo / "public" / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(raw)
+    mall["spaceCatalog"] = {
+        "url": relative,
+        "sha256": hashlib.sha256(raw).hexdigest(),
+        "schema": SPACE_SCHEMA,
+        **document["stats"],
+    }
+    return document

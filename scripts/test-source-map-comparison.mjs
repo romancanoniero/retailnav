@@ -94,7 +94,6 @@ try{
  const focused=await sample();
  assert.ok(focused.state.focusedStoreVectors.length>0);
  assert.notDeepEqual(focused.pixels,before.pixels,'fixture must visibly change colour while selected');
- await page.locator('#rnWayfindingClose').tap();
  await page.locator('#floorSelect').selectOption('UL');
  await page.locator('#floorSelect').selectOption('LL');
  const after=await sample();

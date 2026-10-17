@@ -9,6 +9,10 @@ let spread=26, targetSpread=26, target=[0,26,0], distance=215, q=[0,0,0,1];
 // A store focus is a temporary single-floor view of a multi-floor search.
 // Search matches and the visitor's original floor remain stored unchanged.
 let focusedStoreVectors=new Set();
+// Every physical polygon in the visitor's plan remains visible on the map.
+// Store identities may bind to more than one floor; unidentified spaces use
+// their stable floor/polygon identity until their commercial data is added.
+let visitPlanVectors=new Set(),visitPlanGeometryPending=false,pendingVisitPlanRefresh=false;
 let focusedStoreId=null,focusedStoreVector=null,focusFloorId=null,cameraFlight=null,lastStoreFocus=null,pendingStoreFocus=null;
 let wayfinding=null,wayfindingOpen=false,wayfindingCompact=false,pendingOriginDestination=null,placingLocalOnly=false;
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
@@ -267,9 +271,13 @@ function palette(f,i,line){
 function geometry(floor){let faces=[],edges=[],points=[],contextEdges=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
  const vectorKey=f.floor+':'+f.id;
  const selectedShop=focusedStoreVectors.has(vectorKey);
+ const visitStop=visitPlanVectors.has(vectorKey);
  const match=searchMatchedVectors.has(vectorKey);
  if(selectedShop){
   const chosen=mapRgb('mapSelected',[1,.68,.29]);
+  col=chosen;edgeCol=blendColors(chosen,[1,1,1],.30);
+ }else if(visitStop){
+  const chosen=mapRgb('accent',[.73,.84,.29]);
   col=chosen;edgeCol=blendColors(chosen,[1,1,1],.30);
  }else if(match){
   const chosen=mapRgb('mapSelected',[1,.68,.29]);
@@ -1169,17 +1177,22 @@ function renderCanvas(dt){
   const fh=height(f),fy=floor.y,top=fy+fh,isSelected=selected&&selected.gid===f.gid;
   if(scan){c.fillStyle=isSelected?'#ffc977':'#6ce2e2';c.globalAlpha=.8;for(const r of f.r)for(let j=0;j<r.length;j+=2){let pt=xyz(pos(r[j],top));if(!pt)continue;c.beginPath();c.arc(pt.x,pt.y,Math.max(.7,1.3*(215/distance)),0,Math.PI*2);c.fill();}c.globalAlpha=1;continue;}
   const selectedShop=focusedStoreVectors.has(f.floor+':'+f.id);
+  const visitStop=visitPlanVectors.has(f.floor+':'+f.id);
   const searchMatch=searchMatchedVectors.has(f.floor+':'+f.id);
   const selectTone=mapRgb('mapSelected',[1,.68,.29]);
+  const visitTone=mapRgb('accent',[.73,.84,.29]);
   const underlying=themed?palette(f,floor.index,false):legacyPalette(f,floor.index,false);
   let color=isSelected||selectedShop?mapColor('mapSelected','#ffae4a'):
+   visitStop?mapColor('accent','#BBD74A'):
    searchMatch?rgbHex(blendColors(underlying,selectTone,.30)):
    (themed?rgbHex(underlying):colors[f.k]);
   let line=isSelected||selectedShop?mapColor('mapSelected','#ffae4a'):
+   visitStop?rgbHex(blendColors(visitTone,[1,1,1],.30)):
    searchMatch?rgbHex(blendColors(palette(f,floor.index,true),selectTone,.52)):
    (themed?rgbHex(palette(f,floor.index,true)):lines[f.k]);
   if(!referenceContext(floor)&&['anchor','unit','amenity','zone','slab'].includes(f.k)){
    c.fillStyle=isSelected||selectedShop?mapColor('mapSelected','#ffae4a'):
+    visitStop?rgbHex(blendColors(visitTone,mapRgb('mapOutline',[.25,.3,.35]),.22)):
     themed?rgbHex(blendColors(palette(f,floor.index,false),mapRgb('mapOutline',[.25,.3,.35]),.22)):'rgba(25,65,85,.67)';
    for(const r of f.r)for(let i=0;i<r.length;i++){
     const aa=xyz(pos(r[i],fy+(f.k==='slab'?-.45:0))),ab=xyz(pos(r[(i+1)%r.length],fy+(f.k==='slab'?-.45:0))),ba=xyz(pos(r[(i+1)%r.length],top)),bb=xyz(pos(r[i],top));
@@ -1190,8 +1203,9 @@ function renderCanvas(dt){
   c.beginPath();let any=false;for(const r of f.r)any=pth(r,top)||any;
   if(!any)continue;
   c.fillStyle=color;c.globalAlpha=f.k==='slab'?.92:f.k==='corridor'?.60:wire?.16:f.k==='void'?.42:.87;if(!referenceContext(floor))c.fill('evenodd');c.globalAlpha=1;
-  c.strokeStyle=referenceContext(floor)?'#478f9f':line;c.lineWidth=isSelected||selectedShop?2.8:searchMatch?1.8:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
+  c.strokeStyle=referenceContext(floor)?'#478f9f':line;c.lineWidth=isSelected||selectedShop?2.8:visitStop?2.2:searchMatch?1.8:f.k==='corridor'?1.2:f.k==='slab'?1.2:.9;
   if(isSelected||selectedShop){c.shadowColor=mapColor('mapSelected','#ffae4a');c.shadowBlur=14;}
+  else if(visitStop){c.shadowColor=mapColor('accent','#BBD74A');c.shadowBlur=8;}
   else if(searchMatch){c.shadowColor=mapColor('mapSelected','#ffae4a');c.shadowBlur=4;}
   else if(f.k==='corridor'){c.shadowColor='#25c6c9';c.shadowBlur=2;}
   c.stroke();c.shadowBlur=0;
@@ -2470,7 +2484,7 @@ async function init(){try{
  }
  bindUI();updateRotationModeUI();let embedded=$('modelData');data=window.RetailNavMapCache?await window.RetailNavMapCache.load():(selectedMall.floors||(embedded?JSON.parse(embedded.textContent):await fetchJSON('maps/compact.json')));floors=unpack(data);
  const roofSummary=window.RetailNavRoofText?.prepare?.(floors,selectedMall.units||[],selectedMall.pois||[],cfg.origin,cfg.scale)||null;
- initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;makeLabels();bindWayfinding();active=groundReferenceFloor();showFloorReference();
+ initializeFloorHeights();applyMallUi();bindHeightControls();initGL();makeGrid();if(gl)routeBuffer=gl.createBuffer();for(let i=0;i<floors.length;i++){geometry(floors[i]);progress(25+(i+1)*22,'Geometría '+floors[i].id+' preparada - '+(i+1)+' de '+floors.length+' plantas');await new Promise(requestAnimationFrame);}ready=true;syncVisitPlanVectors();makeLabels();bindWayfinding();active=groundReferenceFloor();showFloorReference();
  // Keep the compact floor UI consistent with the new default user-level view.
  $('floorSpacing').hidden=floors.length<=1||active!=='ALL';
  $('showAllFloors').hidden=floors.length<=1;
@@ -2491,7 +2505,9 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  liftShaftCandidateCount:(selectedMall.verticalShaftCandidates||[]).length,
  searchFloorIDs:searchFloorSet?[...searchFloorSet]:null,
   committedSearch:searchCommitted,highlightedVectorCount:searchMatchedVectors.size,
-  focusedStoreId,focusedStoreVector,focusedStoreVectors:[...focusedStoreVectors],focusFloorId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',
+  focusedStoreId,focusedStoreVector,focusedStoreVectors:[...focusedStoreVectors],
+  visitPlanVectors:[...visitPlanVectors],visitPlanHighlightedVectorCount:visitPlanVectors.size,
+  visitPlanColor:mapColor('accent','#BBD74A'),focusFloorId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',
   wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),wayfindingOpen,wayfindingCompact,
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
@@ -2504,6 +2520,45 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  getEscalatorModels:()=>escalatorModel().items.slice(),
  getLiftShaftModels:()=>liftShaftModel().shafts.slice(),
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{if(!searchFloorSet||!searchFloorSet.has(id))setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:(localOnly=false)=>{if(wayfindingOpen&&wayfinding&&!wayfindingCompact){beginWayfindingLocation();return;}placingLocalOnly=Boolean(localOnly);placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
+function sameVectorSet(a,b){return a.size===b.size&&[...a].every(key=>b.has(key));}
+function collectVisitPlanVectors(){
+ const vectors=new Set();
+ const stops=window.RetailNavVisitPlanner?.getState?.().stops||[];
+ for(const stop of stops){
+  if(stop.storeId){
+   for(const binding of window.RetailNavUnits?.getMapBindings?.(stop.storeId)||[]){
+    if(binding?.floor&&binding?.polygonId)vectors.add(binding.floor+':'+binding.polygonId);
+   }
+  }else if(stop.floor&&stop.polygonId)vectors.add(stop.floor+':'+stop.polygonId);
+ }
+ return vectors;
+}
+function rebuildVisitPlanGeometry(){
+ visitPlanGeometryPending=false;
+ if(!ready){visitPlanGeometryPending=true;return;}
+ if(gl){
+  for(const floor of floors){
+   for(const item of Object.values(floor.gpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+   for(const item of Object.values(floor.roofGpu||{}))if(item?.b)gl.deleteBuffer(item.b);
+   geometry(floor);
+  }
+ }
+ dirty=true;
+}
+function syncVisitPlanVectors(){
+ const next=collectVisitPlanVectors(),changed=!sameVectorSet(next,visitPlanVectors);
+ if(changed)visitPlanVectors=next;
+ for(const floor of floors)for(const feature of floor.features){
+  feature.visitPlanned=visitPlanVectors.has(feature.floor+':'+feature.id);
+ }
+ if(!ready){if(changed)visitPlanGeometryPending=true;return;}
+ if(changed||visitPlanGeometryPending)rebuildVisitPlanGeometry();
+}
+function onVisitPlanChange(){
+ if(pendingVisitPlanRefresh)return;
+ pendingVisitPlanRefresh=true;
+ requestAnimationFrame(()=>{pendingVisitPlanRefresh=false;syncVisitPlanVectors();});
+}
 // Theme preview re-colors loaded mesh buffers without redownloading geometry.
 let pendingThemeRefresh=false;
 let lastRoofFont=window.RetailNavThemes?.getState?.().theme.font||'modern';
@@ -2553,5 +2608,7 @@ function onThemeChange(){
  });
 }
 window.addEventListener('retailnav:themechange',onThemeChange);
+window.addEventListener('retailnav:visit-plan-change',onVisitPlanChange);
+window.addEventListener('retailnav:ready',onVisitPlanChange);
 init();
 })();

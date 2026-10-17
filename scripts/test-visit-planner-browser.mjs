@@ -33,6 +33,8 @@ try{
  const url='http://127.0.0.1:'+server.address().port+'/retailnav/index.html?mall=alto-palermo';
  const ready=()=>page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready&&
   window.RetailNavMeetups&&window.RetailNavVisitPlanner);
+ const waitForVisitHighlights=count=>page.waitForFunction(expected=>
+  window.__RETAILNAV__?.getState().visitPlanHighlightedVectorCount===expected,count);
  const settle=()=>page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying&&
   document.querySelector('#rnStoreActions')?.classList.contains('is-visible'));
  const radialSettled=()=>page.waitForFunction(()=>{
@@ -45,9 +47,10 @@ try{
  assert.equal(await page.locator('#rnVisitPlanToggle').isVisible(),false,'empty plan stays out of the map chrome');
  const stores=await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits().filter(unit=>
-   window.RetailNavUnits.getMapBindings(unit).length===1);
+   window.RetailNavUnits.getMapBindings(unit).length>0);
   return units.slice(0,2).map(unit=>({id:unit.storeId,name:unit.name,
-   floor:window.RetailNavUnits.getMapBindings(unit)[0].floor}));
+   floor:window.RetailNavUnits.getMapBindings(unit)[0].floor,
+   vectors:window.RetailNavUnits.getMapBindings(unit).map(binding=>binding.floor+':'+binding.polygonId)}));
  });
  assert.equal(stores.length,2,'needs two mapped stores');
  await page.locator('#search').fill(stores[0].name);
@@ -56,6 +59,17 @@ try{
  assert.equal(await searchVisit.getAttribute('aria-pressed'),'true',
   'search result exposes the shared add-to-visit action');
  assert.equal(await page.locator('#rnVisitPlanCount').textContent(),'1');
+ await waitForVisitHighlights(new Set(stores[0].vectors).size);
+ const firstHighlight=await page.evaluate(()=>({view:window.__RETAILNAV__.getState(),
+  features:window.__RETAILNAV__.floors.flatMap(floor=>floor.features)
+   .filter(feature=>feature.visitPlanned).map(feature=>feature.floor+':'+feature.id)}));
+ assert.deepEqual(new Set(firstHighlight.view.visitPlanVectors),new Set(stores[0].vectors),
+  'adding a store paints every explicitly bound polygon');
+ assert.deepEqual(new Set(firstHighlight.features),new Set(stores[0].vectors),
+  'render features receive the same visit-plan state as the counter');
+ assert.equal(firstHighlight.view.visitPlanColor,
+  await page.evaluate(()=>window.RetailNavThemes.color('accent','#BBD74A')),
+  'map stops use the exact theme accent shown by the visit counter');
  await page.locator('#search').fill('');
  await page.evaluate(store=>window.RetailNavMeetups.selectStore(store.id,false,store.floor),stores[0]);await settle();await radialSettled();
  const radial=await page.locator('#rnStoreActions').evaluate(menu=>{
@@ -82,6 +96,10 @@ try{
  await page.evaluate(store=>window.RetailNavMeetups.selectStore(store.id,false,store.floor),stores[1]);await settle();
  await page.locator('#rnStoreAddToPlan').tap();
  assert.equal(await page.locator('#rnVisitPlanCount').textContent(),'2');
+ const expectedStoreVectors=new Set(stores.flatMap(store=>store.vectors));
+ await waitForVisitHighlights(expectedStoreVectors.size);
+ assert.deepEqual(new Set(await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors)),
+  expectedStoreVectors,'every selected stop remains marked across its bound floors');
  await page.locator('#rnVisitPlanToggle').tap();
  assert.equal(await page.locator('#rnVisitPlan').isVisible(),true);
  assert.equal(await page.locator('.rnVisitPlanStop').count(),2);
@@ -95,6 +113,9 @@ try{
  assert.equal((await page.evaluate(()=>window.RetailNavVisitPlanner.getState())).stops.length,2,
   'plan persists locally across reloads');
  assert.equal(await page.locator('#rnVisitPlanCount').textContent(),'2');
+ await waitForVisitHighlights(expectedStoreVectors.size);
+ assert.deepEqual(new Set(await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors)),
+  expectedStoreVectors,'map highlights restore with the locally persisted plan');
  await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
   const feature=view.floors.flatMap(floor=>floor.features).find(candidate=>candidate.k==='unit'&&
@@ -107,6 +128,12 @@ try{
  assert.equal(state.stops.length,3);
  assert.ok(state.stops.some(stop=>stop.spaceId&&stop.storeId===null),
   'an unidentified physical shop space remains a valid itinerary stop');
+ const unidentified=state.stops.find(stop=>stop.storeId===null);
+ await waitForVisitHighlights(new Set([...expectedStoreVectors,
+  unidentified.floor+':'+unidentified.polygonId]).size);
+ assert.ok((await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors))
+  .includes(unidentified.floor+':'+unidentified.polygonId),
+  'an unidentified physical space receives the same green map state');
  await page.locator('#rnVisitPlanToggle').tap();
  assert.equal(await page.locator('.rnVisitPlanStop').count(),3);
  assert.match((await page.locator('.rnVisitPlanFocus small').last().textContent()),/identidad pendiente|identity pending/);
@@ -118,6 +145,7 @@ try{
  await page.screenshot({path:'artifacts/visit-plan-'+engine+'.png',fullPage:true});
  await page.locator('.rnVisitPlanRemove').last().tap();
  assert.equal(await page.locator('.rnVisitPlanStop').count(),2);
+ await waitForVisitHighlights(expectedStoreVectors.size);
  await page.setViewportSize({width:390,height:844});
  await page.waitForTimeout(120);
  const mobilePanel=await page.locator('#rnVisitPlan').boundingBox();
@@ -128,5 +156,5 @@ try{
   'mobile visit sheet stays inside the map viewport: '+JSON.stringify({mobilePanel,mobileCanvas}));
  await page.screenshot({path:'artifacts/visit-plan-mobile-'+engine+'.png',fullPage:true});
  assert.deepEqual(errors,[]);
- console.log('PASS visit plan '+engine+': search/context state, five-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
+ console.log('PASS visit plan '+engine+': green map state on every bound polygon, search/context state, five-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
 }finally{await browser.close();await new Promise(ok=>server.close(ok));}

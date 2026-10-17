@@ -16,7 +16,7 @@ let catalog=[],mall=null,floor=null,source=null,features=[],selected=null,drawMo
 const base='../..';
 const say=(s,bad=false)=>{$('status').textContent=s;$('status').style.color=bad?'#ffb0b0':'#bbf0d2'};
 const clone=x=>JSON.parse(JSON.stringify(x));
-const screenPoint=e=>{const b=$('svg').getBoundingClientRect();return [view[0]+(e.clientX-b.left)*view[2]/b.width,view[1]+(e.clientY-b.top)*view[3]/b.height]};
+const screenPoint=e=>{const svg=$('svg'),p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const matrix=svg.getScreenCTM();if(!matrix)return [view[0],view[1]];const q=p.matrixTransform(matrix.inverse());return [q.x,q.y]};
 const polygonPoint=v=>v.map(n=>Math.round(n*100)/100);
 const pointStr=pts=>pts.map(p=>p.join(',')).join(' ');
 function setView(){view[2]=Math.max(30,Math.min(10000,view[2]));view[3]=Math.max(30,Math.min(10000,view[3]));$('svg').setAttribute('viewBox',view.join(' '))}
@@ -35,7 +35,7 @@ function render(){
  const f=features.find(x=>x.id===selected);
  if(f&&!drawMode)f.vertices.forEach((p,i)=>{
   const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',Math.max(5,view[2]/220));c.setAttribute('class','vertex');
-  c.addEventListener('pointerdown',e=>{e.stopPropagation();dragPoint=i;$('svg').setPointerCapture(e.pointerId)});$('vector').append(c)});
+  c.addEventListener('pointerdown',e=>{e.stopPropagation();dragPoint=i;pointers.set(e.pointerId,[e.clientX,e.clientY]);$('svg').setPointerCapture(e.pointerId)});$('vector').append(c)});
  $('draft').setAttribute('points',pointStr(pending));
  $('stats').textContent=features.length+' regiones · '+features.filter(f=>[0,1].includes(f.kind)).length+' posibles recintos comerciales';
 }

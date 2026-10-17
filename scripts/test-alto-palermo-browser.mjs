@@ -80,8 +80,13 @@ try{
  assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
   !label.name||(label.nameRaised==='vector'&&label.frontNameRaised==='vector')));
  assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
-  label.codeRaised==='vector'&&label.codePlacement==='roof-lower-side'&&
+  label.codeRaised==='vector'&&label.codePlacement==='roof-bottom-right-inset'&&
   !label.frontCodeRaised));
+ assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
+  label.codeInset?.corner==='bottom-right'&&label.codeInset.insideSurface&&
+  label.codeInset.rightInset>=.095&&label.codeInset.bottomInset>=.095&&
+  label.codeInset.clearance>=.05),
+ 'every local code must keep real right/bottom perspective-safe roof clearance');
  assert.ok(audit.frontGeometry.vertices>1000);
  assert.ok(audit.frontGeometry.verticalSpan>.1,'facade lettering must be vertical geometry');
  const roofImagePolicy=await page.evaluate(()=>{
@@ -99,6 +104,8 @@ try{
    names:summary.knownNameLabels,frontNames:summary.frontNameLabels,
    roofCodes:summary.roofCodeLabels,frontCodes:summary.frontCodeLabels,
    suppressed:summary.roofImageNameSuppressions,
+   codePlacement:summary.roomLabels[0]?.codePlacement,
+   codeInset:summary.roomLabels[0]?.codeInset,
    roofVertices:floor.roofText.names.length,
    frontVertices:floor.roofText.frontNames.length
   };
@@ -110,6 +117,10 @@ try{
   [0,1,1]);
  assert.deepEqual([roofImagePolicy.roofCodes,roofImagePolicy.frontCodes],[0,1],
   'a roof image moves the local code to the lower facade instead of floating it');
+ assert.equal(roofImagePolicy.codePlacement,'facade-bottom-right-inset');
+ assert.ok(roofImagePolicy.codeInset?.rightInset>=.095&&
+  roofImagePolicy.codeInset?.bottomInset>=.095,
+ 'facade code must preserve right and bottom margins');
  assert.equal(roofImagePolicy.roofVertices,0);
  assert.ok(roofImagePolicy.frontVertices>0,'roof imagery must preserve the smaller facade name');
  assert.deepEqual(audit.viewer.errors,[]);

@@ -201,7 +201,7 @@ unitsApi.getRoofState=()=>({
  labelledRoofs:roofEntries.length,
  unmatched:entries.length-roofEntries.length,
  visibleCodes:visibleCodes.slice(),frames,
- floatingPanels:0,codePlacement:'roof-or-facade-lower-side',
+ floatingPanels:0,codePlacement:'roof-or-facade-bottom-right-inset',
  raisedHasPhysicalPosts:false,raisedHasExtrudedBody:false,
  raisedTextGeometry:'none',
  raisedVectorTriangles:resource?.lastVectorTriangles||0,

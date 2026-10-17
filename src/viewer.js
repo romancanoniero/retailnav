@@ -1263,7 +1263,9 @@ function renderGroupedShopResults(host,query){
   const members=new Map();
   for(const store of option.stores||[]){
    const record=byStore.get(store.storeId);if(!record)continue;
-   if(option.conceptId&&!record.matchedConceptIds.includes(option.conceptId))continue;
+   // A store can match several synonymous tags. The autocomplete is a store
+   // result list, so render that identity once under its highest-ranked tag.
+   if(!selectedSearchTagKey&&grouped.has(record.storeId))continue;
    members.set(record.storeId,record);
   }
   if(!members.size)continue;

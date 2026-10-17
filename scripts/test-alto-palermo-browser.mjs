@@ -79,6 +79,21 @@ try{
  assert.ok(adidasLogo.width>0&&adidasLogo.height>0);
  const fashion=await page.evaluate(()=>window.RetailNavUnits.suggestions('moda',15));
  assert.ok(fashion.some(item=>item.count>=40));
+ await page.locator('#search').fill('caf');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.rnUnitResult')]
+  .some(element=>element.dataset.storeId?.includes('official:77')));
+ const coffeeSearch=await page.evaluate(()=>({
+  labels:[...document.querySelectorAll('.rnResultTag')].map(element=>element.dataset.tag
+   .normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()),
+  stores:[...document.querySelectorAll('#results .rnUnitResult')].map(element=>element.dataset.storeId),
+  starbucks:[...document.querySelectorAll('#results .rnUnitResult')]
+   .filter(element=>element.dataset.storeId?.includes('official:77')).length
+ }));
+ assert.equal(new Set(coffeeSearch.labels).size,coffeeSearch.labels.length,
+  'legacy café tag and canonical coffee concept must not duplicate a visible suggestion');
+ assert.equal(new Set(coffeeSearch.stores).size,coffeeSearch.stores.length,
+  'a store matching several tags must appear only once in the autocomplete');
+ assert.equal(coffeeSearch.starbucks,1,'Starbucks must be rendered once for the caf query');
  await page.locator('#search').fill('');
  await page.locator('#floorSelect').selectOption('PB');
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().visible.length===1&&

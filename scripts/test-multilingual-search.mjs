@@ -202,6 +202,24 @@ test('Canonical store IDs deduplicate cross-floor counts and result rows',()=>{
  assert.ok(rows[0].matchTypes.includes('product'));
 });
 
+test('Legacy tags and semantic concepts with the same label become one suggestion',()=>{
+ const records=[{
+  mallId:'alto-palermo',storeId:'alto-palermo:official:77',floor:'EP',code:'L04',
+  name:'Starbucks',category:'Cafetería',tags:'cafetería,café,gastronomía',
+  conceptIds:['category.restaurant','food.coffee'],productsVerified:false
+ }];
+ const app=setup('alto-palermo',records,['es-AR']);
+ const options=app.units.suggestions('caf',15);
+ const labels=options.map(option=>option.term.normalize('NFD')
+  .replace(/[\u0300-\u036f]/g,'').toLowerCase());
+ assert.equal(new Set(labels).size,labels.length,'visible suggestion labels must be unique');
+ const coffee=options.find(option=>option.term==='café');
+ assert.ok(coffee);
+ assert.equal(coffee.conceptId,'food.coffee','canonical semantic identity wins over its legacy tag');
+ assert.equal(coffee.count,1);
+ assert.deepEqual(Array.from(coffee.stores,store=>store.storeId),['alto-palermo:official:77']);
+});
+
 test('Photographed Shanghai product terms and legacy autocomplete remain supported',()=>{
  const app=setup('new-world-city-shanghai',shanghai.records);
  assert.ok(app.units.find('equipaje').some(u=>u.code==='5A10'));

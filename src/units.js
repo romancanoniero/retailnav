@@ -112,11 +112,22 @@ function suggestions(query,limit=8){
   .map(([key,data])=>({key,term:data.label,count:data.count,verified:data.verified,
    stores:[...data.members.values()].map(u=>({storeId:storeKey(u),name:u.name||u.code,code:u.code,floor:u.floor}))}));
  const semantic=i18n?.searchSuggestions(query,units,20)||[];
+ // A legacy directory tag and a canonical concept can have the same visible
+ // label (for example `café`). They are two evidence paths for one suggestion,
+ // not two choices for the visitor. Merge by normalized display label and keep
+ // the canonical concept identity whenever one is available.
  const unique=new Map();
  for(const entry of [...legacy,...semantic]){
-  // Semantic suggestions are keyed by canonical IDs, never by translated text.
-  const id=entry.conceptId?'concept:'+entry.conceptId:'legacy:'+normalized(entry.term);
-  if(!unique.has(id))unique.set(id,entry);
+  const id=normalized(entry.term);if(!id)continue;
+  const current=unique.get(id);
+  if(!current){unique.set(id,{...entry,conceptIds:entry.conceptId?[entry.conceptId]:[],stores:[...(entry.stores||[])]});continue;}
+  const preferred=!current.conceptId&&entry.conceptId?entry:current;
+  const stores=new Map([...(current.stores||[]),...(entry.stores||[])]
+   .map(store=>[store.storeId,store]));
+  unique.set(id,{...current,...preferred,
+   conceptIds:[...new Set([...(current.conceptIds||[]),current.conceptId,entry.conceptId].filter(Boolean))],
+   stores:[...stores.values()],count:stores.size,
+   verified:Math.max(current.verified||0,entry.verified||0)});
  }
  return [...unique.values()].sort((a,b)=>{
   const aPrefix=Number(normalized(a.term).startsWith(q));

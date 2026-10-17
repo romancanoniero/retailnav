@@ -29,6 +29,7 @@ jobs:
         run: |
           python3 scripts/build-admin-web.py --out /tmp/retailnav-admin-sites
           test -s /tmp/retailnav-admin-sites/map-studio/index.html
+          test -s /tmp/retailnav-admin-sites/map-studio/demo/index.html
           test -s /tmp/retailnav-admin-sites/control/index.html
           test -s /tmp/retailnav-admin-sites/mall-manager/index.html
           test -s /tmp/retailnav-admin-sites/merchant/index.html
@@ -59,7 +60,9 @@ jobs:
                   if self.script:self.js+=data
               def handle_endtag(self,tag):
                   if tag=='script':self.script=False
-          p=P();p.feed(Path('admin/map-studio/index.html').read_text())
-          Path('/tmp/map-studio.js').write_text(p.js)
+          for candidate,name in [('admin/map-studio/index.html','map-studio'),('admin/map-studio/demo/index.html','review-2d')]:
+              p=P();p.feed(Path(candidate).read_text())
+              Path('/tmp/'+name+'.js').write_text(p.js)
           PY
           node --check /tmp/map-studio.js
+          node --check /tmp/review-2d.js

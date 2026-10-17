@@ -56,9 +56,14 @@ meetingBox.id='rnMeetingBox';meetingBox.className='rnMeetingBox';meetingBox.hidd
 panel.append(meetingBox);
 function store(){return window.RetailNavUnits?.getUnits()?.find(u=>u.storeId===selectedId);}
 function describeLocation(u){
- if(u.locationLabel)return u.locationLabel;
- return [...new Set([u.floor,...(u.documentedFloors||[])].filter(Boolean))].join(' / ')||
-   tr('Planta sin confirmar','Floor not confirmed');
+ if(!u.sourceGeometry&&u.source!=='aventura-official-directory')return u.locationLabel||
+  [...new Set([u.floor,...(u.documentedFloors||[])].filter(Boolean))].join(' / ')||
+  tr('Planta sin confirmar','Floor not confirmed');
+ const mapped=window.RetailNavUnits?.getMappedFloors?.(u)||[];
+ if(mapped.length)return tr('Vinculado al mapa · ','Linked to map · ')+mapped.join(' / ');
+ const published=u.locationLabel||[...new Set([u.floor,...(u.documentedFloors||[])].filter(Boolean))].join(' / ');
+ return published?tr('Directorio: ','Directory: ')+published+tr(' · ubicación en mapa pendiente',' · map location pending'):
+  tr('Ubicación en mapa pendiente','Map location pending');
 }
 function safeLogo(host,u){
  const label=u.name||u.code||'?';
@@ -100,7 +105,7 @@ function showSelectionStatus(u,focus){
       'Directory location is available, but not yet linked to the map.')
     :tr('Ubicación pendiente de identificar en el plano; no se puede enfocar ni resaltar.',
       'Map position is unknown; focus and map highlight are not available.'));
- const levels=[...new Set((u.sourceGeometry?.polygons||[]).map(p=>p.floor))];
+ const levels=window.RetailNavUnits?.getMappedFloors?.(u)||[];
  if(levels.length>1){
   const choices=document.createElement('span');choices.className='rnStoreFloorChoices';
   for(const floor of levels){const b=button(tr('Planta ','Floor ')+floor,()=>selectStore(u.storeId,false,floor));

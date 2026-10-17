@@ -1405,6 +1405,9 @@ body.rnTabletHeaderSearch .topbar>#friendsBtn{flex:none;min-width:54px;height:44
 body.rnTabletHeaderSearch .stage.rnWayfindingActive .rnWayfinding{top:16px}
 body.rnTabletHeaderSearch.rnTagResultsOpen .stage>.rnTagResultPanel{padding-top:16px}
 body.rnTabletHeaderSearch .stage>.note{top:85px}
+.rnStoreMapState{display:block;margin-top:4px;color:var(--rn-theme-muted,#acc6d6);
+ font-size:11px;font-weight:600;line-height:1.35;white-space:normal}
+[data-map-state="mapped"] .rnStoreMapState{color:var(--rn-theme-accent,#72d9e9)}
 /* Safari's native select can ignore min-height; preserve the full touch area. */
 .rnWayfinding #rnWayfindingOriginFloor{height:44px;min-height:44px;
  appearance:none;-webkit-appearance:none;padding-right:30px;

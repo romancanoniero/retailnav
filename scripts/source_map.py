@@ -3,10 +3,60 @@ import hashlib
 import json
 import re
 import unicodedata
+from urllib.parse import urlparse
 
 
 def name_key(value):
     return re.sub(r'[^a-z0-9]', '', unicodedata.normalize('NFKD', value.lower()).replace('&', 'and'))
+
+
+def reviewed_directory_binding(source, digest, store, reviews):
+    """Explicit, snapshot-pinned identity repairs; never a general name fallback.
+
+    A merchant page can retain a valid map location ID after the provider drops
+    that ID from its location table. Its own polygon still needs that exact ID.
+    """
+    for review in reviews:
+        if review['storeId'] != store['storeId']:
+            continue
+        page = review['officialPage']
+        location_id = review['mapLocationId']
+        current = review['currentLocation']
+        if not (review['sourceSnapshotSha256'] == digest
+                and review['mallId'] == source['mallId'] == store.get('mallId')
+                and review['venueId'] == source['venueId'] == store.get('officialMapEmbedVenueId')
+                and review['name'] == store['name'] == page['name'] == current['name']
+                and str(store.get('officialMapLocationId')) == location_id
+                and store.get('officialMapSourceUrl') == page['url']
+                and page['postId'] == current['integrationKey']
+                and urlparse(page['embeddedMapUrl']).netloc == 'embed.roveiq.com'
+                and urlparse(page['embeddedMapUrl']).path ==
+                    '/venues/' + str(source['venueId']) + '/locations/' + location_id):
+            continue
+        # A live table entry or a different tenant claiming this footprint
+        # requires a new review, not reuse of this historical-ID repair.
+        if any(l['id'] == location_id for l in source['locations']):
+            continue
+        if [l for l in source['locations'] if name_key(l['name']) == name_key(store['name'])] != [
+                {'id': current['id'], 'name': current['name'], 'suiteIds': current['suiteIds']}]:
+            continue
+        geometry = [{'floor': f['id'], 'sourceFloorId': f['sourceFloorId'],
+                     'polygonId': p['id'], 'datasetId': f['datasetId']}
+                    for f in source['floors'] for p in f['features'] if p['locationId'] == location_id]
+        if geometry != review['polygons'] or not geometry:
+            continue
+        if any(p['floor'] not in store.get('documentedFloors', []) for p in geometry):
+            continue
+        if any(p['polygonId'] in l['suiteIds'] for p in geometry for l in source['locations']):
+            continue
+        return {'mallId': source['mallId'], 'storeId': store['storeId'],
+            'locationId': location_id, 'coordinateSpace': source['coordinateSpace'],
+            'sourceSha256': digest, 'evidence': 'official-directory-location-and-source-polygon-id',
+            'polygons': geometry, 'surveyVerified': False,
+            'identityReview': {'id': review['id'], 'currentLocationId': current['id'],
+                'officialPageUrl': page['url'], 'officialPageSha256': page['sha256'],
+                'reviewedAt': review['reviewedAt']}}
+    return None
 
 
 def attach_source_geometry(repo, mall_id, records):
@@ -17,6 +67,8 @@ def attach_source_geometry(repo, mall_id, records):
     assert source['mallId'] == mall_id and source['venueId'] == 107
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     locations = source['locations']
+    reviews_path = repo / 'data/official-maps' / (mall_id + '-identity-reviews.json')
+    reviews = json.loads(reviews_path.read_text())['reviews'] if reviews_path.exists() else []
     for store in records:
         if store.get('source') != 'aventura-official-directory':
             continue
@@ -25,6 +77,9 @@ def attach_source_geometry(repo, mall_id, records):
             l for l in locations if name_key(l['name']) == name_key(store['name'])]
         # An ID with a different name is a source conflict, not a usable match.
         if len(matches) != 1 or name_key(matches[0]['name']) != name_key(store['name']):
+            binding = reviewed_directory_binding(source, digest, store, reviews)
+            if binding:
+                store['sourceGeometry'] = binding
             continue
         location = matches[0]
         geometry = []

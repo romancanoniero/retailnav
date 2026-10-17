@@ -8,6 +8,7 @@ on:
       - "public/**"
       - "backend/**"
       - "scripts/**"
+      - "data/malls/**"
       - "deploy/**"
   workflow_dispatch:
 
@@ -54,6 +55,7 @@ jobs:
         run: |
           python3 scripts/build-web.py
           python3 scripts/verify.py public
+          python3 scripts/test-alto-palermo-import.py
           node --test scripts/test-multilingual-search.mjs
   tablet-e2e:
     runs-on: ubuntu-latest
@@ -190,7 +192,8 @@ jobs:
           expected={
               'aventura': ['LL','UL','L3'],
               'ap-plaza': ['B1'],
-              'new-world-city-shanghai': ['L1','L2','L3','L4','L5','L6','L7','L8','L9']
+              'new-world-city-shanghai': ['L1','L2','L3','L4','L5','L6','L7','L8','L9'],
+              'alto-palermo': ['SS','PB','EP','P1','P2','P3']
           }
           for slug,levels in expected.items():
               mall=catalog[slug]
@@ -211,6 +214,10 @@ jobs:
               assert [f[0] for f in bundle['floors']]==levels
               if slug=='new-world-city-shanghai':
                   assert sum(len(f[3]) for f in bundle['floors'])==737
+                  assert mall['navigable'] is False
+              if slug=='alto-palermo':
+                  assert mall['storeCatalog']['total']==158
+                  assert mall['officialPositionedAndCodedRecords']==152
                   assert mall['navigable'] is False
               print('PASS: PUBLIC versioned mall bundle',slug,len(levels),'floors',len(content),'bytes, SHA-256 OK')
           PY

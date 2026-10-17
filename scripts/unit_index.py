@@ -104,6 +104,7 @@ def attach(folder, level, geometry):
     with file.open(encoding="utf-8", newline="") as stream:
         for row in csv.DictReader(stream):
             code = row["code"].strip()
+            source_record_id = row.get("sourceRecordId", "").strip()
             # Directory-only brand names have NO defensible floor coordinates.
             # Keep them searchable without silently placing every shop at 0,0.
             try:
@@ -111,9 +112,14 @@ def attach(folder, level, geometry):
                 at=(float(x_str),float(y_str)) if x_str and y_str else None
             except (ValueError, TypeError):
                 at=None
-            matches = [f[0] for f in geometry if inside(at, f)] if at else []
+            # Floor slabs, corridors and amenity zones are not shop tenancy
+            # polygons. Only anchors/units may receive a provisional code link.
+            matches = [f[0] for f in geometry if f[1] in (0, 1) and inside(at, f)] if at else []
             polygon_id = matches[0] if len(matches) == 1 else None
             label = {"code": code, "name": row.get("name", "").strip(),
+                "sourceRecordId": source_record_id or None,
+                "codeKind": row.get("codeKind", "").strip() or
+                    ("official-local-code" if code else "missing-in-source"),
                 "floor": level, "x": at[0] if at else None,
                 "y": at[1] if at else None,
                 "polygonId": polygon_id,

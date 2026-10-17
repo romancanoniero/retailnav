@@ -176,7 +176,7 @@ try{
  }));
  assert.equal(aventuraIndex.units.filter(u=>u.codeKind==='map-vector-reference-not-lease-number').length,0,
   'legacy photo-coordinate references must not enter the active official-source map catalog');
- assert.equal(aventuraIndex.units.filter(u=>u.sourceGeometry).length,294);
+ assert.equal(aventuraIndex.units.filter(u=>u.sourceGeometry).length,295);
  const appleDirectory=aventuraIndex.units.find(u=>u.source==='aventura-official-directory'&&u.name==='Apple');
  assert.ok(appleDirectory);
  assert.equal(appleDirectory.floor,'LL');
@@ -383,8 +383,12 @@ try{
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='JCPenney');
  state=await page.evaluate(()=>window.__RETAILNAV__.getState());
- assert.deepEqual(state.visible,['LL','UL'],
-  'an official multi-level listing opens its documented levels without claiming a vector boundary');
+ assert.deepEqual(state.visible,['LL'],
+  'a mapped listing opens its linked floor; an additional directory floor is not a polygon association');
+ const jcSearch=await page.evaluate(()=>window.RetailNavUnits.findDetailed('JCPenney')[0]);
+ assert.deepEqual(jcSearch.floors,['LL']);
+ assert.deepEqual(jcSearch.unit.documentedFloors,['LL','UL'],
+  'published directory floors remain available as separate evidence');
  await input.fill('Apple');
  await input.press('Enter');
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.committedSearch==='Apple');

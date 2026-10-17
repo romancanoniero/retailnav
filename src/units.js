@@ -17,20 +17,31 @@ let committedQuery='';
 const normalized=text=>String(text||'').trim().normalize('NFD')
  .replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const storeKey=u=>u.storeId||(mall.id+':'+u.floor+':'+u.code);
+const unitByStoreId=new Map(units.map(u=>[storeKey(u),u]));
+const mapEvidence=new Set(['official-location-suite-and-polygon-id',
+ 'official-directory-location-and-source-polygon-id']);
+function getMapBindings(store){
+ const unit=unitByStoreId.get(typeof store==='string'?store:store?.storeId);
+ const binding=unit?.sourceGeometry;
+ if(!unit||unit.mallId!==mall.id||!binding||binding.mallId!==mall.id||
+  binding.storeId!==unit.storeId||!mall.sourceMapSha256||
+  binding.sourceSha256!==mall.sourceMapSha256||!mapEvidence.has(binding.evidence)||
+  !Array.isArray(binding.polygons))return[];
+ const loadedFloors=window.__RETAILNAV__?.floors;
+ return [...new Map(binding.polygons.filter(p=>p&&typeof p.floor==='string'&&
+  typeof p.polygonId==='string'&&p.polygonId&&(!loadedFloors||loadedFloors.some(f=>
+   f.id===p.floor&&f.features.some(feature=>feature.id===p.polygonId))))
+  .map(p=>[p.floor+':'+p.polygonId,{...p}])).values()];
+}
+function getMappedFloors(store){return [...new Set(getMapBindings(store).map(p=>p.floor))];}
 // Display names may repeat; storeId is the stable tenant identity across floors.
 const suggestionKey=u=>storeKey(u);
 const buttons=new Map();
 function find(query){
- const text=normalized(query);
- if(!text)return[];
- return units.filter(u=>{
-  const legacy=[u.code,u.name,u.aliases,u.category,u.tags,u.locationLabel,
-   u.officialDescription,...(u.productTerms||[]),...(u.serviceTerms||[])]
-   .filter(Boolean).join(' ');
-  return normalized(legacy).includes(text)||
-   Boolean(i18n?.termsMatch(legacy,query))||
-   Boolean((u.conceptIds||[]).some(id=>i18n?.matchConcept(id,query)));
- });
+ // The map and results list must use the same matching rules. Retain all
+ // legacy floor records for a matched identity so other malls keep their pins.
+ const matches=new Set(findDetailed(query).map(record=>record.storeId));
+ return units.filter(unit=>matches.has(storeKey(unit)));
 }
 function matchesText(values,query){
  return values.filter(Boolean).some(value=>normalized(value).includes(normalized(query))||
@@ -59,10 +70,12 @@ function findDetailed(query){
  const unique=new Map();
  for(const record of matched){
   const current=unique.get(record.storeId);
-  if(!current){record.floors=[record.unit.floor].filter(Boolean);unique.set(record.storeId,record);continue;}
+  const mappedFloors=getMappedFloors(record.unit);
+  const recordFloors=mappedFloors.length?mappedFloors:[record.unit.floor].filter(Boolean);
+  if(!current){record.floors=recordFloors;unique.set(record.storeId,record);continue;}
   current.matchTypes=[...new Set([...current.matchTypes,...record.matchTypes])];
   current.matchedConceptIds=[...new Set([...current.matchedConceptIds,...record.matchedConceptIds])];
-  if(record.unit.floor&&!current.floors.includes(record.unit.floor))current.floors.push(record.unit.floor);
+  for(const floor of recordFloors)if(!current.floors.includes(floor))current.floors.push(floor);
   const hasLocation=u=>Boolean(u.polygonId||Number.isFinite(u.x)&&Number.isFinite(u.y));
   if(!hasLocation(current.unit)&&hasLocation(record.unit))current.unit=record.unit;
  }
@@ -127,17 +140,18 @@ function getHighlightedCodes(){
 function getMatchedVectors(){
  const active=new Set(searchHighlights);
  return [...new Map(units.filter(u=>active.has(storeKey(u))).flatMap(u=>{
-  if(u.sourceGeometry&&mall.sourceMapSha256&&u.sourceGeometry.sourceSha256===mall.sourceMapSha256)return u.sourceGeometry.polygons;
+  const bindings=getMapBindings(u);
+  if(bindings.length)return bindings;
   return u.polygonId&&u.vectorRelation!=='shared-vector-unverified'?[{floor:u.floor,polygonId:u.polygonId}]:[];
  }).map(p=>[p.floor+':'+p.polygonId,{...p,vectorVerified:false}])).values()];
 }
-function focus(code,floor){
- const u=units.find(x=>x.code===code&&(floor===undefined||x.floor===floor));
+function focusUnit(u,floor){
  if(!u)return false;
  document.getElementById('rnMapSearch')?.classList.remove('finding');
  document.getElementById('search')?.blur();
  selected=storeKey(u);
- title.textContent=u.nameStatus==='official-directory'?u.name:(u.name?u.name+' · ':'')+u.code;
+ title.textContent=u.nameStatus==='official-directory'?u.name:
+  (u.name?u.name+(u.code?' · ':''):'')+(u.code||'');
  const activity=u.conceptIds?.length
   ?' · '+(i18n?.ui('category')||'Tipo de local')+': '+i18n.summary(u,8)
   :(u.category?' · '+u.category:'');
@@ -164,9 +178,13 @@ function focus(code,floor){
   }catch{}
  }
  detail.hidden=false;
- window.__RETAILNAV__?.focusCatalogStore?.(u.storeId,u.floor,[u.x,u.y],u.polygonId);
+ window.__RETAILNAV__?.focusCatalogStore?.(u.storeId,floor||u.floor,[u.x,u.y],u.polygonId);
  window.__RETAILNAV__?.invalidate?.();
  return true;
+}
+function focus(code,floor){
+ return focusUnit(units.find(x=>x.code===code&&
+  (floor===undefined||x.floor===floor||getMappedFloors(x).includes(floor))),floor);
 }
 function selectStoreOnly(storeId){
  const unit=units.find(u=>storeKey(u)===storeId);
@@ -175,10 +193,10 @@ function selectStoreOnly(storeId){
  window.__RETAILNAV__?.invalidate?.();
  return true;
 }
-function focusStore(storeId){
+function focusStore(storeId,floor){
  const matches=units.filter(x=>storeKey(x)===storeId);
  const u=matches.find(x=>x.polygonId||Number.isFinite(x.x)&&Number.isFinite(x.y))||matches[0];
- return u?focus(u.code,u.floor):false;
+ return focusUnit(u,floor||u?.floor);
 }
 function paint(){
  if(!host)return;
@@ -200,11 +218,12 @@ function paint(){
   if(!el){
    el=document.createElement('button');
    el.type='button';el.className='rnUnitCode';
-   el.textContent=u.sourceGeometry?u.name:u.code;
+   el.textContent=u.sourceGeometry?u.name:(u.code||u.name);
    el.dataset.unitCode=u.code;el.dataset.storeId=key;
-   el.title=u.name?u.code+' · '+u.name:u.code+' · código del plano';
+   el.title=u.code?(u.name?u.code+' · '+u.name:u.code+' · código del plano'):
+    u.name+' · sin código publicado';
    el.setAttribute('aria-label','Local '+el.title);
-   el.addEventListener('click',e=>{e.stopPropagation();focus(u.code,u.floor)});
+   el.addEventListener('click',e=>{e.stopPropagation();focusUnit(u,u.floor)});
    host.appendChild(el);buttons.set(key,el);
   }
   if((state.focusFloorId&&u.storeId!==state.focusedStoreId)||!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
@@ -229,7 +248,7 @@ function paint(){
 document.getElementById('rnUnitClose')?.addEventListener('click',()=>{detail.hidden=true;selected=null;window.__RETAILNAV__?.invalidate?.();});
 window.RetailNavUnits={draw:paint,focus,focusStore,selectStoreOnly,find,findDetailed,suggestions,setQuery,clearQuery,
  getHighlightedCodes,getHighlightedStoreIds:()=>searchHighlights.slice(),
- getMatchedVectors,
+ getMatchedVectors,getMapBindings,getMappedFloors,
  getUnits:()=>units.slice(),getState:()=>({
  count:units.length,selected,frames,visibleCount,searchHighlights:searchHighlights.slice(),
  committedQuery,matchedVectorCount:getMatchedVectors().length,tagCount:tags.size,

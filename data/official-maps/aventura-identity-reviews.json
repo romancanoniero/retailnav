@@ -1,0 +1,52 @@
+{
+  "schema": "retailnav.source-identity-review.v1",
+  "reviews": [
+    {
+      "id": "aventura-eataly-official-page-29877-2026-10-16",
+      "reviewedAt": "2026-10-16",
+      "mallId": "aventura",
+      "venueId": 107,
+      "storeId": "aventura:directory:eataly",
+      "name": "Eataly",
+      "mapLocationId": "29877",
+      "sourceSnapshotSha256": "ceea588a7404683be4531dd812c43df59410f833825d1bd870e8798d3751a973",
+      "officialPage": {
+        "url": "https://aventuramall.com/dining/eataly/",
+        "sha256": "508fbb68469229c915fe67896aba691da26c39db8d7268338c8413df01c53a84",
+        "name": "Eataly",
+        "postId": 74995,
+        "locationLabel": "Third Level",
+        "embeddedMapUrl": "https://embed.roveiq.com/venues/107/locations/29877?hidecontrols=1&disableInteraction=1"
+      },
+      "currentLocation": {
+        "id": "65343",
+        "name": "Eataly",
+        "integrationKey": 74995,
+        "suiteIds": [
+          "6925d782c0eb4983b9782fcb75bd36ee"
+        ],
+        "sourceUrl": "https://s3.us-east-2.amazonaws.com/settings.roveiq.com/venue-107/locations.json",
+        "sourceSha256": "1bd1d42c2a45ac384917c654311221a75dfa44547eb589da54bdf74cb18a4051"
+      },
+      "polygons": [
+        {
+          "floor": "L3",
+          "sourceFloorId": 363,
+          "polygonId": "54386bc1ec932155fd6c2b4a8ad17125",
+          "datasetId": 2703
+        }
+      ],
+      "mapSuite": {
+        "id": 24306,
+        "entrance": {
+          "longitude": -80.1444437169227,
+          "latitude": 25.957169763059582,
+          "sourceFloorIds": [
+            363
+          ]
+        }
+      },
+      "reason": "The current merchant page explicitly links location 29877, still assigned to this L3 footprint. The provider location table now lists Eataly as 65343 with the same WordPress integration key 74995, but its suite is a 1.65-square-metre unassigned technical shape. It is not used as the shop footprint. No other current location claims the reviewed footprint. Internal store levels do not establish another mall floor."
+    }
+  ]
+}

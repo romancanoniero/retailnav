@@ -326,7 +326,10 @@ function applySearchFloors(query){
  const lang=window.RetailNavI18n;
  const ref=visitorFloorReference();
  if(ref)active=ref;
- searchFloorSet=new Set([ref,...matches.flatMap(u=>u.documentedFloors?.length?u.documentedFloors:[u.floor]),...services.map(p=>p.floor),
+ searchFloorSet=new Set([ref,...matches.flatMap(u=>{
+  const mapped=window.RetailNavUnits?.getMappedFloors?.(u)||[];
+  return mapped.length?mapped:u.documentedFloors?.length?u.documentedFloors:[u.floor];
+ }),...services.map(p=>p.floor),
   ...districts.map(d=>d.floor)].filter(id=>floors.some(f=>f.id===id)));
  // Frame the vertical range of the open shop floors without moving any
  // actual slabs, recalculating their height or altering escalator landings.
@@ -376,39 +379,68 @@ function drawSearchMarkers(){
   for(const button of searchMarkerElements.values())button.hidden=true;
   return;
  }
- const matching=window.RetailNavUnits?.find?.(searchCommitted)||[];
- const showing=new Set();
+ const normalizeName=value=>String(value||'').normalize('NFKD')
+  .replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'');
+ const queryName=normalizeName(searchCommitted);
+ const namePriority=store=>{
+  const name=normalizeName(store.name);
+  return !queryName||!name?0:name===queryName?3:name.startsWith(queryName)?2:name.includes(queryName)?1:0;
+ };
+ const matching=(window.RetailNavUnits?.find?.(searchCommitted)||[])
+  .sort((a,b)=>namePriority(b)-namePriority(a));
+ const showing=new Set(),occupied=[];
  for(const store of matching){
   const id=store.storeId||(mallId+':'+store.floor+':'+store.code);
-  const floor=floors.find(f=>f.id===store.floor);
   if(focusFloorId&&id!==focusedStoreId)continue;
-  if(!floor||!searchFloorSet.has(store.floor)||(focusFloorId&&store.floor!==focusFloorId)||
-   !Number.isFinite(store.x)||!Number.isFinite(store.y))continue;
-  const point=screen(pos([store.x,store.y],floor.y+3));
+  const bindings=window.RetailNavUnits?.getMapBindings?.(store)||[];
+  const placements=new Map();
+  for(const binding of bindings){
+   const floor=floors.find(f=>f.id===binding.floor),feature=floor?.features.find(f=>f.id===binding.polygonId);
+   if(feature&&!placements.has(floor.id))placements.set(floor.id,{floor,centre:feature.c,source:true});
+  }
+  if(!bindings.length&&!store.sourceGeometry&&Number.isFinite(store.x)&&Number.isFinite(store.y)){
+   const floor=floors.find(f=>f.id===store.floor);
+   if(floor)placements.set(floor.id,{floor,centre:[store.x,store.y],source:false});
+  }
+  for(const {floor,centre,source} of placements.values()){
+  if(!searchFloorSet.has(floor.id)||(focusFloorId&&floor.id!==focusFloorId))continue;
+  const key=id+'@'+floor.id;
+  const point=screen(pos(centre,floor.y+3));
   if(!point||point.w<=0||point.z<=-1||point.z>=1||
    point.x<8||point.y<8||point.x>host.clientWidth-8||
    point.y>host.clientHeight-8)continue;
-  let marker=searchMarkerElements.get(id);
+  let marker=searchMarkerElements.get(key);
   if(!marker){
    marker=document.createElement('button');
    marker.type='button';marker.className='rnSearchMarker';
    marker.dataset.storeId=id;
-   marker.setAttribute('aria-label','Ver local '+store.code+
-    ' en planta '+store.floor+' · referencia provisional');
+   marker.dataset.floor=floor.id;
+   marker.setAttribute('aria-label','Ver '+(store.name||store.code)+
+    ' en planta '+floor.id+(source?' · vinculado al mapa':' · referencia provisional'));
    marker.addEventListener('click',event=>{
     event.stopPropagation();
-    window.RetailNavUnits?.focus?.(store.code,store.floor);
+    if(source&&window.RetailNavMeetups?.selectStore)window.RetailNavMeetups.selectStore(id,false,floor.id);
+    else window.RetailNavUnits?.focusStore?.(id,floor.id);
    });
-   host.append(marker);searchMarkerElements.set(id,marker);
+   host.append(marker);searchMarkerElements.set(key,marker);
   }
-  marker.textContent=store.sourceGeometry?store.name:store.code;
-  marker.title=store.floor+' · '+(store.name||store.code)+
-   (store.sourceGeometry?' · geometría de fuente oficial':store.vectorVerified?' · vector validado':' · posición aproximada, vector provisional');
+  marker.textContent=(source?store.name:(store.code||store.name))+(placements.size>1?' · '+floor.id:'');
+  marker.title=floor.id+' · '+(store.name||store.code)+
+   (source?' · geometría de fuente oficial':store.vectorVerified?' · vector validado':' · posición aproximada, vector provisional');
   marker.hidden=false;
-  marker.classList.toggle('rnSearchMarkerChosen',window.RetailNavUnits?.getState?.()?.selected===id);
+  marker.classList.toggle('rnSearchMarkerChosen',focusedStoreId===id&&focusFloorId===floor.id);
   marker.style.left=point.x.toFixed(1)+'px';
   marker.style.top=point.y.toFixed(1)+'px';
-  showing.add(id);
+  const rect=marker.getBoundingClientRect();
+  // Keep labels at their real polygon anchors. A nearby merchant named in a
+  // location description must not cover the merchant the visitor searched for.
+  const collides=occupied.some(other=>other.storeId!==id&&
+   rect.left<other.rect.right+4&&rect.right>other.rect.left-4&&
+   rect.top<other.rect.bottom+4&&rect.bottom>other.rect.top-4);
+  if(collides){marker.hidden=true;continue;}
+  occupied.push({storeId:id,rect});
+  showing.add(key);
+  }
  }
  for(const [id,marker] of searchMarkerElements)if(!showing.has(id))marker.hidden=true;
 }
@@ -663,10 +695,8 @@ function bindWayfinding(){
 function focusCatalogStore(storeId,requestedFloor){
  if(!ready)return {located:false,reason:'map-not-ready'};
  const unit=window.RetailNavUnits?.getUnits?.().find(u=>u.storeId===storeId&&u.mallId===mallId);
- const binding=unit?.sourceGeometry;
- const source=Boolean(binding&&binding.mallId===mallId&&binding.storeId===storeId&&
-  binding.sourceSha256===selectedMall.sourceMapSha256&&binding.evidence==='official-location-suite-and-polygon-id');
- const allowed=source?binding.polygons:[];
+ const allowed=window.RetailNavUnits?.getMapBindings?.(unit)||[];
+ const source=allowed.length>0;
  const floorId=requestedFloor||allowed[0]?.floor||unit?.floor;
  const floor=floors.find(f=>f.id===floorId);
  const ids=source?allowed.filter(p=>p.floor===floorId).map(p=>p.polygonId):
@@ -1124,6 +1154,7 @@ function setFloor(id){
  $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
   ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
   :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
+  :mallId==='alto-palermo'?'Planos oficiales y marcadores del directorio; límites de locales y rutas sin verificar.'
   :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
   :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
     'Contornos y pasillos trazados sobre tus imágenes.');
@@ -1153,17 +1184,35 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
   b.append(media);
  }
  const badge=document.createElement('span');badge.className='levelbadge';
- badge.textContent=[...new Set([...(record.floors||[]),...(unit.documentedFloors||[])])].join('/')||unit.floor||lang?.ui('floorUnknown')||'?';
+ const mappedFloors=window.RetailNavUnits?.getMappedFloors?.(unit)||[];
+ const publishedFloors=[...new Set(unit.documentedFloors||[])];
+ const displayFloors=mappedFloors.length?mappedFloors:publishedFloors.length?publishedFloors:record.floors||[];
+ const en=lang?.locale?.().startsWith('en');
+ const mapped=mappedFloors.length>0;
+ b.dataset.mapState=mapped?'mapped':displayFloors.length?'published-floor':'unplaced';
+ badge.textContent=displayFloors.join('/')||unit.floor||lang?.ui('floorUnknown')||'?';
+ badge.title=mapped?(en?'Floors linked to map polygons':'Plantas vinculadas a polígonos del mapa'):
+  (en?'Published floor; exact map location pending':'Planta publicada; ubicación exacta en el mapa pendiente');
  const info=document.createElement('span');
- info.textContent=unit.nameStatus==='official-directory'?unit.name:(unit.code+(unit.name?' · '+unit.name:''));
+ info.textContent=unit.nameStatus==='official-directory'?unit.name:
+  (unit.code?(unit.code+(unit.name?' · '+unit.name:'')):unit.name);
  const notes=[...new Set(matchTypes)].map(matchTypeLabel);
  if(horizontal){
   const specialties=lang?.summary(unit,4)||unit.category||'';
   if(specialties)notes.push(specialties);
  }
  if(unit.conceptIds?.length)notes.push(lang?.ui('provisional')||'Clasificación provisional');
- if(unit.locationLabel)notes.push((lang?.ui('publishedLocation')||'Ubicación del directorio')+': '+unit.locationLabel);
- notes.push(unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar'));
+ const differentPublishedFloors=mapped&&publishedFloors.length&&
+  (publishedFloors.some(f=>!mappedFloors.includes(f))||mappedFloors.some(f=>!publishedFloors.includes(f)));
+ if(unit.locationLabel&&(!mapped||!publishedFloors.length||differentPublishedFloors))
+  notes.push((lang?.ui('publishedLocation')||'Ubicación del directorio')+': '+unit.locationLabel);
+ if(unit.source==='aventura-official-directory'){
+  const mapState=document.createElement('span');mapState.className='rnStoreMapState';
+  mapState.textContent=mapped?(en?'Linked to map':'Vinculado al mapa'):displayFloors.length?
+   (en?'Published floor · map location pending':'Planta publicada · ubicación en mapa pendiente'):
+   (en?'Map location pending':'Ubicación en mapa pendiente');
+  info.append(mapState);
+ }else notes.push(unit.polygonId?(lang?.ui('region')||'Región provisional'):(lang?.ui('unplaced')||'Ubicación por verificar'));
  const note=document.createElement('span');note.className='small';note.textContent=notes.join(' · ');
  info.append(note);b.title=[unit.code,unit.name,unit.category,unit.locationLabel,unit.tags].filter(Boolean).join(' · ');
  b.append(badge,info);b.onclick=()=>{
@@ -1266,7 +1315,7 @@ for(const district of districtMatches.slice(0,12)){
 }
 if(!host.children.length){let p=document.createElement('p');p.textContent=window.RetailNavI18n?.ui('none')||'Sin coincidencias en el shopping para esta búsqueda.';host.append(p);}
 $('resultCount').textContent=q?(list.length+pois.length+shopSearch.storeIds.size+districtMatches.length)+' '+(window.RetailNavI18n?.ui('results')||'coincidencias'):
-  (mallId==='ap-plaza'||mallId==='new-world-city-shanghai'
+  (['ap-plaza','new-world-city-shanghai','alto-palermo'].includes(mallId)
     ?'Directorio fotográfico y sectores provisionales: ubicación de cada tienda pendiente de validación'
     :'Tiendas ancla legibles en las imágenes');}
 function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5200);}

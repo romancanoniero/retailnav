@@ -1031,7 +1031,7 @@ try {
   await apPage.locator('#mallSettingsBtn').click();
   assert.ok(await apPage.locator('#mallSettingsDialog').isVisible());
   assert.deepEqual(await apPage.locator('#mallSelect option').evaluateAll(
-    options=>options.map(x=>x.value)),['aventura','ap-plaza','new-world-city-shanghai']);
+    options=>options.map(x=>x.value)),['aventura','alto-palermo','ap-plaza','new-world-city-shanghai']);
   assert.equal(await apPage.locator('#mallSelect').inputValue(),'ap-plaza');
   assert.match(await apPage.locator('#mallLocationStatus').innerText(),/desactivada/i);
   await apPage.locator('#mallSelect').selectOption('aventura');

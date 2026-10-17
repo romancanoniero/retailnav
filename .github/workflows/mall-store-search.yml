@@ -29,6 +29,7 @@ on:
       - "data/store-concepts/**"
       - "data/store-directory/**"
       - "data/search-taxonomy.json"
+      - "data/malls/**"
       - "src/search-i18n.js"
       - "src/poi-layer.js"
       - "scripts/test-multilingual-search.mjs"
@@ -61,6 +62,7 @@ on:
       - "data/store-concepts/**"
       - "data/store-directory/**"
       - "data/search-taxonomy.json"
+      - "data/malls/**"
       - "src/search-i18n.js"
       - "src/poi-layer.js"
       - "scripts/test-multilingual-search.mjs"
@@ -98,6 +100,7 @@ jobs:
           python3 scripts/build-web.py
           python3 scripts/verify.py public
           python3 scripts/test-source-map.py
+          python3 scripts/test-alto-palermo-import.py
           node --test scripts/test-map-cache.mjs scripts/test-positioning-core.mjs scripts/test-multilingual-search.mjs
           node --test scripts/test-wayfinding-route.mjs
       - name: Verify every shop code references its own mall and real polygon only
@@ -109,7 +112,7 @@ jobs:
           src=re.search(r'<script id="mallCatalog" type="application/json">([\s\S]*?)</script>',html)
           assert src
           malls=json.loads(src.group(1))
-          assert set(malls)=={"aventura","ap-plaza","new-world-city-shanghai"},set(malls)
+          assert set(malls)=={"aventura","ap-plaza","new-world-city-shanghai","alto-palermo"},set(malls)
           for slug,info in malls.items():
               table=Path("public/catalog/malls")/slug/"stores.json"
               raw=table.read_bytes()
@@ -128,16 +131,24 @@ jobs:
                   assert sum(map(len,floors.values()))==616
                   assert not any(photo_floors[f]&floors[f] for f in floors)
               ids=set()
+              code_counts={}
+              for u in data["records"]:
+                  code_key=(u["floor"],u["code"])
+                  if u["code"]:
+                      code_counts[code_key]=code_counts.get(code_key,0)+1
               for u in data["records"]:
                   key=(u["floor"],u["code"])
-                  assert key not in ids,key
-                  ids.add(key)
+                  assert u["storeId"] not in ids,u["storeId"]
+                  ids.add(u["storeId"])
                   if u.get("source")=="aventura-official-directory":
                       assert u["storeId"]==slug+":directory:"+u["code"].removeprefix("directory-")
                       assert u["polygonId"] is None
                       assert all(f in floors for f in u.get("documentedFloors",[]))
                   else:
-                      assert u["storeId"]==slug+":"+u["floor"]+":"+u["code"]
+                      if slug=="alto-palermo" and (not u["code"] or code_counts.get(key,0)>1):
+                          assert u["storeId"]==slug+":"+u["floor"]+":source:"+u["sourceRecordId"]
+                      else:
+                          assert u["storeId"]==slug+":"+u["floor"]+":"+u["code"]
                       assert u["floor"] in floors
                       if slug=="aventura":
                           assert u["activeMap"] is False
@@ -171,7 +182,7 @@ jobs:
           assert len(vectors)==131
           assert len(directory)==338
           assert all(u.get("polygonId") is None for u in directory)
-          assert len([u for u in directory if u.get("sourceGeometry")])==294
+          assert len([u for u in directory if u.get("sourceGeometry")])==295
           assert all(u["activeMap"] is False and u["photoReference"] for u in vectors)
           assert len([u for u in vectors if u.get("conceptIds")])==14
           audit=json.loads(Path("data/store-directory/aventura-map-audit.json").read_text())
@@ -180,6 +191,11 @@ jobs:
           assert apple["officialLocationLabel"]=="Outdoor Courtyard"
           assert apple["officialDocumentedFloors"]==[]
           assert malls["new-world-city-shanghai"]["defaultVisitorReference"]["entry"] is None
+          alto=json.loads(Path("public/catalog/malls/alto-palermo/stores.json").read_text())
+          assert len(alto["records"])==158
+          assert len({u["storeId"] for u in alto["records"]})==158
+          assert sum(bool(u["code"]) for u in alto["records"])==153
+          assert malls["alto-palermo"]["floorLabels"]==["SS","PB","EP","P1","P2","P3"]
           print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
           PY
   browser:

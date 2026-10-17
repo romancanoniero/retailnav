@@ -26,7 +26,18 @@ const browser=await (engine==='webkit'?webkit:chromium).launch({headless:true,
  args:engine==='webkit'?[]:['--use-gl=angle','--use-angle=swiftshader']});
 try{
  const context=await browser.newContext({viewport:{width:1024,height:768},hasTouch:true});
- const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const page=await context.newPage();const errors=[],locationRequests=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ // The same assertions run after deployment. Keep social requests local to
+ // this browser test, and never share the synthetic indoor reference point.
+ await page.route('**/retailnav/api/**',async route=>{
+  const request=route.request();
+  if(request.method()==='POST'&&new URL(request.url()).pathname.endsWith('/location'))
+   locationRequests.push(request.postDataJSON());
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+   me:{id:'00000000-0000-4000-8000-000000000001',name:'Floor test',avatarVersion:0,
+    hasRecovery:false},friends:[],incoming:[],outgoing:[],myPosition:null})});
+ });
  const url=new URL(process.env.RETAILNAV_TEST_URL||base);url.searchParams.set('mall','aventura');
  await page.goto(url.href,{waitUntil:'domcontentloaded',timeout:60000});
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState().ready&&window.RetailNavMeetups,
@@ -65,23 +76,51 @@ try{
    const canvas=document.querySelector('#canvas').getBoundingClientRect();
    const panel=document.querySelector('#rnTagResultPanel').getBoundingClientRect();
    return {points:feature.r.flat().map(p=>view.project(floor.id,p)),
-    width:canvas.width,height:canvas.height,right:canvas.right,panelLeft:panel.left};
+    width:canvas.width,height:canvas.height,right:canvas.right,panelLeft:panel.left,
+    panelVisible:panel.width>0};
   },polygonId);
   assert.ok(geometry&&geometry.points.length>=3,'selected source polygon exists in the native 3D meshes');
-  assert.ok(geometry.right<=geometry.panelLeft+2,'tablet results must not cover the map canvas');
+  assert.ok(!geometry.panelVisible||geometry.right<=geometry.panelLeft+2,
+   'tablet results must not cover the map canvas');
   assert.ok(geometry.points.every(p=>p&&p.w>0&&p.x>=0&&p.y>=0&&p.x<=geometry.width&&p.y<=geometry.height),
    'the complete selected polygon stays inside the canvas after rotation and zoom');
  };
  const fixtures=await page.evaluate(()=>Object.fromEntries(
-  ['Joe & The Juice','Venchi','Sens Coffee','Starbucks','JCPenney'].map(name=>{
+  ['Joe & The Juice','Venchi','Eataly','Sens Coffee','Starbucks','JCPenney',
+   'Bath & Body Works/White Barn','Champs Sports','Bloomingdale’s','Macy’s','Joey Aventura'].map(name=>{
    const unit=window.RetailNavUnits.getUnits().find(u=>u.source==='aventura-official-directory'&&u.name===name);
    return [name,unit?.storeId];
   })));
  for(const [name,id] of Object.entries(fixtures))assert.ok(id,'missing fixture '+name);
  const card=name=>page.locator('#rnTagResultCards .rnStoreCard[data-store-id="'+fixtures[name]+'"]');
  const joe='1e262d8a02e8023eecf555d59ee77313',venchi='106b53c386cd808785a547936cfed059';
+ const eataly='54386bc1ec932155fd6c2b4a8ad17125';
+ const eatalyBinding=await page.evaluate(id=>window.RetailNavUnits.getUnits()
+  .find(u=>u.storeId===id)?.sourceGeometry,fixtures.Eataly);
+ assert.equal(eatalyBinding?.evidence,'official-directory-location-and-source-polygon-id');
+ assert.deepEqual(eatalyBinding.polygons.map(p=>[p.floor,p.polygonId]),[['L3',eataly]],
+  'Eataly uses the directory-confirmed source footprint, not the tiny unowned anchor');
  await assertNative();
  assert.ok(['WebGL','Canvas 3D'].includes((await state()).renderer));
+ // Reproduce the unselected Coffee overview from the user's tablet: Eataly
+ // must already be present on L3, before any card has focused the camera.
+ await page.evaluate(()=>window.__RETAILNAV__.setFloor('ALL'));
+ await page.locator('#rnLanguageSelect').selectOption('en');
+ await page.locator('#search').fill('Coffee');
+ await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
+ await page.waitForFunction(id=>{
+  const marker=document.querySelector('#rnSearchMarkers [data-store-id="'+id+'"][data-floor="L3"]');
+  return marker&&!marker.hidden;
+ },fixtures.Eataly);
+ assert.equal(await page.locator('#rnSearchMarkers [data-store-id="'+fixtures.Eataly+'"]'+
+  '[data-floor="L3"]').isVisible(),true,'Coffee overview visibly identifies Eataly on L3 before selection');
+ assert.equal((await state()).focusFloorId,null);assert.deepEqual((await state()).focusedStoreVectors,[]);
+ assert.equal(await card('Eataly').locator('.levelbadge').textContent(),'L3');
+ mkdirSync('artifacts',{recursive:true});
+ await page.locator('#toast').waitFor({state:'hidden',timeout:7000});
+ await page.screenshot({path:'artifacts/source-map-coffee-overview-'+engine+'.png'});
+ await page.evaluate(()=>window.__RETAILNAV__.setFloor('LL'));
+ await page.locator('#search').fill('');
  // Exercise the existing controls before deliberately rolling the camera over.
  // Selection must recover from this real user-controlled orientation, with a
  // transition in the original camera, rather than opening a second surface.
@@ -95,6 +134,10 @@ try{
  await page.locator('#rnLanguageSelect').selectOption('en');
  await page.locator('#search').fill('Coffee');
  await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
+ assert.equal(await card('Eataly').locator('.levelbadge').textContent(),'L3');
+ assert.equal(await page.evaluate(polygon=>window.RetailNavUnits.getMatchedVectors()
+  .some(p=>p.floor==='L3'&&p.polygonId===polygon),eataly),true,
+  'Coffee includes Eataly’s real L3 geometry');
  await card('Joe & The Juice').tap();
  let s=await state();
  assert.equal(s.lastStoreFocus.source,true);assert.equal(s.lastStoreFocus.located,true);
@@ -121,7 +164,7 @@ try{
   const floor=window.__RETAILNAV__.floors.find(f=>f.id==='UL');
   const p=floor.features.find(f=>f.k==='unit')?.c||floor.features[0].c;
   window.dispatchEvent(new CustomEvent('retailnav:map-point',{detail:{floor:'UL',x:p[0],y:p[1],
-   mallId:'aventura',coordinateSpace:window.RETAILNAV_ACTIVE_MALL.coordinateSpace}}));
+   mallId:'aventura',coordinateSpace:window.RETAILNAV_ACTIVE_MALL.coordinateSpace,localOnly:true}}));
  });
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().referenceFloor==='UL');
  if(await page.locator('#rnClose').isVisible())await page.locator('#rnClose').click();
@@ -146,10 +189,26 @@ try{
  assert.deepEqual((await state()).focusedStoreVectors,['LL:'+venchi],
   'choosing another store clears the previous ownership highlight');
  await assertInMap(venchi);
+ await card('Eataly').tap();await settle();s=await state();
+ assert.equal(s.lastStoreFocus.floor,'L3');assert.equal(s.lastStoreFocus.located,true);
+ assert.equal(s.lastStoreFocus.source,true);
+ assert.deepEqual(s.focusedStoreVectors,['L3:'+eataly]);
+ assert.equal(s.focusedStoreVectors.some(id=>id.includes('6925d782c0eb4983b9782fcb75bd36ee')),false,
+  'the tiny unrelated anchor must never be highlighted as Eataly');
+ assert.deepEqual(s.visible,['UL','L3']);
+ assert.equal(await card('Eataly').getAttribute('aria-selected'),'true');
+ await assertInMap(eataly);
+ await page.screenshot({path:'artifacts/source-map-eataly-tablet-'+engine+'.png'});
  await card('Sens Coffee').tap();s=await state();
  assert.equal(s.lastStoreFocus.located,false);assert.deepEqual(s.focusedStoreVectors,[]);
  assert.ok(s.visible.includes('L3')&&s.visible.includes('UL'),
   'an unplaced store can show its documented floor and visitor floor without inventing its polygon');
+ assert.equal(s.wayfinding.mode,'unplaced');
+ assert.equal(await card('Sens Coffee').getAttribute('aria-selected'),'true');
+ assert.equal(await page.locator('#rnStoreSelectionStatus').isVisible(),true);
+ assert.match(await page.locator('#rnStoreSelectionStatus').textContent(),/not yet linked|unknown/i);
+ assert.equal(await page.locator('#rnWayfindingTarget').isVisible(),false);
+ assert.equal(await page.locator('#rnWayfindingRelation').isVisible(),true);
  await card('Starbucks').tap();s=await state();
  assert.equal(s.lastStoreFocus.located,false);assert.deepEqual(s.focusedStoreVectors,[]);
  assert.equal(s.focusedStoreVector,null);assert.equal(s.route,0);
@@ -163,6 +222,73 @@ try{
  await assertInMap(joe);
  await page.setViewportSize({width:820,height:1180});await assertInMap(joe);await assertNative();
  await page.screenshot({path:'artifacts/source-map-tablet-portrait-'+engine+'.png'});
+ // Source floors take precedence over stale directory labels. Start each
+ // search from the complete native scene, then inspect both the search result
+ // badge and the independent marker created on each genuinely linked floor.
+ let capturedMulti=false;
+ const searchMappedStore=async(name,bindings)=>{
+  const id=fixtures[name],levels=bindings.map(b=>b[0]);
+  await page.evaluate(()=>window.__RETAILNAV__.setFloor('ALL'));
+  await page.locator('#search').fill(name);await page.locator('#search').press('Enter');
+  await page.waitForFunction(name=>window.__RETAILNAV__.getState().committedSearch===name,name);
+  const matches=await page.evaluate(({name,id})=>window.RetailNavUnits.findDetailed(name)
+   .find(row=>row.storeId===id)?.floors,{name,id});
+  assert.deepEqual(matches,levels,name+' search result floors must use linked source geometry');
+  assert.deepEqual((await state()).visible,['LL','UL','L3'].filter(f=>f==='UL'||levels.includes(f)),
+   name+' search opens mapped floors plus the visitor floor');
+  const badges=await page.locator('.rnUnitResult[data-store-id="'+id+'"] .levelbadge')
+   .allTextContents();
+  assert.ok(badges.length&&badges.every(text=>text===levels.join('/')),
+   name+' badge must not reintroduce stale directory floors: '+JSON.stringify(badges));
+  await page.locator('#search').press('Escape');await settle();
+  await page.waitForFunction(({id,levels})=>{
+   const shown=[...document.querySelectorAll('#rnSearchMarkers [data-store-id="'+id+'"]')]
+    .filter(el=>!el.hidden).map(el=>el.dataset.floor).sort();
+   return JSON.stringify(shown)===JSON.stringify(levels.slice().sort());
+  },{id,levels});
+  const markers=await page.locator('#rnSearchMarkers [data-store-id="'+id+'"]')
+   .evaluateAll(els=>els.filter(el=>!el.hidden).map(el=>({floor:el.dataset.floor,
+    label:el.getAttribute('aria-label'),text:el.textContent})));
+  assert.equal(new Set(markers.map(m=>m.floor)).size,levels.length,
+   name+' has one independently selectable marker on every source floor');
+  assert.ok(markers.every(m=>m.label.includes(m.floor)),name+' marker labels identify their actual floor');
+  if(levels.length>1)assert.ok(markers.every(m=>m.text.includes(m.floor)),
+   name+' markers visibly distinguish each source floor');
+  if(name==='Bloomingdale’s'&&!capturedMulti){
+   await page.locator('#toast').waitFor({state:'hidden',timeout:7000});
+   await page.screenshot({path:'artifacts/source-map-multifloor-tablet-'+engine+'.png'});
+   capturedMulti=true;
+  }
+  return id;
+ };
+ const chooseSourceMarker=async(id,[floor,polygon])=>{
+  await page.locator('#rnSearchMarkers [data-store-id="'+id+'"][data-floor="'+floor+'"]').tap();
+  await settle();const selected=await state();
+  assert.equal(selected.lastStoreFocus.storeId,id);assert.equal(selected.lastStoreFocus.floor,floor);
+  assert.equal(selected.lastStoreFocus.located,true);
+  assert.deepEqual(selected.focusedStoreVectors,[floor+':'+polygon],
+   'a marker selects only its own source-bound floor and polygon');
+  await assertInMap(polygon);
+ };
+ for(const [name,polygon] of [
+  ['Bath & Body Works/White Barn','b8d1c605282dbd9060c8d06871b9ffde'],
+  ['Champs Sports','6f7c5af192a37b85a2dddc024f4f2f84']]){
+  const id=await searchMappedStore(name,[['UL',polygon]]);
+  await chooseSourceMarker(id,['UL',polygon]);
+  assert.deepEqual((await state()).visible,['UL']);
+ }
+ for(const [name,bindings] of [
+  ['Bloomingdale’s',[['LL','66256ac5a1558451e9affb94ca2ce721'],['L3','d1b8cd766c827d817ba1ebaa12e6221f']]],
+  ['Macy’s',[['LL','60aa0c9e9f2adfbd2c564ec7a6dac12d'],['L3','4872d208fc34fcfa897b234bb6186490']]],
+  ['Joey Aventura',[['LL','057452fb036953f93bf75ee5ed446b8b'],['UL','e3f00b2b41f9ef040b22406bd2d602dd']]]]){
+  const id=await searchMappedStore(name,bindings);
+  await chooseSourceMarker(id,bindings[1]);
+  await searchMappedStore(name,bindings);
+  await chooseSourceMarker(id,bindings[0]);
+ }
+ console.log('PASS Eataly footprint, corrected source floors, floor-specific badges and independent multi-floor markers');
+ await page.locator('#search').fill('Coffee');
+ await page.locator('.rnResultTag[data-concept-id="food.coffee"]').click();
  // Source-bound multi-floor shops expose their real linked floors through
  // the same selection panel, with independent geometry per destination.
  await page.evaluate(()=>window.RetailNavMeetups.selectStore('aventura:directory:joey-aventura'));
@@ -195,6 +321,7 @@ try{
  await page.locator('#floorSelect').selectOption('UL');
  assert.deepEqual((await state()).visible,['UL'],'original floor selector still controls the native scene');
  await assertNative();
+ assert.deepEqual(locationRequests,[],'fixture origins must never send a location-sharing request');
  assert.deepEqual((await state()).errors,[]);assert.deepEqual(errors,[]);
  console.log('PASS rapid selections, unknown geometry, coordinate-frame isolation, reduced motion and portrait tablet');
 }finally{await browser.close();await new Promise(ok=>server.close(ok));}

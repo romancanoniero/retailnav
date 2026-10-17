@@ -1,0 +1,347 @@
+{
+  "id": "alto-palermo",
+  "name": "Alto Palermo",
+  "city": "Buenos Aires, Argentina",
+  "source": "https://www.altopalermo.com.ar/maps_ap/index.html",
+  "status": "vectorizado-provisional",
+  "origin": [
+    1768,
+    1176
+  ],
+  "scale": 0.04,
+  "navigable": false,
+  "warning": "Mapas oficiales y directorio cargados. Las posiciones son centros de marcadores; límites de locales, entradas, escala métrica y rutas siguen pendientes de validación.",
+  "floors": [
+    {
+      "id": "SS",
+      "name": "Subsuelo",
+      "geometry": "SS.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Subsuelo",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 8,
+      "codedRecords": 4,
+      "positionedRecords": 5
+    },
+    {
+      "id": "PB",
+      "name": "Planta Baja",
+      "geometry": "PB.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Planta Baja",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 66,
+      "codedRecords": 66,
+      "positionedRecords": 66
+    },
+    {
+      "id": "EP",
+      "name": "Entrepiso",
+      "geometry": "EP.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Entrepiso",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 5,
+      "codedRecords": 5,
+      "positionedRecords": 5
+    },
+    {
+      "id": "P1",
+      "name": "Piso 1",
+      "geometry": "P1.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Piso 1",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 35,
+      "codedRecords": 35,
+      "positionedRecords": 35
+    },
+    {
+      "id": "P2",
+      "name": "Piso 2",
+      "geometry": "P2.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Piso 2",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 37,
+      "codedRecords": 36,
+      "positionedRecords": 35
+    },
+    {
+      "id": "P3",
+      "name": "Piso 3",
+      "geometry": "P3.geometry.zlib.b64",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "source": "Plano SVG oficial de Alto Palermo · Piso 3",
+      "regionCount": 3,
+      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "geometryReviewApproved": false,
+      "directoryRecords": 7,
+      "codedRecords": 7,
+      "positionedRecords": 7
+    }
+  ],
+  "floorReferences": {
+    "SS": {
+      "url": "reference/alto-palermo/SS.webp",
+      "sha256": "7d7b8f7c8ad0867817e479be372f9321041ec995c156c144b061264a0527e0ab",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial subsuelo.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "0eebca3b22ea15c5cd6376ef1f0b190f91075ccba8eec152a8fb903410620b76",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    },
+    "PB": {
+      "url": "reference/alto-palermo/PB.webp",
+      "sha256": "8a3f1e81b6be40e61f4ae785a053df6c566b02a7520f6e8623c3c4db377b217d",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial planta_baja.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "8dc26585118763174b66bee79237ffd4f1c8c52daa9c6d4d1f15bd073bd459d4",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    },
+    "EP": {
+      "url": "reference/alto-palermo/EP.webp",
+      "sha256": "24e6b93b001a3ea2a7e2db62905032bb2084ef7620dda118b11f6d5621ea6916",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial entrepiso.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "d12338f536d02f1361f46f7f8d10bdc4dd7a51664a7cb6141eb52070a663d32b",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    },
+    "P1": {
+      "url": "reference/alto-palermo/P1.webp",
+      "sha256": "104e9bd90461b7126fe76b67f1c823501ffafa879504517981f08af50c7f15cc",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial piso_1.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "2cbece73377496542c23220a2d91233819127cd759f156401c7b302ed6979383",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    },
+    "P2": {
+      "url": "reference/alto-palermo/P2.webp",
+      "sha256": "8830e7da675f522ee91e5e4f58f4704eb37923d73ffd9101dbcb2822dd9b6bf0",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial piso_2.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "88073ac36815ef90564e47da6e1de09d198f6636c4dbf9ad13d6d3b3f81a1763",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    },
+    "P3": {
+      "url": "reference/alto-palermo/P3.webp",
+      "sha256": "899afe7c0659aeea377012344aec6a000d0623963b83265f0955ee97e63dbdda",
+      "imageSize": [
+        3537,
+        2352
+      ],
+      "rasterSize": [
+        3537,
+        2352
+      ],
+      "quality": "full-resolution",
+      "source": "SVG oficial piso_3.svg, rasterizado a 3x sin etiquetas añadidas",
+      "sourceUrl": "https://www.altopalermo.com.ar/maps_ap/index.html",
+      "sourceSha256": "ce219b01519a8bd517edb7e7cfe8bae46d8642de98e8a58cd039728c4bf2af3f",
+      "viewBox": "0 0 1179 784",
+      "qa": {
+        "status": "pending",
+        "reviewer": null,
+        "reviewedAt": null,
+        "geometrySha256": null,
+        "issues": [
+          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
+          "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
+        ],
+        "checks": {
+          "officialRasterPreserved": true,
+          "markerTableImported": true,
+          "individualStoreWalls": false,
+          "entrances": false,
+          "accessibility": false,
+          "metricScale": false
+        }
+      }
+    }
+  },
+  "floorReferencePolicy": "Los SVG oficiales se conservan como fuente. La geometría nativa contiene sólo losas hasta revisar límites de locales.",
+  "officialDirectoryRecords": 158,
+  "officialCodedRecords": 153,
+  "officialPositionedRecords": 153,
+  "officialPositionedAndCodedRecords": 152,
+  "sourceFloorCounts": {
+    "Subsuelo": 8,
+    "Planta Baja": 66,
+    "Entrepiso": 5,
+    "Piso 1": 35,
+    "Piso 2": 37,
+    "Piso 3": 7
+  },
+  "indoorPositionCalibrated": false,
+  "floorPlanMetricScaleVerified": false,
+  "individualStoreGeometryVerified": false,
+  "numberOfPhysicalStoresVerified": false
+}

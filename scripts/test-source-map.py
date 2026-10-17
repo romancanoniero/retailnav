@@ -168,9 +168,9 @@ assert len(records) == 469 and mall['units'] == records
 directory = [s for s in records if s['source'] == 'aventura-official-directory']
 archived = [s for s in records if s['source'] != 'aventura-official-directory']
 assert len(directory) == 338 and len(archived) == 131
-assert sum(bool(s.get('sourceGeometry')) for s in directory) == 294
+assert sum(bool(s.get('sourceGeometry')) for s in directory) == 295
 coffee = [s for s in records if 'food.coffee' in s.get('conceptIds', [])]
-assert len(coffee) == 15 and sum(bool(s.get('sourceGeometry')) for s in coffee) == 11
+assert len(coffee) == 15 and sum(bool(s.get('sourceGeometry')) for s in coffee) == 12
 assert len({s['storeId'] for s in records}) == len(records)
 for store in records:
     assert store['mallId'] == 'aventura' and store['storeId'].startswith('aventura:')
@@ -183,14 +183,28 @@ for store in records:
     assert binding['storeId'] == store['storeId'] and binding['mallId'] == 'aventura'
     assert binding['coordinateSpace'] == source['coordinateSpace']
     assert binding['sourceSha256'] == mesh['sourceSha256']
-    assert binding['evidence'] == 'official-location-suite-and-polygon-id' and not binding['surveyVerified']
+    assert not binding['surveyVerified']
     assert store['coordinateSpace'] == mesh['coordinateSpace']
-    location = next(l for l in source['locations'] if l['id'] == binding['locationId'])
+    if binding['evidence'] == 'official-location-suite-and-polygon-id':
+        location = next(l for l in source['locations'] if l['id'] == binding['locationId'])
+    else:
+        assert binding['evidence'] == 'official-directory-location-and-source-polygon-id'
+        assert store['storeId'] == 'aventura:directory:eataly'
+        assert binding['locationId'] == store['officialMapLocationId'] == '29877'
+        assert binding['identityReview']['currentLocationId'] == '65343'
+        assert binding['identityReview']['officialPageUrl'] == 'https://aventuramall.com/dining/eataly/'
+        assert binding['polygons'] == [{'floor': 'L3', 'sourceFloorId': 363,
+            'polygonId': '54386bc1ec932155fd6c2b4a8ad17125', 'datasetId': 2703}]
+        assert not any(l['id'] == '29877' or '54386bc1ec932155fd6c2b4a8ad17125' in l['suiteIds']
+                       for l in source['locations'])
+        location = None
     centers = []
     for p in binding['polygons']:
         floor = source_floors[p['floor']]
         feature = next(f for f in floor['features'] if f['id'] == p['polygonId'])
-        assert feature['locationId'] == binding['locationId'] and p['polygonId'] in location['suiteIds']
+        assert feature['locationId'] == binding['locationId']
+        if location:
+            assert p['polygonId'] in location['suiteIds']
         assert p['sourceFloorId'] == floor['sourceFloorId'] and p['datasetId'] == floor['datasetId']
         if p['floor'] == store['floor']:
             centers.append(features[(p['floor'], p['polygonId'])][6])
@@ -229,5 +243,49 @@ for mutation in ('duplicate-location-name', 'missing-suite-membership', 'conflic
         attach_source_geometry(Path(temporary), 'aventura', [candidate])
     assert not candidate.get('sourceGeometry'), mutation
 
+# Eataly's official page still names the original polygon's exact location ID.
+# Its repaired identity is specific and pinned; it cannot turn another tenant,
+# a different floor, an unreviewed source or the 1.65m2 anchor into a shop.
+review_document = json.loads((repo / 'data/official-maps/aventura-identity-reviews.json').read_text())
+eataly = next(s for s in directory if s['name'] == 'Eataly')
+for mutation in ('none', 'stale-source', 'different-tenant', 'foreign-mall', 'wrong-page',
+                 'wrong-venue', 'wrong-embedded-id', 'different-floor', 'claimed-by-other-location',
+                 'conflicting-live-id', 'tiny-anchor', 'ambiguous-name'):
+    fixture = copy.deepcopy(source)
+    candidate = {k: v for k, v in eataly.items() if k != 'sourceGeometry'}
+    reviews = copy.deepcopy(review_document)
+    review = reviews['reviews'][0]
+    if mutation == 'different-tenant':
+        candidate['name'] = 'Other merchant'
+    elif mutation == 'foreign-mall':
+        candidate['mallId'] = 'ap-plaza'
+    elif mutation == 'wrong-page':
+        candidate['officialMapSourceUrl'] = 'https://aventuramall.com/dining/other/'
+    elif mutation == 'wrong-venue':
+        candidate['officialMapEmbedVenueId'] = 108
+    elif mutation == 'wrong-embedded-id':
+        review['officialPage']['embeddedMapUrl'] = 'https://embed.roveiq.com/venues/107/locations/65343'
+    elif mutation == 'different-floor':
+        candidate['documentedFloors'] = ['LL']
+    elif mutation == 'claimed-by-other-location':
+        fixture['locations'][0]['suiteIds'].append('54386bc1ec932155fd6c2b4a8ad17125')
+    elif mutation == 'conflicting-live-id':
+        fixture['locations'].append({'id': '29877', 'name': 'Different tenant', 'suiteIds': []})
+    elif mutation == 'tiny-anchor':
+        review['polygons'][0]['polygonId'] = '6925d782c0eb4983b9782fcb75bd36ee'
+    elif mutation == 'ambiguous-name':
+        fixture['locations'].append({'id': 'other-eataly', 'name': 'Eataly', 'suiteIds': []})
+    raw = json.dumps(fixture).encode()
+    review['sourceSnapshotSha256'] = hashlib.sha256(raw).hexdigest()
+    if mutation == 'stale-source':
+        review['sourceSnapshotSha256'] = '0' * 64
+    with tempfile.TemporaryDirectory() as temporary:
+        folder = Path(temporary) / 'data/official-maps'
+        folder.mkdir(parents=True)
+        (folder / 'aventura.json').write_bytes(raw)
+        (folder / 'aventura-identity-reviews.json').write_text(json.dumps(reviews))
+        attach_source_geometry(Path(temporary), 'aventura', [candidate])
+    assert bool(candidate.get('sourceGeometry')) == (mutation == 'none'), mutation
+
 print('PASS native 3D: 607 source shop meshes + 9 surfaces; exact projection, holes, triangles and interior centers')
-print('PASS 294 source bindings (11 Coffee), 131 isolated photo references, 1224 unverified segments and 17 connectors')
+print('PASS 295 source bindings (12 Coffee), audited Eataly L3 identity, 131 isolated photo references')

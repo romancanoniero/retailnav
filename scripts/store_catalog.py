@@ -130,12 +130,12 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     # assortment for a verified stocked product or available service.
     concept_file = repo / "data" / "store-concepts" / (mall_id + ".json")
     concepts = {}
+    vocabulary = json.loads((repo / "data/search-taxonomy.json").read_text(encoding="utf-8"))
+    allowed = vocabulary["concepts"]
     if concept_file.exists():
         source = json.loads(concept_file.read_text(encoding="utf-8"))
         if source.get("schema") != "retailnav.store-concepts.v1" or source.get("mallId") != mall_id:
             raise ValueError(f"{mall_id}: invalid concept source namespace")
-        vocabulary = json.loads((repo / "data/search-taxonomy.json").read_text(encoding="utf-8"))
-        allowed = vocabulary["concepts"]
         for item in source.get("annotations", []):
             key = (item["floor"], item["code"])
             concept_ids = item.get("conceptIds")
@@ -150,17 +150,35 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
     floors = {f[0]: {v[0]: v for v in f[3]} for f in mall["floors"]}
     owners = Counter((u.get("floor"), u.get("polygonId")) for u in mall.get("units", [])
                      if u.get("polygonId"))
+    code_counts = Counter((u.get("floor"), u.get("code")) for u in mall.get("units", [])
+                          if isinstance(u.get("code"), str) and u.get("code").strip())
     records = []
     seen = set()
+    seen_annotation_keys = set()
     for original in mall.get("units", []):
         u = dict(original)
         floor, code = u.get("floor"), u.get("code")
-        if (floor is not None and (not isinstance(floor, str) or floor not in floors)) or not isinstance(code, str) or not code.strip():
+        source_record_id = u.get("sourceRecordId")
+        if isinstance(source_record_id, str):
+            source_record_id = source_record_id.strip()
+        if (floor is not None and (not isinstance(floor, str) or floor not in floors) or
+                not isinstance(code, str) or
+                (not code.strip() and not source_record_id)):
             raise ValueError(f"{mall_id}: unidentifiable shop row")
-        key = (floor, code)
+        # Most malls identify a row by its floor and printed shop code. Some
+        # official directories expose multiple marker records with one code,
+        # or a named service marker with no printed code. In those cases the
+        # source marker ID is the stable identity; it never replaces the code
+        # shown to the visitor.
+        key = (floor, code, source_record_id) if source_record_id else (floor, code)
         if key in seen:
-            raise ValueError(f"{mall_id}: duplicate shop code on same floor: {key}")
+            raise ValueError(f"{mall_id}: duplicate shop identity: {key}")
         seen.add(key)
+        annotation_key = (floor, code)
+        seen_annotation_keys.add(annotation_key)
+        if code and code_counts[annotation_key] > 1 and (
+                annotation_key in hints or annotation_key in concepts):
+            raise ValueError(f"{mall_id}: annotations cannot target an ambiguous repeated code: {annotation_key}")
         identifier = u.get("polygonId")
         relation = "unplaced-directory"
         # Only an existing polygon on that SAME floor can be referenced. A
@@ -175,7 +193,11 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             else:
                 relation = "one-photo-region-unverified"
         u["mallId"] = mall_id
-        u["storeId"] = (f"{mall_id}:directory:{code.removeprefix('directory-')}"
+        needs_source_identity = bool(source_record_id and
+                                     (not code.strip() or code_counts[(floor, code)] > 1))
+        u["storeId"] = (f"{mall_id}:{floor}:source:{source_record_id}"
+                         if needs_source_identity else
+                         f"{mall_id}:directory:{code.removeprefix('directory-')}"
                          if u.get("source") == "aventura-official-directory"
                          else f"{mall_id}:{floor}:{code}" if floor is not None
                          else f"{mall_id}:directory:{code.removeprefix('directory-')}")
@@ -209,10 +231,10 @@ def build_table(repo: Path, mall_id: str, mall: dict) -> dict:
             u["conceptEvidence"] = u.get("conceptEvidence") or "official-directory-description"
             u["conceptsVerified"] = False
         records.append(u)
-    missing_concepts = set(concepts) - seen
+    missing_concepts = set(concepts) - seen_annotation_keys
     if missing_concepts:
         raise ValueError(f"{mall_id}: orphan concept annotations {sorted(missing_concepts)}")
-    unused = set(hints) - seen
+    unused = set(hints) - seen_annotation_keys
     if unused:
         raise ValueError(f"{mall_id}: orphan product annotations {sorted(unused)}")
     from source_map import attach_source_geometry, activate_native_mesh

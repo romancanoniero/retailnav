@@ -23,6 +23,9 @@ def build(destination):
         folder = destination / module
         folder.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / "admin" / module / "index.html", folder / "index.html")
+    demo_dir = destination / "map-studio" / "demo"
+    demo_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(ROOT / "admin" / "map-studio" / "demo" / "index.html", demo_dir / "index.html")
     data_dir = destination / "demo"
     data_dir.mkdir(exist_ok=True)
     catalog = []

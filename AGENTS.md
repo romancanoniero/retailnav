@@ -1,5 +1,11 @@
 # RetailNav repository instructions
 
+## Zero-damage scope invariant for every task
+
+Treat every behavior, interface, data field, asset, integration, accessibility feature, test, deployment path, and documented decision that already exists as protected. Change only what the user explicitly requests or what is strictly necessary to make that request work. Do not remove, replace, hide, weaken, reset, or silently alter protected behavior to simplify an implementation.
+
+Before editing, inspect the affected flow and its adjacent states so the baseline is known. Prefer the smallest compatible change. When a requested change conflicts with existing behavior, preserve both through a compatible extension or state the unavoidable conflict before changing it. Before completion or deployment, run meaningful regression checks for the touched flow and adjacent protected behavior, compare the resulting experience with the baseline, and report any intentional difference. A new feature passing its own test is not sufficient evidence of zero damage.
+
 ## Mandatory preflight for every mall import or map migration
 
 Before changing, importing, rebuilding, reviewing, or deploying any mall map:

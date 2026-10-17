@@ -28,10 +28,11 @@ Fecha: 2026-10-16. Estado: **PR #44 en revisión, NO publicado ni certificado pa
 2. En tablet, `viewport.right <= panel.left`; en móvil panel inferior intacto.
 3. Al elegir Coffee, listado correcto **del mall actual**, multilingüe. Un toque enfoca y mantiene lista; dos abren ficha.
 4. La bandeja de acciones permanece oculta durante el vuelo y aparece al terminar; sus tres controles son circulares y tienen al menos 44 px. La tarjeta grande de orientación permanece cerrada hasta pulsar orientarme.
-5. Eliminar contacto invalida automáticamente las propuestas relacionadas; tercero no puede leer ni cambiar reuniones.
-6. Otra propuesta nunca cambia la meta hasta ratificación del organizador y todos los participantes.
-7. Si no hay rutas verificadas, botón AR no se puede activar; nunca indicar caminar por geometría fotográfica como ruta segura.
-8. Despliegue en Contabo y verificación real de versión en Safari/iPad, sin asumir éxito a partir de CI solamente.
+5. Toda selección unívoca de un comercio, desde la lista o desde su polígono vinculado, termina en el mismo menú radial: tres acciones sobre una circunferencia y una X circular en el centro. Los polígonos compartidos o sin vínculo no pueden reabrir la tarjeta rectangular heredada ni atribuirse a una marca; muestran una explicación y exigen elegir el comercio en la lista.
+6. Eliminar contacto invalida automáticamente las propuestas relacionadas; tercero no puede leer ni cambiar reuniones.
+7. Otra propuesta nunca cambia la meta hasta ratificación del organizador y todos los participantes.
+8. Si no hay rutas verificadas, botón AR no se puede activar; nunca indicar caminar por geometría fotográfica como ruta segura.
+9. Despliegue en Contabo y verificación real de versión en Safari/iPad, sin asumir éxito a partir de CI solamente.
 
 ## Pendientes posteriores, deliberadamente fuera del PR
 

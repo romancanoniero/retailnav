@@ -1217,6 +1217,19 @@ function select(f){
   const matches=(window.RetailNavUnits?.getUnits?.()||[]).filter(unit=>(window.RetailNavUnits?.getMapBindings?.(unit)||[])
    .some(binding=>binding.floor===f.floor&&binding.polygonId===f.id));
   if(matches.length===1&&window.RetailNavMeetups?.selectStore?.(matches[0].storeId,false,f.floor))return;
+  // A traced polygon can be shared by several directory records or have no
+  // verified store binding. It must never reopen the obsolete rectangular
+  // action card: radial actions belong only to one identified catalog store.
+  window.RetailNavMeetups?.clearSelection?.();
+  storeFocusEvent('retailnav:store-focus-start',{storeId:null});
+  clearWayfinding();setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;
+  selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;
+  $('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');
+  $('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=true;
+  notify(matches.length>1
+   ?'Este volumen corresponde a varios comercios. Elegí uno en la lista para ver sus acciones.'
+   :'Este contorno todavía no está vinculado de forma unívoca con un comercio.');
+  results();dirty=true;return;
  }
  storeFocusEvent('retailnav:store-focus-start',{storeId:null});
  clearWayfinding();setFocusedStoreVector(null,null,[]);focusFloorId=null;cameraFlight=null;selected=f;route=null;routeRunning=false;selectedSearchTagKey=null;$('rnMapSearch').classList.remove('finding');document.body.classList.remove('rnTagResultsOpen');$('rnTagResultPanel').hidden=true;$('search').blur();$('detail').hidden=false;$('detailLevel').textContent=f.floor+' / '+({'anchor':'Ancla identificada en el plano','unit':'Local comercial provisional','amenity':'Servicio dibujado según plano','zone':'Area por identificar'}[f.k]||'Poligono trazado');$('detailName').textContent=f.storeName?(f.storeCode+' · '+f.storeName):(f.n||f.id);$('detailId').textContent='ID '+f.id+' - geometria provisional; altura simulada';$('routeInfo').textContent='';results();

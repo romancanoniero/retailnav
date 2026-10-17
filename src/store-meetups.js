@@ -328,6 +328,18 @@ function hideActionMenu(){
  if(!actionDock)return;
  actionDock.classList.remove('is-visible');actionDock.hidden=true;
 }
+function clearStoreSelection(){
+ selectedId=null;detailOpen=false;
+ cards.querySelectorAll('[data-store-id]').forEach(card=>{
+  card.classList.remove('rnStoreSelected');card.setAttribute('aria-selected','false');
+ });
+ delete panel.dataset.selectedStore;delete panel.dataset.locationKnown;
+ delete panel.dataset.locationNote;
+ details.hidden=true;meetingBox.hidden=true;hideActionMenu();
+ assistAction?.classList.remove('is-route-ready','is-route-open');
+ assistAction?.setAttribute('aria-pressed','false');
+ window.__RETAILNAV__?.closeStoreAssistance?.();
+}
 window.addEventListener('retailnav:store-focus-start',hideActionMenu);
 window.addEventListener('retailnav:store-focus-settled',event=>{
  const focus=event.detail||{};
@@ -364,6 +376,6 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh().
 setInterval(()=>{if(!document.hidden)refresh().catch(()=>{});},20000);
 window.addEventListener('retailnav:ready',()=>refresh().catch(()=>{}));
 window.RetailNavMeetups={getState:()=>({...state,meetings:meetings.map(m=>({id:m.id,status:m.status})),
- actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
- refresh,selectStore,showStoreDetails,openInvitation,openStoreInfo};
+ selectedStoreId:selectedId,actionDockVisible:Boolean(actionDock&&!actionDock.hidden)}),
+ refresh,selectStore,clearSelection:clearStoreSelection,showStoreDetails,openInvitation,openStoreInfo};
 })();

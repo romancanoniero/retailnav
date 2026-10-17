@@ -136,6 +136,48 @@ try{
  assert.equal(new Set(coffeeSearch.stores).size,coffeeSearch.stores.length,
   'a store matching several tags must appear only once in the autocomplete');
  assert.equal(coffeeSearch.starbucks,1,'Starbucks must be rendered once for the caf query');
+ await page.locator('#results .rnUnitResult[data-store-id="alto-palermo:EP:L04"]').click();
+ await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying&&
+  document.querySelector('#rnStoreActions')?.classList.contains('is-visible'));
+ await page.waitForFunction(()=>{
+  const menu=document.querySelector('#rnStoreActions');
+  return menu&&!menu.hidden&&[menu,...menu.querySelectorAll('button')].every(node=>
+   !node.getAnimations?.().some(animation=>animation.playState==='running'||
+    animation.playState==='pending'));
+ });
+ const radialSelection=await page.evaluate(()=>({
+  selected:window.RetailNavMeetups.getState().selectedStoreId,
+  legacyCardVisible:!document.querySelector('#detail').hidden,
+  actionDockVisible:window.RetailNavMeetups.getState().actionDockVisible,
+  buttons:[...document.querySelectorAll('#rnStoreActions button')].map(button=>{
+   const box=button.getBoundingClientRect();return {width:box.width,height:box.height,
+    radius:getComputedStyle(button).borderRadius};
+  })
+ }));
+ assert.equal(radialSelection.selected,'alto-palermo:EP:L04');
+ assert.equal(radialSelection.legacyCardVisible,false);
+ assert.equal(radialSelection.actionDockVisible,true);
+ assert.equal(radialSelection.buttons.length,4);
+ assert.ok(radialSelection.buttons.every(button=>button.width>=44&&button.height>=44&&
+  button.radius==='50%'),'every selected-store action, including X, remains circular');
+
+ const unboundSelection=await page.evaluate(()=>{
+  const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
+  const feature=view.floors.flatMap(f=>f.features).find(candidate=>candidate.k==='unit'&&
+   units.filter(unit=>window.RetailNavUnits.getMapBindings(unit).some(binding=>
+    binding.floor===candidate.floor&&binding.polygonId===candidate.id)).length!==1);
+  view.select(feature);
+  return {featureId:feature?.id,legacyCardVisible:!document.querySelector('#detail').hidden,
+   actionDockVisible:window.RetailNavMeetups.getState().actionDockVisible,
+   selectedStoreId:window.RetailNavMeetups.getState().selectedStoreId,
+   notice:document.querySelector('#toast').textContent};
+ });
+ assert.ok(unboundSelection.featureId);
+ assert.equal(unboundSelection.legacyCardVisible,false,
+  'unlinked geometry must not resurrect the obsolete rectangular store actions');
+ assert.equal(unboundSelection.actionDockVisible,false);
+ assert.equal(unboundSelection.selectedStoreId,null);
+ assert.match(unboundSelection.notice,/no está vinculado|varios comercios/);
  await page.locator('#search').fill('');
  await page.locator('#floorSelect').selectOption('PB');
  await page.waitForFunction(()=>window.__RETAILNAV__.getState().visible.length===1&&

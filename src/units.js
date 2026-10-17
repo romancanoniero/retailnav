@@ -203,13 +203,13 @@ function paint(){
  const view=window.__RETAILNAV__,state=view?.getState();
  if(!state?.ready)return;
  frames++;visibleCount=0;
- if(state.renderer==='WebGL'&&window.RetailNavUnits?.draw3D){
-  // Geometry-bearing WebGL wall signs take priority. Screen-space DOM badges
-  // are only a 2D fallback and must never masquerade as fixed 3D shopfronts.
+ const webglSigns=state.renderer==='WebGL'&&window.RetailNavUnits?.draw3D;
+ const sourceMarkerOverlay=webglSigns&&mall.id==='alto-palermo';
+ if(webglSigns&&!sourceMarkerOverlay){
   for(const el of buttons.values())el.hidden=true;
   return;
  }
- const codesOn=state.distance<145||Boolean(selected)||Boolean(searchHighlights.length);
+ const codesOn=state.distance<(sourceMarkerOverlay?230:145)||Boolean(selected)||Boolean(searchHighlights.length);
  const floors=new Set(state.visible);
  const occupied=[];
  for(const u of units){
@@ -226,6 +226,10 @@ function paint(){
    el.addEventListener('click',e=>{e.stopPropagation();focusUnit(u,u.floor)});
    host.appendChild(el);buttons.set(key,el);
   }
+  // A mapped shop receives real roof-attached WebGL lettering. An unmatched
+  // official marker remains a small 2D code at its published marker position;
+  // it does not claim ownership of a nearby roof.
+  if(webglSigns&&u.polygonId){el.hidden=true;continue;}
   if((state.focusFloorId&&u.storeId!==state.focusedStoreId)||!Number.isFinite(u.x)||!Number.isFinite(u.y)||!codesOn||
     !floors.has(u.floor)||(selected&&key!==selected&&state.distance>=145&&!searchHighlights.includes(key))){
    el.hidden=true;continue;

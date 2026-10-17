@@ -115,7 +115,22 @@ def attach(folder, level, geometry):
             # Floor slabs, corridors and amenity zones are not shop tenancy
             # polygons. Only anchors/units may receive a provisional code link.
             matches = [f[0] for f in geometry if f[1] in (0, 1) and inside(at, f)] if at else []
-            polygon_id = matches[0] if len(matches) == 1 else None
+            explicit = row.get("polygonId", "").strip()
+            explicit_status = row.get("polygonMatchStatus", "").strip()
+            reviewed_binding = "polygonId" in row and "polygonMatchStatus" in row
+            eligible = {f[0] for f in geometry if f[1] in (0, 1)}
+            if explicit:
+                if explicit not in eligible or explicit_status not in (
+                        "official-marker-inside-svg-region-provisional",):
+                    raise ValueError(f"{level}: invalid source SVG polygon binding {explicit}")
+                polygon_id = explicit
+            elif reviewed_binding:
+                polygon_id = None
+            else:
+                polygon_id = matches[0] if len(matches) == 1 else None
+            relation = (explicit_status if polygon_id and explicit_status else
+                        "inside-one-colour-cluster" if polygon_id else
+                        "unplaced-directory" if not at else "pending")
             label = {"code": code, "name": row.get("name", "").strip(),
                 "sourceRecordId": source_record_id or None,
                 "codeKind": row.get("codeKind", "").strip() or
@@ -131,8 +146,10 @@ def attach(folder, level, geometry):
                 "tags": row.get("tags", "").strip(),
                 "aliases": row.get("aliases", "").strip(),
                 "enrichmentURL": row.get("enrichmentURL", "").strip(),
-                "relation": ("inside-one-colour-cluster" if polygon_id else
-                             "unplaced-directory" if not at else "pending")}
+                "polygonMatchStatus": explicit_status or None,
+                "polygonDistanceSvgPx": (float(row["polygonDistanceSvgPx"])
+                                          if row.get("polygonDistanceSvgPx", "").strip() else None),
+                "relation": relation}
             manual_by_code[code] = row
             labels.append(label)
             if polygon_id:

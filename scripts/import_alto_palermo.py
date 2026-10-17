@@ -4,8 +4,8 @@
 The source table keeps the marker ID, printed local code and published marker
 coordinates separate. Missing codes/positions remain empty. The SVG floor plan
 is preserved as provenance and its 3x rasterization is used as the registered
-reference image. Native 3D geometry is deliberately limited to floor slabs
-until individual shop boundaries are reviewed.
+reference image. Native 3D geometry is extracted from the official SVG and
+official marker tips are linked provisionally to unique commercial regions.
 """
 import argparse
 import base64
@@ -18,6 +18,7 @@ from collections import Counter
 from pathlib import Path
 
 from PIL import Image
+from alto_palermo_vectors import vectorize_folder
 
 
 FLOORS = (
@@ -30,27 +31,6 @@ FLOORS = (
 )
 SOURCE_URL = "https://www.altopalermo.com.ar/maps_ap/index.html"
 WIDTH, HEIGHT = 3537, 2352
-
-
-def rectangle(identifier, x1, y1, x2, y2):
-    return [identifier, 5, "", [
-        2 * x1, 2 * y1,
-        2 * (x2 - x1), 0,
-        0, 2 * (y2 - y1),
-        2 * (x1 - x2), 0,
-    ], [[0, 1, 2, 3]], [0, 1, 2, 0, 2, 3],
-        [(x1 + x2) / 2, (y1 + y2) / 2]]
-
-
-def floor_slabs(floor_id):
-    # Three disjoint slab polygons satisfy the native renderer contract without
-    # claiming any unreviewed shop boundary or corridor.
-    split1, split2 = WIDTH // 3, WIDTH * 2 // 3
-    return [
-        rectangle(f"{floor_id}-SLAB-1", 0, 0, split1, HEIGHT),
-        rectangle(f"{floor_id}-SLAB-2", split1, 0, split2, HEIGHT),
-        rectangle(f"{floor_id}-SLAB-3", split2, 0, WIDTH, HEIGHT),
-    ]
 
 
 def write_b64_parts(path, raw, chunk=500_000):
@@ -120,7 +100,10 @@ def main():
         write_b64_parts(args.out / (floor_id + ".reference.webp.b64"), webp)
         webp_path.unlink()
 
-        geometry = floor_slabs(floor_id)
+        # Keep an intentionally invalid empty placeholder while the import is
+        # incomplete. If SVG extraction fails, the normal build rejects this mall
+        # instead of publishing fabricated fallback rooms.
+        geometry = []
         geometry_raw = json.dumps(geometry, ensure_ascii=False,
                                   separators=(",", ":")).encode("utf-8")
         geometry_file = floor_id + ".geometry.zlib.b64"
@@ -130,7 +113,7 @@ def main():
 
         csv_path = args.out / (floor_id + "-unit-codes.csv")
         with csv_path.open("w", encoding="utf-8", newline="") as stream:
-            writer = csv.DictWriter(stream, fieldnames=fieldnames)
+            writer = csv.DictWriter(stream, fieldnames=fieldnames, lineterminator="\n")
             writer.writeheader()
             for row in rows:
                 x, y = marker_to_reference(row)
@@ -164,8 +147,8 @@ def main():
             "geometry": geometry_file,
             "imageSize": [WIDTH, HEIGHT],
             "source": f"Plano SVG oficial de Alto Palermo · {floor_name}",
-            "regionCount": 3,
-            "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+            "regionCount": 0,
+            "vectorizationStatus": "IMPORT-INCOMPLETE-OFFICIAL-SVG-PENDING",
             "geometryReviewApproved": False,
             **counts,
         })
@@ -227,6 +210,7 @@ def main():
     }
     (args.out / "mall.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    vector_totals = vectorize_folder(args.out)
     print(json.dumps({
         "records": len(stores),
         "floors": len(floors_manifest),
@@ -234,6 +218,7 @@ def main():
         "positioned": manifest["officialPositionedRecords"],
         "positionedAndCoded": manifest["officialPositionedAndCodedRecords"],
         "out": str(args.out),
+        "vectors": vector_totals,
     }, ensure_ascii=False))
 
 

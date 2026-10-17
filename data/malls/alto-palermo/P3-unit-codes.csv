@@ -1,8 +1,8 @@
-sourceRecordId,code,codeKind,name,category,tags,aliases,floor,x,y,positionStatus,source,nameStatus,enrichmentURL
-163,L01,official-local-code,KFC,Gastronomía,,,P3,1598.724,500.889,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-164,L01,official-local-code,Wendy'S,Gastronomía,,,P3,1598.724,762.222,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-170,L16,official-local-code,Green And Sea,Gastronomía,,,P3,1259.172,1372.0,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-171,L17,official-local-code,Patate,Gastronomía,,,P3,1236.535,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-172,L18,official-local-code,Arrozales,Gastronomía,,,P3,1304.446,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-173,L19,official-local-code,Remo,Gastronomía,,,P3,1372.356,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
-174,L22,official-local-code,Grano Santo,Gastronomía,,,P3,1400.652,980.0,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,
+sourceRecordId,code,codeKind,name,category,tags,aliases,floor,x,y,positionStatus,source,nameStatus,enrichmentURL,polygonId,polygonMatchStatus,polygonDistanceSvgPx
+163,L01,official-local-code,KFC,Gastronomía,,,P3,1598.724,500.889,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+164,L01,official-local-code,Wendy'S,Gastronomía,,,P3,1598.724,762.222,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+170,L16,official-local-code,Green And Sea,Gastronomía,,,P3,1259.172,1372.0,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+171,L17,official-local-code,Patate,Gastronomía,,,P3,1236.535,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+172,L18,official-local-code,Arrozales,Gastronomía,,,P3,1304.446,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+173,L19,official-local-code,Remo,Gastronomía,,,P3,1372.356,1559.289,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,
+174,L22,official-local-code,Grano Santo,Gastronomía,,,P3,1400.652,980.0,official-interactive-marker-centre-not-entrance,https://www.altopalermo.com.ar/maps_ap/index.html,official-interactive-map,,,,

@@ -195,6 +195,11 @@ jobs:
           assert len(alto["records"])==158
           assert len({u["storeId"] for u in alto["records"]})==158
           assert sum(bool(u["code"]) for u in alto["records"])==153
+          assert alto["stats"]["linkedProvisional"]==55
+          assert alto["stats"]["withoutVector"]==103
+          assert alto["stats"]["sharedVectors"]==0
+          assert all(u.get("polygonMatchStatus") in (None,"official-marker-inside-svg-region-provisional") for u in alto["records"])
+          assert not any("nearest" in json.dumps(u) for u in alto["records"])
           assert malls["alto-palermo"]["floorLabels"]==["SS","PB","EP","P1","P2","P3"]
           print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
           PY
@@ -214,6 +219,8 @@ jobs:
           npx playwright install --with-deps chromium webkit
       - name: All-floor autocomplete and provisional entry reference iPhone smoke
         run: node scripts/test-store-search-browser.mjs
+      - name: Alto Palermo official SVG contours in the real 3D viewer
+        run: node scripts/test-alto-palermo-browser.mjs
       - name: Official source joins and tablet selection in Chromium and WebKit
         run: |
           python3 scripts/test-source-map.py

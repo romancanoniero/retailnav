@@ -1154,7 +1154,7 @@ function setFloor(id){
  $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
   ?'Geometría provisional L1–L9: tiendas candidatas individualizadas y servicios por tipo, sin rutas verificadas.'
   :mallId==='ap-plaza'?'Sectorización automática de una foto; sin rutas verificadas.'
-  :mallId==='alto-palermo'?'Planos oficiales y marcadores del directorio; límites de locales y rutas sin verificar.'
+  :mallId==='alto-palermo'?'Contornos extraídos de los SVG oficiales; asociaciones comerciales, entradas y rutas aún provisionales.'
   :selectedMall.coordinateSpace?'Geometría de fuente oficial. Alturas provisionales; sin ruta peatonal verificada.'
   :(id==='L3'?'Sectores discontinuos conservados del tercer plano.':
     'Contornos y pasillos trazados sobre tus imágenes.');
@@ -2178,7 +2178,7 @@ function applyMallUi(){
     :mallId==='ap-plaza'
      ?'Mapa experimental AI2D v2: 197 regiones candidatas del calco visual, contrastadas parcialmente con la fotografía. Sin navegación real.'
     :mallId==='alto-palermo'
-     ?'Seis planos SVG oficiales y 158 registros del mapa interactivo. Marcadores importados sin atribuir límites, entradas ni rutas.'
+     ?'Seis planos SVG oficiales: 331 regiones extraídas, 192 contornos comerciales y 158 registros del mapa interactivo. Sólo 55 relaciones marcador-contorno son unívocas.'
      :'Geometría del mapa oficial en el visor 3D. Alturas estimadas; sin ruta peatonal verificada.';
   $('mallFloorCountLabel').textContent=floors.length===1?'planta importada':'plantas diferentes';
   document.querySelector('.intro .metric b').textContent=String(floors.length);
@@ -2216,8 +2216,8 @@ function applyMallUi(){
      'NO APTO PARA NAVEGACIÓN REAL.';
   }else if(footer&&mallId==='alto-palermo'){
     footer.textContent='Alto Palermo: seis planos SVG oficiales y 158 registros del mapa interactivo. '+
-     'Los códigos y centros de marcador se conservan tal como fueron publicados. '+
-     'Límites de locales, entradas, escala y rutas permanecen sin verificar. '+
+     'Se muestran 331 regiones nativas y 192 contornos comerciales. Los códigos y centros de marcador se conservan tal como fueron publicados; '+
+     '55 enlaces caen de forma unívoca dentro de un contorno. Las demás asociaciones, entradas, escala y rutas permanecen sin verificar. '+
      'NO APTO PARA NAVEGACIÓN REAL.';
   }
   $('mapSubtitle').textContent=mallId==='new-world-city-shanghai'
@@ -2225,7 +2225,7 @@ function applyMallUi(){
     :mallId==='ap-plaza'
      ?''+(selectedMall.vectorRegionCount||0)+' recintos vectoriales candidatos · calco IA 2D experimental · NO APTO PARA NAVEGACIÓN.'
     :mallId==='alto-palermo'
-     ?'Marcadores del directorio oficial · límites de locales y rutas pendientes de validación.'
+     ?'192 contornos comerciales del SVG oficial · 55 códigos vinculados por contención única · sin rutas verificadas.'
      :'Contornos y pasillos trazados sobre tus imágenes.';
   $('mapTitle').textContent=mallId==='new-world-city-shanghai'
     ?'L1–L9 · geometrías provisionales sin escala calibrada'

@@ -1,5 +1,43 @@
 # RetailNav — importar planos de cualquier shopping
 
+## Lectura y control obligatorios antes de empezar
+
+Este documento es el procedimiento canónico de toda alta o migración de mapas.
+Antes de tocar datos hay que leer también `docs/RETAILNAV-PLAN-MAESTRO-E2E.md`
+(sección 0 y MAP-01..MAP-16) y `docs/STORE-SEARCH-POSITIONING-E2E.md`.
+El archivo `AGENTS.md` de la raíz del repositorio convierte esta lectura y los
+controles siguientes en requisitos de cada tarea futura.
+
+Orden de preferencia de fuentes: geometría vectorial oficial; PDF vectorial;
+imagen raster oficial de resolución completa; fotografía rectificada. Si un
+SVG/PDF ya contiene contornos de locales, hay que extraerlos en sus coordenadas
+nativas. Está prohibido descartarlos y publicar rectángulos, losas o envolventes
+de sustitución.
+
+La primera entrega revisable siempre es 2D y por planta: fuente original,
+contornos extraídos y códigos reales o posiciones oficiales superpuestos. Hay
+que inspeccionar todas las plantas antes de generar el 3D y repetir la revisión
+en el visor final. La compilación debe fallar si detecta geometría de relleno,
+una cantidad trivial de regiones o una planta sin comparación visual.
+
+Un registro comercial sólo se enlaza a `polygonId` cuando la fuente da el ID
+explícito o cuando su punto revisado cae inequívocamente dentro de un único
+contorno. **Nunca se asigna por cercanía.** Un código sin contorno conserva su
+nombre, planta y coordenada oficial; un contorno sin código permanece visible
+como región sin identificar.
+
+### Lista mínima antes de publicar
+
+- fuente, URL, fecha, hash, dimensiones y transformación preservados;
+- IDs estables por planta y contorno, sin regenerarlos por cambios de etiquetas;
+- comparación 2D de cada planta revisada con contornos y códigos visibles;
+- ningún contorno nativo sustituido por losas sintéticas;
+- enlaces tienda-polígono con evidencia explícita o contención única;
+- registros no vinculados conservados y cuantificados;
+- mapa abierto en navegador real en vistas 2D, 3D, planta individual y todas;
+- prueba mall-específica y barrera de despliegue contra regresiones;
+- limitaciones, validaciones y despliegue registrados en el plan maestro.
+
 ## AP Plaza (Shanghai)
 
 Primer caso: el plano B1 fotografiado en AP Plaza y rectificado desde la foto aportada el 13/10/2026. La extracción detectó 190 contornos provisionales tras separar líneas negras internas y cinco nombres reconocibles (TOYcPLAY, KFC, Starbucks, McDonald's, 7-Eleven). Son regiones coloreadas, NO 190 locales individualmente certificados.

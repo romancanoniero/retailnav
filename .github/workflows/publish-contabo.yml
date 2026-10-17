@@ -70,6 +70,7 @@ jobs:
       - run: npm install --no-save --ignore-scripts playwright@1.56.1
       - run: npx playwright install --with-deps chromium webkit
       - run: node scripts/test-store-search-browser.mjs
+      - run: node scripts/test-alto-palermo-browser.mjs
       - run: node scripts/test-source-map-browser.mjs
       - run: node scripts/test-source-map-comparison.mjs
       - run: BROWSER=webkit node scripts/test-source-map-comparison.mjs
@@ -218,6 +219,12 @@ jobs:
               if slug=='alto-palermo':
                   assert mall['storeCatalog']['total']==158
                   assert mall['officialPositionedAndCodedRecords']==152
+                  assert mall['officialSvgGeometryRegions']==331
+                  assert mall['officialSvgCommercialRegions']==192
+                  assert mall['provisionallyLinkedOfficialCodes']==55
+                  assert sum(len(f[3]) for f in bundle['floors'])==331
+                  assert sum(feature[1]==1 for f in bundle['floors'] for feature in f[3])==192
+                  assert not any('-SLAB-' in feature[0] for f in bundle['floors'] for feature in f[3])
                   assert mall['navigable'] is False
               print('PASS: PUBLIC versioned mall bundle',slug,len(levels),'floors',len(content),'bytes, SHA-256 OK')
           PY

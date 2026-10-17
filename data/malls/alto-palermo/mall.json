@@ -10,7 +10,7 @@
   ],
   "scale": 0.04,
   "navigable": false,
-  "warning": "Mapas oficiales y directorio cargados. Las posiciones son centros de marcadores; límites de locales, entradas, escala métrica y rutas siguen pendientes de validación.",
+  "warning": "Contornos extraídos de los SVG oficiales y códigos vinculados a sus marcadores. Las asociaciones marcador-local, entradas, escala métrica y rutas siguen pendientes de validación.",
   "floors": [
     {
       "id": "SS",
@@ -21,12 +21,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Subsuelo",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 137,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 8,
       "codedRecords": 4,
-      "positionedRecords": 5
+      "positionedRecords": 5,
+      "commercialRegionCount": 4,
+      "mappedOfficialCodes": 1
     },
     {
       "id": "PB",
@@ -37,12 +39,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Planta Baja",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 73,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 66,
       "codedRecords": 66,
-      "positionedRecords": 66
+      "positionedRecords": 66,
+      "commercialRegionCount": 72,
+      "mappedOfficialCodes": 22
     },
     {
       "id": "EP",
@@ -53,12 +57,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Entrepiso",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 14,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 5,
       "codedRecords": 5,
-      "positionedRecords": 5
+      "positionedRecords": 5,
+      "commercialRegionCount": 12,
+      "mappedOfficialCodes": 5
     },
     {
       "id": "P1",
@@ -69,12 +75,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Piso 1",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 47,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 35,
       "codedRecords": 35,
-      "positionedRecords": 35
+      "positionedRecords": 35,
+      "commercialRegionCount": 46,
+      "mappedOfficialCodes": 16
     },
     {
       "id": "P2",
@@ -85,12 +93,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Piso 2",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 44,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 37,
       "codedRecords": 36,
-      "positionedRecords": 35
+      "positionedRecords": 35,
+      "commercialRegionCount": 43,
+      "mappedOfficialCodes": 11
     },
     {
       "id": "P3",
@@ -101,12 +111,14 @@
         2352
       ],
       "source": "Plano SVG oficial de Alto Palermo · Piso 3",
-      "regionCount": 3,
-      "vectorizationStatus": "OFFICIAL-RASTER-REFERENCE-SLAB-ONLY",
+      "regionCount": 16,
+      "vectorizationStatus": "OFFICIAL-SVG-REGIONS-MARKER-LINKED-PROVISIONAL",
       "geometryReviewApproved": false,
       "directoryRecords": 7,
       "codedRecords": 7,
-      "positionedRecords": 7
+      "positionedRecords": 7,
+      "commercialRegionCount": 15,
+      "mappedOfficialCodes": 0
     }
   ],
   "floorReferences": {
@@ -132,14 +144,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -168,14 +180,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -204,14 +216,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -240,14 +252,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -276,14 +288,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -312,14 +324,14 @@
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Los límites individuales de los locales no están vinculados a polígonos nativos.",
+          "Los límites provienen del SVG oficial; la asociación marcador-región es provisional.",
           "Las coordenadas corresponden al centro del marcador del mapa oficial, no a una entrada.",
           "La escala métrica, accesibilidad y rutas interiores no fueron verificadas."
         ],
         "checks": {
           "officialRasterPreserved": true,
           "markerTableImported": true,
-          "individualStoreWalls": false,
+          "individualStoreWalls": true,
           "entrances": false,
           "accessibility": false,
           "metricScale": false
@@ -327,7 +339,7 @@
       }
     }
   },
-  "floorReferencePolicy": "Los SVG oficiales se conservan como fuente. La geometría nativa contiene sólo losas hasta revisar límites de locales.",
+  "floorReferencePolicy": "Los SVG oficiales son la fuente de los contornos publicados; nunca se sustituyen por losas sintéticas.",
   "officialDirectoryRecords": 158,
   "officialCodedRecords": 153,
   "officialPositionedRecords": 153,
@@ -343,5 +355,8 @@
   "indoorPositionCalibrated": false,
   "floorPlanMetricScaleVerified": false,
   "individualStoreGeometryVerified": false,
-  "numberOfPhysicalStoresVerified": false
+  "numberOfPhysicalStoresVerified": false,
+  "officialSvgGeometryRegions": 331,
+  "officialSvgCommercialRegions": 192,
+  "provisionallyLinkedOfficialCodes": 55
 }

@@ -46,9 +46,19 @@ try{
   window.RetailNavMeetups&&window.RetailNavSocial?.getState().ready,null,{timeout:85000});
  const state=()=>page.evaluate(()=>window.__RETAILNAV__.getState());
  const settle=async()=>{
-  await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
-  await page.evaluate(()=>new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok))));
+ await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
+ await page.evaluate(()=>new Promise(ok=>requestAnimationFrame(()=>requestAnimationFrame(ok))));
  };
+ const waitForRadialSettled=()=>page.waitForFunction(()=>{
+  const menu=document.querySelector('#rnStoreActions');
+  if(!menu?.classList.contains('is-visible')||menu.hidden)return false;
+  const controls=[...menu.querySelectorAll('.rnStoreAction'),
+   menu.querySelector('#rnStoreActionClose')].filter(Boolean);
+  const transitioning=[menu,...controls].some(node=>node.getAnimations?.()
+   .some(animation=>animation.playState==='running'||animation.playState==='pending'));
+  return controls.length===4&&!transitioning&&
+   [menu,...controls].every(node=>Math.abs(parseFloat(getComputedStyle(node).opacity)-1)<.001);
+ },null,{timeout:5000});
  const select=async(id,floor=null)=>{
   await page.evaluate(({id,floor})=>window.RetailNavMeetups.selectStore(id,false,floor),{id,floor});
   await settle();
@@ -171,7 +181,7 @@ try{
   'selecting a store keeps the large orientation card closed');
  assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
   'compact actions appear only after the camera settles');
- await page.waitForTimeout(650);
+ await waitForRadialSettled();
  const radial=await page.locator('#rnStoreActions').evaluate(menu=>{
   const box=menu.getBoundingClientRect(),close=menu.querySelector('#rnStoreActionClose').getBoundingClientRect();
   const centre={x:close.left+close.width/2,y:close.top+close.height/2};
@@ -202,7 +212,7 @@ try{
  await settle();
  assert.equal(await page.locator('#rnStoreActions').isVisible(),true,
   'selecting the store again restores the radial menu');
- await page.waitForTimeout(650);
+ await waitForRadialSettled();
  mkdirSync('artifacts',{recursive:true});
  await page.screenshot({path:'artifacts/store-actions-tablet-'+engine+'.png'});
  await page.locator('#rnTagResultClose').tap();
@@ -318,7 +328,7 @@ try{
  await settle();
  await markerLayout();await native();await tabletHeader();
  await page.locator('#rnStoreActions').waitFor({state:'visible'});
- await page.waitForTimeout(650);
+ await waitForRadialSettled();
  for(const id of ['rnStoreAssist','rnStoreActionClose']){
   const box=await page.locator('#'+id).boundingBox();
   assert.ok(box&&box.width>=44&&box.height>=44,id+' must provide a 44px tablet touch target');

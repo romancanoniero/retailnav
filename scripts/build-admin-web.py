@@ -53,6 +53,12 @@ def build(destination):
                 json.dumps({"mallId": mall_id, "floor": floor["id"],
                             "imageSize": floor["imageSize"], "features": features},
                            ensure_ascii=False, separators=(",", ":")), encoding="utf8")
+            reference_parts = sorted(mall_folder.glob(floor["id"] + ".reference.webp.b64.part*"))
+            if reference_parts:
+                image = base64.b64decode("".join(p.read_text(encoding="ascii").strip() for p in reference_parts))
+                image_dest = destination / "reference" / mall_id
+                image_dest.mkdir(parents=True, exist_ok=True)
+                (image_dest / (floor["id"] + ".webp")).write_bytes(image)
             floors.append({"id": floor["id"], "name": floor["name"],
                            "imageSize": floor["imageSize"],
                            "referenceUrl": "reference/" + mall_id + "/" + floor["id"] + ".webp"})

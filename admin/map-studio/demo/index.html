@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RetailNav · Revisión 2D de planos</title>
+<style>
+:root{font:15px system-ui,-apple-system,sans-serif;background:#101823;color:#e9f0f7}
+*{box-sizing:border-box}body{margin:0}header{padding:12px 20px;background:#192a3d;border-bottom:1px solid #4a5c71;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}h1{font-size:19px;margin:0}a{color:#9cd9ff}.wrap{display:grid;grid-template-columns:280px minmax(0,1fr) 290px;min-height:calc(100vh - 55px)}aside{padding:16px;background:#162131}aside:last-child{border-left:1px solid #3a4c60}main{padding:10px;min-width:0}label{display:block;margin:12px 0 6px}input,select,button,textarea{font:inherit;background:#22354b;color:#fff;border:1px solid #627891;border-radius:5px;padding:8px;max-width:100%}select,input:not([type=range]),textarea{width:100%}button{cursor:pointer;margin:4px 3px 4px 0}button:hover{background:#355473}button:focus-visible{outline:3px solid #68b8ed}textarea{min-height:85px}small,.muted{color:#b2c7db}#notice{border:1px solid #738596;background:#21364a;padding:10px;line-height:1.45}#svg{width:100%;height:min(78vh,820px);min-height:350px;background:#303842;touch-action:none;border:1px solid #58728b}#src{opacity:.68;pointer-events:none}.base{fill:#94bedb22;stroke:#76d1ff;stroke-width:2;cursor:pointer}.base.selected{fill:#fbd27c55;stroke:#ffd365;stroke-width:4}.vertex{fill:#f3c260;stroke:#000;stroke-width:2;cursor:grab}.pending{fill:none;stroke:#eeb66f;stroke-width:3;stroke-dasharray:12 8}#status{min-height:30px;white-space:pre-wrap}.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:4px}.tag{font-weight:600;color:#9de7b5}#details{white-space:pre-wrap;overflow-wrap:anywhere}.hidden{display:none}@media(max-width:1100px){.wrap{grid-template-columns:1fr}aside{border-bottom:1px solid #456}#svg{height:55vh}main{order:1}.wrap aside:first-child{order:0}.wrap aside:last-child{order:2}}
+</style></head>
+<body><header><h1>RetailNav · Comparador y editor 2D de prueba</h1><nav><a href="../../">Visor público</a> · <a href="../">Map Studio privado</a></nav></header>
+<div class="wrap"><aside><h2>Plano y fuente</h2><p id="notice"><strong>Prueba local sin publicación.</strong> Estas geometrías son provisionales. Los cambios permanecen en este navegador y solo se obtienen como JSON al exportar. No se modifican bases de datos, directorios ni el 3D público.</p><label for="mall">Shopping</label><select id="mall"></select><label for="floor">Planta</label><select id="floor"></select><p id="quality" class="muted"></p><p id="stats" class="tag"></p><label for="opacity">Opacidad de la fotografía</label><input type="range" id="opacity" min="0" max="100" value="70"><div><label><input id="imageOn" type="checkbox" checked> Mostrar fotografía original</label><label><input id="linesOn" type="checkbox" checked> Mostrar contornos</label><label><input id="labelsOn" type="checkbox"> Etiquetas de ID</label></div><button id="reset">Restaurar vista</button><button id="export">Exportar cambios JSON</button><button id="restore">Descartar cambios de esta planta</button></aside>
+<main><div class="toolbar"><button id="zoomIn" title="Ampliar">＋</button><button id="zoomOut" title="Alejar">−</button><button id="fit">Ajustar plano</button><button id="add">Nuevo polígono</button><button id="finish">Cerrar polígono</button><button id="cancel">Cancelar dibujo</button></div><svg id="svg" viewBox="0 0 2048 1529" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparación del plano original con regiones vectoriales"><image id="src" x="0" y="0" width="2048" height="1529"/><g id="vector"></g><polyline id="draft" class="pending"/></svg><p class="muted">Arrastrá el fondo para desplazar; rueda, gesto de pinza o ＋/− para zoom. Tocá un contorno para seleccionarlo, y arrastrá los puntos amarillos para editarlo. En modo nuevo polígono, tocá sus vértices y luego «Cerrar polígono».</p><p id="status" role="status"></p></main>
+<aside><h2>Región seleccionada</h2><p id="details" class="muted">Tocá un contorno</p><label for="spaceId">Identificador del contorno</label><input id="spaceId"><label for="evidence">Evidencia de edición</label><textarea id="evidence" placeholder="Ej.: perímetro corroborado con el plano de la planta PB"></textarea><button id="apply">Aplicar atributos</button><p class="muted">Los números extraídos del vectorizado no prueban qué local comercial ocupa el espacio. No se crean nombres o códigos no verificados.</p></aside></div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+let catalog=[],mall=null,floor=null,source=null,features=[],selected=null,drawMode=false,pending=[],dragPoint=-1,panPointer=null,view=[0,0,2048,1529],pointers=new Map(),pinch=null,dirty=new Map(),baseKey='';
+const base='../..';
+const say=(s,bad=false)=>{$('status').textContent=s;$('status').style.color=bad?'#ffb0b0':'#bbf0d2'};
+const clone=x=>JSON.parse(JSON.stringify(x));
+const screenPoint=e=>{const b=$('svg').getBoundingClientRect();return [view[0]+(e.clientX-b.left)*view[2]/b.width,view[1]+(e.clientY-b.top)*view[3]/b.height]};
+const polygonPoint=v=>v.map(n=>Math.round(n*100)/100);
+const pointStr=pts=>pts.map(p=>p.join(',')).join(' ');
+function setView(){view[2]=Math.max(30,Math.min(10000,view[2]));view[3]=Math.max(30,Math.min(10000,view[3]));$('svg').setAttribute('viewBox',view.join(' '))}
+function zoom(k,center){const cx=center?.[0]??view[0]+view[2]/2,cy=center?.[1]??view[1]+view[3]/2;const nw=view[2]*k,nh=view[3]*k;view[0]=cx-(cx-view[0])*k;view[1]=cy-(cy-view[1])*k;view[2]=nw;view[3]=nh;setView()}
+function render(){
+ $('vector').replaceChildren();
+ if($('linesOn').checked)for(const f of features){
+  if(!Array.isArray(f.vertices)||f.vertices.length<3)continue;
+  const el=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  el.setAttribute('points',pointStr(f.vertices));
+  el.setAttribute('class','base'+(selected===f.id?' selected':''));
+  el.addEventListener('pointerdown',e=>{if(drawMode)return;e.stopPropagation();selected=f.id;inspect();render()});
+  $('vector').append(el);
+  if($('labelsOn').checked){const p=f.vertices[0];const txt=document.createElementNS('http://www.w3.org/2000/svg','text');txt.textContent=f.id;txt.setAttribute('x',p[0]);txt.setAttribute('y',p[1]);txt.setAttribute('font-size','22');txt.setAttribute('fill','#fff');txt.setAttribute('stroke','#182435');txt.setAttribute('stroke-width','2');txt.setAttribute('paint-order','stroke');txt.setAttribute('pointer-events','none');$('vector').append(txt)}
+ }
+ const f=features.find(x=>x.id===selected);
+ if(f&&!drawMode)f.vertices.forEach((p,i)=>{
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',Math.max(5,view[2]/220));c.setAttribute('class','vertex');
+  c.addEventListener('pointerdown',e=>{e.stopPropagation();dragPoint=i;$('svg').setPointerCapture(e.pointerId)});$('vector').append(c)});
+ $('draft').setAttribute('points',pointStr(pending));
+ $('stats').textContent=features.length+' regiones · '+features.filter(f=>[0,1].includes(f.kind)).length+' posibles recintos comerciales';
+}
+function inspect(){const f=features.find(x=>x.id===selected);$('details').textContent=f?'ID: '+f.id+'\nClase vectorial: '+f.kind+'\nPuntos: '+f.vertices.length:'Ninguno';$('spaceId').value=f?.id||'';$('evidence').value=f?.evidence||''}
+function save(){if(mall&&floor){dirty.set(baseKey,clone(features));say('Edición local. Exportá JSON para conservarla fuera del navegador.')}}
+async function loadFloor(){floor=$('floor').value;baseKey=mall.id+'/'+floor;const f=mall.floors.find(f=>f.id===floor);
+ const rsp=await fetch(base+'/demo/malls/'+encodeURIComponent(mall.id)+'/'+encodeURIComponent(floor)+'.json',{cache:'no-store'});
+ if(!rsp.ok)throw Error('No se pudo abrir geometría 2D: '+rsp.status);
+ source=await rsp.json();features=clone(dirty.get(baseKey)||source.features);selected=null;pending=[];drawMode=false;
+ $('src').setAttribute('href',base+'/reference/'+mall.id+'/'+floor+'.webp');$('src').setAttribute('width',f.imageSize[0]);$('src').setAttribute('height',f.imageSize[1]);
+ $('src').style.opacity=$('opacity').value/100;view=[0,0,...f.imageSize];setView();inspect();render();say('Fotografía y vectores sincronizados en coordenadas fuente. Sin certificación cartográfica.')}
+async function loadMall(){mall=catalog.find(m=>m.id===$('mall').value);$('floor').replaceChildren();for(const f of mall.floors)$('floor').add(new Option(f.name+' · '+f.id,f.id));$('quality').textContent=mall.warning||mall.status;await loadFloor()}
+$('mall').onchange=()=>loadMall().catch(e=>say(e.message,true));$('floor').onchange=()=>loadFloor().catch(e=>say(e.message,true));
+$('opacity').oninput=()=>{$('src').style.opacity=$('opacity').value/100};
+$('imageOn').onchange=()=>{$('src').style.display=$('imageOn').checked?'':'none'};
+for(const k of ['linesOn','labelsOn'])$(k).onchange=render;
+$('fit').onclick=$('reset').onclick=()=>{const f=mall.floors.find(x=>x.id===floor);view=[0,0,...f.imageSize];setView()};
+$('zoomIn').onclick=()=>zoom(.75);$('zoomOut').onclick=()=>zoom(1.35);
+$('svg').addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY>0?1.18:.84,screenPoint(e))},{passive:false});
+$('add').onclick=()=>{drawMode=true;pending=[];selected=null;inspect();render();say('Tocá cada vértice nuevo. Cerrá con «Cerrar polígono»')};
+$('cancel').onclick=()=>{drawMode=false;pending=[];render()};
+$('finish').onclick=()=>{
+ if(!drawMode||pending.length<3)return say('Se necesitan por lo menos tres vértices',true);
+ const id='review-'+crypto.randomUUID();features.push({id,kind:0,source:'manual',evidence:'Requiere evidencia de verificación',vertices:clone(pending)});
+ selected=id;pending=[];drawMode=false;save();inspect();render()};
+$('svg').addEventListener('pointerdown',e=>{if(e.button>0)return;pointers.set(e.pointerId,[e.clientX,e.clientY]);if(pointers.size===1)panPointer={id:e.pointerId,p:[e.clientX,e.clientY]};else panPointer=null;$('svg').setPointerCapture(e.pointerId)});
+$('svg').addEventListener('pointermove',e=>{
+ const old=pointers.get(e.pointerId);if(!old)return;
+ const cur=[e.clientX,e.clientY];
+ if(dragPoint>=0){const f=features.find(x=>x.id===selected);if(f)f.vertices[dragPoint]=polygonPoint(screenPoint(e));render()}
+ else if(pointers.size===2){const arr=[...pointers.entries()];const a=arr[0][0]===e.pointerId?cur:arr[0][1],b=arr[1][0]===e.pointerId?cur:arr[1][1];const dist=Math.hypot(a[0]-b[0],a[1]-b[1]);if(pinch&&dist>3)zoom(pinch/dist,screenPoint({clientX:(a[0]+b[0])/2,clientY:(a[1]+b[1])/2}));pinch=dist}
+ else if(panPointer?.id===e.pointerId&&!drawMode){const r=$('svg').getBoundingClientRect();view[0]-=(cur[0]-old[0])*view[2]/r.width;view[1]-=(cur[1]-old[1])*view[3]/r.height;setView()}
+ pointers.set(e.pointerId,cur);
+});
+function up(e){if(dragPoint>=0){dragPoint=-1;save()}else if(drawMode&&pointers.size===1){const old=pointers.get(e.pointerId);if(old&&Math.hypot(e.clientX-old[0],e.clientY-old[1])<5){pending.push(polygonPoint(screenPoint(e)));render()}}pointers.delete(e.pointerId);if(pointers.size<2)pinch=null;panPointer=null}
+$('svg').addEventListener('pointerup',up);$('svg').addEventListener('pointercancel',up);
+$('apply').onclick=()=>{const f=features.find(x=>x.id===selected);if(!f)return;const id=$('spaceId').value.trim();if(!id||features.some(x=>x!==f&&x.id===id))return say('Identificador vacío o duplicado',true);f.id=id;f.evidence=$('evidence').value;selected=id;save();inspect();render()};
+$('restore').onclick=()=>{if(!source)return;dirty.delete(baseKey);features=clone(source.features);selected=null;inspect();render();say('Geometría original restaurada en este navegador')};
+$('export').onclick=()=>{if(!mall||!floor)return;const data={schema:'retailnav.review2d.local.v1',mallId:mall.id,floor,sourceStatus:mall.status,navigable:false,generatedAt:new Date().toISOString(),sourceImageSize:source.imageSize,features};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=mall.id+'-'+floor+'-review2d.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+fetch(base+'/demo/malls.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Catálogo '+r.status);return r.json()}).then(async d=>{catalog=d.items;if(!catalog.length)throw Error('No hay shoppings para mostrar');for(const m of catalog)$('mall').add(new Option(m.name,m.id));const requested=new URLSearchParams(location.search).get('mall');if(catalog.some(x=>x.id===requested))$('mall').value=requested;await loadMall()}).catch(e=>say('No se pudieron abrir planos: '+e.message,true));
+})();
+</script></body></html>

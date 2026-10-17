@@ -215,16 +215,18 @@ jobs:
           parque=malls["del-parque-shopping"]
           assert parque["floorLabels"]==["PB","P1","P2"]
           assert parque["status"]=="vectorizado-provisional" and parque["navigable"] is False
-          assert parque["vectorRegionCount"]==55
+          assert parque["vectorRegionCount"]==69
           assert parque["storeCatalog"]["total"]==0, "Do not invent retailers from LOCAL labels"
-          assert parque["spaceCatalog"]["total"]==41
-          assert parque["spaceCatalog"]["unidentified"]==41
+          assert parque["unresolvedCommercialRooms"]==8
+          assert parque["commercialEnclosedCandidates"]==33
+          assert parque["spaceCatalog"]["total"]==33
+          assert parque["spaceCatalog"]["unidentified"]==33
           package=json.loads((Path("public")/parque["mapAsset"]["url"]).read_text())
-          assert sum(len(f[3]) for f in package["floors"])==55
-          assert sum(f[1] in (0,1) for floor in package["floors"] for f in floor[3])==41
+          assert sum(len(f[3]) for f in package["floors"])==69
+          assert sum(f[1] in (0,1) for floor in package["floors"] for f in floor[3])==33
           assert set(parque["floorReferences"])=={"PB","P1","P2"}
           assert all(ref["qa"]["status"]=="pending" for ref in parque["floorReferences"].values())
-          print("PASS Del Parque Shopping registered, three source floors, 41 unidentified rooms and safe non-navigation")
+          print("PASS Del Parque Shopping registered, three source floors, 33 candidate rooms, 8 pending boundaries, and safe non-navigation")
           print("PASS luggage product tag, unverified ownership, vector code semantics and no fake entrance")
           PY
   browser:

@@ -237,10 +237,10 @@ jobs:
                   assert mall['navigable'] is False
               if slug=='del-parque-shopping':
                   assert mall['status']=='vectorizado-provisional' and mall['navigable'] is False
-                  assert mall['spaceCatalog']['total']==41
+                  assert mall['spaceCatalog']['total']==33
                   assert mall['storeCatalog']['total']==0
-                  assert sum(len(f[3]) for f in bundle['floors'])==55
-                  assert sum(f[1] in (0,1) for floor in bundle['floors'] for f in floor[3])==41
+                  assert sum(len(f[3]) for f in bundle['floors'])==69
+                  assert sum(f[1] in (0,1) for floor in bundle['floors'] for f in floor[3])==33
               print('PASS: PUBLIC versioned mall bundle',slug,len(levels),'floors',len(content),'bytes, SHA-256 OK')
           PY
 

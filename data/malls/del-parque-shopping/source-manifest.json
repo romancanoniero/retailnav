@@ -215,5 +215,122 @@
     "No official directory or identifiable store-number rows appear on evacuation posters.",
     "No georeferenced entrances, metres-per-pixel, or usable routing graph were supplied.",
     "Three-point affine registration is provisional, not a physical survey."
-  ]
+  ],
+  "reviewVersion": 4,
+  "originalNativePhotosIncluded": true,
+  "floorSourceNative": {
+    "PB": {
+      "sourceSha256": "be175c4cc647f461281048d64a57bdd1155bdcbacb60e49224f97ed8617b3c56",
+      "originalBytes": 541906,
+      "resolution": [
+        2048,
+        1529
+      ],
+      "candidateRegions": 14,
+      "unresolvedIds": [
+        "DP-PB-010",
+        "DP-PB-015",
+        "DP-PB-017",
+        "DP-PB-018"
+      ],
+      "registeredReferenceSha256": "bc1b1e11064dfbeb50fbbfe824d8ef370ee5ff43a64478acbde1aae65e918d01",
+      "coordinateTransform": {
+        "homography": [
+          [
+            0.6245388624275983,
+            0.0003527061885729565,
+            -0.15437987322856445
+          ],
+          [
+            -0.00041063635875746853,
+            0.6252169998533655,
+            2.07565372448122
+          ],
+          [
+            -5.894236683492482e-07,
+            4.485916118707281e-07,
+            1.0
+          ]
+        ],
+        "matches": 1092,
+        "inliers": 259,
+        "meanErrorPx": 0.403,
+        "p95ErrorPx": 0.969
+      }
+    },
+    "P1": {
+      "sourceSha256": "844829a9f7a77b2b9685a6d9b356be6375e4717a84002945cad6d077de2ae636",
+      "originalBytes": 541520,
+      "resolution": [
+        2048,
+        1529
+      ],
+      "candidateRegions": 14,
+      "unresolvedIds": [
+        "DP-P1-011",
+        "DP-P1-012"
+      ],
+      "registeredReferenceSha256": "4c94a36fc214849a8607a8eaf264f5129951685bded69f2c83ebbeb14ab73af5",
+      "coordinateTransform": {
+        "homography": [
+          [
+            0.7342453230742791,
+            -0.01239149465415384,
+            48.48621918900346
+          ],
+          [
+            8.595903384098096e-05,
+            0.7341866189148544,
+            -40.31626092164954
+          ],
+          [
+            -2.598016722287476e-07,
+            -1.4129903602488954e-06,
+            0.9999999999999999
+          ]
+        ],
+        "matches": 1027,
+        "inliers": 192,
+        "meanErrorPx": 0.556,
+        "p95ErrorPx": 1.558
+      }
+    },
+    "P2": {
+      "sourceSha256": "a41fb7362023523401301312b2ca188952778e5fa1471de1b44ac9dcb7211b12",
+      "originalBytes": 4374686,
+      "resolution": [
+        2048,
+        1529
+      ],
+      "candidateRegions": 5,
+      "unresolvedIds": [
+        "DP-P2-003",
+        "DP-P2-007"
+      ],
+      "registeredReferenceSha256": "d9c2582841955d1081a10b62048a2ce4b2bd9c1e5fdc0ea697e0708a45f02c99",
+      "coordinateTransform": {
+        "homography": [
+          [
+            0.779960114638597,
+            -0.03632537693108369,
+            -141.00341957319452
+          ],
+          [
+            -0.032837005511081985,
+            0.7773932280085608,
+            -163.66090984258412
+          ],
+          [
+            1.183107786690797e-07,
+            -9.631091718117532e-08,
+            1.0
+          ]
+        ],
+        "matches": 810,
+        "inliers": 290,
+        "meanErrorPx": 0.442,
+        "p95ErrorPx": 1.066
+      }
+    }
+  }
 }

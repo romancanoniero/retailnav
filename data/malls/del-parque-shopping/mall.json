@@ -10,129 +10,197 @@
   "status": "vectorizado-provisional",
   "navigable": false,
   "origin": [
-    560,
-    430
+    1024,
+    765
   ],
-  "scale": 0.1,
-  "warning": "Modelo provisional NO NAVEGABLE: 41 recintos de las fotografias sin numeros oficiales ni marcas identificadas. Las rutas y salidas son referencias de evacuacion, no accesos ni trayectos certificados.",
+  "scale": 0.057,
+  "warning": "Plano de evacuación: 33 locales con delimitación cromática cerrada CANDIDATA y 8 pendientes; navegación, conectores, puertas y escala NO VERIFICADOS. No tomar como plano de seguridad.",
   "indoorPositionCalibrated": false,
   "floorPlanMetricScaleVerified": false,
   "numberOfPhysicalStoresVerified": false,
   "floorAlignmentApproved": false,
-  "vectorMethod": "manual-photo-trace-affine-registered-three-floor-provisional",
-  "vectorRegionCount": 55,
+  "vectorMethod": "native-2048-photo-green-trace-triangulated-spatially-registered",
+  "vectorRegionCount": 69,
   "floorReferences": {
     "PB": {
       "url": "reference/del-parque-shopping/PB.webp",
-      "sha256": "5ba86100b2736fd3dc9279bd66c7b69a41387d4d51a983e528ee2f035a096bd8",
-      "sourceSha256": "207165939b7ee577228024d05b9e67d7c124a8005e1e62b954494efd7486a7fa",
-      "source": "Fotografia original de cartel de evacuacion (Planta Baja), usuario 2026-10-17; rectificacion y registro visual provisionales",
-      "sourceArchive": "PB.original.jpg.b64",
+      "sha256": "bc1b1e11064dfbeb50fbbfe824d8ef370ee5ff43a64478acbde1aae65e918d01",
+      "sourceSha256": "be175c4cc647f461281048d64a57bdd1155bdcbacb60e49224f97ed8617b3c56",
+      "source": "2026-10-17 2048x1529 original photo, SIFT registered without fictional closures",
+      "sourceArchive": "PB.source.original.jpg.b64.part*",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "rasterSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "quality": "compressed-preview",
-      "viewBox": "0 0 1130 830",
+      "viewBox": "0 0 2048 1529",
       "qa": {
         "status": "pending",
         "reviewer": null,
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Las divisiones y fachadas estan sin verificar in situ.",
-          "Alineacion por tres anclas; escala no metrica.",
-          "Plano de evacuacion, no directorio comercial ni red de rutas.",
-          "Omitido PB-circulation-01: invalid unverified source geometry: Self-intersection[410.156382477626 311.742816768724]"
+          "Only source-enclosed candidates rendered; 8 unresolved boundaries across floors remain unrendered.",
+          "2D traces reconstructed from color photo, not architect-approved cadastral walls.",
+          "No verified metric scale, doorway, stairs landing or floor heights."
         ],
         "checks": {
-          "sourcePhotoPreserved": true,
-          "independent2DOverlayGenerated": true,
+          "originalFullResolutionPreserved": true,
+          "native2DOverlayGenerated": true,
+          "candidateRoomsTriangulated": true,
           "individualStoreWalls": false,
           "storeCodes": false,
           "metricScale": false,
-          "verticalConnections": false,
-          "accessibility": false
+          "verticalConnections": false
         }
-      }
+      },
+      "originalPixelSourceSha256": "be175c4cc647f461281048d64a57bdd1155bdcbacb60e49224f97ed8617b3c56",
+      "originalImageSize": [
+        2048,
+        1529
+      ],
+      "nativeToRegistered2048x1529": [
+        [
+          1.13190760199,
+          0.00063924095,
+          -0.27979644281
+        ],
+        [
+          -0.00075646144,
+          1.15175517202,
+          3.82370427076
+        ],
+        [
+          -5.8942e-07,
+          4.4859e-07,
+          1.0
+        ]
+      ],
+      "alignmentResidualMeanOldPixels": 0.403
     },
     "P1": {
       "url": "reference/del-parque-shopping/P1.webp",
-      "sha256": "ba03aa22c64b4ebe17361ca9545b532d74a0c78fa889bdb343440c32d86f0799",
-      "sourceSha256": "cad6c4722cdd844c2e06876623b43d35b2b29c48cc1c426dda9334121e728519",
-      "source": "Fotografia original de cartel de evacuacion (Primer Piso), usuario 2026-10-17; rectificacion y registro visual provisionales",
-      "sourceArchive": "P1.original.jpg.b64",
+      "sha256": "4c94a36fc214849a8607a8eaf264f5129951685bded69f2c83ebbeb14ab73af5",
+      "sourceSha256": "844829a9f7a77b2b9685a6d9b356be6375e4717a84002945cad6d077de2ae636",
+      "source": "2026-10-17 2048x1529 original photo, SIFT registered without fictional closures",
+      "sourceArchive": "P1.source.original.jpg.b64.part*",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "rasterSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "quality": "compressed-preview",
-      "viewBox": "0 0 1130 830",
+      "viewBox": "0 0 2048 1529",
       "qa": {
         "status": "pending",
         "reviewer": null,
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Las divisiones y fachadas estan sin verificar in situ.",
-          "Alineacion por tres anclas; escala no metrica.",
-          "Plano de evacuacion, no directorio comercial ni red de rutas."
+          "Only source-enclosed candidates rendered; 8 unresolved boundaries across floors remain unrendered.",
+          "2D traces reconstructed from color photo, not architect-approved cadastral walls.",
+          "No verified metric scale, doorway, stairs landing or floor heights."
         ],
         "checks": {
-          "sourcePhotoPreserved": true,
-          "independent2DOverlayGenerated": true,
+          "originalFullResolutionPreserved": true,
+          "native2DOverlayGenerated": true,
+          "candidateRoomsTriangulated": true,
           "individualStoreWalls": false,
           "storeCodes": false,
           "metricScale": false,
-          "verticalConnections": false,
-          "accessibility": false
+          "verticalConnections": false
         }
-      }
+      },
+      "originalPixelSourceSha256": "844829a9f7a77b2b9685a6d9b356be6375e4717a84002945cad6d077de2ae636",
+      "originalImageSize": [
+        2048,
+        1529
+      ],
+      "nativeToRegistered2048x1529": [
+        [
+          1.33073842624,
+          -0.02245821332,
+          87.87590876025
+        ],
+        [
+          0.00015835104,
+          1.35249559075,
+          -74.26935295085
+        ],
+        [
+          -2.598e-07,
+          -1.41299e-06,
+          1.0
+        ]
+      ],
+      "alignmentResidualMeanOldPixels": 0.556
     },
     "P2": {
       "url": "reference/del-parque-shopping/P2.webp",
-      "sha256": "2c9d80577ff81b0090cf90775fc055f949a10bc6e100427ef039f30db51edc6a",
-      "sourceSha256": "4e5427860d40b940508fd0f6643ba20f062c14262080b71ee4f2895a55999a1c",
-      "source": "Fotografia original de cartel de evacuacion (Segundo Piso), usuario 2026-10-17; rectificacion y registro visual provisionales",
-      "sourceArchive": "P2.original.jpg.b64",
+      "sha256": "d9c2582841955d1081a10b62048a2ce4b2bd9c1e5fdc0ea697e0708a45f02c99",
+      "sourceSha256": "a41fb7362023523401301312b2ca188952778e5fa1471de1b44ac9dcb7211b12",
+      "source": "2026-10-17 2048x1529 original photo, SIFT registered without fictional closures",
+      "sourceArchive": "P2.source.original.png.b64.part*",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "rasterSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
       "quality": "compressed-preview",
-      "viewBox": "0 0 1130 830",
+      "viewBox": "0 0 2048 1529",
       "qa": {
         "status": "pending",
         "reviewer": null,
         "reviewedAt": null,
         "geometrySha256": null,
         "issues": [
-          "Las divisiones y fachadas estan sin verificar in situ.",
-          "Alineacion por tres anclas; escala no metrica.",
-          "Plano de evacuacion, no directorio comercial ni red de rutas."
+          "Only source-enclosed candidates rendered; 8 unresolved boundaries across floors remain unrendered.",
+          "2D traces reconstructed from color photo, not architect-approved cadastral walls.",
+          "No verified metric scale, doorway, stairs landing or floor heights."
         ],
         "checks": {
-          "sourcePhotoPreserved": true,
-          "independent2DOverlayGenerated": true,
+          "originalFullResolutionPreserved": true,
+          "native2DOverlayGenerated": true,
+          "candidateRoomsTriangulated": true,
           "individualStoreWalls": false,
           "storeCodes": false,
           "metricScale": false,
-          "verticalConnections": false,
-          "accessibility": false
+          "verticalConnections": false
         }
-      }
+      },
+      "originalPixelSourceSha256": "a41fb7362023523401301312b2ca188952778e5fa1471de1b44ac9dcb7211b12",
+      "originalImageSize": [
+        2048,
+        1529
+      ],
+      "nativeToRegistered2048x1529": [
+        [
+          1.41359142901,
+          -0.06583572739,
+          -255.55310025301
+        ],
+        [
+          -0.06049130292,
+          1.43208945256,
+          -301.49100138471
+        ],
+        [
+          1.1831e-07,
+          -9.631e-08,
+          1.0
+        ]
+      ],
+      "alignmentResidualMeanOldPixels": 0.442
     }
   },
   "floors": [
@@ -141,13 +209,13 @@
       "name": "Planta Baja",
       "geometry": "PB.geometry.zlib.b64",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
-      "source": "Fotografia registrada de plano de evacuacion del Planta Baja",
-      "regionCount": 21,
-      "commercialRegionCount": 18,
-      "vectorizationStatus": "MANUAL-PHOTO-TRACES-PROVISIONAL-NO-NAVIGATION",
+      "source": "Native 2048x1529 user evacuation photo (spatially registered)",
+      "regionCount": 24,
+      "commercialRegionCount": 14,
+      "vectorizationStatus": "SOURCE-TRACED-PARTIAL-QA-PENDING-NOT-NAVIGABLE",
       "photoReviewFile": "PB.photo-review.zlib.b64",
       "geometryReviewApproved": false
     },
@@ -156,13 +224,13 @@
       "name": "Primer Piso",
       "geometry": "P1.geometry.zlib.b64",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
-      "source": "Fotografia registrada de plano de evacuacion del Primer Piso",
-      "regionCount": 19,
-      "commercialRegionCount": 16,
-      "vectorizationStatus": "MANUAL-PHOTO-TRACES-PROVISIONAL-NO-NAVIGATION",
+      "source": "Native 2048x1529 user evacuation photo (spatially registered)",
+      "regionCount": 25,
+      "commercialRegionCount": 14,
+      "vectorizationStatus": "SOURCE-TRACED-PARTIAL-QA-PENDING-NOT-NAVIGABLE",
       "photoReviewFile": "P1.photo-review.zlib.b64",
       "geometryReviewApproved": false
     },
@@ -171,13 +239,13 @@
       "name": "Segundo Piso",
       "geometry": "P2.geometry.zlib.b64",
       "imageSize": [
-        1130,
-        830
+        2048,
+        1529
       ],
-      "source": "Fotografia registrada de plano de evacuacion del Segundo Piso",
-      "regionCount": 15,
-      "commercialRegionCount": 7,
-      "vectorizationStatus": "MANUAL-PHOTO-TRACES-PROVISIONAL-NO-NAVIGATION",
+      "source": "Native 2048x1529 user evacuation photo (spatially registered)",
+      "regionCount": 20,
+      "commercialRegionCount": 5,
+      "vectorizationStatus": "SOURCE-TRACED-PARTIAL-QA-PENDING-NOT-NAVIGABLE",
       "photoReviewFile": "P2.photo-review.zlib.b64",
       "geometryReviewApproved": false
     }
@@ -188,10 +256,10 @@
       "floor": "PB",
       "name": "SALIDA (oeste)",
       "category": "exit",
-      "x": 29.0,
-      "y": 181.0,
+      "x": 52.56,
+      "y": 333.43,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -199,10 +267,10 @@
       "floor": "PB",
       "name": "SALIDA (Nazarre oeste)",
       "category": "exit",
-      "x": 304.0,
-      "y": 739.0,
+      "x": 550.97,
+      "y": 1361.36,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -210,10 +278,10 @@
       "floor": "PB",
       "name": "SALIDA (Nazarre este)",
       "category": "exit",
-      "x": 754.0,
-      "y": 744.0,
+      "x": 1366.54,
+      "y": 1370.57,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -221,10 +289,10 @@
       "floor": "PB",
       "name": "SALIDA VEHICULAR",
       "category": "vehicle-access",
-      "x": 464.0,
-      "y": 742.0,
+      "x": 840.95,
+      "y": 1366.89,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -232,10 +300,10 @@
       "floor": "PB",
       "name": "ENTRADA VEHICULAR",
       "category": "vehicle-access",
-      "x": 1057.0,
-      "y": 749.0,
+      "x": 1915.7,
+      "y": 1379.78,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -243,10 +311,10 @@
       "floor": "PB",
       "name": "Escalera, núcleo noroeste",
       "category": "stairs",
-      "x": 271.0,
-      "y": 157.0,
+      "x": 491.16,
+      "y": 289.22,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -254,10 +322,10 @@
       "floor": "PB",
       "name": "Escalera, norte",
       "category": "stairs",
-      "x": 663.0,
-      "y": 383.0,
+      "x": 1201.61,
+      "y": 705.55,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -265,10 +333,10 @@
       "floor": "PB",
       "name": "Escalera, este",
       "category": "stairs",
-      "x": 862.0,
-      "y": 479.0,
+      "x": 1562.28,
+      "y": 882.4,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -276,10 +344,10 @@
       "floor": "PB",
       "name": "Escalera, acceso Nazarre oeste",
       "category": "stairs",
-      "x": 281.0,
-      "y": 707.0,
+      "x": 509.28,
+      "y": 1302.41,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -287,10 +355,10 @@
       "floor": "PB",
       "name": "RAMPA central",
       "category": "ramp",
-      "x": 487.0,
-      "y": 647.0,
+      "x": 882.63,
+      "y": 1191.88,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -298,10 +366,10 @@
       "floor": "PB",
       "name": "RAMPA este",
       "category": "ramp",
-      "x": 1018.0,
-      "y": 691.0,
+      "x": 1845.01,
+      "y": 1272.94,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -309,10 +377,10 @@
       "floor": "PB",
       "name": "ASC. (ascensor: leyenda no usar en caso de incendio)",
       "category": "elevator",
-      "x": 752.0,
-      "y": 628.0,
+      "x": 1362.92,
+      "y": 1156.88,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -320,10 +388,10 @@
       "floor": "P1",
       "name": "SALIDA, noroeste",
       "category": "exit",
-      "x": 253.1,
-      "y": 179.76,
+      "x": 458.72,
+      "y": 331.15,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -331,10 +399,10 @@
       "floor": "P1",
       "name": "SALIDA, ferrocarril centro",
       "category": "exit",
-      "x": 637.91,
-      "y": 387.93,
+      "x": 1156.14,
+      "y": 714.63,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -342,10 +410,10 @@
       "floor": "P1",
       "name": "SALIDA, ferrocarril este",
       "category": "exit",
-      "x": 839.02,
-      "y": 460.84,
+      "x": 1520.63,
+      "y": 848.95,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -353,10 +421,10 @@
       "floor": "P1",
       "name": "SALIDA, Nazarre oeste",
       "category": "exit",
-      "x": 296.16,
-      "y": 674.95,
+      "x": 536.76,
+      "y": 1243.37,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -364,10 +432,10 @@
       "floor": "P1",
       "name": "Escalera, noroeste",
       "category": "stairs",
-      "x": 279.23,
-      "y": 162.11,
+      "x": 506.07,
+      "y": 298.63,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -375,10 +443,10 @@
       "floor": "P1",
       "name": "Escalera, norte central",
       "category": "stairs",
-      "x": 651.04,
-      "y": 374.99,
+      "x": 1179.94,
+      "y": 690.79,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -386,10 +454,10 @@
       "floor": "P1",
       "name": "Escalera, noreste",
       "category": "stairs",
-      "x": 836.29,
-      "y": 485.54,
+      "x": 1515.68,
+      "y": 894.45,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -397,10 +465,10 @@
       "floor": "P1",
       "name": "Escalera, Nazarre oeste",
       "category": "stairs",
-      "x": 294.63,
-      "y": 698.48,
+      "x": 533.98,
+      "y": 1286.72,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -408,10 +476,10 @@
       "floor": "P1",
       "name": "ASC. (ascensor)",
       "category": "elevator",
-      "x": 729.58,
-      "y": 623.17,
+      "x": 1322.28,
+      "y": 1147.98,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -419,10 +487,10 @@
       "floor": "P2",
       "name": "SALIDA, noroeste",
       "category": "exit",
-      "x": 292.05,
-      "y": 194.33,
+      "x": 529.31,
+      "y": 357.99,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -430,10 +498,10 @@
       "floor": "P2",
       "name": "SALIDA, frente al ferrocarril",
       "category": "exit",
-      "x": 649.71,
-      "y": 375.51,
+      "x": 1177.53,
+      "y": 691.75,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -441,10 +509,10 @@
       "floor": "P2",
       "name": "SALIDA, sureste",
       "category": "exit",
-      "x": 913.87,
-      "y": 585.41,
+      "x": 1656.29,
+      "y": 1078.42,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -452,10 +520,10 @@
       "floor": "P2",
       "name": "SALIDA, Nazarre oeste",
       "category": "exit",
-      "x": 291.81,
-      "y": 705.67,
+      "x": 528.87,
+      "y": 1299.96,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -463,10 +531,10 @@
       "floor": "P2",
       "name": "Escalera, noroeste",
       "category": "stairs",
-      "x": 303.02,
-      "y": 172.77,
+      "x": 549.19,
+      "y": 318.27,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -474,10 +542,10 @@
       "floor": "P2",
       "name": "Escalera, ferrocarril",
       "category": "stairs",
-      "x": 683.57,
-      "y": 370.37,
+      "x": 1238.9,
+      "y": 682.28,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -485,10 +553,10 @@
       "floor": "P2",
       "name": "Escalera, sureste",
       "category": "stairs",
-      "x": 942.13,
-      "y": 566.85,
+      "x": 1707.51,
+      "y": 1044.23,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -496,10 +564,10 @@
       "floor": "P2",
       "name": "Escalera, Nazarre oeste",
       "category": "stairs",
-      "x": 289.72,
-      "y": 697.07,
+      "x": 525.09,
+      "y": 1284.12,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -507,10 +575,10 @@
       "floor": "P2",
       "name": "Escalera, Nazarre centro",
       "category": "stairs",
-      "x": 600.73,
-      "y": 703.96,
+      "x": 1088.76,
+      "y": 1296.81,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -518,10 +586,10 @@
       "floor": "P2",
       "name": "BAÑO DISC. (baño accesible)",
       "category": "toilet",
-      "x": 273.39,
-      "y": 593.5,
+      "x": 495.49,
+      "y": 1093.33,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -529,10 +597,10 @@
       "floor": "P2",
       "name": "ASC. (ascensor)",
       "category": "elevator",
-      "x": 740.6,
-      "y": 642.28,
+      "x": 1342.26,
+      "y": 1183.19,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -540,10 +608,10 @@
       "floor": "P2",
       "name": "BARRA",
       "category": "dining",
-      "x": 425.61,
-      "y": 240.88,
+      "x": 771.37,
+      "y": 443.74,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     },
     {
@@ -551,15 +619,28 @@
       "floor": "P2",
       "name": "PATIO DESC. (abreviatura no confirmada)",
       "category": "lounge",
-      "x": 359.45,
-      "y": 324.32,
+      "x": 651.46,
+      "y": 597.45,
       "confidence": "por-revisar",
-      "source": "evacuation-poster-photo-unverified",
+      "source": "previous-photo-approximate-unverified",
       "routingVerified": false
     }
   ],
   "floorReferencePolicy": "Registro por 3 anclas aproximadas. Ningun piso o conexion es metrico. Las fotos originales se archivan sin cambios; compare cada trazo en los SVG de revision.",
   "officialDirectoryStatus": "not-in-evacuation-posters-no-current-official-directory-imported",
   "sourceManifest": "source-manifest.json",
-  "directoryCompleteness": "directory-completeness.json"
+  "directoryCompleteness": "directory-completeness.json",
+  "verifiedCommercialRooms": 0,
+  "commercialEnclosedCandidates": 33,
+  "unresolvedCommercialRooms": 8,
+  "nativePhotoReview": {
+    "report": "native-geometry-qa.json",
+    "status": "pending-human-review",
+    "all41HistoricalRoomIdsPreservedInCandidateAndUnresolvedRecords": true,
+    "originalPhotoPixelSize": [
+      2048,
+      1529
+    ],
+    "automaticUnverifiedClosures": 0
+  }
 }

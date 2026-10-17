@@ -1,0 +1,139 @@
+{
+  "schema": "retailnav.del-parque.native-geometry-qa.v4",
+  "coordinates": "source 2048x1529 -> registered 2048x1529",
+  "geometryApproved": false,
+  "navigationApproved": false,
+  "floorResults": {
+    "PB": {
+      "originalSha256": "be175c4cc647f461281048d64a57bdd1155bdcbacb60e49224f97ed8617b3c56",
+      "originalSourceBytes": 541906,
+      "referenceSha256": "bc1b1e11064dfbeb50fbbfe824d8ef370ee5ff43a64478acbde1aae65e918d01",
+      "geometrySha256": "e08245d5568b40ddca3522fbcf2d966350354dfd3a6650e1ccc222c851cd80ed",
+      "geometryRegions": 24,
+      "commercialCandidates": 14,
+      "unresolvedSpaceIds": [
+        "DP-PB-010",
+        "DP-PB-015",
+        "DP-PB-017",
+        "DP-PB-018"
+      ],
+      "separateColoredRegions": {
+        "purple": 0,
+        "yellow": 8,
+        "orange": 2,
+        "cyan": 0
+      },
+      "alignment": {
+        "homography": [
+          [
+            0.6245388624275983,
+            0.0003527061885729565,
+            -0.15437987322856445
+          ],
+          [
+            -0.00041063635875746853,
+            0.6252169998533655,
+            2.07565372448122
+          ],
+          [
+            -5.894236683492482e-07,
+            4.485916118707281e-07,
+            1.0
+          ]
+        ],
+        "matches": 1092,
+        "inliers": 259,
+        "meanErrorPx": 0.403,
+        "p95ErrorPx": 0.969
+      },
+      "officialDirectory": "not-provided",
+      "navigationApproved": false
+    },
+    "P1": {
+      "originalSha256": "844829a9f7a77b2b9685a6d9b356be6375e4717a84002945cad6d077de2ae636",
+      "originalSourceBytes": 541520,
+      "referenceSha256": "4c94a36fc214849a8607a8eaf264f5129951685bded69f2c83ebbeb14ab73af5",
+      "geometrySha256": "e4f31413998b61902892e8c6be39d833ef000f308a2bde38b6078a7c00a3f850",
+      "geometryRegions": 25,
+      "commercialCandidates": 14,
+      "unresolvedSpaceIds": [
+        "DP-P1-011",
+        "DP-P1-012"
+      ],
+      "separateColoredRegions": {
+        "purple": 2,
+        "yellow": 6,
+        "orange": 3,
+        "cyan": 0
+      },
+      "alignment": {
+        "homography": [
+          [
+            0.7342453230742791,
+            -0.01239149465415384,
+            48.48621918900346
+          ],
+          [
+            8.595903384098096e-05,
+            0.7341866189148544,
+            -40.31626092164954
+          ],
+          [
+            -2.598016722287476e-07,
+            -1.4129903602488954e-06,
+            0.9999999999999999
+          ]
+        ],
+        "matches": 1027,
+        "inliers": 192,
+        "meanErrorPx": 0.556,
+        "p95ErrorPx": 1.558
+      },
+      "officialDirectory": "not-provided",
+      "navigationApproved": false
+    },
+    "P2": {
+      "originalSha256": "a41fb7362023523401301312b2ca188952778e5fa1471de1b44ac9dcb7211b12",
+      "originalSourceBytes": 4374686,
+      "referenceSha256": "d9c2582841955d1081a10b62048a2ce4b2bd9c1e5fdc0ea697e0708a45f02c99",
+      "geometrySha256": "0e927dcc4df2162a5c796bb33fc4621eb2b3b0657442f6fedf3f04ecf2623919",
+      "geometryRegions": 20,
+      "commercialCandidates": 5,
+      "unresolvedSpaceIds": [
+        "DP-P2-003",
+        "DP-P2-007"
+      ],
+      "separateColoredRegions": {
+        "purple": 1,
+        "yellow": 9,
+        "orange": 4,
+        "cyan": 1
+      },
+      "alignment": {
+        "homography": [
+          [
+            0.779960114638597,
+            -0.03632537693108369,
+            -141.00341957319452
+          ],
+          [
+            -0.032837005511081985,
+            0.7773932280085608,
+            -163.66090984258412
+          ],
+          [
+            1.183107786690797e-07,
+            -9.631091718117532e-08,
+            1.0
+          ]
+        ],
+        "matches": 810,
+        "inliers": 290,
+        "meanErrorPx": 0.442,
+        "p95ErrorPx": 1.066
+      },
+      "officialDirectory": "not-provided",
+      "navigationApproved": false
+    }
+  }
+}

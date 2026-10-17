@@ -100,6 +100,39 @@ try{
  await waitForVisitHighlights(expectedStoreVectors.size);
  assert.deepEqual(new Set(await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors)),
   expectedStoreVectors,'every selected stop remains marked across its bound floors');
+ await page.evaluate(()=>window.__RETAILNAV__.setFloor('ALL'));
+ await page.waitForFunction(()=>window.__RETAILNAV__.getState().active==='ALL');
+ await page.evaluate(()=>window.__RETAILNAV__.invalidate());await page.waitForTimeout(180);
+ const greenResult=await page.locator('#canvas').evaluate((canvas,vectors)=>{
+  const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;
+  const context=copy.getContext('2d');context.drawImage(canvas,0,0);
+  const pixels=context.getImageData(0,0,copy.width,copy.height).data;let count=0;
+  for(let i=0;i<pixels.length;i+=4){
+   const red=pixels[i],green=pixels[i+1],blue=pixels[i+2];
+   if(pixels[i+3]>180&&green-red>8&&green-blue>55&&red>75)count++;
+  }
+  const samples=vectors.map(key=>{
+   const [floorId,...polygonParts]=key.split(':'),polygonId=polygonParts.join(':');
+   const floor=window.__RETAILNAV__.floors.find(item=>item.id===floorId);
+   const feature=floor?.features.find(item=>item.id===polygonId);
+   const point=feature&&window.__RETAILNAV__.project(floorId,feature.c);
+   if(!point)return{key,point:null};
+   const scaleX=copy.width/canvas.clientWidth,scaleY=copy.height/canvas.clientHeight;
+   const x=Math.max(0,Math.min(copy.width-1,Math.round(point.x*scaleX)));
+   const y=Math.max(0,Math.min(copy.height-1,Math.round(point.y*scaleY)));
+   const offset=(y*copy.width+x)*4;
+   return{key,point:[point.x,point.y],rgba:[...pixels.slice(offset,offset+4)]};
+  });
+  return{count,samples};
+ },[...expectedStoreVectors]);
+ mkdirSync('artifacts',{recursive:true});
+ await page.screenshot({path:'artifacts/visit-plan-all-floors-'+engine+'.png',fullPage:true});
+ assert.ok(greenResult.count>100,
+  'the all-floor WebGL view must visibly paint visit stops green, pixels='+greenResult.count);
+ assert.ok(greenResult.samples.every(sample=>sample.rgba&&sample.rgba[1]-sample.rgba[0]>8&&
+  sample.rgba[1]-sample.rgba[2]>55),
+  'every planned polygon centre stays visibly green through stacked-floor occlusion: '+
+   JSON.stringify(greenResult.samples));
  await page.locator('#rnVisitPlanToggle').tap();
  assert.equal(await page.locator('#rnVisitPlan').isVisible(),true);
  assert.equal(await page.locator('.rnVisitPlanStop').count(),2);
@@ -141,7 +174,6 @@ try{
  assert.ok(panel&&canvas&&panel.x>=canvas.x&&panel.x+panel.width<=canvas.x+canvas.width&&
   panel.y+panel.height<=canvas.y+canvas.height,
   'responsive visit sheet stays inside the map viewport: '+JSON.stringify({panel,canvas}));
- mkdirSync('artifacts',{recursive:true});
  await page.screenshot({path:'artifacts/visit-plan-'+engine+'.png',fullPage:true});
  await page.locator('.rnVisitPlanRemove').last().tap();
  assert.equal(await page.locator('.rnVisitPlanStop').count(),2);

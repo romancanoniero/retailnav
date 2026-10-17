@@ -4268,7 +4268,7 @@ function palette(f,i,line){
                  f.k==='slab'||f.k==='corridor'?.32:.23;
  return blendColors(base,floorTone,influence).map(x=>Math.max(0,Math.min(1,x)));
 }
-function geometry(floor){let faces=[],edges=[],points=[],contextEdges=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
+function geometry(floor){let faces=[],edges=[],points=[],contextEdges=[],visitFaces=[],visitEdges=[];const emit=(arr,p,n,c,id)=>arr.push(...p,...n,...c,id);for(const f of floor.features){let h=height(f),col=palette(f,floor.index,false),edgeCol=palette(f,floor.index,true);
  const vectorKey=f.floor+':'+f.id;
  const selectedShop=focusedStoreVectors.has(vectorKey);
  const visitStop=visitPlanVectors.has(vectorKey);
@@ -4283,15 +4283,16 @@ function geometry(floor){let faces=[],edges=[],points=[],contextEdges=[];const e
   const chosen=mapRgb('mapSelected',[1,.68,.29]);
   col=blendColors(col,chosen,.30);edgeCol=blendColors(edgeCol,chosen,.52);
  }
- f.flat=[];function tri(a,b,c,n){[a,b,c].forEach(p=>{emit(faces,p,n,col,f.gid);f.flat.push(...p,...n);});}
+ f.flat=[];function tri(a,b,c,n){[a,b,c].forEach(p=>{emit(faces,p,n,col,f.gid);if(visitStop)emit(visitFaces,p,n,col,f.gid);f.flat.push(...p,...n);});}
 if(f.k!=='void'){for(let i=0;i<f.t.length;i+=3){let a=pos(f.p[f.t[i]],h),b=pos(f.p[f.t[i+1]],h),c=pos(f.p[f.t[i+2]],h);if(cross(vsub(b,a),vsub(c,a))[1]<0)[b,c]=[c,b];tri(a,b,c,[0,1,0]);}}
-for(const ring of f.r){for(let j=0;j<ring.length;j++){let a=pos(ring[j],h),b=pos(ring[(j+1)%ring.length],h);emit(edges,a,[0,0,0],edgeCol,f.gid);emit(edges,b,[0,0,0],edgeCol,f.gid);emit(points,a,[0,0,0],edgeCol,f.gid);if(['anchor','unit','amenity','zone','slab'].includes(f.k)){let bottom=f.k==='slab'?-.55:0,aa=[a[0],bottom,a[2]],bb=[b[0],bottom,b[2]],normal=norm([b[2]-a[2],0,a[0]-b[0]]);tri(aa,bb,b,normal);tri(aa,b,a,normal);if(Math.hypot(a[0]-b[0],a[2]-b[2])>1.1){emit(edges,aa,[0,0,0],vmul(edgeCol,.65),f.gid);emit(edges,a,[0,0,0],vmul(edgeCol,.65),f.gid);}}}}
+for(const ring of f.r){for(let j=0;j<ring.length;j++){let a=pos(ring[j],h),b=pos(ring[(j+1)%ring.length],h);emit(edges,a,[0,0,0],edgeCol,f.gid);emit(edges,b,[0,0,0],edgeCol,f.gid);if(visitStop){emit(visitEdges,a,[0,0,0],edgeCol,f.gid);emit(visitEdges,b,[0,0,0],edgeCol,f.gid);}emit(points,a,[0,0,0],edgeCol,f.gid);if(['anchor','unit','amenity','zone','slab'].includes(f.k)){let bottom=f.k==='slab'?-.55:0,aa=[a[0],bottom,a[2]],bb=[b[0],bottom,b[2]],normal=norm([b[2]-a[2],0,a[0]-b[0]]);tri(aa,bb,b,normal);tri(aa,b,a,normal);if(Math.hypot(a[0]-b[0],a[2]-b[2])>1.1){emit(edges,aa,[0,0,0],vmul(edgeCol,.65),f.gid);emit(edges,a,[0,0,0],vmul(edgeCol,.65),f.gid);if(visitStop){emit(visitEdges,aa,[0,0,0],vmul(edgeCol,.65),f.gid);emit(visitEdges,a,[0,0,0],vmul(edgeCol,.65),f.gid);}}}}}
 f.flat=new Float32Array(f.flat);}
 function buffer(arr){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW);return {b,n:arr.length/10};}if(gl){
  for(const f of floor.features)for(const ring of f.r)for(let i=0;i<ring.length;i++){
   for(const p of [ring[i],ring[(i+1)%ring.length]])contextEdges.push(...pos(p,-.12),0,0,0,.28,.58,.65,f.gid);
  }
- floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points),context:buffer(contextEdges)};
+ floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points),context:buffer(contextEdges),
+  visitFaces:buffer(visitFaces),visitEdges:buffer(visitEdges)};
  // Raised letters share world-space coordinates with the roof's geometry.
  floor.roofGpu={};
  for(const key of ['codes','frontCodes','names','frontNames','services']){
@@ -5140,10 +5141,23 @@ function drawRoofTextCanvas(){
   }
  }
 }
+function drawVisitPlanWebGL(){
+ if(!gl||scan||!visitPlanVectors.size)return;
+ // An exploded stack can hide a lower shop directly behind an upper slab.
+ // Redraw only planned shop meshes without depth occlusion so every chosen
+ // stop remains visible; labels and connectors are drawn afterwards.
+ gl.disable(gl.DEPTH_TEST);gl.uniform1f(loc.uWire,0);gl.uniform1f(loc.uAlpha,1);
+ for(const floor of visible()){
+  gl.uniform1f(loc.uY,floor.y);
+  gl.uniform1f(loc.uLine,0);bind(floor.gpu.visitFaces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.visitFaces.n);
+  gl.uniform1f(loc.uLine,1);bind(floor.gpu.visitEdges);gl.drawArrays(gl.LINES,0,floor.gpu.visitEdges.n);
+ }
+ gl.enable(gl.DEPTH_TEST);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uWire,wire?1:0);
+}
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!cameraFlight&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();advanceStoreCameraFlight(time);let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
  else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();drawSearchMarkers();drawWayfinding();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);if(!referenceContext(floor)){gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);}gl.uniform1f(loc.uLine,1);const outlines=referenceContext(floor)?floor.gpu.context:floor.gpu.edges;bind(outlines);gl.drawArrays(gl.LINES,0,outlines.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
-drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawLiftShaftsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
+drawVisitPlanWebGL();drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawLiftShaftsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();if(!wayfindingOpen)window.RetailNavPins?.draw3D?.(gl,mvp);
 if(!wayfindingOpen)window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();drawSearchMarkers();drawWayfinding();requestAnimationFrame(render);}
 
@@ -5209,6 +5223,17 @@ function renderCanvas(dt){
   else if(searchMatch){c.shadowColor=mapColor('mapSelected','#ffae4a');c.shadowBlur=4;}
   else if(f.k==='corridor'){c.shadowColor='#25c6c9';c.shadowBlur=2;}
   c.stroke();c.shadowBlur=0;
+ }
+ if(!scan&&visitPlanVectors.size){
+  for(const floor of visible())for(const f of floor.features){
+   const key=f.floor+':'+f.id;if(!visitPlanVectors.has(key))continue;
+   const chosen=(selected&&selected.gid===f.gid)||focusedStoreVectors.has(key)
+    ?mapColor('mapSelected','#ffae4a'):mapColor('accent','#BBD74A');
+   c.beginPath();let any=false;for(const ring of f.r)any=pth(ring,floor.y+height(f))||any;
+   if(!any)continue;
+   c.fillStyle=chosen;c.globalAlpha=.92;c.fill('evenodd');c.globalAlpha=1;
+   c.strokeStyle=chosen;c.lineWidth=2.4;c.shadowColor=chosen;c.shadowBlur=9;c.stroke();c.shadowBlur=0;
+  }
  }
  if(route&&visible().some(x=>x.id===route.floor)){
   const floor=floors.find(x=>x.id===route.floor),pts=route.points.map(p=>xyz(pos(p,floor.y+.5))).filter(Boolean);

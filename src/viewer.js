@@ -1353,15 +1353,28 @@ function appendUnitResult(host,record,matchTypes,{horizontal=false}={}){
  };
  const shell=document.createElement('div');
  shell.className=horizontal?'rnStoreCardShell':'rnStoreResultShell';
+ const inlineActions=document.createElement('div');inlineActions.className='rnStoreResultActions';
+ const favorite=document.createElement('button');favorite.type='button';favorite.className='rnStoreInlineAction rnStoreFavoriteAction';
+ favorite.dataset.rnFavoriteStore=record.storeId;favorite.dataset.rnFavoriteLabel=unit.name||unit.code||'';
+ const favoriteActive=Boolean(window.RetailNavFavorites?.isFavorite?.(record.storeId));
+ favorite.title=favoriteActive?(en?'Remove from favorites':'Quitar de favoritos'):(en?'Add to favorites':'Agregar a favoritos');
+ favorite.setAttribute('aria-label',(favoriteActive?(en?'Remove ':'Quitar '):(en?'Add ':'Agregar '))+(unit.name||unit.code)+
+  (favoriteActive?(en?' from favorites':' de favoritos'):(en?' to favorites':' a favoritos')));
+ favorite.setAttribute('aria-pressed',String(favoriteActive));
+ favorite.innerHTML='<svg class="icon" aria-hidden="true"><use href="#i-star"/></svg>';
+ favorite.onclick=event=>{event.preventDefault();event.stopPropagation();
+  window.RetailNavFavorites?.toggleStore?.(record.storeId,unit.name||unit.code);};
  const visit=document.createElement('button');visit.type='button';visit.className='rnStoreVisitAction';
  visit.dataset.rnVisitStore=record.storeId;visit.dataset.floor=(mappedFloors[0]||unit.floor||'');
- visit.title=en?'Add to route':'Agregar al recorrido';
- visit.setAttribute('aria-label',(en?'Add ':'Agregar ')+(unit.name||unit.code)+(en?' to route':' al recorrido'));
- visit.setAttribute('aria-pressed','false');
- visit.innerHTML='<svg class="icon" aria-hidden="true"><use href="#i-flag"/></svg>';
+ const visitActive=Boolean(window.RetailNavVisitPlanner?.containsStore?.(record.storeId));
+ visit.title=visitActive?(en?'Remove from route':'Quitar del recorrido'):(en?'Add to route':'Agregar al recorrido');
+ visit.setAttribute('aria-label',(visitActive?(en?'Remove ':'Quitar '):(en?'Add ':'Agregar '))+(unit.name||unit.code)+
+  (visitActive?(en?' from route':' del recorrido'):(en?' to route':' al recorrido')));
+ visit.setAttribute('aria-pressed',String(visitActive));
+ visit.innerHTML='<svg class="icon" aria-hidden="true"><use href="'+(visitActive?'#i-check':'#i-flag')+'"/></svg>';
  visit.onclick=event=>{event.preventDefault();event.stopPropagation();
   window.RetailNavVisitPlanner?.toggleStore?.(record.storeId,visit.dataset.floor);};
- shell.append(b,visit);host.append(shell);
+ inlineActions.append(favorite,visit);shell.append(b,inlineActions);host.append(shell);
 }
 function renderGroupedShopResults(host,query){
  if(!query)return{storeIds:new Set(),options:[]};

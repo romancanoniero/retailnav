@@ -56,7 +56,7 @@ try{
    menu.querySelector('#rnStoreActionClose')].filter(Boolean);
   const transitioning=[menu,...controls].some(node=>node.getAnimations?.()
    .some(animation=>animation.playState==='running'||animation.playState==='pending'));
-  return controls.length===5&&!transitioning&&
+  return controls.length===6&&!transitioning&&
    [menu,...controls].every(node=>Math.abs(parseFloat(getComputedStyle(node).opacity)-1)<.001);
  },null,{timeout:5000});
  const select=async(id,floor=null)=>{
@@ -195,10 +195,10 @@ try{
    radius:getComputedStyle(menu.querySelector('#rnStoreActionClose')).borderRadius},
    centreOffset:Math.hypot(centre.x-(box.left+box.width/2),centre.y-(box.top+box.height/2))};
  });
- assert.equal(radial.actions.length,4);
+ assert.equal(radial.actions.length,5);
  assert.ok(radial.actions.every(a=>a.width>=44&&a.width<=50&&Math.abs(a.height-a.width)<.2&&
   (a.radius==='50%'||Math.abs(parseFloat(a.radius)-a.width/2)<1)&&a.shadow!=='none'),
-  'the four options are small circular touch targets with shadows: '+JSON.stringify(radial));
+  'the five options are small circular touch targets with shadows: '+JSON.stringify(radial));
  assert.ok(Math.max(...radial.actions.map(a=>a.orbitRadius))-
   Math.min(...radial.actions.map(a=>a.orbitRadius))<1,
   'every option centre follows the same imaginary circumference: '+JSON.stringify(radial));

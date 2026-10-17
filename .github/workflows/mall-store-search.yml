@@ -4,11 +4,15 @@ on:
     branches: [main, feature/store-search-floor-follow-orientation-20261015]
     paths:
       - "src/store-meetups.js"
+      - "src/visit-planner.js"
+      - "src/favorites.js"
       - "scripts/source_map.py"
       - "scripts/import-source-map-3d.mjs"
       - "scripts/verify.py"
       - "scripts/test-source-map*"
       - "scripts/test-wayfinding-browser.mjs"
+      - "scripts/test-visit-planner-browser.mjs"
+      - "scripts/test-favorites-browser.mjs"
       - "src/wayfinding-route.js"
       - "src/tablet-header.js"
       - "scripts/import-routing-preview.py"
@@ -37,11 +41,15 @@ on:
   pull_request:
     paths:
       - "src/store-meetups.js"
+      - "src/visit-planner.js"
+      - "src/favorites.js"
       - "scripts/source_map.py"
       - "scripts/import-source-map-3d.mjs"
       - "scripts/verify.py"
       - "scripts/test-source-map*"
       - "scripts/test-wayfinding-browser.mjs"
+      - "scripts/test-visit-planner-browser.mjs"
+      - "scripts/test-favorites-browser.mjs"
       - "src/wayfinding-route.js"
       - "src/tablet-header.js"
       - "scripts/import-routing-preview.py"
@@ -232,5 +240,11 @@ jobs:
         run: |
           node scripts/test-wayfinding-browser.mjs
           BROWSER=webkit node scripts/test-wayfinding-browser.mjs
+      - name: Independent visit plans and favorites in Chromium and WebKit
+        run: |
+          node scripts/test-visit-planner-browser.mjs
+          RETAILNAV_BROWSER=webkit node scripts/test-visit-planner-browser.mjs
+          node scripts/test-favorites-browser.mjs
+          RETAILNAV_BROWSER=webkit node scripts/test-favorites-browser.mjs
       - name: Preserve map versioning, loader and Aventura logo
         run: node scripts/test-map-cache-browser.mjs

@@ -870,6 +870,13 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **Persistencia y privacidad:** el recorrido se guarda sólo en el dispositivo, separado por shopping, con un máximo de 24 paradas. Esta primera entrega conserva el orden de selección; no presume optimización, tiempos, ofertas ni favoritos.
 - **Barrera:** probar alta desde búsqueda, reflejo en contextual, alta desde mapa, dos comercios identificados, un espacio sin identificar, recarga, enfoque, eliminación, hoja dentro del viewport, círculos de 44 px o más y ausencia de errores en Chromium y WebKit/Safari. Las regresiones de búsqueda, navegación y Alto Palermo deben seguir pasando.
 
+### 2026-10-17 — FAVORITES-01 — comercios favoritos independientes
+
+- **Semántica:** favorito es una preferencia durable; visitar es una parada del recorrido actual. Marcar una estrella nunca agrega una parada y completar o vaciar el recorrido nunca borra favoritos.
+- **Accesos coherentes:** cada comercio de la búsqueda ofrece estrella y bandera como acciones separadas. La misma estrella aparece en el contextual del mapa y ambos accesos comparten `aria-pressed`, color y persistencia. Una geometría sin comercio identificado puede visitarse por `spaceId`, pero no se marca como marca favorita hasta disponer de `storeId`.
+- **Persistencia y aislamiento:** se guardan hasta 250 `storeId` en el dispositivo bajo `retailnav:favorites:v1:<mallId>`. Ningún favorito se envía al servidor ni aparece en otro shopping.
+- **Barrera:** probar alta desde búsqueda, reflejo y baja desde contextual, independencia del recorrido, recarga, aislamiento por shopping, botones táctiles de 44 px, cinco acciones sobre una única circunferencia y ausencia de errores en Chromium y WebKit/Safari.
+
 ## 19. Rutas y comandos para retomar (sin suponer despliegue)
 
 **Repositorio:** https://github.com/romancanoniero/retailnav  

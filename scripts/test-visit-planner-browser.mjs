@@ -38,7 +38,7 @@ try{
  const radialSettled=()=>page.waitForFunction(()=>{
   const menu=document.querySelector('#rnStoreActions');if(!menu?.classList.contains('is-visible'))return false;
   const controls=[...menu.querySelectorAll('.rnStoreAction'),menu.querySelector('#rnStoreActionClose')];
-  return controls.length===5&&!controls.some(node=>node.getAnimations?.().some(animation=>
+  return controls.length===6&&!controls.some(node=>node.getAnimations?.().some(animation=>
    animation.playState==='running'||animation.playState==='pending'));
  });
  await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});await ready();
@@ -67,8 +67,9 @@ try{
     round:getComputedStyle(button).borderRadius,shadow:getComputedStyle(button).boxShadow};
   });
  });
- assert.equal(radial.length,4,'the existing radial menu gains exactly one compatible action');
+ assert.equal(radial.length,5,'visit and favorite extend the existing radial menu compatibly');
  assert.ok(radial.some(action=>action.id==='rnStoreAddToPlan'));
+ assert.ok(radial.some(action=>action.id==='rnStoreFavorite'));
  assert.ok(radial.every(action=>action.width>=44&&action.height>=44&&action.shadow!=='none'));
  assert.ok(Math.max(...radial.map(action=>action.radius))-Math.min(...radial.map(action=>action.radius))<1,
   'all four action centres stay on one circumference');
@@ -127,5 +128,5 @@ try{
   'mobile visit sheet stays inside the map viewport: '+JSON.stringify({mobilePanel,mobileCanvas}));
  await page.screenshot({path:'artifacts/visit-plan-mobile-'+engine+'.png',fullPage:true});
  assert.deepEqual(errors,[]);
- console.log('PASS visit plan '+engine+': search/context state, four-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
+ console.log('PASS visit plan '+engine+': search/context state, five-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
 }finally{await browser.close();await new Promise(ok=>server.close(ok));}

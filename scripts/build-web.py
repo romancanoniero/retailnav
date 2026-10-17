@@ -327,6 +327,7 @@ components = {
     "__SOCIAL__": (repo / "src/social.js").read_text(encoding="utf-8"),
     "__STORE_MEETUPS__": (repo / "src/store-meetups.js").read_text(encoding="utf-8"),
     "__VISIT_PLANNER__": (repo / "src/visit-planner.js").read_text(encoding="utf-8"),
+    "__FAVORITES__": (repo / "src/favorites.js").read_text(encoding="utf-8"),
     "__TABLET_HEADER__": (repo / "src/tablet-header.js").read_text(encoding="utf-8"),
     "__QRSCANNER__": (repo / "src/jsqr.js").read_text(encoding="utf-8"),
     "__FALLBACK__": (repo / "src/fallback.svg").read_text(encoding="utf-8"),

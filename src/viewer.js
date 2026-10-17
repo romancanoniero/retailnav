@@ -59,9 +59,14 @@ function updateRotationModeUI(){
  button.classList.toggle('active',!panMode);
  $('rnRollControls').hidden=panMode;
  updateEarthButtons();
+ const precision=inputProfile==='precision';
  canvas.setAttribute('aria-label',panMode
-  ?'Modo mapa: un dedo mueve; dos dedos amplían, giran e inclinan. Pulsá 360° para rotación libre.'
-  :'Modo esfera 3D 360°: un dedo gira libremente por los tres ejes, también por debajo. Dos dedos desplazan, amplían y giran.');
+  ?(precision
+    ?'Modo mapa para trackpad y mouse: arrastrá para mover, pellizcá para ampliar, girá dos dedos para rotar y usá Mayúsculas más desplazamiento para inclinar.'
+    :'Modo mapa táctil: un dedo mueve; dos dedos amplían, giran e inclinan. Pulsá 360° para rotación libre.')
+  :(precision
+    ?'Modo esfera 3D 360° para trackpad y mouse: arrastrá para girar, pellizcá para ampliar, girá dos dedos para rotar y usá Mayúsculas más desplazamiento para inclinar.'
+    :'Modo esfera 3D 360°: un dedo gira libremente por los tres ejes, también por debajo. Dos dedos desplazan, amplían y giran.'));
 }
 // Google Earth-style reference compass and perspective controls. Without a
 // surveyed bearing, 'N' means the image's top edge, NOT verified true north.
@@ -1433,6 +1438,29 @@ function zoomAt(next,clientX,clientY){
 // toolbar, dialogs and other page content remain normally zoomable.
 const mapGestureViewport=canvas.closest('.viewport');
 const mapTouchIdentifiers=new Set();
+const coarseInputQuery=matchMedia('(any-pointer: coarse)');
+const fineInputQuery=matchMedia('(any-pointer: fine)');
+let inputProfile='precision';
+function applyInputProfile(){
+ const coarse=coarseInputQuery.matches||navigator.maxTouchPoints>0;
+ const fine=fineInputQuery.matches;
+ inputProfile=coarse&&fine?'hybrid':coarse?'touch':'precision';
+ document.documentElement.dataset.inputProfile=inputProfile;
+ const help=$('rnGestureHelp');
+ if(inputProfile==='touch'){
+  help.textContent='1 dedo mueve · 2 dedos amplían, giran e inclinan';
+  canvas.setAttribute('aria-label','Mapa 3D. Desplazá con un dedo; dos dedos hacen zoom, rotan e inclinan. Doble toque y arrastre vertical para zoom.');
+ }else if(inputProfile==='hybrid'){
+  help.textContent='Pantalla táctil o trackpad · pellizcar amplía · girar rota · Mayúsculas + desplazar inclina';
+  canvas.setAttribute('aria-label','Mapa 3D compatible con pantalla táctil, trackpad y mouse. Pellizcá para ampliar, girá dos dedos para rotar y usá Mayúsculas más desplazamiento para inclinar.');
+ }else{
+  help.textContent='Trackpad/mouse · pellizcar amplía · girar rota · Mayúsculas + desplazar inclina';
+  canvas.setAttribute('aria-label','Mapa 3D para trackpad y mouse. Pellizcá para ampliar, girá dos dedos para rotar y usá Mayúsculas más desplazamiento para inclinar.');
+ }
+}
+applyInputProfile();
+for(const query of [coarseInputQuery,fineInputQuery])
+ query.addEventListener?.('change',applyInputProfile);
 mapGestureViewport.addEventListener('touchstart',e=>{
  for(const touch of e.changedTouches)mapTouchIdentifiers.add(touch.identifier);
 },{passive:true});
@@ -1450,15 +1478,54 @@ document.addEventListener('touchmove',e=>{
     [...e.touches].every(t=>mapTouchIdentifiers.has(t.identifier)))
   e.preventDefault();
 },{passive:false,capture:true});
-for(const kind of ['gesturestart','gesturechange','gestureend']){
- document.addEventListener(kind,e=>{
-  const insideMap=mapGestureViewport.contains(e.target);
-  if(e.cancelable&&(insideMap||mapTouchIdentifiers.size>=2))
-   e.preventDefault();
- },{passive:false,capture:true});
-}
 const pointers=new Map();
 let gesture=null,lastTap=null;
+let safariTrackpadGesture=null;
+function safariGesturePoint(e){
+ const r=canvas.getBoundingClientRect();
+ return [Number.isFinite(e.clientX)&&e.clientX?r.left+clamp(e.clientX-r.left,0,r.width):r.left+r.width/2,
+  Number.isFinite(e.clientY)&&e.clientY?r.top+clamp(e.clientY-r.top,0,r.height):r.top+r.height/2];
+}
+function handleSafariTrackpadGesture(e){
+ const insideMap=mapGestureViewport.contains(e.target);
+ if(!insideMap&&!safariTrackpadGesture&&mapTouchIdentifiers.size<2)return;
+ if(e.cancelable)e.preventDefault();
+ // iPhone/iPad also emit WebKit GestureEvents. Their real contacts are
+ // already handled by Pointer Events; this branch is only for a Mac trackpad,
+ // which supplies no touch identifiers or pointer contacts to the web page.
+ if(e.type==='gesturestart'){
+  if(!ready||mapTouchIdentifiers.size||pointers.size)return;
+  cameraFlight=null;stopAuto();canvas.focus();matrices();
+  const [x,y]=safariGesturePoint(e);
+  safariTrackpadGesture={distance,target:target.slice(),orientation:q.slice(),
+   yaw:orbitYaw,pitch:orbitPitch,roll:orbitRoll,x,y,
+   anchor:worldPointAt(x,y,target[1])};
+  canvas.classList.add('dragging');dirty=true;
+  return;
+ }
+ if(e.type==='gestureend'){
+  safariTrackpadGesture=null;
+  if(!pointers.size)canvas.classList.remove('dragging');
+  dirty=true;return;
+ }
+ if(e.type!=='gesturechange'||!safariTrackpadGesture)return;
+ const start=safariTrackpadGesture;
+ const scale=clamp(Number.isFinite(e.scale)?e.scale:1,.08,12);
+ const angle=(Number.isFinite(e.rotation)?e.rotation:0)*Math.PI/180;
+ distance=zoomBounds(start.distance/scale);
+ target=start.target.slice();
+ if(panMode){
+  orbitYaw=start.yaw+angle;orbitPitch=start.pitch;orbitRoll=0;
+  updateCameraRotation();
+ }else{
+  q=norm(qm(start.orientation,quat([0,0,1],angle)));
+  orbitYaw=start.yaw;orbitPitch=start.pitch;orbitRoll=wrapAngle(start.roll+angle);
+ }
+ anchorCamera(start.x,start.y,start.target,start.anchor);
+ $('plan').setAttribute('aria-pressed','false');dirty=true;
+}
+for(const kind of ['gesturestart','gesturechange','gestureend'])
+ document.addEventListener(kind,handleSafariTrackpadGesture,{passive:false,capture:true});
 function beginGesture(){
  const p=[...pointers.values()];
  const center=p.length>=2?[(p[0].x+p[1].x)/2,(p[0].y+p[1].y)/2]:
@@ -1614,6 +1681,9 @@ canvas.addEventListener('contextmenu',e=>e.preventDefault());
 canvas.addEventListener('wheel',e=>{
  cameraFlight=null;
  if(!ready)return;e.preventDefault();stopAuto();
+ // WebKit may accompany its native GestureEvent with a ctrl-wheel event.
+ // Avoid applying the same MacBook pinch twice.
+ if(safariTrackpadGesture&&e.ctrlKey)return;
  if(e.altKey&&!panMode){
   orbitRoll=wrapAngle(orbitRoll+e.deltaY*.002);
   rotateCameraLocal([0,0,1],e.deltaY*.002);
@@ -2327,7 +2397,7 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
   wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),wayfindingOpen,wayfindingCompact,
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
   referenceFloor:visitorFloorReference(),
-  searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'google-earth-touch-v1',earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
+  searchPlacement:$('rnMapSearch')?.closest('.topbar')?'topbar':'map-top',headerMallName:$('mallHeaderName').textContent,zoomMin:MIN_ZOOM_DISTANCE,zoomMax:MAX_ZOOM_DISTANCE,nativeGestureDirections:true,gestureMode:panMode?'map-pan':'orbit-3d',gestureProfile:'adaptive-google-earth-v2',inputProfile,safariTrackpadGestures:true,earth2D,compassReference:'photo-top-only-not-calibrated-true-north',trackball360:!panMode,
  cameraQuaternion:q.slice(),cameraUp:qr(q,[0,1,0]),
  orbitYaw,orbitPitch,orbitRoll,rotationAxes:panMode?2:3}),floors,project:(f,p)=>{let floor=floors.find(x=>x.id===f);return floor?screen(pos(p,floor.y+2)):null;},viewportWidth:()=>canvas.clientWidth,pinWorld:(floorId,x,y)=>{const f=floors.find(f=>f.id===floorId);return f?pos([x,y],f.y):null;},projectWorld:p=>screen(p),setFloor,select,editFloorHeight,
   showSearchMatches:applySearchFloors,clearSearchMatches:clearSearchFloors,

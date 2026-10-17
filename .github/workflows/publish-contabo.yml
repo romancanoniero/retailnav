@@ -75,6 +75,8 @@ jobs:
       - run: node scripts/test-source-map-comparison.mjs
       - run: BROWSER=webkit node scripts/test-source-map-comparison.mjs
       - run: BROWSER=webkit node scripts/test-source-map-browser.mjs
+      - run: node scripts/test-desktop-gestures-browser.mjs
+      - run: BROWSER=webkit node scripts/test-desktop-gestures-browser.mjs
       - run: node scripts/test-wayfinding-browser.mjs
       - run: BROWSER=webkit node scripts/test-wayfinding-browser.mjs
       - run: node scripts/test-positioning-web-e2e.mjs chromium

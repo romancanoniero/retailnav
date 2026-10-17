@@ -25,6 +25,27 @@ jobs:
       - run: node --check admin-api/server.mjs
       - run: node --test admin-api/server.test.mjs
       - run: node --test backend/server.test.mjs
+      - name: Verify standalone admin subfolder package
+        run: |
+          python3 scripts/build-admin-web.py --out /tmp/retailnav-admin-sites
+          test -s /tmp/retailnav-admin-sites/map-studio/index.html
+          test -s /tmp/retailnav-admin-sites/control/index.html
+          test -s /tmp/retailnav-admin-sites/mall-manager/index.html
+          test -s /tmp/retailnav-admin-sites/merchant/index.html
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/retailnav-admin-sites/demo')
+          malls=json.loads((root/'malls.json').read_text())['items']
+          assert any(x['id']=='del-parque-shopping' and len(x['floors'])==3 for x in malls)
+          for mall in malls:
+              assert mall['navigable'] is False
+              for floor in mall['floors']:
+                  source=json.loads((root/'malls'/mall['id']/(floor['id']+'.json')).read_text())
+                  assert source['imageSize']==floor['imageSize']
+                  assert len(source['features'])>0
+          print('ADMIN_ISOLATED_BUILD_PASS',len(malls))
+          PY
       - name: Check frontend embedded JS syntax
         run: |
           python3 - <<'PY'

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createServer} from 'node:http';
 import {resolve,extname,sep} from 'node:path';
-import {chromium} from 'playwright';
+import {chromium,webkit} from 'playwright';
 
 const root=resolve('public');
 const types={'.html':'text/html;charset=utf-8','.json':'application/json;charset=utf-8',
@@ -21,8 +21,9 @@ const server=createServer((req,res)=>{
 });
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const base='http://127.0.0.1:'+server.address().port+'/retailnav/index.html?mall=alto-palermo';
-const browser=await chromium.launch({headless:true,
- args:['--use-gl=angle','--use-angle=swiftshader']});
+const engine=process.env.RETAILNAV_BROWSER==='webkit'?webkit:chromium;
+const browser=await engine.launch({headless:true,
+ args:engine===chromium?['--use-gl=angle','--use-angle=swiftshader']:[]});
 try{
  const page=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});
  const errors=[];
@@ -30,15 +31,24 @@ try{
  await page.goto(base,{waitUntil:'domcontentloaded',timeout:50000});
  await page.waitForFunction(()=>window.__RETAILNAV__?.getState()?.ready===true,
   null,{timeout:85000});
- const audit=await page.evaluate(()=>({
+ const audit=await page.evaluate(()=>{
+  const allFloors=window.__RETAILNAV__.floors;
+  const frontVertices=allFloors.flatMap(f=>Array.from(f.roofText?.frontNames||[]));
+  const frontY=frontVertices.filter((_,index)=>index%10===1);
+  let minFrontY=Infinity,maxFrontY=-Infinity;
+  for(const y of frontY){minFrontY=Math.min(minFrontY,y);maxFrontY=Math.max(maxFrontY,y);}
+  return {
   mall:window.RETAILNAV_ACTIVE_MALL.id,
-  floors:window.__RETAILNAV__.floors.map(f=>({id:f.id,total:f.features.length,
+  floors:allFloors.map(f=>({id:f.id,total:f.features.length,
    commercial:f.features.filter(feature=>feature.k==='unit').length,
    triangles:f.features.reduce((sum,feature)=>sum+feature.t.length/3,0),
    ids:f.features.map(feature=>feature.id)})),
   units:window.RetailNavUnits.getState(),
-  viewer:window.__RETAILNAV__.getState()
- }));
+  viewer:window.__RETAILNAV__.getState(),
+  frontGeometry:{vertices:frontVertices.length/10,
+   verticalSpan:frontY.length?maxFrontY-minFrontY:0}
+  };
+ });
  assert.equal(audit.mall,'alto-palermo');
  assert.deepEqual(audit.floors.map(f=>[f.id,f.total,f.commercial]),[
   ['SS',137,4],['PB',73,72],['EP',14,12],['P1',47,46],['P2',44,43],['P3',16,15]
@@ -55,11 +65,43 @@ try{
  assert.equal(audit.viewer.roofTextSummary.textGeometry,'vector-outline-extruded');
  assert.equal(audit.viewer.roofTextSummary.rasterGlyphLabels,0);
  assert.equal(audit.viewer.roofTextSummary.vectorGlyphLabels,
-  audit.viewer.roofTextSummary.codeLabels+audit.viewer.roofTextSummary.knownNameLabels);
+  audit.viewer.roofTextSummary.codeLabels+audit.viewer.roofTextSummary.knownNameLabels+
+  audit.viewer.roofTextSummary.frontNameLabels);
  assert.equal(audit.viewer.roofTextSummary.vectorFontSourceSha256,
   '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63');
  assert.equal(audit.viewer.roofTextSummary.vectorCurveSegments,24);
- assert.ok(audit.viewer.roofTextSummary.knownNameLabels>0);
+ assert.equal(audit.viewer.roofTextSummary.knownNameLabels,55);
+ assert.equal(audit.viewer.roofTextSummary.frontNameLabels,55);
+ assert.equal(audit.viewer.roofTextSummary.roofImageNameSuppressions,0);
+ assert.ok(audit.viewer.roofTextSummary.roomLabels.every(label=>
+  !label.name||(label.nameRaised==='vector'&&label.frontNameRaised==='vector')));
+ assert.ok(audit.frontGeometry.vertices>1000);
+ assert.ok(audit.frontGeometry.verticalSpan>.1,'facade lettering must be vertical geometry');
+ const roofImagePolicy=await page.evaluate(()=>{
+  const mall=window.RETAILNAV_ACTIVE_MALL;
+  const unit=mall.units.find(item=>item.polygonId&&item.name&&item.facade);
+  const sourceFloor=window.__RETAILNAV__.floors.find(f=>f.id===unit.floor);
+  const feature=sourceFloor.features.find(f=>f.id===unit.polygonId);
+  const floor={id:sourceFloor.id,features:[structuredClone(feature)]};
+  const textured={...structuredClone(unit),roofImageURL:'roof-textures/test.webp'};
+  const summary=window.RetailNavRoofText.prepare([floor],[textured],[],mall.origin,mall.scale);
+  return {
+   logoIsRoof:window.RetailNavRoofText.hasRoofImage({logoURL:'brand.png'}),
+   explicitIsRoof:window.RetailNavRoofText.hasRoofImage(textured),
+   nestedIsRoof:window.RetailNavRoofText.hasRoofImage({roof:{textureURL:'roof.webp'}}),
+   names:summary.knownNameLabels,frontNames:summary.frontNameLabels,
+   suppressed:summary.roofImageNameSuppressions,
+   roofVertices:floor.roofText.names.length,
+   frontVertices:floor.roofText.frontNames.length
+  };
+ });
+ assert.equal(roofImagePolicy.logoIsRoof,false,'card logo must not suppress roof lettering');
+ assert.equal(roofImagePolicy.explicitIsRoof,true);
+ assert.equal(roofImagePolicy.nestedIsRoof,true);
+ assert.deepEqual([roofImagePolicy.names,roofImagePolicy.frontNames,roofImagePolicy.suppressed],
+  [0,1,1]);
+ assert.equal(roofImagePolicy.roofVertices,0);
+ assert.ok(roofImagePolicy.frontVertices>0,'roof imagery must preserve the smaller facade name');
  assert.deepEqual(audit.viewer.errors,[]);
  await page.waitForFunction(()=>window.RetailNavUnits.getRoofState()?.raisedVectorTriangles>0);
  const raisedSign=await page.evaluate(()=>window.RetailNavUnits.getRoofState());
@@ -110,6 +152,14 @@ try{
  assert.equal(pb.commercial,72);
  assert.ok(pb.canvas.width>900&&pb.canvas.height>450);
  await page.screenshot({path:'/tmp/retailnav-alto-palermo-vectorized.png',fullPage:true});
+ const starbucks=await page.evaluate(()=>window.RetailNavUnits.getUnits()
+  .find(unit=>unit.storeId==='alto-palermo:EP:L04'));
+ assert.ok(starbucks?.polygonId);
+ const focused=await page.evaluate(unit=>window.__RETAILNAV__.focusCatalogStore(
+  unit.storeId,unit.floor,[unit.x,unit.y],unit.polygonId),starbucks);
+ assert.equal(focused.located,true);
+ await page.waitForFunction(()=>!window.__RETAILNAV__.getState().cameraFlying);
+ await page.screenshot({path:'/tmp/retailnav-alto-palermo-roof-and-facade-names.png',fullPage:true});
  assert.deepEqual(errors,[]);
  console.log('PASS Alto Palermo browser: 6 floors, 331 official SVG regions and 192 commercial contours rendered');
 }finally{

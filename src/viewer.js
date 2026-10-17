@@ -281,7 +281,7 @@ function buffer(arr){let b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl
  floor.gpu={faces:buffer(faces),edges:buffer(edges),points:buffer(points),context:buffer(contextEdges)};
  // Raised letters share world-space coordinates with the roof's geometry.
  floor.roofGpu={};
- for(const key of ['codes','names','services']){
+ for(const key of ['codes','names','frontNames','services']){
   const verts=floor.roofText?.[key];
   floor.roofGpu[key]=verts?.length?buffer(verts):null;
  }
@@ -1027,7 +1027,8 @@ function drawRoofTextWebGL(){
   if(referenceContext(floor))continue;
   gl.uniform1f(loc.uY,floor.y);
   const groups=floor.roofGpu||{};
-  for(const key of ['services',...(showCode?['codes']:[]),...(showName?['names']:[])]){
+  for(const key of ['services',...(showCode?['codes']:[]),
+    ...(showName?['names','frontNames']:[])]){
    if(!groups[key])continue;
    bind(groups[key]);gl.drawArrays(gl.TRIANGLES,0,groups[key].n);
   }
@@ -1041,7 +1042,7 @@ function drawRoofTextCanvas(){
  const ctx=ctx2d,limit=active==='ALL'?24000:90000;
  for(const floor of visible()){
   if(referenceContext(floor))continue;
-  for(const key of ['services','codes',...(active==='ALL'?[]:['names'])]){
+  for(const key of ['services','codes',...(active==='ALL'?[]:['names','frontNames'])]){
    const vertices=floor.roofText?.[key];
    if(!vertices)continue;
    const step=30,count=Math.min(vertices.length,limit);
@@ -2323,7 +2324,7 @@ function recolorRoofText(){
  const titles=mapRgb('mapNameText',[1,.88,.56]);
  const edge=[.20,.32,.39];
  for(const floor of floors){
-  for(const [kind,target] of [['codes',ink],['names',titles]]){
+  for(const [kind,target] of [['codes',ink],['names',titles],['frontNames',titles]]){
    const verts=floor.roofText?.[kind];
    if(!verts)continue;
    for(let i=0;i<verts.length;i+=10){

@@ -760,6 +760,13 @@ Tras finalizar cada PR/épica, agregar un registro nuevo en esta sección:
 - **E2E nueva:** `scripts/test-loader-brand-first-paint.mjs`, HTML entregado por tramos con 2,4 segundos de retraso antes del visor, logo visible en Chromium y Safari WebKit cuando el catálogo principal aún no se analizó; recuperación sin logo si falla la imagen y pruebas de las tres plantas. Flujo documentado en `docs/MAP-CACHE-VERSIONS.md`.
 - **Próxima acción:** comprobar visualmente en dispositivos de visitantes reales; futuras altas de logos deben alimentar este mismo manifiesto temprano. La API persistente de logos no se alteró.
 
+### 2026-10-17 — BRAND-ROOF-02 — nombre vectorial en techo y fachada
+
+- **Incidente:** Alto Palermo ya construía letras desde Inter vectorial, pero el nombre compartía una franja estrecha con el código, se reducía como una única línea y no existía un rótulo unido a la fachada. La validación sólo exigía que hubiera algún nombre, por lo que aceptó una presentación técnicamente vectorial pero visualmente insuficiente.
+- **Corrección:** los 55 locales con relación inequívoca colocan el nombre como malla principal sobre el techo, con distribución automática de hasta dos líneas, y una copia menor extruida verticalmente sobre el segmento de fachada importado. El código conserva su malla pero ocupa una banda secundaria.
+- **Imágenes de techo:** únicamente campos explícitos de imagen/textura de techo suprimen el nombre superior. `logoURL` sigue siendo una imagen de identidad para fichas y jamás activa esa supresión. El nombre de fachada permanece cuando el techo lleva imagen.
+- **Regresión obligatoria:** exigir 55 nombres de techo, 55 nombres de fachada y cero supresiones en el catálogo actual; comprobar que toda malla usa la fuente vectorial archivada, que la fachada tiene altura real y que un caso sintético con `roofImageURL` elimina sólo el nombre superior.
+
 ### 2026-10-15 — BRAND-UX-02 — tipografías por shopping, identidad de carga y contraste
 
 - **Estado:** implementado, fusionado y desplegado en Contabo (PR #36, commit `e770f03e093acc6309652d7925668fc8e6948e5b`, publicación CI `38690684382` concluida correctamente; suites de paleta, caché, nueve plantas de New World City e iPhone superadas).

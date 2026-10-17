@@ -78,6 +78,18 @@ agrandar bitmaps o usar una textura plana como si fuera texto 3D vectorial. Si
 la fuente propietaria no puede redistribuirse, se usa otra fuente licenciada que
 la fuente oficial también emplee y se documenta la limitación.
 
+Cada local vinculado debe llevar su **nombre comercial como malla tipográfica
+vectorial extruida sobre el techo** y, cuando exista un segmento de fachada,
+una segunda versión menor, también vectorial y extruida, sobre ese frente. El
+nombre es el rótulo principal y puede dividirse en líneas para conservar tamaño;
+el código de local queda subordinado. El rótulo superior sólo se omite cuando
+el registro declara una imagen o textura de techo explícita (`roofImageURL`,
+`roofTextureURL` o el equivalente dentro de `roof`). `logoURL` identifica la
+marca para fichas y resultados: nunca se interpreta como imagen de techo y no
+puede ocultar el nombre. Una imagen de techo conserva el rótulo menor de
+fachada. La prueba del mall debe contar nombres de techo, nombres de frente y
+supresiones por imagen, y rechazar cualquier local vinculado que pierda ambos.
+
 ### Lista mínima antes de publicar
 
 - fuente, URL, fecha, hash, dimensiones y transformación preservados;
@@ -92,6 +104,7 @@ la fuente oficial también emplee y se documenta la limitación.
 - descripción, contacto, web/redes, horarios, servicios y accesibilidad preservados cuando la fuente los publique;
 - informe `published/imported/missing/invalid` aprobado y regresión contra pérdida de datos;
 - rótulos 3D verificados como contornos vectoriales extruidos, sin píxeles;
+- nombre vectorial principal en cada techo vinculado sin imagen de techo, nombre menor en cada fachada disponible y supresiones explícitas auditadas;
 - mapa abierto en navegador real en vistas 2D, 3D, planta individual y todas;
 - prueba mall-específica y barrera de despliegue contra regresiones;
 - limitaciones, validaciones y despliegue registrados en el plan maestro.

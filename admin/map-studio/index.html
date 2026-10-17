@@ -1,0 +1,78 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RetailNav Map Studio</title><style>
+:root{font:15px system-ui,sans-serif;color:#e8edf4;background:#111924}*{box-sizing:border-box}body{margin:0}header,nav,aside,main{padding:14px}header{display:flex;align-items:center;justify-content:space-between;background:#1b2736;border-bottom:1px solid #3c4a5b}h1{font-size:19px;margin:0}h2{font-size:16px}label{display:block;margin:8px 0}input,select,textarea,button{font:inherit;color:inherit;background:#243446;border:1px solid #53677f;padding:8px;border-radius:6px}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button:focus-visible,input:focus-visible{outline:3px solid #50b9f0}button[aria-pressed=true]{background:#24629a}.layout{display:grid;grid-template-columns:270px minmax(0,1fr) 285px;min-height:calc(100vh - 65px)}aside{border-right:1px solid #374c63}aside:last-child{border-left:1px solid #374c63;border-right:0}nav{display:flex;gap:8px;flex-wrap:wrap}#canvas{width:100%;height:calc(100vh - 220px);min-height:460px;background:#26313b;touch-action:none;border:1px solid #435164}#drawing{background:#101926;border:1px solid #344657;padding:12px}small,.help{color:#bbcadb}#message{padding:10px;min-height:40px}#original{opacity:.55;pointer-events:none}#originalFeature{fill:rgba(110,180,226,.15);stroke:#6dabc9;stroke-width:2;pointer-events:none}.vector{fill:rgba(50,175,230,.18);stroke:#00d9fb;stroke-width:3;cursor:pointer}.vector.selected{stroke:#ffc857;fill:rgba(255,200,87,.25)}.draft{stroke-dasharray:9 5;fill:rgba(250,200,45,.14);stroke:#ffc857;stroke-width:2;pointer-events:none}#login{max-width:480px;margin:50px auto;padding:24px;border:1px solid #364e69}#login input{width:100%}fieldset{border:1px solid #475b75}.hidden{display:none!important}#editor input,#editor select,#editor textarea{width:100%}#editor textarea{min-height:80px}#errors{white-space:pre-wrap;max-height:180px;overflow:auto}a{color:#7accfa}@media(max-width:900px){.layout{grid-template-columns:1fr}aside{border:0;border-bottom:1px solid #374c63}#canvas{height:55vh;min-height:330px}nav{padding:5px}}</style></head>
+<body><header><h1>RetailNav · Map Studio</h1><span id="who">Acceso administrativo</span></header>
+<section id="login"><h2>Iniciar sesión</h2><form id="loginForm"><label>Correo<input id="email" type="email" autocomplete="username" required></label><label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label><label>Código de autenticador<input id="totp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label><button>Ingresar</button></form><p class="help">Acceso exclusivo para personal autorizado. No se utilizan las cuentas anónimas de visitantes.</p></section>
+<div id="workspace" class="layout hidden"><aside><h2>Centro comercial</h2><label>Shopping<select id="mall"></select></label><label>Planta<select id="floor"></select></label><button id="open">Abrir mapa</button><h2>Revisión</h2><p id="revision"></p><button id="new">Nuevo borrador</button><button id="save">Guardar borrador</button><button id="validate">Validar</button><button id="submit">Enviar a revisión</button><button id="approve">Aprobar</button><button id="publish">Publicar overlay</button><button id="rollback">Restaurar publicación</button><p class="help">El overlay publicado sigue separado del visor hasta completar la validación y compilación de geometría.</p><button id="logout">Salir</button></aside>
+<main><nav id="tools"><button data-mode="select" aria-pressed="true">Seleccionar</button><button data-mode="draw">Dibujar local</button><button data-mode="move">Mover vértice</button><button id="undo">Deshacer</button><button id="redo">Rehacer</button><label><input type="checkbox" id="showOriginal" checked> Ver plano original</label><label>Opacidad <input id="opacity" type="range" min="0" max="100" value="55"></label></nav><div id="drawing"><svg id="canvas" viewBox="0 0 2048 1529" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plano 2D con geometrías editables"><image id="original" x="0" y="0" width="2048" height="1529"/><g id="base"></g><g id="features"></g><polyline id="temp" class="draft" points=""/></svg></div><p class="help">Dibujar: tocar para añadir vértices y doble clic para cerrar. Mover vértice: seleccionar polígono y arrastrar su vértice. Los polígonos originales se muestran sólo como referencia y nunca se sobrescriben.</p><p id="message" role="status"></p><pre id="errors"></pre></main>
+<aside id="editor"><h2>Elemento seleccionado</h2><p id="selected">Ninguno</p><label>Identificador físico<input id="featureId" maxlength="90"></label><label>Tipo<select id="kind"><option value="unit">Local</option><option value="anchor">Ancla</option><option value="corridor">Pasillo</option><option value="poi">Servicio</option></select></label><label>Fuente<select id="source"><option value="manual">Dibujo manual</option><option value="survey">Relevamiento</option><option value="official">Fuente oficial</option></select></label><label>Evidencia y observaciones<textarea id="evidence" placeholder="Indicar de qué foto, plano o levantamiento procede"></textarea></label><button id="apply">Aplicar atributos</button><button id="remove">Eliminar polígono del borrador</button><h2>Conexiones verticales</h2><p class="help">Ascensores y escaleras guardan puntos de desembarco diferentes en cada piso.</p><button id="addConnector">Agregar conexión</button><label>Conexiones JSON (borrador)<textarea id="connectors" spellcheck="false"></textarea></label><label>Alineaciones JSON<textarea id="transforms" spellcheck="false"></textarea></label><label>Ocupaciones JSON<textarea id="occupancies" spellcheck="false"></textarea></label></aside></div>
+<script>
+(()=>{'use strict';
+const API=new URLSearchParams(location.search).get('api')||new URL('../admin-api/',location.href).pathname;
+const $=id=>document.getElementById(id);let csrf='',mallData=null,doc=null,rev=null,selected=null,mode='select',floor='',base=[],
+ history=[],future=[],pending=[],dragging=-1,mall='';
+const msg=(s,error=false)=>{$('message').textContent=s;$('message').style.color=error?'#ff9f9f':'#b8e9cf'};
+async function call(endpoint,{method='GET',body,match}={}){
+ const headers={};if(method!=='GET'){headers['Content-Type']='application/json';headers['X-Retailnav-Csrf']=csrf;}
+ if(match!=null)headers['If-Match']='"'+match+'"';
+ const res=await fetch(API+endpoint,{method,headers,body:body===undefined?undefined:JSON.stringify(body),credentials:'same-origin'});
+ const v=await res.json();if(!res.ok)throw Error(v.error||v.errors?.join('; ')||'HTTP '+res.status);return v;
+}
+const copy=x=>JSON.parse(JSON.stringify(x));
+function checkpoint(){history.push(copy(doc));if(history.length>60)history.shift();future=[]}
+function updateJson(){if(!doc)return;$('connectors').value=JSON.stringify(doc.connectors,null,2);$('transforms').value=JSON.stringify(doc.transforms,null,2);$('occupancies').value=JSON.stringify(doc.occupancies,null,2)}
+function syncJson(){for(const [field,key] of [['connectors','connectors'],['transforms','transforms'],['occupancies','occupancies']]){
+ const parsed=JSON.parse($(field).value);if(!Array.isArray(parsed))throw Error(field+' debe ser una lista');doc[key]=parsed;}}
+function selectedFeature(){return doc?.features.find(f=>f.id===selected&&f.floor===floor)}
+function draw(){
+ $('base').replaceChildren();$('features').replaceChildren();
+ for(const b of base){if(b.vertices?.length<3)continue;const el=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+ el.setAttribute('points',b.vertices.map(p=>p.join(',')).join(' '));el.setAttribute('id','originalFeature');$('base').append(el)}
+ for(const f of doc?.features||[]){if(f.floor!==floor)continue;const el=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+ el.setAttribute('points',f.vertices.map(p=>p.join(',')).join(' '));el.setAttribute('class','vector'+(selected===f.id?' selected':''));
+ el.addEventListener('click',e=>{if(mode==='select'||mode==='move'){e.stopPropagation();selected=f.id;inspect();draw()}});$('features').append(el);}
+ const s=selectedFeature();if(s&&mode==='move')s.vertices.forEach((p,i)=>{
+ const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',8);
+ c.setAttribute('fill','#ffda66');c.style.cursor='grab';c.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();checkpoint();dragging=i;$('canvas').setPointerCapture(e.pointerId)});$('features').append(c)});
+ $('temp').setAttribute('points',pending.map(p=>p.join(',')).join(' '));
+}
+function inspect(){const f=selectedFeature();$('selected').textContent=f?f.id:'Ninguno';$('featureId').value=f?.id||'';$('kind').value=f?.kind||'unit';$('source').value=f?.source||'manual';$('evidence').value=f?.evidence||''}
+const point=e=>{const c=$('canvas');const p=c.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const m=c.getScreenCTM();if(!m)return null;const q=p.matrixTransform(m.inverse());return [+q.x.toFixed(2),+q.y.toFixed(2)]};
+$('canvas').addEventListener('click',e=>{if(mode!=='draw'||!doc)return;const p=point(e);if(p){pending.push(p);draw()}});
+$('canvas').addEventListener('dblclick',e=>{if(mode!=='draw'||pending.length<3)return;e.preventDefault();pending.pop();if(pending.length<3){msg('Se necesitan al menos tres puntos',true);return}
+ checkpoint();const id='new-'+crypto.randomUUID();doc.features.push({id,floor,kind:'unit',source:'manual',evidence:'Pendiente de documentación',vertices:copy(pending)});
+ selected=id;pending=[];inspect();draw();msg('Local dibujado. Completar evidencia y guardar borrador.')});
+$('canvas').addEventListener('pointermove',e=>{if(dragging<0)return;const p=point(e),f=selectedFeature();if(f&&p){f.vertices[dragging]=p;draw()}});
+$('canvas').addEventListener('pointerup',()=>dragging=-1);$('canvas').addEventListener('pointercancel',()=>dragging=-1);
+$('tools').querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;pending=[];for(const x of $('tools').querySelectorAll('[data-mode]'))x.setAttribute('aria-pressed',String(x===b));draw()}));
+$('undo').onclick=()=>{if(!history.length)return;future.push(copy(doc));doc=history.pop();selected=null;inspect();updateJson();draw()};
+$('redo').onclick=()=>{if(!future.length)return;history.push(copy(doc));doc=future.pop();selected=null;inspect();updateJson();draw()};
+$('apply').onclick=()=>{const f=selectedFeature();if(!f)return;const next=$('featureId').value.trim();
+ if(!next||doc.features.some(x=>x!==f&&x.id===next))return msg('ID vacío o duplicado',true);
+ checkpoint();f.id=next;f.kind=$('kind').value;f.source=$('source').value;f.evidence=$('evidence').value;selected=f.id;draw();msg('Atributos actualizados en memoria')};
+$('remove').onclick=()=>{const f=selectedFeature();if(!f)return;checkpoint();doc.features=doc.features.filter(x=>x!==f);selected=null;inspect();draw()};
+$('addConnector').onclick=()=>{checkpoint();doc.connectors.push({id:'connector-'+crypto.randomUUID(),kind:'lift',verification:'unverified',evidence:'Pendiente de identificar en planos originales',landings:[{floor,x:0,y:0},{floor:mallData.floors.find(f=>f.id!==floor)?.id||floor,x:0,y:0}]});updateJson();msg('Completar puntos reales de desembarco en cada planta antes de validar')};
+$('showOriginal').onchange=()=>{$('original').style.display=$('showOriginal').checked?'':'none'};
+$('opacity').oninput=()=>{$('original').style.opacity=Number($('opacity').value)/100};
+$('loginForm').onsubmit=async e=>{e.preventDefault();try{const d=await call('v1/auth/login',{method:'POST',body:{email:$('email').value,password:$('password').value,totp:$('totp').value}});csrf=d.csrf;$('who').textContent=d.user.email;await init()}catch(e){msg(e.message,true)}};
+async function init(){$('login').classList.add('hidden');$('workspace').classList.remove('hidden');const d=await call('v1/malls');$('mall').replaceChildren();
+ for(const x of d.items){const o=new Option(x.name,x.id);$('mall').add(o)}
+ if(d.items.length)await openMall();else msg('No hay shoppings asignados a esta cuenta. El titular debe crear un tenant y asignarlo.',true);}
+async function openMall(){mall=$('mall').value;mallData=await call('v1/malls/'+mall+'/map');
+ $('floor').replaceChildren();for(const f of mallData.floors)$('floor').add(new Option(f.name,f.id));rev=null;
+ const drafts=mallData.revisions.filter(r=>r.status==='draft'||r.status==='in_review'||r.status==='approved');
+ if(drafts.length){rev=await call('v1/malls/'+mall+'/revisions/'+drafts.at(-1).id);doc=copy(rev.document)}else doc={features:[],connectors:[],transforms:[],occupancies:[]};
+ $('revision').textContent=rev?rev.status+' · v'+rev.version:'Sin borrador';updateJson();await openFloor();}
+async function openFloor(){floor=$('floor').value;const f=mallData.floors.find(x=>x.id===floor);
+ $('canvas').setAttribute('viewBox','0 0 '+f.imageSize.join(' '));$('original').setAttribute('width',f.imageSize[0]);$('original').setAttribute('height',f.imageSize[1]);
+ $('original').setAttribute('href',new URL('../'+f.referenceUrl,location.href).href);
+ try{base=(await call('v1/malls/'+mall+'/source/'+floor)).features}catch{base=[]}
+ selected=null;pending=[];inspect();draw();msg('Fuente original cargada (sólo lectura). '+base.length+' regiones de referencia.');}
+$('open').onclick=openMall;$('floor').onchange=openFloor;$('new').onclick=async()=>{try{rev=await call('v1/malls/'+mall+'/revisions',{method:'POST',body:{}});doc=copy(rev.document);$('revision').textContent='draft · v1';history=[];future=[];updateJson();draw();msg('Borrador creado')}catch(e){msg(e.message,true)}};
+$('save').onclick=async()=>{try{if(!rev)throw Error('Crear borrador primero');syncJson();rev=await call('v1/malls/'+mall+'/revisions/'+rev.id,{method:'PUT',match:rev.version,body:doc});doc=copy(rev.document);$('revision').textContent=rev.status+' · v'+rev.version;msg('Cambios guardados')}catch(e){msg(e.message,true)}};
+$('validate').onclick=async()=>{try{if(!rev)throw Error('No hay revisión');const d=await call('v1/malls/'+mall+'/revisions/'+rev.id+'/validate',{method:'POST',body:{}});$('errors').textContent=d.issues.join('\n');msg(d.ok?'Validación estructural correcta (no certifica navegabilidad)':'Errores de geometría detectados',!d.ok)}catch(e){msg(e.message,true)}};
+for(const action of ['submit','approve','publish'])$(action).onclick=async()=>{try{if(!rev)throw Error('Sin revisión');const d=await call('v1/malls/'+mall+'/revisions/'+rev.id+'/'+action,{method:'POST',body:{}});rev=d;msg(action==='publish'?'Overlay administrativo publicado; NO se actualiza mapa de visitantes':action+' completado');await openMall()}catch(e){msg(e.message,true)}};
+$('rollback').onclick=async()=>{try{const d=await call('v1/malls/'+mall+'/revisions');const options=d.items.filter(r=>r.status==='published');const id=prompt('ID de la revisión anterior publicada:\n'+options.map(x=>x.id).join('\n'));if(!id)return;await call('v1/malls/'+mall+'/rollback',{method:'POST',body:{revisionId:id}});msg('Overlay administrativo restaurado')}catch(e){msg(e.message,true)}};
+$('logout').onclick=async()=>{await call('v1/auth/logout',{method:'POST',body:{}});location.reload()};
+call('v1/auth/me').then(d=>{csrf=d.csrf;$('who').textContent=d.user.email;return init()}).catch(()=>{});
+})();
+</script></body></html>

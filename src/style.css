@@ -1149,6 +1149,14 @@ body.rnThemeEnabled .rnThemeEditor #rnTypographyPreset{
  box-shadow:0 0 0 5px #efb53545,0 3px 14px #0009;white-space:nowrap}
 .rnSearchMarker[hidden]{display:none!important}
 .rnSearchMarker:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.rnVisitPlanMarker{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;
+ width:36px;min-width:36px;height:36px;padding:0;border:3px solid #fff;border-radius:50%;
+ background:var(--rn-theme-accent,#65e6e0);color:var(--rn-theme-accent-text,#08232b);
+ font-size:14px;font-weight:900;line-height:1;box-shadow:0 5px 16px #06152165,
+  0 0 0 5px color-mix(in srgb,var(--rn-theme-accent,#65e6e0) 36%,transparent);z-index:12}
+body.rnThemeEnabled .rnSearchMarkers .rnVisitPlanMarker{background:var(--rn-theme-accent,#65e6e0);
+ color:var(--rn-theme-accent-text,#08232b);border-color:#fff}
+.rnVisitPlanMarker[hidden]{display:none!important}.rnVisitPlanMarker:focus-visible{outline:3px solid #111;outline-offset:3px}
 .rnFloorReference{display:inline-block;max-width:165px;font-size:10px;
  padding:5px 8px;border:1px solid var(--rn-theme-border,#607182);
  border-radius:9px;color:var(--rn-theme-text,#e1eef9);

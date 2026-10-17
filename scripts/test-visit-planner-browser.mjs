@@ -149,6 +149,24 @@ try{
  await waitForVisitHighlights(expectedStoreVectors.size);
  assert.deepEqual(new Set(await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors)),
   expectedStoreVectors,'map highlights restore with the locally persisted plan');
+ const looseStore=await page.evaluate(()=>{
+  const unit=window.RetailNavUnits.getUnits().find(candidate=>candidate.name==='Adidas'&&
+   !window.RetailNavUnits.getMapBindings(candidate).length&&Number.isFinite(candidate.x)&&
+   Number.isFinite(candidate.y));
+  return unit&&{id:unit.storeId,name:unit.name,floor:unit.floor};
+ });
+ assert.ok(looseStore,'needs the published Adidas marker without an invented polygon');
+ await page.evaluate(store=>window.RetailNavVisitPlanner.toggleStore(store.id,store.floor),looseStore);
+ await page.waitForFunction(storeId=>{
+  const state=window.__RETAILNAV__.getState();
+  return window.RetailNavVisitPlanner.getState().stops.length===3&&state.visitPlanMarkerCount===1&&
+   state.visitPlanMarkers[0]?.storeId===storeId;
+ },looseStore.id);
+ const looseMarker=page.locator(`.rnVisitPlanMarker[data-store-id="${looseStore.id}"]`);
+ await looseMarker.waitFor({state:'visible'});
+ assert.equal(await looseMarker.textContent(),'3','marker number matches the saved visit order');
+ assert.equal(await looseMarker.evaluate(node=>getComputedStyle(node).backgroundColor),'rgb(187, 215, 74)',
+  'a directory-only stop uses the same green as the visit counter without inventing a polygon');
  await page.evaluate(()=>{
   const units=window.RetailNavUnits.getUnits(),view=window.__RETAILNAV__;
   const feature=view.floors.flatMap(floor=>floor.features).find(candidate=>candidate.k==='unit'&&
@@ -158,7 +176,7 @@ try{
  });
  await settle();await page.locator('#rnStoreAddToPlan').tap();
  const state=await page.evaluate(()=>window.RetailNavVisitPlanner.getState());
- assert.equal(state.stops.length,3);
+ assert.equal(state.stops.length,4);
  assert.ok(state.stops.some(stop=>stop.spaceId&&stop.storeId===null),
   'an unidentified physical shop space remains a valid itinerary stop');
  const unidentified=state.stops.find(stop=>stop.storeId===null);
@@ -167,8 +185,13 @@ try{
  assert.ok((await page.evaluate(()=>window.__RETAILNAV__.getState().visitPlanVectors))
   .includes(unidentified.floor+':'+unidentified.polygonId),
   'an unidentified physical space receives the same green map state');
+ const fourStopState=await page.evaluate(()=>window.__RETAILNAV__.getState());
+ assert.equal(fourStopState.visitPlanHighlightedVectorCount+fourStopState.visitPlanMarkerCount,4,
+  'four saved stops produce three green polygons plus the published Adidas marker');
+ await page.evaluate(()=>window.__RETAILNAV__.setFloor('ALL'));await page.waitForTimeout(180);
+ assert.equal(await looseMarker.isVisible(),true,'the Adidas marker remains visible in the six-floor view');
  await page.locator('#rnVisitPlanToggle').tap();
- assert.equal(await page.locator('.rnVisitPlanStop').count(),3);
+ assert.equal(await page.locator('.rnVisitPlanStop').count(),4);
  assert.match((await page.locator('.rnVisitPlanFocus small').last().textContent()),/identidad pendiente|identity pending/);
  const panel=await page.locator('#rnVisitPlan').boundingBox(),canvas=await page.locator('#canvas').boundingBox();
  assert.ok(panel&&canvas&&panel.x>=canvas.x&&panel.x+panel.width<=canvas.x+canvas.width&&
@@ -176,8 +199,11 @@ try{
   'responsive visit sheet stays inside the map viewport: '+JSON.stringify({panel,canvas}));
  await page.screenshot({path:'artifacts/visit-plan-'+engine+'.png',fullPage:true});
  await page.locator('.rnVisitPlanRemove').last().tap();
- assert.equal(await page.locator('.rnVisitPlanStop').count(),2);
+ assert.equal(await page.locator('.rnVisitPlanStop').count(),3);
  await waitForVisitHighlights(expectedStoreVectors.size);
+ await page.evaluate(()=>window.__RETAILNAV__.setFloor('ALL'));await page.waitForTimeout(120);
+ assert.equal(await page.locator(`.rnVisitPlanMarker[data-store-id="${looseStore.id}"]`).isVisible(),true,
+  'the published marker remains green after another stop is removed');
  await page.setViewportSize({width:390,height:844});
  await page.waitForTimeout(120);
  const mobilePanel=await page.locator('#rnVisitPlan').boundingBox();
@@ -188,5 +214,5 @@ try{
   'mobile visit sheet stays inside the map viewport: '+JSON.stringify({mobilePanel,mobileCanvas}));
  await page.screenshot({path:'artifacts/visit-plan-mobile-'+engine+'.png',fullPage:true});
  assert.deepEqual(errors,[]);
- console.log('PASS visit plan '+engine+': green map state on every bound polygon, search/context state, five-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
+ console.log('PASS visit plan '+engine+': green map state on every bound polygon and published marker-only stop, search/context state, five-action radial menu, identified and physical-space stops, local persistence and desktop/mobile sheet');
 }finally{await browser.close();await new Promise(ok=>server.close(ok));}

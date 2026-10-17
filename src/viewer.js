@@ -12,7 +12,8 @@ let focusedStoreVectors=new Set();
 // Every physical polygon in the visitor's plan remains visible on the map.
 // Store identities may bind to more than one floor; unidentified spaces use
 // their stable floor/polygon identity until their commercial data is added.
-let visitPlanVectors=new Set(),visitPlanGeometryPending=false,pendingVisitPlanRefresh=false;
+let visitPlanVectors=new Set(),visitPlanLooseMarkers=[],visitPlanGeometryPending=false,pendingVisitPlanRefresh=false;
+const visitPlanMarkerElements=new Map();
 let focusedStoreId=null,focusedStoreVector=null,focusFloorId=null,cameraFlight=null,lastStoreFocus=null,pendingStoreFocus=null;
 let wayfinding=null,wayfindingOpen=false,wayfindingCompact=false,pendingOriginDestination=null,placingLocalOnly=false;
 let orbitYaw=-.30,orbitPitch=-.70,orbitRoll=0;
@@ -465,6 +466,32 @@ function drawSearchMarkers(){
   }
  }
  for(const [id,marker] of searchMarkerElements)if(!showing.has(id))marker.hidden=true;
+}
+function drawVisitPlanMarkers(){
+ const host=$('rnSearchMarkers');if(!host)return;
+ const showing=new Set(),openFloors=new Set(visible().map(floor=>floor.id));
+ for(const item of visitPlanLooseMarkers){
+  const floor=floors.find(candidate=>candidate.id===item.floor);
+  if(!floor||!openFloors.has(floor.id))continue;
+  const point=screen(pos([item.x,item.y],floor.y+3));
+  if(!point||point.w<=0||point.z<=-1||point.z>=1||point.x<18||point.y<18||
+   point.x>host.clientWidth-18||point.y>host.clientHeight-18)continue;
+  let marker=visitPlanMarkerElements.get(item.storeId);
+  if(!marker){
+   marker=document.createElement('button');marker.type='button';marker.className='rnVisitPlanMarker';
+   marker.dataset.storeId=item.storeId;
+   marker.addEventListener('click',event=>{event.stopPropagation();
+    window.RetailNavMeetups?.selectStore?.(item.storeId,false,item.floor);});
+   host.append(marker);visitPlanMarkerElements.set(item.storeId,marker);
+  }
+  marker.textContent=String(item.order);marker.hidden=false;
+  marker.style.left=point.x.toFixed(1)+'px';marker.style.top=point.y.toFixed(1)+'px';
+  marker.title=item.label+' · '+item.floor+' · marcador publicado, contorno pendiente';
+  marker.setAttribute('aria-label','Parada '+item.order+': '+item.label+' · planta '+item.floor+
+   ' · ubicación del marcador publicado, contorno pendiente');
+  showing.add(item.storeId);
+ }
+ for(const [id,marker] of visitPlanMarkerElements)if(!showing.has(id))marker.hidden=true;
 }
 function rebuildSearchGeometry(floorIds=null){
  if(!ready||!gl)return;
@@ -1156,10 +1183,10 @@ function drawVisitPlanWebGL(){
 }
 function render(time){if(!ready)return;if(document.querySelector('dialog[open]')||(!dirty&&!cameraFlight&&!auto&&!routeRunning&&Math.abs(spread-targetSpread)<.01)){lastTime=time;requestAnimationFrame(render);return;}dirty=false;let dt=Math.min(.05,(time-lastTime)/1000||0);lastTime=time;frame++;resize();advanceStoreCameraFlight(time);let diff=targetSpread-spread;const oldPivot=floorFocusY();spread+=diff*Math.min(1,dt*8);
  refreshFloorElevations();target[1]+=floorFocusY()-oldPivot;if(auto){if(panMode){orbitYaw+=dt*.18;updateCameraRotation();}
- else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();drawSearchMarkers();drawWayfinding();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);if(!referenceContext(floor)){gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);}gl.uniform1f(loc.uLine,1);const outlines=referenceContext(floor)?floor.gpu.context:floor.gpu.edges;bind(outlines);gl.drawArrays(gl.LINES,0,outlines.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
+ else rotateCameraLocal([0,1,0],dt*.18);}matrices();updateEarthButtons();if(!gl){renderCanvas(dt);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();window.RetailNavAreaLabels?.draw?.();drawSearchMarkers();drawVisitPlanMarkers();drawWayfinding();requestAnimationFrame(render);return;}gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.useProgram(program);gl.uniformMatrix4fv(loc.uMvp,false,mvp);gl.uniform1f(loc.uSelected,selected?selected.gid:-1);gl.uniform1f(loc.uWire,wire?1:0);gl.uniform1f(loc.uPoint,Math.min(devicePixelRatio,2)*2.5);gl.uniform1f(loc.uY,0);gl.uniform1f(loc.uAlpha,1);gl.uniform1f(loc.uLine,1);bind(grid);gl.drawArrays(gl.LINES,0,grid.n);for(let floor of visible()){gl.uniform1f(loc.uY,floor.y);if(!scan){gl.uniform1f(loc.uLine,0);if(!referenceContext(floor)){gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,1);bind(floor.gpu.faces);gl.drawArrays(gl.TRIANGLES,0,floor.gpu.faces.n);gl.disable(gl.POLYGON_OFFSET_FILL);}gl.uniform1f(loc.uLine,1);const outlines=referenceContext(floor)?floor.gpu.context:floor.gpu.edges;bind(outlines);gl.drawArrays(gl.LINES,0,outlines.n);}else{gl.uniform1f(loc.uLine,1);bind(floor.gpu.points);gl.drawArrays(gl.POINTS,0,floor.gpu.points.n);}}
 drawVisitPlanWebGL();drawVerticalWebGL();drawMechanicalEscalatorsWebGL();drawLiftShaftsWebGL();drawRoofTextWebGL();drawRoute(dt);window.RetailNavDistricts?.draw3D?.(gl,mvp);
 window.RetailNavAreaLabels?.draw?.();if(!wayfindingOpen)window.RetailNavPins?.draw3D?.(gl,mvp);
-if(!wayfindingOpen)window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();drawSearchMarkers();drawWayfinding();requestAnimationFrame(render);}
+if(!wayfindingOpen)window.RetailNavUnits?.draw3D?.(gl,mvp);updateLabels();window.RetailNavPins?.draw?.();window.RetailNavPOI?.draw?.();window.RetailNavUnits?.draw?.();window.RetailNavIndoor?.draw?.();drawSearchMarkers();drawVisitPlanMarkers();drawWayfinding();requestAnimationFrame(render);}
 
 // Canvas 3D engine: genuine perspective projection of the same extruded polygon
 // geometry. Used when WebGL is blocked by an in-app preview or GPU policy.
@@ -2532,6 +2559,8 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
   committedSearch:searchCommitted,highlightedVectorCount:searchMatchedVectors.size,
   focusedStoreId,focusedStoreVector,focusedStoreVectors:[...focusedStoreVectors],
   visitPlanVectors:[...visitPlanVectors],visitPlanHighlightedVectorCount:visitPlanVectors.size,
+  visitPlanMarkers:visitPlanLooseMarkers.map(marker=>({...marker})),
+  visitPlanMarkerCount:visitPlanLooseMarkers.length,
   visitPlanColor:mapColor('accent','#BBD74A'),focusFloorId,coordinateSpace:selectedMall.coordinateSpace||'mall-photo-pixels',
   wayfinding:wayfinding&&JSON.parse(JSON.stringify(wayfinding)),wayfindingOpen,wayfindingCompact,
   cameraFlying:Boolean(cameraFlight),lastStoreFocus:lastStoreFocus&&{...lastStoreFocus},
@@ -2546,17 +2575,28 @@ $('spread').disabled=floors.length<=1||active!=='ALL';$('fallback').hidden=true;
  getLiftShaftModels:()=>liftShaftModel().shafts.slice(),
  exportGLB,invalidate:()=>{dirty=true;},focusAt:(id,p,desiredDistance=110)=>{if(!searchFloorSet||!searchFloorSet.has(id))setFloor(id);let floor=floors.find(f=>f.id===id);if(floor){target=pos(p,floor.y);distance=clamp(desiredDistance,30,550);dirty=true;}},beginManualLocation:(localOnly=false)=>{if(wayfindingOpen&&wayfinding&&!wayfindingCompact){beginWayfindingLocation();return;}placingLocalOnly=Boolean(localOnly);placingPosition=true;canvas.classList.add('placing');notify('Elegí la planta y tocá el lugar donde estás. Es una ubicación manual, no GPS.');}};window.dispatchEvent(new Event('retailnav:ready'));}catch(e){fail('No se pudo abrir el visor 3D: '+e.message);}}
 function sameVectorSet(a,b){return a.size===b.size&&[...a].every(key=>b.has(key));}
-function collectVisitPlanVectors(){
- const vectors=new Set();
+function collectVisitPlanState(){
+ const vectors=new Set(),markers=[];
  const stops=window.RetailNavVisitPlanner?.getState?.().stops||[];
- for(const stop of stops){
+ for(const [index,stop] of stops.entries()){
+  let unit=null,bindings=[];
   if(stop.storeId){
-   for(const binding of window.RetailNavUnits?.getMapBindings?.(stop.storeId)||[]){
+   unit=(window.RetailNavUnits?.getUnits?.()||[]).find(item=>item.storeId===stop.storeId)||null;
+   bindings=window.RetailNavUnits?.getMapBindings?.(stop.storeId)||[];
+   for(const binding of bindings){
     if(binding?.floor&&binding?.polygonId)vectors.add(binding.floor+':'+binding.polygonId);
    }
-  }else if(stop.floor&&stop.polygonId)vectors.add(stop.floor+':'+stop.polygonId);
+  }
+  const storedFloor=floors.find(floor=>floor.id===stop.floor);
+  const storedPolygon=stop.floor&&stop.polygonId&&(!floors.length||storedFloor?.features.some(feature=>feature.id===stop.polygonId));
+  if(storedPolygon)vectors.add(stop.floor+':'+stop.polygonId);
+  if(stop.storeId&&!bindings.length&&!storedPolygon&&unit&&Number.isFinite(unit.x)&&Number.isFinite(unit.y)&&unit.floor){
+   markers.push({storeId:stop.storeId,floor:unit.floor,x:unit.x,y:unit.y,
+    label:unit.name||stop.label||unit.code||'Local',order:index+1,
+    positionStatus:unit.positionStatus||'published-directory-marker'});
+  }
  }
- return vectors;
+ return{vectors,markers};
 }
 function rebuildVisitPlanGeometry(){
  visitPlanGeometryPending=false;
@@ -2571,13 +2611,16 @@ function rebuildVisitPlanGeometry(){
  dirty=true;
 }
 function syncVisitPlanVectors(){
- const next=collectVisitPlanVectors(),changed=!sameVectorSet(next,visitPlanVectors);
- if(changed)visitPlanVectors=next;
+ const collected=collectVisitPlanState(),next=collected.vectors,changed=!sameVectorSet(next,visitPlanVectors);
+ const markersChanged=JSON.stringify(collected.markers)!==JSON.stringify(visitPlanLooseMarkers);
+  if(changed)visitPlanVectors=next;
+ if(markersChanged)visitPlanLooseMarkers=collected.markers;
  for(const floor of floors)for(const feature of floor.features){
   feature.visitPlanned=visitPlanVectors.has(feature.floor+':'+feature.id);
  }
  if(!ready){if(changed)visitPlanGeometryPending=true;return;}
- if(changed||visitPlanGeometryPending)rebuildVisitPlanGeometry();
+  if(changed||visitPlanGeometryPending)rebuildVisitPlanGeometry();
+ else if(markersChanged)dirty=true;
 }
 function onVisitPlanChange(){
  if(pendingVisitPlanRefresh)return;

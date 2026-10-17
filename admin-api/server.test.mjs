@@ -24,9 +24,10 @@ function totp(now=Date.now()){const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
  return String((h.readUInt32BE(i)&0x7fffffff)%1000000).padStart(6,'0');}
 let csrf='',cookie='',ownerId='',tenant='';
 async function api(p,method='GET',body,auth=true,extra={}){
- const headers={Origin:origin,...extra};if(method!=='GET')headers['Content-Type']='application/json';
+ const headers={Origin:origin};if(method!=='GET')headers['Content-Type']='application/json';
  if(auth&&csrf)headers['X-Retailnav-Csrf']=csrf;
  if(auth&&cookie)headers.Cookie=cookie;
+ Object.assign(headers,extra);
  const r=await fetch(base+p,{method,headers,body:body===undefined?undefined:JSON.stringify(body)});
  let d=await r.json();return {status:r.status,body:d,setCookie:r.headers.get('set-cookie')};}
 test('admin remains isolated and unauthenticated is rejected',async()=>{
